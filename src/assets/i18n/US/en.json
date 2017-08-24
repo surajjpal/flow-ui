@@ -1,7 +1,7 @@
 {
   "login": {
-    "title": "Sign in to ng2-admin",
-    "signup_link": "New to ng2-admin? Sign up!",
+    "title": "Sign in to APi-Flow",
+    "signup_link": "New to APi-Flow? Sign up!",
     "email": "Email",
     "password": "Password",
     "sign_in": "Sign in",
@@ -12,7 +12,7 @@
     "share_on_google_plus": "Share on Google Plus"
   },
   "general": {
-    "akveo": "Akveo",
+    "akveo": "AutomataPi",
     "home": "Home",
     "forms": {
       "option1": "Option 1"

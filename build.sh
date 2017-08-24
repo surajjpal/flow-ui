@@ -6,4 +6,4 @@ if [ -z "${_tag}" ]; then
     _tag=${_VERSION}
 fi
 
-docker build --tag "ng2-admin:${_tag}"  --no-cache=true .
+docker build --tag "api-flow:${_tag}"  --no-cache=true .
