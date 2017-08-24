@@ -16,6 +16,7 @@ import { layoutPaths } from './theme/theme.constants';
   template: `
     <main [class.menu-collapsed]="isMenuCollapsed" baThemeRun>
       <div class="additional-bg"></div>
+      <api-alert></api-alert>
       <router-outlet></router-outlet>
     </main>
   `
@@ -25,10 +26,10 @@ export class App {
   isMenuCollapsed: boolean = false;
 
   constructor(private _state: GlobalState,
-              private _imageLoader: BaImageLoaderService,
-              private _spinner: BaThemeSpinner,
-              private viewContainerRef: ViewContainerRef,
-              private themeConfig: BaThemeConfig) {
+    private _imageLoader: BaImageLoaderService,
+    private _spinner: BaThemeSpinner,
+    private viewContainerRef: ViewContainerRef,
+    private themeConfig: BaThemeConfig) {
 
     themeConfig.config();
 

@@ -17,11 +17,17 @@ import { GlobalState } from './global.state';
 import { NgaModule } from './theme/nga.module';
 import { PagesModule } from './pages/pages.module';
 
+import { AuthGuard, UserBroadcastService, AuthService, AlertService } from './shared/shared.service';
+import { AlertComponent } from './shared/shared.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
   AppState,
-  GlobalState
+  GlobalState,
+  AuthGuard,
+  UserBroadcastService,
+  AuthService,
+  AlertService
 ];
 
 export type StoreType = {
@@ -36,7 +42,8 @@ export type StoreType = {
 @NgModule({
   bootstrap: [App],
   declarations: [
-    App
+    App,
+    AlertComponent
   ],
   imports: [ // import Angular's modules
     BrowserModule,
