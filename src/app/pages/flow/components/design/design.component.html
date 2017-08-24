@@ -1,0 +1,533 @@
+<!-- page content -->
+
+<div>
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <button type="button" class="btn btn-default" data-toggle="modal" data-target="clearAllData()">Clear Data</button>
+    <button type="button" class="btn btn-default" (click)="toolsChoice(ZOOM_IN)">Zoom In</button>
+    <button type="button" class="btn btn-default" (click)="toolsChoice(ZOOM_OUT)">Zoom Out</button>
+    <button type="button" class="btn btn-default" (click)="toolsChoice(ZOOM_ACTUAL)">Zoom Actual</button>
+    <button type="button" class="btn btn-default" (click)="toolsChoice(PRINT_PREVIEW)">Print Preview</button>
+    <button type="button" class="btn btn-default" (click)="toolsChoice(POSTER_PRINT)">Poster Print</button>
+  </div>
+  <br>
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div id="editorGrid" class="col-md-12 col-sm-12 col-xs-12" style="height:68vh;overflow:hidden;margin-bottom:5px;"></div>
+    <div id="outlineContainer" style="z-index:1;position:absolute;overflow:hidden;top:0px;right:0;width:160px;height:120px;background:transparent;border-style:solid;border-color:lightgray;"></div>
+    <div id="toolsContainer" style="z-index:1;position:absolute;overflow:hidden;top:0px;left:0;width:160px;height:120px;background:transparent;border-style:solid;border-color:lightgray;"></div>
+  </div>
+</div>
+
+<!-- Modal - Add State -->
+<div class="modal fade" id="stateModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="stateModalLabel">
+          {{stateDialogTitle}}
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        <form>
+          <div class="form-group">
+            <label for="inputStateCode">State Code</label>
+            <input type="text" class="form-control" required id="inputStateCode" placeholder="State Code" [(ngModel)]="tempState.stateCd"
+              name="stateCd" />
+          </div>
+          <div class="form-group">
+            <label for="inputStateLabel">State Name</label>
+            <input type="text" class="form-control" required id="inputStateLabel" placeholder="State Name" [(ngModel)]="tempState.name"
+              name="name" />
+          </div>
+          <div class="form-group">
+            <label for="selectStateType">State Type</label>
+            <select class="selectpicker form-control" required id="selectStateType" title="Choose State Type" [(ngModel)]="tempState.type"
+              name="type">
+                <option *ngFor="let stateType of sourceStateTypes" [value]="stateType">{{stateType}}</option>
+              </select>
+          </div>
+          <div class="form-group">
+            <label for="selectStateTrigger">State Trigger</label>
+            <select class="selectpicker form-control" required id="selectStateTrigger" title="Choose trigger for this state" [(ngModel)]="tempState.trigger"
+              name="trigger">
+                <option *ngFor="let event of tempParentState.events" [value]="event">{{event.eventCd}}</option>
+              </select>
+          </div>
+          <div class="form-group">
+            <label for="selectClassifiers">Classifiers</label>
+            <select class="selectpicker form-control" required id="selectClassifiers" title="Choose Classifiers" [(ngModel)]="tempState.classifiers"
+              name="classifiers">
+                <option *ngFor="let classifier of sourceClassifiers" [value]="classifier">{{classifier.apiName}}</option>
+              </select>
+          </div>
+        </form>
+
+        <div id="eventAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempState.events.length > 0">
+          <div *ngFor="let event of tempState.events; let eventIndex=index" class="panel">
+            <div class="card">
+
+              <div *ngIf="eventIndex == 0" [id]="'eventTabHeading' + eventIndex" class="card-header" heightStyle="content" role="tab">
+                <h5 class="mb-0">
+                  <a data-toggle="collapse" data-parent="#eventAccordion" [href]="'#eventCollapse' + eventIndex" aria-expanded="true" [attr.aria-controls]="'eventCollapse' + eventIndex">
+                    {{event.eventCd}}
+                  </a>
+                </h5>
+              </div>
+              <div *ngIf="eventIndex != 0" [id]="'eventTabHeading' + eventIndex" class="card-header" heightStyle="content" role="tab">
+                <h5 class="mb-0">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#eventAccordion" [href]="'#eventCollapse' + eventIndex" aria-expanded="false"
+                    [attr.aria-controls]="'eventCollapse' + eventIndex">
+                    {{event.eventCd}}
+                  </a>
+                </h5>
+              </div>
+
+              <div *ngIf="eventIndex == 0" [id]="'eventCollapse' + eventIndex" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'eventTabHeading' + eventIndex">
+                <div class="card-block">
+                  <form>
+                    <div class="form-group">
+                      <label for="inputEventCode">
+                        Event Code
+                      </label>
+                      <input type="text" class="form-control" id="inputEventCode" placeholder="Event Code" [(ngModel)]="event.eventCd" name="eventCd"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="inputOperand">
+                        Operand
+                      </label>
+                      <select class="selectpicker form-control" required id="inputOperand" title="Select Operand" [(ngModel)]="event.operand" name="operand">
+                        <option *ngFor="let operand of sourceOperands" [value]="operand">{{operand}}</option>
+                      </select>
+                    </div>
+
+                    <div [id]="'expAccordion' + eventIndex" role="tablist" aria-multiselectable="true" *ngIf="event.expressions.length > 0">
+                      <div *ngFor="let expression of event.expressions; let expIndex=index" class="panel">
+                        <div class="card">
+                          <div *ngIf="expIndex == 0" [id]="'event' + eventIndex + 'expTabHeading' + expIndex" class="card-header" heightStyle="content"
+                            role="tab">
+                            <h5 class="mb-0">
+                              <a data-toggle="collapse" [attr.data-parent]="'#expAccordion' + eventIndex" [href]="'#event' + eventIndex + 'expCollapse' + expIndex"
+                                aria-expanded="true" [attr.aria-controls]="'event' + eventIndex + 'expCollapse' + expIndex">
+                                {{expression.value}}
+                              </a>
+                            </h5>
+                          </div>
+                          <div *ngIf="expIndex != 0" [id]="'event' + eventIndex + 'expTabHeading' + expIndex" class="card-header" heightStyle="content"
+                            role="tab">
+                            <h5 class="mb-0">
+                              <a class="collapsed" data-toggle="collapse" [attr.data-parent]="'#expAccordion' + eventIndex" [href]="'#event' + eventIndex + 'expCollapse' + expIndex"
+                                aria-expanded="false" [attr.aria-controls]="'event' + eventIndex + 'expCollapse' + expIndex">
+                                {{expression.value}}
+                              </a>
+                            </h5>
+                          </div>
+
+                          <div *ngIf="expIndex == 0" [id]="'event' + eventIndex + 'expCollapse' + expIndex" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'event' + eventIndex + 'expTabHeading' + expIndex">
+                            <div class="card-block">
+                              <form>
+                                <div class="form-group">
+                                  <label required [for]="'expValue' + expIndex">
+                                    Value
+                                  </label>
+                                  <input type="text" class="form-control" required [id]="'expValue' + expIndex" placeholder="Value" [(ngModel)]="expression.value"
+                                    name="value" />
+                                </div>
+                                <div class="form-group">
+                                  <label [for]="'expTarget' + expIndex">
+                                    Target
+                                  </label>
+                                  <select class="selectpicker form-control" required [id]="'expTarget' + expIndex" title="Select Target" [(ngModel)]="expression.target"
+                                    name="target">
+                                    <option *ngFor="let sourceInput of sourceInputTargets" [value]="sourceInput">{{sourceInput}}</option>
+                                  </select>
+                                </div>
+                                <div class="form-group">
+                                  <label [for]="'expResult' + expIndex">
+                                    Expected Result
+                                  </label>
+                                  <input type="text" class="form-control" required [id]="'expResult' + expIndex" placeholder="Expected Result" [(ngModel)]="expression.expectedResult"
+                                    name="expectedResult" />
+                                </div>
+                                <div class="form-group" *ngIf="event.expressions.length > 1">
+                                  <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
+                                    Remove Expression
+                                  </button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                          <div *ngIf="expIndex != 0" [id]="'event' + eventIndex + 'expCollapse' + expIndex" class="collapse" role="tabpanel" [attr.aria-labelledby]="'event' + eventIndex + 'expTabHeading' + expIndex">
+                            <div class="card-block">
+                              <form>
+                                <div class="form-group">
+                                  <label required [for]="'expValue' + expIndex">
+                                      Value
+                                    </label>
+                                  <input type="text" class="form-control" required [id]="'expValue' + expIndex" placeholder="Value" [(ngModel)]="expression.value"
+                                    name="value" />
+                                </div>
+                                <div class="form-group">
+                                  <label [for]="'expTarget' + expIndex">
+                                      Target
+                                    </label>
+                                  <select class="selectpicker form-control" required [id]="'expTarget' + expIndex" title="Select Target" [(ngModel)]="expression.target"
+                                    name="target">
+                                      <option *ngFor="let sourceInput of sourceInputTargets" [value]="sourceInput">{{sourceInput}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                  <label [for]="'expResult' + expIndex">
+                                      Expected Result
+                                    </label>
+                                  <input type="text" class="form-control" required [id]="'expResult' + expIndex" placeholder="Expected Result" [(ngModel)]="expression.expectedResult"
+                                    name="expectedResult" />
+                                </div>
+                                <div class="form-group" *ngIf="event.expressions.length > 1">
+                                  <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
+                                      Remove Expression
+                                    </button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <button type="button" class="btn btn-danger" *ngIf="tempState.events.length > 1" (click)="deleteEvent(event)">
+                        Remove Event
+                      </button>
+                      <button type="button" class="btn btn-primary" (click)="addExpression(event)">
+                        Add Expression
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div *ngIf="eventIndex != 0" [id]="'eventCollapse' + eventIndex" class="collapse" role="tabpanel" [attr.aria-labelledby]="'eventTabHeading' + eventIndex">
+                <div class="card-block">
+                  <form>
+                    <div class="form-group">
+                      <label for="inputEventCode">
+                        Event Code
+                      </label>
+                      <input type="text" class="form-control" id="inputEventCode" placeholder="Event Code" [(ngModel)]="event.eventCd" name="eventCd"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="inputOperand">
+                        Operand
+                      </label>
+                      <select class="selectpicker form-control" required id="inputOperand" title="Select Operand" [(ngModel)]="event.operand" name="operand">
+                        <option *ngFor="let operand of sourceOperands" [value]="operand">{{operand}}</option>
+                      </select>
+                    </div>
+
+                    <div [id]="'expAccordion' + eventIndex" role="tablist" aria-multiselectable="true" *ngIf="event.expressions.length > 0">
+                      <div *ngFor="let expression of event.expressions; let expIndex=index" class="panel">
+                        <div class="card">
+                          <div *ngIf="expIndex == 0" [id]="'event' + eventIndex + 'expTabHeading' + expIndex" class="card-header" heightStyle="content"
+                            role="tab">
+                            <h5 class="mb-0">
+                              <a data-toggle="collapse" [attr.data-parent]="'#expAccordion' + eventIndex" [href]="'#event' + eventIndex + 'expCollapse' + expIndex"
+                                aria-expanded="true" [attr.aria-controls]="'event' + eventIndex + 'expCollapse' + expIndex">
+                                {{expression.value}}
+                              </a>
+                            </h5>
+                          </div>
+                          <div *ngIf="expIndex != 0" [id]="'event' + eventIndex + 'expTabHeading' + expIndex" class="card-header" heightStyle="content"
+                            role="tab">
+                            <h5 class="mb-0">
+                              <a class="collapsed" data-toggle="collapse" [attr.data-parent]="'#expAccordion' + eventIndex" [href]="'#event' + eventIndex + 'expCollapse' + expIndex"
+                                aria-expanded="false" [attr.aria-controls]="'event' + eventIndex + 'expCollapse' + expIndex">
+                                {{expression.value}}
+                              </a>
+                            </h5>
+                          </div>
+
+                          <div *ngIf="expIndex == 0" [id]="'event' + eventIndex + 'expCollapse' + expIndex" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'event' + eventIndex + 'expTabHeading' + expIndex">
+                            <div class="card-block">
+                              <form>
+                                <div class="form-group">
+                                  <label required [for]="'expValue' + expIndex">
+                                    Value
+                                  </label>
+                                  <input type="text" class="form-control" required [id]="'expValue' + expIndex" placeholder="Value" [(ngModel)]="expression.value"
+                                    name="value" />
+                                </div>
+                                <div class="form-group">
+                                  <label [for]="'expTarget' + expIndex">
+                                    Target
+                                  </label>
+                                  <select class="selectpicker form-control" required [id]="'expTarget' + expIndex" title="Select Target" [(ngModel)]="expression.target"
+                                    name="target">
+                                    <option *ngFor="let sourceInput of sourceInputTargets" [value]="sourceInput">{{sourceInput}}</option>
+                                  </select>
+                                </div>
+                                <div class="form-group">
+                                  <label [for]="'expResult' + expIndex">
+                                    Expected Result
+                                  </label>
+                                  <input type="text" class="form-control" required [id]="'expResult' + expIndex" placeholder="Expected Result" [(ngModel)]="expression.expectedResult"
+                                    name="expectedResult" />
+                                </div>
+                                <div class="form-group" *ngIf="event.expressions.length > 1">
+                                  <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
+                                    Remove Expression
+                                  </button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                          <div *ngIf="expIndex != 0" [id]="'event' + eventIndex + 'expCollapse' + expIndex" class="collapse" role="tabpanel" [attr.aria-labelledby]="'event' + eventIndex + 'expTabHeading' + expIndex">
+                            <div class="card-block">
+                              <form>
+                                <div class="form-group">
+                                  <label required [for]="'expValue' + expIndex">
+                                      Value
+                                    </label>
+                                  <input type="text" class="form-control" required [id]="'expValue' + expIndex" placeholder="Value" [(ngModel)]="expression.value"
+                                    name="value" />
+                                </div>
+                                <div class="form-group">
+                                  <label [for]="'expTarget' + expIndex">
+                                      Target
+                                    </label>
+                                  <select class="selectpicker form-control" required [id]="'expTarget' + expIndex" title="Select Target" [(ngModel)]="expression.target"
+                                    name="target">
+                                      <option *ngFor="let sourceInput of sourceInputTargets" [value]="sourceInput">{{sourceInput}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                  <label [for]="'expResult' + expIndex">
+                                      Expected Result
+                                    </label>
+                                  <input type="text" class="form-control" required [id]="'expResult' + expIndex" placeholder="Expected Result" [(ngModel)]="expression.expectedResult"
+                                    name="expectedResult" />
+                                </div>
+                                <div class="form-group" *ngIf="event.expressions.length > 1">
+                                  <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
+                                      Remove Expression
+                                    </button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <button type="button" class="btn btn-danger" *ngIf="tempState.events.length > 1" (click)="deleteEvent(event)">
+                        Remove Event
+                      </button>
+                      <button type="button" class="btn btn-primary" (click)="addExpression(event)">
+                        Add Expression
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <!-- <button type="button" class="btn btn-default" data-toggle="modal" data-target="#eventModal" (click)="addEvent()">Add Event</button> -->
+        <button type="button" class="btn btn-primary" (click)="addEvent()">Add Event</button>
+        <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="saveState()">{{stateDialogButtonName}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal - Settings -->
+<div class="modal fade" id="settignsModal" tabindex="-1" role="dialog" attr.aria-labelledby="settingsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="settingsModalLabel">
+          Settings
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="inputMachineName">
+              Machine Name
+            </label>
+            <!-- <div class="col-md-12 col-sm-12 col-xs-12"> -->
+            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputMachineName" placeholder="Machine Name" [(ngModel)]="graphObject.machineType"
+              name="machineType" />
+            <!-- </div> -->
+          </div>
+          <div class="form-group">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="inputVersionNumber">
+              Version Number
+            </label>
+            <!-- <div class="col-md-12 col-sm-12 col-xs-12"> -->
+            <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputVersionNumber" placeholder="Version Number"
+              min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+              [(ngModel)]="graphObject.version" name="version" />
+            <!-- </div> -->
+          </div>
+          <div class="form-group">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="inputStatus">
+              Status
+            </label>
+            <!-- <div class="col-md-12 col-sm-12 col-xs-12"> -->
+            <select disabled="true" class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" id="inputStatus" title="Select Status">
+                <option *ngFor="let status of sourceStatusCodes" [value]="status">{{status}}</option>
+              </select>
+            <!-- </div> -->
+          </div>
+        </form>
+
+        <div id="dpAccordion" role="tablist" aria-multiselectable="true" *ngIf="graphObject.dataPointConfigurationList.length > 0">
+          <div *ngFor="let dataPoint of graphObject.dataPointConfigurationList; let index=index" class="panel">
+            <div class="card">
+              <div *ngIf="index == 0" [id]="'dpTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                <h5 class="mb-0">
+                  <a data-toggle="collapse" data-parent="#dpAccordion" [href]="'#dpCollapse' + index" aria-expanded="true" [attr.aria-controls]="'dpCollapse' + index"
+                    (click)="selectedDataPoint=dataPoint">
+                    {{dataPoint.dataPointName}}
+                  </a>
+                </h5>
+              </div>
+              <div *ngIf="index != 0" [id]="'dpTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                <h5 class="mb-0">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#dpAccordion" [href]="'#dpCollapse' + index" aria-expanded="false"
+                    [attr.aria-controls]="'dpCollapse' + index" (click)="selectedDataPoint=dataPoint">
+                    {{dataPoint.dataPointName}}
+                  </a>
+                </h5>
+              </div>
+
+              <div *ngIf="index == 0" [id]="'dpCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'dpTabHeading' + index">
+                <div class="card-block">
+                  <form>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpInputName' + index">
+                          Name
+                        </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpInputName' + index" placeholder="Name"
+                        [(ngModel)]="dataPoint.dataPointName" name="dataPointName" />
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputExpression' + index">
+                          Expression
+                        </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpInputExpression' + index" placeholder="Expression"
+                        [(ngModel)]="dataPoint.expression" name="expression" />
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputTargetList' + index">
+                          Param Target List
+                        </label>
+                      <select multiple="true" class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'dpInputTargetList' + index"
+                        title="Select Targets" [(ngModel)]="dataPoint.paramTargetList" name="paramTargetList">
+                          <option *ngFor="let sourceParam of sourceParamTargets" [value]="sourceParam">{{sourceParam}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputInputTarget' + index">
+                          Input Target
+                        </label>
+                      <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'dpInputInputTarget' + index" title="Select Input Target"
+                        [(ngModel)]="dataPoint.inputTarget" name="inputTarget">
+                          <option *ngFor="let sourceInput of sourceInputTargets" [value]="sourceInput">{{sourceInput}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group" *ngIf="graphObject.dataPointConfigurationList.length > 1">
+                      <button type="button" class="btn btn-danger" (click)="deleteDataPoint(dataPoint)">
+                          Remove Data Point
+                        </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div *ngIf="index != 0" [id]="'dpCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'dpTabHeading' + index">
+                <div class="card-block">
+                  <form>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpInputName' + index">
+                          Name
+                        </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpInputName' + index" placeholder="Name"
+                        [(ngModel)]="dataPoint.dataPointName" name="dataPointName" />
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputExpression' + index">
+                          Expression
+                        </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpInputExpression' + index" placeholder="Expression"
+                        [(ngModel)]="dataPoint.expression" name="expression" />
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputTargetList' + index">
+                          Param Target List
+                        </label>
+                      <select multiple="true" class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'dpInputTargetList' + index"
+                        title="Select Targets" [(ngModel)]="dataPoint.paramTargetList" name="paramTargetList">
+                          <option *ngFor="let sourceParam of sourceParamTargets" [value]="sourceParam">{{sourceParam}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputInputTarget' + index">
+                          Input Target
+                        </label>
+                      <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'dpInputInputTarget' + index" title="Select Input Target"
+                        [(ngModel)]="dataPoint.inputTarget" name="inputTarget">
+                          <option *ngFor="let sourceInput of sourceInputTargets" [value]="sourceInput">{{sourceInput}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group" *ngIf="graphObject.dataPointConfigurationList.length > 1">
+                      <button type="button" class="btn btn-danger" (click)="deleteDataPoint(dataPoint)">
+                          Remove Data Point
+                        </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="settingsModalFooter">
+        <!-- <button type="button" class="btn btn-default" data-dismiss="modal">
+          Close
+        </button> -->
+        <button type="button" class="btn btn-primary" id="addDataPointButton" (click)="addNewDataPoint()">
+          Add Data Point
+        </button>
+        <button type="button" class="btn btn-success" id="saveChangesButton" data-dismiss="modal">
+          Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- /page content -->

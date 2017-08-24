@@ -1,0 +1,47 @@
+<div class="widgets">
+  <div class="row">
+    <ba-card baCardClass="with-scroll" class="data-table-container">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h2>State Machines</h2>
+        </div>
+        <br>
+        <table class="table table-striped" [mfData]="graphObjectList | dataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage"
+          [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
+          <thead>
+            <tr>
+              <th colspan="5">
+                <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
+              </th>
+            </tr>
+            <tr>
+              <th>
+                <mfDefaultSorter by="machineType">Machine Type</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter [by]="toInt">Version</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="statusCd">Status</mfDefaultSorter>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let graph of mf.data" (click)="onSelect(graph)" data-toggle="modal" data-target=".bs-example-modal-lg">
+              <td>{{graph.machineType}}</td>
+              <td>{{graph.version}}</td>
+              <td>{{graph.statusCd}}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="5">
+                <mfBootstrapPaginator [rowsOnPageSet]="[10,25,50,100]"></mfBootstrapPaginator>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </ba-card>
+  </div>
+</div>

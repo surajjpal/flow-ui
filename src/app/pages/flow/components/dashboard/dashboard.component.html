@@ -1,0 +1,70 @@
+<api-daterangepicker (selectedRange)="fetchFlowStats($event)"></api-daterangepicker>
+
+<div class="row tile_count">
+    <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-user"></i> Total chats</span>
+        <div class="count">{{conversationSummary.episodes_count}}</div>
+        <span class="count_bottom"><i class="green">{{conversationSummary.episode_percentage_change}}% </i> From last Week</span>
+    </div>
+    <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> Average Time</span>
+        <div class="count">{{conversationSummary.avg_time}}</div>
+        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>{{conversationSummary.avg_time_percentage_change}}% </i> From last Week</span>
+    </div>
+    <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-user"></i> Total Users</span>
+        <div class="count green">{{conversationSummary.conversation_count}}</div>
+        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>{{conversationSummary.user_percentage_change}}% </i> From last Week</span>
+    </div>
+    <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-user"></i> Goals Met</span>
+        <div class="count">{{conversationSummary.goals_met_count}}</div>
+        <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>{{conversationSummary.goal_met_percentage_change}}% </i> From last Week</span>
+    </div>
+    <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-user"></i> Goal Efficiency</span>
+        <div class="count">80%</div>
+        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>+5 </i> From last Week</span>
+    </div>
+    <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-user"></i> Predicted Efficiency</span>
+        <div class="count">84%</div>
+        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>+4% </i> For next Week</span>
+    </div>
+</div>
+
+<div class="row">
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Episode Timeline">
+        <nvd3 [options]="episodeCountOptions" [data]="episodeCountData"></nvd3>
+    </ba-card>
+</div>
+
+<div class="row">
+    <ba-card class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" cardTitle="Intent Count">
+        <nvd3 [options]="intentCountOptions" [data]="intentCountData"></nvd3>
+    </ba-card>
+
+    <ba-card class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" cardTitle="Entity Count">
+        <nvd3 [options]="entityCountOptions" [data]="entityCountData"></nvd3>
+    </ba-card>
+
+    <ba-card class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" cardTitle="Sentiment Count">
+        <nvd3 [options]="sentimentCountOptions" [data]="sentimentCountData"></nvd3>
+    </ba-card>
+</div>
+
+<div class="row">
+    <ba-card class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" cardTitle="Goal Count">
+        <nvd3 [options]="goalsCountOptions" [data]="goalsCountData"></nvd3>
+    </ba-card>
+
+    <ba-card class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" cardTitle="Goal Efficiency">
+        <nvd3 [options]="goalsEfficiencyOptions" [data]="goalsEfficiencyData"></nvd3>
+    </ba-card>
+</div>
+
+<div class="row">
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Messages in Episodes">
+        <nvd3 [options]="messagesInEpisodeOptions" [data]="messagesInEpisodeData"></nvd3>
+    </ba-card>
+</div>
