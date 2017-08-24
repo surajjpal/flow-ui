@@ -14,6 +14,7 @@ import * as moment from 'moment/moment';
 import { routing } from './auto.routing';
 import { AutoComponent } from './auto.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ConversationComponent } from './components/conversation/conversation.component';
 import { DateRangePickerComponent } from './components/dashboard/daterangepicker/daterangepicker.component';
 import { DashboardService } from './auto.service';
 
@@ -30,6 +31,7 @@ import { DashboardService } from './auto.service';
   declarations: [
     AutoComponent,
     DashboardComponent,
+    ConversationComponent,
     DateRangePickerComponent
   ],
   providers: [

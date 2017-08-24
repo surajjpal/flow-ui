@@ -43,6 +43,14 @@ export const PAGES_MENU = [
                 title: 'Dashboard'
               }
             }
+          },
+          {
+            path: 'conversation',
+            data: {
+              menu: {
+                title: 'Conversation'
+              }
+            }
           }
         ]
       },
