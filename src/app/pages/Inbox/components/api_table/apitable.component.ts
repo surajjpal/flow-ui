@@ -47,7 +47,9 @@ export class ApiTableComponent implements OnInit {
       //   }
       // });
 
-      this.sortBy = this.parameterKeys.keys().next().value;
+      // this.sortBy = this.parameterKeys.keys().next().value;
+
+      console.log(this.parameterKeys);
     } else {
       this.tableTitle = '';
       this.rawDataArray = [];

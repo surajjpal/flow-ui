@@ -6,14 +6,11 @@
           <h2>{{tableTitle}}</h2>
         </div>
         <br>
+        <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
+        <br>
         <table class="table table-striped" [mfData]="rawDataArray | dataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage"
           [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
           <thead>
-            <tr>
-              <th colspan="5">
-                <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
-              </th>
-            </tr>
             <tr>
               <th>
                 <mfDefaultSorter by="">Flow</mfDefaultSorter>
@@ -24,9 +21,9 @@
               <th>
                 <mfDefaultSorter by="">Date</mfDefaultSorter>
               </th>
-              <!-- <th *ngFor="let element of parameterKeys | keys">
-                <mfDefaultSorter [by]="element.value">{{element.key}}</mfDefaultSorter>
-              </th> -->
+              <th *ngFor="let element of parameterKeys | keys">
+                <mfDefaultSorter [by]="element.value">{{element.value}}</mfDefaultSorter>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -34,7 +31,7 @@
               <td>{{s.machineType}}</td>
               <td>{{s.stateCd}}</td>
               <td>{{s.startTime[0]}}-{{s.startTime[1]}}-{{s.startTime[2]}}</td>
-              <!-- <td *ngFor="let element of parameterKeys | keys">{{s.get(element.value)}}</td> -->
+              <td *ngFor="let element of parameterKeys | keys">{{s.parameters[element.value]}}</td>
             </tr>
           </tbody>
           <tfoot>
@@ -193,7 +190,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-3 col-sm-3 col-xs-12">
+              <div *ngIf="selectedState && selectedState.parameters['INCOMEPROOF']" class="col-md-3 col-sm-3 col-xs-12">
                 <div class="thumbnail">
                   <div class="image view view-first">
                     <img style="width: 100%; display: block;" src="{{selectedState.parameters['INCOMEPROOF']}}" alt="image" />

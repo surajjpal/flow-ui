@@ -3,15 +3,21 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({ name: 'keys', pure: false })
 export class KeysPipe implements PipeTransform {
-  transform(value, args: string[] = null): any {
-    let keys = [];
-    console.log('Pipe value: ' + value);
+  transform(object, args: string[] = null): any {
+    const keys = [];
+    // console.log('Pipe value: ' + object);
 
-    value.forEach((k: string, v: string) => {
-      keys.push({ key: v, value: k });  // for some resone forEach reverses key value
-    });
+    for (const property in object) {
+      if (object.hasOwnProperty(property)) {
+        keys.push({ key: property, value: object[property] });
+      }
+    }
 
-    console.log('Pipe keys:' + keys);
+    // object.forEach((k: string, v: string) => {
+    //   keys.push({ key: v, value: k });  // for some resone forEach reverses key value
+    // });
+
+    // console.log('Pipe keys:' + keys);
     return keys;
   }
 }
