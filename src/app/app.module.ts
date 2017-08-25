@@ -17,7 +17,7 @@ import { GlobalState } from './global.state';
 import { NgaModule } from './theme/nga.module';
 import { PagesModule } from './pages/pages.module';
 
-import { AuthGuard, UserBroadcastService, AuthService, AlertService } from './shared/shared.service';
+import { AuthGuard, AntiAuthGuard, UserBroadcastService, AuthService, AlertService } from './shared/shared.service';
 import { AlertComponent } from './shared/shared.component';
 
 // Application wide providers
@@ -25,6 +25,7 @@ const APP_PROVIDERS = [
   AppState,
   GlobalState,
   AuthGuard,
+  AntiAuthGuard,
   UserBroadcastService,
   AuthService,
   AlertService

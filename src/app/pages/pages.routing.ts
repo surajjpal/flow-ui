@@ -1,7 +1,7 @@
 import { Routes, RouterModule } from '@angular/router';
-import { Pages } from './pages.component';
+import { PagesComponent } from './pages.component';
 import { ModuleWithProviders } from '@angular/core';
-import { AuthGuard } from '../shared/shared.service';
+import { AuthGuard, AntiAuthGuard } from '../shared/shared.service';
 // noinspection TypeScriptValidateTypes
 
 // export function loadChildren(path) { return System.import(path); };
@@ -9,15 +9,17 @@ import { AuthGuard } from '../shared/shared.service';
 export const routes: Routes = [
   {
     path: 'login',
+    canActivate: [AntiAuthGuard],
     loadChildren: 'app/pages/login/login.module#LoginModule'
   },
   {
     path: 'register',
+    canActivate: [AntiAuthGuard],
     loadChildren: 'app/pages/register/register.module#RegisterModule'
   },
   {
     path: 'pages',
-    component: Pages,
+    component: PagesComponent,
     canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'auto/dashboard', pathMatch: 'full' },

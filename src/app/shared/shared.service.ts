@@ -28,21 +28,34 @@ export class UserBroadcastService {
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-  constructor(private router: Router, private userBroadcastService: UserBroadcastService) { }
+  constructor(private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (localStorage.getItem('currentUser')) {
-      // this.userBroadcastService.broadcastUser(JSON.parse(localStorage.getItem('currentUser')));
       // logged in so return true
-      const user = JSON.parse(localStorage.getItem('currentUser'));
-      console.log('Routing...' + user._id);
       return true;
     }
 
-    // this.userBroadcastService.broadcastUser(null);
     // not logged in so redirect to login page with the return url
     this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
     return false;
+  }
+}
+
+@Injectable()
+export class AntiAuthGuard implements CanActivate {
+
+  constructor(private router: Router) { }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    if (localStorage.getItem('currentUser')) {
+      // logged in so return false and navigate to home page
+      this.router.navigate(['/pages']);
+      return false;
+    }
+
+    // not logged in so redirect to login page
+    return true;
   }
 }
 
@@ -51,7 +64,7 @@ export class AuthService {
   private headers = new Headers({ 'Content-Type': 'application/json' });
   private options = new RequestOptions({ headers: this.headers });
 
-  constructor(private http: Http, private userBroadcastService: UserBroadcastService) { }
+  constructor(private router: Router, private http: Http) { }
 
   login(user: User) {
     const url = `${environment.server + environment.loginurl}`;
@@ -67,7 +80,6 @@ export class AuthService {
         if (newUser) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify(newUser));
-          // this.userBroadcastService.broadcastUser(user);
         }
 
         return newUser;
@@ -76,9 +88,8 @@ export class AuthService {
 
   logout() {
     // remove user from local storage to log user out
-    console.log('Logging out...');
     localStorage.removeItem('currentUser');
-    this.userBroadcastService.broadcastUser(null);
+    this.router.navigate(['/login']);
   }
 
   authenticate(user: User): Promise<User> {
