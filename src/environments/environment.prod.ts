@@ -15,5 +15,11 @@ export const environment = {
   graphurl: 'graph/',
   autodashboardurl: 'autodashboard',
   loginurl: 'auth/',
-  registerurl: 'auth/createUser'
+  registerurl: 'auth/createUser',
+
+
+  // wheels emi
+  wheelsServer: 'http://wheelsemi.automatapi.xyz/',
+  episodelisturl: 'load/episodes?query=',
+  messagelisturl: 'load/messages?query='
 };
