@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { NgaModule } from '../../theme/nga.module';
+import { DataTableModule } from 'angular2-datatable';
 
 import { NvD3Module } from 'ng2-nvd3';
 import 'd3';
@@ -16,7 +17,8 @@ import { AutoComponent } from './auto.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { DateRangePickerComponent } from './components/dashboard/daterangepicker/daterangepicker.component';
-import { DashboardService } from './auto.service';
+import { DashboardService, ConversationService } from './auto.service';
+import { DataFilterPipe } from './components/conversation/data-filter.pipe';
 
 @NgModule({
   imports: [
@@ -26,16 +28,19 @@ import { DashboardService } from './auto.service';
     routing,
     Daterangepicker,
     MomentModule,
-    NvD3Module
+    NvD3Module,
+    DataTableModule
   ],
   declarations: [
     AutoComponent,
     DashboardComponent,
     ConversationComponent,
-    DateRangePickerComponent
+    DateRangePickerComponent,
+    DataFilterPipe
   ],
   providers: [
-    DashboardService
+    DashboardService,
+    ConversationService
   ]
 })
 export class AutoModule { }
