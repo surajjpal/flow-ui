@@ -88,41 +88,41 @@
           <div role="tabpanel" class="tab-pane fade show active" id="tab_content1" aria-labelledby="details-tab">
             <form>
               <div *ngIf="selectedState" class="form-group">
-                <label class="control-label" for="last-name">Date</label>
-                <input type="text" id="lead-date" name="lead-date" required="required" disabled="disabled" class="form-control col-md-7 col-xs-12"
+                <label>Date</label>
+                <input type="text" id="lead-date" name="lead-date" required="required" disabled="disabled" class="form-control"
                   value="{{selectedState.startTime[0]}}-{{selectedState.startTime[1]}}-{{selectedState.startTime[2]}}">
               </div>
               <div *ngIf="selectedState && selectedState.parameters.userName" class="form-group">
-                <label class="control-label" for="first-name">Name</label>
-                <input type="text" id="first-name" required="required" disabled="disabled" class="form-control col-md-7 col-xs-12" value="{{selectedState.parameters.userName}}">
+                <label>Name</label>
+                <input type="text" id="first-name" required="required" disabled="disabled" class="form-control" value="{{selectedState.parameters.userName}}">
               </div>
               <div *ngIf="selectedState && selectedState.parameters.designation" class="form-group">
-                <label class="control-label" for="last-name">Position</label>
-                <input type="text" id="last-name" name="last-name" required="required" disabled="disabled" class="form-control col-md-7 col-xs-12"
+                <label>Position</label>
+                <input type="text" id="last-name" name="last-name" required="required" disabled="disabled" class="form-control"
                   value="{{selectedState.parameters.designation}}">
               </div>
               <div *ngIf="selectedState && selectedState.parameters.txnValue" class="form-group">
-                <label class="control-label" for="last-name">Business Value</label>
-                <input type="text" id="business-value" name="business-value" required="required" disabled="disabled" class="form-control col-md-7 col-xs-12"
+                <label>Business Value</label>
+                <input type="text" id="business-value" name="business-value" required="required" disabled="disabled" class="form-control"
                   value="{{selectedState.parameters.txnValue}}">
               </div>
               <div *ngIf="selectedState && selectedState.parameters.contactno" class="form-group">
-                <label class="control-label" for="last-name">Contact No</label>
-                <input type="text" id="contact" name="contact" required="required" disabled="disabled" class="form-control col-md-7 col-xs-12"
+                <label>Contact No</label>
+                <input type="text" id="contact" name="contact" required="required" disabled="disabled" class="form-control"
                   value="{{selectedState.parameters.contactno}}">
               </div>
               <div *ngIf="selectedState && selectedState.parameters.email" class="form-group">
-                <label class="control-label" for="last-name">E-mail</label>
-                <input type="text" id="e-mail" name="e-mail" required="required" disabled="disabled" class="form-control col-md-7 col-xs-12"
+                <label>E-mail</label>
+                <input type="text" id="e-mail" name="e-mail" required="required" disabled="disabled" class="form-control"
                   value="{{selectedState.parameters.email}}">
               </div>
               <div *ngIf="selectedState && selectedState.parameters.interestedIn" class="form-group">
-                <label class="control-label" for="last-name">Interested In:</label>
-                <input type="text" id="interestedIn" name="interestedIn" required="required" disabled="disabled" class="form-control col-md-7 col-xs-12"
+                <label>Interested In:</label>
+                <input type="text" id="interestedIn" name="interestedIn" required="required" disabled="disabled" class="form-control"
                   value="{{selectedState.parameters.interestedIn}}">
               </div>
               <div *ngIf="selectedState && selectedState.parameters['decision']" class="form-group">
-                <label class="control-label">Decision</label>
+                <label>Decision</label>
                 <select name="decision" [(ngModel)]="selectedState.parameters['decision']" class="form-control" required>
                   <option value="">Choose..</option>
                   <option value="Classify">Classify</option>
@@ -135,76 +135,78 @@
                 </select>
               </div>
               <div *ngIf="selectedState && selectedState.predictedParameters && selectedState.predictedParameters['decision']" class="form-group">
-                <label class="control-label">Predicted Decision</label>
-                <input type="text" id="interestedIn" name="interestedIn" required="required" disabled="disabled" class="form-control col-md-7 col-xs-12"
+                <label>Predicted Decision</label>
+                <input type="text" id="interestedIn" name="interestedIn" required="required" disabled="disabled" class="form-control"
                   value="{{selectedState.predictedParameters['decision']}}">
               </div>
               <div *ngIf="selectedState && selectedState.parameters['USERNAME']" class="form-group">
-                <label class="control-label" for="last-name">Name</label>
-                <input type="text" id="name" name="name" required="required" disabled="disabled" class="form-control col-md-7 col-xs-12"
+                <label>Name</label>
+                <input type="text" id="name" name="name" required="required" disabled="disabled" class="form-control"
                   value="{{selectedState.parameters['USERNAME']}}">
               </div>
               <div *ngIf="selectedState && selectedState.parameters['DOB']" class="form-group">
-                <label class="control-label" for="last-name">Date of Birth</label>
-                <input type="text" id="name" name="name" required="required" disabled="disabled" class="form-control col-md-7 col-xs-12"
+                <label>Date of Birth</label>
+                <input type="text" id="name" name="name" required="required" disabled="disabled" class="form-control"
                   value="{{selectedState.parameters['DOB']}}">
               </div>
               <div *ngIf="selectedState && selectedState.parameters['TYPEOFQUERY']" class="form-group">
-                <label class="control-label" for="last-name">Type of Query</label>
-                <input type="text" id="typeofquery" name="typeofquery" required="required" disabled="disabled" class="form-control col-md-7 col-xs-12"
+                <label>Type of Query</label>
+                <input type="text" id="typeofquery" name="typeofquery" required="required" disabled="disabled" class="form-control"
                   value="{{selectedState.parameters['TYPEOFQUERY']}}">
               </div>
               <div *ngIf="selectedState && selectedState.parameters['AMOUNT']" class="form-group">
-                <label class="control-label" for="last-name">Amount</label>
-                <input type="text" id="amount" name="amount" required="required" disabled="disabled" class="form-control col-md-7 col-xs-12"
+                <label>Amount</label>
+                <input type="text" id="amount" name="amount" required="required" disabled="disabled" class="form-control"
                   value="{{selectedState.parameters['AMOUNT']}}">
               </div>
               <div *ngIf="selectedState && selectedState.parameters['EMAIL']" class="form-group">
-                <label class="control-label" for="last-name">E-mail</label>
-                <input type="text" id="email" name="email" required="required" disabled="disabled" class="form-control col-md-7 col-xs-12"
+                <label>E-mail</label>
+                <input type="text" id="email" name="email" required="required" disabled="disabled" class="form-control"
                   value="{{selectedState.parameters['EMAIL']}}">
               </div>
               <div *ngIf="selectedState && selectedState.parameters['PHONE']" class="form-group">
-                <label class="control-label" for="last-name">Phone</label>
-                <input type="text" id="phone" name="phone" required="required" disabled="disabled" class="form-control col-md-7 col-xs-12"
+                <label>Phone</label>
+                <input type="text" id="phone" name="phone" required="required" disabled="disabled" class="form-control"
                   value="{{selectedState.parameters['PHONE']}}">
               </div>
               <div *ngIf="selectedState  && selectedState.parameters['RISK_ASSESSMENT']" class="form-group">
-                <label class="control-label">Decision</label>
+                <label>Decision</label>
                 <select name="decision" [(ngModel)]="selectedState.parameters['RISK_ASSESSMENT']" class="form-control" required>
                   <option value="RISKAPPROVED">Approve</option>
                   <option value="RISKREJECTED">Reject</option>
                 </select>
               </div>
               <div *ngIf="selectedState  && selectedState.parameters['KYC']  && selectedState.parameters['INCOMEPROOF']" class="form-group">
-                <label class="control-label">Documents Submitted</label>
-                <div class="thumbnail">
-                  <div class="image view view-first">
-                    <img style="width: 100%; display: block;" src="{{selectedState.parameters['KYC']}}" alt="image" />
-                    <div class="mask">
-                      <p>KYC Document</p>
+                <label>Documents Submitted</label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                  <div class="thumbnail">
+                    <div class="image view view-first">
+                      <img style="width: 100%; display: block;" src="{{selectedState.parameters['KYC']}}" alt="image" />
+                      <div class="mask">
+                        <p>KYC Document</p>
+                      </div>
                     </div>
-                  </div>
-                  <div class="caption">
-                    <p>Kyc Document</p>
+                    <div class="caption">
+                      <p>Kyc Document</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div *ngIf="selectedState && selectedState.parameters['INCOMEPROOF']" class="col-md-3 col-sm-3 col-xs-12">
-                <div class="thumbnail">
-                  <div class="image view view-first">
-                    <img style="width: 100%; display: block;" src="{{selectedState.parameters['INCOMEPROOF']}}" alt="image" />
-                    <div class="mask">
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                  <div class="thumbnail">
+                    <div class="image view view-first">
+                      <img style="width: 100%; display: block;" src="{{selectedState.parameters['INCOMEPROOF']}}" alt="image" />
+                      <div class="mask">
+                        <p>Income Proof</p>
+                      </div>
+                    </div>
+                    <div class="caption">
                       <p>Income Proof</p>
                     </div>
-                  </div>
-                  <div class="caption">
-                    <p>Income Proof</p>
                   </div>
                 </div>
               </div>
               <div *ngIf="selectedState && selectedState.parameters['APPROVALLETTERURL']" class="form-group">
-                <label class="control-label">Approval Document</label>
+                <label>Approval Document</label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
                   <div class="thumbnail">
                     <div class="image view view-first">

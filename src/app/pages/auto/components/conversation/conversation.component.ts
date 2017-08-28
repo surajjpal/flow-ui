@@ -60,6 +60,7 @@ export class ConversationComponent implements OnInit {
 
   onSelect(selectedEpisode: Episode): void {
     this.selectedEpisode = selectedEpisode;
+    this.chatMessageList = [];
 
     this.conversationService.getChat(selectedEpisode._id)
       .then(
@@ -67,7 +68,6 @@ export class ConversationComponent implements OnInit {
           if (chatMessageList) {
             chatMessageList.reverse();    // To get latest message at bottom of screen
             this.chatMessageList = chatMessageList;
-            console.log(this.chatMessageList);
           }
         },
         error => {

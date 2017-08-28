@@ -121,35 +121,45 @@
   .tab-pane p {
     color: $default-text;
   }
+  border-left: 0.5px solid $border;
+  border-right: 0.5px solid $border;
+  border-bottom: 0.5px solid $border;
+  border-top: 0.5px solid transparent;
 }
 
 .nav.nav-tabs {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  border-bottom: 1px solid transparent;
-  background-color: $primary-light;
+  background-color: transparent;
+  border-bottom: 0.5px solid $border;
   a {
-    color: $label-text;
+    color: $disabled;
+    margin-right: 10px;
+    margin-bottom: 0;
+    background-color: $disabled-bg;
     &:hover {
       color: $label-text;
+      background-color: tint($primary, 50%);
     }
   }
   & > li > a {
-    margin-right: 0;
+    color: $disabled;
+    margin-right: 10px;
     margin-bottom: 0;
-    border-radius: 0;
-    border: none;
+    background-color: tint($disabled-bg, 80%);
+    border-color: $border-light;
     &:hover {
-      border: none;
-      background-color: $primary-light;
+      color: $label-text;
+      background-color: tint($primary, 50%);
     }
   }
-  & > li.active > a {
-    color: $label-text;
-    background-color: $primary;
-  }
-  > li:first-of-type a {
+  & > li > a.active {
+    color: $default-text;
+    background-color: transparent;
     border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-color: $border-light;
+    border-bottom: 0.5px solid #FFFFFF;
   }
   .dropdown-menu > li > a {
     color: $dropdown-text;

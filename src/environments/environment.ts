@@ -26,5 +26,6 @@ export const environment = {
   // wheels emi
   wheelsServer: 'http://wheelsemi.automatapi.xyz/',
   episodelisturl: 'load/episodes?query=',
-  messagelisturl: 'load/messages?query='
+  messagelisturl: 'load/messages?query=',
+  trainingdataurl: 'load/trainingdata'
 };

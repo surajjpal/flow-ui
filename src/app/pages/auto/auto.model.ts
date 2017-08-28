@@ -79,3 +79,15 @@ export class ChatMessage {
   userHash: string;
   inputText: string;
 }
+
+export class TrainingData {
+  updateExcelFlag: string;
+  sentiment: string;
+  level: number;
+  actionHtml: string;
+  intentName: string;
+  responseMessages: string;
+  pref_language: string;
+  requestMessage: string;
+  thirdPartyEntity: string;
+}

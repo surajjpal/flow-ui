@@ -21,10 +21,10 @@
             </tr>
             <tr>
               <th>
-                <mfDefaultSorter by="_id">Episode Id</mfDefaultSorter>
+                <mfDefaultSorter by="_source.startTime">Start Time</mfDefaultSorter>
               </th>
               <th>
-                <mfDefaultSorter by="_source.name">Name</mfDefaultSorter>
+                <mfDefaultSorter by="_source.endTime">End Time</mfDefaultSorter>
               </th>
               <th>
                 <mfDefaultSorter by="_source.status">Status</mfDefaultSorter>
@@ -32,22 +32,14 @@
               <th>
                 <mfDefaultSorter by="_source.goalStatus">Goal Status</mfDefaultSorter>
               </th>
-              <th>
-                <mfDefaultSorter by="_source.startTime">Start Time</mfDefaultSorter>
-              </th>
-              <th>
-                <mfDefaultSorter by="_source.endTime">End Time</mfDefaultSorter>
-              </th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let episode of mf.data" (click)="onSelect(episode)" data-toggle="modal" data-target="#detailsModal">
-              <td>{{episode._id}}
-                <td>{{episode._source.name}}</td>
-                <td>{{episode._source.status}}</td>
-                <td>{{episode._source.goalStatus}}</td>
-                <td>{{episode._source.startTime | date:'dd/MM/y, h:mm:ss a'}}</td>
-                <td>{{episode._source.endTime | date:'dd/MM/y, h:mm:ss a'}}</td>
+              <td>{{episode._source.startTime | date:'dd/MM/y, h:mm:ss a'}}</td>
+              <td>{{episode._source.endTime | date:'dd/MM/y, h:mm:ss a'}}</td>
+              <td>{{episode._source.status}}</td>
+              <td>{{episode._source.goalStatus}}</td>
             </tr>
           </tbody>
           <tfoot>
@@ -152,7 +144,7 @@
             </form>
           </ba-card>
 
-          <ba-card baCardClass="with-scroll" class="data-table-container col-md-6 col-sm-12" cardTitle="Conversation" >
+          <ba-card baCardClass="with-scroll" class="data-table-container col-md-6 col-sm-12" cardTitle="Conversation">
             <form style="max-height: 400px; overflow:scroll">
               <thead>
                 <th style="width: 50%"></th>
@@ -160,40 +152,27 @@
               </thead>
               <tbody *ngFor="let message of chatMessageList">
                 <tr *ngIf="message.messageFrom === 'auto'">
-                  <td align="left" style="max-width: 50%">
+                  <td align="left" style="width: 50%">
                     <div class="talk-bubble tri-right round top-left" style="background-color: #E4E4E4">
                       <div class="talktext">
                         <p>{{message.inputText}}</p>
                       </div>
                     </div>
-                    <!-- <span class="label" style="margin-top: 1cm; background-color: #E4E4E4"></span> -->
                   </td>
                   <td></td>
                 </tr>
                 <tr *ngIf="message.messageFrom === 'user'">
                   <td></td>
-                  <td align="right" style="max-width: 50%">
+                  <td align="right" style="width: 50%">
                     <div class="talk-bubble tri-right round top-right" style="background-color: #B9F1FB">
                       <div class="talktext">
                         <p>{{message.inputText}}</p>
                       </div>
                     </div>
-                    <!-- <span class="label" style="margin-top: 1cm; background-color: #B9F1FB">{{message.inputText}}</span> -->
                   </td>
                 </tr>
               </tbody>
             </form>
-
-            <!-- <tbody *ngFor="let message of chatMessageList">
-                    <tr>
-                      <td *ngIf="message.messageFrom === 'auto'" class="label-auto">
-                        {{message.inputText}}
-                      </td>
-                      <td *ngIf="message.messageFrom === 'user'" class="label-user">
-                        {{message.inputText}}
-                      </td>
-                    </tr>
-                  </tbody> -->
           </ba-card>
         </div>
       </div>

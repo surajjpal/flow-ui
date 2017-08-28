@@ -51,6 +51,14 @@ export const PAGES_MENU = [
                 title: 'Conversation'
               }
             }
+          },
+          {
+            path: 'training',
+            data: {
+              menu: {
+                title: 'Training'
+              }
+            }
           }
         ]
       },

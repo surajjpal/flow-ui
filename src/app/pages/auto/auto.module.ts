@@ -17,8 +17,10 @@ import { AutoComponent } from './auto.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { DateRangePickerComponent } from './components/dashboard/daterangepicker/daterangepicker.component';
-import { DashboardService, ConversationService } from './auto.service';
+import { DashboardService, ConversationService, TrainingService } from './auto.service';
 import { DataFilterPipe } from './components/conversation/data-filter.pipe';
+import { TrainingDataFilterPipe } from './components/training/data-filter.pipe';
+import { TrainingComponent } from './components/training/training.component';
 
 @NgModule({
   imports: [
@@ -36,11 +38,14 @@ import { DataFilterPipe } from './components/conversation/data-filter.pipe';
     DashboardComponent,
     ConversationComponent,
     DateRangePickerComponent,
-    DataFilterPipe
+    DataFilterPipe,
+    TrainingDataFilterPipe,
+    TrainingComponent
   ],
   providers: [
     DashboardService,
-    ConversationService
+    ConversationService,
+    TrainingService
   ]
 })
 export class AutoModule { }

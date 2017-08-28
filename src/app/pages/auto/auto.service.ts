@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Headers, Http, Jsonp, RequestOptions, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
-import { Dashboard, Episode, ChatMessage } from './auto.model';
+import { Dashboard, Episode, ChatMessage, TrainingData } from './auto.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable()
@@ -72,6 +72,33 @@ export class ConversationService {
           return error.json() as any;
         }
       )
+      .catch(this.handleError);
+  }
+
+  private handleError(error: any): Promise<any> {
+    return Promise.reject(error.message || error);
+  }
+}
+
+@Injectable()
+export class TrainingService {
+  private headers = new Headers({ 'Content-Type': 'application/json' });
+  private options = new RequestOptions({ headers: this.headers });
+
+  constructor(private http: Http) { }
+
+  getTrainingData(): Promise<TrainingData[]> {
+    const proxyurl = 'https://cors-anywhere.herokuapp.com/';
+    const url = `${environment.wheelsServer}${environment.trainingdataurl}`;    // TODO: Same url used in local, dev & prod. Create environment specific urls.
+
+    return this.http
+      .get(proxyurl + url, { headers: this.headers })
+      .toPromise()
+      .then(
+        response => {
+          return response.json() as TrainingData[];
+        },
+        error => error.json() as any)
       .catch(this.handleError);
   }
 
