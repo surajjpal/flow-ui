@@ -21,6 +21,12 @@
             </tr>
             <tr>
               <th>
+                  <mfDefaultSorter by="_source.mode">Mode</mfDefaultSorter>
+              </th>
+              <th>
+                  <mfDefaultSorter by="_source.entities">Entities</mfDefaultSorter>
+              </th>
+              <th>
                 <mfDefaultSorter by="_source.startTime">Start Time</mfDefaultSorter>
               </th>
               <th>
@@ -36,6 +42,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let episode of mf.data" (click)="onSelect(episode)" data-toggle="modal" data-target="#detailsModal">
+              <td>{{episode._source.mode}}</td>
+              <td>{{episode._source.entities}}</td>
               <td>{{episode._source.startTime | date:'dd/MM/y, h:mm:ss a'}}</td>
               <td>{{episode._source.endTime | date:'dd/MM/y, h:mm:ss a'}}</td>
               <td>{{episode._source.status}}</td>
