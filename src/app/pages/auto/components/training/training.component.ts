@@ -29,8 +29,7 @@ export class TrainingComponent implements OnInit {
     this.selectedTrainingData = new TrainingData();
     this.filterQuery = '';
 
-    const proxyurl = 'https://cors-anywhere.herokuapp.com/';
-    const uploadUrl = `${proxyurl}${environment.autoServer}${environment.uploadtrainingexcelurl}`;
+    const uploadUrl = `${environment.autoServer}${environment.uploadtrainingexcelurl}`;
     this.fileUploaderOptions = {
       url: uploadUrl,
     };
