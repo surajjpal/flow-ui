@@ -99,6 +99,18 @@ export const PAGES_MENU = [
             }
           }
         ]
+      },
+      {
+        path: 'master',
+        data: {
+          menu: {
+            title: 'Master',
+            icon: 'ion-locked',
+            selected: false,
+            expanded: false,
+            order: 4
+          }
+        }
       }
     ]
   }
