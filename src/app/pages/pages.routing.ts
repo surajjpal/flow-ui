@@ -25,7 +25,8 @@ export const routes: Routes = [
       { path: '', redirectTo: 'auto/dashboard', pathMatch: 'full' },
       { path: 'inbox', loadChildren: './inbox/inbox.module#InboxModule' },
       { path: 'auto', loadChildren: './auto/auto.module#AutoModule' },
-      { path: 'flow', loadChildren: './flow/flow.module#FlowModule' }
+      { path: 'flow', loadChildren: './flow/flow.module#FlowModule' },
+      { path: 'master', loadChildren: './master/master.module#MasterModule' }
     ]
   }
 ];
