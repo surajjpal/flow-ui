@@ -16,11 +16,14 @@ export const environment = {
   autodashboardurl: 'autodashboard',
   loginurl: 'auth/',
   registerurl: 'auth/createUser',
-  uploadtrainingexcelurl: 'load/excelupload',
 
   // wheels emi
   wheelsServer: 'http://wheelsemi.automatapi.xyz/',
   episodelisturl: 'load/episodes?query=',
   messagelisturl: 'load/messages?query=',
-  trainingdataurl: 'load/trainingdata'
+  trainingdataurl: 'load/trainingdata',
+
+  // auto
+  autoServer: 'http://auto.automatapi.xyz/',
+  uploadtrainingexcelurl: 'load/excelupload'
 };
