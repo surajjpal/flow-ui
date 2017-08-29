@@ -20,6 +20,8 @@ import { PagesModule } from './pages/pages.module';
 import { AuthGuard, AntiAuthGuard, UserBroadcastService, AuthService, AlertService } from './shared/shared.service';
 import { AlertComponent } from './shared/shared.component';
 
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+
 // Application wide providers
 const APP_PROVIDERS = [
   AppState,
@@ -55,10 +57,14 @@ export type StoreType = {
     NgaModule.forRoot(),
     NgbModule.forRoot(),
     PagesModule,
-    routing
+    routing,
+    SlimLoadingBarModule.forRoot()
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     APP_PROVIDERS
+  ],
+  exports: [
+    SlimLoadingBarModule
   ]
 })
 

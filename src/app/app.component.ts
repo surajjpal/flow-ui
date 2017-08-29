@@ -19,6 +19,7 @@ import { layoutPaths } from './theme/theme.constants';
       <api-alert></api-alert>
       <router-outlet></router-outlet>
     </main>
+    <ng2-slim-loading-bar></ng2-slim-loading-bar>
   `
 })
 export class App {

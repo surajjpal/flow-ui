@@ -16,7 +16,7 @@ export const environment = {
   autodashboardurl: 'autodashboard',
   loginurl: 'auth/',
   registerurl: 'auth/createUser',
-
+  uploadtrainingexcelurl: 'load/excelupload',
 
   // wheels emi
   wheelsServer: 'http://wheelsemi.automatapi.xyz/',
