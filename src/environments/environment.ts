@@ -22,10 +22,10 @@ export const environment = {
   loginurl: 'auth/',
   registerurl: 'auth/createUser',
 
-
-  // wheels emi
-  wheelsServer: 'http://wheelsemi.automatapi.xyz/',
+  // auto
+  autoServer: 'https://cors-anywhere.herokuapp.com/https://auto.automatapi.xyz/',   // TODO: remove proxy
   episodelisturl: 'load/episodes?query=',
   messagelisturl: 'load/messages?query=',
-  trainingdataurl: 'load/trainingdata'
+  trainingdataurl: 'load/trainingdata',
+  uploadtrainingexcelurl: 'load/excelupload'
 };

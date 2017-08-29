@@ -41,13 +41,10 @@ export class ConversationService {
   constructor(private http: Http) { }
 
   search(searchQuery: string): Promise<Episode[]> {
-    // this.headers.append('Access-Control-Allow-Origin', 'http://localhost:4200');
-
-    const proxyurl = 'https://cors-anywhere.herokuapp.com/';
-    const url = `${environment.wheelsServer}${environment.episodelisturl}${searchQuery}`;    // TODO: Same url used in local, dev & prod. Create environment specific urls.
+    const url = `${environment.autoServer}${environment.episodelisturl}${searchQuery}`;    // TODO: Same url used in local, dev & prod. Create environment specific urls.
 
     return this.http
-      .get(proxyurl + url, { headers: this.headers })
+      .get(url, { headers: this.headers })
       .toPromise()
       .then(
         response => {
@@ -58,11 +55,10 @@ export class ConversationService {
   }
 
   getChat(episodeId: string): Promise<ChatMessage[]> {
-    const proxyurl = 'https://cors-anywhere.herokuapp.com/';
-    const url = `${environment.wheelsServer}${environment.messagelisturl}${episodeId}`;   // TODO: Same url used in local, dev & prod. Create environment specific urls.
+    const url = `${environment.autoServer}${environment.messagelisturl}${episodeId}`;   // TODO: Same url used in local, dev & prod. Create environment specific urls.
 
     return this.http
-      .get(proxyurl + url)
+      .get(url)
       .toPromise()
       .then(
         response => {
@@ -88,11 +84,10 @@ export class TrainingService {
   constructor(private http: Http) { }
 
   getTrainingData(): Promise<TrainingData[]> {
-    const proxyurl = 'https://cors-anywhere.herokuapp.com/';
-    const url = `${environment.wheelsServer}${environment.trainingdataurl}`;    // TODO: Same url used in local, dev & prod. Create environment specific urls.
+    const url = `${environment.autoServer}${environment.trainingdataurl}`;    // TODO: Same url used in local, dev & prod. Create environment specific urls.
 
     return this.http
-      .get(proxyurl + url, { headers: this.headers })
+      .get(url, { headers: this.headers })
       .toPromise()
       .then(
         response => {
