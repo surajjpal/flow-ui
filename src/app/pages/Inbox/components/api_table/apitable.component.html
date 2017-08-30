@@ -19,7 +19,7 @@
                 <mfDefaultSorter by="">State</mfDefaultSorter>
               </th>
               <th>
-                <mfDefaultSorter by="">Date</mfDefaultSorter>
+                <mfDefaultSorter by="">Date Time</mfDefaultSorter>
               </th>
               <th *ngFor="let element of parameterKeys | keys">
                 <mfDefaultSorter [by]="element.value">{{element.value}}</mfDefaultSorter>
@@ -30,7 +30,7 @@
             <tr *ngFor="let s of mf.data" (click)="onSelect(s)" data-toggle="modal" data-target="#detailsModal">
               <td>{{s.machineType}}</td>
               <td>{{s.stateCd}}</td>
-              <td>{{s.startTime[0]}}-{{s.startTime[1]}}-{{s.startTime[2]}}</td>
+              <td>{{s.startTime[0]}}/{{s.startTime[1]}}/{{s.startTime[2]}} {{s.startTime[3]}}:{{s.startTime[4]}}</td>
               <td *ngFor="let element of parameterKeys | keys">{{s.parameters[element.value]}}</td>
             </tr>
           </tbody>
@@ -50,7 +50,7 @@
 
 
 
-
+<!--  --------------------------Modal page start------------------------------------   -->
 
 
 <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" attr.aria-labelledby="detailsModalLabel" aria-hidden="true">
@@ -66,11 +66,10 @@
             <span class="sr-only">Close</span>
           </button>
       </div>
-
       <!-- Modal Body -->
       <div class="modal-body">
         <div>
-          <h3>Qualify Queue business parameters received</h3>
+          <h3>Task Queue business parameters received</h3>
         </div>
 
         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -86,15 +85,15 @@
         </ul>
         <div class="tab-content" id="myTabContent">
           <div role="tabpanel" class="tab-pane fade show active" id="tab_content1" aria-labelledby="details-tab">
-            <form>
-              <div *ngIf="selectedState" class="form-group">
-                <label>Date</label>
-                <input type="text" id="lead-date" name="lead-date" required="required" disabled="disabled" class="form-control"
-                  value="{{selectedState.startTime[0]}}-{{selectedState.startTime[1]}}-{{selectedState.startTime[2]}}">
+            <form  *ngIf="selectedState">
+              <div *ngFor="let element of parameterKeys | keys" class="form-group">
+                  <label>{{element.value}}</label>
+                  <input type="text" id="first-name" required="required" class="form-control" value="{{selectedState.parameters[element.value]}}">
               </div>
-              <div *ngIf="selectedState && selectedState.parameters.userName" class="form-group">
-                <label>Name</label>
-                <input type="text" id="first-name" required="required" disabled="disabled" class="form-control" value="{{selectedState.parameters.userName}}">
+              <div *ngIf="selectedState" class="form-group">
+                <label>Date Time</label>
+                <input type="text" id="lead-date" name="lead-date" required="required"   class="form-control"
+                  value="{{selectedState.startTime[0]}}/{{selectedState.startTime[1]}}/{{selectedState.startTime[2]}}  {{selectedState.startTime[3]}}:{{selectedState.startTime[4]}}">
               </div>
               <div *ngIf="selectedState && selectedState.parameters.designation" class="form-group">
                 <label>Position</label>
@@ -138,11 +137,6 @@
                 <label>Predicted Decision</label>
                 <input type="text" id="interestedIn" name="interestedIn" required="required" disabled="disabled" class="form-control"
                   value="{{selectedState.predictedParameters['decision']}}">
-              </div>
-              <div *ngIf="selectedState && selectedState.parameters['USERNAME']" class="form-group">
-                <label>Name</label>
-                <input type="text" id="name" name="name" required="required" disabled="disabled" class="form-control"
-                  value="{{selectedState.parameters['USERNAME']}}">
               </div>
               <div *ngIf="selectedState && selectedState.parameters['DOB']" class="form-group">
                 <label>Date of Birth</label>
