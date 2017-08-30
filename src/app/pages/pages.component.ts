@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 
 import { BaMenuService } from '../theme';
 import { PAGES_MENU } from './pages.menu';
+import {RouteService} from './pages.service';
 
 @Component({
   selector: 'pages',
@@ -31,10 +32,11 @@ import { PAGES_MENU } from './pages.menu';
 })
 export class PagesComponent implements OnInit {
 
-  constructor(private _menuService: BaMenuService) {
+  constructor(private _menuService: BaMenuService, private routeService: RouteService) {
   }
 
   ngOnInit() {
+    console.log(this.routeService.routes());
     this._menuService.updateMenuByRoutes(<Routes>PAGES_MENU);
   }
 }

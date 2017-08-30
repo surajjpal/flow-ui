@@ -8,6 +8,7 @@ export const environment = {
   updatestatemachineurl: 'statemachine/',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
+  menurouteurl: 'menu/route',
   parentmenuurl: 'menu/fetchparent/',
   messageurl: 'data/message/byuser/Admin',
   stateflowimageurl: 'statemachine/stateflow/',
