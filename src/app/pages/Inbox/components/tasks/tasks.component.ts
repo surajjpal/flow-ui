@@ -19,7 +19,7 @@ export class TasksComponent implements OnInit {
   constructor(private stateService: StateService) { }
 
   ngOnInit(): void {
-    this.tableTitle = 'Tasks Table / LoanSTP Table';
+    this.tableTitle = 'Queue';
     this.fetchData();
 
     // for (let i = 0; i < 10; i++) {
@@ -40,13 +40,13 @@ export class TasksComponent implements OnInit {
 
   fetchData(): void {
     try {
-      this.stateService.getStatesforfolder('loanSTP')
+      this.stateService.getStatesforfolder('conversation')
       .then(states => {
         this.states = states;
         console.log(this.states);
       });
 
-      this.stateService.getParamforfolder('loanSTP')
+      this.stateService.getParamforfolder('conversation')
       .then(parameterKeys => {
         this.parameterKeys = parameterKeys;
         console.log(this.parameterKeys);

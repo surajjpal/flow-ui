@@ -17,7 +17,7 @@ export class StateService {
     console.log(folder);
     if (folder) {
       const url = environment.server + environment.folderurl + ',' + folder + ',ACTIVE';
-      console.log('loanSTP url: ' + url);
+      console.log('Task url: ' + url);
       return this.http
         .get(url).toPromise()
         .then(response => response.json() as Map<string, string>[])
