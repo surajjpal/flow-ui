@@ -43,13 +43,13 @@ export class TasksComponent implements OnInit {
       this.stateService.getStatesforfolder('conversation')
       .then(states => {
         this.states = states;
-        console.log(this.states);
+        // console.log(this.states);
       });
 
       this.stateService.getParamforfolder('conversation')
       .then(parameterKeys => {
         this.parameterKeys = parameterKeys;
-        console.log(this.parameterKeys);
+        // console.log(this.parameterKeys);
       });
     } catch (e) {
       alert(e.message);

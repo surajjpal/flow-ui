@@ -203,7 +203,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   saveEvent(): void {
-    console.log(this.tempEvent);
+    // console.log(this.tempEvent);
     this.tempState.events.push(this.tempEvent);
   }
 
@@ -250,7 +250,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   saveGraphXml(xml: string): void {
     if (xml && this.graphObject) {
       this.graphObject.xml = xml;
-      console.log(this.graphObject);
+      // console.log(this.graphObject);
 
       this.graphService.save(this.graphObject)
         .then(graphObject => this.graphObject = graphObject);

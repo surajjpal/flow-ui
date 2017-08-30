@@ -546,7 +546,7 @@ graph.convertValueToString = function(cell)
         return state.name;
       }
     } catch (exception) {
-      console.log(exception);
+       console.log(exception);
     }
     
     return 'No label found';
@@ -566,7 +566,7 @@ graph.cellLabelChanged = function(cell, newValue, autoSize)
         cellLabelChanged.apply(this, arguments);
       }
     } catch (exception) {
-      console.log(exception);
+       console.log(exception);
     }
   }
 };
@@ -628,7 +628,7 @@ tb.addItem('View XML', '/assets/js/mxGraph/images/zoom_in32.png',function(evt)
   try{
     window['flowComponentRef'].zone.run(() => {window['flowComponentRef'].component.saveGraphXml(xml);})
   }catch(exception){
-    console.log(exception);
+     console.log(exception);
   }
 });
 tb.addItem('Settings', '/assets/js/mxGraph/images/zoom_in32.png',function(evt)

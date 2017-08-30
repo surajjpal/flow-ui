@@ -36,7 +36,9 @@ export class PagesComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.routeService.routes());
-    this._menuService.updateMenuByRoutes(<Routes>PAGES_MENU);
+    this.routeService.routes().then(routes => {
+      this._menuService.updateMenuByRoutes(<Routes>routes);
+    });
+    // this._menuService.updateMenuByRoutes(<Routes>PAGES_MENU);
   }
 }

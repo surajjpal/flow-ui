@@ -14,10 +14,10 @@ export class StateService {
   constructor(private http: Http) { }
 
   getStatesforfolder(folder: string): Promise<Map<string, string>[]> {
-    console.log(folder);
+    // console.log(folder);
     if (folder) {
       const url = environment.server + environment.folderurl + ',' + folder + ',ACTIVE';
-      console.log('Task url: ' + url);
+      // console.log('Task url: ' + url);
       return this.http
         .get(url).toPromise()
         .then(response => response.json() as Map<string, string>[])
@@ -42,11 +42,11 @@ export class StateService {
   }
 
   update(state: State, machineType: string, entityId: string, payload: string): Promise<State> {
-    console.log(state.parameters['decision']);
+    // console.log(state.parameters['decision']);
     const map = {};
     map['payload'] = state.payload;
     map['param'] = JSON.stringify(state.parameters);
-    console.log(map);
+    // console.log(map);
     if (machineType === null) {
       machineType = `lead`;
     }
@@ -62,7 +62,7 @@ export class StateService {
     const map = {};
     map['payload'] = state.payload;
     map['param'] = JSON.stringify(state.parameters);
-    console.log(JSON.stringify(map));
+    // console.log(JSON.stringify(map));
     const url = `${environment.server + environment.updatestatemachineurl}/`;
     return this.http
       .put(url, map, { headers: this.headers })

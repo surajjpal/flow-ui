@@ -86,8 +86,8 @@ export class DashboardComponent implements OnInit {
         pie: {
           dispatch: {
             elementClick: function(e) {
-              console.log('Element Click');
-              console.log(e);
+            //  console.log('Element Click');
+            //  console.log(e);
             }            
           }
         },
@@ -141,8 +141,8 @@ export class DashboardComponent implements OnInit {
         lines: {
           dispatch: {
             elementClick: function (e) {
-              console.log('click');
-              console.log(e);
+            //  console.log('click');
+            //  console.log(e);
             }
           }
         }
@@ -185,8 +185,8 @@ export class DashboardComponent implements OnInit {
         multibar: {
           dispatch: {
             elementClick: function (e) {
-              console.log('click');
-              console.log(e);
+            //  console.log('click');
+            //  console.log(e);
             }
           }
         }
@@ -227,8 +227,8 @@ export class DashboardComponent implements OnInit {
         multibar: {
           dispatch: {
             elementClick: function (e) {
-              console.log('click');
-              console.log(e);
+            //  console.log('click');
+            //  console.log(e);
             }
           }
         }
