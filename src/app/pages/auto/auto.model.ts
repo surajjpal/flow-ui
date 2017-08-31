@@ -82,7 +82,7 @@ export class ChatMessage {
 
 export class TrainingData {
   updateExcelFlag: string;
-  sentiment: string;
+  sentiment: string[];
   level: number;
   actionHtml: string;
   intentName: string;

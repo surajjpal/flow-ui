@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   password: AbstractControl;
   submitted: boolean = false;
 
-  user: User = { _id: '', username: '', password: '', email: '', name: '', enabled: false };
+  user: User = new User();
   loading = false;
   returnUrl: string;
 

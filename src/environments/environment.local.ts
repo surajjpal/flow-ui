@@ -15,8 +15,10 @@ export const environment = {
   autosummary: 'autodashboard/CONVERSATION_SUMMARY',
   graphurl: 'graph/',
   autodashboardurl: 'autodashboard',
-  loginurl: 'auth/',
+  authurl: 'auth/',
   registerurl: 'auth/createUser',
+  updateuserurl: 'auth/update',
+  authoritiesurl: 'auth/roles',
 
   // auto
   autoServer: 'https://cors-anywhere.herokuapp.com/https://auto.automatapi.xyz/',   // TODO: remove proxy

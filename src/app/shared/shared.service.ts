@@ -8,6 +8,24 @@ import { User } from './shared.model';
 import { environment } from '../../environments/environment';
 
 @Injectable()
+export class DataSharingService {
+  sharedObject: any;
+  
+  setSharedObject(sharedObject: any) {
+    this.sharedObject = sharedObject;
+  }
+
+  getSharedObject() {
+    let tempObject = null;
+    if (this.sharedObject) {
+      tempObject = JSON.parse(JSON.stringify(this.sharedObject));
+      this.sharedObject = null;
+    }
+    return tempObject;
+  }
+}
+
+@Injectable()
 export class UserBroadcastService {
   // Observable users source
   private userSource = new Subject<boolean>();
@@ -67,7 +85,7 @@ export class AuthService {
   constructor(private router: Router, private http: Http) { }
 
   login(user: User) {
-    const url = `${environment.server + environment.loginurl}`;
+    const url = `${environment.server + environment.authurl}`;
     return this.http.post(url, user, { headers: this.headers })
       .map((response: Response) => {
         // login successful if there's a user object in the response
@@ -94,7 +112,7 @@ export class AuthService {
 
   authenticate(user: User): Promise<User> {
     if (user) {
-      const url = `${environment.server + environment.loginurl}`;
+      const url = `${environment.server + environment.authurl}`;
       return this.http
         .post(url, user, { headers: this.headers })
         .toPromise()
@@ -117,6 +135,46 @@ export class AuthService {
 
         return response.json();
       });
+  }
+
+  update(user: User) {
+    const url = `${environment.server + environment.updateuserurl}`;
+    return this.http.put(url, user, { headers: this.headers })
+      .map((response: Response) => {
+        // login successful if there's a user object in the response
+        if (!response.ok) {
+          const body = response.json();
+          return body.error;
+        }
+
+        return response.json();
+      });
+  }
+
+  delete(userId: string) {
+    const url = `${environment.server + environment.authurl + userId}`;
+    return this.http.delete(url, { headers: this.headers })
+      .map((response: Response) => {
+        // login successful if there's a user object in the response
+        if (!response.ok) {
+          const body = response.json();
+          return body.error;
+        }
+
+        return response.json();
+      });
+  }
+
+  getAuthorities(): Promise<string[]> {
+    const url = `${environment.server + environment.authoritiesurl}`;
+    return this.http
+      .get(url, { headers: this.headers })
+      .toPromise()
+      .then(
+        response => response.json() as string[],
+        error => error.json() as any
+      )
+      .catch(this.handleError);
   }
 
   private handleError(error: any): Promise<any> {
