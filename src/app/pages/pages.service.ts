@@ -13,10 +13,11 @@ export class RouteService {
   constructor(private http: Http) { }
 
   routes(): Promise<Routes> {
-    const body: any = {};
+    const loggedinuser = localStorage.getItem('currentUser');
+    // console.log(loggedinuser);
     const url = `${environment.server + environment.menurouteurl}`;
     return this.http
-      .post(url, body, { headers: this.headers })
+      .post(url, loggedinuser, { headers: this.headers })
       .toPromise()
       .then(response => response.json() as Routes)
       .catch(this.handleError);
