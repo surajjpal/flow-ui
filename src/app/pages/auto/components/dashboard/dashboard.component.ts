@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardService } from '../../auto.service';
 import { ConversationSummary, Dashboard } from '../../auto.model';
+import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 
 declare let d3: any;
 declare let moment: any;
@@ -33,8 +34,17 @@ export class DashboardComponent implements OnInit {
 
   goalsEfficiencyOptions;
   goalsEfficiencyData;
+
+  CONVERSATION_SUMMARY_FLAG = false;
+  EPISODE_TIMELINE_FLAG = false;
+  INTENT_COUNT_FLAG = false;
+  ENTITY_COUNT_FLAG = false;
+  SENTIMENT_COUNT_FLAG = false;
+  GOAL_COUNT_AND_EFFICIENCY_FLAG = false;
+  MESSAGES_IN_EPISODE_FLAG = false;
+
   
-  constructor(private dashboardService: DashboardService) {}
+  constructor(private dashboardService: DashboardService, private slimLoadingBarService: SlimLoadingBarService) {}
 
   ngOnInit(): void {
     // this.fetchAutoStats();
@@ -42,20 +52,64 @@ export class DashboardComponent implements OnInit {
   }
 
   fetchAutoStats(dateRange: any) {
+
+    this.slimLoadingBarService.color = '#2DACD1'; // Primary color
+    this.slimLoadingBarService.height = '10px';
+    this.slimLoadingBarService.stop();
+    
+
     this.dashboardService.fetch('CONVERSATION_SUMMARY', dateRange)
-      .then(autoDashboard => this.conversationSummary = autoDashboard.conversationSummary);
+      .then(autoDashboard => {
+        this.conversationSummary = autoDashboard.conversationSummary;
+        this.CONVERSATION_SUMMARY_FLAG = true;
+        this.updateProgressBar();
+      } );
     this.dashboardService.fetch('EPISODE_TIMELINE', dateRange)
-      .then(autoDashboard => this.episodeCountData = autoDashboard.nvd3ChartInputList[0]);
+      .then(autoDashboard => {
+        this.episodeCountData = autoDashboard.nvd3ChartInputList[0];
+        this.EPISODE_TIMELINE_FLAG = true;
+        this.updateProgressBar();
+      });
     this.dashboardService.fetch('INTENT_COUNT', dateRange)
-      .then(autoDashboard => this.intentCountData = autoDashboard.nvd3ChartInputList[0][0].values);
+      .then(autoDashboard => {
+        this.intentCountData = autoDashboard.nvd3ChartInputList[0][0].values;
+        this.INTENT_COUNT_FLAG = true;
+        this.updateProgressBar();
+      });
     this.dashboardService.fetch('ENTITY_COUNT', dateRange)
-      .then(autoDashboard => this.entityCountData = autoDashboard.nvd3ChartInputList[0][0].values);
+      .then(autoDashboard => {
+        this.entityCountData = autoDashboard.nvd3ChartInputList[0][0].values;
+        this.ENTITY_COUNT_FLAG = true;
+        this.updateProgressBar();
+      });
     this.dashboardService.fetch('SENTIMENT_COUNT', dateRange)
-      .then(autoDashboard => this.sentimentCountData = autoDashboard.nvd3ChartInputList[0][0].values);
+      .then(autoDashboard => {
+        this.sentimentCountData = autoDashboard.nvd3ChartInputList[0][0].values;
+        this.SENTIMENT_COUNT_FLAG = true;
+        this.updateProgressBar();
+      } );
     this.dashboardService.fetch('GOAL_COUNT_AND_EFFICIENCY', dateRange)
-      .then(autoDashboard => this.parseGoalsCountAndEfficiency(autoDashboard));
+      .then(autoDashboard => {
+        this.parseGoalsCountAndEfficiency(autoDashboard);
+        this.GOAL_COUNT_AND_EFFICIENCY_FLAG = true;
+        this.updateProgressBar();
+      } );
     this.dashboardService.fetch('MESSAGES_IN_EPISODE', dateRange)
-      .then(autoDashboard => this.messagesInEpisodeData = autoDashboard.nvd3ChartInputList[0]);
+      .then(autoDashboard => {
+        this.messagesInEpisodeData = autoDashboard.nvd3ChartInputList[0];
+        this.MESSAGES_IN_EPISODE_FLAG = true;
+        this.updateProgressBar();
+      });
+
+  }
+
+  updateProgressBar() {
+    this.slimLoadingBarService.progress = this.slimLoadingBarService.progress + (100 / 7);
+    if ( this.CONVERSATION_SUMMARY_FLAG && this.EPISODE_TIMELINE_FLAG  
+      && this.INTENT_COUNT_FLAG && this.ENTITY_COUNT_FLAG && this.SENTIMENT_COUNT_FLAG
+       && this.GOAL_COUNT_AND_EFFICIENCY_FLAG && this.MESSAGES_IN_EPISODE_FLAG) {
+      this.slimLoadingBarService.complete();
+    }
   }
 
   setupChartOptions() {
