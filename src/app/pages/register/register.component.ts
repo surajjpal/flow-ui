@@ -22,7 +22,7 @@ export class RegisterComponent {
 
   submitted: boolean = false;
 
-  newUser: User = { _id: '', username: '', password: '', email: '', name: '', enabled: false };
+  newUser: User = new User();
   loading = false;
 
   constructor(
