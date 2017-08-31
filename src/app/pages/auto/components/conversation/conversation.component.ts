@@ -34,9 +34,13 @@ export class ConversationComponent implements OnInit {
     this.onTextChange(this.searchQuery);
   }
 
-  onTextChange(searchQuery: any) {
-    this.loading = true;
+  onTextChange(searchQuery: string) {
+    if (!searchQuery && searchQuery.length <= 0) {
+      return;
+    }
+    
     this.searchQuery = searchQuery;
+    this.loading = true;
 
     this.conversationService.search(searchQuery)
       .then(

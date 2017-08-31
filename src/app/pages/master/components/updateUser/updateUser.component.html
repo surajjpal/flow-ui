@@ -3,7 +3,7 @@
     <ba-card [cardTitle]="formHeader" baCardClass="with-scroll" class="col-md-12">
       <div class="panel panel-default">
         <form>
-          <div *ngIf="selectedUser._id" class="form-group">
+          <div *ngIf="!profileEditMode && selectedUser._id" class="form-group">
             <label>Id</label>
             <input type="text" class="form-control" required placeholder="Id" [(ngModel)]="selectedUser._id" name="_id" disabled="disabled"
             />
@@ -12,7 +12,7 @@
             <label>Name</label>
             <input type="text" class="form-control" required placeholder="Name" [(ngModel)]="selectedUser.name" name="name" />
           </div>
-          <div class="form-group">
+          <div *ngIf="!profileEditMode" class="form-group">
             <label>Email</label>
             <input type="text" class="form-control" required placeholder="Email" [(ngModel)]="selectedUser.email" name="email" />
           </div>
@@ -21,14 +21,14 @@
             <input type="password" class="form-control" required [placeholder]="passwordPlaceholder" [(ngModel)]="selectedUser.password"
               name="password" />
           </div>
-          <div class="form-group">
+          <div *ngIf="!profileEditMode" class="form-group">
             <label>Enabled</label>
             <select class="selectpicker form-control" required title="Select status" [(ngModel)]="selectedUser.enabled" name="enabled">
               <option [value]="true">Enabled</option>
               <option [value]="false">Disabled</option>
             </select>
           </div>
-          <div class="form-group">
+          <div *ngIf="!profileEditMode" class="form-group">
             <label>Authorities</label>
             <select class="selectpicker form-control" multiple="true" required title="Select authorities" [(ngModel)]="selectedUser.authorities"
               name="authorities">
@@ -40,7 +40,7 @@
             <button type="button" class="btn btn-default" (click)="goBack()">
               Cancel
             </button>
-            <button *ngIf="updateMode" type="button" class="btn btn-danger" (click)="deleteUser()">
+            <button *ngIf="!profileEditMode && updateMode" type="button" class="btn btn-danger" (click)="deleteUser()">
               Delete User
             </button>
             <button type="button" class="btn btn-primary" (click)="updateUser()">

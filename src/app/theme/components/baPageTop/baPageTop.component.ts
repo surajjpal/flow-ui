@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { GlobalState } from '../../../global.state';
 import { AuthService } from '../../../shared/shared.service';
@@ -14,6 +15,8 @@ export class BaPageTop {
   isMenuCollapsed: boolean = false;
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private _state: GlobalState,
     private authService: AuthService
   ) {
@@ -34,5 +37,9 @@ export class BaPageTop {
 
   signOut() {
     this.authService.logout();
+  }
+
+  profile() {
+    this.router.navigate(['/pages/master/updateUser/profile'], { relativeTo: this.route });
   }
 }

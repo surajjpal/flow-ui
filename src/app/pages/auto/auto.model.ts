@@ -81,13 +81,14 @@ export class ChatMessage {
 }
 
 export class TrainingData {
-  updateExcelFlag: string;
-  sentiment: string[];
+  id: string;
+  intent: string;
+  sentiments: string[];
+  language: string;
+  entity: string;
+  sentenceType: string;
   level: number;
-  actionHtml: string;
-  intentName: string;
-  responseMessages: string;
-  pref_language: string;
-  requestMessage: string;
   thirdPartyEntity: string;
+  responseMessage: string;
+  actionHtml: string;
 }

@@ -72,7 +72,7 @@ export class ApiTableComponent implements OnInit {
   }
 
   goBack(): void {
-    new closeModal();
+    new closeModal('detailsModal');
     this.ngOnInit();
   }
 }

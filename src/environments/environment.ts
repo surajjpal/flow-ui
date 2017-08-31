@@ -30,5 +30,8 @@ export const environment = {
   episodelisturl: 'load/episodes?query=',
   messagelisturl: 'load/messages?query=',
   trainingdataurl: 'load/trainingdata',
-  uploadtrainingexcelurl: 'load/excelupload'
+  uploadtrainingexcelurl: 'load/excelupload',
+  createtrainingdataurl: 'add/trainingdata',
+  updatetrainingdataurl: 'update/trainingdata',
+  deletetrainingdataurl: 'delete/trainingdata?query='
 };

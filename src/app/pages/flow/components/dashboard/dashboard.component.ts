@@ -13,7 +13,7 @@ declare let moment: any;
 export class DashboardComponent implements OnInit {
 
   conversationSummary: ConversationSummary;
-  
+
   episodeCountOptions;
   episodeCountData;
 
@@ -34,8 +34,8 @@ export class DashboardComponent implements OnInit {
 
   goalsEfficiencyOptions;
   goalsEfficiencyData;
-  
-  constructor(private dashboardService: DashboardService) {}
+
+  constructor(private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
     // this.fetchFlowStats();
@@ -80,15 +80,15 @@ export class DashboardComponent implements OnInit {
         type: 'pieChart',
         height: 450,
         donut: true,
-        x: function(d){return d.label;},
-        y: function(d){return d.value;},
+        x: function (d) { return d.label; },
+        y: function (d) { return d.value; },
         showLabels: false,
         pie: {
           dispatch: {
-            elementClick: function(e) {
-            //  console.log('Element Click');
-            //  console.log(e);
-            }            
+            elementClick: function (e) {
+              //  console.log('Element Click');
+              //  console.log(e);
+            }
           }
         },
         duration: 500,
@@ -121,12 +121,12 @@ export class DashboardComponent implements OnInit {
         xAxis: {
           axisLabel: "Timeline",
           axisLabelDistance: 5,
-          tickFormat: function(d) {
+          tickFormat: function (d) {
             return d3.time.format('%x')(new Date(d));
           }
         },
         x2Axis: {
-          tickFormat: function(d) {
+          tickFormat: function (d) {
             return d3.time.format('%x')(new Date(d));
           },
           showMaxMin: false
@@ -134,15 +134,15 @@ export class DashboardComponent implements OnInit {
         yAxis: {
           axisLabel: "Episode Count",
           axisLabelDistance: -15,
-          tickFormat: function(d) {
+          tickFormat: function (d) {
             return d3.format('d')(d)
           }
         },
         lines: {
           dispatch: {
             elementClick: function (e) {
-            //  console.log('click');
-            //  console.log(e);
+              //  console.log('click');
+              //  console.log(e);
             }
           }
         }
@@ -155,7 +155,7 @@ export class DashboardComponent implements OnInit {
       chart: {
         type: 'multiBarChart',
         height: 450,
-        margin : {
+        margin: {
           top: 35,
           right: 20,
           bottom: 70,
@@ -165,28 +165,28 @@ export class DashboardComponent implements OnInit {
         staggerLabels: true,
         duration: 500,
         stacked: true,
-        forceY:[0],
+        forceY: [0],
         reduceXTicks: false,
         xAxis: {
           axisLabel: 'Episodes',
           showMaxMin: true,
           axisLabelDistance: 10,
-          tickFormat: function(d){
+          tickFormat: function (d) {
             return d;
           }
         },
         yAxis: {
           axisLabel: 'Message Count',
           axisLabelDistance: -15,
-          tickFormat: function(d){
+          tickFormat: function (d) {
             return d3.format('d')(d);
           }
         },
         multibar: {
           dispatch: {
             elementClick: function (e) {
-            //  console.log('click');
-            //  console.log(e);
+              //  console.log('click');
+              //  console.log(e);
             }
           }
         }
@@ -199,7 +199,7 @@ export class DashboardComponent implements OnInit {
       chart: {
         type: 'multiBarChart',
         height: 450,
-        margin : {
+        margin: {
           top: 35,
           right: 20,
           bottom: 50,
@@ -214,21 +214,21 @@ export class DashboardComponent implements OnInit {
         xAxis: {
           axisLabel: 'Goals',
           showMaxMin: true,
-          tickFormat: function(d){
-             return d3.format('d')(d)
+          tickFormat: function (d) {
+            return d3.format('d')(d)
           }
         },
         yAxis: {
           axisLabel: 'Efficiency',
-          tickFormat: function(d){
+          tickFormat: function (d) {
             return d3.format('d')(d) + '%';
           }
         },
         multibar: {
           dispatch: {
             elementClick: function (e) {
-            //  console.log('click');
-            //  console.log(e);
+              //  console.log('click');
+              //  console.log(e);
             }
           }
         }

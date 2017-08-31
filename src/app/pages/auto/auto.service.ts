@@ -16,8 +16,8 @@ export class DashboardService {
   fetch(configurationCode: string, dateRange: any): Promise<Dashboard> {
     const body: any = {};
     body.params = {};
-    body.params.startDate = dateRange.start.format('DD-MM-YYYY HH:mm:ss');
-    body.params.endDate = dateRange.end.format('DD-MM-YYYY HH:mm:ss');
+    body.params.startDate = dateRange.start.format('YYYY-MM-DD HH:mm:ss');
+    body.params.endDate = dateRange.end.format('YYYY-MM-DD HH:mm:ss');
     const url = `${environment.server + environment.autodashboardurl}/${configurationCode}`;
     return this.http
       .post(url, body, { headers: this.headers })
@@ -94,6 +94,45 @@ export class TrainingService {
           return response.json() as TrainingData[];
         },
         error => error.json() as any)
+      .catch(this.handleError);
+  }
+
+  create(trainingData: TrainingData): Promise<any> {
+    const url = `${environment.autoServer + environment.createtrainingdataurl}`;
+
+    return this.http
+    .post(url, trainingData, this.options)
+    .toPromise()
+    .then(
+      response => response as any,
+      error => error as any
+    )
+    .catch(this.handleError);
+  }
+
+  update(trainingData: TrainingData): Promise<any> {
+    const url = `${environment.autoServer + environment.updatetrainingdataurl}`;
+
+    return this.http
+    .post(url, trainingData, this.options)
+    .toPromise()
+    .then(
+      response => response as any,
+      error => error as any
+    )
+    .catch(this.handleError);
+  }
+
+  delete(id: string): Promise<any> {
+    const url = `${environment.autoServer + environment.deletetrainingdataurl + id}`;
+
+    return this.http
+      .delete(url, this.options)
+      .toPromise()
+      .then(
+        response => response as any,
+        error => error as any
+      )
       .catch(this.handleError);
   }
 

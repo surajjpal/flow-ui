@@ -17,7 +17,7 @@ import { GlobalState } from './global.state';
 import { NgaModule } from './theme/nga.module';
 import { PagesModule } from './pages/pages.module';
 
-import { AuthGuard, AntiAuthGuard, UserBroadcastService, AuthService, AlertService, DataSharingService } from './shared/shared.service';
+import { AuthGuard, AntiAuthGuard, UserBroadcastService, AuthService, AlertService, DataSharingService, UniversalUser } from './shared/shared.service';
 import { AlertComponent } from './shared/shared.component';
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
@@ -31,7 +31,8 @@ const APP_PROVIDERS = [
   UserBroadcastService,
   AuthService,
   AlertService,
-  DataSharingService
+  DataSharingService,
+  UniversalUser
 ];
 
 export type StoreType = {

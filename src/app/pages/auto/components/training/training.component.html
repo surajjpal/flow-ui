@@ -7,52 +7,50 @@
   <div class="row">
     <ba-card cardTitle="Training Data" baCardClass="with-scroll" class="data-table-container">
       <div class="panel panel-default">
+        <form class="row form-inline">
+          <div class="form-group col-sm-10">
+            <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Query" />
+          </div>
+          <div class="form-group col-sm-2">
+            <button type="button" class="btn btn-primary" (click)="onSelect(null)" data-toggle="modal" data-target="#detailsModal">
+              Add Data
+            </button>
+          </div>
+        </form>
+        <br>
+
         <table class="table table-striped" [mfData]="trainingDataList | dataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10"
           mfSortBy="_id">
           <thead>
             <tr>
-              <th colspan="100%">
-                Filter Results:
-                <input class="form-control" [(ngModel)]="filterQuery" placeholder="Filter Query" />
-              </th>
-            </tr>
-            <tr>
               <th>
-                <mfDefaultSorter by="intentName">Intent Name</mfDefaultSorter>
+                <mfDefaultSorter by="intent">Intent</mfDefaultSorter>
               </th>
               <th>
-                <mfDefaultSorter by="sentiment">Sentiment</mfDefaultSorter>
+                <mfDefaultSorter by="sentiments">Sentiments</mfDefaultSorter>
               </th>
               <th>
-                <mfDefaultSorter by="pref_language">Preferred Langguage</mfDefaultSorter>
+                <mfDefaultSorter by="language">Language</mfDefaultSorter>
               </th>
               <th>
-                <mfDefaultSorter by="requestMessage">Request Message</mfDefaultSorter>
+                <mfDefaultSorter by="entity">Entity</mfDefaultSorter>
               </th>
               <th>
-                <mfDefaultSorter by="responseMessage">Response Message</mfDefaultSorter>
+                <mfDefaultSorter by="sentenceType">Sentence Type</mfDefaultSorter>
               </th>
               <th>
                 <mfDefaultSorter [by]="toInt(level)">Level</mfDefaultSorter>
-              </th>
-              <th>
-                <mfDefaultSorter by="updateExcelFlag">Update Excel Flag</mfDefaultSorter>
-              </th>
-              <th>
-                <mfDefaultSorter by="thirdPartyEntity">3rd Party Entity</mfDefaultSorter>
               </th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let training of mf.data" (click)="onSelect(training)" data-toggle="modal" data-target="#detailsModal">
-              <td>{{training.intentName}}</td>
-              <td>{{training.sentiment}}</td>
-              <td>{{training.pref_language}}</td>
-              <td>{{training.requestMessage}}</td>
-              <td>{{training.responseMessage}}</td>
+              <td>{{training.intent}}</td>
+              <td>{{arrayToString(training.sentiments)}}</td>
+              <td>{{training.language}}</td>
+              <td>{{training.entity}}</td>
+              <td>{{training.sentenceType}}</td>
               <td>{{training.level}}</td>
-              <td>{{training.updateExcelFlag}}</td>
-              <td>{{training.thirdPartyEntity}}</td>
             </tr>
           </tbody>
           <tfoot>
@@ -65,5 +63,75 @@
         </table>
       </div>
     </ba-card>
+  </div>
+</div>
+
+
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" attr.aria-labelledby="detailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="detailsModalLabel">
+          {{modalHeader}}
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" [disabled]="loading">
+              <span aria-hidden="true">&times;</span>
+              <span class="sr-only">Close</span>
+            </button>
+      </div>
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form *ngIf="selectedTrainingData">
+          <div class="form-group">
+            <label>Intent</label>
+            <input type="text" class="form-control" [(ngModel)]="selectedTrainingData.intent" name="intent" placeholder="Intent">
+          </div>
+          <div class="form-group">
+            <label>Sentiments</label>
+            <select class="selectpicker form-control" required multiple="true" title="Select sentiment(s)" [(ngModel)]="selectedTrainingData.sentiments"
+              name="sentiments">
+              <option value="positive">Positive</option>
+              <option value="neutral">Neutral</option>
+              <option value="negative">Negative</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Language</label>
+            <input type="text" class="form-control" [(ngModel)]="selectedTrainingData.language" name="language" placeholder="Language">
+          </div>
+          <div class="form-group">
+            <label>Entity</label>
+            <input type="text" class="form-control" [(ngModel)]="selectedTrainingData.entity" name="entity" placeholder="Entity">
+          </div>
+          <div class="form-group">
+            <label>Sentence Type</label>
+            <input type="text" class="form-control" [(ngModel)]="selectedTrainingData.sentenceType" name="sentenceType" placeholder="Sentence Type">
+          </div>
+          <div class="form-group">
+            <label>Level</label>
+            <input type="number" class="form-control" [(ngModel)]="selectedTrainingData.level" name="level" placeholder="Level">
+          </div>
+          <div class="form-group">
+            <label>Response Message</label>
+            <textarea class="form-control" rows="4" [(ngModel)]="selectedTrainingData.responseMessage" name="responseMessage" placeholder="Response Message"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Action Html</label>
+            <textarea class="form-control" rows="4" [(ngModel)]="selectedTrainingData.actionHtml" name="actionHtml" placeholder="Action Html"></textarea>
+          </div>
+
+          <div class="ln_solid"></div>
+        </form>
+
+        <!-- Modal Footer -->
+        <div class="modal-footer" id="settingsModalFooter">
+          <button type="button" class="btn btn-default" data-dismiss="modal" [disabled]="loading">Close</button>
+          <button *ngIf="!createMode" type="button" class="btn btn-danger" (click)="deleteRecord()" [disabled]="loading">Delete</button>
+          <button *ngIf="!createMode"type="submit" class="btn btn-success" (click)="updateRecord()" [disabled]="loading">Update</button>
+          <button *ngIf="createMode"type="submit" class="btn btn-success" (click)="createRecord()" [disabled]="loading">Create</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

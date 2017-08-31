@@ -3,6 +3,7 @@ import { Headers, Http, Jsonp, RequestOptions, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { environment } from '../../environments/environment';
 import { Routes } from '@angular/router';
+import { UniversalUser } from '../shared/shared.service';
 
 @Injectable()
 export class RouteService {
@@ -10,10 +11,10 @@ export class RouteService {
   private headers = new Headers({ 'Content-Type': 'application/json' });
   private options = new RequestOptions({ headers: this.headers });
 
-  constructor(private http: Http) { }
+  constructor(private http: Http, private universalUser: UniversalUser) { }
 
   routes(): Promise<Routes> {
-    const loggedinuser = localStorage.getItem('currentUser');
+    const loggedinuser = this.universalUser.getUser();
     // console.log(loggedinuser);
     const url = `${environment.server + environment.menurouteurl}`;
     return this.http

@@ -44,12 +44,38 @@ export class UserBroadcastService {
 }
 
 @Injectable()
+export class UniversalUser {
+  private user: User;
+
+  setUser(user: User) {
+    localStorage.setItem('universalUser', JSON.stringify(user));
+    this.user = user;
+  }
+
+  getUser() {
+    if (!this.user) {
+      this.user = JSON.parse(localStorage.getItem('universalUser'));
+    }
+    
+    return this.user;
+  }
+
+  removeUser() {
+    this.user = null;
+    localStorage.removeItem('universalUser');
+  }
+}
+
+@Injectable()
 export class AuthGuard implements CanActivate {
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private universalUser: UniversalUser
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if (localStorage.getItem('currentUser')) {
+    if (this.universalUser.getUser()) {
       // logged in so return true
       return true;
     }
@@ -63,10 +89,13 @@ export class AuthGuard implements CanActivate {
 @Injectable()
 export class AntiAuthGuard implements CanActivate {
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private universalUser: UniversalUser
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if (localStorage.getItem('currentUser')) {
+    if (this.universalUser.getUser()) {
       // logged in so return false and navigate to home page
       this.router.navigate(['/pages']);
       return false;
@@ -82,7 +111,11 @@ export class AuthService {
   private headers = new Headers({ 'Content-Type': 'application/json' });
   private options = new RequestOptions({ headers: this.headers });
 
-  constructor(private router: Router, private http: Http) { }
+  constructor(
+    private router: Router,
+    private http: Http,
+    private universalUser: UniversalUser
+  ) {}
 
   login(user: User) {
     const url = `${environment.server + environment.authurl}`;
@@ -97,7 +130,7 @@ export class AuthService {
         const newUser = response.json();
         if (newUser) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify(newUser));
+          this.universalUser.setUser(newUser);
         }
 
         return newUser;
@@ -106,7 +139,7 @@ export class AuthService {
 
   logout() {
     // remove user from local storage to log user out
-    localStorage.removeItem('currentUser');
+    this.universalUser.removeUser();
     this.router.navigate(['/login']);
   }
 
