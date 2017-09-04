@@ -213,7 +213,7 @@ export class EntityService {
   constructor(private http: Http) { }
 
   fetchData(): Promise<EntityData[]> {
-    const url = `${environment.autoServer + environment.getintenturl}`;
+    const url = `${environment.autoServer + environment.getentityurl}`;
 
     return this.http
       .get(url, this.options)
@@ -226,7 +226,7 @@ export class EntityService {
   }
 
   createData(entityData: EntityData): Promise<EntityData> {
-    const url = `${environment.autoServer + environment.getintenturl}`;
+    const url = `${environment.autoServer + environment.getentityurl}`;
 
     return this.http
       .post(url, entityData, this.options)
@@ -239,7 +239,7 @@ export class EntityService {
   }
 
   updateData(entityData: EntityData): Promise<EntityData> {
-    const url = `${environment.autoServer + environment.updateintenturl}`;
+    const url = `${environment.autoServer + environment.updateentityurl}`;
 
     return this.http
       .put(url, entityData, this.options)
@@ -252,7 +252,7 @@ export class EntityService {
   }
 
   deleteData(entity: string): Promise<any> {
-    const url = `${environment.autoServer + environment.deleteintenturl + entity}`;
+    const url = `${environment.autoServer + environment.deleteentityurl + entity}`;
 
     return this.http
       .delete(url, this.options)

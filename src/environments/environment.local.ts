@@ -36,5 +36,10 @@ export const environment = {
   getintenturl: 'load/intentclassifier',
   createintenturl: '',
   updateintenturl: 'update/intentclassifier',
-  deleteintenturl: 'delete/intentclassifier?query='
+  deleteintenturl: 'delete/intentclassifier?query=',
+  
+  getentityurl: 'load/entityclassifier',
+  createentityurl: '',
+  updateentityurl: 'update/entityclassifier',
+  deleteentityurl: 'delete/entityclassifier?query='
 };
