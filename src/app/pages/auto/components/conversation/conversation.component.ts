@@ -84,4 +84,17 @@ export class ConversationComponent implements OnInit {
         }
       );
   }
+
+  arrayToString(array: string[]) {
+    let arrayString: string = '';
+    for (let i = 0, len = array.length; i < len; i++) {
+      arrayString += array[i];
+
+      if (i < (len - 1)) {
+        arrayString += ', ';
+      }
+    }
+    
+    return arrayString;
+  }
 }

@@ -3,6 +3,8 @@ declare var closeModal: any;
 import { Component, OnInit } from '@angular/core';
 import { NgUploaderOptions } from 'ngx-uploader';
 
+import { Angular2Csv } from 'angular2-csv/Angular2-csv';
+
 import { TrainingService } from '../../auto.service';
 import { TrainingData } from '../../auto.model';
 import { environment } from '../../../../../environments/environment';
@@ -57,7 +59,16 @@ export class TrainingComponent implements OnInit {
   }
 
   arrayToString(array: string[]) {
-    return array.toString();
+    let arrayString: string = '';
+    for (let i = 0, len = array.length; i < len; i++) {
+      arrayString += array[i];
+
+      if (i < (len - 1)) {
+        arrayString += ', ';
+      }
+    }
+    
+    return arrayString;
   }
 
   fetchTrainingData() {
@@ -65,26 +76,19 @@ export class TrainingComponent implements OnInit {
     this.trainingService.getTrainingData()
     .then(
     trainingDataList => {
-      if (this.loading) {
-        this.loading = false;
-      }
+      this.loading = false;
+      
       if (trainingDataList) {
         this.trainingDataList = trainingDataList;
       }
     },
     error => {
       this.loading = false;
-      if (this.loading) {
-        this.loading = false;
-      }
     }
     )
     .catch(
     error => {
       this.loading = false;
-      if (this.loading) {
-        this.loading = false;
-      }
     }
     );
   }
@@ -174,5 +178,9 @@ export class TrainingComponent implements OnInit {
         this.loading = false;
       }
     );
+  }
+
+  exportToCSV() {
+    new Angular2Csv(this.trainingDataList, 'Intent Classification');
   }
 }

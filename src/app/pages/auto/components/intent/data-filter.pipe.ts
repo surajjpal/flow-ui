@@ -1,16 +1,16 @@
 import * as _ from 'lodash';
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { User } from '../../../../shared/shared.model';
+import { IntentData } from '../../auto.model';
 
 declare let moment: any;
 
 @Pipe({
     name: 'dataFilter'
 })
-export class UserFilterPipe implements PipeTransform {
+export class IntentDataFilterPipe implements PipeTransform {
 
-    transform(array: User[], query: string): User[] {
+    transform(array: IntentData[], query: string): IntentData[] {
         if (query) {
             return _.filter(array, row => {
                 let result = false;
@@ -18,6 +18,14 @@ export class UserFilterPipe implements PipeTransform {
                     for (const property in row) {
                         if (property) {
                             result = result || this.matchQuery(row, property, query);
+                        }
+                    }
+
+                    if (!result && row.hasOwnProperty('body')) {
+                        for (const property in row['body']) {
+                            if (property) {
+                                result = result || this.matchQuery(row['body'], property, query);
+                            }
                         }
                     }
                 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Headers, Http, Jsonp, RequestOptions, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
-import { Dashboard, Episode, ChatMessage, TrainingData } from './auto.model';
+import { Dashboard, Episode, ChatMessage, TrainingData, IntentData, EntityData } from './auto.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable()
@@ -125,6 +125,134 @@ export class TrainingService {
 
   delete(id: string): Promise<any> {
     const url = `${environment.autoServer + environment.deletetrainingdataurl + id}`;
+
+    return this.http
+      .delete(url, this.options)
+      .toPromise()
+      .then(
+        response => response as any,
+        error => error as any
+      )
+      .catch(this.handleError);
+  }
+
+  private handleError(error: any): Promise<any> {
+    return Promise.reject(error.message || error);
+  }
+}
+
+@Injectable()
+export class IntentService {
+  private headers = new Headers({ 'Content-Type': 'application/json' });
+  private options = new RequestOptions({ headers: this.headers });
+
+  constructor(private http: Http) { }
+
+  fetchData(): Promise<IntentData[]> {
+    const url = `${environment.autoServer + environment.getintenturl}`;
+
+    return this.http
+      .get(url, this.options)
+      .toPromise()
+      .then(
+        response => response.json() as IntentData[],
+        error => error.json() as any
+      )
+      .catch(this.handleError);
+  }
+
+  createData(intentData: IntentData): Promise<IntentData> {
+    const url = `${environment.autoServer + environment.getintenturl}`;
+
+    return this.http
+      .post(url, intentData, this.options)
+      .toPromise()
+      .then(
+        response => response.json() as IntentData,
+        error => error as any
+      )
+      .catch(this.handleError);
+  }
+
+  updateData(intentData: IntentData): Promise<IntentData> {
+    const url = `${environment.autoServer + environment.updateintenturl}`;
+
+    return this.http
+      .put(url, intentData, this.options)
+      .toPromise()
+      .then(
+        response => response as any,
+        error => error as any
+      )
+      .catch(this.handleError);
+  }
+
+  deleteData(intent: string): Promise<any> {
+    const url = `${environment.autoServer + environment.deleteintenturl + intent}`;
+
+    return this.http
+      .delete(url, this.options)
+      .toPromise()
+      .then(
+        response => response as any,
+        error => error as any
+      )
+      .catch(this.handleError);
+  }
+
+  private handleError(error: any): Promise<any> {
+    return Promise.reject(error.message || error);
+  }
+}
+
+@Injectable()
+export class EntityService {
+  private headers = new Headers({ 'Content-Type': 'application/json' });
+  private options = new RequestOptions({ headers: this.headers });
+
+  constructor(private http: Http) { }
+
+  fetchData(): Promise<EntityData[]> {
+    const url = `${environment.autoServer + environment.getintenturl}`;
+
+    return this.http
+      .get(url, this.options)
+      .toPromise()
+      .then(
+        response => response.json() as EntityData[],
+        error => error.json() as any
+      )
+      .catch(this.handleError);
+  }
+
+  createData(entityData: EntityData): Promise<EntityData> {
+    const url = `${environment.autoServer + environment.getintenturl}`;
+
+    return this.http
+      .post(url, entityData, this.options)
+      .toPromise()
+      .then(
+        response => response.json() as EntityData,
+        error => error as any
+      )
+      .catch(this.handleError);
+  }
+
+  updateData(entityData: EntityData): Promise<EntityData> {
+    const url = `${environment.autoServer + environment.updateintenturl}`;
+
+    return this.http
+      .put(url, entityData, this.options)
+      .toPromise()
+      .then(
+        response => response as any,
+        error => error as any
+      )
+      .catch(this.handleError);
+  }
+
+  deleteData(entity: string): Promise<any> {
+    const url = `${environment.autoServer + environment.deleteintenturl + entity}`;
 
     return this.http
       .delete(url, this.options)

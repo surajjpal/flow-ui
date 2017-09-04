@@ -43,7 +43,7 @@
           <tbody>
             <tr *ngFor="let episode of mf.data" (click)="onSelect(episode)" data-toggle="modal" data-target="#detailsModal">
               <td>{{episode._source.mode}}</td>
-              <td>{{episode._source.entities}}</td>
+              <td>{{arrayToString(episode._source.entities)}}</td>
               <td>{{episode._source.startTime | date:'dd/MM/y, h:mm:ss a'}}</td>
               <td>{{episode._source.endTime | date:'dd/MM/y, h:mm:ss a'}}</td>
               <td>{{episode._source.status}}</td>

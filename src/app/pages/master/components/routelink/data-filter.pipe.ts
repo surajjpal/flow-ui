@@ -1,16 +1,16 @@
 import * as _ from 'lodash';
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { User } from '../../../../shared/shared.model';
+import { RoleRouteMap } from '../../master.model';
 
 declare let moment: any;
 
 @Pipe({
     name: 'dataFilter'
 })
-export class UserFilterPipe implements PipeTransform {
+export class RouteFilterPipe implements PipeTransform {
 
-    transform(array: User[], query: string): User[] {
+    transform(array: RoleRouteMap[], query: string): RoleRouteMap[] {
         if (query) {
             return _.filter(array, row => {
                 let result = false;

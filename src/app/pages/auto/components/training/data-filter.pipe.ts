@@ -37,9 +37,11 @@ export class TrainingDataFilterPipe implements PipeTransform {
                 }
                 if (value instanceof Array) {
                     for (const innerValue of value) {
-
                         if (innerValue instanceof String || typeof innerValue === 'string') {
-                            return innerValue.toLowerCase().indexOf(query.toLowerCase()) > -1;
+                            const result = innerValue.toLowerCase().indexOf(query.toLowerCase()) > -1;
+                            if (result) {
+                                return result;
+                            }
                         }
                     }
                 }

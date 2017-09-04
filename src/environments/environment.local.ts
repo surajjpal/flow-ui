@@ -19,6 +19,9 @@ export const environment = {
   registerurl: 'auth/createUser',
   updateuserurl: 'auth/update',
   authoritiesurl: 'auth/roles',
+  roleroutemapurl: 'master/roleroutemap',
+  rolesurl: 'master/roles',
+  routesurl: 'master/routes',
 
   // auto
   autoServer: 'https://cors-anywhere.herokuapp.com/https://auto.automatapi.xyz/',   // TODO: remove proxy
@@ -28,5 +31,10 @@ export const environment = {
   uploadtrainingexcelurl: 'load/excelupload',
   createtrainingdataurl: 'add/trainingdata',
   updatetrainingdataurl: 'update/trainingdata',
-  deletetrainingdataurl: 'delete/trainingdata?query='
+  deletetrainingdataurl: 'delete/trainingdata?query=',
+
+  getintenturl: 'load/intentclassifier',
+  createintenturl: '',
+  updateintenturl: 'update/intentclassifier',
+  deleteintenturl: 'delete/intentclassifier?query='
 };

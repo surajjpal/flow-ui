@@ -65,7 +65,10 @@ export class DataFilterPipe implements PipeTransform {
                                 innerValue = moment(innerValue).format('dd/MM/y, h:mm:ss a');
                             }
                             
-                            return innerValue.toLowerCase().indexOf(query.toLowerCase()) > -1;
+                            const result = innerValue.toLowerCase().indexOf(query.toLowerCase()) > -1;
+                            if (result) {
+                                return result;
+                            }
                         }
                     }
                 }

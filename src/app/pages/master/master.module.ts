@@ -11,8 +11,10 @@ import { MasterComponent } from './master.component';
 import { UserComponent } from './components/user/user.component';
 import { UserFilterPipe } from './components/user/data-filter.pipe';
 import { UpdateUserComponent } from './components/updateUser/updateUser.component';
+import { RoutelinkComponent } from './components/routelink/routelink.component';
+import { RouteFilterPipe } from './components/routelink/data-filter.pipe';
 
-import { UserService } from './master.service';
+import { UserService, RoutesService } from './master.service';
 
 @NgModule({
   imports: [
@@ -26,10 +28,13 @@ import { UserService } from './master.service';
     MasterComponent,
     UserComponent,
     UserFilterPipe,
-    UpdateUserComponent
+    UpdateUserComponent,
+    RoutelinkComponent,
+    RouteFilterPipe
   ],
   providers: [
-    UserService
+    UserService,
+    RoutesService
   ]
 })
 export class MasterModule { }

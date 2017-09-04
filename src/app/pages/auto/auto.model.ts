@@ -92,3 +92,49 @@ export class TrainingData {
   responseMessage: string;
   actionHtml: string;
 }
+
+export class IntentDataBody {
+  goals: string[];
+  name: string;
+  parent: string;
+  tags: string[];
+
+  constructor() {
+    this.name = '';
+    this.parent = '';
+    this. goals = [];
+    this.tags = [];
+  }
+}
+
+export class IntentData {
+  intent: string;
+  body: IntentDataBody;
+
+  constructor() {
+    this.intent = '';
+    this.body = new IntentDataBody();
+  }
+}
+
+export class EntityDataBody {
+  name: string;
+  parent: string;
+  tags: string[];
+
+  constructor() {
+    this.name = '';
+    this.parent = '';
+    this.tags = [];
+  }
+}
+
+export class EntityData {
+  intent: string;         // replace intent with entity once API is ready
+  body: EntityDataBody;
+
+  constructor() {
+    this.intent = '';
+    this.body = new EntityDataBody();
+  }
+}
