@@ -7,7 +7,7 @@ import { RoutesService } from '../../master.service';
 
 @Component({
   selector: 'api-route',
-  templateUrl: 'routeLink.component.html',
+  templateUrl: 'routelink.component.html',
   styleUrls: ['routelink.scss']
 })
 export class RoutelinkComponent implements OnInit {
