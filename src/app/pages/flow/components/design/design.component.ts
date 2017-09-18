@@ -3,6 +3,7 @@ declare var saveStateObject: any;
 declare var updateStateObject: any;
 declare var designFlowEditor: any;
 declare var closeModal: any;
+declare var exportGraphXml: any;
 
 import { Component, Input, OnInit, OnDestroy, NgZone } from '@angular/core';
 import 'rxjs/add/operator/switchMap';
@@ -65,20 +66,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (this.graphObject) {
       this.communicationService.sendGraphObject(null);
     }
-
-    /*
-    this.subscription = communicationService.graphObjectReceived$.subscribe(
-      graphObject => {
-        this.graphObject = graphObject;
-    });
-    */
-    /*
-    this.route.queryParams.subscribe(params => {
-      this.graphObject = params["graph_object"];
-    });
-    */
   }
-
 
   ngOnInit() {
     this.load();
@@ -218,7 +206,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   save(): void {
-
+    // This will call a method in app.js and it will convert mxGraph into xml
+    // and send it back to this component in method saveGraphXml(xml: string)
+    new exportGraphXml();
   }
 
   ngOnDestroy() {

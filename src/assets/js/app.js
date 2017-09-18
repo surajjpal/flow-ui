@@ -569,53 +569,6 @@ designFlowEditor = function (serverXml) {
       // To scroll graph so that our cell would appear in center
       graph.scrollCellToVisible(v1, true);
     }
-
-
-    var content = document.createElement('div');
-    content.style.padding = '4px';
-    var tb = new mxToolbar(content);
-    tb.addItem('View XML', '/assets/js/mxGraph/images/zoom_in32.png', function (evt) {
-      var encoder = new mxCodec();
-      var node = encoder.encode(graph.getModel());
-      var xml = mxUtils.getXml(node);
-      mxUtils.popup(xml, true);
-
-      try {
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.saveGraphXml(xml); })
-      } catch (exception) {
-        // console.log(exception);
-      }
-    });
-    tb.addItem('Settings', '/assets/js/mxGraph/images/zoom_in32.png', function (evt) {
-      $('#settignsModal').modal();
-    });
-    tb.addItem('Zoom In', '/assets/js/mxGraph/images/zoom_in32.png', function (evt) {
-      graph.zoomIn();
-    });
-    tb.addItem('Zoom Out', '/assets/js/mxGraph/images/zoom_out32.png', function (evt) {
-      graph.zoomOut();
-    });
-
-    tb.addItem('Actual Size', '/assets/js/mxGraph/images/view_1_132.png', function (evt) {
-      graph.zoomActual();
-    });
-    tb.addItem('Print', '/assets/js/mxGraph/images/print32.png', function (evt) {
-      var preview = new mxPrintPreview(graph, 1);
-      preview.open();
-    });
-    tb.addItem('Poster Print', '/assets/js/mxGraph/images/press32.png', function (evt) {
-      var pageCount = mxUtils.prompt('Enter maximum page count', '1');
-      if (pageCount != null) {
-        var scale = mxUtils.getScaleForPageCount(pageCount, graph);
-        var preview = new mxPrintPreview(graph, scale);
-        preview.open();
-      }
-    });
-    wnd = new mxWindow('Tools', content, 0, 0, 200, 110, true, false, toolsContainer);
-    wnd.setMaximizable(false);
-    wnd.setScrollable(false);
-    wnd.setResizable(false);
-    wnd.setVisible(true);
   }
 };
 
@@ -874,6 +827,18 @@ updateStateObject = function (state) {
     } finally {
       graph.getModel().endUpdate();
     }
+  }
+}
+
+exportGraphXml = function () {
+  var encoder = new mxCodec();
+  var node = encoder.encode(graph.getModel());
+  var xml = mxUtils.getXml(node);
+
+  try {
+    window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.saveGraphXml(xml); })
+  } catch (exception) {
+    // console.log(exception);
   }
 }
 

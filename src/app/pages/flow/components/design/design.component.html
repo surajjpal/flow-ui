@@ -3,6 +3,7 @@
 <div>
   <div class="col-md-12 col-sm-12 col-xs-12">
     <button type="button" class="btn btn-default" data-toggle="modal" data-target="clearAllData()">Clear Data</button>
+    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#settignsModal">Settings</button>
     <button type="button" class="btn btn-default" (click)="toolsChoice(ZOOM_IN)">Zoom In</button>
     <button type="button" class="btn btn-default" (click)="toolsChoice(ZOOM_OUT)">Zoom Out</button>
     <button type="button" class="btn btn-default" (click)="toolsChoice(ZOOM_ACTUAL)">Zoom Actual</button>
@@ -13,7 +14,6 @@
   <div class="col-md-12 col-sm-12 col-xs-12">
     <div id="editorGrid" class="col-md-12 col-sm-12 col-xs-12" style="height:68vh;overflow:hidden;margin-bottom:5px;"></div>
     <div id="outlineContainer" style="z-index:1;position:absolute;overflow:hidden;top:0px;right:0;width:160px;height:120px;background:transparent;border-style:solid;border-color:lightgray;"></div>
-    <div id="toolsContainer" style="z-index:1;position:absolute;overflow:hidden;top:0px;left:0;width:160px;height:120px;background:transparent;border-style:solid;border-color:lightgray;"></div>
   </div>
 </div>
 
@@ -522,7 +522,7 @@
         <button type="button" class="btn btn-primary" id="addDataPointButton" (click)="addNewDataPoint()">
           Add Data Point
         </button>
-        <button type="button" class="btn btn-success" id="saveChangesButton" data-dismiss="modal">
+        <button type="button" class="btn btn-success" id="saveChangesButton" (click)="save()" data-dismiss="modal">
           Save Changes
         </button>
       </div>
