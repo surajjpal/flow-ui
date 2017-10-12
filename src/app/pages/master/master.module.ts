@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataTableModule } from 'angular2-datatable';
+import { TagInputModule } from 'ngx-chips';
 
 import { NgaModule } from '../../theme/nga.module';
 
@@ -22,7 +23,8 @@ import { UserService, RoutesService } from './master.service';
     FormsModule,
     DataTableModule,
     NgaModule,
-    routing
+    routing,
+    TagInputModule
   ],
   declarations: [
     MasterComponent,

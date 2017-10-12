@@ -2,13 +2,14 @@
 
 <div>
   <div class="col-md-12 col-sm-12 col-xs-12">
-    <button type="button" class="btn btn-default" data-toggle="modal" data-target="clearAllData()">Clear Data</button>
-    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#settignsModal">Settings</button>
-    <button type="button" class="btn btn-default" (click)="toolsChoice(ZOOM_IN)">Zoom In</button>
-    <button type="button" class="btn btn-default" (click)="toolsChoice(ZOOM_OUT)">Zoom Out</button>
-    <button type="button" class="btn btn-default" (click)="toolsChoice(ZOOM_ACTUAL)">Zoom Actual</button>
-    <button type="button" class="btn btn-default" (click)="toolsChoice(PRINT_PREVIEW)">Print Preview</button>
-    <button type="button" class="btn btn-default" (click)="toolsChoice(POSTER_PRINT)">Poster Print</button>
+    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="clearAllData()">Clear Data</button>
+    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="saveOnServer()" *ngIf="!readOnly">Save</button>
+    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="prepareDummyObject()" *ngIf="!readOnly" data-toggle="modal" data-target="#settignsModal">Settings</button>
+    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">Zoom In</button>
+    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">Zoom Out</button>
+    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">Zoom Actual</button>
+    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)">Print Preview</button>
+    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="toolsChoice(POSTER_PRINT)">Poster Print</button>
   </div>
   <br>
   <div class="col-md-12 col-sm-12 col-xs-12">
@@ -41,11 +42,6 @@
               name="stateCd" />
           </div>
           <div class="form-group">
-            <label for="inputStateLabel">State Name</label>
-            <input type="text" class="form-control" required id="inputStateLabel" placeholder="State Name" [(ngModel)]="tempState.name"
-              name="name" />
-          </div>
-          <div class="form-group">
             <label for="selectStateType">State Type</label>
             <select class="selectpicker form-control" required id="selectStateType" title="Choose State Type" [(ngModel)]="tempState.type"
               name="type">
@@ -56,14 +52,21 @@
             <label for="selectStateTrigger">State Trigger</label>
             <select class="selectpicker form-control" required id="selectStateTrigger" title="Choose trigger for this state" [(ngModel)]="tempState.trigger"
               name="trigger">
-                <option *ngFor="let event of tempParentState.events" [value]="event">{{event.eventCd}}</option>
+                <option *ngFor="let event of tempParentState.events" [ngValue]="event">{{event.eventCd}}</option>
               </select>
           </div>
           <div class="form-group">
             <label for="selectClassifiers">Classifiers</label>
-            <select class="selectpicker form-control" required id="selectClassifiers" title="Choose Classifiers" [(ngModel)]="tempState.classifiers"
+            <select multiple="true" class="selectpicker form-control" required id="selectClassifiers" title="Choose Classifiers" [(ngModel)]="tempState.classifiers"
               name="classifiers">
-                <option *ngFor="let classifier of sourceClassifiers" [value]="classifier">{{classifier.apiName}}</option>
+                <option *ngFor="let classifier of sourceClassifiers" [ngValue]="classifier">{{classifier.apiName}}</option>
+              </select>
+          </div>
+          <div class="form-group">
+            <label for="selectEntryActions">Entry Actions</label>
+            <select multiple="true" class="selectpicker form-control" required id="selectEntryActions" title="Choose Entry Actions" [(ngModel)]="tempState.entryActionList"
+              name="entryActionList">
+                <option *ngFor="let entryAction of sourceEntryActionList" [ngValue]="entryAction['key']">{{entryAction['value']}}</option>
               </select>
           </div>
         </form>
@@ -107,8 +110,8 @@
                       </select>
                     </div>
 
-                    <div [id]="'expAccordion' + eventIndex" role="tablist" aria-multiselectable="true" *ngIf="event.expressions.length > 0">
-                      <div *ngFor="let expression of event.expressions; let expIndex=index" class="panel">
+                    <div [id]="'expAccordion' + eventIndex" role="tablist" aria-multiselectable="true" *ngIf="event.expressionList.length > 0">
+                      <div *ngFor="let expression of event.expressionList; let expIndex=index" class="panel">
                         <div class="card">
                           <div *ngIf="expIndex == 0" [id]="'event' + eventIndex + 'expTabHeading' + expIndex" class="card-header" heightStyle="content"
                             role="tab">
@@ -155,7 +158,7 @@
                                   <input type="text" class="form-control" required [id]="'expResult' + expIndex" placeholder="Expected Result" [(ngModel)]="expression.expectedResult"
                                     name="expectedResult" />
                                 </div>
-                                <div class="form-group" *ngIf="event.expressions.length > 1">
+                                <div class="form-group" *ngIf="event.expressionList.length > 1">
                                   <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
                                     Remove Expression
                                   </button>
@@ -189,7 +192,7 @@
                                   <input type="text" class="form-control" required [id]="'expResult' + expIndex" placeholder="Expected Result" [(ngModel)]="expression.expectedResult"
                                     name="expectedResult" />
                                 </div>
-                                <div class="form-group" *ngIf="event.expressions.length > 1">
+                                <div class="form-group" *ngIf="event.expressionList.length > 1">
                                   <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
                                       Remove Expression
                                     </button>
@@ -231,8 +234,8 @@
                       </select>
                     </div>
 
-                    <div [id]="'expAccordion' + eventIndex" role="tablist" aria-multiselectable="true" *ngIf="event.expressions.length > 0">
-                      <div *ngFor="let expression of event.expressions; let expIndex=index" class="panel">
+                    <div [id]="'expAccordion' + eventIndex" role="tablist" aria-multiselectable="true" *ngIf="event.expressionList.length > 0">
+                      <div *ngFor="let expression of event.expressionList; let expIndex=index" class="panel">
                         <div class="card">
                           <div *ngIf="expIndex == 0" [id]="'event' + eventIndex + 'expTabHeading' + expIndex" class="card-header" heightStyle="content"
                             role="tab">
@@ -279,7 +282,7 @@
                                   <input type="text" class="form-control" required [id]="'expResult' + expIndex" placeholder="Expected Result" [(ngModel)]="expression.expectedResult"
                                     name="expectedResult" />
                                 </div>
-                                <div class="form-group" *ngIf="event.expressions.length > 1">
+                                <div class="form-group" *ngIf="event.expressionList.length > 1">
                                   <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
                                     Remove Expression
                                   </button>
@@ -313,7 +316,7 @@
                                   <input type="text" class="form-control" required [id]="'expResult' + expIndex" placeholder="Expected Result" [(ngModel)]="expression.expectedResult"
                                     name="expectedResult" />
                                 </div>
-                                <div class="form-group" *ngIf="event.expressions.length > 1">
+                                <div class="form-group" *ngIf="event.expressionList.length > 1">
                                   <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
                                       Remove Expression
                                     </button>
@@ -374,38 +377,41 @@
       <div class="modal-body">
         <form>
           <div class="form-group">
-            <label class="col-md-12 col-sm-12 col-xs-12" for="inputMachineName">
-              Machine Name
+            <label class="col-md-12 col-sm-12 col-xs-12" for="inputMachineLabel">
+              Machine Label
             </label>
-            <!-- <div class="col-md-12 col-sm-12 col-xs-12"> -->
-            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputMachineName" placeholder="Machine Name" [(ngModel)]="graphObject.machineType"
+            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputMachineLabel" placeholder="Machine Label" [(ngModel)]="tempGraphObject.machineLabel"
+              name="machineLabel" />
+          </div>
+          <div class="form-group">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="inputMachineType">
+              Machine Type
+            </label>
+            <input *ngIf="graphObject.machineType && graphObject.machineType.length > 0" disabled type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputMachineType" placeholder="Machine Name" [(ngModel)]="tempGraphObject.machineType"
               name="machineType" />
-            <!-- </div> -->
+            <input *ngIf="!graphObject.machineType || graphObject.machineType.length == 0" type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputMachineType" placeholder="Machine Name" [(ngModel)]="tempGraphObject.machineType"
+              name="machineType" />
           </div>
           <div class="form-group">
             <label class="col-md-12 col-sm-12 col-xs-12" for="inputVersionNumber">
               Version Number
             </label>
-            <!-- <div class="col-md-12 col-sm-12 col-xs-12"> -->
-            <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputVersionNumber" placeholder="Version Number"
+            <input type="number" disabled class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputVersionNumber" placeholder="Version Number"
               min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
-              [(ngModel)]="graphObject.version" name="version" />
-            <!-- </div> -->
+              [(ngModel)]="tempGraphObject.version" name="version" />
           </div>
           <div class="form-group">
             <label class="col-md-12 col-sm-12 col-xs-12" for="inputStatus">
               Status
             </label>
-            <!-- <div class="col-md-12 col-sm-12 col-xs-12"> -->
             <select disabled="true" class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" id="inputStatus" title="Select Status">
                 <option *ngFor="let status of sourceStatusCodes" [value]="status">{{status}}</option>
               </select>
-            <!-- </div> -->
           </div>
         </form>
 
-        <div id="dpAccordion" role="tablist" aria-multiselectable="true" *ngIf="graphObject.dataPointConfigurationList.length > 0">
-          <div *ngFor="let dataPoint of graphObject.dataPointConfigurationList; let index=index" class="panel">
+        <div id="dpAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempGraphObject.dataPointConfigurationList.length > 0">
+          <div *ngFor="let dataPoint of tempGraphObject.dataPointConfigurationList; let index=index" class="panel">
             <div class="card">
               <div *ngIf="index == 0" [id]="'dpTabHeading' + index" class="card-header" heightStyle="content" role="tab">
                 <h5 class="mb-0">
@@ -459,7 +465,7 @@
                           <option *ngFor="let sourceInput of sourceInputTargets" [value]="sourceInput">{{sourceInput}}</option>
                         </select>
                     </div>
-                    <div class="form-group" *ngIf="graphObject.dataPointConfigurationList.length > 1">
+                    <div class="form-group" *ngIf="tempGraphObject.dataPointConfigurationList.length > 1">
                       <button type="button" class="btn btn-danger" (click)="deleteDataPoint(dataPoint)">
                           Remove Data Point
                         </button>
@@ -502,7 +508,7 @@
                           <option *ngFor="let sourceInput of sourceInputTargets" [value]="sourceInput">{{sourceInput}}</option>
                         </select>
                     </div>
-                    <div class="form-group" *ngIf="graphObject.dataPointConfigurationList.length > 1">
+                    <div class="form-group" *ngIf="tempGraphObject.dataPointConfigurationList.length > 1">
                       <button type="button" class="btn btn-danger" (click)="deleteDataPoint(dataPoint)">
                           Remove Data Point
                         </button>

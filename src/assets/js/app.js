@@ -249,8 +249,11 @@ var settingsPopupBody;
 var horizontal = true;
 var sourceCell;   // Used as a parent cell while adding new cell in graph.
 var cellLabelChanged;
+var isReadOnly = false;;
 
-designFlowEditor = function (serverXml) {
+designFlowEditor = function (serverXml, readOnly) {
+  isReadOnly = readOnly;
+
   // Checks if browser is supported
   if (!mxClient.isBrowserSupported()) {
     // Displays an error message if the browser is
@@ -502,24 +505,24 @@ designFlowEditor = function (serverXml) {
       if (cell.getValue()) {
         var state = cell.getValue();
         try {
-          if (state.name) {
-            return state.name;
+          if (state.stateCd) {
+            return state.stateCd;
           }
         } catch (exception) {
           // console.log(exception);
         }
 
-        return 'No label found';
+        return '';
       }
     };
 
     cellLabelChanged = graph.cellLabelChanged;
     graph.cellLabelChanged = function (cell, newValue, autoSize) {
-      if (cell.getValue()) {
+      if (!isReadOnly && cell.getValue()) {
         var state = cell.getValue();
         try {
-          if (state.name) {
-            state.name = newValue;
+          if (state.stateCd) {
+            state.stateCd = newValue;
             newValue = state;
 
             cellLabelChanged.apply(this, arguments);
@@ -575,17 +578,11 @@ designFlowEditor = function (serverXml) {
 // Function to create the entries in the popupmenu
 function createPopupMenu(graph, menu, cell, evt, horizontal) {
   var model = graph.getModel();
-  if (cell != null) {
-    if (model.isVertex(cell)) {
-      menu.addItem('Add child', '/assets/js/mxGraph/images/check.png', function () {
-        addChild(graph, cell, horizontal);
-      });
-    }
+  if (!isReadOnly && cell != null) {
     menu.addItem('Edit label', '/assets/js/mxGraph/images/text.gif', function () {
       graph.startEditingAtCell(cell);
     });
-    if (cell.id != 'treeRoot' &&
-      model.isVertex(cell)) {
+    if (cell.id != 'treeRoot' && model.isVertex(cell)) {
       menu.addItem('Delete', '/assets/js/mxGraph/images/delete.gif', function () {
         deleteSubtree(graph, cell);
       });
@@ -593,7 +590,22 @@ function createPopupMenu(graph, menu, cell, evt, horizontal) {
       menu.addItem('Edit', '', function () {
         try {
           sourceCell = cell;
-          window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.addState(cell.value, cell.source.value); })
+
+          let state = cell.value;
+          let parentState = null;
+          if (cell.source) {
+            parentState = cell.source.value;
+          }
+
+          if (state && (typeof state === 'string' || state instanceof String)) {
+            state = null;
+          }
+
+          if (parentState && (typeof parentState === 'string' || parentState instanceof String)) {
+            parentState = null;
+          }
+
+          window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.addState(state, parentState); })
           $("#stateModal").modal();
         } catch (exception) {
           // console.log(exception);
@@ -624,9 +636,11 @@ function createPopupMenu(graph, menu, cell, evt, horizontal) {
 };
 
 function addOverlays(graph, cell, addDeleteIcon, horizontal) {
-  if (cell.style != 'end') {
+  graph.removeCellOverlays(cell);
+  
+  if (!isReadOnly && cell.style != 'end') {
     var overlay = new mxCellOverlay(new mxImage('/assets/js/mxGraph/images/add.png', 24, 24), 'Add child');
-    var cellId = cell.id;
+    
     overlay.cursor = 'hand';
     if (horizontal) {
       overlay.align = mxConstants.ALIGN_RIGHT;
@@ -638,7 +652,14 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
 
     overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
       try {
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.addState(null, cell.value); })
+        
+        let parentState = cell.value;
+
+        if (typeof parentState === 'string' || parentState instanceof String) {
+          parentState = null;
+        }
+        
+        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.addState(null, parentState); })
         sourceCell = cell;
       } catch (exception) {
         // console.log(exception);
@@ -648,7 +669,7 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
     graph.addCellOverlay(cell, overlay);
   }
 
-  if (addDeleteIcon) {
+  if (!isReadOnly && addDeleteIcon) {
     overlay = new mxCellOverlay(new mxImage('/assets/js/mxGraph/images/close.png', 30, 30), 'Delete');
     overlay.cursor = 'hand';
     // overlay.offset = new mxPoint(-4, 8);
@@ -660,38 +681,6 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
 
     graph.addCellOverlay(cell, overlay);
   }
-};
-
-function addChild(graph, cell, horizontal) {
-  var model = graph.getModel();
-  var parent = graph.getDefaultParent();
-  var vertex;
-  model.beginUpdate();
-  try {
-    vertex = graph.insertVertex(parent, null, 'Double click to set name');
-    var geometry = model.getGeometry(vertex);
-    // Updates the geometry of the vertex with the
-    // preferred size computed in the graph
-    var size = graph.getPreferredSizeForCell(vertex);
-    geometry.width = size.width;
-    geometry.height = size.height;
-    // Adds the edge between the existing cell
-    // and the new vertex and executes the
-    // automatic layout on the parent
-    var edge = graph.insertEdge(parent, null, '', cell, vertex);
-    // Configures the edge label "in-place" to reside
-    // at the end of the edge (x = 1) and with an offset
-    // of 20 pixels in negative, vertical direction.
-    edge.geometry.x = 1;
-    edge.geometry.y = 0;
-    edge.geometry.offset = new mxPoint(0, -20);
-    addOverlays(graph, vertex, true, horizontal);
-  }
-  finally {
-    model.endUpdate();
-  }
-
-  return vertex;
 };
 
 function addChild(graph, cell, customObject, horizontal, stateCode, stateLabel, stateType) {
@@ -716,17 +705,29 @@ function addChild(graph, cell, customObject, horizontal, stateCode, stateLabel, 
       var geometry = model.getGeometry(vertex);
       geometry.width = size.width;
       geometry.height = size.height;
-    } else if (stateType == 'End') {
-      vertex = graph.insertVertex(parent, null, '', 0, 0, 0, 0, 'end', false);
+
+      if (sourceCell != null) {
+        vertex.source = sourceCell;
+      }
+    } else if (stateType == 'End' || (customObject && customObject.events && customObject.events.length == 0)) {
+      vertex = graph.insertVertex(parent, null, customObject, 0, 0, 0, 0, 'end', false);
       var geometry = model.getGeometry(vertex);
       geometry.width = circleSize;
       geometry.height = circleSize;
+
+      if (sourceCell != null) {
+        vertex.source = sourceCell;
+      }
     } else {
       vertex = graph.insertVertex(parent, null, customObject);
       var size = graph.getPreferredSizeForCell(vertex);
       var geometry = model.getGeometry(vertex);
       geometry.width = size.width;
       geometry.height = size.height;
+
+      if (sourceCell != null) {
+        vertex.source = sourceCell;
+      }
     }
 
     // vertex.source = cell;
@@ -821,6 +822,25 @@ updateStateObject = function (state) {
     graph.getModel().beginUpdate();
     try {
       sourceCell.setValue(state);
+
+      if (state && state.events && state.events.length > 1) {
+        var size = graph.getPreferredSizeForCell(sourceCell);
+        var geometry = graph.getModel().getGeometry(sourceCell);
+        geometry.width = size.width;
+        geometry.height = size.height;
+      } else if (state && state.events && state.events.length == 0) {
+        var geometry = graph.getModel().getGeometry(sourceCell);
+        geometry.width = circleSize;
+        geometry.height = circleSize;
+      } else {
+        var size = graph.getPreferredSizeForCell(sourceCell);
+        var geometry = graph.getModel().getGeometry(sourceCell);
+        geometry.width = size.width;
+        geometry.height = size.height;
+      }
+
+      addOverlays(graph, sourceCell, true, horizontal);
+
       graph.getView().clear(cell, false, false);
       graph.getView().validate();
       graph.cellSizeUpdated(sourceCell, false);
@@ -835,11 +855,49 @@ exportGraphXml = function () {
   var node = encoder.encode(graph.getModel());
   var xml = mxUtils.getXml(node);
 
+  var states = getValueForAllVertices();
+  var transitions = getTransitionForAllVertices();
+
   try {
-    window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.saveGraphXml(xml); })
+    window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.saveGraphXml(xml, states, transitions); })
   } catch (exception) {
     // console.log(exception);
   }
+}
+
+getValueForAllVertices = function() {
+  var states = [];
+  var vertices = graph.getChildVertices(graph.getDefaultParent());
+  for (var vertex of vertices) {
+    if (vertex != null && vertex.value != null && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
+      states.push(vertex.value);
+    }
+  }
+
+  return states;
+}
+
+getTransitionForAllVertices = function() {
+  var transitions = [];
+  var vertices = graph.getChildVertices(graph.getDefaultParent());
+  for (var vertex of vertices) {
+    if (vertex != null && vertex.value != null && vertex.source != null && vertex.source.value != null && !(typeof vertex.source.value === 'string' || vertex.source.value instanceof String) && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
+      var transition = {};
+      
+      transition.sourceStateCd = vertex.source.value.stateCd;
+      transition.targetStateCd = vertex.value.stateCd;
+
+      if (vertex.value.trigger == null) {
+        transition.eventCd = null;
+      } else {
+        transition.eventCd = vertex.value.trigger.eventCd;
+      }
+
+      transitions.push(transition);
+    }
+  }
+
+  return transitions;
 }
 
 initializeGraphOnInit = function () {

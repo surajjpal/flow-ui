@@ -14,6 +14,7 @@ export const environment = {
   stateflowimageurl: 'statemachine/stateflow/',
   autosummary: 'autodashboard/CONVERSATION_SUMMARY',
   graphurl: 'graph/',
+  entryactionurl: 'graph/actions',
   autodashboardurl: 'autodashboard',
   authurl: 'auth/',
   registerurl: 'auth/createUser',
@@ -24,7 +25,7 @@ export const environment = {
   routesurl: 'master/routes',
 
   // auto
-  autoServer: 'https://cors-anywhere.herokuapp.com/https://auto.automatapi.xyz/',   // TODO: remove proxy
+  autoServer: 'https://cors-anywhere.herokuapp.com/https://auto.automatapi.com/',   // TODO: remove proxy
   episodelisturl: 'load/episodes?query=',
   messagelisturl: 'load/messages?query=',
   trainingdataurl: 'load/trainingdata',
@@ -37,9 +38,18 @@ export const environment = {
   createintenturl: '',
   updateintenturl: 'update/intentclassifier',
   deleteintenturl: 'delete/intentclassifier?query=',
-  
+
   getentityurl: 'load/entityclassifier',
   createentityurl: '',
   updateentityurl: 'update/entityclassifier',
-  deleteentityurl: 'delete/entityclassifier?query='
+  deleteentityurl: 'delete/entityclassifier?query=',
+
+  // Wheels EMI
+  wheelsemiserver: 'https://cors-anywhere.herokuapp.com/http://169.54.3.12:5002/',
+  savedomainurl: 'domain',
+  fetchdomainurl: 'fetchdomain?query=',
+  saveagenturl: 'agent',
+  fetchagenturl: 'fetchagent?query=',
+  saveaccounturl: 'saveaccount',
+  fetchresponse: 'fetchresponse?' // fetchresponse?intentName=information&entityName=policy is actual url
 };

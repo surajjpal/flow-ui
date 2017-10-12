@@ -13,16 +13,43 @@ export class ConversationSummary {
   auto_messages_percentage_change: number;
   user_messages_percentage_change: number;
   goal_met_percentage_change: number;
+
+  constructor() {
+    this.goals_met_count = 0;
+    this.user_messages_count = 0;
+    this.conversation_count = 0;
+    this.episodes_count = 0;
+    this.auto_messages_count = 0;
+    this.goals_count = 0;
+    this.avg_time = 0;
+    this.episode_percentage_change = 0;
+    this.user_percentage_change = 0;
+    this.avg_time_percentage_change = 0;
+    this.goals_count_percentage_change = 0;
+    this.auto_messages_percentage_change = 0;
+    this.user_messages_percentage_change = 0;
+    this.goal_met_percentage_change = 0;
+  }
 }
 
 export class NVD3Chart {
   key: string;
   values: [string, any][];
+
+  constructor() {
+    this.key = '';
+    this.values = [];
+  }
 }
 
 export class Dashboard {
   conversationSummary: ConversationSummary;
   nvd3ChartInputList: NVD3Chart[];
+
+  constructor() {
+    this.conversationSummary = new ConversationSummary();
+    this.nvd3ChartInputList = [];
+  }
 }
 
 export class DataPoint {
@@ -31,40 +58,108 @@ export class DataPoint {
   paramTargetList: string[];
   inputTarget: string;
   machineType: string;
+
+  constructor() {
+    this.dataPointName = '';
+    this.expression = '';
+    this.paramTargetList = [];
+    this.inputTarget = '';
+    this.machineType = '';
+  }
 }
 
 export class Classifier {
   apiName: string;
   url: string;
+
+  constructor() {
+    this.apiName = '';
+    this.url = '';
+  }
 }
 
 export class Expression {
   value: string;
   target: string;
   expectedResult: string;
+
+  constructor() {
+    this.value = '';
+    this.target = '';
+    this.expectedResult = '';
+  }
 }
 
 export class EventModel {
   eventCd: string;
-  expressions: Expression[];
+  expressionList: Expression[];
   operand: string;
+  sortPriority: number;
+
+  constructor() {
+    this.eventCd = '';
+    this.expressionList = [];
+    this.operand = '';
+    this.sortPriority = 0;
+  }
 }
 
 export class StateModel {
-  id: string;
+  stateId: string;
   stateCd: string;
-  name: string;
+  initialState: boolean;
+  endState: boolean;
+  events: EventModel[];
   type: string;
   trigger: EventModel;
-  events: EventModel[];
   classifiers: Classifier[];
+  entryActionList: string[];
+
+  constructor() {
+    this.stateId = '';
+    this.stateCd = '';
+    this.initialState = false;
+    this.endState = false;
+    this.events = [];
+    this.type = '';
+    this.trigger = new EventModel();
+    this.classifiers = [];
+    this.entryActionList = [];
+  }
+}
+
+export class Transition {
+  sourceStateCd: string;
+  targetStateCd: string;
+  eventCd: string;
+
+  constructor() {
+    this.sourceStateCd = '';
+    this.targetStateCd = '';
+    this.eventCd = '';
+  }
 }
 
 export class GraphObject {
   _id: string;
   statusCd: string;
+  machineLabel: string;
   machineType: string;
-  version: string;
+  version: number;
   xml: string;
   dataPointConfigurationList: DataPoint[];
+  states: StateModel[];
+  transitions: Transition[];
+
+  constructor() {
+    this._id = null;
+    this.statusCd = '';
+    this.machineLabel = '';
+    this.machineType = '';
+    this.version = 0;
+    this.xml = '';
+    this.dataPointConfigurationList = [];
+    this.states = [];
+    this.transitions = [];
+  }
 }

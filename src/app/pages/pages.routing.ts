@@ -26,7 +26,8 @@ export const routes: Routes = [
       { path: 'inbox', loadChildren: './inbox/inbox.module#InboxModule' },
       { path: 'auto', loadChildren: './auto/auto.module#AutoModule' },
       { path: 'flow', loadChildren: './flow/flow.module#FlowModule' },
-      { path: 'master', loadChildren: './master/master.module#MasterModule' }
+      { path: 'master', loadChildren: './master/master.module#MasterModule' },
+      { path: 'agent', loadChildren: './agent/agent.module#AgentModule'}
     ]
   }
 ];

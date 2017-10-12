@@ -24,13 +24,46 @@
               <th>
                 <mfDefaultSorter by="statusCd">Status</mfDefaultSorter>
               </th>
+              <th>
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let graph of mf.data" (click)="onSelect(graph)" data-toggle="modal" data-target=".bs-example-modal-lg">
+            <tr *ngFor="let graph of mf.data" data-toggle="modal" data-target=".bs-example-modal-lg">
               <td>{{graph.machineType}}</td>
               <td>{{graph.version}}</td>
               <td>{{graph.statusCd}}</td>
+              <td *ngIf="graph.statusCd === DRAFT">
+                <button type="button" class="btn btn-info" (click)="onSelect(graph, OPEN_IN_EDIT_MODE)" style="margin-right: 4px">
+                  EDIT
+                </button>
+                <button type="button" class="btn btn-warning" (click)="onSelect(graph)" data-toggle="modal" data-target="#finalWarningModal">
+                  Finalise
+                </button>
+              </td>
+              <td *ngIf="graph.statusCd === CLOSED">
+                <button type="button" class="btn btn-info" (click)="onSelect(graph, OPEN_IN_READONLY_MODE)" style="margin-right: 4px">
+                  View
+                </button>
+                <button type="button" class="btn btn-primary" (click)="activateFlow(graph)" style="margin-right: 4px">
+                  Activate
+                </button>
+                <button type="button" class="btn btn-success" (click)="onSelect(graph, CLONE_AND_EDIT_MODE)">
+                  Clone
+                </button>
+              </td>
+              <td *ngIf="graph.statusCd === ACTIVE">
+                <button type="button" class="btn btn-info" (click)="onSelect(graph, OPEN_IN_READONLY_MODE)" style="margin-right: 4px">
+                  View
+                </button>
+                <button type="button" class="btn btn-danger" (click)="deactivateFlow(graph)" style="margin-right: 4px">
+                  Deactivate
+                </button>
+                <button type="button" class="btn btn-success" (click)="onSelect(graph, CLONE_AND_EDIT_MODE)">
+                  Clone
+                </button>
+              </td>
             </tr>
           </tbody>
           <tfoot>
@@ -45,3 +78,32 @@
     </ba-card>
   </div>
 </div>
+
+
+<div class="modal fade" id="finalWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="finalWarningLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="finalWarningLabel">
+            Warning
+          </h4>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+  
+        <!-- Modal Body -->
+        <div class="modal-body" id="modal_body">
+          Once it is finalised it can no longer be edited and you have to clone it and create a new copy of it to make any further changes. This will create a new version of the flow. Are you sure you want to finalise the flow?
+        </div>
+  
+        <!-- Modal Footer -->
+        <div class="modal-footer" id="modal_footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="activateFlow(selectedGraphObject, 'finalWarningModal')">Finalise</button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -70,6 +70,42 @@ export class GraphService {
       .catch(this.handleError);
   }
 
+  deactivate(_id: string): Promise<GraphObject> {
+    const url = `${environment.server + environment.graphurl + _id}/close`;
+    return this.http
+    .get(url)
+    .toPromise()
+    .then(
+      response => response.json() as GraphObject,
+      error => error.json() as any
+    )
+    .catch(this.handleError);
+  }
+
+  activate(_id: string): Promise<GraphObject> {
+    const url = `${environment.server + environment.graphurl + _id}/activate`;
+    return this.http
+    .get(url)
+    .toPromise()
+    .then(
+      response => response.json() as GraphObject,
+      error => error.json() as any
+    )
+    .catch(this.handleError);
+  }
+
+  getEntryActions(): Promise<string[]> {
+    const url = `${environment.server + environment.entryactionurl}`;
+    return this.http
+    .get(url)
+    .toPromise()
+    .then(
+      response => response.json() as string[],
+      error => error.json() as any
+    )
+    .catch(this.handleError);
+  }
+
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.message || error);
@@ -79,6 +115,7 @@ export class GraphService {
 @Injectable()
 export class CommunicationService {
   sharedGraphObject: GraphObject;
+  readOnly: boolean;
   // Observable string sources
   // private graphObjectSource = new Subject<GraphObject>();
 
@@ -86,8 +123,14 @@ export class CommunicationService {
   // graphObjectReceived$ = this.graphObjectSource.asObservable();
 
   // Service message commands
-  sendGraphObject(graphObject: GraphObject) {
+  sendGraphObject(graphObject: GraphObject, readOnly?: boolean) {
     this.sharedGraphObject = graphObject;
+
+    if (readOnly !== null) {
+      this.readOnly = readOnly;
+    } else {
+      this.readOnly = false;
+    }
     // console.log("Data received at service end. Object: " + this.sharedGraphObject);
 
     // this.graphObjectSource.next(graphObject);
@@ -95,5 +138,13 @@ export class CommunicationService {
 
   getGraphObject() {
     return this.sharedGraphObject;
+  }
+
+  isReadOnly() {
+    return this.readOnly;
+  }
+
+  setReadOnly(readOnly: boolean) {
+    this.readOnly = readOnly;
   }
 }

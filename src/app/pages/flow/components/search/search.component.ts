@@ -1,3 +1,5 @@
+declare var closeModal: any;
+
 import { Component, Input, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params, NavigationExtras } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
@@ -16,6 +18,14 @@ import { GraphService, CommunicationService } from '../../flow.service';
 })
 
 export class SearchComponent implements OnInit {
+
+  private readonly ACTIVE = 'ACTIVE';
+  private readonly CLOSED = 'CLOSED';
+  private readonly DRAFT = 'DRAFT';
+
+  private readonly OPEN_IN_READONLY_MODE = 1;
+  private readonly OPEN_IN_EDIT_MODE = 2;
+  private readonly CLONE_AND_EDIT_MODE = 3;
 
   data;
   filterQuery = '';
@@ -38,19 +48,6 @@ export class SearchComponent implements OnInit {
 
   }
 
-  onSelect(graphObject: GraphObject): void {
-    this.selectedGraphObject = graphObject;
-    this.communicationService.sendGraphObject(this.selectedGraphObject);
-    // console.log("Sent graoh object from searchflow. Object: " + this.selectedGraphObject);
-    this.router.navigate(['/pages/flow/design'], { relativeTo: this.route });
-    /*
-    let navigationExtras: NavigationExtras = {
-      queryParams: { 'graph_object': this.selectedGraphObject }
-    };
-    this.router.navigate(['/designflow'], navigationExtras);
-    */
-  }
-
   ngOnInit() {
     this.fetchGraphs();
   }
@@ -66,5 +63,55 @@ export class SearchComponent implements OnInit {
 
   sortByWordLength = (a: any) => {
     return a.city.length;
+  }
+
+  onSelect(graphObject: GraphObject, task?: number): void {
+    this.selectedGraphObject = graphObject;
+
+    if (task) {
+      if (task === this.OPEN_IN_READONLY_MODE) {
+        this.openInDesigner(this.selectedGraphObject, true);
+      } else if (task === this.OPEN_IN_EDIT_MODE) {
+        console.log('XML to be edited: ' + this.selectedGraphObject.xml);
+        this.openInDesigner(this.selectedGraphObject);
+      } else if (task === this.CLONE_AND_EDIT_MODE) {
+        this.selectedGraphObject._id = null;
+        this.selectedGraphObject.statusCd = this.DRAFT;
+
+        this.openInDesigner(this.selectedGraphObject);
+      }
+    }
+  }
+
+  openInDesigner(graph: GraphObject, readOnly?: boolean) {
+    this.communicationService.sendGraphObject(graph, (readOnly !== null && readOnly));
+    this.router.navigate(['/pages/flow/design'], { relativeTo: this.route });
+  }
+
+  activateFlow(graph: GraphObject, modalName?: string) {
+    this.graphService.activate(graph._id)
+    .then(
+      response => {
+        if (modalName && modalName.length > 0) {
+          new closeModal(modalName);
+        }
+        this.fetchGraphs();
+      },
+      error => {
+
+      }
+    );
+  }
+
+  deactivateFlow(graph: GraphObject) {
+    this.graphService.deactivate(graph._id)
+    .then(
+      response => {
+        this.fetchGraphs();
+      },
+      error => {
+
+      }
+    );
   }
 }

@@ -1,0 +1,42 @@
+<div class="widgets">
+  <div class="row">
+    <ba-card cardTitle="Create Account" baCardClass="with-scroll" class="col-md-12">
+      <div class="panel panel-default">
+        <form>
+          <div class="form-group">
+            <label>Email ID</label>
+            <input type="text" class="form-control" required placeholder="Email ID" [(ngModel)]="account.loginId" name="loginId" />
+          </div>
+          <div class="form-group">
+            <label>Company Name</label>
+            <input type="text" class="form-control" required placeholder="Company Name" [(ngModel)]="account.companyName" name="companyName" />
+          </div>
+          <div class="form-group">
+            <label>Company Description</label>
+            <input type="text" class="form-control" required placeholder="Company Description" [(ngModel)]="account.companyDesc" name="companyDesc" />
+          </div>
+          <div class="form-group">
+            <label>Flash Info</label>
+            <tag-input [(ngModel)]="account.flashInfo" name="flashInfo" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Message" secondaryPlaceholder="Enter a new message" theme="minimal" class="custom-input-tag-border"></tag-input>
+          </div>
+          <div class="form-group">
+            <label>S3 Storage</label>
+            <select class="selectpicker form-control" required title="Select status" [(ngModel)]="account.s3" name="s3">
+              <option [value]="true">Enabled</option>
+              <option [value]="false">Disabled</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <button type="button" class="btn btn-default" (click)="resetFields()">
+              Reset
+            </button>
+            <button type="button" class="btn btn-primary" (click)="createAccount()">
+              Create
+            </button>
+          </div>
+        </form>
+      </div>
+    </ba-card>
+  </div>
+</div>

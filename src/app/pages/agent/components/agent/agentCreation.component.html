@@ -1,0 +1,306 @@
+<div class="widgets">
+  <div class="row">
+    <ba-card baCardClass="with-scroll" class="col-md-12">
+
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="agentInfoTab" data-toggle="tab" href="#agentInfoContent" role="tab" aria-controls="agentInfo"
+            aria-expanded="true">Agent Info</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="agentTrainingTab" data-toggle="tab" href="#agentTrainingContent" role="tab" aria-controls="agentTraining">Agent Training</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="agentPluginsTab" data-toggle="tab" href="#agentPluginsContent" role="tab" aria-controls="agentPlugins">Agent Plugins</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="settingsTab" data-toggle="tab" href="#settingsContent" role="tab" aria-controls="settings">Settings</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade show active" id="agentInfoContent" aria-labelledby="agentInfoTab">
+          <div class="panel panel-default">
+            <form>
+              <div class="form-group">
+                <label>Agent Name</label>
+                <input type="text" class="form-control" required placeholder="Agent Name" [(ngModel)]="selectedAgent.name" name="name" />
+              </div>
+              <div class="form-group">
+                <label>Agent Description</label>
+                <input type="text" class="form-control" required placeholder="Agent Description" [(ngModel)]="selectedAgent.desc" name="desc"
+                />
+              </div>
+            </form>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="agentTrainingContent" aria-labelledby="agentTrainingTab">
+            <div class="panel panel-default">
+              <form>
+                <div class="form-group">
+                  <label>Select Flows</label>
+                  <select class="selectpicker form-control" multiple="true" title="Select Flows" [(ngModel)]="selectedAgent.agentFlow" name="agentFlow">
+                    <option *ngFor="let flow of flowSource" [ngValue]="flow.machineType">{{flow.machineType + ' v' + flow.version}}</option>
+                  </select>
+                </div>
+              </form>
+            </div>
+          <div class="row">
+            <div class="col-md-3">
+              <button *ngIf="!containsAll()" type="button" class="btn btn-primary" (click)="addAllDomain()">
+                Add All
+              </button>
+              <button *ngIf="containsAll()" type="button" class="btn btn-default" (click)="removeAllDomain()">
+                Remove All
+              </button>
+              <ul class="domain-list">
+                <li *ngFor="let domain of domainSource" [class.selected]="domain === selectedDomain" (click)="onDomainSelect(domain)">
+                  {{domain.name}}
+                </li>
+              </ul>
+            </div>
+
+            <div *ngIf="selectedDomain" class="col-md-8">
+              <h3>
+                Domain Details
+              </h3>
+              <form>
+                <div class="form-group">
+                  <label>Domain Name</label>
+                  <input type="text" class="form-control" disabled placeholder="Domain Name" [value]="selectedDomain.name" name="name" />
+                </div>
+                <div class="form-group">
+                  <label>Domain Description</label>
+                  <input type="text" class="form-control" disabled placeholder="Domain Description" [value]="selectedDomain.desc" name="desc"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Language Supported</label>
+                  <input type="text" class="form-control" disabled placeholder="Language Supported" [value]="arrayToString(selectedDomain.langSupported)"
+                    name="langSupported" />
+                </div>
+                <div class="form-group">
+                  <label>Goals</label>
+                  <input type="text" class="form-control" disabled placeholder="Domain Goals" [value]="domainGoalsToString(selectedDomain.domainGoals)"
+                    name="domainGoals" />
+                </div>
+
+                <div class="form-group">
+                  <button *ngIf="!domainAddedToList()" type="button" class="btn btn-primary" (click)="addDomain()">
+                    Add
+                  </button>
+                  <button *ngIf="domainAddedToList()" type="button" class="btn btn-default" (click)="removeDomain()">
+                    Remove
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="agentPluginsContent" aria-labelledby="agentPluginsTab">
+
+
+          <div class="row">
+            <div class="panel panel-default data-table-container">
+              <table class="table table-striped" [mfData]="selectedAgent.agentPlugins" #mf1="mfDataTable" [mfRowsOnPage]="10" mfSortBy="messengerName">
+                <thead>
+                  <tr>
+                    <th>
+                      <button type="button" class="btn btn-primary" (click)="onPluginSelect()" data-toggle="modal" data-target="#pluginModal">
+                        Add
+                      </button>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      <mfDefaultSorter by="messengerName">Messanger Name</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="webhook">Webhook</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="apitoken">API Token</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="serviceDownMsg">Service Downtime Message</mfDefaultSorter>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let plugin of mf1.data" (click)="onPluginSelect(plugin)" data-toggle="modal" data-target="#pluginModal">
+                    <td>{{plugin.messengerName}}</td>
+                    <td>{{plugin.webhook}}</td>
+                    <td>{{plugin.apitoken}}</td>
+                    <td>{{plugin.serviceDownMsg}}</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="100%">
+                      <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+
+
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="settingsContent" aria-labelledby="settingsTab">
+          
+
+          <div class="row">
+            <div class="panel panel-default data-table-container">
+              <table class="table table-striped" [mfData]="selectedAgent.agentClassifier" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="classifierServiceName">
+                <thead>
+                  <tr>
+                    <th>
+                      <button type="button" class="btn btn-primary" (click)="onClassifierSelect()" data-toggle="modal" data-target="#classifierModal">
+                        Add
+                      </button>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      <mfDefaultSorter by="classifierServiceName">Service Name</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="classifierServiceUrl">Service URL</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="classifierServiceToken">Service Token</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="classifierWorkspaceId">Workspace ID</mfDefaultSorter>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let classifier of mf.data" (click)="onClassifierSelect(classifier)" data-toggle="modal" data-target="#classifierModal">
+                    <td>{{classifier.classifierServiceName}}</td>
+                    <td>{{classifier.classifierServiceUrl}}</td>
+                    <td>{{classifier.classifierServiceToken}}</td>
+                    <td>{{classifier.classifierWorkspaceId}}</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="100%">
+                      <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+          <form>
+            <div class="form-group">
+              <button type="button" class="btn btn-primary" (click)="createAgent()">
+                Create Agent
+              </button>
+            </div>
+          </form>
+
+
+        </div>
+      </div>
+
+    </ba-card>
+  </div>
+</div>
+
+<div class="modal fade" id="pluginModal" tabindex="-1" role="dialog" attr.aria-labelledby="pluginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="pluginModalLabel">
+          {{modalHeader}}
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" [disabled]="loading">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label>Messenger Name</label>
+            <input class="form-control" placeholder="Messenger Name" [(ngModel)]="tempPlugin.messengerName" name="messengerName" />
+          </div>
+          <div class="form-group">
+            <label>Webhook</label>
+            <input class="form-control" placeholder="Webhook" [(ngModel)]="tempPlugin.webhook" name="webhook" />
+          </div>
+          <div class="form-group">
+            <label>API Token</label>
+            <input class="form-control" placeholder="API Token" [(ngModel)]="tempPlugin.apitoken" name="apitoken" />
+          </div>
+          <div class="form-group">
+            <label>Service Downtime Message</label>
+            <input class="form-control" placeholder="Service Downtime Message" [(ngModel)]="tempPlugin.serviceDownMsg" name="serviceDownMsg"
+            />
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="settingsModalFooter">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removePlugin()">Remove</button>
+        <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="addPlugin()">{{createMode ? 'Create' : 'Update'}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="classifierModal" tabindex="-1" role="dialog" attr.aria-labelledby="classifierModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="classifierModalLabel">
+          {{modalHeader}}
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" [disabled]="loading">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label>Service Name</label>
+            <input class="form-control" placeholder="Service Name" [(ngModel)]="tempClassifier.classifierServiceName" name="classifierServiceName" />
+          </div>
+          <div class="form-group">
+            <label>Service URL</label>
+            <input class="form-control" placeholder="Service URL" [(ngModel)]="tempClassifier.classifierServiceUrl" name="classifierServiceUrl" />
+          </div>
+          <div class="form-group">
+            <label>Service Token</label>
+            <input class="form-control" placeholder="Service Token" [(ngModel)]="tempClassifier.classifierServiceToken" name="classifierServiceToken" />
+          </div>
+          <div class="form-group">
+            <label>Workspace ID</label>
+            <input class="form-control" placeholder="Workspace ID" [(ngModel)]="tempClassifier.classifierWorkspaceId" name="classifierWorkspaceId"
+            />
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="settingsModalFooter">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeClassifier()">Remove</button>
+        <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="addClassifier()">{{createMode ? 'Create' : 'Update'}}</button>
+      </div>
+    </div>
+  </div>
+</div>

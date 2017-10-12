@@ -9,7 +9,7 @@ import { Component, Input, OnInit, OnDestroy, NgZone } from '@angular/core';
 import 'rxjs/add/operator/switchMap';
 
 // Model Imports
-import { GraphObject, DataPoint, Classifier, StateModel, EventModel, Expression } from '../../flow.model';
+import { GraphObject, DataPoint, Classifier, StateModel, EventModel, Expression, Transition } from '../../flow.model';
 
 // Service Imports
 import { GraphService, CommunicationService } from '../../flow.service';
@@ -48,9 +48,12 @@ export class DesignComponent implements OnInit, OnDestroy {
   sourceStateTypes: string[] = ['Manual', 'Auto', 'Cognitive'];
   sourceOperands: string[] = ['AND', 'OR'];
   sourceClassifiers: Classifier[];
+  sourceEntryActionList: string[];
 
   // Models to bind with html
+  readOnly: boolean;
   graphObject: GraphObject;
+  tempGraphObject: GraphObject;
   tempState: StateModel;
   tempParentState: StateModel;
   tempEvent: EventModel;
@@ -61,6 +64,11 @@ export class DesignComponent implements OnInit, OnDestroy {
     private communicationService: CommunicationService
   ) {
     window['flowComponentRef'] = { component: this, zone: zone };
+    
+    this.readOnly = this.communicationService.isReadOnly();
+    if (this.readOnly) {
+      this.communicationService.setReadOnly(false);
+    }
 
     this.graphObject = this.communicationService.getGraphObject();
     if (this.graphObject) {
@@ -73,48 +81,44 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   load(): void {
-    this.tempState = {
-      id: '',
-      stateCd: '',
-      name: '',
-      type: '',
-      trigger: null,
-      events: [],
-      classifiers: []
-    };
-    this.tempParentState = {
-      id: '',
-      stateCd: '',
-      name: '',
-      type: null,
-      trigger: null,
-      events: [],
-      classifiers: null
-    };
-    this.tempEvent = {
-      eventCd: '',
-      operand: '',
-      expressions: []
-    };
-    this.sourceClassifiers = [{
-      apiName: 'Temp',
-      url: 'temp url'
-    }];
+    this.tempGraphObject = new GraphObject();
+    this.tempState = new StateModel();
+    this.tempParentState = new StateModel();
+    this.tempEvent = new EventModel();
+    this.sourceClassifiers = [new Classifier(), new Classifier()];
 
-    if (!this.graphObject || this.graphObject == null) {
-      this.graphObject = {
-        _id: null,
-        statusCd: this.sourceStatusCodes[0],
-        machineType: '',
-        version: '',
-        xml: '',
-        dataPointConfigurationList: []
+    this.getSourceEntryActions();
 
-      };
+    if (!this.graphObject || this.graphObject === null) {
+      this.graphObject = new GraphObject();
+      this.graphObject.statusCd = this.sourceStatusCodes[0],
       this.addNewDataPoint();
     }
 
-    new designFlowEditor(this.graphObject.xml);
+    new designFlowEditor(this.graphObject.xml, this.readOnly);
+  }
+
+  getSourceEntryActions() {
+    this.graphService.getEntryActions()
+      .then(
+        entryActionList => {
+          if (entryActionList) {
+            this.sourceEntryActionList = entryActionList;
+          }
+        },
+
+        error => {
+          
+        }
+      );
+  }
+
+  prepareDummyObject() {
+    if (this.graphObject) {
+      this.tempGraphObject = JSON.parse(JSON.stringify(this.graphObject));
+    } else {
+      this.tempGraphObject = new GraphObject();
+    }
   }
 
   toolsChoice(choice: string): void {
@@ -125,15 +129,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (parentState) {
       this.tempParentState = parentState;
     } else {
-      this.tempParentState = {
-        id: '',
-        stateCd: '',
-        name: '',
-        type: null,
-        trigger: null,
-        events: [],
-        classifiers: null
-      };
+      this.tempParentState = new StateModel();
     }
 
     if (state) {
@@ -144,26 +140,24 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.stateDialogTitle = "Add State";
       this.stateDialogButtonName = "Add";
 
-      this.tempState = {
-        id: '',
-        stateCd: 'State Cd',
-        name: 'State Name',
-        type: this.sourceStateTypes[0],
-        trigger: this.tempParentState.events[0],
-        events: [],
-        classifiers: this.sourceClassifiers
-      };
+      this.tempState = new StateModel();
+      this.tempState.type = this.sourceStateTypes[0];
+      this.tempState.trigger = this.tempParentState.events[0];
 
-      this.addEvent();
+      if (this.tempParentState.events && this.tempParentState.events.length > 0) {
+        this.tempState.initialState = false;
+      } else {
+        this.tempState.initialState = true;
+      }
+      // this.addEvent();
     }
   }
 
   addEvent(): void {
-    let tempEvent: EventModel = <EventModel>{
-      eventCd: 'Event',
-      operand: this.sourceOperands[0],
-      expressions: []
-    };
+    const tempEvent: EventModel = new EventModel();
+    tempEvent.eventCd = 'Event';
+    tempEvent.operand = this.sourceOperands[0];
+    tempEvent.expressionList = [];
 
     this.addExpression(tempEvent);
 
@@ -171,41 +165,46 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   addExpression(event: EventModel): void {
-    let tempExpression: Expression = <Expression>{
-      value: 'Expression',
-      target: this.sourceInputTargets[0],
-      expectedResult: ''
-    };
+    const tempExpression: Expression = new Expression();
+    tempExpression.value = 'Expression';
+    tempExpression.target = this.sourceInputTargets[0];
+    tempExpression.expectedResult = '';
 
-    event.expressions.push(tempExpression);
+    event.expressionList.push(tempExpression);
   }
 
   deleteExpression(expression: Expression, event: EventModel): void {
-    let index = event.expressions.indexOf(expression);
-    event.expressions.splice(index, 1);
+    const index = event.expressionList.indexOf(expression);
+    event.expressionList.splice(index, 1);
   }
 
   deleteEvent(event: EventModel): void {
-    let index = this.tempState.events.indexOf(event);
+    const index = this.tempState.events.indexOf(event);
     this.tempState.events.splice(index, 1);
   }
 
   saveEvent(): void {
-    // console.log(this.tempEvent);
     this.tempState.events.push(this.tempEvent);
   }
 
   saveState(): void {
-    if (this.tempState.id && this.tempState.id.length > 0) {
-      new updateStateObject(this.tempState);
+    this.tempState.endState = (this.tempState.events.length === 0);
+    if (this.tempState.stateId && this.tempState.stateId.length > 0) {
+      const customObject: Object = JSON.parse(JSON.stringify(this.tempState));  // Very important line of code, don't remove
+      new updateStateObject(customObject);
     } else {
       this.stateCount++;
-      this.tempState.id = 'state' + this.stateCount;
-      new saveStateObject(this.tempState);
+      this.tempState.stateId = 'state' + this.stateCount;
+      const customObject: Object = JSON.parse(JSON.stringify(this.tempState));  // Very important line of code, don't remove
+      new saveStateObject(customObject);
     }
   }
 
   save(): void {
+    this.graphObject = this.tempGraphObject;
+  }
+
+  saveOnServer() {
     // This will call a method in app.js and it will convert mxGraph into xml
     // and send it back to this component in method saveGraphXml(xml: string)
     new exportGraphXml();
@@ -221,26 +220,24 @@ export class DesignComponent implements OnInit, OnDestroy {
   addNewDataPoint() {
     this.dataPointCount++;
 
-    let dataPoint: DataPoint = <DataPoint>{
-      dataPointName: 'Data Point' + this.dataPointCount,
-      expression: '',
-      paramTargetList: [this.sourceParamTargets[0]],
-      inputTarget: this.sourceInputTargets[0],
-      machineType: null
-    };
+    const dataPoint: DataPoint = new DataPoint();
+    dataPoint.dataPointName = 'Data Point' + this.dataPointCount;
+    dataPoint.paramTargetList = [this.sourceParamTargets[0]];
+    dataPoint.inputTarget = this.sourceInputTargets[0];
 
     this.graphObject.dataPointConfigurationList.push(dataPoint);
   }
 
   deleteDataPoint(dataPoint: DataPoint) {
-    let index = this.graphObject.dataPointConfigurationList.indexOf(dataPoint);
+    const index = this.graphObject.dataPointConfigurationList.indexOf(dataPoint);
     this.graphObject.dataPointConfigurationList.splice(index, 1);
   }
 
-  saveGraphXml(xml: string): void {
+  saveGraphXml(xml: string, states: StateModel[], transitions: Transition[]): void {
     if (xml && this.graphObject) {
       this.graphObject.xml = xml;
-      // console.log(this.graphObject);
+      this.graphObject.states = states;
+      this.graphObject.transitions = transitions;
 
       this.graphService.save(this.graphObject)
         .then(graphObject => this.graphObject = graphObject);
@@ -249,5 +246,9 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   clearAllData(): void {
     location.reload();
+  }
+
+  deepCopy(object: Object) {
+    return JSON.parse(JSON.stringify(object));
   }
 }

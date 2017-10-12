@@ -236,14 +236,28 @@ export class AlertService {
     });
   }
 
-  success(message: string, keepAfterNavigationChange = false) {
+  success(message: string, keepAfterNavigationChange = false, timeout?: number) {
     this.keepAfterNavigationChange = keepAfterNavigationChange;
     this.subject.next({ type: 'success', text: message });
+
+    if (timeout && timeout > 0) {
+      setTimeout(() => {
+        // clear alert after timeout
+        this.subject.next();
+      }, timeout);
+    }
   }
 
-  error(message: string, keepAfterNavigationChange = false) {
+  error(message: string, keepAfterNavigationChange = false, timeout?: number) {
     this.keepAfterNavigationChange = keepAfterNavigationChange;
     this.subject.next({ type: 'error', text: message });
+
+    if (timeout && timeout > 0) {
+      setTimeout(() => {
+        // clear alert after timeout
+        this.subject.next();
+      }, timeout);
+    }
   }
 
   getMessage(): Observable<any> {
