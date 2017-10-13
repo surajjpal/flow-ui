@@ -1,11 +1,12 @@
 declare var closeModal: any;
 
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 
 import { Domain, Intent, Entity, Goal, GoalStep, Response } from '../../agent.model';
 
 import { AgentService } from '../../agent.services';
-import { AlertService } from '../../../../shared/shared.service';
+import { AlertService, DataSharingService } from '../../../../shared/shared.service';
 
 @Component ({
   selector: 'api-agent-domain',
@@ -30,12 +31,14 @@ export class DomainSetupComponent implements OnInit {
 
   constructor(
       private alertService: AlertService,
-      private agentService: AgentService
+      private agentService: AgentService,
+      private sharingService: DataSharingService,
+      private location: Location,
     ) {
     this.modalHeader = '';
     this.createMode = false;
     this.filterQuery = '';
-    this.languageSource = ['English', 'Hindi', 'Marathi', 'Bahasa'];
+    this.languageSource = ['ENG', 'HIN', 'MAR', 'Bahasa'];
 
     this.selectedDomain = new Domain();
     this.tempIntent = new Intent();
@@ -49,6 +52,11 @@ export class DomainSetupComponent implements OnInit {
   }
 
   ngOnInit() {
+    const domain: Domain = this.sharingService.getSharedObject();
+    if (domain) {
+      this.selectedDomain = domain;
+    }
+
     this.removeGoalStepResponseFromDomainResponse();
   }
 
@@ -308,6 +316,7 @@ export class DomainSetupComponent implements OnInit {
           response => {
             console.log('Domain saved');
             console.log(response);
+            this.location.back();
           }
         );
     }

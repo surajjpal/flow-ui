@@ -12,7 +12,9 @@ import { routing } from './agent.routing';
 import { AgentComponent } from './agent.component';
 import { AccountCreationComponent } from './components/account/accountCreation.component';
 import { AgentCreationComponent } from './components/agent/agentCreation.component';
-import { DomainSetupComponent } from './components/domain/domainSetup.component';
+import { DomainSetupComponent } from './components/domainSetup/domainSetup.component';
+import { DomainsComponent } from './components/domains/domains.component';
+import { DomainFilterPipe } from './components/domains/data-filter.pipe';
 
 import { AgentService } from './agent.services';
 import { GraphService } from '../flow/flow.service';
@@ -30,7 +32,9 @@ import { GraphService } from '../flow/flow.service';
     AgentComponent,
     AccountCreationComponent,
     AgentCreationComponent,
-    DomainSetupComponent
+    DomainSetupComponent,
+    DomainsComponent,
+    DomainFilterPipe
   ],
   providers: [
     AgentService,

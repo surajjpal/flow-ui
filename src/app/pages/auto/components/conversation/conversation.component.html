@@ -95,7 +95,7 @@
                 <label>Status</label>
                 <input class="form-control" placeholder="Status" disabled="disabled" value="{{selectedEpisode._source.status}}" />
               </div>
-              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.intents && selectedEpisode._source.intents.size > 0"
+              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.intents && selectedEpisode._source.intents.length > 0"
                 class="form-group">
                 <label>Intents</label>
                 <select *ngFor="let intent of selectedEpisode._source.intents" multiple class="form-control" disabled="disabled">
@@ -111,7 +111,7 @@
                 <input class="form-control" placeholder="Conversation Id" disabled="disabled" value="{{selectedEpisode._source.conversationId}}"
                 />
               </div>
-              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.entities && selectedEpisode._source.entities.size > 0"
+              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.entities && selectedEpisode._source.entities.length > 0"
                 class="form-group">
                 <label>Entities</label>
                 <select *ngFor="let entity of selectedEpisode._source.entities" multiple class="form-control" disabled="disabled">
@@ -142,7 +142,7 @@
                 <input class="form-control" placeholder="Goal Status" disabled="disabled" value="{{selectedEpisode._source.goalStatus}}"
                 />
               </div>
-              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.goals && selectedEpisode._source.goals.size > 0"
+              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.goals && selectedEpisode._source.goals.length > 0"
                 class="form-group">
                 <label>Goals</label>
                 <select *ngFor="let goal of selectedEpisode._source.goals" multiple class="form-control" disabled="disabled">

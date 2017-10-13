@@ -3,7 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { AgentComponent } from './agent.component';
 import { AccountCreationComponent } from './components/account/accountCreation.component';
 import { AgentCreationComponent } from './components/agent/agentCreation.component';
-import { DomainSetupComponent } from './components/domain/domainSetup.component';
+import { DomainSetupComponent } from './components/domainSetup/domainSetup.component';
+import { DomainsComponent } from './components/domains/domains.component';
 
 const routes: Routes = [
   {
@@ -13,7 +14,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'accountCreation', pathMatch: 'full' },
       { path: 'accountCreation', component: AccountCreationComponent },
       { path: 'agentCreation', component: AgentCreationComponent },
-      { path: 'domainSetup', component: DomainSetupComponent }
+      { path: 'domainSetup', component: DomainSetupComponent },
+      { path: 'domains', component: DomainsComponent }
     ]
   }
 ];

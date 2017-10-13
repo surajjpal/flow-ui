@@ -531,3 +531,7 @@
   padding-right: 10px;
   background-color: #FFFFFF;
 }
+
+.modal-backdrop{
+  z-index: 9999;
+}

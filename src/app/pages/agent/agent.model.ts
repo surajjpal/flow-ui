@@ -84,8 +84,7 @@ export class GoalStep {
   sequence: number;
   goalResponse: string;
   lang: string;
-
-  // api -  will be introduced in future
+  api: string;
 
   constructor() {
     this.goalExpression = '';
@@ -93,6 +92,7 @@ export class GoalStep {
     this.goalResponse = 'New Goal Response';
     this.lang = '';
     this.sequence = 0;
+    this.api = '';
   }
 }
 

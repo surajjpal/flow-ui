@@ -3,7 +3,7 @@
     <ba-card [cardTitle]="formHeader" baCardClass="with-scroll" class="col-md-12">
       <div class="panel panel-default">
         <form>
-          <div *ngIf="!profileEditMode && selectedUser._id" class="form-group">
+          <div *ngIf="(!profileEditMode && selectedUser._id != null)" class="form-group">
             <label>Id</label>
             <input type="text" class="form-control" required placeholder="Id" [(ngModel)]="selectedUser._id" name="_id" disabled="disabled"
             />
