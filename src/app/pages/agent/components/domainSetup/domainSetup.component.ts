@@ -1,12 +1,16 @@
 declare var closeModal: any;
 
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
+import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
 
 import { Domain, Intent, Entity, Goal, GoalStep, Response } from '../../agent.model';
 
 import { AgentService } from '../../agent.services';
-import { AlertService, DataSharingService } from '../../../../shared/shared.service';
+import { AlertService, DataSharingService,  } from '../../../../shared/shared.service';
+
+import { environment } from '../../../../../environments/environment';
+import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 
 @Component ({
   selector: 'api-agent-domain',
@@ -14,6 +18,10 @@ import { AlertService, DataSharingService } from '../../../../shared/shared.serv
 })
 export class DomainSetupComponent implements OnInit {
 
+  intentUploaderOptions: NgUploaderOptions;
+  entityUploaderOptions: NgUploaderOptions;
+
+  domainCreateMode: boolean;
   modalHeader: string;
   createMode: boolean;
   filterQuery: string;
@@ -30,11 +38,14 @@ export class DomainSetupComponent implements OnInit {
   selectedResponse: Response;
 
   constructor(
+      private router: Router,
+      private route: ActivatedRoute,
       private alertService: AlertService,
       private agentService: AgentService,
       private sharingService: DataSharingService,
-      private location: Location,
+      private slimLoadingBarService: SlimLoadingBarService
     ) {
+    this.domainCreateMode = true;
     this.modalHeader = '';
     this.createMode = false;
     this.filterQuery = '';
@@ -49,12 +60,29 @@ export class DomainSetupComponent implements OnInit {
     this.selectedGoal = new Goal();
     this.tempResponse = new Response();
     this.selectedResponse = new Response();
+
+    const uploadIntentUrl = `${environment.wheelsemiserver}${environment.uploadintentexcelurl}`;
+    this.intentUploaderOptions = {
+      url: uploadIntentUrl
+    };
+
+    const uploadEntityUrl = `${environment.wheelsemiserver}${environment.uploadentityexcelurl}`;
+    this.entityUploaderOptions = {
+      url: uploadEntityUrl
+    };
+
+    this.slimLoadingBarService.color = '#2DACD1'; // Primary color
+    this.slimLoadingBarService.height = '4px';
   }
 
   ngOnInit() {
     const domain: Domain = this.sharingService.getSharedObject();
     if (domain) {
       this.selectedDomain = domain;
+      this.domainCreateMode = false;
+    } else {
+      this.selectedDomain = new Domain();
+      this.domainCreateMode = true;
     }
 
     this.removeGoalStepResponseFromDomainResponse();
@@ -314,11 +342,54 @@ export class DomainSetupComponent implements OnInit {
       this.agentService.saveDomain(this.selectedDomain)
         .then(
           response => {
-            console.log('Domain saved');
-            console.log(response);
-            this.location.back();
+            this.router.navigate(['/pages/agent/domains'], { relativeTo: this.route });
           }
         );
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------------
+
+  onExcelUpload(event: any) {
+    if (event) {
+      if (event.hasOwnProperty('progress') && event['progress'].hasOwnProperty('percent')) {
+        const percent = (event['progress'])['percent'];
+        if (percent) {
+          if (percent < 100) {
+            this.slimLoadingBarService.progress = percent;
+          } else {
+            this.slimLoadingBarService.complete();
+          }
+        }
+      }
+    }
+  }
+
+  onExcelUploadComplete(event: UploadedFile) {
+    this.slimLoadingBarService.complete();
+
+    if (event.response && event.response.length > 0) {
+      const responseObject = JSON.parse(event.response);
+
+      if (responseObject) {
+        if (responseObject.hasOwnProperty('domainIntents')) {
+          const excelIntents: Intent[] = responseObject['domainIntents'];
+
+          if (excelIntents && excelIntents.length > 0) {
+            for (const intent of excelIntents) {
+              this.selectedDomain.domainIntents.push(intent);
+            }
+          }
+        } else if (responseObject.hasOwnProperty('domainEntities')) {
+          const excelEntities: Entity[] = responseObject['domainEntities'];
+
+          if (excelEntities && excelEntities.length > 0) {
+            for (const entity of excelEntities) {
+              this.selectedDomain.domainEntities.push(entity);
+            }
+          }
+        }
+      }
     }
   }
 }

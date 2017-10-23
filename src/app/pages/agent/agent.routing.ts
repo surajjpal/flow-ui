@@ -5,6 +5,7 @@ import { AccountCreationComponent } from './components/account/accountCreation.c
 import { AgentCreationComponent } from './components/agent/agentCreation.component';
 import { DomainSetupComponent } from './components/domainSetup/domainSetup.component';
 import { DomainsComponent } from './components/domains/domains.component';
+import { AgentsComponent } from './components/agents/agents.component';
 
 const routes: Routes = [
   {
@@ -15,7 +16,8 @@ const routes: Routes = [
       { path: 'accountCreation', component: AccountCreationComponent },
       { path: 'agentCreation', component: AgentCreationComponent },
       { path: 'domainSetup', component: DomainSetupComponent },
-      { path: 'domains', component: DomainsComponent }
+      { path: 'domains', component: DomainsComponent },
+      { path: 'agents', component: AgentsComponent }
     ]
   }
 ];

@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+declare var showModal: any;
+
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { Agent, Domain, Goal, Plugin, Classifier } from '../../agent.model';
 import { GraphObject } from '../../../flow/flow.model';
 import { AgentService } from '../../agent.services';
 import { GraphService } from '../../../flow/flow.service';
+import { DataSharingService } from '../../../../shared/shared.service';
 
 @Component({
   selector: 'api-agent-agent',
@@ -12,56 +16,150 @@ import { GraphService } from '../../../flow/flow.service';
 })
 export class AgentCreationComponent implements OnInit {
 
+  agentCreateMode: boolean;
   modalHeader: string;
   createMode: boolean;
 
   selectedAgent: Agent;
-  selectedPlugin: Plugin;
-  tempPlugin: Plugin;
-  selectedClassifier: Classifier;
-  tempClassifier: Classifier;
   selectedDomain: Domain;
   domainSource: Domain[];
   selectedDomainList: Domain[];
   flowSource: GraphObject[];
 
+  isWatsonEnabled: boolean;
+  isApiEnabled: boolean;
+  watsonClassifier: Classifier;
+  apiClassifier: Classifier;
+
+  facebookPlugin: Plugin;
+
+  @ViewChild('successModal') successModal: ElementRef;
+  facebookIntegrated: boolean;
+  webhook: string;
+  isSuccess: boolean;
+  errorMessage: string;
+
   constructor(
-      private agentService: AgentService,
-      private graphService: GraphService
-    ) {
+    private router: Router,
+    private route: ActivatedRoute,
+    private agentService: AgentService,
+    private graphService: GraphService,
+    private sharingService: DataSharingService
+  ) {
     this.modalHeader = '';
     this.createMode = true;
     this.selectedAgent = new Agent();
-    this.selectedPlugin = new Plugin();
-    this.tempPlugin = new Plugin();
-    this.selectedClassifier = new Classifier();
-    this.tempClassifier = new Classifier();
     this.domainSource = [];
     this.selectedDomainList = [];
     this.flowSource = [];
+
+    this.isWatsonEnabled = false;
+    this.watsonClassifier = new Classifier();
+    this.watsonClassifier.classifierServiceName = 'WATSON';
+    this.watsonClassifier.classifierServiceUrl = null;
+    this.watsonClassifier.classifierServiceToken = null;
+
+    this.isApiEnabled = false;
+    this.apiClassifier = new Classifier();
+    this.apiClassifier.classifierServiceName = 'API';
+    this.apiClassifier.classifierWorkspaceId = null;
+    this.apiClassifier.classifierUsername = null;
+    this.apiClassifier.classifierPassword = null;
+    this.apiClassifier.classifierVersion = null;
+
+    this.facebookPlugin = new Plugin();
+    this.facebookPlugin.messengerName = 'FBMESSENGER';
+
+    this.facebookIntegrated = false;
+    this.webhook = '';
+    this.isSuccess = true;
+    this.errorMessage = '';
   }
 
   ngOnInit() {
     this.fetchLookups();
+
+    const agent: Agent = this.sharingService.getSharedObject();
+    if (agent) {
+      this.selectedAgent = agent;
+      this.agentCreateMode = false;
+
+      if (this.selectedAgent.agentPlugins && this.selectedAgent.agentPlugins.length > 0) {
+        const pluginsToBeRemoved: Plugin[] = [];
+        for (const plugin of this.selectedAgent.agentPlugins) {
+          if (plugin && plugin.messengerName === 'FBMESSENGER') {
+            this.facebookPlugin = JSON.parse(JSON.stringify(this.selectedAgent.agentPlugins[0]));
+            pluginsToBeRemoved.push(plugin);
+          }
+        }
+
+        for (const plugin of pluginsToBeRemoved) {
+          const index: number = this.selectedAgent.agentPlugins.indexOf(plugin);
+          if (index !== -1) {
+            this.selectedAgent.agentPlugins.splice(index, 1);
+          }
+        }
+      }
+
+      if (this.selectedAgent.agentClassifier && this.selectedAgent.agentClassifier.length > 0) {
+        const classifiersToBeRemoved: Classifier[] = [];
+        for (const classifier of this.selectedAgent.agentClassifier) {
+          if (classifier && classifier.classifierServiceName && classifier.classifierServiceName.length > 0) {
+            if (classifier.classifierServiceName === 'WATSON') {
+              this.watsonClassifier = JSON.parse(JSON.stringify(classifier));
+              this.isWatsonEnabled = true;
+              classifiersToBeRemoved.push(classifier);
+            } else if (classifier.classifierServiceName === 'API') {
+              this.apiClassifier = JSON.parse(JSON.stringify(classifier));
+              this.isApiEnabled = true;
+              classifiersToBeRemoved.push(classifier);
+            }
+          }
+        }
+
+        for (const classifier of classifiersToBeRemoved) {
+          const index: number = this.selectedAgent.agentClassifier.indexOf(classifier);
+          if (index !== -1) {
+            this.selectedAgent.agentClassifier.splice(index, 1);
+          }
+        }
+      }
+    } else {
+      this.selectedAgent = new Agent();
+      this.agentCreateMode = true;
+    }
   }
 
   fetchLookups() {
     this.agentService.domainLookup()
-    .then(
+      .then(
       domainList => {
         if (domainList) {
           this.domainSource = domainList;
+
+          if (!this.agentCreateMode) {
+            if (this.selectedAgent.domainNameList && this.selectedAgent.domainNameList.length > 0) {
+              for (const domainName of this.selectedAgent.domainNameList) {
+                for (const domain of this.domainSource) {
+                  if (domainName === domain.name) {
+                    this.addDomain(domain);
+                    break;
+                  }
+                }
+              }
+            }
+          }
         }
       }
-    );
+      );
 
     this.graphService.fetch()
       .then(
-        flowSource => {
-          if (flowSource) {
-            this.flowSource = flowSource;
-          }
+      flowSource => {
+        if (flowSource) {
+          this.flowSource = flowSource;
         }
+      }
       );
   }
 
@@ -85,12 +183,58 @@ export class AgentCreationComponent implements OnInit {
         this.selectedAgent.companyKey = 'bank123';
       }
 
+      if (this.isApiEnabled && this.apiClassifierValidator()) {
+        this.selectedAgent.agentClassifier.push(this.apiClassifier);
+      }
+
+      if (this.isWatsonEnabled && this.watsonClassifierValidator()) {
+        this.selectedAgent.agentClassifier.push(this.watsonClassifier);
+      }
+
+      if (this.facebookPluginValidator()) {
+        this.selectedAgent.agentPlugins.push(this.facebookPlugin);
+      }
+
       this.agentService.saveAgent(this.selectedAgent)
         .then(
-          response => {
-            console.log(response);
-            this.ngOnInit();
+        response => {
+          if (response) {
+            if (response.status >= 200 && response.status < 300) {
+              this.isSuccess = true;
+
+              if (response._body) {
+                const agentString: string = response._body;
+
+                if (agentString && agentString.length > 0) {
+                  const createdAgent: Agent = JSON.parse(agentString);
+
+                  if (createdAgent) {
+                    if (createdAgent.agentPlugins && createdAgent.agentPlugins.length > 0) {
+                      const facebookPlugin: Plugin = createdAgent.agentPlugins[0];
+
+                      if (facebookPlugin && facebookPlugin.webhook && facebookPlugin.webhook.length > 0) {
+                        this.facebookIntegrated = true;
+                        this.webhook = facebookPlugin.webhook;
+                        new showModal('successModal');
+                        return;
+                      }
+                    }
+
+                    this.facebookIntegrated = false;
+                    this.webhook = '';
+                    new showModal('successModal');
+                  }
+                }
+              }
+            } else {
+              this.isSuccess = false;
+
+              if (response._body) {
+                this.errorMessage = response._body;
+              }
+            }
           }
+        }
         );
     }
   }
@@ -98,74 +242,6 @@ export class AgentCreationComponent implements OnInit {
   onDomainSelect(domain: Domain) {
     if (domain) {
       this.selectedDomain = domain;
-    }
-  }
-
-  onPluginSelect(plugin?: Plugin) {
-    if (plugin) {
-      this.modalHeader = 'Update Plugin';
-      this.createMode = false;
-      this.selectedPlugin = plugin;
-      this.tempPlugin = JSON.parse(JSON.stringify(this.selectedPlugin));
-    } else {
-      this.modalHeader = 'Create Plugin';
-      this.createMode = true;
-      this.selectedPlugin = null;
-      this.tempPlugin = new Plugin();
-    }
-  }
-
-  addPlugin() {
-    if (this.selectedPlugin) {
-      const index: number = this.selectedAgent.agentPlugins.indexOf(this.selectedPlugin);
-      if (index !== -1) {
-        this.selectedAgent.agentPlugins[index] = this.tempPlugin;
-      }
-    } else {
-      this.selectedAgent.agentPlugins.push(this.tempPlugin);
-    }
-  }
-
-  removePlugin() {
-    if (this.selectedPlugin) {
-      const index: number = this.selectedAgent.agentPlugins.indexOf(this.selectedPlugin);
-      if (index !== -1) {
-        this.selectedAgent.agentPlugins.splice(index, 1);
-      }
-    }
-  }
-
-  onClassifierSelect(classifier?: Classifier) {
-    if (classifier) {
-      this.modalHeader = 'Update Classifier';
-      this.createMode = false;
-      this.selectedClassifier = classifier;
-      this.tempClassifier = JSON.parse(JSON.stringify(this.selectedClassifier));
-    } else {
-      this.modalHeader = 'Create Classifier';
-      this.createMode = true;
-      this.selectedClassifier = null;
-      this.tempClassifier = new Classifier();
-    }
-  }
-
-  addClassifier() {
-    if (this.selectedClassifier) {
-      const index: number = this.selectedAgent.agentClassifier.indexOf(this.selectedClassifier);
-      if (index !== -1) {
-        this.selectedAgent.agentClassifier[index] = this.tempClassifier;
-      }
-    } else {
-      this.selectedAgent.agentClassifier.push(this.tempClassifier);
-    }
-  }
-
-  removeClassifier() {
-    if (this.selectedClassifier) {
-      const index: number = this.selectedAgent.agentClassifier.indexOf(this.selectedClassifier);
-      if (index !== -1) {
-        this.selectedAgent.agentClassifier.splice(index, 1);
-      }
     }
   }
 
@@ -229,9 +305,15 @@ export class AgentCreationComponent implements OnInit {
     }
   }
 
-  addDomain() {
-    if (!this.domainAddedToList()) {
-      this.selectedDomainList.push(this.selectedDomain);
+  addDomain(domain?: Domain) {
+    if (domain) {
+      if (!this.domainAddedToList(domain)) {
+        this.selectedDomainList.push(domain);
+      }
+    } else {
+      if (!this.domainAddedToList()) {
+        this.selectedDomainList.push(this.selectedDomain);
+      }
     }
   }
 
@@ -264,6 +346,31 @@ export class AgentCreationComponent implements OnInit {
           }
         }
       }
+    }
+  }
+
+  apiClassifierValidator() {
+    return this.apiClassifier && this.apiClassifier.classifierServiceUrl && this.apiClassifier.classifierServiceToken
+      && this.apiClassifier.classifierServiceUrl.length > 0 && this.apiClassifier.classifierServiceToken.length > 0;
+  }
+
+  watsonClassifierValidator() {
+    return this.watsonClassifier && this.watsonClassifier.classifierWorkspaceId
+      && this.watsonClassifier.classifierUsername && this.watsonClassifier.classifierPassword
+      && this.watsonClassifier.classifierVersion && this.watsonClassifier.classifierWorkspaceId.length > 0
+      && this.watsonClassifier.classifierUsername.length > 0 && this.watsonClassifier.classifierPassword.length > 0
+      && this.watsonClassifier.classifierVersion.length > 0;
+  }
+
+  facebookPluginValidator() {
+    return this.facebookPlugin && this.facebookPlugin.apitoken && this.facebookPlugin.validation
+      && this.facebookPlugin.serviceDownMsg && this.facebookPlugin.apitoken.length > 0
+      && this.facebookPlugin.validation.length > 0 && this.facebookPlugin.serviceDownMsg.length > 0;
+  }
+
+  goToAgentsListing() {
+    if (this.isSuccess) {
+      this.router.navigate(['/pages/agent/agents'], { relativeTo: this.route });
     }
   }
 }

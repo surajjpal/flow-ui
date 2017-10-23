@@ -1,6 +1,6 @@
 <div class="widgets">
   <div class="row">
-    <ba-card baCardClass="with-scroll" class="col-md-12">
+    <ba-card [cardTitle]="domainCreateMode ? 'Create Domain' : 'Update Domain'" baCardClass="with-scroll" class="col-md-12">
 
 
 
@@ -46,6 +46,9 @@
         </div>
         <div role="tabpanel" class="tab-pane fade" id="intentTrainingContent" aria-labelledby="intentTrainingTab">
           <div class="panel panel-default">
+            <div class="data-table-container">
+              <ba-file-uploader [defaultValue]="'Upload Intent Excel'" [fileUploaderOptions]="intentUploaderOptions" (onFileUpload)="onExcelUpload($event)" (onFileUploadCompleted)="onExcelUploadComplete($event)"></ba-file-uploader>
+            </div>
             <form class="row form-inline">
               <div class="form-group col-sm-10">
                 <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Query" />
@@ -95,6 +98,9 @@
         </div>
         <div role="tabpanel" class="tab-pane fade" id="entityTrainingContent" aria-labelledby="entityTrainingTab">
           <div class="panel panel-default">
+            <div class="data-table-container">
+              <ba-file-uploader [defaultValue]="'Upload Entity Excel'" [fileUploaderOptions]="entityUploaderOptions" (onFileUpload)="onExcelUpload($event)" (onFileUploadCompleted)="onExcelUploadComplete($event)"></ba-file-uploader>
+            </div>
             <form class="row form-inline">
               <div class="form-group col-sm-10">
                 <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Query" />
@@ -245,7 +251,7 @@
       <form>
         <div class="form-group">
           <button type="button" class="btn btn-primary" (click)="createDomain()">
-            Create Domain
+              {{domainCreateMode ? 'Create Domain' : 'Update Domain'}}
           </button>
         </div>
       </form>

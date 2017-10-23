@@ -1,0 +1,61 @@
+<div class="widgets">
+  <div class="row">
+    <ba-card cardTitle="All Agents" baCardClass="with-scroll" class="data-table-container">
+      <div class="panel panel-default">
+        <form class="row form-inline">
+          <div class="form-group col-sm-10">
+            <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Agents" />
+          </div>
+          <div class="form-group col-sm-2">
+            <button type="button" class="btn btn-primary" (click)="onAgentSelect()">
+              Create Agent
+            </button>
+          </div>
+        </form>
+        <br>
+
+        <table class="table table-striped" [mfData]="agentSource | dataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="name">
+          <thead>
+            <tr>
+              <th>
+                <mfDefaultSorter by="name">Name</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="langSupported">Languages Supported</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="agentFlow">Attached Flows</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="agentDomain">Attached Domains</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="agentPlugins">Attached Plugins</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="agentClassifier">Attached Classifiers</mfDefaultSorter>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let agent of mf.data" (click)="onAgentSelect(agent)">
+              <td>{{agent.name}}</td>
+              <td>{{agent.langSupported}}</td>
+              <td>{{arrayToString(agent.agentFlow)}}</td>
+              <td>{{domainsToString(agent.agentDomain)}}</td>
+              <td>{{pluginsToString(agent.agentPlugins)}}</td>
+              <td>{{classifiersToString(agent.agentClassifier)}}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="100%">
+                <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </ba-card>
+  </div>
+</div>

@@ -15,6 +15,8 @@ import { AgentCreationComponent } from './components/agent/agentCreation.compone
 import { DomainSetupComponent } from './components/domainSetup/domainSetup.component';
 import { DomainsComponent } from './components/domains/domains.component';
 import { DomainFilterPipe } from './components/domains/data-filter.pipe';
+import { AgentsComponent } from './components/agents/agents.component';
+import { AgentFilterPipe } from './components/agents/data-filter.pipe';
 
 import { AgentService } from './agent.services';
 import { GraphService } from '../flow/flow.service';
@@ -34,7 +36,9 @@ import { GraphService } from '../flow/flow.service';
     AgentCreationComponent,
     DomainSetupComponent,
     DomainsComponent,
-    DomainFilterPipe
+    DomainFilterPipe,
+    AgentsComponent,
+    AgentFilterPipe
   ],
   providers: [
     AgentService,

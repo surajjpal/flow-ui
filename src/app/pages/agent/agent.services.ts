@@ -29,6 +29,22 @@ export class AgentService {
       .catch(this.handleError);
   }
 
+  agentLookup(query?: string): Promise<Agent[]> {
+    if (!query || query.length <= 0) {
+      query = 'ALL';
+    }
+
+    const url = `${environment.wheelsemiserver + environment.fetchagenturl + query}`;
+    return this.http
+      .get(url)
+      .toPromise()
+      .then(
+      response => response.json() as Agent[],
+      error => error as any
+      )
+      .catch(this.handleError);
+  }
+
   saveDomain(domain: Domain): Promise<any> {
     const url = `${environment.wheelsemiserver + environment.savedomainurl}`;
     return this.http

@@ -45,7 +45,7 @@ export class DomainsComponent implements OnInit {
     if (domain) {
       this.selectedDomain = domain;
     } else {
-      this.selectedDomain = new Domain();
+      this.selectedDomain = null;
     }
 
     this.sharingService.setSharedObject(this.selectedDomain);

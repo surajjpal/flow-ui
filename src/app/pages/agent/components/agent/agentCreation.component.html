@@ -1,7 +1,6 @@
 <div class="widgets">
   <div class="row">
-    <ba-card baCardClass="with-scroll" class="col-md-12">
-
+    <ba-card [cardTitle]="agentCreateMode ? 'Create Agent' : 'Update Agent'" baCardClass="with-scroll" class="col-md-12">
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" id="agentInfoTab" data-toggle="tab" href="#agentInfoContent" role="tab" aria-controls="agentInfo"
@@ -34,16 +33,16 @@
           </div>
         </div>
         <div role="tabpanel" class="tab-pane fade" id="agentTrainingContent" aria-labelledby="agentTrainingTab">
-            <div class="panel panel-default">
-              <form>
-                <div class="form-group">
-                  <label>Select Flows</label>
-                  <select class="selectpicker form-control" multiple="true" title="Select Flows" [(ngModel)]="selectedAgent.agentFlow" name="agentFlow">
+          <div class="panel panel-default">
+            <form>
+              <div class="form-group">
+                <label>Select Flows</label>
+                <select class="selectpicker form-control" multiple="true" title="Select Flows" [(ngModel)]="selectedAgent.agentFlow" name="agentFlow">
                     <option *ngFor="let flow of flowSource" [ngValue]="flow.machineType">{{flow.machineType + ' v' + flow.version}}</option>
                   </select>
-                </div>
-              </form>
-            </div>
+              </div>
+            </form>
+          </div>
           <div class="row">
             <div class="col-md-3">
               <button *ngIf="!containsAll()" type="button" class="btn btn-primary" (click)="addAllDomain()">
@@ -58,7 +57,6 @@
                 </li>
               </ul>
             </div>
-
             <div *ngIf="selectedDomain" class="col-md-8">
               <h3>
                 Domain Details
@@ -83,7 +81,6 @@
                   <input type="text" class="form-control" disabled placeholder="Domain Goals" [value]="domainGoalsToString(selectedDomain.domainGoals)"
                     name="domainGoals" />
                 </div>
-
                 <div class="form-group">
                   <button *ngIf="!domainAddedToList()" type="button" class="btn btn-primary" (click)="addDomain()">
                     Add
@@ -97,126 +94,97 @@
           </div>
         </div>
         <div role="tabpanel" class="tab-pane fade" id="agentPluginsContent" aria-labelledby="agentPluginsTab">
-
-
-          <div class="row">
-            <div class="panel panel-default data-table-container">
-              <table class="table table-striped" [mfData]="selectedAgent.agentPlugins" #mf1="mfDataTable" [mfRowsOnPage]="10" mfSortBy="messengerName">
-                <thead>
-                  <tr>
-                    <th>
-                      <button type="button" class="btn btn-primary" (click)="onPluginSelect()" data-toggle="modal" data-target="#pluginModal">
-                        Add
-                      </button>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      <mfDefaultSorter by="messengerName">Messanger Name</mfDefaultSorter>
-                    </th>
-                    <th>
-                      <mfDefaultSorter by="webhook">Webhook</mfDefaultSorter>
-                    </th>
-                    <th>
-                      <mfDefaultSorter by="apitoken">API Token</mfDefaultSorter>
-                    </th>
-                    <th>
-                      <mfDefaultSorter by="serviceDownMsg">Service Downtime Message</mfDefaultSorter>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let plugin of mf1.data" (click)="onPluginSelect(plugin)" data-toggle="modal" data-target="#pluginModal">
-                    <td>{{plugin.messengerName}}</td>
-                    <td>{{plugin.webhook}}</td>
-                    <td>{{plugin.apitoken}}</td>
-                    <td>{{plugin.serviceDownMsg}}</td>
-                  </tr>
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="100%">
-                      <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
+          <div class="panel panel-default">
+            <div class="row">
+              <form class="col-md-12">
+                <fieldset class="form-group">
+                  <legend>Facebook Messenger Plugin</legend>
+                  <div *ngIf="facebookPlugin.webhook.length > 0" class="form-group">
+                    <label>Webhook</label>
+                    <input type="text" disabled class="form-control" placeholder="Webhook" [(ngModel)]="facebookPlugin.webhook" name="webhook">
+                  </div>
+                  <div class="form-group">
+                    <label>API Token</label>
+                    <input type="text" class="form-control" placeholder="API Token" [(ngModel)]="facebookPlugin.apitoken" name="apitoken">
+                  </div>
+                  <div class="form-group">
+                    <label>Verification Key</label>
+                    <input type="text" class="form-control" placeholder="Verification Key" [(ngModel)]="facebookPlugin.validation" name="validation">
+                  </div>
+                  <div class="form-group">
+                    <label>Service Downtime Message</label>
+                    <input type="text" class="form-control" placeholder="Service Downtime Message" [(ngModel)]="facebookPlugin.serviceDownMsg"
+                      name="serviceDownMsg">
+                  </div>
+                </fieldset>
+              </form>
             </div>
           </div>
-
-
-
         </div>
         <div role="tabpanel" class="tab-pane fade" id="settingsContent" aria-labelledby="settingsTab">
-          
-
-          <div class="row">
-            <div class="panel panel-default data-table-container">
-              <table class="table table-striped" [mfData]="selectedAgent.agentClassifier" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="classifierServiceName">
-                <thead>
-                  <tr>
-                    <th>
-                      <button type="button" class="btn btn-primary" (click)="onClassifierSelect()" data-toggle="modal" data-target="#classifierModal">
-                        Add
-                      </button>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      <mfDefaultSorter by="classifierServiceName">Service Name</mfDefaultSorter>
-                    </th>
-                    <th>
-                      <mfDefaultSorter by="classifierServiceUrl">Service URL</mfDefaultSorter>
-                    </th>
-                    <th>
-                      <mfDefaultSorter by="classifierServiceToken">Service Token</mfDefaultSorter>
-                    </th>
-                    <th>
-                      <mfDefaultSorter by="classifierWorkspaceId">Workspace ID</mfDefaultSorter>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let classifier of mf.data" (click)="onClassifierSelect(classifier)" data-toggle="modal" data-target="#classifierModal">
-                    <td>{{classifier.classifierServiceName}}</td>
-                    <td>{{classifier.classifierServiceUrl}}</td>
-                    <td>{{classifier.classifierServiceToken}}</td>
-                    <td>{{classifier.classifierWorkspaceId}}</td>
-                  </tr>
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="100%">
-                      <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
+          <div class="panel panel-default">
+            <div class="row">
+              <form class="col-md-6">
+                <div class="checkbox">
+                  <ba-checkbox [(ngModel)]="isWatsonEnabled" [label]="'Enable Watson'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+                </div>
+                <fieldset *ngIf="isWatsonEnabled" class="form-group">
+                  <div class="form-group">
+                    <label>Workspace ID</label>
+                    <input type="text" class="form-control" placeholder="Workspace ID" [(ngModel)]="watsonClassifier.classifierWorkspaceId" name="classifierWorkspaceId">
+                  </div>
+                  <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" class="form-control" placeholder="Username" [(ngModel)]="watsonClassifier.classifierUsername" name="classifierUsername">
+                  </div>
+                  <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" placeholder="Password" [(ngModel)]="watsonClassifier.classifierPassword" name="classifierPassword">
+                  </div>
+                  <div class="form-group">
+                    <label>Version</label>
+                    <input type="text" class="form-control" placeholder="Version" [(ngModel)]="watsonClassifier.classifierVersion" name="classifierVersion">
+                  </div>
+                </fieldset>
+              </form>
+              <form class="col-md-6">
+                <div class="checkbox">
+                  <ba-checkbox [(ngModel)]="isApiEnabled" [label]="'Enable API'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+                </div>
+                <fieldset *ngIf="isApiEnabled" class="form-group">
+                  <div class="form-group">
+                    <label>Service Url</label>
+                    <input type="text" class="form-control" placeholder="Service Url" [(ngModel)]="apiClassifier.classifierServiceUrl" name="classifierServiceUrl">
+                  </div>
+                  <div class="form-group">
+                    <label>Service Token</label>
+                    <input type="text" class="form-control" placeholder="Service Token" [(ngModel)]="apiClassifier.classifierServiceToken" name="classifierServiceToken">
+                  </div>
+                </fieldset>
+              </form>
             </div>
+            <form>
+              <div class="form-group">
+                <button type="button" class="btn btn-primary" (click)="createAgent()">
+                  {{agentCreateMode ? 'Create Agent' : 'Update Agent'}}
+                </button>
+              </div>
+            </form>
           </div>
-          <form>
-            <div class="form-group">
-              <button type="button" class="btn btn-primary" (click)="createAgent()">
-                Create Agent
-              </button>
-            </div>
-          </form>
-
-
         </div>
       </div>
-
     </ba-card>
   </div>
 </div>
 
-<div class="modal fade" id="pluginModal" tabindex="-1" role="dialog" attr.aria-labelledby="pluginModalLabel" aria-hidden="true">
+<div class="modal fade" id="successModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" attr.aria-labelledby="successModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title" id="pluginModalLabel">
-          {{modalHeader}}
+        <h4 class="modal-title" id="successModalLabel">
+          {{isSuccess ? 'Success' : 'Error'}}
         </h4>
         <button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
@@ -226,80 +194,26 @@
 
       <!-- Modal Body -->
       <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label>Messenger Name</label>
-            <input class="form-control" placeholder="Messenger Name" [(ngModel)]="tempPlugin.messengerName" name="messengerName" />
-          </div>
-          <div class="form-group">
-            <label>Webhook</label>
-            <input class="form-control" placeholder="Webhook" [(ngModel)]="tempPlugin.webhook" name="webhook" />
-          </div>
-          <div class="form-group">
-            <label>API Token</label>
-            <input class="form-control" placeholder="API Token" [(ngModel)]="tempPlugin.apitoken" name="apitoken" />
-          </div>
-          <div class="form-group">
-            <label>Service Downtime Message</label>
-            <input class="form-control" placeholder="Service Downtime Message" [(ngModel)]="tempPlugin.serviceDownMsg" name="serviceDownMsg"
-            />
-          </div>
-        </form>
+        <div *ngIf="isSuccess && facebookIntegrated">
+          You have successfully created the agent. Following is the webhook for Facebook plugin integrated.
+          <form>
+            <div class="form-group">
+              <label>Webhook</label>
+              <input class="form-control" disabled placeholder="Webhook" disabled [value]="webhook" />
+            </div>
+          </form>
+        </div>
+        <div *ngIf="isSuccess && !facebookIntegrated">
+          You have successfully created the agent.
+        </div>
+        <div *ngIf="!isSuccess">
+          {{errorMessage}}
+        </div>
       </div>
 
       <!-- Modal Footer -->
-      <div class="modal-footer" id="settingsModalFooter">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removePlugin()">Remove</button>
-        <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="addPlugin()">{{createMode ? 'Create' : 'Update'}}</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div class="modal fade" id="classifierModal" tabindex="-1" role="dialog" attr.aria-labelledby="classifierModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title" id="classifierModalLabel">
-          {{modalHeader}}
-        </h4>
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span>
-          <span class="sr-only">Close</span>
-        </button>
-      </div>
-
-      <!-- Modal Body -->
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label>Service Name</label>
-            <input class="form-control" placeholder="Service Name" [(ngModel)]="tempClassifier.classifierServiceName" name="classifierServiceName" />
-          </div>
-          <div class="form-group">
-            <label>Service URL</label>
-            <input class="form-control" placeholder="Service URL" [(ngModel)]="tempClassifier.classifierServiceUrl" name="classifierServiceUrl" />
-          </div>
-          <div class="form-group">
-            <label>Service Token</label>
-            <input class="form-control" placeholder="Service Token" [(ngModel)]="tempClassifier.classifierServiceToken" name="classifierServiceToken" />
-          </div>
-          <div class="form-group">
-            <label>Workspace ID</label>
-            <input class="form-control" placeholder="Workspace ID" [(ngModel)]="tempClassifier.classifierWorkspaceId" name="classifierWorkspaceId"
-            />
-          </div>
-        </form>
-      </div>
-
-      <!-- Modal Footer -->
-      <div class="modal-footer" id="settingsModalFooter">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeClassifier()">Remove</button>
-        <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="addClassifier()">{{createMode ? 'Create' : 'Update'}}</button>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="goToAgentsListing();">Close</button>
       </div>
     </div>
   </div>

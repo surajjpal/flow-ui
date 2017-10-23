@@ -178,6 +178,7 @@ export class Plugin {
   // createdDt: Date;
   webhook: string;
   apitoken: string;
+  validation: string;
   serviceDownMsg: string;
 
   constructor() {
@@ -185,6 +186,7 @@ export class Plugin {
     // this.createdDt = new Date();
     this.webhook = '';
     this.apitoken = '';
+    this.validation = '';
     this.serviceDownMsg = '';
   }
 }

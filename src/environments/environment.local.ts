@@ -45,11 +45,14 @@ export const environment = {
   deleteentityurl: 'delete/entityclassifier?query=',
 
   // Wheels EMI
-  wheelsemiserver: 'https://cors-anywhere.herokuapp.com/http://169.54.3.12:5002/',
+  // wheelsemiserver: 'https://cors-anywhere.herokuapp.com/http://169.54.3.12/',
+  wheelsemiserver: 'http://169.54.3.12/',
   savedomainurl: 'domain',
   fetchdomainurl: 'fetchdomain?query=',
   saveagenturl: 'agent',
   fetchagenturl: 'fetchagent?query=',
   saveaccounturl: 'saveaccount',
-  fetchresponse: 'fetchresponse?' // fetchresponse?intentName=information&entityName=policy is actual url
+  fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
+  uploadintentexcelurl: 'uploadintents',
+  uploadentityexcelurl: 'uploadentity'
 };
