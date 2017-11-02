@@ -51,7 +51,7 @@ export class DomainSetupComponent implements OnInit {
     this.createMode = false;
     this.filterQuery = '';
     this.languageSource = ['ENG', 'HIN', 'MAR', 'Bahasa'];
-    this.tempKeySource = ['name', 'dob', 'phoneNumber', 'email', 'panNumber', 'aadharNumber', 'income'];
+    this.tempKeySource = ['name', 'dob', 'phoneNumber', 'email', 'panNumber', 'aadharNumber', 'income', 'emi'];
 
     this.selectedDomain = new Domain();
     this.tempIntent = new Intent();
