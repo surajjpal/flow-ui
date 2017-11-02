@@ -2,14 +2,13 @@
 
 <div>
   <div class="col-md-12 col-sm-12 col-xs-12">
-    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="clearAllData()">Clear Data</button>
-    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="saveOnServer()" *ngIf="!readOnly">Save</button>
-    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="prepareDummyObject()" *ngIf="!readOnly" data-toggle="modal" data-target="#settignsModal">Settings</button>
-    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">Zoom In</button>
-    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">Zoom Out</button>
-    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">Zoom Actual</button>
-    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)">Print Preview</button>
-    <button type="button" class="btn btn-default" style="margin-right: 5px" (click)="toolsChoice(POSTER_PRINT)">Poster Print</button>
+    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="clearAllData()"><i class="ion-ios-refresh"></i>Reset</button>
+    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="saveOnServer()" *ngIf="!readOnly"><i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
+    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="prepareDummyObject()" *ngIf="!readOnly" data-toggle="modal" data-target="#settignsModal"><i class="fa fa-cogs" aria-hidden="true"></i>Settings</button>
+    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)"><i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>
+    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)"><i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>
+    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)"><i class="ion-arrow-expand"></i>Zoom Actual</button>
+    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)"><i class="ion-printer"></i>Print Preview</button>
   </div>
   <br>
   <div class="col-md-12 col-sm-12 col-xs-12">

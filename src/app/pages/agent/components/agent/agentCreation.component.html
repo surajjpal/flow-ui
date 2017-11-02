@@ -29,6 +29,11 @@
                 <input type="text" class="form-control" required placeholder="Agent Description" [(ngModel)]="selectedAgent.desc" name="desc"
                 />
               </div>
+              <div *ngIf="selectedAgent.agenturl && selectedAgent.agenturl.length > 0" class="form-group">
+                <label>Agent URL</label>
+                <input type="text" disabled class="form-control" placeholder="Agent URL" [(ngModel)]="selectedAgent.agenturl" name="agenturl"
+                />
+              </div>
             </form>
           </div>
         </div>

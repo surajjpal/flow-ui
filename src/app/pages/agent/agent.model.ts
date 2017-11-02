@@ -85,6 +85,8 @@ export class GoalStep {
   goalResponse: string;
   lang: string;
   api: string;
+  key: string;
+  parameters: string[];
 
   constructor() {
     this.goalExpression = '';
@@ -93,6 +95,8 @@ export class GoalStep {
     this.lang = '';
     this.sequence = 0;
     this.api = '';
+    this.key = '';
+    this.parameters = [];
   }
 }
 
@@ -104,6 +108,7 @@ export class Goal {
   // createdDt: Date;
   authRequired: boolean;
   domainGoalSteps: GoalStep[];
+  model: any;
 
   constructor() {
     // this.intentName = '';
@@ -112,6 +117,7 @@ export class Goal {
     this.goalName = '';
     // this.createdDt = new Date();
     this.domainGoalSteps = [];
+    this.model = {};
   }
 }
 
@@ -214,6 +220,7 @@ export class Classifier {
 export class Agent {
   _id: string;
   name: string;
+  agenturl: string;
   createdDt: Date;
   desc: string;
   langSupported: string[];
@@ -227,6 +234,7 @@ export class Agent {
 
   constructor() {
     this._id = null;
+    this.agenturl = null;
     this.name = '';
     this.createdDt = new Date();
     this.desc = '';

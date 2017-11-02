@@ -7,12 +7,12 @@ import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
 import { Domain, Intent, Entity, Goal, GoalStep, Response } from '../../agent.model';
 
 import { AgentService } from '../../agent.services';
-import { AlertService, DataSharingService,  } from '../../../../shared/shared.service';
+import { AlertService, DataSharingService } from '../../../../shared/shared.service';
 
 import { environment } from '../../../../../environments/environment';
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 
-@Component ({
+@Component({
   selector: 'api-agent-domain',
   templateUrl: './domainSetup.component.html'
 })
@@ -26,6 +26,7 @@ export class DomainSetupComponent implements OnInit {
   createMode: boolean;
   filterQuery: string;
   languageSource: string[];
+  tempKeySource: string[];
 
   selectedDomain: Domain;
   tempIntent: Intent;
@@ -38,18 +39,19 @@ export class DomainSetupComponent implements OnInit {
   selectedResponse: Response;
 
   constructor(
-      private router: Router,
-      private route: ActivatedRoute,
-      private alertService: AlertService,
-      private agentService: AgentService,
-      private sharingService: DataSharingService,
-      private slimLoadingBarService: SlimLoadingBarService
-    ) {
+    private router: Router,
+    private route: ActivatedRoute,
+    private alertService: AlertService,
+    private agentService: AgentService,
+    private sharingService: DataSharingService,
+    private slimLoadingBarService: SlimLoadingBarService
+  ) {
     this.domainCreateMode = true;
     this.modalHeader = '';
     this.createMode = false;
     this.filterQuery = '';
     this.languageSource = ['ENG', 'HIN', 'MAR', 'Bahasa'];
+    this.tempKeySource = ['name', 'dob', 'phoneNumber', 'email', 'panNumber', 'aadharNumber', 'income'];
 
     this.selectedDomain = new Domain();
     this.tempIntent = new Intent();
@@ -180,6 +182,20 @@ export class DomainSetupComponent implements OnInit {
       this.alertService.error(error, false, 5000);
     } else {
       this.removeGoalStepResponseFromDomainResponse();
+      this.tempGoal.model = '{}';
+
+      if (this.tempGoal && this.tempGoal.domainGoalSteps) {
+        const tempMap: any = {};
+
+        for (const goalStep of this.tempGoal.domainGoalSteps) {
+          if (goalStep.key && goalStep.key.length > 0) {
+            tempMap[goalStep.key] = 'NOTMET';
+          }
+        }
+
+        this.tempGoal.model = JSON.stringify(tempMap);
+      }
+
       if (this.selectedGoal) {
         const index: number = this.selectedDomain.domainGoals.indexOf(this.selectedGoal);
         if (index !== -1) {
@@ -223,7 +239,7 @@ export class DomainSetupComponent implements OnInit {
     if (goalSteps) {
       for (let i = 0, len = goalSteps.length; i < len; i++) {
         toString += goalSteps[i].goalResponse;
-  
+
         if (i < (len - 1)) {
           toString += ', ';
         }
@@ -341,9 +357,9 @@ export class DomainSetupComponent implements OnInit {
 
       this.agentService.saveDomain(this.selectedDomain)
         .then(
-          response => {
-            this.router.navigate(['/pages/agent/domains'], { relativeTo: this.route });
-          }
+        response => {
+          this.router.navigate(['/pages/agent/domains'], { relativeTo: this.route });
+        }
         );
     }
   }

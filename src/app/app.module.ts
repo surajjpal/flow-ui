@@ -22,6 +22,7 @@ import { AuthGuard, AntiAuthGuard, UserBroadcastService, AuthService, AlertServi
 import { AlertComponent } from './shared/shared.component';
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -62,7 +63,8 @@ export type StoreType = {
     NgbModule.forRoot(),
     PagesModule,
     routing,
-    SlimLoadingBarModule.forRoot()
+    SlimLoadingBarModule.forRoot(),
+    AngularFontAwesomeModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     APP_PROVIDERS
