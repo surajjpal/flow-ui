@@ -55,15 +55,11 @@ export class Dashboard {
 export class DataPoint {
   dataPointName: string;
   expression: string;
-  paramTargetList: string[];
-  inputTarget: string;
   machineType: string;
 
   constructor() {
     this.dataPointName = '';
     this.expression = '';
-    this.paramTargetList = [];
-    this.inputTarget = '';
     this.machineType = '';
   }
 }
@@ -80,13 +76,9 @@ export class Classifier {
 
 export class Expression {
   value: string;
-  target: string;
-  expectedResult: string;
-
+  
   constructor() {
     this.value = '';
-    this.target = '';
-    this.expectedResult = '';
   }
 }
 

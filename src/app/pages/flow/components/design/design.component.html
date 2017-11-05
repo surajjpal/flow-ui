@@ -141,22 +141,6 @@
                                   <input type="text" class="form-control" required [id]="'expValue' + expIndex" placeholder="Value" [(ngModel)]="expression.value"
                                     name="value" />
                                 </div>
-                                <div class="form-group">
-                                  <label [for]="'expTarget' + expIndex">
-                                    Target
-                                  </label>
-                                  <select class="selectpicker form-control" required [id]="'expTarget' + expIndex" title="Select Target" [(ngModel)]="expression.target"
-                                    name="target">
-                                    <option *ngFor="let sourceInput of sourceInputTargets" [value]="sourceInput">{{sourceInput}}</option>
-                                  </select>
-                                </div>
-                                <div class="form-group">
-                                  <label [for]="'expResult' + expIndex">
-                                    Expected Result
-                                  </label>
-                                  <input type="text" class="form-control" required [id]="'expResult' + expIndex" placeholder="Expected Result" [(ngModel)]="expression.expectedResult"
-                                    name="expectedResult" />
-                                </div>
                                 <div class="form-group" *ngIf="event.expressionList.length > 1">
                                   <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
                                     Remove Expression
@@ -174,22 +158,6 @@
                                     </label>
                                   <input type="text" class="form-control" required [id]="'expValue' + expIndex" placeholder="Value" [(ngModel)]="expression.value"
                                     name="value" />
-                                </div>
-                                <div class="form-group">
-                                  <label [for]="'expTarget' + expIndex">
-                                      Target
-                                    </label>
-                                  <select class="selectpicker form-control" required [id]="'expTarget' + expIndex" title="Select Target" [(ngModel)]="expression.target"
-                                    name="target">
-                                      <option *ngFor="let sourceInput of sourceInputTargets" [value]="sourceInput">{{sourceInput}}</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                  <label [for]="'expResult' + expIndex">
-                                      Expected Result
-                                    </label>
-                                  <input type="text" class="form-control" required [id]="'expResult' + expIndex" placeholder="Expected Result" [(ngModel)]="expression.expectedResult"
-                                    name="expectedResult" />
                                 </div>
                                 <div class="form-group" *ngIf="event.expressionList.length > 1">
                                   <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
@@ -265,22 +233,6 @@
                                   <input type="text" class="form-control" required [id]="'expValue' + expIndex" placeholder="Value" [(ngModel)]="expression.value"
                                     name="value" />
                                 </div>
-                                <div class="form-group">
-                                  <label [for]="'expTarget' + expIndex">
-                                    Target
-                                  </label>
-                                  <select class="selectpicker form-control" required [id]="'expTarget' + expIndex" title="Select Target" [(ngModel)]="expression.target"
-                                    name="target">
-                                    <option *ngFor="let sourceInput of sourceInputTargets" [value]="sourceInput">{{sourceInput}}</option>
-                                  </select>
-                                </div>
-                                <div class="form-group">
-                                  <label [for]="'expResult' + expIndex">
-                                    Expected Result
-                                  </label>
-                                  <input type="text" class="form-control" required [id]="'expResult' + expIndex" placeholder="Expected Result" [(ngModel)]="expression.expectedResult"
-                                    name="expectedResult" />
-                                </div>
                                 <div class="form-group" *ngIf="event.expressionList.length > 1">
                                   <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
                                     Remove Expression
@@ -298,22 +250,6 @@
                                     </label>
                                   <input type="text" class="form-control" required [id]="'expValue' + expIndex" placeholder="Value" [(ngModel)]="expression.value"
                                     name="value" />
-                                </div>
-                                <div class="form-group">
-                                  <label [for]="'expTarget' + expIndex">
-                                      Target
-                                    </label>
-                                  <select class="selectpicker form-control" required [id]="'expTarget' + expIndex" title="Select Target" [(ngModel)]="expression.target"
-                                    name="target">
-                                      <option *ngFor="let sourceInput of sourceInputTargets" [value]="sourceInput">{{sourceInput}}</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                  <label [for]="'expResult' + expIndex">
-                                      Expected Result
-                                    </label>
-                                  <input type="text" class="form-control" required [id]="'expResult' + expIndex" placeholder="Expected Result" [(ngModel)]="expression.expectedResult"
-                                    name="expectedResult" />
                                 </div>
                                 <div class="form-group" *ngIf="event.expressionList.length > 1">
                                   <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
@@ -446,24 +382,6 @@
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpInputExpression' + index" placeholder="Expression"
                         [(ngModel)]="dataPoint.expression" name="expression" />
                     </div>
-                    <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputTargetList' + index">
-                          Param Target List
-                        </label>
-                      <select multiple="true" class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'dpInputTargetList' + index"
-                        title="Select Targets" [(ngModel)]="dataPoint.paramTargetList" name="paramTargetList">
-                          <option *ngFor="let sourceParam of sourceParamTargets" [value]="sourceParam">{{sourceParam}}</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputInputTarget' + index">
-                          Input Target
-                        </label>
-                      <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'dpInputInputTarget' + index" title="Select Input Target"
-                        [(ngModel)]="dataPoint.inputTarget" name="inputTarget">
-                          <option *ngFor="let sourceInput of sourceInputTargets" [value]="sourceInput">{{sourceInput}}</option>
-                        </select>
-                    </div>
                     <div class="form-group" *ngIf="tempGraphObject.dataPointConfigurationList.length > 1">
                       <button type="button" class="btn btn-danger" (click)="deleteDataPoint(dataPoint)">
                           Remove Data Point
@@ -488,24 +406,6 @@
                         </label>
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpInputExpression' + index" placeholder="Expression"
                         [(ngModel)]="dataPoint.expression" name="expression" />
-                    </div>
-                    <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputTargetList' + index">
-                          Param Target List
-                        </label>
-                      <select multiple="true" class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'dpInputTargetList' + index"
-                        title="Select Targets" [(ngModel)]="dataPoint.paramTargetList" name="paramTargetList">
-                          <option *ngFor="let sourceParam of sourceParamTargets" [value]="sourceParam">{{sourceParam}}</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputInputTarget' + index">
-                          Input Target
-                        </label>
-                      <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'dpInputInputTarget' + index" title="Select Input Target"
-                        [(ngModel)]="dataPoint.inputTarget" name="inputTarget">
-                          <option *ngFor="let sourceInput of sourceInputTargets" [value]="sourceInput">{{sourceInput}}</option>
-                        </select>
                     </div>
                     <div class="form-group" *ngIf="tempGraphObject.dataPointConfigurationList.length > 1">
                       <button type="button" class="btn btn-danger" (click)="deleteDataPoint(dataPoint)">

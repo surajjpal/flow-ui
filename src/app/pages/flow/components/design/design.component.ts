@@ -6,6 +6,7 @@ declare var closeModal: any;
 declare var exportGraphXml: any;
 
 import { Component, Input, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 
 // Model Imports
@@ -43,8 +44,6 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   // Dropdown source list
   sourceStatusCodes: string[] = ['DRAFT', 'ACTIVE', 'ARCHIVE'];
-  sourceInputTargets: string[] = ['PAYLOAD', 'PARAM'];
-  sourceParamTargets: string[] = ['Client', 'Transaction', 'Entity'];
   sourceStateTypes: string[] = ['Manual', 'Auto', 'Cognitive'];
   sourceOperands: string[] = ['AND', 'OR'];
   sourceClassifiers: Classifier[];
@@ -59,6 +58,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   tempEvent: EventModel;
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute,
     private zone: NgZone,
     private graphService: GraphService,
     private communicationService: CommunicationService
@@ -92,7 +93,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (!this.graphObject || this.graphObject === null) {
       this.graphObject = new GraphObject();
       this.graphObject.statusCd = this.sourceStatusCodes[0],
-      this.addNewDataPoint();
+      this.addNewDataPoint(true);
     }
 
     new designFlowEditor(this.graphObject.xml, this.readOnly);
@@ -167,8 +168,6 @@ export class DesignComponent implements OnInit, OnDestroy {
   addExpression(event: EventModel): void {
     const tempExpression: Expression = new Expression();
     tempExpression.value = 'Expression';
-    tempExpression.target = this.sourceInputTargets[0];
-    tempExpression.expectedResult = '';
 
     event.expressionList.push(tempExpression);
   }
@@ -217,20 +216,22 @@ export class DesignComponent implements OnInit, OnDestroy {
     //this.subscription.unsubscribe();
   }
 
-  addNewDataPoint() {
+  addNewDataPoint(isInit?: boolean) {
     this.dataPointCount++;
 
     const dataPoint: DataPoint = new DataPoint();
     dataPoint.dataPointName = 'Data Point' + this.dataPointCount;
-    dataPoint.paramTargetList = [this.sourceParamTargets[0]];
-    dataPoint.inputTarget = this.sourceInputTargets[0];
 
-    this.graphObject.dataPointConfigurationList.push(dataPoint);
+    if (isInit) {
+      this.graphObject.dataPointConfigurationList.push(dataPoint);
+    } else {
+      this.tempGraphObject.dataPointConfigurationList.push(dataPoint);
+    }
   }
 
   deleteDataPoint(dataPoint: DataPoint) {
-    const index = this.graphObject.dataPointConfigurationList.indexOf(dataPoint);
-    this.graphObject.dataPointConfigurationList.splice(index, 1);
+    const index = this.tempGraphObject.dataPointConfigurationList.indexOf(dataPoint);
+    this.tempGraphObject.dataPointConfigurationList.splice(index, 1);
   }
 
   saveGraphXml(xml: string, states: StateModel[], transitions: Transition[]): void {
@@ -240,7 +241,10 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.graphObject.transitions = transitions;
 
       this.graphService.save(this.graphObject)
-        .then(graphObject => this.graphObject = graphObject);
+        .then(graphObject => {
+          this.graphObject = graphObject;
+          this.router.navigate(['/pages/flow/search'], { relativeTo: this.route });
+        });
     }
   }
 
