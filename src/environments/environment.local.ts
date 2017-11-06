@@ -14,6 +14,7 @@ export const environment = {
   stateflowimageurl: 'statemachine/stateflow/',
   autosummary: 'autodashboard/CONVERSATION_SUMMARY',
   graphurl: 'graph/',
+  graphbystatusurl: 'graph/findbystatus/',
   entryactionurl: 'graph/actions',
   autodashboardurl: 'autodashboard',
   authurl: 'auth/',
@@ -23,6 +24,7 @@ export const environment = {
   roleroutemapurl: 'master/roleroutemap',
   rolesurl: 'master/roles',
   routesurl: 'master/routes',
+  apiconfigurl: 'api/',
 
   // auto
   autoServer: 'https://cors-anywhere.herokuapp.com/https://auto.automatapi.xyz/',   // TODO: remove proxy
@@ -54,5 +56,6 @@ export const environment = {
   saveaccounturl: 'saveaccount',
   fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
   uploadintentexcelurl: 'uploadintents',
-  uploadentityexcelurl: 'uploadentity'
+  uploadentityexcelurl: 'uploadentity',
+  modelkeyslookupurl: 'load/modelkeys'
 };

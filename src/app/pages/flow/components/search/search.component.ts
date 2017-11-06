@@ -35,7 +35,9 @@ export class SearchComponent implements OnInit {
 
 
   // Models to bind with html
-  graphObjectList: GraphObject[];
+  activeGraphObjectList: GraphObject[];
+  closedGraphObjectList: GraphObject[];
+  dictionaryGraphObjectList: GraphObject[];
   selectedGraphObject: GraphObject = new GraphObject();
 
 
@@ -53,8 +55,12 @@ export class SearchComponent implements OnInit {
   }
 
   fetchGraphs(): void {
-    this.graphService.fetch()
-      .then(graphObjects => this.graphObjectList = graphObjects);
+    this.graphService.fetch('ACTIVE')
+      .then(graphObjects => this.activeGraphObjectList = graphObjects);
+      this.graphService.fetch('CLOSED')
+      .then(graphObjects => this.closedGraphObjectList = graphObjects);
+      this.graphService.fetch('TEMPLATE')
+      .then(graphObjects => this.dictionaryGraphObjectList = graphObjects);
   }
 
   toInt(num: string) {
@@ -72,7 +78,6 @@ export class SearchComponent implements OnInit {
       if (task === this.OPEN_IN_READONLY_MODE) {
         this.openInDesigner(this.selectedGraphObject, true);
       } else if (task === this.OPEN_IN_EDIT_MODE) {
-        console.log('XML to be edited: ' + this.selectedGraphObject.xml);
         this.openInDesigner(this.selectedGraphObject);
       } else if (task === this.CLONE_AND_EDIT_MODE) {
         this.selectedGraphObject._id = null;

@@ -8,13 +8,42 @@ export class DataFilterPipe implements PipeTransform {
 
     transform(array: any[], query: string): any {
         if (query) {
-            // console.log('Query: ' + query);
             return _.filter(array, row => {
-                // console.log('Machine Type: ' + row.machineType + ', Version: ' + row.version + ', Status Code: ' + row.statusCd);
-                // console.log('Query Output: ' + ((row.machineType.indexOf(query) > -1) || (row.version.indexOf(query) > -1) || (row.statusCd.indexOf(query) > -1)));
-                return ((row.machineType.toLowerCase().indexOf(query.toLowerCase()) > -1) || (row.version.toLowerCase().indexOf(query.toLowerCase()) > -1) || (row.statusCd.toLowerCase().indexOf(query.toLowerCase()) > -1));
+                let result = false;
+                if (row) {
+                    for (const property in row) {
+                        if (property) {
+                            result = result || this.matchQuery(row, property, query);
+                        }
+                    }
+                }
+                return result;
             });
         }
         return array;
+    }
+
+    private matchQuery(source: any, property: any, query: string): boolean {
+        if (source && property && query) {
+            if (source.hasOwnProperty(property) && source[property]) {
+                const value = source[property];
+
+                if (value instanceof String || typeof value === 'string' || typeof value === 'number') {
+                    return value.toString().toLowerCase().indexOf(query.toLowerCase()) > -1;
+                }
+                if (value instanceof Array) {
+                    for (const innerValue of value) {
+                        if (innerValue instanceof String || typeof innerValue === 'string') {
+                            const result = innerValue.toLowerCase().indexOf(query.toLowerCase()) > -1;
+                            if (result) {
+                                return result;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

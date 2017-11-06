@@ -61,8 +61,15 @@ export class GraphService {
     return Promise.reject('Graph object is null');
   }
 
-  fetch(): Promise<GraphObject[]> {
-    const url = `${environment.server + environment.graphurl}`;
+  fetch(status?: string): Promise<GraphObject[]> {
+    let url;
+
+    if (status) {
+      url = `${environment.server + environment.graphbystatusurl + status}`;
+    } else {
+      url = `${environment.server + environment.graphurl}`;
+    }
+    
     return this.http
       .get(url)
       .toPromise()

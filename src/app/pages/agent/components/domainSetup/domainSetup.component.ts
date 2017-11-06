@@ -26,7 +26,7 @@ export class DomainSetupComponent implements OnInit {
   createMode: boolean;
   filterQuery: string;
   languageSource: string[];
-  tempKeySource: string[];
+  modelKeysSource: string[];
 
   selectedDomain: Domain;
   tempIntent: Intent;
@@ -51,7 +51,7 @@ export class DomainSetupComponent implements OnInit {
     this.createMode = false;
     this.filterQuery = '';
     this.languageSource = ['ENG', 'HIN', 'MAR', 'Bahasa'];
-    this.tempKeySource = ['name', 'dob', 'phoneNumber', 'email', 'panNumber', 'aadharNumber', 'income', 'emi'];
+    this.modelKeysSource = [];
 
     this.selectedDomain = new Domain();
     this.tempIntent = new Intent();
@@ -78,6 +78,8 @@ export class DomainSetupComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.fetchModelKeys();
+
     const domain: Domain = this.sharingService.getSharedObject();
     if (domain) {
       this.selectedDomain = domain;
@@ -88,6 +90,17 @@ export class DomainSetupComponent implements OnInit {
     }
 
     this.removeGoalStepResponseFromDomainResponse();
+  }
+
+  fetchModelKeys() {
+    this.agentService.modelKeysLookup()
+      .then(
+        modelKeys => {
+          if (modelKeys) {
+            this.modelKeysSource = modelKeys;
+          }
+        }
+      );
   }
 
   resetFields() {

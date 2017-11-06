@@ -13,6 +13,18 @@ export class AgentService {
 
   constructor(private http: Http) { }
 
+  modelKeysLookup(): Promise<string[]> {
+    const url = `${environment.wheelsemiserver + environment.modelkeyslookupurl}`;
+    return this.http
+      .get(url)
+      .toPromise()
+      .then(
+        response => response.json() as string[],
+        error => error as any
+      )
+      .catch(this.handleError);
+  }
+
   domainLookup(query?: string): Promise<Domain[]> {
     if (!query || query.length <= 0) {
       query = 'ALL';
@@ -23,8 +35,8 @@ export class AgentService {
       .get(url)
       .toPromise()
       .then(
-      response => response.json() as Domain[],
-      error => error as any
+        response => response.json() as Domain[],
+        error => error as any
       )
       .catch(this.handleError);
   }
@@ -39,8 +51,8 @@ export class AgentService {
       .get(url)
       .toPromise()
       .then(
-      response => response.json() as Agent[],
-      error => error as any
+        response => response.json() as Agent[],
+        error => error as any
       )
       .catch(this.handleError);
   }
@@ -51,8 +63,8 @@ export class AgentService {
       .post(url, domain, { headers: this.headers })
       .toPromise()
       .then(
-      response => response as any,
-      error => error as any
+        response => response as any,
+        error => error as any
       )
       .catch(this.handleError);
   }
@@ -63,8 +75,8 @@ export class AgentService {
       .post(url, agent, { headers: this.headers })
       .toPromise()
       .then(
-      response => response as any,
-      error => error as any
+        response => response as any,
+        error => error as any
       )
       .catch(this.handleError);
   }
@@ -75,8 +87,8 @@ export class AgentService {
       .post(url, account, { headers: this.headers })
       .toPromise()
       .then(
-      response => response as any,
-      error => error as any
+        response => response as any,
+        error => error as any
       )
       .catch(this.handleError);
   }
