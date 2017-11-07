@@ -29,14 +29,14 @@ import { SharedModule } from '../../shared/shared.module';
   imports: [
     CommonModule,
     FormsModule,
-    // BrowserAnimationsModule,
     NgaModule,
     routing,
     Daterangepicker,
     MomentModule,
     NvD3Module,
     DataTableModule,
-    TagInputModule
+    TagInputModule,
+    SharedModule
   ],
   declarations: [
     AutoComponent,
