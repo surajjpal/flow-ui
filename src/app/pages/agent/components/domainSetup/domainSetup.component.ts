@@ -24,9 +24,13 @@ export class DomainSetupComponent implements OnInit {
   domainCreateMode: boolean;
   modalHeader: string;
   createMode: boolean;
-  filterQuery: string;
   languageSource: string[];
   modelKeysSource: string[];
+
+  intentFilterQuery: string;
+  entityFilterQuery: string;
+  goalFilterQuery: string;
+  responseFilterQuery: string;
 
   selectedDomain: Domain;
   tempIntent: Intent;
@@ -49,9 +53,13 @@ export class DomainSetupComponent implements OnInit {
     this.domainCreateMode = true;
     this.modalHeader = '';
     this.createMode = false;
-    this.filterQuery = '';
     this.languageSource = ['ENG', 'HIN', 'MAR', 'Bahasa'];
     this.modelKeysSource = [];
+
+    this.intentFilterQuery = '';
+    this.entityFilterQuery = '';
+    this.goalFilterQuery = '';
+    this.responseFilterQuery = '';
 
     this.selectedDomain = new Domain();
     this.tempIntent = new Intent();
@@ -193,6 +201,7 @@ export class DomainSetupComponent implements OnInit {
     const error = this.isInvalidGoalSteps(this.tempGoal.domainGoalSteps);
     if (error) {
       this.alertService.error(error, false, 5000);
+      console.log('Validation error: ' + error);
     } else {
       this.removeGoalStepResponseFromDomainResponse();
       this.tempGoal.model = '{}';

@@ -19,13 +19,11 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { DateRangePickerComponent } from './components/dashboard/daterangepicker/daterangepicker.component';
 import { DashboardService, ConversationService, TrainingService, IntentService, EntityService } from './auto.service';
-import { DataFilterPipe } from './components/conversation/data-filter.pipe';
-import { TrainingDataFilterPipe } from './components/training/data-filter.pipe';
 import { TrainingComponent } from './components/training/training.component';
-import { IntentDataFilterPipe } from './components/intent/data-filter.pipe';
 import { IntentComponent } from './components/intent/intent.component';
-import { EntityDataFilterPipe } from './components/entity/data-filter.pipe';
 import { EntityComponent } from './components/entity/entity.component';
+
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -45,12 +43,8 @@ import { EntityComponent } from './components/entity/entity.component';
     DashboardComponent,
     ConversationComponent,
     DateRangePickerComponent,
-    DataFilterPipe,
-    TrainingDataFilterPipe,
     TrainingComponent,
-    IntentDataFilterPipe,
     IntentComponent,
-    EntityDataFilterPipe,
     EntityComponent
   ],
   providers: [

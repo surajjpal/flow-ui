@@ -18,8 +18,7 @@ import { GlobalState } from './global.state';
 import { NgaModule } from './theme/nga.module';
 import { PagesModule } from './pages/pages.module';
 
-import { AuthGuard, AntiAuthGuard, UserBroadcastService, AuthService, AlertService, DataSharingService, UniversalUser } from './shared/shared.service';
-import { AlertComponent } from './shared/shared.component';
+import { SharedModule } from './shared/shared.module';
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
@@ -27,14 +26,7 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awes
 // Application wide providers
 const APP_PROVIDERS = [
   AppState,
-  GlobalState,
-  AuthGuard,
-  AntiAuthGuard,
-  UserBroadcastService,
-  AuthService,
-  AlertService,
-  DataSharingService,
-  UniversalUser
+  GlobalState
 ];
 
 export type StoreType = {
@@ -49,8 +41,7 @@ export type StoreType = {
 @NgModule({
   bootstrap: [App],
   declarations: [
-    App,
-    AlertComponent
+    App
   ],
   imports: [ // import Angular's modules
     BrowserModule,
@@ -64,13 +55,15 @@ export type StoreType = {
     PagesModule,
     routing,
     SlimLoadingBarModule.forRoot(),
-    AngularFontAwesomeModule
+    AngularFontAwesomeModule,
+    SharedModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     APP_PROVIDERS
   ],
   exports: [
-    SlimLoadingBarModule
+    SlimLoadingBarModule,
+    SharedModule
   ]
 })
 

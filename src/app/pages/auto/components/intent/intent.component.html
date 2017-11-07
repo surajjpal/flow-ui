@@ -14,7 +14,7 @@
         </form>
         <br>
 
-        <table class="table table-striped" [mfData]="intentList | dataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10"
+        <table class="table table-striped" [mfData]="intentList | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10"
           mfSortBy="_id">
           <thead>
             <tr>

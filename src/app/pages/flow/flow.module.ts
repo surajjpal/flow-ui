@@ -15,7 +15,6 @@ import { FlowComponent } from './flow.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { DateRangePickerComponent } from './components/dashboard/daterangepicker/daterangepicker.component';
 import { SearchComponent } from './components/search/search.component';
-import { DataFilterPipe } from './components/search/data-filter.pipe';
 import { DesignComponent } from './components/design/design.component';
 
 import { DashboardService, GraphService, CommunicationService } from './flow.service';
@@ -23,6 +22,8 @@ import { DashboardService, GraphService, CommunicationService } from './flow.ser
 import 'd3';
 import 'nvd3';
 import * as moment from 'moment/moment';
+
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -33,14 +34,14 @@ import * as moment from 'moment/moment';
     Daterangepicker,
     MomentModule,
     NvD3Module,
-    DataTableModule
+    DataTableModule,
+    SharedModule
   ],
   declarations: [
     FlowComponent,
     DashboardComponent,
     DateRangePickerComponent,
     SearchComponent,
-    DataFilterPipe,
     DesignComponent
   ],
   providers: [

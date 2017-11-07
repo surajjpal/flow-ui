@@ -14,12 +14,12 @@ import { AccountCreationComponent } from './components/account/accountCreation.c
 import { AgentCreationComponent } from './components/agent/agentCreation.component';
 import { DomainSetupComponent } from './components/domainSetup/domainSetup.component';
 import { DomainsComponent } from './components/domains/domains.component';
-import { DomainFilterPipe } from './components/domains/data-filter.pipe';
 import { AgentsComponent } from './components/agents/agents.component';
-import { AgentFilterPipe } from './components/agents/data-filter.pipe';
 
 import { AgentService } from './agent.services';
 import { GraphService } from '../flow/flow.service';
+
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -28,7 +28,8 @@ import { GraphService } from '../flow/flow.service';
     DataTableModule,
     NgaModule,
     routing,
-    TagInputModule
+    TagInputModule,
+    SharedModule
   ],
   declarations: [
     AgentComponent,
@@ -36,9 +37,7 @@ import { GraphService } from '../flow/flow.service';
     AgentCreationComponent,
     DomainSetupComponent,
     DomainsComponent,
-    DomainFilterPipe,
-    AgentsComponent,
-    AgentFilterPipe
+    AgentsComponent
   ],
   providers: [
     AgentService,

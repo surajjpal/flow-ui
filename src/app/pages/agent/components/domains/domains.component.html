@@ -14,7 +14,7 @@
         </form>
         <br>
 
-        <table class="table table-striped" [mfData]="domainSource | dataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="name">
+        <table class="table table-striped" [mfData]="domainSource | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="name">
           <thead>
             <tr>
               <th>

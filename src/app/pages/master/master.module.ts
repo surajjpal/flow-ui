@@ -10,12 +10,12 @@ import { routing } from './master.routing';
 
 import { MasterComponent } from './master.component';
 import { UserComponent } from './components/user/user.component';
-import { UserFilterPipe } from './components/user/data-filter.pipe';
 import { UpdateUserComponent } from './components/updateUser/updateUser.component';
 import { RoutelinkComponent } from './components/routelink/routelink.component';
-import { RouteFilterPipe } from './components/routelink/data-filter.pipe';
 
 import { UserService, RoutesService } from './master.service';
+
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -24,15 +24,14 @@ import { UserService, RoutesService } from './master.service';
     DataTableModule,
     NgaModule,
     routing,
-    TagInputModule
+    TagInputModule,
+    SharedModule
   ],
   declarations: [
     MasterComponent,
     UserComponent,
-    UserFilterPipe,
     UpdateUserComponent,
-    RoutelinkComponent,
-    RouteFilterPipe
+    RoutelinkComponent
   ],
   providers: [
     UserService,

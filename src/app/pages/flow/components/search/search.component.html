@@ -20,7 +20,7 @@
         </ul>
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane fade show active" id="tab_active">
-            <table class="table table-striped" [mfData]="activeGraphObjectList | dataFilter : filterQuery" #mfActive="mfDataTable" [mfRowsOnPage]="rowsOnPage"
+            <table class="table table-striped" [mfData]="activeGraphObjectList | universalDataFilter : filterQuery" #mfActive="mfDataTable" [mfRowsOnPage]="rowsOnPage"
               [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
               <thead>
                 <tr>
@@ -80,7 +80,7 @@
             </table>
           </div>
           <div role="tabpanel" class="tab-pane fade" id="tab_archived">
-            <table class="table table-striped" [mfData]="closedGraphObjectList | dataFilter : filterQuery" #mfClosed="mfDataTable" [mfRowsOnPage]="rowsOnPage"
+            <table class="table table-striped" [mfData]="closedGraphObjectList | universalDataFilter : filterQuery" #mfClosed="mfDataTable" [mfRowsOnPage]="rowsOnPage"
               [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
               <thead>
                 <tr>
@@ -140,7 +140,7 @@
             </table>
           </div>
           <div role="tabpanel" class="tab-pane fade" id="tab_dictionary">
-            <table class="table table-striped" [mfData]="dictionaryGraphObjectList | dataFilter : filterQuery" #mfDictionary="mfDataTable" [mfRowsOnPage]="rowsOnPage"
+            <table class="table table-striped" [mfData]="dictionaryGraphObjectList | universalDataFilter : filterQuery" #mfDictionary="mfDataTable" [mfRowsOnPage]="rowsOnPage"
               [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
               <thead>
                 <tr>

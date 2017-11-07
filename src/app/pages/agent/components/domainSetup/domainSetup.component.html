@@ -51,7 +51,7 @@
             </div>
             <form class="row form-inline">
               <div class="form-group col-sm-10">
-                <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Query" />
+                <input class="form-control" [(ngModel)]="intentFilterQuery" name="intentFilterQuery" placeholder="Filter Query" />
               </div>
               <div class="form-group col-sm-2">
                 <button type="button" class="btn btn-primary" (click)="onIntentSelect()" data-toggle="modal" data-target="#intentModal">
@@ -61,7 +61,7 @@
             </form>
             <br>
     
-            <table class="table table-striped" [mfData]="selectedDomain.domainIntents" #mfIntent="mfDataTable" [mfRowsOnPage]="10" mfSortBy="intentCd">
+            <table class="table table-striped" [mfData]="selectedDomain.domainIntents | universalDataFilter : intentFilterQuery" #mfIntent="mfDataTable" [mfRowsOnPage]="10" mfSortBy="intentCd">
               <thead>
                 <tr>
                   <th>
@@ -103,7 +103,7 @@
             </div>
             <form class="row form-inline">
               <div class="form-group col-sm-10">
-                <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Query" />
+                <input class="form-control" [(ngModel)]="entityFilterQuery" name="entityFilterQuery" placeholder="Filter Query" />
               </div>
               <div class="form-group col-sm-2">
                 <button type="button" class="btn btn-primary" (click)="onEntitySelect()" data-toggle="modal" data-target="#entityModal">
@@ -113,7 +113,7 @@
             </form>
             <br>
     
-            <table class="table table-striped" [mfData]="selectedDomain.domainEntities" #mfEntity="mfDataTable" [mfRowsOnPage]="10" mfSortBy="entityCd">
+            <table class="table table-striped" [mfData]="selectedDomain.domainEntities | universalDataFilter : entityFilterQuery" #mfEntity="mfDataTable" [mfRowsOnPage]="10" mfSortBy="entityCd">
               <thead>
                 <tr>
                   <th>
@@ -152,7 +152,7 @@
           <div class="panel panel-default">
             <form class="row form-inline">
               <div class="form-group col-sm-10">
-                <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Query" />
+                <input class="form-control" [(ngModel)]="goalFilterQuery" name="goalFilterQuery" placeholder="Filter Query" />
               </div>
               <div class="form-group col-sm-2">
                 <button type="button" class="btn btn-primary" (click)="onGoalSelect()" data-toggle="modal" data-target="#goalModal">
@@ -162,7 +162,7 @@
             </form>
             <br>
     
-            <table class="table table-striped" [mfData]="selectedDomain.domainGoals" #mfGoal="mfDataTable" [mfRowsOnPage]="10" mfSortBy="goalName">
+            <table class="table table-striped" [mfData]="selectedDomain.domainGoals | universalDataFilter : goalFilterQuery" #mfGoal="mfDataTable" [mfRowsOnPage]="10" mfSortBy="goalName">
               <thead>
                 <tr>
                   <th>
@@ -201,7 +201,7 @@
           <div class="panel panel-default">
             <form class="row form-inline">
               <div class="form-group col-sm-10">
-                <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Query" />
+                <input class="form-control" [(ngModel)]="responseFilterQuery" name="responseFilterQuery" placeholder="Filter Query" />
               </div>
               <div class="form-group col-sm-2">
                 <button type="button" class="btn btn-primary" (click)="onResponseSelect()" data-toggle="modal" data-target="#responseModal">
@@ -211,7 +211,7 @@
             </form>
             <br>
     
-            <table class="table table-striped" [mfData]="selectedDomain.domainResponse" #mfResponse="mfDataTable" [mfRowsOnPage]="10" mfSortBy="response">
+            <table class="table table-striped" [mfData]="selectedDomain.domainResponse | universalDataFilter : responseFilterQuery" #mfResponse="mfDataTable" [mfRowsOnPage]="10" mfSortBy="response">
               <thead>
                 <tr>
                   <th>

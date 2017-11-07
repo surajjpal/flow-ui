@@ -10,7 +10,7 @@
   <div class="row">
     <ba-card baCardClass="with-scroll" class="data-table-container">
       <div class="panel panel-default">
-        <table class="table table-striped" [mfData]="episodeList | dataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10"
+        <table class="table table-striped" [mfData]="episodeList | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10"
           mfSortBy="_id">
           <thead>
             <tr>
