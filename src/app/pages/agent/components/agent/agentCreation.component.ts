@@ -170,6 +170,7 @@ export class AgentCreationComponent implements OnInit {
   createAgent() {
     if (this.selectedAgent) {
       if (this.selectedDomainList) {
+        this.selectedAgent.domainNameList = [];
         for (const domain of this.selectedDomainList) {
           this.selectedAgent.domainNameList.push(domain.name);
         }
