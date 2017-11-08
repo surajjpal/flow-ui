@@ -109,6 +109,7 @@ export class Goal {
   authRequired: boolean;
   domainGoalSteps: GoalStep[];
   model: any;
+  api: string;
 
   constructor() {
     // this.intentName = '';
@@ -118,6 +119,7 @@ export class Goal {
     // this.createdDt = new Date();
     this.domainGoalSteps = [];
     this.model = {};
+    this.api = '';
   }
 }
 

@@ -175,6 +175,9 @@
                     <mfDefaultSorter by="expression">Expression</mfDefaultSorter>
                   </th>
                   <th>
+                    <mfDefaultSorter by="api">Goal API</mfDefaultSorter>
+                  </th>
+                  <th>
                     <mfDefaultSorter by="domainGoalSteps">Goal Responses</mfDefaultSorter>
                   </th>
                 </tr>
@@ -184,6 +187,7 @@
                   <td>{{goal.goalName}}</td>
                   <td>{{goal.authRequired}}</td>
                   <td>{{goal.expression}}</td>
+                  <td>{{goal.api}}</td>
                   <td>{{goalStepToString(goal.domainGoalSteps)}}</td>
                 </tr>
               </tbody>
@@ -394,6 +398,13 @@
             </label>
             <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="expressionLabel" placeholder="Expression" [(ngModel)]="tempGoal.expression"
               name="expression" />
+          </div>
+          <div class="form-group">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="goalApiLabel">
+              Goal API
+            </label>
+            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="goalApiLabel" placeholder="Goal API" [(ngModel)]="tempGoal.api"
+              name="api" />
           </div>
         </form>
 
