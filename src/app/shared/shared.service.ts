@@ -252,6 +252,7 @@ export class AlertService {
     this.keepAfterNavigationChange = keepAfterNavigationChange;
     this.subject.next({ type: 'error', text: message });
 
+    console.log(message);
     if (timeout && timeout > 0) {
       setTimeout(() => {
         // clear alert after timeout

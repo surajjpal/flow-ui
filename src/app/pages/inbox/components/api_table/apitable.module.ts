@@ -5,20 +5,19 @@ import { DataTableModule } from 'angular2-datatable';
 
 import { NgaModule } from '../../../../theme/nga.module';
 
-import { DataFilterPipe } from './data-filter.pipe';
-import { KeysPipe } from './data-key.pipe';
 import { ApiTableComponent } from './apitable.component';
+
+import { SharedModule } from '../../../../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     NgaModule,
-    DataTableModule
+    DataTableModule,
+    SharedModule
   ],
   declarations: [
-    DataFilterPipe,
-    KeysPipe,
     ApiTableComponent
   ],
   exports: [

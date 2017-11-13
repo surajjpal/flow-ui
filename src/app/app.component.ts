@@ -16,7 +16,6 @@ import { layoutPaths } from './theme/theme.constants';
   template: `
     <main [class.menu-collapsed]="isMenuCollapsed" baThemeRun>
       <div class="additional-bg"></div>
-      <api-alert></api-alert>
       <router-outlet></router-outlet>
     </main>
     <ng2-slim-loading-bar></ng2-slim-loading-bar>

@@ -30,6 +30,7 @@ export const environment = {
   rolesurl: 'master/roles',
   routesurl: 'master/routes',
   apiconfigurl: 'api/',
+  supportedmethodsurl: 'api/supportedMethods',
 
   // auto
   autoServer: 'https://cors-anywhere.herokuapp.com/https://auto.automatapi.xyz/',   // TODO: remove proxy

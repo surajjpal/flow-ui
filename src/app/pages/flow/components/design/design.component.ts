@@ -12,6 +12,9 @@ import 'rxjs/add/operator/switchMap';
 // Model Imports
 import { GraphObject, DataPoint, Classifier, StateModel, EventModel, Expression, Transition } from '../../flow.model';
 
+// External Model Imports
+import { ApiConfig } from '../../../master/master.model';
+
 // Service Imports
 import { GraphService, CommunicationService } from '../../flow.service';
 import { Subscription } from 'rxjs/Subscription';
@@ -48,6 +51,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   sourceOperands: string[] = ['AND', 'OR'];
   sourceClassifiers: Classifier[];
   sourceEntryActionList: string[];
+  sourceApiConfigList: ApiConfig[];
 
   // Models to bind with html
   readOnly: boolean;
@@ -75,6 +79,13 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (this.graphObject) {
       this.communicationService.sendGraphObject(null);
     }
+
+    this.tempGraphObject = new GraphObject();
+    this.tempState = new StateModel();
+    this.tempParentState = new StateModel();
+    this.tempEvent = new EventModel();
+    this.sourceClassifiers = [new Classifier(), new Classifier()];
+    this.sourceApiConfigList = [];
   }
 
   ngOnInit() {
@@ -82,13 +93,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   load(): void {
-    this.tempGraphObject = new GraphObject();
-    this.tempState = new StateModel();
-    this.tempParentState = new StateModel();
-    this.tempEvent = new EventModel();
-    this.sourceClassifiers = [new Classifier(), new Classifier()];
-
     this.getSourceEntryActions();
+    this.getApiConfigLookup();
 
     if (!this.graphObject || this.graphObject === null) {
       this.graphObject = new GraphObject();
@@ -107,11 +113,21 @@ export class DesignComponent implements OnInit, OnDestroy {
             this.sourceEntryActionList = entryActionList;
           }
         },
-
         error => {
           
         }
       );
+  }
+
+  getApiConfigLookup() {
+    this.graphService.apiConfigLookup()
+    .then(
+      apiConfigList => {
+        if (apiConfigList && apiConfigList.length > 0) {
+          this.sourceApiConfigList = apiConfigList;
+        }
+      }
+    );
   }
 
   prepareDummyObject() {
@@ -188,6 +204,10 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   saveState(): void {
     this.tempState.endState = (this.tempState.events.length === 0);
+    if (!this.isStateApiCompatible()) {
+      this.tempState.apiConfigurationList = [];
+    }
+
     if (this.tempState.stateId && this.tempState.stateId.length > 0) {
       const customObject: Object = JSON.parse(JSON.stringify(this.tempState));  // Very important line of code, don't remove
       new updateStateObject(customObject);
@@ -232,6 +252,12 @@ export class DesignComponent implements OnInit, OnDestroy {
   deleteDataPoint(dataPoint: DataPoint) {
     const index = this.tempGraphObject.dataPointConfigurationList.indexOf(dataPoint);
     this.tempGraphObject.dataPointConfigurationList.splice(index, 1);
+  }
+
+  isStateApiCompatible() {
+    // TODO: improve the mechanism to differentiate API State with other states
+    return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
+      && this.tempState.entryActionList.includes('apiStateEntryAction');
   }
 
   saveGraphXml(xml: string, states: StateModel[], transitions: Transition[]): void {

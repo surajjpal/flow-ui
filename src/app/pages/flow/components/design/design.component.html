@@ -68,6 +68,13 @@
                 <option *ngFor="let entryAction of sourceEntryActionList" [ngValue]="entryAction['key']">{{entryAction['value']}}</option>
               </select>
           </div>
+          <div class="form-group" *ngIf="isStateApiCompatible()">
+            <label for="selectApiConfig">Select API</label>
+            <select multiple="true" class="selectpicker form-control" required id="selectApiConfig" title="Choose API" [(ngModel)]="tempState.apiConfigurationList"
+              name="apiConfigurationList">
+                <option *ngFor="let apiConfig of sourceApiConfigList" [ngValue]="apiConfig">{{apiConfig.name}}</option>
+              </select>
+          </div>
         </form>
 
         <div id="eventAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempState.events.length > 0">

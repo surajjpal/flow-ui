@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Headers, Http, Jsonp, RequestOptions, Response } from '@angular/http';
 import { User } from '../../shared/shared.model';
-import { RoleRouteMap } from './master.model';
+import { RoleRouteMap, ApiConfig } from './master.model';
 
 import { environment } from '../../../environments/environment';
 
@@ -19,8 +19,8 @@ export class UserService {
       .get(url)
       .toPromise()
       .then(
-      users => users.json() as User[],
-      error => error.json() as any
+        users => users.json() as User[],
+        error => error.json() as any
       ).catch(this.handleError);
   }
 
@@ -43,8 +43,8 @@ export class RoutesService {
       .get(url)
       .toPromise()
       .then(
-      routeList => routeList.json() as RoleRouteMap[],
-      error => error as any
+        routeList => routeList.json() as RoleRouteMap[],
+        error => error as any
       ).catch(this.handleError);
   }
 
@@ -57,8 +57,8 @@ export class RoutesService {
         .post(url, roleRouteMap, this.options)
         .toPromise()
         .then(
-        route => route.json() as RoleRouteMap,
-        error => error as any
+          route => route.json() as RoleRouteMap,
+          error => error as any
         ).catch(this.handleError);
     } else {
       return Promise.reject('Object is null');
@@ -72,8 +72,8 @@ export class RoutesService {
         .put(url, roleRouteMap, this.options)
         .toPromise()
         .then(
-        route => route.json() as RoleRouteMap,
-        error => error as any
+          route => route.json() as RoleRouteMap,
+          error => error as any
         ).catch(this.handleError);
     } else {
       return Promise.reject('Invalid object');
@@ -87,8 +87,8 @@ export class RoutesService {
         .delete(url, this.options)
         .toPromise()
         .then(
-        response => response as any,
-        error => error as any
+          response => response as any,
+          error => error as any
         ).catch(this.handleError);
     } else {
       return Promise.reject('Invalid object');
@@ -101,8 +101,8 @@ export class RoutesService {
       .get(url)
       .toPromise()
       .then(
-      roleList => roleList.json() as string[],
-      error => error as any
+        roleList => roleList.json() as string[],
+        error => error as any
       ).catch(this.handleError);
   }
 
@@ -112,8 +112,90 @@ export class RoutesService {
       .get(url)
       .toPromise()
       .then(
-      routeList => routeList.json() as string[],
-      error => error as any
+        routeList => routeList.json() as string[],
+        error => error as any
+      ).catch(this.handleError);
+  }
+
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error); // for demo purposes only
+    return Promise.reject(error.message || error);
+  }
+}
+
+@Injectable()
+export class ApiConfigService {
+  private headers = new Headers({ 'Content-Type': 'application/json' });
+  private options = new RequestOptions({ headers: this.headers });
+
+  constructor(private router: Router, private http: Http) { }
+
+  getAllApi(): Promise<ApiConfig[]> {
+    const url = `${environment.server + environment.apiconfigurl}`;
+    return this.http
+      .get(url)
+      .toPromise()
+      .then(
+        apiConfigList => apiConfigList.json() as ApiConfig[],
+        error => error.json() as any
+      ).catch(this.handleError);
+  }
+
+  createApiConfig(apiConfig: ApiConfig) {
+    if (apiConfig) {
+      apiConfig._id = null;
+
+      const url = `${environment.server + environment.apiconfigurl}`;
+      return this.http
+        .post(url, apiConfig, this.options)
+        .toPromise()
+        .then(
+          apiConfigResponse => apiConfigResponse.json() as ApiConfig,
+          error => error as any
+        ).catch(this.handleError);
+    } else {
+      return Promise.reject('Object is null');
+    }
+  }
+
+  updateApiConfig(apiConfig: ApiConfig) {
+    if (apiConfig && apiConfig._id && apiConfig._id.length > 0) {
+      const url = `${environment.server + environment.apiconfigurl}`;
+      return this.http
+        .put(url, apiConfig, this.options)
+        .toPromise()
+        .then(
+          apiConfigResponse => apiConfigResponse.json() as ApiConfig,
+          error => error as any
+        ).catch(this.handleError);
+    } else {
+      return Promise.reject('Invalid object');
+    }
+  }
+
+  deleteApiConfig(apiConfig: ApiConfig) {
+    if (apiConfig && apiConfig._id && apiConfig._id.length > 0) {
+      const url = `${environment.server + environment.apiconfigurl + apiConfig._id}`;
+      return this.http
+        .delete(url, this.options)
+        .toPromise()
+        .then(
+          response => response as any,
+          error => error as any
+        ).catch(this.handleError);
+    } else {
+      return Promise.reject('Invalid object');
+    }
+  }
+
+  getSupportedMethods(): Promise<string[]> {
+    const url = `${environment.server + environment.supportedmethodsurl}`;
+    return this.http
+      .get(url)
+      .toPromise()
+      .then(
+        methodList => methodList.json() as string[],
+        error => error.json() as any
       ).catch(this.handleError);
   }
 

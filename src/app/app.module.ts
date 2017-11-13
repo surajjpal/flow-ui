@@ -18,6 +18,8 @@ import { GlobalState } from './global.state';
 import { NgaModule } from './theme/nga.module';
 import { PagesModule } from './pages/pages.module';
 
+import { AuthGuard, AntiAuthGuard, UserBroadcastService, AuthService,
+  AlertService, DataSharingService, UniversalUser } from './shared/shared.service';
 import { SharedModule } from './shared/shared.module';
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
@@ -26,7 +28,14 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awes
 // Application wide providers
 const APP_PROVIDERS = [
   AppState,
-  GlobalState
+  GlobalState,
+  AuthGuard,
+  AntiAuthGuard,
+  UserBroadcastService,
+  AuthService,
+  AlertService,
+  DataSharingService,
+  UniversalUser
 ];
 
 export type StoreType = {

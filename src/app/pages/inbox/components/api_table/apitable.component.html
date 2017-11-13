@@ -8,7 +8,7 @@
         <br>
         <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
         <br>
-        <table class="table table-striped" [mfData]="rawDataArray | dataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage"
+        <table class="table table-striped" [mfData]="rawDataArray | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage"
           [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
           <thead>
             <tr>

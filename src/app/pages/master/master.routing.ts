@@ -4,6 +4,8 @@ import { MasterComponent } from './master.component';
 import { UserComponent } from './components/user/user.component';
 import { UpdateUserComponent } from './components/updateUser/updateUser.component';
 import { RoutelinkComponent } from './components/routelink/routelink.component';
+import { ApiConfigComponent } from './components/apiConfig/apiConfig.component';
+import { ApiConfigSetupComponent } from './components/apiConfigSetup/apiConfigSetup.component';
 
 const routes: Routes = [
   {
@@ -13,8 +15,9 @@ const routes: Routes = [
       { path: '', redirectTo: 'user', pathMatch: 'full' },
       { path: 'user', component: UserComponent },
       { path: 'updateUser', component: UpdateUserComponent },
-      { path: 'updateUser/:profile', component: UpdateUserComponent },
-      { path: 'route', component: RoutelinkComponent }
+      { path: 'route', component: RoutelinkComponent },
+      { path: 'apiConfig', component: ApiConfigComponent },
+      { path: 'apiSetup', component: ApiConfigSetupComponent }
     ]
   }
 ];

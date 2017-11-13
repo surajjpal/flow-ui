@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 import { NgUploaderModule } from 'ngx-uploader';
 import { AppTranslationModule } from '../app.translation.module';
 
+import { SharedModule } from '../shared/shared.module';
+
 import {
   BaThemeConfig
 } from './theme.config';
@@ -112,7 +114,8 @@ const NGA_VALIDATORS = [
     FormsModule,
     ReactiveFormsModule,
     AppTranslationModule,
-    NgUploaderModule
+    NgUploaderModule,
+    SharedModule
   ],
   exports: [
     ...NGA_PIPES,

@@ -12,8 +12,10 @@ import { MasterComponent } from './master.component';
 import { UserComponent } from './components/user/user.component';
 import { UpdateUserComponent } from './components/updateUser/updateUser.component';
 import { RoutelinkComponent } from './components/routelink/routelink.component';
+import { ApiConfigComponent } from './components/apiConfig/apiConfig.component';
+import { ApiConfigSetupComponent } from './components/apiConfigSetup/apiConfigSetup.component';
 
-import { UserService, RoutesService } from './master.service';
+import { UserService, RoutesService, ApiConfigService } from './master.service';
 
 import { SharedModule } from '../../shared/shared.module';
 
@@ -31,11 +33,14 @@ import { SharedModule } from '../../shared/shared.module';
     MasterComponent,
     UserComponent,
     UpdateUserComponent,
-    RoutelinkComponent
+    RoutelinkComponent,
+    ApiConfigComponent,
+    ApiConfigSetupComponent
   ],
   providers: [
     UserService,
-    RoutesService
+    RoutesService,
+    ApiConfigService
   ]
 })
 export class MasterModule { }

@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AuthGuard, AntiAuthGuard, UserBroadcastService, AuthService,
-          AlertService, DataSharingService, UniversalUser } from './shared.service';
 import { AlertComponent } from './shared.component';
 import { UniversalFilterPipe } from './universal-data-filter.pipe';
+import { KeysPipe } from './key-filter.pipe';
 
 @NgModule({
   imports: [
@@ -12,20 +11,13 @@ import { UniversalFilterPipe } from './universal-data-filter.pipe';
   ],
   declarations: [
     AlertComponent,
-    UniversalFilterPipe
-  ],
-  providers: [
-    AuthGuard,
-    AntiAuthGuard,
-    UserBroadcastService,
-    AuthService,
-    AlertService,
-    DataSharingService,
-    UniversalUser
+    UniversalFilterPipe,
+    KeysPipe
   ],
   exports: [
     AlertComponent,
-    UniversalFilterPipe
+    UniversalFilterPipe,
+    KeysPipe
   ]
 })
 export class SharedModule { }

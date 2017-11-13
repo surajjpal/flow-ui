@@ -1,3 +1,5 @@
+import { ApiConfig } from '../master/master.model';
+
 export class ConversationSummary {
   goals_met_count: number;
   user_messages_count: number;
@@ -106,6 +108,7 @@ export class StateModel {
   trigger: EventModel;
   classifiers: Classifier[];
   entryActionList: string[];
+  apiConfigurationList: ApiConfig[];
 
   constructor() {
     this.stateId = '';
@@ -117,6 +120,7 @@ export class StateModel {
     this.trigger = new EventModel();
     this.classifiers = [];
     this.entryActionList = [];
+    this.apiConfigurationList = [];
   }
 }
 

@@ -2,8 +2,6 @@ declare var graphRendererFunction: any;
 declare var closeModal: any;
 
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { DataFilterPipe } from './data-filter.pipe';
-import { KeysPipe } from './data-key.pipe';
 import { environment } from '../../../../../environments/environment';
 import { StateService } from '../../inbox.service';
 
