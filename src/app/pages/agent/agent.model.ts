@@ -232,7 +232,7 @@ export class Agent {
   common: boolean;
   agentPlugins: Plugin[];
   agentClassifier: Classifier[];
-  companyKey: string;
+  companyId: string;
 
   constructor() {
     this._id = null;
@@ -247,6 +247,6 @@ export class Agent {
     this.common = false;
     this.agentPlugins = [];
     this.agentClassifier = [];
-    this.companyKey = '';
+    this.companyId = '';
   }
 }

@@ -180,8 +180,8 @@ export class AgentCreationComponent implements OnInit {
         this.selectedAgent.langSupported = ['ENG', 'HIN'];
       }
 
-      if (this.selectedAgent.companyKey || this.selectedAgent.companyKey.length <= 0) {
-        this.selectedAgent.companyKey = 'bank123';
+      if (this.selectedAgent.companyId || this.selectedAgent.companyId.length <= 0) {
+        this.selectedAgent.companyId = 'bank123';
       }
 
       if (this.isApiEnabled && this.apiClassifierValidator()) {
