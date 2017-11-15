@@ -108,7 +108,7 @@ export class StateModel {
   trigger: EventModel;
   classifiers: Classifier[];
   entryActionList: string[];
-  apiConfigurationList: ApiConfig[];
+  apiConfigurationList: string[];
 
   constructor() {
     this.stateId = '';

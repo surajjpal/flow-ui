@@ -72,7 +72,7 @@
             <label for="selectApiConfig">Select API</label>
             <select multiple="true" class="selectpicker form-control" required id="selectApiConfig" title="Choose API" [(ngModel)]="tempState.apiConfigurationList"
               name="apiConfigurationList">
-                <option *ngFor="let apiConfig of sourceApiConfigList" [ngValue]="apiConfig">{{apiConfig.name}}</option>
+                <option *ngFor="let apiConfig of sourceApiConfigList" [ngValue]="apiConfig._id">{{apiConfig.name}}</option>
               </select>
           </div>
         </form>
