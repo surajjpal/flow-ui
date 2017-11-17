@@ -3,7 +3,7 @@ declare var showModal: any;
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Agent, Domain, Goal, Plugin, Classifier } from '../../agent.model';
+import { Agent, Domain, Goal, Plugin, Classifier, UIComponent } from '../../agent.model';
 import { GraphObject } from '../../../flow/flow.model';
 import { AgentService } from '../../agent.services';
 import { GraphService } from '../../../flow/flow.service';
@@ -83,6 +83,10 @@ export class AgentCreationComponent implements OnInit {
     if (agent) {
       this.selectedAgent = agent;
       this.agentCreateMode = false;
+
+      if (!this.selectedAgent.uiComponent) {
+        this.selectedAgent.uiComponent = new UIComponent();
+      }
 
       if (this.selectedAgent.agentPlugins && this.selectedAgent.agentPlugins.length > 0) {
         const pluginsToBeRemoved: Plugin[] = [];

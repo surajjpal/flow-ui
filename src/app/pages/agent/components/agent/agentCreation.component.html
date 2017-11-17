@@ -34,6 +34,26 @@
                 <input type="text" disabled class="form-control" placeholder="Agent URL" [(ngModel)]="selectedAgent.agenturl" name="agenturl"
                 />
               </div>
+              <div class="form-group">
+                <label>Color CSS</label>
+                <input type="text" class="form-control" required placeholder="Color CSS (Optional)" [(ngModel)]="selectedAgent.uiComponent.colorCss" name="colorCss"
+                />
+              </div>
+              <div class="form-group">
+                <label>Font</label>
+                <input type="text" class="form-control" required placeholder="Font (Optional)" [(ngModel)]="selectedAgent.uiComponent.font" name="font"
+                />
+              </div>
+              <div class="form-group">
+                <label>Logo URL</label>
+                <input type="text" class="form-control" required placeholder="Logo URL (Optional)" [(ngModel)]="selectedAgent.uiComponent.logoUrl" name="logoUrl"
+                />
+              </div>
+              <div class="form-group">
+                <label>Typing GIF</label>
+                <input type="text" class="form-control" required placeholder="Typing GIF (Optional)" [(ngModel)]="selectedAgent.uiComponent.typingGif" name="typingGif"
+                />
+              </div>
             </form>
           </div>
         </div>

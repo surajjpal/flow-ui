@@ -1,12 +1,12 @@
 export class UIComponent {
-  colorCss: string[];
-  font: string[];
+  colorCss: string;
+  font: string;
   logoUrl: string;
   typingGif: string;
 
   constructor() {
-    this.colorCss = [];
-    this.font = [];
+    this.colorCss = '';
+    this.font = '';
     this.logoUrl = '';
     this.typingGif = '';
   }
@@ -22,7 +22,6 @@ export class Account {
   s3: boolean;
   apiKey: string;
   agentName: string[];
-  ui: UIComponent;
 
   constructor() {
     this._id = null;
@@ -34,7 +33,6 @@ export class Account {
     this.s3 = false;
     this.apiKey = '';
     this.agentName = [];
-    this.ui = new UIComponent();
   }
 }
 
@@ -233,6 +231,7 @@ export class Agent {
   agentPlugins: Plugin[];
   agentClassifier: Classifier[];
   companyId: string;
+  uiComponent: UIComponent;
 
   constructor() {
     this._id = null;
@@ -248,5 +247,6 @@ export class Agent {
     this.agentPlugins = [];
     this.agentClassifier = [];
     this.companyId = '';
+    this.uiComponent = new UIComponent();
   }
 }
