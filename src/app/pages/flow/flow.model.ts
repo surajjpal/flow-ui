@@ -1,4 +1,4 @@
-import { ApiConfig } from '../master/master.model';
+import { ApiConfig, ApiKeyExpressionMap } from '../master/master.model';
 
 export class ConversationSummary {
   goals_met_count: number;
@@ -109,6 +109,7 @@ export class StateModel {
   classifiers: Classifier[];
   entryActionList: string[];
   apiConfigurationList: string[];
+  ruleList: ApiKeyExpressionMap[];
 
   constructor() {
     this.stateId = '';
@@ -121,6 +122,7 @@ export class StateModel {
     this.classifiers = [];
     this.entryActionList = [];
     this.apiConfigurationList = [];
+    this.ruleList = [];
   }
 }
 

@@ -77,6 +77,55 @@
           </div>
         </form>
 
+        <div id="ruleAccordion" role="tablist" aria-multiselectable="true" *ngIf="isStateRuleCompatible()">
+          <div class="panel card">
+            <div id="ruleTabHeader" class="card-header" heightStyle="content" role="tab">
+              <h5 class="mb-0">
+                <a data-toggle="collapse" data-parent="#ruleAccordion" href="#ruleCollapse" aria-expanded="true" aria-controls="ruleCollapse">
+                  Rule Expressions
+                </a>
+              </h5>
+            </div>
+
+            <div id="ruleCollapse" class="collapse show" role="tabpanel" aria-labelledby="ruleTabHeader">
+              <div class="card-block">
+                <table class="table" [mfData]="tempState.ruleList" [mfRowsOnPage]="5">
+                  <thead>
+                    <tr>
+                      <th>Action</th>
+                      <th>Key to save Result</th>
+                      <th>Expression</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let rule of tempState.ruleList">
+                      <td>
+                        <button type="button" class="btn btn-danger" title="Delete" (click)="removeRule(rule)"><i class="ion-close-round"></i></button>
+                      </td>
+                      <td>
+                        <input type="text" class="form-control" placeholder="Key" [value]="rule.key" (input)="rule.key = $event.target.value">
+                      </td>
+                      <td>
+                        <input type="text" class="form-control" placeholder="Expression" [value]="rule.expression" (input)="rule.expression = $event.target.value"/>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="2">
+                        <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                      </td>
+                      <td colspan="1" style="text-align: right;">
+                        <button type="button" class="btn btn-primary" (click)="addRule()">Add Expression</button>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div id="eventAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempState.events.length > 0">
           <div *ngFor="let event of tempState.events; let eventIndex=index" class="panel">
             <div class="card">

@@ -13,7 +13,7 @@ import 'rxjs/add/operator/switchMap';
 import { GraphObject, DataPoint, Classifier, StateModel, EventModel, Expression, Transition } from '../../flow.model';
 
 // External Model Imports
-import { ApiConfig } from '../../../master/master.model';
+import { ApiConfig, ApiKeyExpressionMap } from '../../../master/master.model';
 
 // Service Imports
 import { GraphService, CommunicationService } from '../../flow.service';
@@ -208,6 +208,10 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.tempState.apiConfigurationList = [];
     }
 
+    if (!this.isStateRuleCompatible()) {
+      this.tempState.ruleList = [];
+    }
+
     if (this.tempState.stateId && this.tempState.stateId.length > 0) {
       const customObject: Object = JSON.parse(JSON.stringify(this.tempState));  // Very important line of code, don't remove
       new updateStateObject(customObject);
@@ -257,7 +261,31 @@ export class DesignComponent implements OnInit, OnDestroy {
   isStateApiCompatible() {
     // TODO: improve the mechanism to differentiate API State with other states
     return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
-      && this.tempState.entryActionList.includes('apiStateEntryAction');
+      && this.tempState.entryActionList.includes('APIStateEntryAction');
+  }
+
+  isStateRuleCompatible() {
+    // TODO: improve the mechanism to differentiate Rule State with other states
+    return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
+      && this.tempState.entryActionList.includes('RuleStateEntryAction');
+  }
+
+  addRule() {
+    if (!this.tempState) {
+      this.tempState = new StateModel();
+    }
+    if (!this.tempState.ruleList) {
+      this.tempState.ruleList = [];
+    }
+
+    this.tempState.ruleList.push(new ApiKeyExpressionMap());
+  }
+
+  removeRule(rule: ApiKeyExpressionMap) {
+    if (rule && this.tempState && this.tempState.ruleList && this.tempState.ruleList.includes(rule)) {
+      const index = this.tempState.ruleList.indexOf(rule);
+      this.tempState.ruleList.splice(index, 1);
+    }
   }
 
   saveGraphXml(xml: string, states: StateModel[], transitions: Transition[]): void {
