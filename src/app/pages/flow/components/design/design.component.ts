@@ -48,6 +48,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   // Dropdown source list
   sourceStatusCodes: string[] = ['DRAFT', 'ACTIVE', 'ARCHIVE'];
   sourceStateTypes: string[] = ['Manual', 'Auto', 'Cognitive'];
+  allocationTypes: string[] = ['Group','Least_Allocated','Maximum_Efficiency','API'];
   sourceOperands: string[] = ['AND', 'OR'];
   sourceClassifiers: Classifier[];
   sourceEntryActionList: string[];
@@ -159,6 +160,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
       this.tempState = new StateModel();
       this.tempState.type = this.sourceStateTypes[0];
+      this.tempState.allocationModel.allocationType = this.allocationTypes[0];
       this.tempState.trigger = this.tempParentState.events[0];
 
       if (this.tempParentState.events && this.tempParentState.events.length > 0) {

@@ -98,6 +98,20 @@ export class EventModel {
   }
 }
 
+export class AllocationModel{
+  allocationGroup: string;
+  allocationType: string;
+  groups: string[];
+  api: string;
+
+  constructor() {
+    this.allocationGroup = '';
+    this.groups = [];
+    this.allocationType = '';
+    this.api = '';
+  }
+}
+
 export class StateModel {
   stateId: string;
   stateCd: string;
@@ -110,6 +124,7 @@ export class StateModel {
   entryActionList: string[];
   apiConfigurationList: string[];
   ruleList: ApiKeyExpressionMap[];
+  allocationModel : AllocationModel;
 
   constructor() {
     this.stateId = '';
@@ -123,6 +138,7 @@ export class StateModel {
     this.entryActionList = [];
     this.apiConfigurationList = [];
     this.ruleList = [];
+    this.allocationModel = new AllocationModel();
   }
 }
 
