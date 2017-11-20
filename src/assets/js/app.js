@@ -340,6 +340,17 @@ designFlowEditor = function (serverXml, readOnly) {
     style[mxConstants.STYLE_ROUNDED] = '1';
     style[mxConstants.STYLE_GLASS] = '0';
 
+    style = mxUtils.clone(style);
+    graph.getStylesheet().putCellStyle('PENDING_STATE', style);
+
+    style = mxUtils.clone(style);
+    style[mxConstants.STYLE_FILLCOLOR] = '#99D9EA';
+    graph.getStylesheet().putCellStyle('ACTIVE_STATE', style);
+
+    style = mxUtils.clone(style);
+    style[mxConstants.STYLE_FILLCOLOR] = '#D9E1DC';
+    graph.getStylesheet().putCellStyle('CLOSED_STATE', style);
+
     style = [];
     style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RHOMBUS;
     style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RhombusPerimeter;
@@ -358,6 +369,17 @@ designFlowEditor = function (serverXml, readOnly) {
     style[mxConstants.STYLE_GLASS] = '0';
 
     graph.getStylesheet().putCellStyle('decision', style);
+
+    style = mxUtils.clone(style);
+    graph.getStylesheet().putCellStyle('PENDING_DECISION', style);
+
+    style = mxUtils.clone(style);
+    style[mxConstants.STYLE_FILLCOLOR] = '#99D9EA';
+    graph.getStylesheet().putCellStyle('ACTIVE_DECISION', style);
+
+    style = mxUtils.clone(style);
+    style[mxConstants.STYLE_FILLCOLOR] = '#D9E1DC';
+    graph.getStylesheet().putCellStyle('CLOSED_DECISION', style);
 
     style = [];
     style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_ELLIPSE;
@@ -379,8 +401,31 @@ designFlowEditor = function (serverXml, readOnly) {
     graph.getStylesheet().putCellStyle('start', style);
 
     style = mxUtils.clone(style);
+    graph.getStylesheet().putCellStyle('PENDING_START', style);
+
+    style = mxUtils.clone(style);
+    style[mxConstants.STYLE_FILLCOLOR] = '#99D9EA';
+    graph.getStylesheet().putCellStyle('ACTIVE_START', style);
+
+    style = mxUtils.clone(style);
+    style[mxConstants.STYLE_FILLCOLOR] = '#D9E1DC';
+    graph.getStylesheet().putCellStyle('CLOSED_START', style);
+
+    style = mxUtils.clone(style);
     style[mxConstants.STYLE_STROKEWIDTH] = '3';
+    style[mxConstants.STYLE_FILLCOLOR] = 'white';
     graph.getStylesheet().putCellStyle('end', style);
+
+    style = mxUtils.clone(style);
+    graph.getStylesheet().putCellStyle('PENDING_END', style);
+
+    style = mxUtils.clone(style);
+    style[mxConstants.STYLE_FILLCOLOR] = '#99D9EA';
+    graph.getStylesheet().putCellStyle('ACTIVE_END', style);
+
+    style = mxUtils.clone(style);
+    style[mxConstants.STYLE_FILLCOLOR] = '#D9E1DC';
+    graph.getStylesheet().putCellStyle('CLOSED_END', style);
 
     // style[mxConstants.STYLE_IMAGE] = 'assets/js/mxGraph/images/dude3.png';
     // style[mxConstants.STYLE_IMAGE_WIDTH] = '48';
@@ -700,11 +745,21 @@ function addChild(graph, cell, customObject, horizontal, stateCode, stateLabel, 
     var circleSize = 50;
     if (stateType == 'Start') {
       vertex = graph.insertVertex(parent, null, '', 0, 0, 0, 0, 'start', false);
+      var cellId = vertex.id;
+      var stateData = vertex.value;
+      stateData.stateId = cellId;
+      vertex.value = stateData;
+      
       var geometry = model.getGeometry(vertex);
       geometry.width = circleSize;
       geometry.height = circleSize;
     } else if (stateType == 'Decision State' || (customObject && customObject.events && customObject.events.length > 1)) {
       vertex = graph.insertVertex(parent, null, customObject, 0, 0, 0, 0, 'decision', false);
+      var cellId = vertex.id;
+      var stateData = vertex.value;
+      stateData.stateId = cellId;
+      vertex.value = stateData;
+
       var size = graph.getPreferredSizeForCell(vertex);
       var geometry = model.getGeometry(vertex);
       geometry.width = size.width;
@@ -715,6 +770,11 @@ function addChild(graph, cell, customObject, horizontal, stateCode, stateLabel, 
       }
     } else if (stateType == 'End' || (customObject && customObject.events && customObject.events.length == 0)) {
       vertex = graph.insertVertex(parent, null, customObject, 0, 0, 0, 0, 'end', false);
+      var cellId = vertex.id;
+      var stateData = vertex.value;
+      stateData.stateId = cellId;
+      vertex.value = stateData;
+
       var geometry = model.getGeometry(vertex);
       geometry.width = circleSize;
       geometry.height = circleSize;
@@ -724,6 +784,11 @@ function addChild(graph, cell, customObject, horizontal, stateCode, stateLabel, 
       }
     } else {
       vertex = graph.insertVertex(parent, null, customObject);
+      var cellId = vertex.id;
+      var stateData = vertex.value;
+      stateData.stateId = cellId;
+      vertex.value = stateData;
+
       var size = graph.getPreferredSizeForCell(vertex);
       var geometry = model.getGeometry(vertex);
       geometry.width = size.width;
