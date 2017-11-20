@@ -85,6 +85,7 @@ export class GoalStep {
   api: string;
   key: string;
   parameters: string[];
+  authRequired: boolean;
 
   constructor() {
     this.goalExpression = '';
@@ -95,6 +96,7 @@ export class GoalStep {
     this.api = '';
     this.key = '';
     this.parameters = [];
+    this.authRequired = false;
   }
 }
 
@@ -104,7 +106,6 @@ export class Goal {
   expression: string;
   goalName: string;
   // createdDt: Date;
-  authRequired: boolean;
   domainGoalSteps: GoalStep[];
   model: any;
   api: string;

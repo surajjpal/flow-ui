@@ -169,9 +169,6 @@
                     <mfDefaultSorter by="goalName">Goal Name</mfDefaultSorter>
                   </th>
                   <th>
-                    <mfDefaultSorter by="authRequired">Authentication Required</mfDefaultSorter>
-                  </th>
-                  <th>
                     <mfDefaultSorter by="expression">Expression</mfDefaultSorter>
                   </th>
                   <th>
@@ -185,7 +182,6 @@
               <tbody>
                 <tr *ngFor="let goal of mfGoal.data" (click)="onGoalSelect(goal)" data-toggle="modal" data-target="#goalModal">
                   <td>{{goal.goalName}}</td>
-                  <td>{{goal.authRequired}}</td>
                   <td>{{goal.expression}}</td>
                   <td>{{goal.api}}</td>
                   <td>{{goalStepToString(goal.domainGoalSteps)}}</td>
@@ -386,13 +382,6 @@
               name="goalName" />
           </div>
           <div class="form-group">
-            <label>Authentication Required</label>
-            <select class="selectpicker form-control" required title="Select authentication required" [(ngModel)]="tempGoal.authRequired" name="authRequired">
-              <option [value]="true">Yes</option>
-              <option [value]="false">No</option>
-            </select>
-          </div>
-          <div class="form-group">
             <label class="col-md-12 col-sm-12 col-xs-12" for="expressionLabel">
               Expression
             </label>
@@ -461,6 +450,13 @@
                         [(ngModel)]="goalStep.api" name="api" />
                     </div>
                     <div class="form-group">
+                      <label>Authentication Required</label>
+                      <select class="selectpicker form-control" required title="Select authentication required" [(ngModel)]="goalStep.authRequired" name="authRequired">
+                        <option [value]="true">Yes</option>
+                        <option [value]="false">No</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsKey' + index">
                         Model Key
                       </label>
@@ -522,6 +518,13 @@
                       </label>
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsApi' + index" placeholder="API"
                         [(ngModel)]="goalStep.api" name="api" />
+                    </div>
+                    <div class="form-group">
+                      <label>Authentication Required</label>
+                      <select class="selectpicker form-control" required title="Select authentication required" [(ngModel)]="goalStep.authRequired" name="authRequired">
+                        <option [value]="true">Yes</option>
+                        <option [value]="false">No</option>
+                      </select>
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsKey' + index">
