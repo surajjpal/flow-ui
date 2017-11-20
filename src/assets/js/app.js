@@ -969,6 +969,26 @@ getTransitionForAllVertices = function() {
   return transitions;
 }
 
+styleStates = function(activeStateIdList, closedStateIdList) {
+  if (activeStateIdList != null && closedStateIdList != null) {
+    graph.getModel().beginUpdate();
+    try {
+      var vertices = graph.getChildVertices(graph.getDefaultParent());
+      for (var vertex of vertices) {
+        if (vertex != null && vertex.id != null) {
+          if (activeStateIdList.indexOf(vertex.id) > 0) {
+            vertex.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#99D9EA', [cell]);
+          } else if (closedStateIdList.indexOf(vertex.id) > 0) {
+            vertex.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#D9E1DC', [cell]);
+          }
+        }
+      }
+    } finally {
+      graph.getModel().endUpdate();
+    }
+  }
+}
+
 initializeGraphOnInit = function () {
 
   try { init_sparklines(); } catch (e) { }
