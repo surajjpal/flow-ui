@@ -1,4 +1,5 @@
 declare var designFlowEditor: any;
+declare var styleStates: any;
 declare var closeModal: any;
 
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
@@ -65,8 +66,9 @@ export class ApiTableComponent implements OnInit {
     this.stateService.getXMLforActiveState(selectedData.stateMachineInstanceModelId)
     .then(
       graphObject => {
-        console.log("xml returned:"+graphObject.xml);
+        console.log(graphObject);
         new designFlowEditor(graphObject.xml, true);
+        new styleStates(graphObject.activeStateIdList,graphObject.closedStateIdList);
       },
       error => {
         console.log("error in fetch");

@@ -148,6 +148,8 @@ export class GraphObject {
   dataPointConfigurationList: DataPoint[];
   states: StateModel[];
   transitions: Transition[];
+  activeStateIdList: string[];
+  closedStateIdList: string[];
 
   constructor() {
     this._id = null;
@@ -159,5 +161,7 @@ export class GraphObject {
     this.dataPointConfigurationList = [];
     this.states = [];
     this.transitions = [];
+    this.activeStateIdList = [];
+    this.closedStateIdList = [];
   }
 }
