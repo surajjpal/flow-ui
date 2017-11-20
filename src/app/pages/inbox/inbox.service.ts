@@ -4,6 +4,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { State } from './inbox.model';
 import { environment } from '../../../environments/environment';
+import { GraphObject } from '../flow/flow.model';
 
 @Injectable()
 export class StateService {
@@ -28,6 +29,15 @@ export class StateService {
         .then(response => response.json() as Map<string, string>[])
         .catch(this.handleError);
     }
+  }
+
+  getXMLforActiveState(stateId:string): Promise<GraphObject>{
+    const url = environment.server + environment.stateflowimageurl + stateId;
+
+    return this.http
+    .get(url).toPromise()
+    .then(response => response.json() as GraphObject)
+    .catch(this.handleError);
   }
 
   getParamforfolder(folder: string): Promise<Map<string, string>> {

@@ -25,12 +25,12 @@ export class TasksComponent implements OnInit {
 
   fetchData(): void {
     try {
-      this.stateService.getStatesforfolder('conversation')
+      this.stateService.getStatesforfolder('lead')
       .then(states => {
         this.states = states;
       });
 
-      this.stateService.getParamforfolder('conversation')
+      this.stateService.getParamforfolder('lead')
       .then(parameterKeys => {
         this.parameterKeys = parameterKeys;
       });

@@ -3,7 +3,7 @@ export const environment = {
   name: 'local',
   server: 'http://localhost:8080/',
   activestateurl: 'state/bystatus/ACTIVE',
-  folderurl: 'state/byusergroupandmachinetypeandstatus/admin',
+  folderurl: 'state/byusergroupandmachinetypeandstatus/PublicFolder',
   paramurl: 'statemachine/machinetypeparams/',
   updatestatemachineurl: 'statemachine/',
   menutreeurl: 'menu/tree',

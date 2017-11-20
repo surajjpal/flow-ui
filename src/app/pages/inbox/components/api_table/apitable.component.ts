@@ -1,9 +1,11 @@
-declare var graphRendererFunction: any;
+declare var designFlowEditor: any;
 declare var closeModal: any;
 
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { environment } from '../../../../../environments/environment';
 import { StateService } from '../../inbox.service';
+import { GraphObject } from '../../../flow/flow.model';
+
 
 @Component({
   selector: 'apitable',
@@ -60,8 +62,16 @@ export class ApiTableComponent implements OnInit {
     this.selectedState = selectedData;
     this.selectedStateCd = selectedData.stateCd;
 
-    document.getElementById('graphContainer').innerHTML = '';
-    new graphRendererFunction(document.getElementById('graphContainer'), selectedData.stateMachineInstanceModelId, environment.server + environment.stateflowimageurl);
+    this.stateService.getXMLforActiveState(selectedData.stateMachineInstanceModelId)
+    .then(
+      graphObject => {
+        console.log("xml returned:"+graphObject.xml);
+        new designFlowEditor(graphObject.xml, true);
+      },
+      error => {
+        console.log("error in fetch");
+      }      
+    );
   }
 
   save(): void {

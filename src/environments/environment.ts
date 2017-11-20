@@ -8,7 +8,7 @@ export const environment = {
   name: 'development',
   server: 'http://flow.automatapi.xyz/',
   activestateurl: 'state/bystatus/ACTIVE',
-  folderurl: 'state/byusergroupandmachinetypeandstatus/admin',
+  folderurl: 'state/byusergroupandmachinetypeandstatus/599575c4f5c90222e4f25471',
   paramurl: 'statemachine/machinetypeparams/',
   updatestatemachineurl: 'statemachine/',
   menutreeurl: 'menu/tree',
