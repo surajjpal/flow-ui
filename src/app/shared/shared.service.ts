@@ -237,7 +237,7 @@ export class AlertService {
     });
   }
 
-  success(message: string, keepAfterNavigationChange = false, timeout?: number) {
+  success(message: string, keepAfterNavigationChange = false, timeout: number = 5000) {
     this.keepAfterNavigationChange = keepAfterNavigationChange;
     this.subject.next({ type: 'success', text: message });
 
@@ -252,8 +252,7 @@ export class AlertService {
   error(message: string, keepAfterNavigationChange = false, timeout?: number) {
     this.keepAfterNavigationChange = keepAfterNavigationChange;
     this.subject.next({ type: 'error', text: message });
-
-    console.log(message);
+   
     if (timeout && timeout > 0) {
       setTimeout(() => {
         // clear alert after timeout

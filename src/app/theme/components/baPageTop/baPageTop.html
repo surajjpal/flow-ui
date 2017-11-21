@@ -3,23 +3,26 @@
   <a routerLink="/pages/dashboard" class="al-logo clearfix"><span>APi </span>Flow</a>
   <a href (click)="toggleMenu()" class="collapse-menu-link ion-navicon"></a>
 
-  <!-- <div class="search">
-    <i class="ion-ios-search-strong" ng-click="startSearch()"></i>
-    <input id="searchInput" type="text" placeholder="Search for...">
-  </div> -->
-  <api-alert></api-alert>
-
-  <div class="user-profile clearfix">
-    <div class="dropdown al-user-profile">
-      <a class="profile-toggle-link dropdown-toggle" id="user-profile-dd" data-toggle="dropdown" aria-expanded="false">
-        <img src="{{ ( 'profile-icon' | baProfilePicture ) }}">
-      </a>
-      <ul class="dropdown-menu top-dropdown-menu profile-dropdown" aria-labelledby="user-profile-dd">
-        <li class="dropdown-item"><a (click)="profile()"><i class="fa fa-user"></i>Profile</a></li>
-        <li class="dropdown-item"><a href><i class="fa fa-cog"></i>Settings</a></li>
-        <li class="dropdown-item"><a (click)="signOut()" class="signout"><i class="fa fa-power-off"></i>Sign out</a></li>
-      </ul>
+    <div class="row">
+      <div class="col-lg-2 col-md-2 col-sm-2" style="margin-top: 1%"></div>
+      <div class="col-lg-8 col-md-8 col-sm-8" style="margin-top: 1%">
+        <api-alert></api-alert>
+      </div>
+      <div class="col-lg-2 col-md-2 col-sm-2">
+          <div class="user-profile clearfix">
+              <div class="dropdown al-user-profile">
+                <a class="profile-toggle-link dropdown-toggle" id="user-profile-dd" data-toggle="dropdown" aria-expanded="false">
+                  <img src="{{ ( 'profile-icon' | baProfilePicture ) }}">
+                </a>
+                <ul class="dropdown-menu top-dropdown-menu profile-dropdown" aria-labelledby="user-profile-dd">
+                  <li class="dropdown-item"><a (click)="profile()"><i class="fa fa-user"></i>Profile</a></li>
+                  <li class="dropdown-item"><a href><i class="fa fa-cog"></i>Settings</a></li>
+                  <li class="dropdown-item"><a (click)="signOut()" class="signout"><i class="fa fa-power-off"></i>Sign out</a></li>
+                </ul>
+              </div>
+            </div>
+      </div>
     </div>
-   <!-- <ba-msg-center></ba-msg-center> -->
-  </div>
+
+  
 </div>

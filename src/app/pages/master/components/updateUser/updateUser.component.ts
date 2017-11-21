@@ -105,22 +105,22 @@ export class UpdateUserComponent implements OnInit {
           .subscribe(
           data => {
             // set success message and pass true paramater to persist the message after redirecting to the login page
-            this.alertService.success('User updated successfully', true);
+            this.alertService.success('User updated successfully', true,5000);
             this.location.back();
           },
           error => {
-            this.alertService.error(error);
+            this.alertService.error(error,false,5000);
           });
       } else {
         this.authService.register(this.selectedUser)
           .subscribe(
           data => {
             // set success message and pass true paramater to persist the message after redirecting to the login page
-            this.alertService.success('User created successfully', true);
+            this.alertService.success('User created successfully', true,5000);
             this.location.back();
           },
           error => {
-            this.alertService.error(error);
+            this.alertService.error(error,false,5000);
           });
       }
     }
@@ -132,11 +132,11 @@ export class UpdateUserComponent implements OnInit {
         .subscribe(
         data => {
           // set success message and pass true paramater to persist the message after redirecting to the login page
-          this.alertService.success('User deleted successfully', true);
+          this.alertService.success('User deleted successfully', true,5000);
           this.location.back();
         },
         error => {
-          this.alertService.error(error);
+          this.alertService.error(error,false,5000);
         });
     }
   }
