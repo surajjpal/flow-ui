@@ -23,18 +23,13 @@ export class ApiTableComponent implements OnInit {
   filterQuery = '';
 
   @Input()
-  tableTitle: string;
-  @Input()
   rawDataArray: Map<string, string>[];
-
-  objectKeys: any = Object.keys;
 
   @Output()
   selectedData: EventEmitter<any> = new EventEmitter<any>();
 
   selectedState: State;
   selectedStateCd: string;
-
 
   constructor(
     private router: Router, 
@@ -45,7 +40,6 @@ export class ApiTableComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.rawDataArray) {
-      this.tableTitle = '';
       this.rawDataArray = [];
     }
   }

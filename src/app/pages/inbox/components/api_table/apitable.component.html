@@ -1,44 +1,32 @@
-<div class="widgets">
-  <div class="row">
-    <ba-card baCardClass="with-scroll" class="data-table-container">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h2>{{tableTitle}}</h2>
-        </div>
-        <br>
-        <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
-        <br>
-        <table class="table table-striped" [mfData]="rawDataArray | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage"
-          [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
-          <thead>
-            <tr>
-              <th>
-                <mfDefaultSorter by="">Flow</mfDefaultSorter>
-              </th>
-              <th>
-                <mfDefaultSorter by="">State</mfDefaultSorter>
-              </th>
-              <th>
-                <mfDefaultSorter by="">Date Time</mfDefaultSorter>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let s of mf.data" (click)="onSelect(s)">
-              <td>{{s.machineType}}</td>
-              <td>{{s.stateCd}}</td>
-              <td>{{s.startTime[0]}}/{{s.startTime[1]}}/{{s.startTime[2]}} {{s.startTime[3]}}:{{s.startTime[4]}}</td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="5">
-                <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-    </ba-card>
-  </div>
-</div>
+<input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
+<br>
+<table class="table table-striped" [mfData]="rawDataArray | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage"
+  [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
+  <thead>
+    <tr>
+      <th>
+        <mfDefaultSorter by="">Flow</mfDefaultSorter>
+      </th>
+      <th>
+        <mfDefaultSorter by="">State</mfDefaultSorter>
+      </th>
+      <th>
+        <mfDefaultSorter by="">Date Time</mfDefaultSorter>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let s of mf.data" (click)="onSelect(s)">
+      <td>{{s.machineType}}</td>
+      <td>{{s.stateCd}}</td>
+      <td>{{s.startTime[0]}}/{{s.startTime[1]}}/{{s.startTime[2]}} {{s.startTime[3]}}:{{s.startTime[4]}}</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="5">
+        <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+      </td>
+    </tr>
+  </tfoot>
+</table>

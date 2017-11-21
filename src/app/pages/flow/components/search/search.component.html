@@ -14,9 +14,6 @@
           <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#tab_archived" role="tab">Archived</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#tab_dictionary" role="tab">Dictionary</a>
-          </li>
         </ul>
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane fade show active" id="tab_active">
@@ -129,52 +126,6 @@
                     <div class="btn-group" role="group">
                       <button type="button" class="btn btn-primary" title="View" (click)="onSelect(graph, OPEN_IN_READONLY_MODE)"><i class="ion-eye"></i></button>
                       <button type="button" class="btn btn-primary" title="Deactivate" (click)="deactivateFlow(graph)"><i class="ion-close-round"></i></button>
-                      <button type="button" class="btn btn-primary" title="Clone" (click)="onSelect(graph, CLONE_AND_EDIT_MODE)"><i class="fa fa-clone"></i></button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="5">
-                    <mfBootstrapPaginator [rowsOnPageSet]="[10,25,50,100]"></mfBootstrapPaginator>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-          <div role="tabpanel" class="tab-pane fade" id="tab_dictionary">
-            <table class="table table-striped" [mfData]="dictionaryGraphObjectList | universalDataFilter : filterQuery" #mfDictionary="mfDataTable" [mfRowsOnPage]="rowsOnPage"
-              [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
-              <thead>
-                <tr>
-                  <th colspan="5">
-                    <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
-                  </th>
-                </tr>
-                <tr>
-                  <th>
-                    <mfDefaultSorter by="machineType">Machine Type</mfDefaultSorter>
-                  </th>
-                  <th>
-                    <mfDefaultSorter [by]="toInt">Version</mfDefaultSorter>
-                  </th>
-                  <th>
-                    <mfDefaultSorter by="statusCd">Status</mfDefaultSorter>
-                  </th>
-                  <th>
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let graph of mfDictionary.data">
-                  <td>{{graph.machineType}}</td>
-                  <td>{{graph.version}}</td>
-                  <td>{{graph.statusCd}}</td>
-                  <td *ngIf="graph.statusCd === ACTIVE">
-                    <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-primary" title="View" (click)="onSelect(graph, OPEN_IN_READONLY_MODE)"><i class="ion-eye"></i></button>
                       <button type="button" class="btn btn-primary" title="Clone" (click)="onSelect(graph, CLONE_AND_EDIT_MODE)"><i class="fa fa-clone"></i></button>
                     </div>
                   </td>

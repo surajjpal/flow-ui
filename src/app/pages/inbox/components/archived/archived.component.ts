@@ -11,27 +11,21 @@ import { StateService } from '../../inbox.service';
 
 export class ArchivedComponent implements OnInit {
 
-  private states: Map<string, string>[];
-  private parameterKeys: Map<string, string>;
-  private objectKeys: any;
-  private selectedData: State;
+  private closedStates: State[];
 
   constructor(private stateService: StateService) {
-    this.states = [];
-    this.parameterKeys = new Map();
-    this.objectKeys = Object.keys;
-    this.selectedData = new State();
+    this.closedStates = [];
   }
 
   ngOnInit(): void {
-    // this.fetchData();
+    this.fetchData();
   }
 
   fetchData(): void {
     try {
-      this.stateService.getStatesByFolder('lead')
+      this.stateService.getStatesByStatus('CLOSED')
       .then(states => {
-        this.states = states;
+        this.closedStates = states;
       });
     } catch (e) {
       alert(e.message);
@@ -40,7 +34,7 @@ export class ArchivedComponent implements OnInit {
 
   onSelect(selectedData: State): void {
     if (selectedData) {
-      this.selectedData = selectedData;
+      
     }
   }
 }

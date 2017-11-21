@@ -13,7 +13,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'tasks', pathMatch: 'full' },
       { path: 'active', component: ActiveComponent },
-      { path: 'archived', component: ArchivedComponent },
+      { path: 'archive', component: ArchivedComponent },
       { path: 'tasks', component: TasksComponent },
       { path: 'taskDetails', component: TaskDetailsComponent }
     ]

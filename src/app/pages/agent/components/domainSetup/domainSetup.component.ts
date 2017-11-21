@@ -53,7 +53,7 @@ export class DomainSetupComponent implements OnInit {
     this.domainCreateMode = true;
     this.modalHeader = '';
     this.createMode = false;
-    this.languageSource = ['ENG', 'HIN', 'MAR', 'Bahasa'];
+    this.languageSource = ['ENG', 'HIN', 'MAR', 'ID'];
     this.modelKeysSource = [];
 
     this.intentFilterQuery = '';

@@ -2,13 +2,7 @@
   <div class="row">
     <ba-card baCardClass="with-scroll" class="data-table-container">
       <div class="panel panel-default">
-        <div class="panel-heading">
-          <h2>Active States</h2>
-        </div>
-        <br>
-
-        Archived Tasks
-        
+        <apitable *ngIf="closedStates && closedStates.length > 0" [rawDataArray]="closedStates" (selectedData)="onSelect($event)"></apitable>
       </div>
     </ba-card>
   </div>

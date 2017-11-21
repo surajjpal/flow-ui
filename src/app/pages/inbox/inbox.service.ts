@@ -51,7 +51,7 @@ export class StateService {
 
   constructor(private http: Http) { }
 
-  getStatesByFolder(folder: string): Promise<Map<string, string>[]> {
+  getStatesByFolder(folder: string): Promise<State[]> {
     if (!folder) {
       folder = 'ALL';
     }
@@ -60,7 +60,20 @@ export class StateService {
     return this.http
       .get(url)
       .toPromise()
-      .then(response => response.json() as Map<string, string>[])
+      .then(response => response.json() as State[])
+      .catch(this.handleError);
+  }
+
+  getStatesByStatus(status: string): Promise<State[]> {
+    if (!status) {
+      status = 'ACTIVE';
+    }
+
+    const url = `${environment.server + environment.statebystatusurl + status}`;
+    return this.http
+      .get(url)
+      .toPromise()
+      .then(response => response.json() as State[])
       .catch(this.handleError);
   }
 

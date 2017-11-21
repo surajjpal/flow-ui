@@ -2,28 +2,22 @@
   <div class="row">
     <ba-card baCardClass="with-scroll" class="data-table-container">
       <div class="panel panel-default">
-        <div class="panel-heading">
-          <h2>Active States</h2>
-        </div>
-        <br>
-
         <ul class="nav nav-tabs" role="tablist">
           <li class="nav-item">
             <a class="nav-link active" data-toggle="tab" href="#tab_personal" role="tab" aria-expanded="true">Personal</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#tab_pubilc" role="tab">Public</a>
+            <a class="nav-link" data-toggle="tab" href="#tab_group" role="tab">Group</a>
           </li>
         </ul>
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane fade show active" id="tab_personal">
-            Personal Tab
+            <apitable *ngIf="groupStates && groupStates.length > 0" [rawDataArray]="groupStates" (selectedData)="onSelect($event)"></apitable>
           </div>
-          <div role="tabpanel" class="tab-pane fade" id="tab_pubilc">
-            Pubilc Tab
+          <div role="tabpanel" class="tab-pane fade" id="tab_group">
+            <apitable *ngIf="personalStates && personalStates.length > 0" [rawDataArray]="personalStates" (selectedData)="onSelect($event)"></apitable>
           </div>
         </div>
-        
       </div>
     </ba-card>
   </div>

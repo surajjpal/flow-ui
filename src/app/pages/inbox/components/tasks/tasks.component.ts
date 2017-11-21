@@ -5,21 +5,17 @@ import { StateService } from '../../inbox.service';
 
 @Component({
   selector: 'api-tasks',
-  templateUrl: './tasks.component.html'
+  templateUrl: './tasks.component.html',
+  styleUrls: ['./tasks.scss']
 })
 
 export class TasksComponent implements OnInit {
 
-  tableTitle: string = '';
-  states: Map<string, string>[] = [];
-  parameterKeys: Map<string, string> = new Map();
-  objectKeys = Object.keys;
-  selectedData: State;
+  states: State[] = [];
 
   constructor(private stateService: StateService) { }
 
   ngOnInit(): void {
-    this.tableTitle = 'Queue';
     this.fetchData();
   }
 
