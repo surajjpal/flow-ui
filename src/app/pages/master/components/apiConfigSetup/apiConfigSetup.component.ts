@@ -155,6 +155,7 @@ export class ApiConfigSetupComponent implements OnInit {
     } else {
       this.apiConfig.responseList = [];
       this.addResponse();
+      this.selectedResponse = this.apiConfig.responseList[0];
     }
   }
 
