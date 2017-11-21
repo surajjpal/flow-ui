@@ -57,12 +57,10 @@ export class Dashboard {
 export class DataPoint {
   dataPointName: string;
   expression: string;
-  machineType: string;
 
   constructor() {
     this.dataPointName = '';
     this.expression = '';
-    this.machineType = '';
   }
 }
 

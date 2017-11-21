@@ -7,9 +7,8 @@ export const environment = {
   production: false,
   name: 'development',
   server: 'http://flow.automatapi.xyz/',
-  activestateurl: 'state/bystatus/ACTIVE',
-  folderurl: 'state/byusergroupandmachinetypeandstatus/599575c4f5c90222e4f25471',
-  paramurl: 'statemachine/machinetypeparams/',
+  statebyfolderurl: '/state/page/0,100,', // folder: Group, Personal
+  statebystatusurl: '/state/pagebystatus/0,100,', // status: CLOSED, ACTIVE
   updatestatemachineurl: 'statemachine/',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',

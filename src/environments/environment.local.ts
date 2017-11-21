@@ -2,9 +2,8 @@ export const environment = {
   production: false,
   name: 'local',
   server: 'http://localhost:8080/',
-  activestateurl: 'state/bystatus/ACTIVE',
-  folderurl: 'state/byusergroupandmachinetypeandstatus/PublicFolder',
-  paramurl: 'statemachine/machinetypeparams/',
+  statebyfolderurl: '/state/page/0,100,', // folder: Group, Personal
+  statebystatusurl: '/state/pagebystatus/0,100,', // status: CLOSED, ACTIVE
   updatestatemachineurl: 'statemachine/',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',

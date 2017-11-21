@@ -25,14 +25,9 @@ export class TasksComponent implements OnInit {
 
   fetchData(): void {
     try {
-      this.stateService.getStatesforfolder('lead')
+      this.stateService.getStatesByFolder('Group')
       .then(states => {
         this.states = states;
-      });
-
-      this.stateService.getParamforfolder('lead')
-      .then(parameterKeys => {
-        this.parameterKeys = parameterKeys;
       });
     } catch (e) {
       alert(e.message);

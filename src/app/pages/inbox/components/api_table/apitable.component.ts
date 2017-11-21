@@ -3,9 +3,11 @@ declare var styleStates: any;
 declare var closeModal: any;
 
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../../environments/environment';
-import { StateService } from '../../inbox.service';
+import { StateService, DataSharingService } from '../../inbox.service';
 import { GraphObject } from '../../../flow/flow.model';
+import { State } from '../../inbox.model';
 
 
 @Component({
@@ -24,37 +26,27 @@ export class ApiTableComponent implements OnInit {
   tableTitle: string;
   @Input()
   rawDataArray: Map<string, string>[];
-  @Input()
-  parameterKeys: Map<string, string>;
 
   objectKeys: any = Object.keys;
 
   @Output()
   selectedData: EventEmitter<any> = new EventEmitter<any>();
 
-  selectedState: any;
+  selectedState: State;
   selectedStateCd: string;
 
 
-  constructor(private stateService: StateService) { }
+  constructor(
+    private router: Router, 
+    private route: ActivatedRoute,
+    private stateService: StateService,
+    private dataSharingService: DataSharingService
+  ) { }
 
   ngOnInit(): void {
-    if (this.rawDataArray && this.parameterKeys) {
-      // this.parameterKeys.forEach((key: string, value: string) => {
-      //   for (const data of this.rawDataArray) {
-      //     if (data) {
-      //       console.log('Key: ' + key + ' Data: ' + data.get(key));
-      //     }
-      //   }
-      // });
-
-      // this.sortBy = this.parameterKeys.keys().next().value;
-
-      // console.log(this.parameterKeys);
-    } else {
+    if (!this.rawDataArray) {
       this.tableTitle = '';
       this.rawDataArray = [];
-      this.parameterKeys = new Map();
     }
   }
 
@@ -66,9 +58,8 @@ export class ApiTableComponent implements OnInit {
     this.stateService.getXMLforActiveState(selectedData.stateMachineInstanceModelId)
     .then(
       graphObject => {
-        console.log(graphObject);
-        new designFlowEditor(graphObject.xml, true);
-        new styleStates(graphObject.activeStateIdList,graphObject.closedStateIdList);
+        this.dataSharingService.setSharedObject(graphObject, this.selectedState);
+        this.router.navigate(['/pages/inbox/taskDetails'], { relativeTo: this.route });
       },
       error => {
         console.log("error in fetch");
@@ -77,7 +68,8 @@ export class ApiTableComponent implements OnInit {
   }
 
   save(): void {
-    this.stateService.update(this.selectedState, this.selectedState.machineType, this.selectedState.entityId, this.selectedState.payload)
+    this.stateService.update(this.selectedState, this.selectedState.machineType,
+      this.selectedState.entityId, this.selectedState.payload)
       .then(() => this.goBack());
   }
 

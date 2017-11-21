@@ -7,13 +7,15 @@ import { NgaModule } from '../../theme/nga.module';
 
 import { routing } from './inbox.routing';
 import { InboxComponent } from './inbox.component';
-import { StateService } from './inbox.service';
+import { StateService, DataSharingService } from './inbox.service';
 
+import { ActiveComponent } from './components/active/active.component';
+import { ArchivedComponent } from './components/archived/archived.component';
 import { TasksComponent } from './components/tasks/tasks.component';
+import { TaskDetailsComponent } from './components/taskDetails/taskDetails.component';
 import { ApiTableModule } from './components/api_table/apitable.module';
-// import { DataFilterPipe } from './components/api_table/data-filter.pipe';
-// import { DataFilterPipe } from '../flow/components/search/data-filter.pipe';
-// import { ApiTableComponent } from './components/api_table/apitable.component';
+
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -22,14 +24,19 @@ import { ApiTableModule } from './components/api_table/apitable.module';
     NgaModule,
     routing,
     ApiTableModule,
-    DataTableModule
+    DataTableModule,
+    SharedModule
   ],
   declarations: [
     InboxComponent,
-    TasksComponent
+    ActiveComponent,
+    ArchivedComponent,
+    TasksComponent,
+    TaskDetailsComponent
   ],
   providers: [
-    StateService
+    StateService,
+    DataSharingService
   ]
 })
 export class InboxModule { }

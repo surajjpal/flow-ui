@@ -7,6 +7,43 @@ import { environment } from '../../../environments/environment';
 import { GraphObject } from '../flow/flow.model';
 
 @Injectable()
+export class DataSharingService {
+  graphObject: any;
+  selectedState: any;
+
+  setSharedObject(graphObject: any, selectedState: any) {
+    this.setGraphObject(graphObject);
+    this.setSelectedState(selectedState);
+  }
+
+  setGraphObject(graphObject: any) {
+    this.graphObject = graphObject;
+  }
+
+  setSelectedState(selectedState: any) {
+    this.selectedState = selectedState;
+  }
+
+  getGraphObject() {
+    let tempGraphObject = null;
+    if (this.graphObject) {
+      tempGraphObject = JSON.parse(JSON.stringify(this.graphObject));
+      this.graphObject = null;
+    }
+    return tempGraphObject;
+  }
+
+  getSelectedState() {
+    let tempSelectedState = null;
+    if (this.selectedState) {
+      tempSelectedState = JSON.parse(JSON.stringify(this.selectedState));
+      this.selectedState = null;
+    }
+    return tempSelectedState;
+  }
+}
+
+@Injectable()
 export class StateService {
 
   private headers = new Headers({ 'Content-Type': 'application/json' });
@@ -14,49 +51,33 @@ export class StateService {
 
   constructor(private http: Http) { }
 
-  getStatesforfolder(folder: string): Promise<Map<string, string>[]> {
-    // console.log(folder);
-    if (folder) {
-      const url = environment.server + environment.folderurl + ',' + folder + ',ACTIVE';
-      // console.log('Task url: ' + url);
-      return this.http
-        .get(url).toPromise()
-        .then(response => response.json() as Map<string, string>[])
-        .catch(this.handleError);
-    } else {
-      return this.http
-        .get(environment.server + environment.activestateurl).toPromise()
-        .then(response => response.json() as Map<string, string>[])
-        .catch(this.handleError);
-    }
-  }
-
-  getXMLforActiveState(stateId:string): Promise<GraphObject>{
-    const url = environment.server + environment.stateflowimageurl + stateId;
-
-    return this.http
-    .get(url).toPromise()
-    .then(response => response.json() as GraphObject)
-    .catch(this.handleError);
-  }
-
-  getParamforfolder(folder: string): Promise<Map<string, string>> {
+  getStatesByFolder(folder: string): Promise<Map<string, string>[]> {
     if (!folder) {
       folder = 'ALL';
     }
-    return this.http
-      .get(environment.server + environment.paramurl + folder).toPromise()
-      .then(response => response.json() as Map<string, string>)
-      .catch(this.handleError);
 
+    const url = `${environment.server + environment.statebyfolderurl + folder}`;
+    return this.http
+      .get(url)
+      .toPromise()
+      .then(response => response.json() as Map<string, string>[])
+      .catch(this.handleError);
+  }
+
+  getXMLforActiveState(stateId: string): Promise<GraphObject> {
+    const url = `${environment.server + environment.stateflowimageurl + stateId}`;
+
+    return this.http
+      .get(url)
+      .toPromise()
+      .then(response => response.json() as GraphObject)
+      .catch(this.handleError);
   }
 
   update(state: State, machineType: string, entityId: string, payload: string): Promise<State> {
-    // console.log(state.parameters['decision']);
     const map = {};
     map['payload'] = state.payload;
     map['param'] = JSON.stringify(state.parameters);
-    // console.log(map);
     if (machineType === null) {
       machineType = `lead`;
     }
@@ -72,7 +93,6 @@ export class StateService {
     const map = {};
     map['payload'] = state.payload;
     map['param'] = JSON.stringify(state.parameters);
-    // console.log(JSON.stringify(map));
     const url = `${environment.server + environment.updatestatemachineurl}/`;
     return this.http
       .put(url, map, { headers: this.headers })
