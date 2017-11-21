@@ -22,7 +22,7 @@ export const routes: Routes = [
     component: PagesComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'inbox/task', pathMatch: 'full' },
+      { path: '', redirectTo: 'inbox/tasks', pathMatch: 'full' },
       { path: 'inbox', loadChildren: './inbox/inbox.module#InboxModule' },
       { path: 'auto', loadChildren: './auto/auto.module#AutoModule' },
       { path: 'flow', loadChildren: './flow/flow.module#FlowModule' },
