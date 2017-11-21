@@ -3,7 +3,7 @@ import { ModuleWithProviders } from '@angular/core';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'pages', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages/auto/dashboard' }
+  { path: '**', redirectTo: 'pages/inbox/task' }
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(routes, { useHash: true });
