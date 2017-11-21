@@ -30,6 +30,9 @@
                 </tr>
                 <tr>
                   <th>
+                    <mfDefaultSorter by="machineLabel">Machine Name</mfDefaultSorter>
+                  </th>
+                  <th>
                     <mfDefaultSorter by="machineType">Machine Type</mfDefaultSorter>
                   </th>
                   <th>
@@ -45,6 +48,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let graph of mfActive.data" data-toggle="modal">
+                  <td>{{graph.machineLabel}}</td>
                   <td>{{graph.machineType}}</td>
                   <td>{{graph.version}}</td>
                   <td>{{graph.statusCd}}</td>

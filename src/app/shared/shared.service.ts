@@ -119,7 +119,8 @@ export class AuthService {
 
   login(user: User) {
     const url = `${environment.server + environment.authurl}`;
-    return this.http.post(url, user, { headers: this.headers })
+    console.log(JSON.stringify(user));
+    return this.http.post(url, JSON.stringify(user), { headers: this.headers })
       .map((response: Response) => {
         // login successful if there's a user object in the response
         if (!response.ok) {
