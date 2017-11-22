@@ -69,13 +69,13 @@
                   <div class="form-group col-sm-12">
                     <label>Input Type</label>
                     <select class="selectpicker form-control" required title="Select input type" [(ngModel)]="isBodyTextEditor" name="isBodyTextEditor">
-                      <option [value]="true">Text Editor</option>
-                      <option [value]="false">Key Value Pair</option>
+                      <option [ngValue]="true">Text Editor</option>
+                      <option [ngValue]="false">Key Value Pair</option>
                     </select>
                     <label style="margin-left:20px">Data Format</label>
                     <select class="selectpicker form-control" required title="Select data format" [(ngModel)]="isDataFormatJson" name="isDataFormatJson">
-                      <option [value]="false">Text (text/plain)</option>
-                      <option [value]="true">JSON (application/json)</option>
+                      <option [ngValue]="false">Text (text/plain)</option>
+                      <option [ngValue]="true">JSON (application/json)</option>
                     </select>
                   </div>
                 </form>

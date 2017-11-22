@@ -24,8 +24,8 @@
           <div *ngIf="!profileEditMode" class="form-group">
             <label>Enabled</label>
             <select class="selectpicker form-control" required title="Select status" [(ngModel)]="selectedUser.enabled" name="enabled">
-              <option [value]="true">Enabled</option>
-              <option [value]="false">Disabled</option>
+              <option [ngValue]="true">Enabled</option>
+              <option [ngValue]="false">Disabled</option>
             </select>
           </div>
           <div *ngIf="!profileEditMode" class="form-group">

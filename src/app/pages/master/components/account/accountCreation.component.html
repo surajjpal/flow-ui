@@ -22,8 +22,8 @@
           <div class="form-group">
             <label>S3 Storage</label>
             <select class="selectpicker form-control" required title="Select status" [(ngModel)]="account.s3" name="s3">
-              <option [value]="true">Enabled</option>
-              <option [value]="false">Disabled</option>
+              <option [ngValue]="true">Enabled</option>
+              <option [ngValue]="false">Disabled</option>
             </select>
           </div>
 

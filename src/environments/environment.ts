@@ -52,7 +52,6 @@ export const environment = {
   deleteentityurl: 'delete/entityclassifier?query=',
 
   // Wheels EMI
-  // wheelsemiserver: 'https://cors-anywhere.herokuapp.com/http://169.54.3.12/',
   wheelsemiserver: 'http://169.54.3.12/',
   savedomainurl: 'domain',
   fetchdomainurl: 'fetchdomain?query=',
