@@ -98,8 +98,8 @@
               <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.intents && selectedEpisode._source.intents.length > 0"
                 class="form-group">
                 <label>Intents</label>
-                <select *ngFor="let intent of selectedEpisode._source.intents" multiple class="form-control" disabled="disabled">
-                    <option>{{intent.intentName}}</option>
+                <select multiple class="form-control" disabled="disabled">
+                    <option *ngFor="let intent of selectedEpisode._source.intents">{{intent.intentName}}</option>
                   </select>
               </div>
               <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.name" class="form-group">
@@ -114,8 +114,8 @@
               <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.entities && selectedEpisode._source.entities.length > 0"
                 class="form-group">
                 <label>Entities</label>
-                <select *ngFor="let entity of selectedEpisode._source.entities" multiple class="form-control" disabled="disabled">
-                      <option>{{entity}}</option>
+                <select multiple class="form-control" disabled="disabled">
+                      <option *ngFor="let entity of selectedEpisode._source.entities">{{entity}}</option>
                     </select>
               </div>
               <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.mode" class="form-group">
@@ -145,9 +145,9 @@
               <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.goals && selectedEpisode._source.goals.length > 0"
                 class="form-group">
                 <label>Goals</label>
-                <select *ngFor="let goal of selectedEpisode._source.goals" multiple class="form-control" disabled="disabled">
-                      <option>{{intent}}</option>
-                    </select>
+                <select  multiple class="form-control" disabled="disabled">
+                      <option *ngFor="let goal of selectedEpisode._source.goals">{{goal.goalName}}</option>
+                </select>
               </div>
             </form>
           </ba-card>
