@@ -9,13 +9,14 @@ import { NgaModule } from '../../theme/nga.module';
 import { routing } from './master.routing';
 
 import { MasterComponent } from './master.component';
+import { AccountCreationComponent } from './components/account/accountCreation.component';
 import { UserComponent } from './components/user/user.component';
 import { UpdateUserComponent } from './components/updateUser/updateUser.component';
 import { RoutelinkComponent } from './components/routelink/routelink.component';
 import { ApiConfigComponent } from './components/apiConfig/apiConfig.component';
 import { ApiConfigSetupComponent } from './components/apiConfigSetup/apiConfigSetup.component';
 
-import { UserService, RoutesService, ApiConfigService } from './master.service';
+import { UserService, RoutesService, ApiConfigService, AccountService } from './master.service';
 
 import { SharedModule } from '../../shared/shared.module';
 
@@ -31,6 +32,7 @@ import { SharedModule } from '../../shared/shared.module';
   ],
   declarations: [
     MasterComponent,
+    AccountCreationComponent,
     UserComponent,
     UpdateUserComponent,
     RoutelinkComponent,
@@ -40,7 +42,8 @@ import { SharedModule } from '../../shared/shared.module';
   providers: [
     UserService,
     RoutesService,
-    ApiConfigService
+    ApiConfigService,
+    AccountService
   ]
 })
 export class MasterModule { }

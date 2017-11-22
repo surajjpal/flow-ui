@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { DashboardService } from '../../flow.service';
+import { DashboardService } from '../../agent.services';
 import { ConversationSummary, Dashboard } from '../../../../models/agentDashboard.model';
-import { DateRangePickerComponent } from './daterangepicker/daterangepicker.component';
+import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 
 declare let d3: any;
 declare let moment: any;
 
 @Component({
-  selector: 'api-flow-dashboard',
+  selector: 'api-auto-dashboard',
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
 
   conversationSummary: ConversationSummary;
-
+  
   episodeCountOptions;
   episodeCountData;
 
@@ -35,28 +35,81 @@ export class DashboardComponent implements OnInit {
   goalsEfficiencyOptions;
   goalsEfficiencyData;
 
-  constructor(private dashboardService: DashboardService) { }
+  CONVERSATION_SUMMARY_FLAG = false;
+  EPISODE_TIMELINE_FLAG = false;
+  INTENT_COUNT_FLAG = false;
+  ENTITY_COUNT_FLAG = false;
+  SENTIMENT_COUNT_FLAG = false;
+  GOAL_COUNT_AND_EFFICIENCY_FLAG = false;
+  MESSAGES_IN_EPISODE_FLAG = false;
+
+  
+  constructor(private dashboardService: DashboardService, private slimLoadingBarService: SlimLoadingBarService) {}
 
   ngOnInit(): void {
-    // this.fetchFlowStats();
+    // this.fetchAutoStats();
     this.setupChartOptions();
   }
 
-  fetchFlowStats(dateRange: any) {
+  fetchAutoStats(dateRange: any) {
+
+    this.slimLoadingBarService.color = '#2DACD1'; // Primary color
+    this.slimLoadingBarService.height = '10px';
+    this.slimLoadingBarService.stop();
+    
+
     this.dashboardService.fetch('CONVERSATION_SUMMARY', dateRange)
-      .then(flowDashboard => this.conversationSummary = flowDashboard.conversationSummary);
+      .then(autoDashboard => {
+        this.CONVERSATION_SUMMARY_FLAG = true;
+        this.updateProgressBar();
+        this.conversationSummary = autoDashboard.conversationSummary;
+      } );
     this.dashboardService.fetch('EPISODE_TIMELINE', dateRange)
-      .then(flowDashboard => this.episodeCountData = flowDashboard.nvd3ChartInputList[0]);
+      .then(autoDashboard => {
+        this.EPISODE_TIMELINE_FLAG = true;
+        this.updateProgressBar();
+        this.episodeCountData = autoDashboard.nvd3ChartInputList[0];
+      });
     this.dashboardService.fetch('INTENT_COUNT', dateRange)
-      .then(flowDashboard => this.intentCountData = flowDashboard.nvd3ChartInputList[0][0].values);
+      .then(autoDashboard => {
+        this.INTENT_COUNT_FLAG = true;
+        this.updateProgressBar();
+        this.intentCountData = autoDashboard.nvd3ChartInputList[0][0].values;
+      });
     this.dashboardService.fetch('ENTITY_COUNT', dateRange)
-      .then(flowDashboard => this.entityCountData = flowDashboard.nvd3ChartInputList[0][0].values);
+      .then(autoDashboard => {
+        this.ENTITY_COUNT_FLAG = true;
+        this.updateProgressBar();
+        this.entityCountData = autoDashboard.nvd3ChartInputList[0][0].values;
+      });
     this.dashboardService.fetch('SENTIMENT_COUNT', dateRange)
-      .then(flowDashboard => this.sentimentCountData = flowDashboard.nvd3ChartInputList[0][0].values);
+      .then(autoDashboard => {
+        this.SENTIMENT_COUNT_FLAG = true;
+        this.updateProgressBar();
+        this.sentimentCountData = autoDashboard.nvd3ChartInputList[0][0].values;
+      } );
     this.dashboardService.fetch('GOAL_COUNT_AND_EFFICIENCY', dateRange)
-      .then(flowDashboard => this.parseGoalsCountAndEfficiency(flowDashboard));
+      .then(autoDashboard => {
+        this.GOAL_COUNT_AND_EFFICIENCY_FLAG = true;
+        this.updateProgressBar();
+        this.parseGoalsCountAndEfficiency(autoDashboard);
+      } );
     this.dashboardService.fetch('MESSAGES_IN_EPISODE', dateRange)
-      .then(flowDashboard => this.messagesInEpisodeData = flowDashboard.nvd3ChartInputList[0]);
+      .then(autoDashboard => {
+        this.MESSAGES_IN_EPISODE_FLAG = true;
+        this.updateProgressBar();
+        this.messagesInEpisodeData = autoDashboard.nvd3ChartInputList[0];
+      });
+
+  }
+
+  updateProgressBar() {
+    this.slimLoadingBarService.progress = this.slimLoadingBarService.progress + (100 / 7);
+    if ( this.CONVERSATION_SUMMARY_FLAG && this.EPISODE_TIMELINE_FLAG  
+      && this.INTENT_COUNT_FLAG && this.ENTITY_COUNT_FLAG && this.SENTIMENT_COUNT_FLAG
+       && this.GOAL_COUNT_AND_EFFICIENCY_FLAG && this.MESSAGES_IN_EPISODE_FLAG) {
+      this.slimLoadingBarService.complete();
+    }
   }
 
   setupChartOptions() {
@@ -69,9 +122,9 @@ export class DashboardComponent implements OnInit {
     this.goalsEfficiencyOptions = this.goalEfficiencyBarChartOptions();
   }
 
-  parseGoalsCountAndEfficiency(flowDashboard: Dashboard) {
-    this.goalsCountData = flowDashboard.nvd3ChartInputList[0][0].values;
-    this.goalsEfficiencyData = flowDashboard.nvd3ChartInputList[1];
+  parseGoalsCountAndEfficiency(autoDashboard: Dashboard) {
+    this.goalsCountData = autoDashboard.nvd3ChartInputList[0][0].values;
+    this.goalsEfficiencyData = autoDashboard.nvd3ChartInputList[1];
   }
 
   donutChartOptions() {
@@ -80,15 +133,15 @@ export class DashboardComponent implements OnInit {
         type: 'pieChart',
         height: 450,
         donut: true,
-        x: function (d) { return d.label; },
-        y: function (d) { return d.value; },
+        x: function(d){return d.label;},
+        y: function(d){return d.value;},
         showLabels: false,
         pie: {
           dispatch: {
-            elementClick: function (e) {
-              //  console.log('Element Click');
-              //  console.log(e);
-            }
+            elementClick: function(e) {
+             // console.log('Element Click');
+             // console.log(e);
+            }            
           }
         },
         duration: 500,
@@ -121,12 +174,12 @@ export class DashboardComponent implements OnInit {
         xAxis: {
           axisLabel: "Timeline",
           axisLabelDistance: 5,
-          tickFormat: function (d) {
+          tickFormat: function(d) {
             return d3.time.format('%x')(new Date(d));
           }
         },
         x2Axis: {
-          tickFormat: function (d) {
+          tickFormat: function(d) {
             return d3.time.format('%x')(new Date(d));
           },
           showMaxMin: false
@@ -134,15 +187,15 @@ export class DashboardComponent implements OnInit {
         yAxis: {
           axisLabel: "Episode Count",
           axisLabelDistance: -15,
-          tickFormat: function (d) {
+          tickFormat: function(d) {
             return d3.format('d')(d)
           }
         },
         lines: {
           dispatch: {
             elementClick: function (e) {
-              //  console.log('click');
-              //  console.log(e);
+             // console.log('click');
+             // console.log(e);
             }
           }
         }
@@ -155,7 +208,7 @@ export class DashboardComponent implements OnInit {
       chart: {
         type: 'multiBarChart',
         height: 450,
-        margin: {
+        margin : {
           top: 35,
           right: 20,
           bottom: 70,
@@ -165,28 +218,28 @@ export class DashboardComponent implements OnInit {
         staggerLabels: true,
         duration: 500,
         stacked: true,
-        forceY: [0],
+        forceY:[0],
         reduceXTicks: false,
         xAxis: {
           axisLabel: 'Episodes',
           showMaxMin: true,
           axisLabelDistance: 10,
-          tickFormat: function (d) {
+          tickFormat: function(d){
             return d;
           }
         },
         yAxis: {
           axisLabel: 'Message Count',
           axisLabelDistance: -15,
-          tickFormat: function (d) {
+          tickFormat: function(d){
             return d3.format('d')(d);
           }
         },
         multibar: {
           dispatch: {
             elementClick: function (e) {
-              //  console.log('click');
-              //  console.log(e);
+            //  console.log('click');
+            //  console.log(e);
             }
           }
         }
@@ -199,7 +252,7 @@ export class DashboardComponent implements OnInit {
       chart: {
         type: 'multiBarChart',
         height: 450,
-        margin: {
+        margin : {
           top: 35,
           right: 20,
           bottom: 50,
@@ -214,21 +267,21 @@ export class DashboardComponent implements OnInit {
         xAxis: {
           axisLabel: 'Goals',
           showMaxMin: true,
-          tickFormat: function (d) {
-            return d3.format('d')(d)
+          tickFormat: function(d){
+             return d3.format('d')(d)
           }
         },
         yAxis: {
           axisLabel: 'Efficiency',
-          tickFormat: function (d) {
+          tickFormat: function(d){
             return d3.format('d')(d) + '%';
           }
         },
         multibar: {
           dispatch: {
             elementClick: function (e) {
-              //  console.log('click');
-              //  console.log(e);
+            //  console.log('click');
+            //  console.log(e);
             }
           }
         }
@@ -239,8 +292,8 @@ export class DashboardComponent implements OnInit {
   /*
   // this is used to change keys in map with new keys
 
-  parseData(flowDashboard: FlowDashboard) {
-    this.data = flowDashboard.nvd3ChartInputList[0].map(function(series) {
+  parseData(autoDashboard: AutoDashboard) {
+    this.data = autoDashboard.nvd3ChartInputList[0].map(function(series) {
       let clone = JSON.parse(JSON.stringify(series.values));
       series.values = null;
       series.values = clone.map(function(d) { return {x: +d.label, y: +d.value } });

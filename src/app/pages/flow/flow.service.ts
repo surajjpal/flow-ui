@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Headers, Http, Jsonp, RequestOptions, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
-import { Dashboard, GraphObject } from './flow.model';
-import { ApiConfig } from '../master/master.model';
+import { Dashboard, GraphObject } from '../../models/flow.model';
+import { ApiConfig } from '../../models/setup.model';
 
 import { environment } from '../../../environments/environment';
 

@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { Headers, Http, Jsonp, RequestOptions, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
-import { State } from './inbox.model';
+import { State } from '../../models/tasks.model';
+import { GraphObject } from '../../models/flow.model';
+
 import { environment } from '../../../environments/environment';
-import { GraphObject } from '../flow/flow.model';
 
 @Injectable()
 export class DataSharingService {

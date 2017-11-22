@@ -1,23 +1,23 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { AgentComponent } from './agent.component';
-import { AccountCreationComponent } from './components/account/accountCreation.component';
 import { AgentCreationComponent } from './components/agent/agentCreation.component';
-import { DomainSetupComponent } from './components/domainSetup/domainSetup.component';
-import { DomainsComponent } from './components/domains/domains.component';
 import { AgentsComponent } from './components/agents/agents.component';
+
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ConversationComponent } from './components/conversation/conversation.component';
 
 const routes: Routes = [
   {
     path: '',
     component: AgentComponent,
     children: [
-      { path: '', redirectTo: 'accountCreation', pathMatch: 'full' },
-      { path: 'accountCreation', component: AccountCreationComponent },
+      { path: '', redirectTo: 'agentCreation', pathMatch: 'full' },
       { path: 'agentCreation', component: AgentCreationComponent },
-      { path: 'domainSetup', component: DomainSetupComponent },
-      { path: 'domains', component: DomainsComponent },
-      { path: 'agents', component: AgentsComponent }
+      { path: 'agents', component: AgentsComponent },
+
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'conversation', component: ConversationComponent }
     ]
   }
 ];

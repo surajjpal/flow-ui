@@ -3,8 +3,10 @@ declare var showModal: any;
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Agent, Domain, Goal, Plugin, Classifier, UIComponent } from '../../agent.model';
-import { GraphObject } from '../../../flow/flow.model';
+import { Agent, Plugin, Classifier, UIComponent } from '../../../../models/agent.model';
+import { Domain, Goal } from '../../../../models/domain.model';
+import { GraphObject } from '../../../../models/flow.model';
+
 import { AgentService } from '../../agent.services';
 import { GraphService } from '../../../flow/flow.service';
 import { DataSharingService } from '../../../../shared/shared.service';

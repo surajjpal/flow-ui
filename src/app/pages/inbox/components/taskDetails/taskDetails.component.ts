@@ -4,8 +4,9 @@ declare var styleStates: any;
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 
-import { State } from '../../inbox.model';
-import { GraphObject, DataPoint } from '../../../flow/flow.model';
+import { State } from '../../../../models/tasks.model';
+import { GraphObject, DataPoint } from '../../../../models/flow.model';
+
 import { StateService, DataSharingService } from '../../inbox.service';
 
 @Component({

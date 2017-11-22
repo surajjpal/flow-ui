@@ -4,11 +4,13 @@ declare var closeModal: any;
 
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { environment } from '../../../../../environments/environment';
-import { StateService, DataSharingService } from '../../inbox.service';
-import { GraphObject } from '../../../flow/flow.model';
-import { State } from '../../inbox.model';
 
+import { environment } from '../../../../../environments/environment';
+
+import { StateService, DataSharingService } from '../../inbox.service';
+
+import { GraphObject } from '../../../../models/flow.model';
+import { State } from '../../../../models/tasks.model';
 
 @Component({
   selector: 'apitable',

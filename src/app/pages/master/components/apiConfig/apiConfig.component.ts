@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ApiConfigService } from '../../master.service';
 import { DataSharingService } from '../../../../shared/shared.service';
 
-import { ApiConfig } from '../../master.model';
+import { ApiConfig } from '../../../../models/setup.model';
 
 @Component({
   selector: 'api-apiConfig',

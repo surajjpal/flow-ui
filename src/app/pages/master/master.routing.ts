@@ -1,6 +1,7 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { MasterComponent } from './master.component';
+import { AccountCreationComponent } from './components/account/accountCreation.component';
 import { UserComponent } from './components/user/user.component';
 import { UpdateUserComponent } from './components/updateUser/updateUser.component';
 import { RoutelinkComponent } from './components/routelink/routelink.component';
@@ -13,6 +14,7 @@ const routes: Routes = [
     component: MasterComponent,
     children: [
       { path: '', redirectTo: 'user', pathMatch: 'full' },
+      { path: 'accountCreation', component: AccountCreationComponent },
       { path: 'user', component: UserComponent },
       { path: 'updateUser', component: UpdateUserComponent },
       { path: 'route', component: RoutelinkComponent },

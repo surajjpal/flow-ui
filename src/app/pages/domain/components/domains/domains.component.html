@@ -1,7 +1,6 @@
 <div class="widgets">
   <div class="row">
-    <ba-card cardTitle="All Agents" baCardClass="with-scroll" class="data-table-container">
-
+    <ba-card cardTitle="All Domains" baCardClass="with-scroll" class="data-table-container">
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" data-toggle="tab" href="#tab_active" role="tab" aria-expanded="true">Active</a>
@@ -15,47 +14,39 @@
           <div class="panel panel-default">
             <form class="row form-inline">
               <div class="form-group col-sm-10">
-                <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Agents" />
+                <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Domains" />
               </div>
               <div class="form-group col-sm-2">
-                <button type="button" class="btn btn-primary" (click)="onAgentSelect()">
-                  Create Agent
+                <button type="button" class="btn btn-primary" (click)="onDomainSelect()">
+                  Create Domain
                 </button>
               </div>
             </form>
             <br>
     
-            <table class="table table-striped" [mfData]="agentSource | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="name">
+            <table class="table table-striped" [mfData]="domainSource | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="name">
               <thead>
                 <tr>
                   <th>
                     <mfDefaultSorter by="name">Name</mfDefaultSorter>
                   </th>
                   <th>
+                    <mfDefaultSorter by="desc">Description</mfDefaultSorter>
+                  </th>
+                  <th>
                     <mfDefaultSorter by="langSupported">Languages Supported</mfDefaultSorter>
                   </th>
                   <th>
-                    <mfDefaultSorter by="agentFlow">Attached Flows</mfDefaultSorter>
-                  </th>
-                  <th>
-                    <mfDefaultSorter by="agentDomain">Attached Domains</mfDefaultSorter>
-                  </th>
-                  <th>
-                    <mfDefaultSorter by="agentPlugins">Attached Plugins</mfDefaultSorter>
-                  </th>
-                  <th>
-                    <mfDefaultSorter by="agentClassifier">Attached Classifiers</mfDefaultSorter>
+                    <mfDefaultSorter by="domainGoals">Goals</mfDefaultSorter>
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let agent of mf.data" (click)="onAgentSelect(agent)">
-                  <td>{{agent.name}}</td>
-                  <td>{{agent.langSupported}}</td>
-                  <td>{{arrayToString(agent.agentFlow)}}</td>
-                  <td>{{domainsToString(agent.agentDomain)}}</td>
-                  <td>{{pluginsToString(agent.agentPlugins)}}</td>
-                  <td>{{classifiersToString(agent.agentClassifier)}}</td>
+                <tr *ngFor="let domain of mf.data" (click)="onDomainSelect(domain)">
+                  <td>{{domain.name}}</td>
+                  <td>{{domain.desc}}</td>
+                  <td>{{arrayToString(domain.langSupported)}}</td>
+                  <td>{{domainGoalsToString(domain.domainGoals)}}</td>
                 </tr>
               </tbody>
               <tfoot>

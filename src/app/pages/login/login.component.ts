@@ -3,7 +3,7 @@ import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/fo
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { AuthService, AlertService } from '../../shared/shared.service';
-import { User } from '../../shared/shared.model';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'api-login',

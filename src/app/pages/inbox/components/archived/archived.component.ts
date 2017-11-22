@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { State } from '../../inbox.model';
+import { State } from '../../../../models/tasks.model';
 import { StateService } from '../../inbox.service';
 
 @Component({

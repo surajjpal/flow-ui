@@ -3,7 +3,7 @@ import { Router, NavigationStart, CanActivate, ActivatedRouteSnapshot, RouterSta
 import { Headers, Http, Jsonp, RequestOptions, Response } from '@angular/http';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
-import { User } from './shared.model';
+import { User } from '../models/user.model';
 
 import { environment } from '../../environments/environment';
 

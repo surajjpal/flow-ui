@@ -2,7 +2,7 @@ declare var closeModal: any;
 
 import { Component, OnInit } from '@angular/core';
 
-import { RoleRouteMap } from '../../master.model';
+import { RoleRouteMap } from '../../../../models/setup.model';
 import { RoutesService } from '../../master.service';
 
 @Component({

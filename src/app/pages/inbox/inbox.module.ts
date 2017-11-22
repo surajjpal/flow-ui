@@ -11,7 +11,6 @@ import { StateService, DataSharingService } from './inbox.service';
 
 import { ActiveComponent } from './components/active/active.component';
 import { ArchivedComponent } from './components/archived/archived.component';
-import { TasksComponent } from './components/tasks/tasks.component';
 import { TaskDetailsComponent } from './components/taskDetails/taskDetails.component';
 import { ApiTableModule } from './components/api_table/apitable.module';
 
@@ -31,7 +30,6 @@ import { SharedModule } from '../../shared/shared.module';
     InboxComponent,
     ActiveComponent,
     ArchivedComponent,
-    TasksComponent,
     TaskDetailsComponent
   ],
   providers: [

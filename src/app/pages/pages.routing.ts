@@ -22,12 +22,12 @@ export const routes: Routes = [
     component: PagesComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'inbox/tasks', pathMatch: 'full' },
+      { path: '', redirectTo: 'inbox/active', pathMatch: 'full' },
       { path: 'inbox', loadChildren: './inbox/inbox.module#InboxModule' },
-      { path: 'auto', loadChildren: './auto/auto.module#AutoModule' },
       { path: 'flow', loadChildren: './flow/flow.module#FlowModule' },
       { path: 'master', loadChildren: './master/master.module#MasterModule' },
-      { path: 'agent', loadChildren: './agent/agent.module#AgentModule'}
+      { path: 'agent', loadChildren: './agent/agent.module#AgentModule' },
+      { path: 'domain', loadChildren: './domain/domain.module#DomainModule' }
     ]
   }
 ];

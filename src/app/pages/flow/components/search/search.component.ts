@@ -5,7 +5,7 @@ import { Router, ActivatedRoute, Params, NavigationExtras } from '@angular/route
 import 'rxjs/add/operator/switchMap';
 
 // Model Imports
-import { GraphObject } from '../../flow.model';
+import { GraphObject } from '../../../../models/flow.model';
 
 // Service Imports
 import { GraphService, CommunicationService } from '../../flow.service';

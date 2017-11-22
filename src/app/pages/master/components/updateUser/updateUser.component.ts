@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService, AlertService, UniversalUser } from '../../../../shared/shared.service';
 import { DataSharingService } from '../../../../shared/shared.service';
 
-import { User } from '../../../../shared/shared.model';
+import { User } from '../../../../models/user.model';
 
 @Component({
   selector: 'api-update-user',

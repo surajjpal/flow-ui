@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Headers, Http, Jsonp, RequestOptions, Response } from '@angular/http';
-import { User } from '../../shared/shared.model';
-import { RoleRouteMap, ApiConfig } from './master.model';
+import { User } from '../../models/user.model';
+import { RoleRouteMap, ApiConfig } from '../../models/setup.model';
+import { Account } from '../../models/account.model';
 
 import { environment } from '../../../environments/environment';
 
@@ -197,6 +198,31 @@ export class ApiConfigService {
         methodList => methodList.json() as string[],
         error => error.json() as any
       ).catch(this.handleError);
+  }
+
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error); // for demo purposes only
+    return Promise.reject(error.message || error);
+  }
+}
+
+@Injectable()
+export class AccountService {
+  private headers = new Headers({ 'Content-Type': 'application/json' });
+  private options = new RequestOptions({ headers: this.headers });
+
+  constructor(private router: Router, private http: Http) { }
+
+  saveAccount(account: Account): Promise<any> {
+    const url = `${environment.wheelsemiserver + environment.saveaccounturl}`;
+    return this.http
+      .post(url, account, { headers: this.headers })
+      .toPromise()
+      .then(
+        response => response as any,
+        error => error as any
+      )
+      .catch(this.handleError);
   }
 
   private handleError(error: any): Promise<any> {

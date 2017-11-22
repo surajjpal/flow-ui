@@ -4,19 +4,27 @@ import { FormsModule } from '@angular/forms';
 import { DataTableModule } from 'angular2-datatable';
 
 import { TagInputModule } from 'ngx-chips';
+import { NvD3Module } from 'ng2-nvd3';
+import 'd3';
+import 'nvd3';
+import { Daterangepicker } from 'ng2-daterangepicker';
+import { MomentModule } from 'angular2-moment';
+import * as moment from 'moment/moment';
 
 import { NgaModule } from '../../theme/nga.module';
 
 import { routing } from './agent.routing';
 
 import { AgentComponent } from './agent.component';
-import { AccountCreationComponent } from './components/account/accountCreation.component';
 import { AgentCreationComponent } from './components/agent/agentCreation.component';
-import { DomainSetupComponent } from './components/domainSetup/domainSetup.component';
-import { DomainsComponent } from './components/domains/domains.component';
 import { AgentsComponent } from './components/agents/agents.component';
 
-import { AgentService } from './agent.services';
+
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ConversationComponent } from './components/conversation/conversation.component';
+import { DateRangePickerComponent } from './components/dashboard/daterangepicker/daterangepicker.component';
+
+import { AgentService, DashboardService, ConversationService } from './agent.services';
 import { GraphService } from '../flow/flow.service';
 
 import { SharedModule } from '../../shared/shared.module';
@@ -28,20 +36,25 @@ import { SharedModule } from '../../shared/shared.module';
     DataTableModule,
     NgaModule,
     routing,
+    Daterangepicker,
+    MomentModule,
+    NvD3Module,
     TagInputModule,
     SharedModule
   ],
   declarations: [
     AgentComponent,
-    AccountCreationComponent,
     AgentCreationComponent,
-    DomainSetupComponent,
-    DomainsComponent,
-    AgentsComponent
+    AgentsComponent,
+    DashboardComponent,
+    ConversationComponent,
+    DateRangePickerComponent
   ],
   providers: [
     AgentService,
-    GraphService
+    GraphService,
+    DashboardService,
+    ConversationService
   ]
 })
 export class AgentModule { }

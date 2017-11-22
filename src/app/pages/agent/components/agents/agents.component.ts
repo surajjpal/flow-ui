@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Agent, Domain, Plugin, Classifier } from '../../agent.model';
+import { Agent, Plugin, Classifier } from '../../../../models/agent.model';
+import { Domain } from '../../../../models/domain.model';
 import { AgentService } from '../../agent.services';
 import { DataSharingService } from '../../../../shared/shared.service';
 

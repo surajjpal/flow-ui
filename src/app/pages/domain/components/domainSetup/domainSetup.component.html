@@ -1,0 +1,634 @@
+<div class="widgets">
+  <div class="row">
+    <ba-card [cardTitle]="domainCreateMode ? 'Create Domain' : 'Update Domain'" baCardClass="with-scroll" class="col-md-12">
+
+
+
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="domainTab" data-toggle="tab" href="#domainContent" role="tab" aria-controls="domain"
+            aria-expanded="true">Domain</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="intentTrainingTab" data-toggle="tab" href="#intentTrainingContent" role="tab" aria-controls="intentTraining">Intent Training</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="entityTrainingTab" data-toggle="tab" href="#entityTrainingContent" role="tab" aria-controls="entityTraining">Entity Training</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="goalSetupTab" data-toggle="tab" href="#goalSetupContent" role="tab" aria-controls="goalSetup">Goal Setup</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="responseMessagesTab" data-toggle="tab" href="#responseMessagesContent" role="tab" aria-controls="responseMessages">Response Messages</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade show active" id="domainContent" aria-labelledby="domainTab">
+          <div class="panel panel-default">
+            <form>
+              <div class="form-group">
+                <label>Domain Name</label>
+                <input type="text" class="form-control" required placeholder="Domain Name" [(ngModel)]="selectedDomain.name" name="name" />
+              </div>
+              <div class="form-group">
+                <label>Domain Description</label>
+                <input type="text" class="form-control" required placeholder="Domain Description" [(ngModel)]="selectedDomain.desc" name="desc"
+                />
+              </div>
+              <div class="form-group">
+                <label>Lanugage Supported</label>
+                <select class="selectpicker form-control" multiple="true" title="Select supported languages" [(ngModel)]="selectedDomain.langSupported" name="langSupported">
+                  <option *ngFor="let language of languageSource" [ngValue]="language">{{language}}</option>
+                </select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="intentTrainingContent" aria-labelledby="intentTrainingTab">
+          <div class="panel panel-default">
+            <div class="data-table-container">
+              <ba-file-uploader [defaultValue]="'Upload Intent Excel'" [fileUploaderOptions]="intentUploaderOptions" (onFileUpload)="onExcelUpload($event)" (onFileUploadCompleted)="onExcelUploadComplete($event)"></ba-file-uploader>
+            </div>
+            <form class="row form-inline">
+              <div class="form-group col-sm-10">
+                <input class="form-control" [(ngModel)]="intentFilterQuery" name="intentFilterQuery" placeholder="Filter Query" />
+              </div>
+              <div class="form-group col-sm-2">
+                <button type="button" class="btn btn-primary" (click)="onIntentSelect()" data-toggle="modal" data-target="#intentModal">
+                  Add Intent
+                </button>
+              </div>
+            </form>
+            <br>
+    
+            <table class="table table-striped" [mfData]="selectedDomain.domainIntents | universalDataFilter : intentFilterQuery" #mfIntent="mfDataTable" [mfRowsOnPage]="10" mfSortBy="intentCd">
+              <thead>
+                <tr>
+                  <th>
+                    <mfDefaultSorter by="intentCd">Intent Code</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="intentParent">Intent Parent</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="tags">Tags</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="weight">Weight</mfDefaultSorter>
+                  </th>                  
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let intent of mfIntent.data" (click)="onIntentSelect(intent)" data-toggle="modal" data-target="#intentModal">
+                  <td>{{intent.intentCd}}</td>
+                  <td>{{intent.intentParent}}</td>
+                  <td>{{intent.tags}}</td>
+                  <td>{{intent.weight}}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="100%">
+                    <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="entityTrainingContent" aria-labelledby="entityTrainingTab">
+          <div class="panel panel-default">
+            <div class="data-table-container">
+              <ba-file-uploader [defaultValue]="'Upload Entity Excel'" [fileUploaderOptions]="entityUploaderOptions" (onFileUpload)="onExcelUpload($event)" (onFileUploadCompleted)="onExcelUploadComplete($event)"></ba-file-uploader>
+            </div>
+            <form class="row form-inline">
+              <div class="form-group col-sm-10">
+                <input class="form-control" [(ngModel)]="entityFilterQuery" name="entityFilterQuery" placeholder="Filter Query" />
+              </div>
+              <div class="form-group col-sm-2">
+                <button type="button" class="btn btn-primary" (click)="onEntitySelect()" data-toggle="modal" data-target="#entityModal">
+                  Add Entity
+                </button>
+              </div>
+            </form>
+            <br>
+    
+            <table class="table table-striped" [mfData]="selectedDomain.domainEntities | universalDataFilter : entityFilterQuery" #mfEntity="mfDataTable" [mfRowsOnPage]="10" mfSortBy="entityCd">
+              <thead>
+                <tr>
+                  <th>
+                    <mfDefaultSorter by="entityCd">Entity Code</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="entityParent">Entity Parent</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="tags">Tags</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="transactionValue">Transaction Value</mfDefaultSorter>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let entity of mfEntity.data" (click)="onEntitySelect(entity)" data-toggle="modal" data-target="#entityModal">
+                  <td>{{entity.entityCd}}</td>
+                  <td>{{entity.entityParent}}</td>
+                  <td>{{entity.tags}}</td>
+                  <td>{{entity.transactionValue}}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="100%">
+                    <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="goalSetupContent" aria-labelledby="goalSetupTab">
+          <div class="panel panel-default">
+            <form class="row form-inline">
+              <div class="form-group col-sm-10">
+                <input class="form-control" [(ngModel)]="goalFilterQuery" name="goalFilterQuery" placeholder="Filter Query" />
+              </div>
+              <div class="form-group col-sm-2">
+                <button type="button" class="btn btn-primary" (click)="onGoalSelect()" data-toggle="modal" data-target="#goalModal">
+                  Add Goal
+                </button>
+              </div>
+            </form>
+            <br>
+    
+            <table class="table table-striped" [mfData]="selectedDomain.domainGoals | universalDataFilter : goalFilterQuery" #mfGoal="mfDataTable" [mfRowsOnPage]="10" mfSortBy="goalName">
+              <thead>
+                <tr>
+                  <th>
+                    <mfDefaultSorter by="goalName">Goal Name</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="expression">Expression</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="api">Goal API</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="domainGoalSteps">Goal Responses</mfDefaultSorter>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let goal of mfGoal.data" (click)="onGoalSelect(goal)" data-toggle="modal" data-target="#goalModal">
+                  <td>{{goal.goalName}}</td>
+                  <td>{{goal.expression}}</td>
+                  <td>{{goal.api}}</td>
+                  <td>{{goalStepToString(goal.domainGoalSteps)}}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="100%">
+                    <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="responseMessagesContent" aria-labelledby="responseMessagesTab">
+          <div class="panel panel-default">
+            <form class="row form-inline">
+              <div class="form-group col-sm-10">
+                <input class="form-control" [(ngModel)]="responseFilterQuery" name="responseFilterQuery" placeholder="Filter Query" />
+              </div>
+              <div class="form-group col-sm-2">
+                <button type="button" class="btn btn-primary" (click)="onResponseSelect()" data-toggle="modal" data-target="#responseModal">
+                  Add Response
+                </button>
+              </div>
+            </form>
+            <br>
+    
+            <table class="table table-striped" [mfData]="selectedDomain.domainResponse | universalDataFilter : responseFilterQuery" #mfResponse="mfDataTable" [mfRowsOnPage]="10" mfSortBy="response">
+              <thead>
+                <tr>
+                  <th>
+                    <mfDefaultSorter by="expression">Expression</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="lang">Language</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="response">Response</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="actionHTML">Action HTML</mfDefaultSorter>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let response of mfResponse.data" (click)="onResponseSelect(response)" data-toggle="modal" data-target="#responseModal">
+                  <td>{{response.expression}}</td>
+                  <td>{{response.lang}}</td>
+                  <td>{{response.response}}</td>
+                  <td>{{response.actionHTML}}</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="100%">
+                    <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <form>
+        <div class="form-group">
+          <button type="button" class="btn btn-primary" (click)="createDomain()">
+              {{domainCreateMode ? 'Create Domain' : 'Update Domain'}}
+          </button>
+        </div>
+      </form>
+
+
+
+    </ba-card>
+  </div>
+</div>
+
+
+<div class="modal fade" id="intentModal" tabindex="-1" role="dialog" attr.aria-labelledby="intentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="intentModalLabel">
+          {{modalHeader}}
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label>Intent Code</label>
+            <input class="form-control" placeholder="Intent Code" [(ngModel)]="tempIntent.intentCd" name="intentCd" />
+          </div>
+          <div class="form-group">
+            <label>Intent Parent</label>
+            <input class="form-control" placeholder="Intent Parent" [(ngModel)]="tempIntent.intentParent" name="intentParent" />
+          </div>
+          <div class="form-group">
+            <label>Tags</label>
+            <tag-input [(ngModel)]="tempIntent.tags" name="tags" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Tags (Enter separated)" secondaryPlaceholder="Enter a new tag (Enter separated)" theme="minimal" class="custom-input-tag-border"></tag-input>
+          </div>
+          <div class="form-group">
+            <label>Weight</label>
+            <input type="number" class="form-control" placeholder="Weight" min="0" [(ngModel)]="tempIntent.weight" name="weight"
+              onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeIntent()">Remove</button>
+        <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="addIntent()">{{createMode ? 'Create' : 'Update'}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="entityModal" tabindex="-1" role="dialog" attr.aria-labelledby="entityModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="entityModalLabel">
+          {{modalHeader}}
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label>Entity Code</label>
+            <input class="form-control" placeholder="Entity Code" [(ngModel)]="tempEntity.entityCd" name="entityCd" />
+          </div>
+          <div class="form-group">
+            <label>Entity Parent</label>
+            <input class="form-control" placeholder="Entity Parent" [(ngModel)]="tempEntity.entityParent" name="entityParent" />
+          </div>
+          <div class="form-group">
+            <label>Tags</label>
+            <tag-input [(ngModel)]="tempEntity.tags" name="tags" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Tags (Enter separated)" secondaryPlaceholder="Enter a new tag (Enter separated)" theme="minimal" class="custom-input-tag-border"></tag-input>
+          </div>
+          <div class="form-group">
+            <label>Transaction Value</label>
+            <input type="number" class="form-control" placeholder="Transaction Value" min="0" [(ngModel)]="tempEntity.transactionValue" name="transactionValue"
+              onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeEntity()">Remove</button>
+        <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="addEntity()">{{createMode ? 'Create' : 'Update'}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="goalModal" tabindex="-1" role="dialog" attr.aria-labelledby="goalModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="goalsModalLabel">
+          {{modalHeader}}
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="goalNameLabel">
+              Goal Name
+            </label>
+            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="goalNameLabel" placeholder="Goal Name" [(ngModel)]="tempGoal.goalName"
+              name="goalName" />
+          </div>
+          <div class="form-group">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="expressionLabel">
+              Expression
+            </label>
+            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="expressionLabel" placeholder="Expression" [(ngModel)]="tempGoal.expression"
+              name="expression" />
+          </div>
+          <div class="form-group">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="goalApiLabel">
+              Goal API
+            </label>
+            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="goalApiLabel" placeholder="Goal API" [(ngModel)]="tempGoal.api"
+              name="api" />
+          </div>
+        </form>
+
+        <div id="goalStepAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempGoal.domainGoalSteps.length > 0">
+          <div *ngFor="let goalStep of tempGoal.domainGoalSteps; let index=index" class="panel">
+            <div class="card">
+              <div *ngIf="index == 0" [id]="'gsTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                <h5 class="mb-0">
+                  <a data-toggle="collapse" data-parent="#goalStepAccordion" [href]="'#gsCollapse' + index" aria-expanded="true" [attr.aria-controls]="'gsCollapse' + index">
+                    {{goalStep.goalResponse}}
+                  </a>
+                </h5>
+              </div>
+              <div *ngIf="index != 0" [id]="'gsTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                <h5 class="mb-0">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#goalStepAccordion" [href]="'#gsCollapse' + index" aria-expanded="false"
+                    [attr.aria-controls]="'gsCollapse' + index" >
+                    {{goalStep.goalResponse}}
+                  </a>
+                </h5>
+              </div>
+
+              <div *ngIf="index == 0" [id]="'gsCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'gsTabHeading' + index">
+                <div class="card-block">
+                  <form>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsLanguage' + index">
+                        Language
+                      </label>
+                      <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'gsLanguage' + index" title="Select Language"
+                      [(ngModel)]="goalStep.lang" name="lang">
+                        <option *ngFor="let language of selectedDomain.langSupported" [ngValue]="language">{{language}}</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsGoalExpression' + index">
+                        Expression
+                      </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsGoalExpression' + index" placeholder="Expression"
+                        [(ngModel)]="goalStep.goalExpression" name="goalExpression" />
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsGoalResponse' + index">
+                        Goal Response
+                      </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsGoalResponse' + index" placeholder="Goal Response"
+                        [(ngModel)]="goalStep.goalResponse" name="goalResponse" />
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsApi' + index">
+                        API
+                      </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsApi' + index" placeholder="API"
+                        [(ngModel)]="goalStep.api" name="api" />
+                    </div>
+                    <div class="form-group">
+                      <label>Mandatory</label>
+                      <select class="selectpicker form-control" required title="Select is mandatory" [(ngModel)]="goalStep.authRequired" name="authRequired">
+                        <option [value]="true">Yes</option>
+                        <option [value]="false">No</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Ignore Intent</label>
+                      <select class="selectpicker form-control" required title="Select if to ignore intent" [(ngModel)]="goalStep.ignoreIntent" name="ignoreIntent">
+                        <option [value]="true">Yes</option>
+                        <option [value]="false">No</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsKey' + index">
+                        Model Key
+                      </label>
+                      <select class="selectpicker form-control" title="Select Model Keys" [(ngModel)]="goalStep.key" name="key">
+                        <option *ngFor="let key of modelKeysSource" [ngValue]="key">{{key}}</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsParameters' + index">
+                        Parameters
+                      </label>
+                      <tag-input [id]="'gsParameters' + index" [(ngModel)]="goalStep.parameters" name="parameters" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Parameters (Enter separated)" secondaryPlaceholder="Enter a new parameter (Enter separated)" theme="minimal" class="custom-input-tag-border"></tag-input>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required for="'gsSequence' + index">
+                        Sequence
+                      </label>
+                      <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'gsSequence' + index" placeholder="Sequence"
+                        min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                        [(ngModel)]="goalStep.sequence" name="sequence" />
+                    </div>
+                    <div class="form-group">
+                      <button type="button" class="btn btn-danger" (click)="deleteGoalStep(goalStep)">
+                        Remove Goal Response
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div *ngIf="index != 0" [id]="'gsCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'gsTabHeading' + index">
+                <div class="card-block">
+                  <form>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsLanguage' + index">
+                        Language
+                      </label>
+                      <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'gsLanguage' + index" title="Select Language"
+                      [(ngModel)]="goalStep.lang" name="lang">
+                        <option *ngFor="let language of selectedDomain.langSupported" [ngValue]="language">{{language}}</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsGoalExpression' + index">
+                        Expression
+                      </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsGoalExpression' + index" placeholder="Expression"
+                        [(ngModel)]="goalStep.goalExpression" name="goalExpression" />
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsGoalResponse' + index">
+                        Goal Response
+                      </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsGoalResponse' + index" placeholder="Goal Response"
+                        [(ngModel)]="goalStep.goalResponse" name="goalResponse" />
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsApi' + index">
+                        API
+                      </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsApi' + index" placeholder="API"
+                        [(ngModel)]="goalStep.api" name="api" />
+                    </div>
+                    <div class="form-group">
+                      <label>Mandatory</label>
+                      <select class="selectpicker form-control" required title="Select is mandatory" [(ngModel)]="goalStep.authRequired" name="authRequired">
+                        <option [value]="true">Yes</option>
+                        <option [value]="false">No</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>Ignore Intent</label>
+                      <select class="selectpicker form-control" required title="Select if to ignore intent" [(ngModel)]="goalStep.ignoreIntent" name="ignoreIntent">
+                        <option [value]="true">Yes</option>
+                        <option [value]="false">No</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsKey' + index">
+                        Model Key
+                      </label>
+                      <select class="selectpicker form-control" title="Select Model Keys" [(ngModel)]="goalStep.key" name="key">
+                        <option *ngFor="let key of modelKeysSource" [ngValue]="key">{{key}}</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsParameters' + index">
+                        Parameters
+                      </label>
+                      <tag-input [id]="'gsParameters' + index" [(ngModel)]="goalStep.parameters" name="parameters" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Parameters (Enter separated)" secondaryPlaceholder="Enter a new parameter (Enter separated)" theme="minimal" class="custom-input-tag-border"></tag-input>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required for="'gsSequence' + index">
+                        Sequence
+                      </label>
+                      <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'gsSequence' + index" placeholder="Sequence"
+                        min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                        [(ngModel)]="goalStep.sequence" name="sequence" />
+                    </div>
+                    <div class="form-group">
+                      <button type="button" class="btn btn-danger" (click)="deleteGoalStep(goalStep)">
+                        Remove Goal Response
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="addNewGoalStep()">Add Goal Response</button>
+        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeGoal()">Remove</button>
+        <button type="submit" class="btn btn-primary" (click)="addGoal()">{{createMode ? 'Create' : 'Update'}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="responseModal" tabindex="-1" role="dialog" attr.aria-labelledby="responseModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="responseModalLabel">
+          {{modalHeader}}
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label>Expression</label>
+            <input class="form-control" placeholder="Expression" [(ngModel)]="tempResponse.expression" name="expression" />
+          </div>
+          <div class="form-group">
+            <label>Language</label>
+            <select class="selectpicker form-control" title="Select Language" [(ngModel)]="tempResponse.lang" name="lang">
+              <option *ngFor="let language of selectedDomain.langSupported" [ngValue]="language">{{language}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Response</label>
+            <input class="form-control" placeholder="Response" [(ngModel)]="tempResponse.response" name="response" />
+          </div>
+          <div class="form-group">
+            <label>Action HTML</label>
+            <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="tempResponse.actionHTML" name="actionHTML"></textarea>
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeResponse()">Remove</button>
+        <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="addResponse()">{{createMode ? 'Create' : 'Update'}}</button>
+      </div>
+    </div>
+  </div>
+</div>

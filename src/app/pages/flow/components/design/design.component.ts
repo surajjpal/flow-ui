@@ -10,10 +10,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 
 // Model Imports
-import { GraphObject, DataPoint, Classifier, StateModel, EventModel, Expression, Transition } from '../../flow.model';
-
-// External Model Imports
-import { ApiConfig, ApiKeyExpressionMap } from '../../../master/master.model';
+import { GraphObject, DataPoint, Classifier, StateModel,
+   EventModel, Expression, Transition } from '../../../../models/flow.model';
+import { ApiConfig, ApiKeyExpressionMap } from '../../../../models/setup.model';
 
 // Service Imports
 import { GraphService, CommunicationService } from '../../flow.service';
