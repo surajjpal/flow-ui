@@ -27,7 +27,7 @@ export const environment = {
   supportedmethodsurl: 'api/supportedMethods',
 
   // auto
-  autoServer: 'https://cors-anywhere.herokuapp.com/https://auto.automatapi.xyz/',   // TODO: remove proxy
+  autoServer: 'https://cors-anywhere.herokuapp.com/http://169.54.3.12/',  
   episodelisturl: 'load/episodes?query=',
   messagelisturl: 'load/messages?query=',
   trainingdataurl: 'load/trainingdata',

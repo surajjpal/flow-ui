@@ -8,10 +8,19 @@
         <mfDefaultSorter by="">Flow</mfDefaultSorter>
       </th>
       <th>
-        <mfDefaultSorter by="">State</mfDefaultSorter>
+        <mfDefaultSorter by="">Task</mfDefaultSorter>
       </th>
       <th>
-        <mfDefaultSorter by="">Date Time</mfDefaultSorter>
+        <mfDefaultSorter by="">Status</mfDefaultSorter>
+      </th>
+      <th>
+        <mfDefaultSorter by="">Start Time</mfDefaultSorter>
+      </th>
+      <th>
+        <mfDefaultSorter by="">Assigned Group</mfDefaultSorter>
+      </th>
+      <th>
+        <mfDefaultSorter by="">Alloted to</mfDefaultSorter>
       </th>
     </tr>
   </thead>
@@ -19,7 +28,10 @@
     <tr *ngFor="let s of mf.data" (click)="onSelect(s)">
       <td>{{s.machineType}}</td>
       <td>{{s.stateCd}}</td>
+      <td>{{s.statusCd}}</td>
       <td>{{s.startTime[0]}}/{{s.startTime[1]}}/{{s.startTime[2]}} {{s.startTime[3]}}:{{s.startTime[4]}}</td>
+      <td>{{s.assignedUserGroupCd}}</td>
+      <td>{{s.assignedUserId}}</td>
     </tr>
   </tbody>
   <tfoot>

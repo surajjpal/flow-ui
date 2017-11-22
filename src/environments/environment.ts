@@ -6,7 +6,7 @@
 export const environment = {
   production: false,
   name: 'development',
-  server: 'http://flow.automatapi.xyz/',
+  server: 'http://108.168.190.82:8080/',
   statebyfolderurl: '/state/page/0,200,', // folder: Group, Personal
   statebystatusurl: '/state/pagebystatus/0,200,', // status: CLOSED, ACTIVE
   updatestatemachineurl: 'statemachine/',
@@ -32,7 +32,7 @@ export const environment = {
   supportedmethodsurl: 'api/supportedMethods',
 
   // auto
-  autoServer: 'https://cors-anywhere.herokuapp.com/https://auto.automatapi.xyz/',   // TODO: remove proxy
+  autoServer: 'https://cors-anywhere.herokuapp.com/http://169.54.3.12/',  
   episodelisturl: 'load/episodes?query=',
   messagelisturl: 'load/messages?query=',
   trainingdataurl: 'load/trainingdata',
