@@ -138,6 +138,26 @@ export class AuthService {
       });
   }
 
+  getUser() {
+    const userurl = `${environment.server}`;
+    return this.http.get(userurl, { headers: this.headers })
+      .map((response: Response) => {
+        // login successful if there's a user object in the response
+        if (!response.ok) {
+          const body = response.json();
+          return body.error;
+        }
+
+        const newUser = response.json();
+        if (newUser) {
+          // store user details and jwt token in local storage to keep user logged in between page refreshes
+          this.universalUser.setUser(newUser);
+        }
+
+        return newUser;
+      });
+  }
+
   logout() {
     // remove user from local storage to log user out
     this.universalUser.removeUser();
@@ -147,11 +167,14 @@ export class AuthService {
   authenticate(user: User): Promise<User> {
     if (user) {
       const url = `${environment.server + environment.authurl}`;
+
       return this.http
-        .post(url, user, { headers: this.headers })
+       .post(url, user, { headers: this.headers })
         .toPromise()
-        .then(response => response.json() as User)
+        .then(response => {console.log('SUCCESS' +response); response.json() as User },
+          error => {console.log(error._body)})
         .catch(this.handleError);
+      
     }
 
     return Promise.reject('User object is null');
