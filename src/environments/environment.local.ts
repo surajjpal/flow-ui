@@ -1,9 +1,10 @@
 export const environment = {
   production: false,
   name: 'local',
-  server: 'http://localhost:8080/',
-  statebyfolderurl: '/state/page/0,200,', // folder: Group, Personal
-  statebystatusurl: '/state/pagebystatus/0,200,', // status: CLOSED, ACTIVE
+  server: 'http://localhost:8080/flow/',
+  // server: 'http://localhost:8080/flow/console/', // in future
+  statebyfolderurl: 'state/page/0,200,', // folder: Group, Personal
+  statebystatusurl: 'state/pagebystatus/0,200,', // status: CLOSED, ACTIVE
   updatestatemachineurl: 'statemachine/',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
