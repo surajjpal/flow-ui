@@ -17,6 +17,12 @@ export class Time {
   chronology: Chronology;
 }
 
+export class Amount{
+  typecd: string;
+  amount: number;
+  currency: string;
+}
+
 export class State {
   _id: string;
   statusCd: string;
@@ -33,4 +39,5 @@ export class State {
   eventModel: string;
   parameters: [string, string];
   predictedParameters: [string, string];
+  businessCost: Amount;
 }

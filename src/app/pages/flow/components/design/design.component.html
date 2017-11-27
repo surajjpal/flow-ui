@@ -40,8 +40,14 @@
             <input type="text" class="form-control" required id="inputStateCode" placeholder="State Code" [(ngModel)]="tempState.stateCd"
               name="stateCd" />
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="selectStateType">State Type</label>
+            <select class="selectpicker form-control" required id="selectStateType" title="Choose State Type" [(ngModel)]="tempState.type"
+              name="type">
+                <option *ngFor="let stateType of sourceStateTypes" [value]="stateType">{{stateType}}</option>
+              </select>
+          </div> -->
+          <div class="form-group">
             <select class="selectpicker form-control" required id="selectStateType" title="Choose State Type" [(ngModel)]="tempState.type"
               name="type">
                 <option *ngFor="let stateType of sourceStateTypes" [value]="stateType">{{stateType}}</option>
@@ -76,13 +82,6 @@
               </select>
           </div>
           <div class="form-group">
-            <label for="selectClassifiers">Classifiers</label>
-            <select multiple="true" class="selectpicker form-control" required id="selectClassifiers" title="Choose Classifiers" [(ngModel)]="tempState.classifiers"
-              name="classifiers">
-                <option *ngFor="let classifier of sourceClassifiers" [ngValue]="classifier">{{classifier.apiName}}</option>
-              </select>
-          </div>
-          <div class="form-group">
             <label for="selectEntryActions">Entry Actions</label>
             <select multiple="true" class="selectpicker form-control" required id="selectEntryActions" title="Choose Entry Actions" [(ngModel)]="tempState.entryActionList"
               name="entryActionList">
@@ -96,8 +95,28 @@
                 <option *ngFor="let apiConfig of sourceApiConfigList" [ngValue]="apiConfig._id">{{apiConfig.name}}</option>
               </select>
           </div>
-          
-
+          <div class="form-group" *ngIf="tempState.costModel !== null">
+            <label for="selectCostType">Cost Type</label>
+            <select class="selectpicker form-control" required id="selectCostType" title="Choose Cost Type" [(ngModel)]="tempState.costModel.costType"
+              name="costType">
+                <option *ngFor="let amountType of amountTypes" [value]="amountType">{{amountType}}</option>
+              </select>
+          </div>
+          <div class="form-group" *ngIf="tempState.costModel !== null && tempState.costModel.costType === 'FIXED'">
+            <label for="amount">Fixed cost</label>
+            <input type="text" class="form-control" required id="amount" placeholder="Fixed cost" [(ngModel)]="tempState.costModel.amount"
+              name="amount" />
+          </div>
+          <div class="form-group" *ngIf="tempState.costModel !== null && tempState.costModel.costType === 'DERIVED'">
+            <label for="expression">Fixed cost</label>
+            <input type="text" class="form-control" required id="expression" placeholder="Cost Expression" [(ngModel)]="tempState.costModel.expression"
+              name="expression" />
+          </div>
+          <div class="form-group" *ngIf="tempState.costModel !== null && tempState.costModel.costType === 'API'">
+            <label for="apiCd">Cost API</label>
+            <input type="text" class="form-control" required id="apiCd" placeholder="Cost API" [(ngModel)]="tempState.costModel.apiCd"
+              name="apiCd" />
+          </div>
         </form>
 
         <div id="ruleAccordion" role="tablist" aria-multiselectable="true" *ngIf="isStateRuleCompatible()">

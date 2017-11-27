@@ -110,6 +110,22 @@ export class AllocationModel{
   }
 }
 
+export class CostModel{
+  expression: string;
+  costType: string;
+  amount: number;
+  apiCd: string;
+  currency: string;
+
+  constructor() {
+    this.expression = '';
+    this.amount = 0.0;
+    this.costType = '';
+    this.apiCd = '';
+    this.currency = '';
+  }
+}
+
 export class StateModel {
   stateId: string;
   stateCd: string;
@@ -123,6 +139,7 @@ export class StateModel {
   apiConfigurationList: string[];
   ruleList: ApiKeyExpressionMap[];
   allocationModel : AllocationModel;
+  costModel: CostModel;
 
   constructor() {
     this.stateId = '';
@@ -137,6 +154,7 @@ export class StateModel {
     this.apiConfigurationList = [];
     this.ruleList = [];
     this.allocationModel = new AllocationModel();
+    this.costModel = new CostModel();
   }
 }
 

@@ -22,6 +22,9 @@
       <th>
         <mfDefaultSorter by="">Alloted to</mfDefaultSorter>
       </th>
+      <th>
+        <mfDefaultSorter by="">Cost</mfDefaultSorter>
+      </th>
     </tr>
   </thead>
   <tbody>
@@ -32,6 +35,7 @@
       <td>{{s.startTime[0]}}/{{s.startTime[1]}}/{{s.startTime[2]}} {{s.startTime[3]}}:{{s.startTime[4]}}</td>
       <td>{{s.assignedUserGroupCd}}</td>
       <td>{{s.assignedUserId}}</td>
+      <td *ngIf="s.businessCost">{{s.businessCost.amount}}</td>
     </tr>
   </tbody>
   <tfoot>
