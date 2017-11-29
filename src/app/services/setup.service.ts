@@ -44,7 +44,7 @@ export class RoutesService {
         subject.error(err);
       }
       );
-      
+
     return subject.asObservable();
   }
   
@@ -430,7 +430,7 @@ export class AccountService {
   saveAccount(account: Account): Observable<any> {
     const subject = new Subject<any>();
 
-    const url = `${environment.wheelsemiserver + environment.saveaccounturl}`;
+    const url = `${environment.server + environment.saveaccounturl}`;
 
     this.httpClient.post<any>(
       url,

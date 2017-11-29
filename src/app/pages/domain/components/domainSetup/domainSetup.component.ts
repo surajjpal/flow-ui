@@ -72,12 +72,12 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.tempResponse = new Response();
     this.selectedResponse = new Response();
     
-    const uploadIntentUrl = `${environment.wheelsemiserver}${environment.uploadintentexcelurl}`;
+    const uploadIntentUrl = `${environment.autoServer}${environment.uploadintentexcelurl}`;
     this.intentUploaderOptions = {
       url: uploadIntentUrl
     };
     
-    const uploadEntityUrl = `${environment.wheelsemiserver}${environment.uploadentityexcelurl}`;
+    const uploadEntityUrl = `${environment.autoServer}${environment.uploadentityexcelurl}`;
     this.entityUploaderOptions = {
       url: uploadEntityUrl
     };

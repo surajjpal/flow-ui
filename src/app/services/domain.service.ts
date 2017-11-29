@@ -15,7 +15,7 @@ export class DomainService {
   modelKeysLookup(): Observable<string[]> {
     const subject = new Subject<string[]>();
 
-    const url = `${environment.wheelsemiserver + environment.modelkeyslookupurl}`;
+    const url = `${environment.autoServer + environment.modelkeyslookupurl}`;
 
     this.httpClient.get<string[]>(
       url,
@@ -48,7 +48,7 @@ export class DomainService {
       query = 'ALL';
     }
 
-    const url = `${environment.wheelsemiserver + environment.fetchdomainurl + query}`;
+    const url = `${environment.autoServer + environment.fetchdomainurl + query}`;
 
     this.httpClient.get<Domain[]>(
       url,
@@ -77,7 +77,7 @@ export class DomainService {
   saveDomain(domain: Domain): Observable<any> {
     const subject = new Subject<any>();
 
-    const url = `${environment.wheelsemiserver + environment.savedomainurl}`;
+    const url = `${environment.autoServer + environment.savedomainurl}`;
 
     this.httpClient.post<any>(
       url,

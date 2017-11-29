@@ -23,7 +23,7 @@ export class AgentService {
       query = 'ALL';
     }
 
-    const url = `${environment.wheelsemiserver + environment.fetchdomainurl + query}`;
+    const url = `${environment.autoServer + environment.fetchdomainurl + query}`;
 
     this.httpClient.get<Domain[]>(
       url,
@@ -56,7 +56,7 @@ export class AgentService {
       query = 'ALL';
     }
 
-    const url = `${environment.wheelsemiserver + environment.fetchagenturl + query}`;
+    const url = `${environment.autoServer + environment.fetchagenturl + query}`;
 
     this.httpClient.get<Agent[]>(
       url,
@@ -85,7 +85,7 @@ export class AgentService {
   saveAgent(agent: Agent): Observable<any> {
     const subject = new Subject<any>();
 
-    const url = `${environment.wheelsemiserver + environment.saveagenturl}`;
+    const url = `${environment.autoServer + environment.saveagenturl}`;
 
     this.httpClient.post<any>(
       url,

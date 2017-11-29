@@ -1,9 +1,11 @@
 export const environment = {
   production: true,
   name: 'production',
-  server: 'http://108.168.190.82:8080/',
-  statebyfolderurl: '/state/page/0,200,', // folder: Group, Personal
-  statebystatusurl: '/state/pagebystatus/0,200,', // status: CLOSED, ACTIVE
+
+  // Flow
+  server: 'http://108.168.190.82:8080/flow/',
+  statebyfolderurl: 'state/page/0,200,', // folder: Group, Personal
+  statebystatusurl: 'state/pagebystatus/0,200,', // status: CLOSED, ACTIVE
   updatestatemachineurl: 'statemachine/',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
@@ -27,7 +29,7 @@ export const environment = {
   supportedmethodsurl: 'api/supportedMethods',
 
   // auto
-  autoServer: 'https://cors-anywhere.herokuapp.com/http://169.54.3.12/',   // TODO: remove proxy
+  autoServer: 'http://108.168.190.82:8080/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   messagelisturl: 'load/messages?query=',
   trainingdataurl: 'load/trainingdata',
@@ -46,15 +48,15 @@ export const environment = {
   updateentityurl: 'update/entityclassifier',
   deleteentityurl: 'delete/entityclassifier?query=',
 
-  // Wheels EMI
-  wheelsemiserver: 'http://169.54.3.12/',
   savedomainurl: 'domain',
   fetchdomainurl: 'fetchdomain?query=',
   saveagenturl: 'agent',
   fetchagenturl: 'fetchagent?query=',
-  saveaccounturl: 'saveaccount',
   fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
   uploadintentexcelurl: 'uploadintents',
   uploadentityexcelurl: 'uploadentity',
-  modelkeyslookupurl: 'load/modelkeys'
+  modelkeyslookupurl: 'load/modelkeys',
+
+  // Services - gets appended to server and not to autoServer
+  saveaccounturl: '/services/saveaccount'
 };

@@ -1,8 +1,9 @@
 export const environment = {
   production: false,
   name: 'local',
+
+  // Flow
   server: 'http://localhost:8080/flow/',
-  // server: 'http://localhost:8080/flow/console/', // in future
   statebyfolderurl: 'state/page/0,200,', // folder: Group, Personal
   statebystatusurl: 'state/pagebystatus/0,200,', // status: CLOSED, ACTIVE
   updatestatemachineurl: 'statemachine/',
@@ -27,8 +28,8 @@ export const environment = {
   apiconfigurl: 'api/',
   supportedmethodsurl: 'api/supportedMethods',
 
-  // auto
-  autoServer: 'https://cors-anywhere.herokuapp.com/http://169.54.3.12/',  
+  // Auto
+  autoServer: 'http://localhost:8080/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   messagelisturl: 'load/messages?query=',
   trainingdataurl: 'load/trainingdata',
@@ -47,15 +48,15 @@ export const environment = {
   updateentityurl: 'update/entityclassifier',
   deleteentityurl: 'delete/entityclassifier?query=',
 
-  // Wheels EMI
-  wheelsemiserver: 'http://169.54.3.12/',
   savedomainurl: 'domain',
   fetchdomainurl: 'fetchdomain?query=',
   saveagenturl: 'agent',
   fetchagenturl: 'fetchagent?query=',
-  saveaccounturl: 'saveaccount',
   fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
   uploadintentexcelurl: 'uploadintents',
   uploadentityexcelurl: 'uploadentity',
-  modelkeyslookupurl: 'load/modelkeys'
+  modelkeyslookupurl: 'load/modelkeys',
+
+  // Services - gets appended to server and not to autoServer
+  saveaccounturl: '/services/saveaccount'
 };
