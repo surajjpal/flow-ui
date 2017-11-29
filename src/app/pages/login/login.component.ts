@@ -1,19 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { AuthService, AlertService, UniversalUser } from '../../shared/shared.service';
+import { AlertService, UniversalUser } from '../../services/shared.service';
+import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user.model';
 
 import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'api-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
   email: AbstractControl;
@@ -23,6 +26,8 @@ export class LoginComponent implements OnInit {
   user: User = new User();
   loading = false;
   returnUrl: string;
+
+  private userSubscription: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -45,9 +50,6 @@ export class LoginComponent implements OnInit {
   onSubmit(values: Object): void {
     this.submitted = true;
     if (this.form.valid) {
-      // your code goes here
-      // console.log(values);
-
       if (values.hasOwnProperty('email') && values.hasOwnProperty('password')) {
         this.user.username = values['email'];
         this.user.password = values['password'];
@@ -61,88 +63,32 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
-  login() {
-    this.loading = true;
-    const url = `${environment.server + environment.authurl}`;
-    // const options = new RequestOptions({ headers: this.headers });
-
-    this.httpClient.post<User>(
-      url,
-      this.user,
-      { 
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-        observe: 'response',
-        reportProgress: true
-      })
-      .subscribe(
-        (response: HttpResponse<User>) => {
-          if (response.body) {
-            this.onSuccessfulLogin(response.body);
-          }
-        },
-        (err: HttpErrorResponse) => {
-          if (err.error instanceof Error) {
-            // A client-side or network error occurred. Handle it accordingly.
-            console.log('An error occurred:', err.error.message);
-          } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
-            console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
-            console.log(err);
-            console.log('Assuming error code 302 and redirecting');
-            // this.afterLoginRedirection();
-          }
-        }
-      );
+  ngOnDestroy() {
+    if (this.userSubscription && !this.userSubscription.closed) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
-  afterLoginRedirection() {
-    const url = `${environment.server}`;
-
-    this.httpClient.get<User>(
-      url,
-      { 
-        observe: 'response',
-        reportProgress: true,
-        withCredentials: true
-      })
-      .subscribe(
-        (response: HttpResponse<User>) => {
-          console.log(response);
-          if (response.body) {
-            this.onSuccessfulLogin(response.body);
-          }
-        },
-        (err: HttpErrorResponse) => {
-          if (err.error instanceof Error) {
-            // A client-side or network error occurred. Handle it accordingly.
-            console.log('An error occurred:', err.error.message);
-          } else {
-            // The backend returned an unsuccessful response code.
-            // The response body may contain clues as to what went wrong,
-            console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
-            this.alertService.error(`Failed to authenticate. Reason: ${err.error}`, false, 5000);
-          }
-        }
-      );
-  }
-
-  onSuccessfulLogin(user: User) {
+  saveUser(user: User) {
     if (user) {
       this.universalUser.setUser(user);
       this.router.navigate([this.returnUrl]);
     }
   }
-    // this.authService.authenticate(this.user)
-    //   .then(
-    //     data => {
-    //       this.authService.getUser().subscribe (data=>this.router.navigate([this.returnUrl]))
-
-    //     },
-    //     error => {
-    //       this.alertService.error(error);
-    //       this.loading = false;
-    //     }
-    // );
-  // }
+  
+  login() {
+    this.loading = true;
+    this.userSubscription = this.authService.authenticate(this.user)
+      .subscribe(
+        user => {
+          this.loading = false;
+          this.user = user;
+          this.universalUser.setUser(user);
+          this.router.navigate([this.returnUrl]);
+        },
+        error => {
+          this.loading = false;
+        }
+      );
+  }
 }

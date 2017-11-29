@@ -1,39 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { Agent, Plugin, Classifier } from '../../../../models/agent.model';
 import { Domain } from '../../../../models/domain.model';
-import { AgentService } from '../../agent.services';
-import { DataSharingService } from '../../../../shared/shared.service';
+import { AgentService } from '../../../../services/agent.service';
+import { DataSharingService } from '../../../../services/shared.service';
 
 @Component ({
   selector: 'api-agents',
   templateUrl: './agents.component.html',
   styleUrls: ['./agents.scss']
 })
-export class AgentsComponent implements OnInit {
-
+export class AgentsComponent implements OnInit, OnDestroy {
   filterQuery: string;
   agentSource: Agent[];
   selectedAgent: Agent;
-
+  
+  
   constructor(
-      private agentService: AgentService,
-      private router: Router,
-      private route: ActivatedRoute,
-      private sharingService: DataSharingService
-    ) {
+    private agentService: AgentService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private sharingService: DataSharingService
+  ) {
     this.agentSource = [];
     this.selectedAgent = new Agent();
   }
-
+  
   ngOnInit() {
     this.fetchAgents();
   }
+  
+  ngOnDestroy(): void {
+    if (this.subscription && !this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
+  }
 
+  private subscription: Subscription;
   fetchAgents() {
-    this.agentService.agentLookup()
-      .then(
+    this.subscription = this.agentService.agentLookup()
+      .subscribe(
         agents => {
           if (agents) {
             this.agentSource = agents;

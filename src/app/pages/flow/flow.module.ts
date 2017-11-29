@@ -17,8 +17,6 @@ import { DateRangePickerComponent } from './components/dashboard/daterangepicker
 import { SearchComponent } from './components/search/search.component';
 import { DesignComponent } from './components/design/design.component';
 
-import { DashboardService, GraphService, CommunicationService } from './flow.service';
-
 import 'd3';
 import 'nvd3';
 import * as moment from 'moment/moment';
@@ -43,11 +41,6 @@ import { SharedModule } from '../../shared/shared.module';
     DateRangePickerComponent,
     SearchComponent,
     DesignComponent
-  ],
-  providers: [
-    DashboardService,
-    GraphService,
-    CommunicationService
   ]
 })
 export class FlowModule { }

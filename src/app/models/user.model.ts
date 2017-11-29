@@ -22,6 +22,9 @@ export class User {
   authorities: string[];
   groups: UserGroup[];
   groupAsStringList: string[];
+  credentialsNonExpired: boolean;
+  accountNonLocked: boolean;
+  accountNonExpired: boolean;
 
   constructor() {
     this._id = '';
@@ -33,5 +36,8 @@ export class User {
     this.authorities = [];
     this.groups = [];
     this.groupAsStringList = [];
+    this.credentialsNonExpired = true;
+    this.accountNonLocked = true;
+    this.accountNonExpired = true;
   }
 }

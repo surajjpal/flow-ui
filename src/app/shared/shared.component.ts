@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertService } from './shared.service';
+import { AlertService } from '../services/shared.service';
  
 @Component({
     selector: 'api-alert',

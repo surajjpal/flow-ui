@@ -6,7 +6,8 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -19,24 +20,34 @@ import { GlobalState } from './global.state';
 import { NgaModule } from './theme/nga.module';
 import { PagesModule } from './pages/pages.module';
 
-import { AuthGuard, AntiAuthGuard, UserBroadcastService, AuthService,
-  AlertService, DataSharingService, UniversalUser } from './shared/shared.service';
+import { AuthService } from './services/auth.service';
+import { AgentService, ConversationService, AgentDashboardService } from './services/agent.service';
+import { DomainService } from './services/domain.service';
+import { FlowDashboardService, GraphService, CommunicationService } from './services/flow.service';
+import { DataCachingService, StateService } from './services/inbox.service';
+import { AccountService, ApiConfigService, RoutesService } from './services/setup.service';
+import { AuthGuard, AntiAuthGuard, AlertService, DataSharingService, UniversalUser } from './services/shared.service';
+
 import { SharedModule } from './shared/shared.module';
+
+import { ErrorInterceptor } from './services/interceptors';
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
 
 // Application wide providers
 const APP_PROVIDERS = [
-  AppState,
-  GlobalState,
-  AuthGuard,
-  AntiAuthGuard,
-  UserBroadcastService,
-  AuthService,
-  AlertService,
-  DataSharingService,
-  UniversalUser
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: ErrorInterceptor,
+    multi: true
+  },
+  AgentService, ConversationService, AgentDashboardService,
+  DomainService,
+  FlowDashboardService, GraphService, CommunicationService,
+  DataCachingService, StateService,
+  AccountService, ApiConfigService, RoutesService,
+  AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService, UniversalUser
 ];
 
 export type StoreType = {

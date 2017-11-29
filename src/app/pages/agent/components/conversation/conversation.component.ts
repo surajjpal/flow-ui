@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
-import { ConversationService } from '../../agent.services';
+import { ConversationService } from '../../../../services/agent.service';
 import { Episode, ChatMessage } from '../../../../models/conversation.model';
 
 declare let moment: any;
@@ -10,15 +11,15 @@ declare let moment: any;
   templateUrl: './conversation.component.html',
   styleUrls: ['./conversation.scss']
 })
-export class ConversationComponent implements OnInit {
-
-  filterQuery: string;
+export class ConversationComponent implements OnInit, OnDestroy {
   searchQuery: string;
   episodeList: Episode[];
   selectedEpisode: Episode;
   chatMessageList: ChatMessage[];
   loading;
 
+  private subscription: Subscription;
+  
   constructor(
     private conversationService: ConversationService
   ) {
@@ -29,11 +30,18 @@ export class ConversationComponent implements OnInit {
     this.selectedEpisode = new Episode();
     this.chatMessageList = [];
   }
-
+  
   ngOnInit() {
     this.onTextChange(this.searchQuery);
   }
+  
+  ngOnDestroy(): void {
+    if (this.subscription && !this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
+  }
 
+  filterQuery: string;
   onTextChange(searchQuery: string) {
     if (!searchQuery && searchQuery.length <= 0) {
       return;
@@ -42,23 +50,17 @@ export class ConversationComponent implements OnInit {
     this.searchQuery = searchQuery;
     this.loading = true;
 
-    this.conversationService.search(searchQuery)
-      .then(
+    this.subscription = this.conversationService.search(searchQuery)
+      .subscribe(
         episodeList => {
           this.loading = false;
           if (episodeList) {
             this.episodeList = episodeList;
-
           }
         },
         error => {
           this.loading = false;
         }
-      )
-      .catch(
-      error => {
-        this.loading = false;
-      }
       );
   }
 
@@ -66,21 +68,13 @@ export class ConversationComponent implements OnInit {
     this.selectedEpisode = selectedEpisode;
     this.chatMessageList = [];
 
-    this.conversationService.getChat(selectedEpisode._id)
-      .then(
+    this.subscription = this.conversationService.getChat(selectedEpisode._id)
+      .subscribe(
         chatMessageList => {
           if (chatMessageList) {
             chatMessageList.reverse();    // To get latest message at bottom of screen
             this.chatMessageList = chatMessageList;
           }
-        },
-        error => {
-          
-        }
-      )
-      .catch(
-        error => {
-
         }
       );
   }

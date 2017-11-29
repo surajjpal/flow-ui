@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 import { State } from '../../../../models/tasks.model';
-import { StateService } from '../../inbox.service';
+import { StateService } from '../../../../services/inbox.service';
 
 @Component({
   selector: 'api-inbox-active',
@@ -9,9 +10,12 @@ import { StateService } from '../../inbox.service';
   styleUrls: ['./active.scss']
 })
 
-export class ActiveComponent implements OnInit {
+export class ActiveComponent implements OnInit, OnDestroy {
   private groupStates: State[];
   private personalStates: State[];
+
+  private subscriptionGroup: Subscription;
+  private subscriptionPersonal: Subscription;
 
   constructor(private stateService: StateService) {
     this.groupStates = [];
@@ -22,20 +26,25 @@ export class ActiveComponent implements OnInit {
     this.fetchData();
   }
 
-  fetchData(): void {
-    try {
-      this.stateService.getStatesByFolder('Group')
-      .then(states => {
-        this.groupStates = states;
-      });
-
-      this.stateService.getStatesByFolder('Personal')
-      .then(states => {
-        this.personalStates = states;
-      });
-    } catch (e) {
-      alert(e.message);
+  ngOnDestroy(): void {
+    if (this.subscriptionGroup && !this.subscriptionGroup.closed) {
+      this.subscriptionGroup.unsubscribe();
     }
+    if (this.subscriptionPersonal && !this.subscriptionPersonal.closed) {
+      this.subscriptionPersonal.unsubscribe();
+    }
+  }
+
+  fetchData(): void {
+    this.subscriptionGroup = this.stateService.getStatesByFolder('Group')
+    .subscribe(states => {
+      this.groupStates = states;
+    });
+
+    this.subscriptionPersonal = this.stateService.getStatesByFolder('Personal')
+    .subscribe(states => {
+      this.personalStates = states;
+    });
   }
 
   onSelect(selectedData: State): void {

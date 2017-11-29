@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { DashboardService } from '../../flow.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+
+import { FlowDashboardService } from '../../../../services/flow.service';
 import { ConversationSummary, Dashboard } from '../../../../models/agentDashboard.model';
 import { DateRangePickerComponent } from './daterangepicker/daterangepicker.component';
 
@@ -10,9 +12,7 @@ declare let moment: any;
   selector: 'api-flow-dashboard',
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent implements OnInit {
-
-  conversationSummary: ConversationSummary;
+export class DashboardComponent implements OnInit, OnDestroy {
 
   episodeCountOptions;
   episodeCountData;
@@ -35,28 +35,61 @@ export class DashboardComponent implements OnInit {
   goalsEfficiencyOptions;
   goalsEfficiencyData;
 
-  constructor(private dashboardService: DashboardService) { }
+  private conversationSubscription: Subscription;
+  private episodeSubscription: Subscription;
+  private intentSubscription: Subscription;
+  private entitySubscription: Subscription;
+  private sentimentSubscription: Subscription;
+  private goalSubscription: Subscription;
+  private messagesSubscription: Subscription;
+
+  constructor(private dashboardService: FlowDashboardService) { }
 
   ngOnInit(): void {
     // this.fetchFlowStats();
     this.setupChartOptions();
   }
 
+  ngOnDestroy(): void {
+    if (this.conversationSubscription && !this.conversationSubscription.closed) {
+      this.conversationSubscription.unsubscribe();
+    }
+    if (this.episodeSubscription && !this.episodeSubscription.closed) {
+      this.episodeSubscription.unsubscribe();
+    }
+    if (this.intentSubscription && !this.intentSubscription.closed) {
+      this.intentSubscription.unsubscribe();
+    }
+    if (this.entitySubscription && !this.entitySubscription.closed) {
+      this.entitySubscription.unsubscribe();
+    }
+    if (this.sentimentSubscription && !this.sentimentSubscription.closed) {
+      this.sentimentSubscription.unsubscribe();
+    }
+    if (this.goalSubscription && !this.goalSubscription.closed) {
+      this.goalSubscription.unsubscribe();
+    }
+    if (this.messagesSubscription && !this.messagesSubscription.closed) {
+      this.messagesSubscription.unsubscribe();
+    }
+  }
+
+  conversationSummary: ConversationSummary;
   fetchFlowStats(dateRange: any) {
-    this.dashboardService.fetch('CONVERSATION_SUMMARY', dateRange)
-      .then(flowDashboard => this.conversationSummary = flowDashboard.conversationSummary);
-    this.dashboardService.fetch('EPISODE_TIMELINE', dateRange)
-      .then(flowDashboard => this.episodeCountData = flowDashboard.nvd3ChartInputList[0]);
-    this.dashboardService.fetch('INTENT_COUNT', dateRange)
-      .then(flowDashboard => this.intentCountData = flowDashboard.nvd3ChartInputList[0][0].values);
-    this.dashboardService.fetch('ENTITY_COUNT', dateRange)
-      .then(flowDashboard => this.entityCountData = flowDashboard.nvd3ChartInputList[0][0].values);
-    this.dashboardService.fetch('SENTIMENT_COUNT', dateRange)
-      .then(flowDashboard => this.sentimentCountData = flowDashboard.nvd3ChartInputList[0][0].values);
-    this.dashboardService.fetch('GOAL_COUNT_AND_EFFICIENCY', dateRange)
-      .then(flowDashboard => this.parseGoalsCountAndEfficiency(flowDashboard));
-    this.dashboardService.fetch('MESSAGES_IN_EPISODE', dateRange)
-      .then(flowDashboard => this.messagesInEpisodeData = flowDashboard.nvd3ChartInputList[0]);
+    this.conversationSubscription = this.dashboardService.fetch('CONVERSATION_SUMMARY', dateRange)
+      .subscribe(flowDashboard => { this.conversationSummary = flowDashboard.conversationSummary; });
+    this.episodeSubscription = this.dashboardService.fetch('EPISODE_TIMELINE', dateRange)
+      .subscribe(flowDashboard => { this.episodeCountData = flowDashboard.nvd3ChartInputList[0]; });
+    this.intentSubscription = this.dashboardService.fetch('INTENT_COUNT', dateRange)
+      .subscribe(flowDashboard => { this.intentCountData = flowDashboard.nvd3ChartInputList[0][0].values; });
+    this.entitySubscription = this.dashboardService.fetch('ENTITY_COUNT', dateRange)
+      .subscribe(flowDashboard => { this.entityCountData = flowDashboard.nvd3ChartInputList[0][0].values; });
+    this.sentimentSubscription = this.dashboardService.fetch('SENTIMENT_COUNT', dateRange)
+      .subscribe(flowDashboard => { this.sentimentCountData = flowDashboard.nvd3ChartInputList[0][0].values; });
+    this.goalSubscription = this.dashboardService.fetch('GOAL_COUNT_AND_EFFICIENCY', dateRange)
+      .subscribe(flowDashboard => { this.parseGoalsCountAndEfficiency(flowDashboard); });
+    this.messagesSubscription = this.dashboardService.fetch('MESSAGES_IN_EPISODE', dateRange)
+      .subscribe(flowDashboard => { this.messagesInEpisodeData = flowDashboard.nvd3ChartInputList[0]; });
   }
 
   setupChartOptions() {

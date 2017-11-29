@@ -1,7 +1,7 @@
 import { Routes, RouterModule } from '@angular/router';
 import { PagesComponent } from './pages.component';
 import { ModuleWithProviders } from '@angular/core';
-import { AuthGuard, AntiAuthGuard } from '../shared/shared.service';
+import { AuthGuard, AntiAuthGuard } from '../services/shared.service';
 // noinspection TypeScriptValidateTypes
 
 // export function loadChildren(path) { return System.import(path); };

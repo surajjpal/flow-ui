@@ -1,13 +1,14 @@
 declare var closeModal: any;
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
+import { Subscription } from 'rxjs/Subscription';
 
 import { Domain, Intent, Entity, Goal, GoalStep, Response } from '../../../../models/domain.model';
 
-import { DomainService } from '../../domain.services';
-import { AlertService, DataSharingService } from '../../../../shared/shared.service';
+import { DomainService } from '../../../../services/domain.service';
+import { AlertService, DataSharingService } from '../../../../services/shared.service';
 
 import { environment } from '../../../../../environments/environment';
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
@@ -16,22 +17,20 @@ import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
   selector: 'api-agent-domain',
   templateUrl: './domainSetup.component.html'
 })
-export class DomainSetupComponent implements OnInit {
-
-  intentUploaderOptions: NgUploaderOptions;
+export class DomainSetupComponent implements OnInit, OnDestroy {
   entityUploaderOptions: NgUploaderOptions;
-
+  
   domainCreateMode: boolean;
   modalHeader: string;
   createMode: boolean;
   languageSource: string[];
   modelKeysSource: string[];
-
+  
   intentFilterQuery: string;
   entityFilterQuery: string;
   goalFilterQuery: string;
   responseFilterQuery: string;
-
+  
   selectedDomain: Domain;
   tempIntent: Intent;
   selectedIntent: Intent;
@@ -42,6 +41,8 @@ export class DomainSetupComponent implements OnInit {
   tempResponse: Response;
   selectedResponse: Response;
 
+  private subscription: Subscription;
+  
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -55,12 +56,12 @@ export class DomainSetupComponent implements OnInit {
     this.createMode = false;
     this.languageSource = ['ENG', 'HIN', 'MAR', 'ID'];
     this.modelKeysSource = [];
-
+    
     this.intentFilterQuery = '';
     this.entityFilterQuery = '';
     this.goalFilterQuery = '';
     this.responseFilterQuery = '';
-
+    
     this.selectedDomain = new Domain();
     this.tempIntent = new Intent();
     this.selectedIntent = new Intent();
@@ -70,24 +71,24 @@ export class DomainSetupComponent implements OnInit {
     this.selectedGoal = new Goal();
     this.tempResponse = new Response();
     this.selectedResponse = new Response();
-
+    
     const uploadIntentUrl = `${environment.wheelsemiserver}${environment.uploadintentexcelurl}`;
     this.intentUploaderOptions = {
       url: uploadIntentUrl
     };
-
+    
     const uploadEntityUrl = `${environment.wheelsemiserver}${environment.uploadentityexcelurl}`;
     this.entityUploaderOptions = {
       url: uploadEntityUrl
     };
-
+    
     this.slimLoadingBarService.color = '#2DACD1'; // Primary color
     this.slimLoadingBarService.height = '4px';
   }
-
+  
   ngOnInit() {
     this.fetchModelKeys();
-
+    
     const domain: Domain = this.sharingService.getSharedObject();
     if (domain) {
       this.selectedDomain = domain;
@@ -96,19 +97,26 @@ export class DomainSetupComponent implements OnInit {
       this.selectedDomain = new Domain();
       this.domainCreateMode = true;
     }
-
+    
     this.removeGoalStepResponseFromDomainResponse();
   }
+  
+  ngOnDestroy(): void {
+    if (this.subscription && !this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
+  }
 
+  intentUploaderOptions: NgUploaderOptions;
   fetchModelKeys() {
-    this.domainService.modelKeysLookup()
-      .then(
-        modelKeys => {
-          if (modelKeys) {
-            this.modelKeysSource = modelKeys;
-          }
+    this.subscription = this.domainService.modelKeysLookup()
+    .subscribe(
+      modelKeys => {
+        if (modelKeys) {
+          this.modelKeysSource = modelKeys;
         }
-      );
+      }
+    );
   }
 
   resetFields() {
@@ -377,11 +385,11 @@ export class DomainSetupComponent implements OnInit {
         }
       }
 
-      this.domainService.saveDomain(this.selectedDomain)
-        .then(
-        response => {
-          this.router.navigate(['/pages/domain/domains'], { relativeTo: this.route });
-        }
+      this.subscription = this.domainService.saveDomain(this.selectedDomain)
+        .subscribe(
+          response => {
+            this.router.navigate(['/pages/domain/domains'], { relativeTo: this.route });
+          }
         );
     }
   }

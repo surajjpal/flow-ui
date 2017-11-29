@@ -2,12 +2,13 @@ declare var designFlowEditor: any;
 declare var styleStates: any;
 declare var closeModal: any;
 
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { environment } from '../../../../../environments/environment';
 
-import { StateService, DataSharingService } from '../../inbox.service';
+import { StateService, DataCachingService } from '../../../../services/inbox.service';
 
 import { GraphObject } from '../../../../models/flow.model';
 import { State } from '../../../../models/tasks.model';
@@ -18,7 +19,7 @@ import { State } from '../../../../models/tasks.model';
   styleUrls: ['./apitable.scss']
 })
 
-export class ApiTableComponent implements OnInit {
+export class ApiTableComponent implements OnInit, OnDestroy {
   rowsOnPage = 10;
   sortBy = '';
   sortOrder = 'asc';
@@ -33,11 +34,14 @@ export class ApiTableComponent implements OnInit {
   selectedState: State;
   selectedStateCd: string;
 
+  private subscription: Subscription;
+  private subscriptionXML: Subscription;
+
   constructor(
     private router: Router, 
     private route: ActivatedRoute,
     private stateService: StateService,
-    private dataSharingService: DataSharingService
+    private dataCachingService: DataCachingService
   ) { }
 
   ngOnInit(): void {
@@ -46,27 +50,31 @@ export class ApiTableComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    if (this.subscription && !this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
+    if (this.subscriptionXML && !this.subscriptionXML.closed) {
+      this.subscriptionXML.unsubscribe();
+    }
+  }
+
   onSelect(selectedData: any): void {
     this.selectedData.emit(selectedData);
     this.selectedState = selectedData;
     this.selectedStateCd = selectedData.stateCd;
 
-    this.stateService.getXMLforActiveState(selectedData.stateMachineInstanceModelId)
-    .then(
-      graphObject => {
-        this.dataSharingService.setSharedObject(graphObject, this.selectedState);
+    this.subscriptionXML = this.stateService.getXMLforActiveState(selectedData.stateMachineInstanceModelId)
+      .subscribe(graphObject => {
+        this.dataCachingService.setSharedObject(graphObject, this.selectedState);
         this.router.navigate(['/pages/inbox/taskDetails'], { relativeTo: this.route });
-      },
-      error => {
-        console.log("error in fetch");
-      }      
-    );
+      });
   }
 
   save(): void {
-    this.stateService.update(this.selectedState, this.selectedState.machineType,
+    this.subscription = this.stateService.update(this.selectedState, this.selectedState.machineType,
       this.selectedState.entityId, this.selectedState.payload)
-      .then(() => this.goBack());
+      .subscribe(() => this.goBack());
   }
 
   goBack(): void {

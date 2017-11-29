@@ -1,18 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
-import { AuthService, AlertService, UniversalUser } from '../../../../shared/shared.service';
-import { DataSharingService } from '../../../../shared/shared.service';
+import { DataSharingService, AlertService, UniversalUser } from '../../../../services/shared.service';
+import { AuthService } from '../../../../services/auth.service';
 
 import { User } from '../../../../models/user.model';
+
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'api-update-user',
   templateUrl: './updateUser.component.html'
 })
 
-export class UpdateUserComponent implements OnInit {
+export class UpdateUserComponent implements OnInit, OnDestroy {
   selectedUser: User;
   authorityList: string[];
 
@@ -22,6 +24,8 @@ export class UpdateUserComponent implements OnInit {
 
   updateMode: boolean;
   profileEditMode: boolean = false;
+
+  private userSubscription: Subscription;
 
   constructor(
     private alertService: AlertService,
@@ -36,6 +40,12 @@ export class UpdateUserComponent implements OnInit {
 
   ngOnInit() {
     this.initUI();
+  }
+
+  ngOnDestroy() {
+    if (this.userSubscription && !this.userSubscription.closed) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
   initUI() {
@@ -64,7 +74,7 @@ export class UpdateUserComponent implements OnInit {
         this.buttonName = 'Create User';
         this.updateMode = false;
       }
-      
+
       this.getAuthorities();
     } else {
       this.selectedUser = this.universalUser.getUser();
@@ -76,24 +86,13 @@ export class UpdateUserComponent implements OnInit {
   }
 
   getAuthorities() {
-    this.authService.getAuthorities()
-      .then(
-      authorityList => {
-        if (authorityList) {
-          this.authorityList = authorityList;
-
-
-        }
-      },
-      error => {
-
-      }
-      )
-      .catch(
-      error => {
-
-      }
-      );
+    this.userSubscription = this.authService.getAuthorities()
+      .subscribe(
+        authorityList => {
+          if (authorityList) {
+            this.authorityList = authorityList;
+          }
+        });
   }
 
   updateUser() {
@@ -101,26 +100,20 @@ export class UpdateUserComponent implements OnInit {
 
     if (this.validateUser(this.selectedUser)) {
       if (this.updateMode || this.profileEditMode) {
-        this.authService.update(this.selectedUser)
+        this.userSubscription = this.authService.update(this.selectedUser)
           .subscribe(
           data => {
             // set success message and pass true paramater to persist the message after redirecting to the login page
-            this.alertService.success('User updated successfully', true,5000);
+            this.alertService.success('User updated successfully', true, 5000);
             this.location.back();
-          },
-          error => {
-            this.alertService.error(error,false,5000);
           });
       } else {
-        this.authService.register(this.selectedUser)
+        this.userSubscription = this.authService.register(this.selectedUser)
           .subscribe(
           data => {
             // set success message and pass true paramater to persist the message after redirecting to the login page
-            this.alertService.success('User created successfully', true,5000);
+            this.alertService.success('User created successfully', true, 5000);
             this.location.back();
-          },
-          error => {
-            this.alertService.error(error,false,5000);
           });
       }
     }
@@ -128,15 +121,12 @@ export class UpdateUserComponent implements OnInit {
 
   deleteUser() {
     if (this.selectedUser && this.selectedUser._id && this.selectedUser._id.length > 0) {
-      this.authService.delete(this.selectedUser._id)
+      this.userSubscription = this.authService.delete(this.selectedUser._id)
         .subscribe(
         data => {
           // set success message and pass true paramater to persist the message after redirecting to the login page
-          this.alertService.success('User deleted successfully', true,5000);
+          this.alertService.success('User deleted successfully', true, 5000);
           this.location.back();
-        },
-        error => {
-          this.alertService.error(error,false,5000);
         });
     }
   }

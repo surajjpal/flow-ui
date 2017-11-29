@@ -7,7 +7,7 @@ import { Location } from '@angular/common';
 import { State } from '../../../../models/tasks.model';
 import { GraphObject, DataPoint } from '../../../../models/flow.model';
 
-import { StateService, DataSharingService } from '../../inbox.service';
+import { StateService, DataCachingService } from '../../../../services/inbox.service';
 
 @Component({
   selector: 'api-task-details',
@@ -23,17 +23,17 @@ export class TaskDetailsComponent implements OnInit {
 
   constructor(
     private stateService: StateService,
-    private dataSharingService: DataSharingService,
+    private dataCachingService: DataCachingService,
     private location: Location
   ) { }
 
   ngOnInit(): void {
-    this.graphObject = this.dataSharingService.getGraphObject();
+    this.graphObject = this.dataCachingService.getGraphObject();
     if (!this.graphObject) {
       this.graphObject = new GraphObject();
     }
 
-    this.selectedState = this.dataSharingService.getSelectedState();
+    this.selectedState = this.dataCachingService.getSelectedState();
     if (!this.selectedState) {
       this.selectedState = new State();
     }

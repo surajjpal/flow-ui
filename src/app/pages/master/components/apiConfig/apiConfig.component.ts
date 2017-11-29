@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
-import { ApiConfigService } from '../../master.service';
-import { DataSharingService } from '../../../../shared/shared.service';
+import { ApiConfigService } from '../../../../services/setup.service';
+import { DataSharingService } from '../../../../services/shared.service';
 
 import { ApiConfig } from '../../../../models/setup.model';
 
@@ -12,10 +13,12 @@ import { ApiConfig } from '../../../../models/setup.model';
   styleUrls: ['./apiConfig.scss']
 })
 
-export class ApiConfigComponent implements OnInit {
+export class ApiConfigComponent implements OnInit, OnDestroy {
   apiConfigList: ApiConfig[];
   filterQuery: string;
   selectedApiConfig: ApiConfig;
+
+  private subscription: Subscription;
 
   constructor(
     private router: Router,
@@ -28,23 +31,19 @@ export class ApiConfigComponent implements OnInit {
     this.selectedApiConfig = new ApiConfig();
   }
 
-  ngOnInit() {
-    this.apiConfigService.getAllApi()
-      .then(
-        apiConfigList => {
-          if (apiConfigList) {
-            this.apiConfigList = apiConfigList;
-          }
-        },
-        error => {
-
+  ngOnInit(): void {
+    this.subscription = this.apiConfigService.getAllApi()
+      .subscribe(apiConfigList => {
+        if (apiConfigList) {
+          this.apiConfigList = apiConfigList;
         }
-      )
-      .catch(
-        error => {
+      });
+  }
 
-        }
-      );
+  ngOnDestroy(): void {
+    if (this.subscription && !this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
   }
 
   onSelect(apiConfig: ApiConfig) {
