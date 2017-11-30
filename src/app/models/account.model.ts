@@ -1,5 +1,6 @@
-export class Account {
-  _id: string;
+import { BaseModel } from './base.model';
+
+export class Account extends BaseModel {
   loginId: string;
   companyName: string;
   createdDt: Date;
@@ -10,7 +11,8 @@ export class Account {
   agentName: string[];
 
   constructor() {
-    this._id = null;
+    super();
+  
     this.loginId = '';
     this.companyName = '';
     this.createdDt = new Date();

@@ -1,3 +1,5 @@
+import { BaseModel } from './base.model';
+
 export class RoleRouteMap {
   _id: string;
   roleCd: string;
@@ -12,8 +14,7 @@ export class RoleRouteMap {
   }
 }
 
-export class ApiConfig {
-  _id: string;
+export class ApiConfig extends BaseModel {
   name: string;
   url: string;
   method: string;
@@ -22,7 +23,8 @@ export class ApiConfig {
   responseList: ApiResponse[];
 
   constructor() {
-    this._id = null;
+    super();
+    
     this.name = '';
     this.url = '';
     this.method = '';

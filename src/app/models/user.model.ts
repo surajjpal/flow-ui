@@ -1,3 +1,5 @@
+import { BaseModel } from './base.model';
+
 export class UserGroup {
   userGroupCd: string;
   expression: string;
@@ -12,8 +14,7 @@ export class UserGroup {
   }
 }
 
-export class User {
-  _id: string;
+export class User extends BaseModel {
   username: string;
   password: string;
   email: string;
@@ -25,10 +26,10 @@ export class User {
   credentialsNonExpired: boolean;
   accountNonLocked: boolean;
   accountNonExpired: boolean;
-  companyId: string;
 
   constructor() {
-    this._id = '';
+    super();
+    
     this.username = '';
     this.password = '';
     this.email = '';
@@ -40,6 +41,5 @@ export class User {
     this.credentialsNonExpired = true;
     this.accountNonLocked = true;
     this.accountNonExpired = true;
-    this.companyId = '';
   }
 }

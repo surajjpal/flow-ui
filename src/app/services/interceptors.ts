@@ -22,11 +22,24 @@ export class ErrorInterceptor implements HttpInterceptor {
           if (err instanceof HttpErrorResponse) {
             if (err.error instanceof Error) {
               // A client-side or network error occurred. Handle it accordingly.
-              this.alertService.error(err.error.message);
+              if (err && err.error && err.error.message) {
+                this.alertService.error(err.error.message);
+              }
             } else {
               // The backend returned an unsuccessful response code.
               // The response body may contain clues as to what went wrong,
-              this.alertService.error(`Status Code: ${err.status}. Error: ${err.error.message}`);
+              if (err) {
+                let statusCd = 0;
+                let message = '';
+
+                if (err.status) {
+                  statusCd = err.status;
+                }
+                if (err.error && err.error.message) {
+                  message = err.error.message;
+                }
+                this.alertService.error(`Status Code: ${statusCd}. Error: ${message}`);
+              }
             }
           }
         }

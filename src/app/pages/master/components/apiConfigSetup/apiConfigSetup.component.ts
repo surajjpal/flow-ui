@@ -280,10 +280,7 @@ export class ApiConfigSetupComponent implements OnInit, OnDestroy {
         data => {
           this.alertService.success('API Config updated successfully', true);
           this.router.navigate(['/pages/master/apiConfig'], { relativeTo: this.route });
-        },
-        error => {
-          this.alertService.error(error);
-      });
+        });
   }
 
   createApiConfig() {
@@ -292,10 +289,7 @@ export class ApiConfigSetupComponent implements OnInit, OnDestroy {
       data => {
         this.alertService.success('API Config created successfully', true);
         this.router.navigate(['/pages/master/apiConfig'], { relativeTo: this.route });
-      },
-      error => {
-        this.alertService.error(error);
-    });
+      });
   }
 
   onResponseTypeChange() {

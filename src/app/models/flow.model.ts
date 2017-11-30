@@ -1,3 +1,4 @@
+import { BaseModel } from './base.model';
 import { ApiConfig, ApiKeyExpressionMap } from './setup.model';
 
 export class ConversationSummary {
@@ -96,7 +97,7 @@ export class EventModel {
   }
 }
 
-export class AllocationModel{
+export class AllocationModel {
   allocationGroup: string;
   allocationType: string;
   groups: string[];
@@ -122,7 +123,7 @@ export class StateModel {
   entryActionList: string[];
   apiConfigurationList: string[];
   ruleList: ApiKeyExpressionMap[];
-  allocationModel : AllocationModel;
+  allocationModel: AllocationModel;
 
   constructor() {
     this.stateId = '';
@@ -152,9 +153,7 @@ export class Transition {
   }
 }
 
-export class GraphObject {
-  _id: string;
-  statusCd: string;
+export class GraphObject extends BaseModel {
   machineLabel: string;
   machineType: string;
   version: number;
@@ -166,8 +165,8 @@ export class GraphObject {
   closedStateIdList: string[];
 
   constructor() {
-    this._id = null;
-    this.statusCd = '';
+    super();
+    
     this.machineLabel = '';
     this.machineType = '';
     this.version = 0;

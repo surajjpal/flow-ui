@@ -1,3 +1,5 @@
+import { BaseModel } from './base.model';
+
 export class Chronology {
   id: string;
   calendarType: string;
@@ -17,9 +19,7 @@ export class Time {
   chronology: Chronology;
 }
 
-export class State {
-  _id: string;
-  statusCd: string;
+export class State extends BaseModel {
   machineType: string;
   entityId: string;
   stateCd: string;

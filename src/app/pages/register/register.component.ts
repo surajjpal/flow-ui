@@ -78,7 +78,6 @@ export class RegisterComponent implements OnDestroy {
             this.router.navigate(['/login']);
           },
           error => {
-            this.alertService.error(error);
             this.loading = false;
           });
       }
