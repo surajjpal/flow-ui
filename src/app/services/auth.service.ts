@@ -136,7 +136,7 @@ export class AuthService {
     const subject = new Subject<any>();
 
     if (userId) {
-      const url = `${environment.server + environment.authurl + userId}`;
+      const url = `${environment.server + environment.userurl + userId}`;
 
       this.httpClient.delete<any>(
         url,
@@ -199,7 +199,7 @@ export class AuthService {
   getAllUsers(): Observable<User[]> {
     const subject = new Subject<User[]>();
 
-    const url = `${environment.server + environment.authurl}`;
+    const url = `${environment.server + environment.userurl}`;
 
     this.httpClient.get<User[]>(
       url,

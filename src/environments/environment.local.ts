@@ -19,14 +19,16 @@ export const environment = {
   entryactionurl: 'graph/actions',
   autodashboardurl: 'autodashboard',
   authurl: 'auth/',
-  registerurl: 'auth/createUser',
-  updateuserurl: 'auth/update',
-  authoritiesurl: 'auth/roles',
+  userurl: 'user/',
+  registerurl: 'user/createUser',
+  updateuserurl: 'user/update',
+  authoritiesurl: 'user/roles',
   roleroutemapurl: 'master/roleroutemap',
   rolesurl: 'master/roles',
   routesurl: 'master/routes',
   apiconfigurl: 'api/',
   supportedmethodsurl: 'api/supportedMethods',
+
 
   // Auto
   autoServer: 'http://localhost:8080/flow/auto/',

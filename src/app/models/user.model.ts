@@ -25,6 +25,7 @@ export class User {
   credentialsNonExpired: boolean;
   accountNonLocked: boolean;
   accountNonExpired: boolean;
+  companyId: string;
 
   constructor() {
     this._id = '';
@@ -39,5 +40,6 @@ export class User {
     this.credentialsNonExpired = true;
     this.accountNonLocked = true;
     this.accountNonExpired = true;
+    this.companyId = '';
   }
 }
