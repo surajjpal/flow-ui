@@ -30,9 +30,13 @@ export class AuthService {
     if (user) {
       const url = `${environment.server + environment.authurl}`;
       
+      const body = {};
+      body['username'] = user.username;
+      body['password'] = user.password;
+
       this.httpClient.post<User>(
         url,
-        user,
+        body,
         {
           headers: this.httpHeaders,
           observe: 'response',
