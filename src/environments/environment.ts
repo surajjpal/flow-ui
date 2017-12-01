@@ -31,8 +31,8 @@ export const environment = {
   roleroutemapurl: 'master/roleroutemap',
   rolesurl: 'master/roles',
   routesurl: 'master/routes',
-  apiconfigurl: 'api/',
-  supportedmethodsurl: 'api/supportedMethods',
+  apiconfigurl: 'apiConfig/',
+  supportedmethodsurl: 'apiConfig/supportedMethods',
 
   // auto
   autoServer: 'http://108.168.190.82:8080/flow/auto/',
