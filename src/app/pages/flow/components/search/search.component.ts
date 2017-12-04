@@ -109,7 +109,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   openInDesigner(graph: GraphObject, readOnly?: boolean) {
     this.communicationService.sendGraphObject(graph, (readOnly !== null && readOnly));
-    this.router.navigate(['/pages/flow/design'], { relativeTo: this.route });
+    this.router.navigate(['/pg/flw/fld'], { relativeTo: this.route });
   }
 
   activateFlow(graph: GraphObject, modalName?: string) {

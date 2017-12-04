@@ -12,12 +12,12 @@ const routes: Routes = [
     path: '',
     component: AgentComponent,
     children: [
-      { path: '', redirectTo: 'agentCreation', pathMatch: 'full' },
-      { path: 'agentCreation', component: AgentCreationComponent },
-      { path: 'agents', component: AgentsComponent },
+      { path: '', redirectTo: 'agsr', pathMatch: 'full' },
+      { path: 'ags', component: AgentCreationComponent },
+      { path: 'agsr', component: AgentsComponent },
 
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'conversation', component: ConversationComponent }
+      { path: 'agdb', component: DashboardComponent },
+      { path: 'agcv', component: ConversationComponent }
     ]
   }
 ];

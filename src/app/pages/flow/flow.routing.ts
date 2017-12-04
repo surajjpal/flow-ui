@@ -10,10 +10,10 @@ const routes: Routes = [
     path: '',
     component: FlowComponent,
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'search', component: SearchComponent },
-      { path: 'design', component: DesignComponent }
+      { path: '', redirectTo: 'flsr', pathMatch: 'full' },
+      { path: 'fldb', component: DashboardComponent },
+      { path: 'flsr', component: SearchComponent },
+      { path: 'fld', component: DesignComponent }
     ]
   }
 ];

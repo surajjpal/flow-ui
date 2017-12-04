@@ -299,7 +299,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.subscription = this.graphService.save(this.graphObject)
         .subscribe(graphObject => {
           this.graphObject = graphObject;
-          this.router.navigate(['/pages/flow/search'], { relativeTo: this.route });
+          this.router.navigate(['/pg/flw/flsr'], { relativeTo: this.route });
         });
     }
   }

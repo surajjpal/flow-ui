@@ -59,7 +59,7 @@ export class AgentsComponent implements OnInit, OnDestroy {
 
     this.sharingService.setSharedObject(this.selectedAgent);
 
-    this.router.navigate(['/pages/agent/agentCreation'], { relativeTo: this.route });
+    this.router.navigate(['/pg/agnt/ags'], { relativeTo: this.route });
   }
 
   arrayToString(array: String[]) {

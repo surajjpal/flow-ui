@@ -40,6 +40,6 @@ export class BaPageTop {
   }
 
   profile() {
-    this.router.navigate(['/pages/master/updateUser/profile'], { relativeTo: this.route });
+    this.router.navigate(['/pg/stp/stus/profile'], { relativeTo: this.route });
   }
 }

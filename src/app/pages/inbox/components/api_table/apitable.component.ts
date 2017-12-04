@@ -67,7 +67,7 @@ export class ApiTableComponent implements OnInit, OnDestroy {
     this.subscriptionXML = this.stateService.getXMLforActiveState(selectedData.stateMachineInstanceModelId)
       .subscribe(graphObject => {
         this.dataCachingService.setSharedObject(graphObject, this.selectedState);
-        this.router.navigate(['/pages/inbox/taskDetails'], { relativeTo: this.route });
+        this.router.navigate(['/pg/tsk/tdts'], { relativeTo: this.route });
       });
   }
 

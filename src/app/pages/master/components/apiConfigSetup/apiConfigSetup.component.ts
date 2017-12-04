@@ -279,7 +279,7 @@ export class ApiConfigSetupComponent implements OnInit, OnDestroy {
       .subscribe(
         data => {
           this.alertService.success('API Config updated successfully', true);
-          this.router.navigate(['/pages/master/apiConfig'], { relativeTo: this.route });
+          this.router.navigate(['/pg/stp/sta'], { relativeTo: this.route });
         });
   }
 
@@ -288,7 +288,7 @@ export class ApiConfigSetupComponent implements OnInit, OnDestroy {
     .subscribe(
       data => {
         this.alertService.success('API Config created successfully', true);
-        this.router.navigate(['/pages/master/apiConfig'], { relativeTo: this.route });
+        this.router.navigate(['/pg/stp/sta'], { relativeTo: this.route });
       });
   }
 

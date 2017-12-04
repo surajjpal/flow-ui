@@ -18,16 +18,16 @@ export const routes: Routes = [
     loadChildren: 'app/pages/register/register.module#RegisterModule'
   },
   {
-    path: 'pages',
+    path: 'pg',
     component: PagesComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'inbox/active', pathMatch: 'full' },
-      { path: 'inbox', loadChildren: './inbox/inbox.module#InboxModule' },
-      { path: 'flow', loadChildren: './flow/flow.module#FlowModule' },
-      { path: 'master', loadChildren: './master/master.module#MasterModule' },
-      { path: 'agent', loadChildren: './agent/agent.module#AgentModule' },
-      { path: 'domain', loadChildren: './domain/domain.module#DomainModule' }
+      { path: '', redirectTo: 'tsk/tact', pathMatch: 'full' },
+      { path: 'tsk', loadChildren: './inbox/inbox.module#InboxModule' },
+      { path: 'flw', loadChildren: './flow/flow.module#FlowModule' },
+      { path: 'agnt', loadChildren: './agent/agent.module#AgentModule' },
+      { path: 'dmn', loadChildren: './domain/domain.module#DomainModule' },
+      { path: 'stp', loadChildren: './master/master.module#MasterModule' }
     ]
   }
 ];

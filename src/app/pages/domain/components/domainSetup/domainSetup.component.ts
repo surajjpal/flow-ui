@@ -388,7 +388,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.subscription = this.domainService.saveDomain(this.selectedDomain)
         .subscribe(
           response => {
-            this.router.navigate(['/pages/domain/domains'], { relativeTo: this.route });
+            this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
           }
         );
     }

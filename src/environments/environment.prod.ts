@@ -1,11 +1,12 @@
-
-
 export const environment = {
   production: true,
   name: 'production',
 
+  // Auth
+  authurl: 'http://108.168.190.82:8080/flow/auth/',
+
   // Flow
-  server: 'http://108.168.190.82:8080/flow/',
+  server: 'http://108.168.190.82:8080/flow/console/',
   statebyfolderurl: 'state/page/0,200,', // folder: Group, Personal
   statebystatusurl: 'state/pagebystatus/0,200,', // status: CLOSED, ACTIVE
   updatestatemachineurl: 'statemachine/',
@@ -20,7 +21,6 @@ export const environment = {
   graphbystatusurl: 'graph/findbystatus/',
   entryactionurl: 'graph/actions',
   autodashboardurl: 'dashboard',
-  authurl: 'http://localhost:8080/flow/auth/',
   userurl: 'user/',
   registerurl: 'user/createUser',
   updateuserurl: 'user/update',

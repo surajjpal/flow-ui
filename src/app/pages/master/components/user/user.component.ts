@@ -51,11 +51,11 @@ export class UserComponent implements OnInit, OnDestroy {
       this.selectedUser = user;
 
       this.sharingService.setSharedObject(this.selectedUser);
-      this.router.navigate(['/pages/master/updateUser'], { relativeTo: this.route });
+      this.router.navigate(['/pg/stp/stus'], { relativeTo: this.route });
     }
   }
 
   createUser() {
-    this.router.navigate(['/pages/master/updateUser'], { relativeTo: this.route });
+    this.router.navigate(['/pg/stp/stus'], { relativeTo: this.route });
   }
 }

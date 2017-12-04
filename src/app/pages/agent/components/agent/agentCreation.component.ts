@@ -378,7 +378,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
 
   goToAgentsListing() {
     if (this.isSuccess) {
-      this.router.navigate(['/pages/agent/agents'], { relativeTo: this.route });
+      this.router.navigate(['/pg/agnt/agsr'], { relativeTo: this.route });
     }
   }
 }
