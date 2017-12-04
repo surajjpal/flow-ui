@@ -3,7 +3,8 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angul
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
-import { Dashboard, GraphObject } from '../models/flow.model';
+import { GraphObject } from '../models/flow.model';
+import { Dashboard } from '../models/dashboard.model';
 import { ApiConfig } from '../models/setup.model';
 
 import { environment } from '../../environments/environment';

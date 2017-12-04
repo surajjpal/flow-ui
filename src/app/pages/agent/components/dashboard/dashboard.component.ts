@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 
 import { AgentDashboardService } from '../../../../services/agent.service';
-import { ConversationSummary, Dashboard } from '../../../../models/agentDashboard.model';
+import { ConversationSummary, Dashboard } from '../../../../models/dashboard.model';
 
 declare let d3: any;
 declare let moment: any;

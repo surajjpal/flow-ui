@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Rx';
 
 import { Domain } from '../models/domain.model';
 import { Agent } from '../models/agent.model';
-import { Dashboard } from '../models/agentDashboard.model';
+import { Dashboard } from '../models/dashboard.model';
 import { Account } from '../models/account.model';
 import { Episode, ChatMessage } from '../models/conversation.model';
 import { environment } from '../../environments/environment';
