@@ -5,6 +5,9 @@ export const environment = {
   // Auth
   authurl: 'http://localhost:8080/flow/auth/',
 
+  // Services
+  saveaccounturl: 'http://localhost:8080/flow/services/saveaccount',
+
   // Flow
   server: 'http://localhost:8080/flow/console/',
   statebyfolderurl: 'state/page/0,200,', // folder: Group, Personal
@@ -59,8 +62,5 @@ export const environment = {
   fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
   uploadintentexcelurl: 'uploadintents',
   uploadentityexcelurl: 'uploadentity',
-  modelkeyslookupurl: 'load/modelkeys',
-
-  // Services - gets appended to server and not to autoServer
-  saveaccounturl: '/services/saveaccount'
+  modelkeyslookupurl: 'load/modelkeys'
 };

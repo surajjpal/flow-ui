@@ -430,7 +430,7 @@ export class AccountService {
   saveAccount(account: Account): Observable<any> {
     const subject = new Subject<any>();
 
-    const url = `${environment.server + environment.saveaccounturl}`;
+    const url = `${environment.saveaccounturl}`;
 
     this.httpClient.post<any>(
       url,
