@@ -427,12 +427,12 @@ export class AccountService {
   
   constructor(private router: Router, private httpClient: HttpClient) { }
 
-  saveAccount(account: Account): Observable<any> {
-    const subject = new Subject<any>();
+  saveAccount(account: Account): Observable<Account> {
+    const subject = new Subject<Account>();
 
     const url = `${environment.saveaccounturl}`;
 
-    this.httpClient.post<any>(
+    this.httpClient.post<Account>(
       url,
       account,
       {
@@ -443,7 +443,7 @@ export class AccountService {
       }
     )
       .subscribe(
-      (response: HttpResponse<any>) => {
+      (response: HttpResponse<Account>) => {
         if (response.body) {
           subject.next(response.body);
         }

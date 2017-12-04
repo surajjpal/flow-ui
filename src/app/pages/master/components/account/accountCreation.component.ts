@@ -2,7 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Account } from '../../../../models/account.model';
+import { User } from '../../../../models/user.model';
 import { AccountService } from '../../../../services/setup.service';
+import { AuthService } from '../../../../services/auth.service';
+import { AlertService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'api-agent-account',
@@ -15,7 +18,9 @@ export class AccountCreationComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
 
   constructor(
-    private accountService: AccountService
+    private accountService: AccountService,
+    private authService: AuthService,
+    private alertService: AlertService
   ) {
     this.account = new Account();
   }
@@ -30,16 +35,30 @@ export class AccountCreationComponent implements OnInit, OnDestroy {
     }
   }
 
-  resetFields() {
-    this.account = new Account();
-  }
-
   createAccount() {
     this.subscription = this.accountService.saveAccount(this.account)
       .subscribe(response => {
-        if (response) {
+        if (response && response._id) {
+          this.createUserForCompany(response);
+        }
+      });
+  }
+
+  createUserForCompany(account: Account) {
+    const map = {};
+    map['companyId'] = account._id;
+    map['email'] = account.loginId;
+
+    this.subscription = this.authService.createCompanyAdmin(map)
+      .subscribe(response => {
+        if (response && response._id) {
+          this.alertService.success('Company account created successfully');
           this.resetFields();
         }
       });
+  }
+
+  resetFields() {
+    this.account = new Account();
   }
 }

@@ -34,7 +34,7 @@ export class User extends BaseModel {
     this.password = '';
     this.email = '';
     this.name = '';
-    this.enabled = false;
+    this.enabled = true;
     this.authorities = [];
     this.groups = [];
     this.groupAsStringList = [];

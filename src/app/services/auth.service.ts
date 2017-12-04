@@ -100,6 +100,42 @@ export class AuthService {
     return subject.asObservable();
   }
 
+  createCompanyAdmin(map: any): Observable<User> {
+    const subject = new Subject<User>();
+
+    if (map) {
+      const url = `${environment.server + environment.createcompanyadminurl}`;
+
+      this.httpClient.post<User>(
+        url,
+        map,
+        {
+          headers: this.httpHeaders,
+          observe: 'response',
+          reportProgress: true,
+          withCredentials: true
+        }
+      )
+        .subscribe(
+        (response: HttpResponse<User>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
+
+          subject.error(err);
+        }
+        );
+    } else {
+      subject.error('Map object is null or empty');
+    }
+
+    return subject.asObservable();
+  }
+
   update(user: User): Observable<User> {
     const subject = new Subject<User>();
 
