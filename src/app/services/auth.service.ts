@@ -28,7 +28,7 @@ export class AuthService {
     const subject = new Subject<User>();
 
     if (user) {
-      const url = `${environment.server + environment.authurl}`;
+      const url = `${environment.authurl}`;
       
       const body = {};
       body['username'] = user.username;

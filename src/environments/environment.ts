@@ -23,7 +23,7 @@ export const environment = {
   graphbystatusurl: 'graph/findbystatus/',
   entryactionurl: 'graph/actions',
   autodashboardurl: 'dashboard',
-  authurl: 'auth/',
+  authurl: 'http://localhost:8080/flow/auth/',
   userurl: 'user/',
   registerurl: 'user/createUser',
   updateuserurl: 'user/update',
