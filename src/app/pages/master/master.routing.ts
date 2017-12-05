@@ -13,13 +13,13 @@ const routes: Routes = [
     path: '',
     component: MasterComponent,
     children: [
-      { path: '', redirectTo: 'user', pathMatch: 'full' },
-      { path: 'accountCreation', component: AccountCreationComponent },
-      { path: 'user', component: UserComponent },
-      { path: 'updateUser', component: UpdateUserComponent },
-      { path: 'route', component: RoutelinkComponent },
-      { path: 'apiConfig', component: ApiConfigComponent },
-      { path: 'apiSetup', component: ApiConfigSetupComponent }
+      { path: '', redirectTo: 'stu', pathMatch: 'full' },
+      { path: 'stac', component: AccountCreationComponent },
+      { path: 'stu', component: UserComponent },
+      { path: 'stus', component: UpdateUserComponent },
+      { path: 'stm', component: RoutelinkComponent },
+      { path: 'sta', component: ApiConfigComponent },
+      { path: 'stas', component: ApiConfigSetupComponent }
     ]
   }
 ];

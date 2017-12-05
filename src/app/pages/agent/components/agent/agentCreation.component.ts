@@ -1,22 +1,24 @@
 declare var showModal: any;
 
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { Agent, Plugin, Classifier, UIComponent } from '../../../../models/agent.model';
 import { Domain, Goal } from '../../../../models/domain.model';
 import { GraphObject } from '../../../../models/flow.model';
 
-import { AgentService } from '../../agent.services';
-import { GraphService } from '../../../flow/flow.service';
-import { DataSharingService } from '../../../../shared/shared.service';
+import { AgentService } from '../../../../services/agent.service';
+import { DomainService } from '../../../../services/domain.service';
+import { GraphService } from '../../../../services/flow.service';
+import { DataSharingService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'api-agent-agent',
   templateUrl: './agentCreation.component.html',
   styleUrls: ['./agent.scss']
 })
-export class AgentCreationComponent implements OnInit {
+export class AgentCreationComponent implements OnInit, OnDestroy {
 
   agentCreateMode: boolean;
   modalHeader: string;
@@ -41,10 +43,15 @@ export class AgentCreationComponent implements OnInit {
   isSuccess: boolean;
   errorMessage: string;
 
+  private subscriptionDomain: Subscription;
+  private subscriptionGraph: Subscription;
+  private subscription: Subscription;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private agentService: AgentService,
+    private domainService: DomainService,
     private graphService: GraphService,
     private sharingService: DataSharingService
   ) {
@@ -135,10 +142,22 @@ export class AgentCreationComponent implements OnInit {
       this.agentCreateMode = true;
     }
   }
+  
+  ngOnDestroy(): void {
+    if (this.subscription && !this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
+    if (this.subscriptionDomain && !this.subscriptionDomain.closed) {
+      this.subscriptionDomain.unsubscribe();
+    }
+    if (this.subscriptionGraph && !this.subscriptionGraph.closed) {
+      this.subscriptionGraph.unsubscribe();
+    }
+  }
 
   fetchLookups() {
-    this.agentService.domainLookup()
-      .then(
+    this.subscriptionDomain = this.domainService.domainLookup()
+      .subscribe(
       domainList => {
         if (domainList) {
           this.domainSource = domainList;
@@ -159,14 +178,12 @@ export class AgentCreationComponent implements OnInit {
       }
       );
 
-    this.graphService.fetch()
-      .then(
-      flowSource => {
+    this.subscriptionGraph = this.graphService.fetch('ACTIVE')
+      .subscribe(flowSource => {
         if (flowSource) {
           this.flowSource = flowSource;
         }
-      }
-      );
+      });
   }
 
   resetAgentFields() {
@@ -202,46 +219,30 @@ export class AgentCreationComponent implements OnInit {
         this.selectedAgent.agentPlugins.push(this.facebookPlugin);
       }
 
-      this.agentService.saveAgent(this.selectedAgent)
-        .then(
-        response => {
-          if (response) {
-            if (response.status >= 200 && response.status < 300) {
-              this.isSuccess = true;
+      this.subscription = this.agentService.saveAgent(this.selectedAgent)
+        .subscribe(
+          createdAgent => {
+            this.isSuccess = true;
 
-              if (response._body) {
-                const agentString: string = response._body;
+            if (createdAgent) {
+              if (createdAgent.agentPlugins && createdAgent.agentPlugins.length > 0) {
+                const facebookPlugin: Plugin = createdAgent.agentPlugins[0];
 
-                if (agentString && agentString.length > 0) {
-                  const createdAgent: Agent = JSON.parse(agentString);
-
-                  if (createdAgent) {
-                    if (createdAgent.agentPlugins && createdAgent.agentPlugins.length > 0) {
-                      const facebookPlugin: Plugin = createdAgent.agentPlugins[0];
-
-                      if (facebookPlugin && facebookPlugin.webhook && facebookPlugin.webhook.length > 0) {
-                        this.facebookIntegrated = true;
-                        this.webhook = facebookPlugin.webhook;
-                        new showModal('successModal');
-                        return;
-                      }
-                    }
-
-                    this.facebookIntegrated = false;
-                    this.webhook = '';
-                    new showModal('successModal');
-                  }
+                if (facebookPlugin && facebookPlugin.webhook && facebookPlugin.webhook.length > 0) {
+                  this.facebookIntegrated = true;
+                  this.webhook = facebookPlugin.webhook;
+                  new showModal('successModal');
+                  return;
                 }
               }
-            } else {
-              this.isSuccess = false;
 
-              if (response._body) {
-                this.errorMessage = response._body;
-              }
+              this.facebookIntegrated = false;
+              this.webhook = '';
+              new showModal('successModal');
             }
+          }, error => {
+            this.isSuccess = false;
           }
-        }
         );
     }
   }
@@ -377,7 +378,7 @@ export class AgentCreationComponent implements OnInit {
 
   goToAgentsListing() {
     if (this.isSuccess) {
-      this.router.navigate(['/pages/agent/agents'], { relativeTo: this.route });
+      this.router.navigate(['/pg/agnt/agsr'], { relativeTo: this.route });
     }
   }
 }

@@ -24,9 +24,6 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { DateRangePickerComponent } from './components/dashboard/daterangepicker/daterangepicker.component';
 
-import { AgentService, DashboardService, ConversationService } from './agent.services';
-import { GraphService } from '../flow/flow.service';
-
 import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
@@ -49,12 +46,6 @@ import { SharedModule } from '../../shared/shared.module';
     DashboardComponent,
     ConversationComponent,
     DateRangePickerComponent
-  ],
-  providers: [
-    AgentService,
-    GraphService,
-    DashboardService,
-    ConversationService
   ]
 })
 export class AgentModule { }

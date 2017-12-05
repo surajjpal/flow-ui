@@ -7,7 +7,6 @@ import { NgaModule } from '../../theme/nga.module';
 
 import { routing } from './inbox.routing';
 import { InboxComponent } from './inbox.component';
-import { StateService, DataSharingService } from './inbox.service';
 
 import { ActiveComponent } from './components/active/active.component';
 import { ArchivedComponent } from './components/archived/archived.component';
@@ -31,10 +30,6 @@ import { SharedModule } from '../../shared/shared.module';
     ActiveComponent,
     ArchivedComponent,
     TaskDetailsComponent
-  ],
-  providers: [
-    StateService,
-    DataSharingService
   ]
 })
 export class InboxModule { }

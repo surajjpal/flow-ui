@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 import { State } from '../../../../models/tasks.model';
-import { StateService } from '../../inbox.service';
+import { StateService } from '../../../../services/inbox.service';
 
 @Component({
   selector: 'api-inbox-archived',
@@ -9,9 +10,11 @@ import { StateService } from '../../inbox.service';
   styleUrls: ['./archived.scss']
 })
 
-export class ArchivedComponent implements OnInit {
+export class ArchivedComponent implements OnInit, OnDestroy {
 
   private closedStates: State[];
+
+  private subscription: Subscription;
 
   constructor(private stateService: StateService) {
     this.closedStates = [];
@@ -21,20 +24,22 @@ export class ArchivedComponent implements OnInit {
     this.fetchData();
   }
 
+  ngOnDestroy(): void {
+    if (this.subscription && !this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
+  }
+
   fetchData(): void {
-    try {
-      this.stateService.getStatesByStatus('CLOSED')
-      .then(states => {
+    this.subscription = this.stateService.getStatesByStatus('CLOSED')
+      .subscribe(states => {
         this.closedStates = states;
       });
-    } catch (e) {
-      alert(e.message);
-    }
   }
 
   onSelect(selectedData: State): void {
     if (selectedData) {
-      
+
     }
   }
 }

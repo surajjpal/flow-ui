@@ -1,70 +1,116 @@
 <api-daterangepicker (selectedRange)="fetchFlowStats($event)"></api-daterangepicker>
 
 <div class="row tile_count">
-    <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-user"></i> Total chats</span>
-        <div class="count">{{conversationSummary.episodes_count}}</div>
-        <span class="count_bottom"><i class="green">{{conversationSummary.episode_percentage_change}}% </i> From last Week</span>
+    <div *ngIf="workflowSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-tasks"></i> Total active states</span>
+        <div class="count">{{workflowSummary.no_of_active_states}}</div>
+        <!-- <span class="count_bottom"><i class="green">{{conversationSummary.episode_percentage_change}}% </i> From last Week</span> -->
     </div>
-    <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-clock-o"></i> Average Time</span>
-        <div class="count">{{conversationSummary.avg_time}}</div>
-        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>{{conversationSummary.avg_time_percentage_change}}% </i> From last Week</span>
+    <div *ngIf="workflowSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-tasks"></i> Total closed states</span>
+        <div class="count">{{workflowSummary.no_of_closed_states}}</div>
     </div>
-    <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-user"></i> Total Users</span>
-        <div class="count green">{{conversationSummary.conversation_count}}</div>
-        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>{{conversationSummary.user_percentage_change}}% </i> From last Week</span>
+    <div *ngIf="workflowSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-tasks"></i> Total active process</span>
+        <div class="count">{{workflowSummary.no_of_active_business_process}}</div>
     </div>
-    <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-user"></i> Goals Met</span>
-        <div class="count">{{conversationSummary.goals_met_count}}</div>
-        <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>{{conversationSummary.goal_met_percentage_change}}% </i> From last Week</span>
+    <div *ngIf="workflowSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-tasks"></i> Total closed process</span>
+        <div class="count">{{workflowSummary.no_of_closed_business_process}}</div>
     </div>
-   <!--  <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-user"></i> Goal Efficiency</span>
-        <div class="count">80%</div>
-        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>+5 </i> From last Week</span>
+    <div *ngIf="workflowSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-users"></i> Resource allocated efficiency</span>
+        <div class="count">{{workflowSummary.res_allocated_efficiency}}</div>
     </div>
-    <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-user"></i> Predicted Efficiency</span>
-        <div class="count">84%</div>
-        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>+4% </i> For next Week</span>
-    </div> -->
+    <div *ngIf="workflowSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-clock-o"></i> State average time </span>
+        <div class="count">{{workflowSummary.avg_time_state}}</div>
+    </div>
+    
 </div>
 
 <div class="row">
-    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Episode Timeline">
-        <nvd3 [options]="episodeCountOptions" [data]="episodeCountData"></nvd3>
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Sates in each states">
+        <nvd3 [options]="flowTimelineOptions" [data]="flowTimelineData"></nvd3>
     </ba-card>
 </div>
 
 <div class="row">
-    <ba-card class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" cardTitle="Intent Count">
-        <nvd3 [options]="intentCountOptions" [data]="intentCountData"></nvd3>
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Range of transaction in each states">
+        <nvd3 [options]="rangeOfTransactionInStatesOptions" [data]="rangeOfTransactionInStatesData"></nvd3>
     </ba-card>
+</div>
+    
 
-    <ba-card class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" cardTitle="Entity Count">
-        <nvd3 [options]="entityCountOptions" [data]="entityCountData"></nvd3>
-    </ba-card>
-
-    <ba-card class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" cardTitle="Sentiment Count">
-        <nvd3 [options]="sentimentCountOptions" [data]="sentimentCountData"></nvd3>
+<div class="row">
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Group resource allocation in each states">
+        <nvd3 [options]="groupResourceAllocationInStatesOptions" [data]="groupResourceAllocationInStatesData"></nvd3>
     </ba-card>
 </div>
 
 <div class="row">
-    <ba-card class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" cardTitle="Goal Count">
-        <nvd3 [options]="goalsCountOptions" [data]="goalsCountData"></nvd3>
-    </ba-card>
-
-    <ba-card class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" cardTitle="Goal Efficiency">
-        <nvd3 [options]="goalsEfficiencyOptions" [data]="goalsEfficiencyData"></nvd3>
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Transaction value in each states">
+        <nvd3 [options]="transactionValueInStatesOptions" [data]="transactionValueInStatesData"></nvd3>
     </ba-card>
 </div>
 
 <div class="row">
-    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Messages in Episodes">
-        <nvd3 [options]="messagesInEpisodeOptions" [data]="messagesInEpisodeData"></nvd3>
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Average time in states">
+        <nvd3 [options]="avgTimeInStatesOptions" [data]="avgTimeInStatesData"></nvd3>
+    </ba-card>
+</div>
+
+
+<div class="row">
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="state consume max resources">
+        <div class="row tile_count">
+            <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> State</span>
+                <div class="count">{{statesConsumingMaxResTimeTransaction.stateConsumeMaxRes}}</div>
+                <!-- <span class="count_bottom"><i class="green">{{conversationSummary.episode_percentage_change}}% </i> From last Week</span> -->
+            </div>
+            <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> resources</span>
+                <div class="count">{{statesConsumingMaxResTimeTransaction.resources}}</div>
+            </div>
+            <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> resource count</span>
+                <div class="count">{{statesConsumingMaxResTimeTransaction.resourceCount}}</div>
+            </div>
+        </div>
+    </ba-card>
+</div>
+
+<div class="row">
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="state consume max time">
+        <div class="row tile_count">
+            <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-6 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> State consume max time</span>
+                <div class="count">{{statesConsumingMaxResTimeTransaction.stateConsumeMaxtime}}</div>
+            </div>
+            <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-6 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> Average time (minutes)</span>
+                <div class="count">{{statesConsumingMaxResTimeTransaction.averageTime}}</div>
+            </div>
+        </div>     
+    </ba-card>
+</div>
+
+<div class="row">
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="state consume max time">
+        <div class="row tile_count">
+            <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> State consume max transaction</span>
+                <div class="count">{{statesConsumingMaxResTimeTransaction.stateConsumeMaxTransaction}}</div>
+            </div>
+            <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> Trnsaction values</span>
+                <div class="count">{{statesConsumingMaxResTimeTransaction.transactionValues}}</div>
+            </div>
+            <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i> Total value</span>
+                <div class="count">{{statesConsumingMaxResTimeTransaction.totalTransactionValue}}</div>
+            </div>
+        </div>
     </ba-card>
 </div>

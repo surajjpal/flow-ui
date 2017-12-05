@@ -1,58 +1,5 @@
+import { BaseModel } from './base.model';
 import { ApiConfig, ApiKeyExpressionMap } from './setup.model';
-
-export class ConversationSummary {
-  goals_met_count: number;
-  user_messages_count: number;
-  conversation_count: number;
-  episodes_count: number;
-  auto_messages_count: number;
-  goals_count: number;
-  avg_time: number;
-  episode_percentage_change: number;
-  user_percentage_change: number;
-  avg_time_percentage_change: number;
-  goals_count_percentage_change: number
-  auto_messages_percentage_change: number;
-  user_messages_percentage_change: number;
-  goal_met_percentage_change: number;
-
-  constructor() {
-    this.goals_met_count = 0;
-    this.user_messages_count = 0;
-    this.conversation_count = 0;
-    this.episodes_count = 0;
-    this.auto_messages_count = 0;
-    this.goals_count = 0;
-    this.avg_time = 0;
-    this.episode_percentage_change = 0;
-    this.user_percentage_change = 0;
-    this.avg_time_percentage_change = 0;
-    this.goals_count_percentage_change = 0;
-    this.auto_messages_percentage_change = 0;
-    this.user_messages_percentage_change = 0;
-    this.goal_met_percentage_change = 0;
-  }
-}
-
-export class NVD3Chart {
-  key: string;
-  values: [string, any][];
-
-  constructor() {
-    this.key = '';
-    this.values = [];
-  }
-}
-
-export class Dashboard {
-  conversationSummary: ConversationSummary;
-  nvd3ChartInputList: NVD3Chart[];
-
-  constructor() {
-    this.conversationSummary = new ConversationSummary();
-    this.nvd3ChartInputList = [];
-  }
-}
 
 export class DataPoint {
   dataPointName: string;
@@ -96,7 +43,7 @@ export class EventModel {
   }
 }
 
-export class AllocationModel{
+export class AllocationModel {
   allocationGroup: string;
   allocationType: string;
   groups: string[];
@@ -138,7 +85,7 @@ export class StateModel {
   entryActionList: string[];
   apiConfigurationList: string[];
   ruleList: ApiKeyExpressionMap[];
-  allocationModel : AllocationModel;
+  allocationModel: AllocationModel;
   costModel: CostModel;
 
   constructor() {
@@ -170,9 +117,7 @@ export class Transition {
   }
 }
 
-export class GraphObject {
-  _id: string;
-  statusCd: string;
+export class GraphObject extends BaseModel {
   machineLabel: string;
   machineType: string;
   version: number;
@@ -184,8 +129,8 @@ export class GraphObject {
   closedStateIdList: string[];
 
   constructor() {
-    this._id = null;
-    this.statusCd = '';
+    super();
+    
     this.machineLabel = '';
     this.machineType = '';
     this.version = 0;

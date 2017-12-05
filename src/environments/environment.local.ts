@@ -1,9 +1,17 @@
 export const environment = {
   production: false,
   name: 'local',
-  server: 'http://localhost:8080/',
-  statebyfolderurl: '/state/page/0,200,', // folder: Group, Personal
-  statebystatusurl: '/state/pagebystatus/0,200,', // status: CLOSED, ACTIVE
+
+  // Auth
+  authurl: 'http://localhost:8080/flow/auth/',
+
+  // Services
+  saveaccounturl: 'http://localhost:8080/flow/services/saveaccount',
+
+  // Flow
+  server: 'http://localhost:8080/flow/console/',
+  statebyfolderurl: 'state/page/0,200,', // folder: Group, Personal
+  statebystatusurl: 'state/pagebystatus/0,200,', // status: CLOSED, ACTIVE
   updatestatemachineurl: 'statemachine/',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
@@ -11,23 +19,25 @@ export const environment = {
   parentmenuurl: 'menu/fetchparent/',
   messageurl: 'data/message/byuser/Admin',
   stateflowimageurl: 'statemachine/stateflow/',
-  autosummary: 'autodashboard/CONVERSATION_SUMMARY',
+  autosummary: 'dashboard/CONVERSATION_SUMMARY',
   graphurl: 'graph/',
   graphbystatusurl: 'graph/findbystatus/',
   entryactionurl: 'graph/actions',
-  autodashboardurl: 'autodashboard',
-  authurl: 'auth/',
-  registerurl: 'auth/createUser',
-  updateuserurl: 'auth/update',
-  authoritiesurl: 'auth/roles',
+  autodashboardurl: 'dashboard',
+  userurl: 'user/',
+  registerurl: 'user/createUser',
+  createcompanyadminurl: 'user/createcompanyadmin',
+  updateuserurl: 'user/update',
+  authoritiesurl: 'user/roles',
   roleroutemapurl: 'master/roleroutemap',
   rolesurl: 'master/roles',
   routesurl: 'master/routes',
-  apiconfigurl: 'api/',
-  supportedmethodsurl: 'api/supportedMethods',
+  apiconfigurl: 'apiConfig/',
+  supportedmethodsurl: 'apiConfig/supportedMethods',
 
-  // auto
-  autoServer: 'https://cors-anywhere.herokuapp.com/http://169.54.3.12/',  
+
+  // Auto
+  autoServer: 'http://localhost:8080/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   messagelisturl: 'load/messages?query=',
   trainingdataurl: 'load/trainingdata',
@@ -46,13 +56,10 @@ export const environment = {
   updateentityurl: 'update/entityclassifier',
   deleteentityurl: 'delete/entityclassifier?query=',
 
-  // Wheels EMI
-  wheelsemiserver: 'http://169.54.3.12/',
   savedomainurl: 'domain',
   fetchdomainurl: 'fetchdomain?query=',
   saveagenturl: 'agent',
   fetchagenturl: 'fetchagent?query=',
-  saveaccounturl: 'saveaccount',
   fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
   uploadintentexcelurl: 'uploadintents',
   uploadentityexcelurl: 'uploadentity',

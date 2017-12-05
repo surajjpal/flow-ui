@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
-import { UserService } from '../../master.service';
-import { DataSharingService } from '../../../../shared/shared.service';
+import { DataSharingService } from '../../../../services/shared.service';
+import { AuthService } from '../../../../services/auth.service';
 
 import { User } from '../../../../models/user.model';
 
@@ -12,15 +13,17 @@ import { User } from '../../../../models/user.model';
   styleUrls: ['./user.scss']
 })
 
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, OnDestroy {
   userList: User[];
   filterQuery: string;
   selectedUser: User;
 
+  private subscription: Subscription;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private userService: UserService,
+    private authService: AuthService,
     private sharingService: DataSharingService
   ) {
     this.userList = [];
@@ -28,23 +31,19 @@ export class UserComponent implements OnInit {
     this.selectedUser = new User();
   }
 
-  ngOnInit() {
-    this.userService.getAllUsers()
-      .then(
-        userList => {
-          if (userList) {
-            this.userList = userList;
-          }
-        },
-        error => {
-
+  ngOnInit(): void {
+    this.subscription = this.authService.getAllUsers()
+      .subscribe(userList => {
+        if (userList) {
+          this.userList = userList;
         }
-      )
-      .catch(
-        error => {
+      });
+  }
 
-        }
-      );
+  ngOnDestroy(): void {
+    if (this.subscription && !this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
   }
 
   onSelect(user: User) {
@@ -52,11 +51,11 @@ export class UserComponent implements OnInit {
       this.selectedUser = user;
 
       this.sharingService.setSharedObject(this.selectedUser);
-      this.router.navigate(['/pages/master/updateUser'], { relativeTo: this.route });
+      this.router.navigate(['/pg/stp/stus'], { relativeTo: this.route });
     }
   }
 
   createUser() {
-    this.router.navigate(['/pages/master/updateUser'], { relativeTo: this.route });
+    this.router.navigate(['/pg/stp/stus'], { relativeTo: this.route });
   }
 }

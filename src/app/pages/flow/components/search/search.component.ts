@@ -1,15 +1,15 @@
 declare var closeModal: any;
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params, NavigationExtras } from '@angular/router';
-import 'rxjs/add/operator/switchMap';
+import { Subscription } from 'rxjs/Subscription';
+// import 'rxjs/add/operator/switchMap';
 
 // Model Imports
 import { GraphObject } from '../../../../models/flow.model';
 
 // Service Imports
-import { GraphService, CommunicationService } from '../../flow.service';
-
+import { GraphService, CommunicationService } from '../../../../services/flow.service';
 
 @Component({
   selector: 'api-flow-search',
@@ -17,7 +17,7 @@ import { GraphService, CommunicationService } from '../../flow.service';
   styleUrls: ['./search.scss']
 })
 
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
 
   private readonly ACTIVE = 'ACTIVE';
   private readonly CLOSED = 'CLOSED';
@@ -40,6 +40,10 @@ export class SearchComponent implements OnInit {
   dictionaryGraphObjectList: GraphObject[];
   selectedGraphObject: GraphObject = new GraphObject();
 
+  private subscription: Subscription;
+  private subscriptionActive: Subscription;
+  private subscriptionClosed: Subscription;
+  private subscriptionTemplate: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -54,13 +58,28 @@ export class SearchComponent implements OnInit {
     this.fetchGraphs();
   }
 
+  ngOnDestroy() {
+    if (this.subscription && !this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
+    if (this.subscriptionActive && !this.subscriptionActive.closed) {
+      this.subscriptionActive.unsubscribe();
+    }
+    if (this.subscriptionClosed && !this.subscriptionClosed.closed) {
+      this.subscriptionClosed.unsubscribe();
+    }
+    if (this.subscriptionTemplate && !this.subscriptionTemplate.closed) {
+      this.subscriptionTemplate.unsubscribe();
+    }
+  }
+
   fetchGraphs(): void {
-    this.graphService.fetch('ACTIVE')
-      .then(graphObjects => this.activeGraphObjectList = graphObjects);
-      this.graphService.fetch('CLOSED')
-      .then(graphObjects => this.closedGraphObjectList = graphObjects);
-      this.graphService.fetch('TEMPLATE')
-      .then(graphObjects => this.dictionaryGraphObjectList = graphObjects);
+    this.subscriptionActive = this.graphService.fetch('ACTIVE')
+      .subscribe(graphObjects => this.activeGraphObjectList = graphObjects);
+    this.subscriptionActive = this.graphService.fetch('CLOSED')
+      .subscribe(graphObjects => this.closedGraphObjectList = graphObjects);
+    this.subscriptionActive = this.graphService.fetch('TEMPLATE')
+      .subscribe(graphObjects => this.dictionaryGraphObjectList = graphObjects);
   }
 
   toInt(num: string) {
@@ -90,33 +109,23 @@ export class SearchComponent implements OnInit {
 
   openInDesigner(graph: GraphObject, readOnly?: boolean) {
     this.communicationService.sendGraphObject(graph, (readOnly !== null && readOnly));
-    this.router.navigate(['/pages/flow/design'], { relativeTo: this.route });
+    this.router.navigate(['/pg/flw/fld'], { relativeTo: this.route });
   }
 
   activateFlow(graph: GraphObject, modalName?: string) {
-    this.graphService.activate(graph._id)
-    .then(
-      response => {
-        if (modalName && modalName.length > 0) {
-          new closeModal(modalName);
-        }
-        this.fetchGraphs();
-      },
-      error => {
-
+    this.subscription = this.graphService.activate(graph._id)
+    .subscribe(response => {
+      if (modalName && modalName.length > 0) {
+        new closeModal(modalName);
       }
-    );
+      this.fetchGraphs();
+    });
   }
 
   deactivateFlow(graph: GraphObject) {
-    this.graphService.deactivate(graph._id)
-    .then(
-      response => {
-        this.fetchGraphs();
-      },
-      error => {
-
-      }
-    );
+    this.subscription = this.graphService.deactivate(graph._id)
+    .subscribe(response => {
+      this.fetchGraphs();
+    });
   }
 }

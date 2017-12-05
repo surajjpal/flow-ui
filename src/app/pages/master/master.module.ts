@@ -16,8 +16,6 @@ import { RoutelinkComponent } from './components/routelink/routelink.component';
 import { ApiConfigComponent } from './components/apiConfig/apiConfig.component';
 import { ApiConfigSetupComponent } from './components/apiConfigSetup/apiConfigSetup.component';
 
-import { UserService, RoutesService, ApiConfigService, AccountService } from './master.service';
-
 import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
@@ -38,12 +36,6 @@ import { SharedModule } from '../../shared/shared.module';
     RoutelinkComponent,
     ApiConfigComponent,
     ApiConfigSetupComponent
-  ],
-  providers: [
-    UserService,
-    RoutesService,
-    ApiConfigService,
-    AccountService
   ]
 })
 export class MasterModule { }

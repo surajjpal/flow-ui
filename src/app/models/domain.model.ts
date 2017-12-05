@@ -48,6 +48,7 @@ export class GoalStep {
   key: string;
   parameters: string[];
   authRequired: boolean;
+  mandatory: boolean;
   ignoreIntent: boolean;
 
   constructor() {
@@ -60,6 +61,7 @@ export class GoalStep {
     this.key = '';
     this.parameters = [];
     this.authRequired = false;
+    this.mandatory = false;
     this.ignoreIntent = false;
   }
 }

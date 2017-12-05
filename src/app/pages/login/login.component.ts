@@ -1,16 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { AuthService, AlertService } from '../../shared/shared.service';
+import { AlertService, UniversalUser } from '../../services/shared.service';
+import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user.model';
+
+import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'api-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
   email: AbstractControl;
@@ -21,12 +27,16 @@ export class LoginComponent implements OnInit {
   loading = false;
   returnUrl: string;
 
+  private userSubscription: Subscription;
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private httpClient: HttpClient,
+    private universalUser: UniversalUser
   ) {
     this.form = fb.group({
       'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
@@ -40,9 +50,6 @@ export class LoginComponent implements OnInit {
   onSubmit(values: Object): void {
     this.submitted = true;
     if (this.form.valid) {
-      // your code goes here
-      // console.log(values);
-
       if (values.hasOwnProperty('email') && values.hasOwnProperty('password')) {
         this.user.username = values['email'];
         this.user.password = values['password'];
@@ -56,16 +63,32 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
+  ngOnDestroy() {
+    if (this.userSubscription && !this.userSubscription.closed) {
+      this.userSubscription.unsubscribe();
+    }
+  }
+
+  saveUser(user: User) {
+    if (user) {
+      this.universalUser.setUser(user);
+      this.router.navigate([this.returnUrl]);
+    }
+  }
+  
   login() {
     this.loading = true;
-    this.authService.login(this.user)
+    this.userSubscription = this.authService.authenticate(this.user)
       .subscribe(
-      data => {
-        this.router.navigate([this.returnUrl]);
-      },
-      error => {
-        this.alertService.error(error);
-        this.loading = false;
-      });
+        user => {
+          this.loading = false;
+          this.user = user;
+          this.universalUser.setUser(user);
+          this.router.navigate([this.returnUrl]);
+        },
+        error => {
+          this.loading = false;
+        }
+      );
   }
 }

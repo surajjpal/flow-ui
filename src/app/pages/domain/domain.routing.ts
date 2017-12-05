@@ -9,9 +9,9 @@ const routes: Routes = [
     path: '',
     component: DomainComponent,
     children: [
-      { path: '', redirectTo: 'domains', pathMatch: 'full' },
-      { path: 'domainSetup', component: DomainSetupComponent },
-      { path: 'domains', component: DomainsComponent }
+      { path: '', redirectTo: 'dmsr', pathMatch: 'full' },
+      { path: 'dms', component: DomainSetupComponent },
+      { path: 'dmsr', component: DomainsComponent }
     ]
   }
 ];

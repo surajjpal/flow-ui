@@ -1,16 +1,17 @@
 declare var closeModal: any;
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 import { RoleRouteMap } from '../../../../models/setup.model';
-import { RoutesService } from '../../master.service';
+import { RoutesService } from '../../../../services/setup.service';
 
 @Component({
   selector: 'api-route',
   templateUrl: 'routelink.component.html',
   styleUrls: ['routelink.scss']
 })
-export class RoutelinkComponent implements OnInit {
+export class RoutelinkComponent implements OnInit, OnDestroy {
 
   roleRouteList: RoleRouteMap[];
   roleMasterList: string[];
@@ -21,6 +22,11 @@ export class RoutelinkComponent implements OnInit {
   modalHeader: string;
   createMode: boolean;
   loading: boolean;
+
+  private subscription: Subscription;
+  private subscriptionRoleRoute: Subscription;
+  private subscriptionRoleMaster: Subscription;
+  private subscriptionRouteMaster: Subscription;
 
   constructor(
     private routesService: RoutesService
@@ -42,52 +48,46 @@ export class RoutelinkComponent implements OnInit {
     this.fetchRouteMasterList();
   }
 
-  fetchRoleRouteList() {
-    this.routesService.getAllRoutes()
-    .then(
-      roleRouteList => {
-        this.loading = false;
+  ngOnDestroy() {
+    if (this.subscription && !this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
+    if (this.subscriptionRoleRoute && !this.subscriptionRoleRoute.closed) {
+      this.subscriptionRoleRoute.unsubscribe();
+    }
+    if (this.subscriptionRoleMaster && !this.subscriptionRoleMaster.closed) {
+      this.subscriptionRoleMaster.unsubscribe();
+    }
+    if (this.subscriptionRouteMaster && !this.subscriptionRouteMaster.closed) {
+      this.subscriptionRouteMaster.unsubscribe();
+    }
+  }
 
-        if (roleRouteList) {
-          this.roleRouteList = roleRouteList;
-        }
-      },
-      error => {
-        this.loading = false;
+  fetchRoleRouteList() {
+    this.subscriptionRoleRoute = this.routesService.getAllRoutes()
+    .subscribe(roleRouteList => {
+      if (roleRouteList) {
+        this.roleRouteList = roleRouteList;
       }
-    ).catch(
-      error => {
-        this.loading = false;
-      }
-    );
+    });
   }
 
   fetchRoleMasterList() {
-    this.routesService.rolesMaster()
-    .then(
-      roleMasterList => {
-        if (roleMasterList) {
-          this.roleMasterList = roleMasterList;
-        }
-      },
-      error => {
-        
+    this.subscriptionRoleMaster = this.routesService.rolesMaster()
+    .subscribe(roleMasterList => {
+      if (roleMasterList) {
+        this.roleMasterList = roleMasterList;
       }
-    );
+    });
   }
 
   fetchRouteMasterList() {
-    this.routesService.routesMaster()
-    .then(
-      routeMasterList => {
-        if (routeMasterList) {
-          this.routeMasterList = routeMasterList;
-        }
-      },
-      error => {
-        
+    this.subscriptionRouteMaster = this.routesService.routesMaster()
+    .subscribe(routeMasterList => {
+      if (routeMasterList) {
+        this.routeMasterList = routeMasterList;
       }
-    );
+    });
   }
 
   onSelect(roleRouteMap: RoleRouteMap) {
@@ -103,17 +103,14 @@ export class RoutelinkComponent implements OnInit {
   }
 
   createRoute() {
-    this.routesService.createRoute(this.selectedRoleRouteMap)
-    .then(
+    this.loading = true;
+    this.subscription = this.routesService.createRoute(this.selectedRoleRouteMap)
+    .subscribe(
       roleRouteMap => {
         new closeModal('detailsModal');
+        this.loading = false;
         this.fetchRoleRouteList();
       },
-      error => {
-        this.loading = false;
-      }
-    )
-    .catch(
       error => {
         this.loading = false;
       }
@@ -121,17 +118,14 @@ export class RoutelinkComponent implements OnInit {
   }
 
   updateRoute() {
-    this.routesService.updateRoute(this.selectedRoleRouteMap)
-    .then(
+    this.loading = true;
+    this.subscription = this.routesService.updateRoute(this.selectedRoleRouteMap)
+    .subscribe(
       roleRouteMap => {
         new closeModal('detailsModal');
+        this.loading = false;
         this.fetchRoleRouteList();
       },
-      error => {
-        this.loading = false;
-      }
-    )
-    .catch(
       error => {
         this.loading = false;
       }
@@ -139,17 +133,14 @@ export class RoutelinkComponent implements OnInit {
   }
 
   deleteRoute() {
-    this.routesService.deleteRoute(this.selectedRoleRouteMap)
-    .then(
+    this.loading = true;
+    this.subscription = this.routesService.deleteRoute(this.selectedRoleRouteMap)
+    .subscribe(
       roleRouteMap => {
         new closeModal('detailsModal');
+        this.loading = false;
         this.fetchRoleRouteList();
       },
-      error => {
-        this.loading = false;
-      }
-    )
-    .catch(
       error => {
         this.loading = false;
       }

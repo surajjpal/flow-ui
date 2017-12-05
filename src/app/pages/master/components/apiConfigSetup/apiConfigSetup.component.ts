@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
-import { ApiConfigService } from '../../master.service';
-import { AlertService, DataSharingService } from '../../../../shared/shared.service';
+import { ApiConfigService } from '../../../../services/setup.service';
+import { AlertService, DataSharingService } from '../../../../services/shared.service';
 
 import { ApiConfig, ApiResponse, ApiKeyExpressionMap } from '../../../../models/setup.model';
 
@@ -12,7 +13,7 @@ import { ApiConfig, ApiResponse, ApiKeyExpressionMap } from '../../../../models/
   styleUrls: ['./apiConfigSetup.scss']
 })
 
-export class ApiConfigSetupComponent implements OnInit {
+export class ApiConfigSetupComponent implements OnInit, OnDestroy {
   // For UI elements
   createMode: boolean;
   isBodyTextEditor: boolean;
@@ -29,6 +30,9 @@ export class ApiConfigSetupComponent implements OnInit {
   textBody: string;
   bodyList: any[];
 
+  private subscription: Subscription;
+  private subscriptionMethods: Subscription;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -42,30 +46,18 @@ export class ApiConfigSetupComponent implements OnInit {
     this.methodSource = [];
     this.responseTypeSource = ['PAYLOAD', 'PARAM'];
     this.paramsToSelectSource = ['SELECTIVE', 'ALL'];
-
-    
   }
 
   ngOnInit() {
-    this.apiConfigService.getSupportedMethods()
-      .then(
-        methods => {
-          if (methods && methods.length > 0) {
-            this.methodSource = methods;
-            if (this.apiConfig.method && this.apiConfig.method.length <= 0) {
-              this.apiConfig.method = this.methodSource[0];
-            }
+    this.subscriptionMethods = this.apiConfigService.getSupportedMethods()
+      .subscribe(methods => {
+        if (methods && methods.length > 0) {
+          this.methodSource = methods;
+          if (this.apiConfig.method && this.apiConfig.method.length <= 0) {
+            this.apiConfig.method = this.methodSource[0];
           }
-        },
-        error => {
-
         }
-      )
-      .catch(
-        error => {
-
-        }
-      );
+      });
 
     // Init methods for UI
     const apiConfig: ApiConfig = this.sharingService.getSharedObject();
@@ -80,6 +72,15 @@ export class ApiConfigSetupComponent implements OnInit {
     this.populateHeaderList();
     this.populateBody();
     this.populateSelectedResponse();
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription && !this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
+    if (this.subscriptionMethods && !this.subscriptionMethods.closed) {
+      this.subscriptionMethods.unsubscribe();
+    }
   }
 
   populateHeaderList() {
@@ -274,27 +275,21 @@ export class ApiConfigSetupComponent implements OnInit {
   }
 
   updateApiConfig() {
-    this.apiConfigService.updateApiConfig(this.apiConfig)
-      .then(
+    this.subscription = this.apiConfigService.updateApiConfig(this.apiConfig)
+      .subscribe(
         data => {
           this.alertService.success('API Config updated successfully', true);
-          this.router.navigate(['/pages/master/apiConfig'], { relativeTo: this.route });
-        },
-        error => {
-          this.alertService.error(error);
-      });
+          this.router.navigate(['/pg/stp/sta'], { relativeTo: this.route });
+        });
   }
 
   createApiConfig() {
-    this.apiConfigService.createApiConfig(this.apiConfig)
-    .then(
+    this.subscription = this.apiConfigService.createApiConfig(this.apiConfig)
+    .subscribe(
       data => {
         this.alertService.success('API Config created successfully', true);
-        this.router.navigate(['/pages/master/apiConfig'], { relativeTo: this.route });
-      },
-      error => {
-        this.alertService.error(error);
-    });
+        this.router.navigate(['/pg/stp/sta'], { relativeTo: this.route });
+      });
   }
 
   onResponseTypeChange() {

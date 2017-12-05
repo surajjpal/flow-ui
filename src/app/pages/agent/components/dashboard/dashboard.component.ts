@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { DashboardService } from '../../agent.services';
-import { ConversationSummary, Dashboard } from '../../../../models/agentDashboard.model';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
+
+import { AgentDashboardService } from '../../../../services/agent.service';
+import { ConversationSummary, Dashboard } from '../../../../models/dashboard.model';
 
 declare let d3: any;
 declare let moment: any;
@@ -10,7 +13,7 @@ declare let moment: any;
   selector: 'api-auto-dashboard',
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
 
   conversationSummary: ConversationSummary;
   
@@ -43,12 +46,45 @@ export class DashboardComponent implements OnInit {
   GOAL_COUNT_AND_EFFICIENCY_FLAG = false;
   MESSAGES_IN_EPISODE_FLAG = false;
 
+  private conversationSubscription: Subscription;
+  private episodeSubscription: Subscription;
+  private intentSubscription: Subscription;
+  private entitySubscription: Subscription;
+  private sentimentSubscription: Subscription;
+  private goalSubscription: Subscription;
+  private messagesSubscription: Subscription;
   
-  constructor(private dashboardService: DashboardService, private slimLoadingBarService: SlimLoadingBarService) {}
+  constructor(private dashboardService: AgentDashboardService, private slimLoadingBarService: SlimLoadingBarService) {}
 
   ngOnInit(): void {
     // this.fetchAutoStats();
     this.setupChartOptions();
+  }
+
+  ngOnDestroy() {
+    if (this.conversationSubscription && !this.conversationSubscription.closed) {
+      this.conversationSubscription.unsubscribe();
+    }
+    if (this.episodeSubscription && !this.episodeSubscription.closed) {
+      this.episodeSubscription.unsubscribe();
+    }
+    if (this.intentSubscription && !this.intentSubscription.closed) {
+      this.intentSubscription.unsubscribe();
+    }
+    if (this.entitySubscription && !this.entitySubscription.closed) {
+      this.entitySubscription.unsubscribe();
+    }
+    if (this.sentimentSubscription && !this.sentimentSubscription.closed) {
+      this.sentimentSubscription.unsubscribe();
+    }
+    if (this.goalSubscription && !this.goalSubscription.closed) {
+      this.goalSubscription.unsubscribe();
+    }
+    if (this.messagesSubscription && !this.messagesSubscription.closed) {
+      this.messagesSubscription.unsubscribe();
+    }
+
+    this.slimLoadingBarService.complete();
   }
 
   fetchAutoStats(dateRange: any) {
@@ -58,49 +94,76 @@ export class DashboardComponent implements OnInit {
     this.slimLoadingBarService.stop();
     
 
-    this.dashboardService.fetch('CONVERSATION_SUMMARY', dateRange)
-      .then(autoDashboard => {
+    this.conversationSubscription = this.dashboardService.fetch('CONVERSATION_SUMMARY', dateRange)
+      .subscribe(autoDashboard => {
         this.CONVERSATION_SUMMARY_FLAG = true;
         this.updateProgressBar();
         this.conversationSummary = autoDashboard.conversationSummary;
-      } );
-    this.dashboardService.fetch('EPISODE_TIMELINE', dateRange)
-      .then(autoDashboard => {
+      }, err => {
+        this.CONVERSATION_SUMMARY_FLAG = true;
+        this.updateProgressBar();
+      }
+    );
+    this.episodeSubscription = this.dashboardService.fetch('EPISODE_TIMELINE', dateRange)
+      .subscribe(autoDashboard => {
         this.EPISODE_TIMELINE_FLAG = true;
         this.updateProgressBar();
         this.episodeCountData = autoDashboard.nvd3ChartInputList[0];
-      });
-    this.dashboardService.fetch('INTENT_COUNT', dateRange)
-      .then(autoDashboard => {
+      }, err => {
+        this.EPISODE_TIMELINE_FLAG = true;
+        this.updateProgressBar();
+      }
+    );
+    this.intentSubscription = this.dashboardService.fetch('INTENT_COUNT', dateRange)
+      .subscribe(autoDashboard => {
         this.INTENT_COUNT_FLAG = true;
         this.updateProgressBar();
         this.intentCountData = autoDashboard.nvd3ChartInputList[0][0].values;
-      });
-    this.dashboardService.fetch('ENTITY_COUNT', dateRange)
-      .then(autoDashboard => {
+      }, err => {
+        this.INTENT_COUNT_FLAG = true;
+        this.updateProgressBar();
+      }
+    );
+    this.entitySubscription = this.dashboardService.fetch('ENTITY_COUNT', dateRange)
+      .subscribe(autoDashboard => {
         this.ENTITY_COUNT_FLAG = true;
         this.updateProgressBar();
         this.entityCountData = autoDashboard.nvd3ChartInputList[0][0].values;
-      });
-    this.dashboardService.fetch('SENTIMENT_COUNT', dateRange)
-      .then(autoDashboard => {
+      }, err => {
+        this.ENTITY_COUNT_FLAG = true;
+        this.updateProgressBar();
+      }
+    );
+    this.sentimentSubscription = this.dashboardService.fetch('SENTIMENT_COUNT', dateRange)
+      .subscribe(autoDashboard => {
         this.SENTIMENT_COUNT_FLAG = true;
         this.updateProgressBar();
         this.sentimentCountData = autoDashboard.nvd3ChartInputList[0][0].values;
-      } );
-    this.dashboardService.fetch('GOAL_COUNT_AND_EFFICIENCY', dateRange)
-      .then(autoDashboard => {
+      }, err => {
+        this.SENTIMENT_COUNT_FLAG = true;
+        this.updateProgressBar();
+      }
+    );
+    this.goalSubscription = this.dashboardService.fetch('GOAL_COUNT_AND_EFFICIENCY', dateRange)
+      .subscribe(autoDashboard => {
         this.GOAL_COUNT_AND_EFFICIENCY_FLAG = true;
         this.updateProgressBar();
         this.parseGoalsCountAndEfficiency(autoDashboard);
-      } );
-    this.dashboardService.fetch('MESSAGES_IN_EPISODE', dateRange)
-      .then(autoDashboard => {
+      }, err => {
+        this.GOAL_COUNT_AND_EFFICIENCY_FLAG = true;
+        this.updateProgressBar();
+      }
+    );
+    this.messagesSubscription = this.dashboardService.fetch('MESSAGES_IN_EPISODE', dateRange)
+      .subscribe(autoDashboard => {
         this.MESSAGES_IN_EPISODE_FLAG = true;
         this.updateProgressBar();
         this.messagesInEpisodeData = autoDashboard.nvd3ChartInputList[0];
-      });
-
+      }, err => {
+        this.MESSAGES_IN_EPISODE_FLAG = true;
+        this.updateProgressBar();
+      }
+    );
   }
 
   updateProgressBar() {

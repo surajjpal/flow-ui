@@ -7,7 +7,8 @@ declare var exportGraphXml: any;
 
 import { Component, Input, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import 'rxjs/add/operator/switchMap';
+import { Subscription } from 'rxjs/Subscription';
+// import 'rxjs/add/operator/switchMap';
 
 // Model Imports
 import { GraphObject, DataPoint, Classifier, StateModel,
@@ -15,9 +16,7 @@ import { GraphObject, DataPoint, Classifier, StateModel,
 import { ApiConfig, ApiKeyExpressionMap } from '../../../../models/setup.model';
 
 // Service Imports
-import { GraphService, CommunicationService } from '../../flow.service';
-import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs';
+import { GraphService, CommunicationService } from '../../../../services/flow.service';
 
 @Component({
   selector: 'api-flow-design',
@@ -25,25 +24,22 @@ import { Observable } from 'rxjs';
 })
 
 export class DesignComponent implements OnInit, OnDestroy {
-
-  // Service components
-  subscription: Subscription;
-
+  
   // Final strings used in html as method parameter
   ZOOM_IN = 'ZOOM_IN';
   ZOOM_OUT = 'ZOOM_OUT';
   ZOOM_ACTUAL = 'ZOOM_ACTUAL';
   PRINT_PREVIEW = 'PRINT_PREVIEW';
   POSTER_PRINT = 'POSTER_PRINT';
-
+  
   // List counts
   dataPointCount: number = 0;
   stateCount: number = 0;
-
+  
   // Dynamic html titles for dialogs
   stateDialogTitle: string = "Add State";
   stateDialogButtonName: string = "Add";
-
+  
   // Dropdown source list
   sourceStatusCodes: string[] = ['DRAFT', 'ACTIVE', 'ARCHIVE'];
   sourceStateTypes: string[] = ['Manual', 'Auto', 'Cognitive'];
@@ -53,7 +49,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   sourceClassifiers: Classifier[];
   sourceEntryActionList: string[];
   sourceApiConfigList: ApiConfig[];
-
+  
   // Models to bind with html
   readOnly: boolean;
   graphObject: GraphObject;
@@ -61,7 +57,11 @@ export class DesignComponent implements OnInit, OnDestroy {
   tempState: StateModel;
   tempParentState: StateModel;
   tempEvent: EventModel;
-
+  
+  private subscription: Subscription;
+  private subscriptionEntryAction: Subscription;
+  private subscriptionApiConfig: Subscription;
+  
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -75,7 +75,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (this.readOnly) {
       this.communicationService.setReadOnly(false);
     }
-
+    
     this.graphObject = this.communicationService.getGraphObject();
     if (this.graphObject) {
       this.communicationService.sendGraphObject(null);
@@ -91,6 +91,21 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.load();
+  }  
+  
+  ngOnDestroy() {
+    // prevent memory leak when component destroyed
+    window['flowComponentRef'] = null;
+
+    if (this.subscription && !this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
+    if (this.subscriptionEntryAction && !this.subscriptionEntryAction.closed) {
+      this.subscriptionEntryAction.unsubscribe();
+    }
+    if (this.subscriptionApiConfig && !this.subscriptionApiConfig.closed) {
+      this.subscriptionApiConfig.unsubscribe();
+    }
   }
 
   load(): void {
@@ -101,54 +116,47 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.graphObject = new GraphObject();
       this.graphObject.statusCd = this.sourceStatusCodes[0],
       this.addNewDataPoint(true);
-    }
+    }  
 
     new designFlowEditor(this.graphObject.xml, this.readOnly);
-  }
+  }  
 
   getSourceEntryActions() {
-    this.graphService.getEntryActions()
-      .then(
-        entryActionList => {
-          if (entryActionList) {
-            this.sourceEntryActionList = entryActionList;
-          }
-        },
-        error => {
-          
-        }
-      );
-  }
+    this.subscriptionEntryAction = this.graphService.getEntryActions()
+      .subscribe(entryActionList => {
+        if (entryActionList) {
+          this.sourceEntryActionList = entryActionList;
+        }  
+      });  
+  }    
 
   getApiConfigLookup() {
-    this.graphService.apiConfigLookup()
-    .then(
-      apiConfigList => {
+    this.subscriptionApiConfig = this.graphService.apiConfigLookup()
+      .subscribe(apiConfigList => {
         if (apiConfigList && apiConfigList.length > 0) {
           this.sourceApiConfigList = apiConfigList;
         }
-      }
-    );
-  }
+      });
+  }  
 
   prepareDummyObject() {
     if (this.graphObject) {
       this.tempGraphObject = JSON.parse(JSON.stringify(this.graphObject));
     } else {
       this.tempGraphObject = new GraphObject();
-    }
-  }
+    }  
+  }  
 
   toolsChoice(choice: string): void {
     new graphTools(choice);
-  }
+  }  
 
   addState(state: StateModel, parentState: StateModel): void {
     if (parentState) {
       this.tempParentState = parentState;
     } else {
       this.tempParentState = new StateModel();
-    }
+    }  
 
     if (state) {
       this.stateDialogTitle = "Update State";
@@ -167,10 +175,10 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.tempState.initialState = false;
       } else {
         this.tempState.initialState = true;
-      }
+      }  
       // this.addEvent();
-    }
-  }
+    }  
+  }  
 
   addEvent(): void {
     const tempEvent: EventModel = new EventModel();
@@ -181,38 +189,38 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.addExpression(tempEvent);
 
     this.tempState.events.push(tempEvent);
-  }
+  }  
 
   addExpression(event: EventModel): void {
     const tempExpression: Expression = new Expression();
     tempExpression.value = 'Expression';
 
     event.expressionList.push(tempExpression);
-  }
+  }  
 
   deleteExpression(expression: Expression, event: EventModel): void {
     const index = event.expressionList.indexOf(expression);
     event.expressionList.splice(index, 1);
-  }
+  }  
 
   deleteEvent(event: EventModel): void {
     const index = this.tempState.events.indexOf(event);
     this.tempState.events.splice(index, 1);
-  }
+  }  
 
   saveEvent(): void {
     this.tempState.events.push(this.tempEvent);
-  }
+  }  
 
   saveState(): void {
     this.tempState.endState = (this.tempState.events.length === 0);
     if (!this.isStateApiCompatible()) {
       this.tempState.apiConfigurationList = [];
-    }
+    }  
 
     if (!this.isStateRuleCompatible()) {
       this.tempState.ruleList = [];
-    }
+    }  
 
     if (this.tempState.stateId && this.tempState.stateId.length > 0) {
       const customObject: Object = JSON.parse(JSON.stringify(this.tempState));  // Very important line of code, don't remove
@@ -222,25 +230,18 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.tempState.stateId = 'state' + this.stateCount;
       const customObject: Object = JSON.parse(JSON.stringify(this.tempState));  // Very important line of code, don't remove
       new saveStateObject(customObject);
-    }
-  }
+    }  
+  }  
 
   save(): void {
     this.graphObject = this.tempGraphObject;
-  }
+  }  
 
   saveOnServer() {
     // This will call a method in app.js and it will convert mxGraph into xml
     // and send it back to this component in method saveGraphXml(xml: string)
     new exportGraphXml();
-  }
-
-  ngOnDestroy() {
-    window['flowComponentRef'] = null;
-
-    // prevent memory leak when component destroyed
-    //this.subscription.unsubscribe();
-  }
+  }  
 
   addNewDataPoint(isInit?: boolean) {
     this.dataPointCount++;
@@ -296,10 +297,10 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.graphObject.states = states;
       this.graphObject.transitions = transitions;
 
-      this.graphService.save(this.graphObject)
-        .then(graphObject => {
+      this.subscription = this.graphService.save(this.graphObject)
+        .subscribe(graphObject => {
           this.graphObject = graphObject;
-          this.router.navigate(['/pages/flow/search'], { relativeTo: this.route });
+          this.router.navigate(['/pg/flw/flsr'], { relativeTo: this.route });
         });
     }
   }

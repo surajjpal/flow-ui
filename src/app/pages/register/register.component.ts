@@ -1,17 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 
 import { EmailValidator, EqualPasswordsValidator } from '../../theme/validators';
-import { AuthService, AlertService } from '../../shared/shared.service';
+import { AlertService } from '../../services/shared.service';
+import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user.model';
+
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'api-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.scss']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnDestroy {
 
   form: FormGroup;
   name: AbstractControl;
@@ -24,6 +27,8 @@ export class RegisterComponent {
 
   newUser: User = new User();
   loading = false;
+
+  private userSubscription: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -65,7 +70,7 @@ export class RegisterComponent {
         this.newUser.password = (values['passwords'])['password'];
         this.newUser._id = null;
 
-        this.authService.register(this.newUser)
+        this.userSubscription = this.authService.register(this.newUser)
           .subscribe(
           data => {
             // set success message and pass true paramater to persist the message after redirecting to the login page
@@ -73,10 +78,15 @@ export class RegisterComponent {
             this.router.navigate(['/login']);
           },
           error => {
-            this.alertService.error(error);
             this.loading = false;
           });
       }
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.userSubscription && !this.userSubscription.closed) {
+      this.userSubscription.unsubscribe();
     }
   }
 }

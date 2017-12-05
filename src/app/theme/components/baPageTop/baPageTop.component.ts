@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { GlobalState } from '../../../global.state';
-import { AuthService } from '../../../shared/shared.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'ba-page-top',
@@ -40,6 +40,6 @@ export class BaPageTop {
   }
 
   profile() {
-    this.router.navigate(['/pages/master/updateUser/profile'], { relativeTo: this.route });
+    this.router.navigate(['/pg/stp/stus/profile'], { relativeTo: this.route });
   }
 }

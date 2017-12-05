@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { DashboardService } from '../../flow.service';
-import { ConversationSummary, Dashboard } from '../../../../models/agentDashboard.model';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+
+import { FlowDashboardService } from '../../../../services/flow.service';
+import { ConversationSummary, Dashboard, WorkflowSummary, StateConsumingMaxResTimeTransaction } from '../../../../models/dashboard.model';
 import { DateRangePickerComponent } from './daterangepicker/daterangepicker.component';
 
 declare let d3: any;
@@ -10,70 +12,93 @@ declare let moment: any;
   selector: 'api-flow-dashboard',
   templateUrl: './dashboard.component.html'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
 
-  conversationSummary: ConversationSummary;
+  flowTimelineOptions;
+  flowTimelineData;
 
-  episodeCountOptions;
-  episodeCountData;
+  rangeOfTransactionInStatesOptions;
+  rangeOfTransactionInStatesData;
 
-  intentCountOptions;
-  intentCountData;
+  groupResourceAllocationInStatesOptions;
+  groupResourceAllocationInStatesData;
 
-  entityCountOptions;
-  entityCountData;
+  transactionValueInStatesOptions
+  transactionValueInStatesData;
 
-  sentimentCountOptions;
-  sentimentCountData;
+  avgTimeInStatesOptions;
+  avgTimeInStatesData;
 
-  goalsCountOptions;
-  goalsCountData;
+  private statesConsumingMaxResTimeTransaction: StateConsumingMaxResTimeTransaction;
+  private workflowSummary: WorkflowSummary;
+  private workflowSummarySubscription: Subscription;
+  private statesConsumingMaxResTimeTransactionSubscription: Subscription;
+  private flowTimelineSubscription: Subscription;
+  private rangeOfTransactionInStatesSubscription: Subscription;
+  private groupResourceAllocationInStatesSubscription: Subscription;
+  private transactionValueInStatesSubscription: Subscription;
+  private avgTimeInStatesSubscription: Subscription;
 
-  messagesInEpisodeOptions;
-  messagesInEpisodeData;
-
-  goalsEfficiencyOptions;
-  goalsEfficiencyData;
-
-  constructor(private dashboardService: DashboardService) { }
+  
+  constructor(private dashboardService: FlowDashboardService) { }
 
   ngOnInit(): void {
     // this.fetchFlowStats();
     this.setupChartOptions();
   }
 
+  ngOnDestroy(): void {
+    if (this.workflowSummarySubscription && !this.workflowSummarySubscription.closed) {
+      this.workflowSummarySubscription.unsubscribe();
+    }
+    if (this.flowTimelineSubscription && !this.flowTimelineSubscription.closed) {
+      this.flowTimelineSubscription.unsubscribe();
+    }
+    if (this.rangeOfTransactionInStatesSubscription && !this.rangeOfTransactionInStatesSubscription.closed) {
+      this.rangeOfTransactionInStatesSubscription.unsubscribe();
+    }
+    if (this.groupResourceAllocationInStatesSubscription && !this.groupResourceAllocationInStatesSubscription.closed) {
+      this.groupResourceAllocationInStatesSubscription.unsubscribe();
+    }
+    if (this.transactionValueInStatesSubscription && !this.transactionValueInStatesSubscription.closed) {
+      this.transactionValueInStatesSubscription.unsubscribe();
+    }
+    if (this.avgTimeInStatesSubscription && !this.avgTimeInStatesSubscription.closed) {
+      this.avgTimeInStatesSubscription.unsubscribe();
+    }
+    if (this.statesConsumingMaxResTimeTransactionSubscription && !this.statesConsumingMaxResTimeTransactionSubscription.closed) {
+      this.statesConsumingMaxResTimeTransactionSubscription.unsubscribe();
+    }
+
+  }
+
+  
   fetchFlowStats(dateRange: any) {
-    this.dashboardService.fetch('CONVERSATION_SUMMARY', dateRange)
-      .then(flowDashboard => this.conversationSummary = flowDashboard.conversationSummary);
-    this.dashboardService.fetch('EPISODE_TIMELINE', dateRange)
-      .then(flowDashboard => this.episodeCountData = flowDashboard.nvd3ChartInputList[0]);
-    this.dashboardService.fetch('INTENT_COUNT', dateRange)
-      .then(flowDashboard => this.intentCountData = flowDashboard.nvd3ChartInputList[0][0].values);
-    this.dashboardService.fetch('ENTITY_COUNT', dateRange)
-      .then(flowDashboard => this.entityCountData = flowDashboard.nvd3ChartInputList[0][0].values);
-    this.dashboardService.fetch('SENTIMENT_COUNT', dateRange)
-      .then(flowDashboard => this.sentimentCountData = flowDashboard.nvd3ChartInputList[0][0].values);
-    this.dashboardService.fetch('GOAL_COUNT_AND_EFFICIENCY', dateRange)
-      .then(flowDashboard => this.parseGoalsCountAndEfficiency(flowDashboard));
-    this.dashboardService.fetch('MESSAGES_IN_EPISODE', dateRange)
-      .then(flowDashboard => this.messagesInEpisodeData = flowDashboard.nvd3ChartInputList[0]);
+    this.workflowSummarySubscription = this.dashboardService.fetch('WORKFLOW_SUMMARY', dateRange)
+      .subscribe(flowDashboard => { this.workflowSummary = flowDashboard.workflowSummary; })
+    this.flowTimelineSubscription = this.dashboardService.fetch('FLOW_TIMELINE', dateRange)
+      .subscribe(flowDashboard => { this.flowTimelineData = flowDashboard.nvd3ChartInputList[0]; })
+    this.rangeOfTransactionInStatesSubscription = this.dashboardService.fetch('RANGE_TRANSACTION_IN_STATES_COUNT', dateRange)
+      .subscribe(flowDashboard => { this.rangeOfTransactionInStatesData = flowDashboard.nvd3ChartInputList[0]; })
+    this.groupResourceAllocationInStatesSubscription = this.dashboardService.fetch('GROUP_RESOURCE_ALLOCATION_STATES_COUNT', dateRange)
+      .subscribe(flowDashboard => { this.groupResourceAllocationInStatesData = flowDashboard.nvd3ChartInputList[0]; })
+    this.transactionValueInStatesSubscription = this.dashboardService.fetch('TRANSACTION_IN_STATES_COUNT', dateRange)
+      .subscribe(flowDashboard => { this.transactionValueInStatesData = flowDashboard.nvd3ChartInputList[0]; })
+    this.avgTimeInStatesSubscription = this.dashboardService.fetch('AVERAGE_TIME_IN_STATES', dateRange)
+      .subscribe(flowDashboard => { this.avgTimeInStatesData = flowDashboard.nvd3ChartInputList[0]; })
+    this.statesConsumingMaxResTimeTransactionSubscription = this.dashboardService.fetch('STATES_CONSUME_MAX_BY_RESOURCEGROUP_TIME_TRANSACTIONVALUE', dateRange)
+      .subscribe(flowDashboard => { this.statesConsumingMaxResTimeTransaction = flowDashboard.stateConsumingMaxResTimeTransaction; })
   }
 
   setupChartOptions() {
-    this.episodeCountOptions = this.lineChartOptionsTimeVsValue();
-    this.intentCountOptions = this.donutChartOptions();
-    this.entityCountOptions = this.donutChartOptions();
-    this.sentimentCountOptions = this.donutChartOptions();
-    this.goalsCountOptions = this.donutChartOptions();
-    this.messagesInEpisodeOptions = this.mulitBarChartOptionsStringVsValue();
-    this.goalsEfficiencyOptions = this.goalEfficiencyBarChartOptions();
+    this.flowTimelineOptions = this.lineChartOptionsTimeVsValue("Timeline", "State Count");
+    this.rangeOfTransactionInStatesOptions = this.mulitBarChartOptionsStringVsValue("Range of transactions", "State count");
+    this.groupResourceAllocationInStatesOptions = this.mulitBarChartOptionsStringVsValue("Resource group", "State Count")
+    this.transactionValueInStatesOptions = this.singleBarChartOptionsStringVsValue("Sates", "Transaction values");
+    this.avgTimeInStatesOptions = this.singleBarChartOptionsStringVsValue("States", "Time (minutes)");
   }
 
-  parseGoalsCountAndEfficiency(flowDashboard: Dashboard) {
-    this.goalsCountData = flowDashboard.nvd3ChartInputList[0][0].values;
-    this.goalsEfficiencyData = flowDashboard.nvd3ChartInputList[1];
-  }
-
+  
   donutChartOptions() {
     return {
       chart: {
@@ -104,7 +129,7 @@ export class DashboardComponent implements OnInit {
     };
   }
 
-  lineChartOptionsTimeVsValue() {
+  lineChartOptionsTimeVsValue(xAxisLabel, yAxisLabel) {
     return {
       chart: {
         type: 'lineWithFocusChart',
@@ -132,7 +157,7 @@ export class DashboardComponent implements OnInit {
           showMaxMin: false
         },
         yAxis: {
-          axisLabel: "Episode Count",
+          axisLabel: "State Count",
           axisLabelDistance: -15,
           tickFormat: function (d) {
             return d3.format('d')(d)
@@ -150,7 +175,47 @@ export class DashboardComponent implements OnInit {
     };
   }
 
-  mulitBarChartOptionsStringVsValue() {
+  singleBarChartOptionsStringVsValue(xAxisLabel, yAxisLabel) {
+    return {
+      chart: {
+        type: 'discreteBarChart',
+        height: 450,
+        margin : {
+          top: 20,
+          right: 20,
+          bottom: 50,
+          left: 55
+        },
+        x: function(d){return d.label;},
+        y: function(d){return d.value;},
+        showValues: true,
+        clipEdge: true,
+        staggerLabels: true,
+        // valueFormat: function(d){
+        //   return d3.format(',.4f')(d);
+        // },
+        duration: 500,
+        forceY: [0],
+        xAxis: {
+          axisLabel: xAxisLabel,
+          showMaxMin: true,
+          axisLabelDistance: 10,
+          tickFormat: function (d) {
+            return d;
+          }
+        },
+        yAxis: {
+          axisLabel: yAxisLabel,
+          axisLabelDistance: -15,
+          tickFormat: function (d) {
+            return d3.format('d')(d);
+          }
+        }
+      }
+    }
+  }
+
+  mulitBarChartOptionsStringVsValue(xAxisLabel, yAxisLabel) {
     return {
       chart: {
         type: 'multiBarChart',
@@ -168,7 +233,7 @@ export class DashboardComponent implements OnInit {
         forceY: [0],
         reduceXTicks: false,
         xAxis: {
-          axisLabel: 'Episodes',
+          axisLabel: xAxisLabel,
           showMaxMin: true,
           axisLabelDistance: 10,
           tickFormat: function (d) {
@@ -176,7 +241,7 @@ export class DashboardComponent implements OnInit {
           }
         },
         yAxis: {
-          axisLabel: 'Message Count',
+          axisLabel: yAxisLabel,
           axisLabelDistance: -15,
           tickFormat: function (d) {
             return d3.format('d')(d);

@@ -14,8 +14,6 @@ import { DomainComponent } from './domain.component';
 import { DomainSetupComponent } from './components/domainSetup/domainSetup.component';
 import { DomainsComponent } from './components/domains/domains.component';
 
-import { DomainService } from './domain.services';
-
 import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
@@ -32,9 +30,6 @@ import { SharedModule } from '../../shared/shared.module';
     DomainComponent,
     DomainSetupComponent,
     DomainsComponent
-  ],
-  providers: [
-    DomainService
   ]
 })
 export class DomainModule { }

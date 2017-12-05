@@ -10,10 +10,10 @@ const routes: Routes = [
     path: '',
     component: InboxComponent,
     children: [
-      { path: '', redirectTo: 'tasks', pathMatch: 'full' },
-      { path: 'active', component: ActiveComponent },
-      { path: 'archive', component: ArchivedComponent },
-      { path: 'taskDetails', component: TaskDetailsComponent }
+      { path: '', redirectTo: 'tact', pathMatch: 'full' },
+      { path: 'tact', component: ActiveComponent },
+      { path: 'trch', component: ArchivedComponent },
+      { path: 'tdts', component: TaskDetailsComponent }
     ]
   }
 ];

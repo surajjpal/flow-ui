@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Routes } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { BaMenuService } from '../theme';
 import { PAGES_MENU } from './pages.menu';
-import {RouteService} from './pages.service';
+import { RoutesService } from '../services/setup.service';
 
 @Component({
   selector: 'pages',
@@ -30,15 +31,22 @@ import {RouteService} from './pages.service';
     <ba-back-top position="200"></ba-back-top>
     `
 })
-export class PagesComponent implements OnInit {
+export class PagesComponent implements OnInit, OnDestroy {
+  private subscription: Subscription;
 
-  constructor(private _menuService: BaMenuService, private routeService: RouteService) {
+  constructor(private _menuService: BaMenuService, private routesService: RoutesService) {
   }
 
-  ngOnInit() {
-    this.routeService.routes().then(routes => {
+  ngOnInit(): void {
+    this.subscription = this.routesService.routes()
+    .subscribe(routes => {
       this._menuService.updateMenuByRoutes(<Routes>routes);
     });
-    // this._menuService.updateMenuByRoutes(<Routes>PAGES_MENU);
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription && !this.subscription.closed) {
+      this.subscription.unsubscribe();
+    }
   }
 }
