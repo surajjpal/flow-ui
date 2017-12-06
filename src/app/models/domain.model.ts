@@ -46,10 +46,11 @@ export class GoalStep {
   lang: string;
   api: string;
   key: string;
-  parameters: string[];
   authRequired: boolean;
   mandatory: boolean;
   ignoreIntent: boolean;
+  goalValidationTypes: string[];
+  dependancyExpression: string;
 
   constructor() {
     this.goalExpression = '';
@@ -59,10 +60,11 @@ export class GoalStep {
     this.sequence = 0;
     this.api = '';
     this.key = '';
-    this.parameters = [];
     this.authRequired = false;
     this.mandatory = false;
     this.ignoreIntent = false;
+    this.goalValidationTypes = [];
+    this.dependancyExpression = '';
   }
 }
 
@@ -75,6 +77,7 @@ export class Goal {
   domainGoalSteps: GoalStep[];
   model: any;
   api: string;
+  triggerFlow: boolean;
 
   constructor() {
     // this.intentName = '';
@@ -85,6 +88,7 @@ export class Goal {
     this.domainGoalSteps = [];
     this.model = {};
     this.api = '';
+    this.triggerFlow = true;
   }
 }
 

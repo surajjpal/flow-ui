@@ -389,6 +389,13 @@
               name="expression" />
           </div>
           <div class="form-group">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="triggerFlowLabel">Trigger Flow</label>
+            <select class="selectpicker form-control" required title="Select should trigger flow" [(ngModel)]="goalStep.triggerFlow" name="triggerFlow">
+              <option [ngValue]="true">Yes</option>
+              <option [ngValue]="false">No</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label class="col-md-12 col-sm-12 col-xs-12" for="goalApiLabel">
               Goal API
             </label>
@@ -479,10 +486,17 @@
                       </select>
                     </div>
                     <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsParameters' + index">
-                        Parameters
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsValidationTypes' + index">
+                        Goal Validation Types
                       </label>
-                      <tag-input [id]="'gsParameters' + index" [(ngModel)]="goalStep.parameters" name="parameters" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Parameters (Enter separated)" secondaryPlaceholder="Enter a new parameter (Enter separated)" theme="minimal" class="custom-input-tag-border"></tag-input>
+                      <tag-input [id]="'gsValidationTypes' + index" [(ngModel)]="goalStep.goalValidationTypes" name="parameters" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Validation Types" secondaryPlaceholder="Enter a new validation" theme="minimal" class="custom-input-tag-border"></tag-input>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsDependancyExpression' + index">
+                        Dependancy Expression
+                      </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsDependancyExpression' + index" placeholder="Dependancy Expression"
+                        [(ngModel)]="goalStep.dependancyExpression" name="dependancyExpression" />
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required for="'gsSequence' + index">
@@ -563,10 +577,17 @@
                       </select>
                     </div>
                     <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsParameters' + index">
-                        Parameters
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsValidationTypes' + index">
+                        Goal Validation Types
                       </label>
-                      <tag-input [id]="'gsParameters' + index" [(ngModel)]="goalStep.parameters" name="parameters" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Parameters (Enter separated)" secondaryPlaceholder="Enter a new parameter (Enter separated)" theme="minimal" class="custom-input-tag-border"></tag-input>
+                      <tag-input [id]="'gsValidationTypes' + index" [(ngModel)]="goalStep.goalValidationTypes" name="parameters" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Validation Types" secondaryPlaceholder="Enter a new validation" theme="minimal" class="custom-input-tag-border"></tag-input>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsDependancyExpression' + index">
+                        Dependancy Expression
+                      </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsDependancyExpression' + index" placeholder="Dependancy Expression"
+                        [(ngModel)]="goalStep.dependancyExpression" name="dependancyExpression" />
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required for="'gsSequence' + index">
