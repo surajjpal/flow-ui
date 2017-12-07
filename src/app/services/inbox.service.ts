@@ -146,17 +146,13 @@ export class StateService {
     return subject.asObservable();
   }
 
-  update(state: State, machineType: string, entityId: string, payload: string): Observable<State> {
+  update(machineType: string, entityId: string, payload: any): Observable<State> {
     const subject = new Subject<State>();
 
     const map = {};
-    map['payload'] = state.payload;
-    map['param'] = JSON.stringify(state.parameters);
-    if (machineType === null) {
-      machineType = `lead`;
-    }
+    map['payload'] = JSON.stringify(payload);
 
-    const url = `${environment.server + environment.updatestatemachineurl}/${machineType}/${entityId}`;
+    const url = `${environment.updatestatemachineurl}/${machineType}/${entityId}`;
 
     this.httpClient.put<State>(
       url,

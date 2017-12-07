@@ -71,12 +71,6 @@ export class ApiTableComponent implements OnInit, OnDestroy {
       });
   }
 
-  save(): void {
-    this.subscription = this.stateService.update(this.selectedState, this.selectedState.machineType,
-      this.selectedState.entityId, this.selectedState.payload)
-      .subscribe(() => this.goBack());
-  }
-
   goBack(): void {
     new closeModal('detailsModal');
     this.ngOnInit();

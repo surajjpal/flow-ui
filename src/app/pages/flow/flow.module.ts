@@ -6,6 +6,7 @@ import { NgaModule } from '../../theme/nga.module';
 
 import { routing } from './flow.routing';
 
+import { TagInputModule } from 'ngx-chips';
 import { NvD3Module } from 'ng2-nvd3';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { MomentModule } from 'angular2-moment';
@@ -29,6 +30,7 @@ import { SharedModule } from '../../shared/shared.module';
     FormsModule,
     NgaModule,
     routing,
+    TagInputModule,
     Daterangepicker,
     MomentModule,
     NvD3Module,

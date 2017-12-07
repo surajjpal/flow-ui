@@ -2,8 +2,9 @@ export const environment = {
   production: true,
   name: 'production',
 
-  // Auth
+  // API
   authurl: 'http://108.168.190.82:8080/flow/auth/',
+  updatestatemachineurl: 'http://108.168.190.82:8080/flow/api/withState',
 
   // Services
   saveaccounturl: 'http://108.168.190.82:8080/flow/services/saveaccount',
@@ -12,7 +13,6 @@ export const environment = {
   server: 'http://108.168.190.82:8080/flow/console/',
   statebyfolderurl: 'state/page/0,200,', // folder: Group, Personal
   statebystatusurl: 'state/pagebystatus/0,200,', // status: CLOSED, ACTIVE
-  updatestatemachineurl: 'statemachine/',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',

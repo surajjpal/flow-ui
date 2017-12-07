@@ -51,7 +51,7 @@ export class ApiConfigComponent implements OnInit, OnDestroy {
       this.selectedApiConfig = apiConfig;
 
       this.sharingService.setSharedObject(this.selectedApiConfig);
-      this.router.navigate(['/pg/stp/stat'], { relativeTo: this.route });
+      this.router.navigate(['/pg/stp/stas'], { relativeTo: this.route });
     }
   }
 

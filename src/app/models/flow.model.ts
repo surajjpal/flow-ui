@@ -73,6 +73,18 @@ export class CostModel{
   }
 }
 
+export class ManualAction {
+  key: string;
+  action: any;
+  type: string;
+
+  constructor() {
+    this.key = '';
+    this.action = '';
+    this.type = '';
+  }
+}
+
 export class StateModel {
   stateId: string;
   stateCd: string;
@@ -87,6 +99,7 @@ export class StateModel {
   ruleList: ApiKeyExpressionMap[];
   allocationModel: AllocationModel;
   costModel: CostModel;
+  manualActions: ManualAction[];
 
   constructor() {
     this.stateId = '';
@@ -102,6 +115,7 @@ export class StateModel {
     this.ruleList = [];
     this.allocationModel = new AllocationModel();
     this.costModel = new CostModel();
+    this.manualActions = [];
   }
 }
 

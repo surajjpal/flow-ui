@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 // Model Imports
 import { GraphObject, DataPoint, Classifier, StateModel,
-   EventModel, Expression, Transition } from '../../../../models/flow.model';
+   EventModel, Expression, Transition, ManualAction } from '../../../../models/flow.model';
 import { ApiConfig, ApiKeyExpressionMap } from '../../../../models/setup.model';
 
 // Service Imports
@@ -49,6 +49,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   sourceClassifiers: Classifier[];
   sourceEntryActionList: string[];
   sourceApiConfigList: ApiConfig[];
+  sourceManualActionType: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT'];
   
   // Models to bind with html
   readOnly: boolean;
@@ -288,6 +289,24 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (rule && this.tempState && this.tempState.ruleList && this.tempState.ruleList.includes(rule)) {
       const index = this.tempState.ruleList.indexOf(rule);
       this.tempState.ruleList.splice(index, 1);
+    }
+  }
+
+  addManualAction() {
+    if (!this.tempState) {
+      this.tempState = new StateModel();
+    }
+    if (!this.tempState.manualActions) {
+      this.tempState.manualActions = [];
+    }
+
+    this.tempState.manualActions.push(new ManualAction());
+  }
+
+  removeManualAction(manualAction: ManualAction) {
+    if (manualAction && this.tempState && this.tempState.manualActions && this.tempState.manualActions.includes(manualAction)) {
+      const index = this.tempState.manualActions.indexOf(manualAction);
+      this.tempState.manualActions.splice(index, 1);
     }
   }
 

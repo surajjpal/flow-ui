@@ -40,14 +40,8 @@
             <input type="text" class="form-control" required id="inputStateCode" placeholder="State Code" [(ngModel)]="tempState.stateCd"
               name="stateCd" />
           </div>
-          <!-- <div class="form-group">
-            <label for="selectStateType">State Type</label>
-            <select class="selectpicker form-control" required id="selectStateType" title="Choose State Type" [(ngModel)]="tempState.type"
-              name="type">
-                <option *ngFor="let stateType of sourceStateTypes" [value]="stateType">{{stateType}}</option>
-              </select>
-          </div> -->
           <div class="form-group">
+            <label for="selectStateType">State Type</label>
             <select class="selectpicker form-control" required id="selectStateType" title="Choose State Type" [(ngModel)]="tempState.type"
               name="type">
                 <option *ngFor="let stateType of sourceStateTypes" [value]="stateType">{{stateType}}</option>
@@ -70,10 +64,6 @@
             <input type="text" class="form-control" required id="api" placeholder="API" [(ngModel)]="tempState.allocationModel.api"
               name="api" />
           </div>
-          <!-- <div class="form-group" *ngIf="tempState.allocationMode !== null && tempState.type === 'Manual'">
-            <label for="groups">Groups</label>
-            <tag-input [(ngModel)]="tempState.allocationModel.groups" name="groups" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
-           </div> -->
           <div class="form-group">
             <label for="selectStateTrigger">State Trigger</label>
             <select class="selectpicker form-control" required id="selectStateTrigger" title="Choose trigger for this state" [(ngModel)]="tempState.trigger"
@@ -81,7 +71,7 @@
                 <option *ngFor="let event of tempParentState.events" [ngValue]="event">{{event.eventCd}}</option>
               </select>
           </div>
-          <div class="form-group">
+          <div class="form-group" *ngIf="tempState.allocationMode !== null && tempState.type === 'Auto'">
             <label for="selectEntryActions">Entry Actions</label>
             <select multiple="true" class="selectpicker form-control" required id="selectEntryActions" title="Choose Entry Actions" [(ngModel)]="tempState.entryActionList"
               name="entryActionList">
@@ -118,6 +108,63 @@
               name="apiCd" />
           </div>
         </form>
+
+        <div id="manualActionAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempState.allocationMode !== null && tempState.type === 'Manual'">
+          <div class="panel card">
+            <div id="manualActionTabHeader" class="card-header" heightStyle="content" role="tab">
+              <h5 class="mb-0">
+                <a data-toggle="collapse" data-parent="#manualActionAccordion" href="#manualActionCollapse" aria-expanded="true" aria-controls="manualActionCollapse">
+                  Manual Actions
+                </a>
+              </h5>
+            </div>
+
+            <div id="manualActionCollapse" class="collapse show" role="tabpanel" aria-labelledby="manualActionTabHeader">
+              <div class="card-block">
+                <table class="table" [mfData]="tempState.manualActions" [mfRowsOnPage]="5">
+                  <thead>
+                    <tr>
+                      <th>Delete</th>
+                      <th>Key to save Result</th>
+                      <th>Type</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let manualAction of tempState.manualActions">
+                      <td>
+                        <button type="button" class="btn btn-danger" title="Delete" (click)="removeManualAction(manualAction)"><i class="ion-close-round"></i></button>
+                      </td>
+                      <td>
+                        <input type="text" class="form-control" placeholder="Key" [value]="manualAction.key" (input)="manualAction.key = $event.target.value">
+                      </td>
+                      <td>
+                        <select class="selectpicker form-control" title="Choose type" [(ngModel)]="manualAction.type"
+                        name="type">
+                          <option *ngFor="let type of sourceManualActionType" [ngValue]="type">{{type}}</option>
+                        </select>
+                      </td>
+                      <td>
+                        <tag-input *ngIf="manualAction.type === 'SINGLE_SELECT' || manualAction.type === 'MULTI_SELECT'" [(ngModel)]="manualAction.action" name="action" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Action (Enter separated)" secondaryPlaceholder="Populate source actions" theme="minimal" class="custom-input-tag-border"></tag-input>
+                        <input *ngIf="manualAction.type === 'STRING' || manualAction.type === 'NUMBER' || manualAction.type === 'BOOLEAN'" type="text" disabled class="form-control" placeholder="Editable to client" [value]="manualAction.action" (input)="manualAction.action = $event.target.value">
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="2">
+                        <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                      </td>
+                      <td colspan="1" style="text-align: right;">
+                        <button type="button" class="btn btn-primary" (click)="addManualAction()">Add Action</button>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div id="ruleAccordion" role="tablist" aria-multiselectable="true" *ngIf="isStateRuleCompatible()">
           <div class="panel card">

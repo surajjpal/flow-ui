@@ -50,7 +50,7 @@ export class GoalStep {
   mandatory: boolean;
   ignoreIntent: boolean;
   goalValidationTypes: string[];
-  dependancyExpression: string;
+  dependencyExpression: string;
 
   constructor() {
     this.goalExpression = '';
@@ -64,7 +64,7 @@ export class GoalStep {
     this.mandatory = false;
     this.ignoreIntent = false;
     this.goalValidationTypes = [];
-    this.dependancyExpression = '';
+    this.dependencyExpression = '';
   }
 }
 
