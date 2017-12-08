@@ -628,11 +628,11 @@ designFlowEditor = function (serverXml, readOnly) {
 function createPopupMenu(graph, menu, cell, evt, horizontal) {
   var model = graph.getModel();
   if (!isReadOnly && cell != null) {
-    menu.addItem('Edit label', '/assets/js/mxGraph/images/text.gif', function () {
+    menu.addItem('Edit label', './assets/js/mxGraph/images/text.gif', function () {
       graph.startEditingAtCell(cell);
     });
     if (cell.id != 'treeRoot' && model.isVertex(cell)) {
-      menu.addItem('Delete', '/assets/js/mxGraph/images/delete.gif', function () {
+      menu.addItem('Delete', './assets/js/mxGraph/images/delete.gif', function () {
         deleteSubtree(graph, cell);
       });
 
@@ -663,18 +663,18 @@ function createPopupMenu(graph, menu, cell, evt, horizontal) {
     }
     menu.addSeparator();
   }
-  menu.addItem('Fit', '/assets/js/mxGraph/images/zoom.gif', function () {
+  menu.addItem('Fit', './assets/js/mxGraph/images/zoom.gif', function () {
     graph.fit();
   });
-  menu.addItem('Actual', '/assets/js/mxGraph/images/zoomactual.gif', function () {
+  menu.addItem('Actual', './assets/js/mxGraph/images/zoomactual.gif', function () {
     graph.zoomActual();
   });
   menu.addSeparator();
-  menu.addItem('Print', '/assets/js/mxGraph/images/print.gif', function () {
+  menu.addItem('Print', './assets/js/mxGraph/images/print.gif', function () {
     var preview = new mxPrintPreview(graph, 1);
     preview.open();
   });
-  menu.addItem('Poster Print', '/assets/js/mxGraph/images/print.gif', function () {
+  menu.addItem('Poster Print', './assets/js/mxGraph/images/print.gif', function () {
     var pageCount = mxUtils.prompt('Enter maximum page count', '1');
     if (pageCount != null) {
       var scale = mxUtils.getScaleForPageCount(pageCount, graph);
@@ -688,7 +688,7 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
   graph.removeCellOverlays(cell);
   
   if (!isReadOnly && cell.style != 'end') {
-    var overlay = new mxCellOverlay(new mxImage('/assets/js/mxGraph/images/add.png', 24, 24), 'Add child');
+    var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/add.png', 24, 24), 'Add child');
     
     overlay.cursor = 'hand';
     if (horizontal) {
@@ -719,7 +719,7 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
   }
 
   if (!isReadOnly && addDeleteIcon) {
-    overlay = new mxCellOverlay(new mxImage('/assets/js/mxGraph/images/close.png', 30, 30), 'Delete');
+    overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/close.png', 30, 30), 'Delete');
     overlay.cursor = 'hand';
     // overlay.offset = new mxPoint(-4, 8);
     overlay.align = mxConstants.ALIGN_RIGHT;
