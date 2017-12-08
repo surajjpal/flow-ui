@@ -32,7 +32,8 @@
         "app/theme/theme.scss",
         "styles.scss",
         "../node_modules/nvd3/build/nv.d3.min.css",
-        "../node_modules/font-awesome/css/font-awesome.css"
+        "../node_modules/font-awesome/css/font-awesome.css",
+        "assets/build/css/mycustom.css"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",
@@ -43,7 +44,10 @@
         "../node_modules/handsontable/dist/handsontable.full.js",
         "../node_modules/chroma-js/chroma.js",
         "../node_modules/d3/d3.min.js",
-        "../node_modules/nvd3/build/nv.d3.min.js"
+        "../node_modules/nvd3/build/nv.d3.min.js",
+        "assets/js/mxGraph/js/mxClient.js",
+        "assets/js/app.js",
+        "assets/build/js/mycustom.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
