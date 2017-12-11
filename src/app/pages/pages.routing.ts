@@ -13,11 +13,6 @@ export const routes: Routes = [
     loadChildren: 'app/pages/login/login.module#LoginModule'
   },
   {
-    path: 'register',
-    canActivate: [AntiAuthGuard],
-    loadChildren: 'app/pages/register/register.module#RegisterModule'
-  },
-  {
     path: 'pg',
     component: PagesComponent,
     canActivate: [AuthGuard],
