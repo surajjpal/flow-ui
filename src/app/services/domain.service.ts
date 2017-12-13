@@ -41,6 +41,35 @@ export class DomainService {
     return subject.asObservable();
   }
 
+  validationKeysLookup(): Observable<string[]> {
+    const subject = new Subject<string[]>();
+
+    const url = `${environment.autoServer + environment.validationtypekeyslookupurl}`;
+
+    this.httpClient.get<string[]>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<string[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
   domainLookup(query?: string): Observable<Domain[]> {
     const subject = new Subject<Domain[]>();
 

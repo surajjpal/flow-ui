@@ -30,7 +30,7 @@ import { AuthGuard, AntiAuthGuard, AlertService, DataSharingService, UniversalUs
 
 import { SharedModule } from './shared/shared.module';
 
-import { ErrorInterceptor } from './services/interceptors';
+import { ErrorInterceptor, UnauthenticateInterceptor } from './services/interceptors';
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
@@ -40,6 +40,11 @@ const APP_PROVIDERS = [
   {
     provide: HTTP_INTERCEPTORS,
     useClass: ErrorInterceptor,
+    multi: true
+  },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: UnauthenticateInterceptor,
     multi: true
   },
   AgentService, ConversationService, AgentDashboardService,

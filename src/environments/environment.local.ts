@@ -64,5 +64,6 @@ export const environment = {
   fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
   uploadintentexcelurl: 'uploadintents',
   uploadentityexcelurl: 'uploadentity',
-  modelkeyslookupurl: 'load/modelkeys'
+  modelkeyslookupurl: 'load/modelkeys',
+  validationtypekeyslookupurl: 'load/validations'
 };

@@ -25,6 +25,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   createMode: boolean;
   languageSource: string[];
   modelKeysSource: string[];
+  validationKeysSource: string[];
   
   intentFilterQuery: string;
   entityFilterQuery: string;
@@ -42,6 +43,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   selectedResponse: Response;
 
   private subscription: Subscription;
+  private subscriptionModelKeys: Subscription;
+  private subscriptionValidationKeys: Subscription;
   
   constructor(
     private router: Router,
@@ -88,6 +91,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   
   ngOnInit() {
     this.fetchModelKeys();
+    this.fetchValidationKeys();
     
     const domain: Domain = this.sharingService.getSharedObject();
     if (domain) {
@@ -105,15 +109,32 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     if (this.subscription && !this.subscription.closed) {
       this.subscription.unsubscribe();
     }
+    if (this.subscriptionModelKeys && !this.subscriptionModelKeys.closed) {
+      this.subscriptionModelKeys.unsubscribe();
+    }
+    if (this.subscriptionValidationKeys && !this.subscriptionValidationKeys.closed) {
+      this.subscriptionValidationKeys.unsubscribe();
+    }
   }
 
   intentUploaderOptions: NgUploaderOptions;
   fetchModelKeys() {
-    this.subscription = this.domainService.modelKeysLookup()
+    this.subscriptionModelKeys = this.domainService.modelKeysLookup()
     .subscribe(
       modelKeys => {
         if (modelKeys) {
           this.modelKeysSource = modelKeys;
+        }
+      }
+    );
+  }
+
+  fetchValidationKeys() {
+    this.subscriptionValidationKeys = this.domainService.validationKeysLookup()
+    .subscribe(
+      validationKeys => {
+        if (validationKeys) {
+          this.validationKeysSource = validationKeys;
         }
       }
     );
