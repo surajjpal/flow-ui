@@ -12,10 +12,10 @@
         </ul>
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane fade show active" id="tab_personal">
-            <apitable *ngIf="groupStates && groupStates.length > 0" [rawDataArray]="groupStates" (selectedData)="onSelect($event)"></apitable>
+            <apitable *ngIf="personalStates" [rawDataArray]="personalStates" (selectedData)="onSelect($event)"></apitable>
           </div>
           <div role="tabpanel" class="tab-pane fade" id="tab_group">
-            <apitable *ngIf="personalStates && personalStates.length > 0" [rawDataArray]="personalStates" (selectedData)="onSelect($event)"></apitable>
+            <apitable *ngIf="groupStates" [rawDataArray]="groupStates" (selectedData)="onSelect($event)"></apitable>
           </div>
         </div>
       </div>
