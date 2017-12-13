@@ -42,7 +42,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 }
 
                 if (statusCd !== 401) {
-                  this.alertService.error(`Status Code: ${statusCd}. Error: ${message}`);
+                  this.alertService.error(`${message}`);
                 }
               }
             }
