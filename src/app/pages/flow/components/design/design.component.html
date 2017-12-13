@@ -47,19 +47,19 @@
                 <option *ngFor="let stateType of sourceStateTypes" [value]="stateType">{{stateType}}</option>
               </select>
           </div>
-          <div class="form-group" *ngIf="tempState.allocationMode !== null && tempState.type === 'Manual'">
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'">
             <label for="selectAllocationType">Allocation Type</label>
             <select class="selectpicker form-control" required id="selectAllocationType" title="Choose Allocation Type" [(ngModel)]="tempState.allocationModel.allocationType"
               name="allocationType">
                 <option *ngFor="let allocationType of allocationTypes" [value]="allocationType">{{allocationType}}</option>
               </select>
           </div>
-          <div class="form-group" *ngIf="tempState.allocationMode !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'Group'">
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'Group'">
             <label for="allocationGroup">Allocate to group</label>
             <input type="text" class="form-control" required id="allocationGroup" placeholder="Allocate to group" [(ngModel)]="tempState.allocationModel.allocationGroup"
               name="allocationGroup" />
           </div>
-          <div class="form-group" *ngIf="tempState.allocationMode !== null && tempState.type === 'Manual'  && tempState.allocationModel.allocationType === 'API'">
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'  && tempState.allocationModel.allocationType === 'API'">
             <label for="api">API</label>
             <input type="text" class="form-control" required id="api" placeholder="API" [(ngModel)]="tempState.allocationModel.api"
               name="api" />
@@ -71,7 +71,7 @@
                 <option *ngFor="let event of tempParentState.events" [ngValue]="event">{{event.eventCd}}</option>
               </select>
           </div>
-          <div class="form-group" *ngIf="tempState.allocationMode !== null && tempState.type === 'Auto'">
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto'">
             <label for="selectEntryActions">Entry Actions</label>
             <select multiple="true" class="selectpicker form-control" required id="selectEntryActions" title="Choose Entry Actions" [(ngModel)]="tempState.entryActionList"
               name="entryActionList">
@@ -109,7 +109,7 @@
           </div>
         </form>
 
-        <div id="manualActionAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempState.allocationMode !== null && tempState.type === 'Manual'">
+        <div id="manualActionAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'">
           <div class="panel card">
             <div id="manualActionTabHeader" class="card-header" heightStyle="content" role="tab">
               <h5 class="mb-0">
@@ -145,8 +145,8 @@
                         </select>
                       </td>
                       <td>
-                        <tag-input *ngIf="manualAction.type === 'SINGLE_SELECT' || manualAction.type === 'MULTI_SELECT'" [(ngModel)]="manualAction.action" name="action" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Action (Enter separated)" secondaryPlaceholder="Populate source actions" theme="minimal" class="custom-input-tag-border"></tag-input>
-                        <input *ngIf="manualAction.type === 'STRING' || manualAction.type === 'NUMBER' || manualAction.type === 'BOOLEAN'" type="text" disabled class="form-control" placeholder="Editable to client" [value]="manualAction.action" (input)="manualAction.action = $event.target.value">
+                        <tag-input *ngIf="manualAction.type === 'SINGLE_SELECT' || manualAction.type === 'MULTI_SELECT'" [(ngModel)]="manualAction.value" name="action" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Action (Enter separated)" secondaryPlaceholder="Populate source actions" theme="minimal" class="custom-input-tag-border"></tag-input>
+                        <input *ngIf="manualAction.type === 'STRING' || manualAction.type === 'NUMBER' || manualAction.type === 'BOOLEAN'" type="text" disabled class="form-control" placeholder="Editable to client" [value]="manualAction.value" (input)="manualAction.value = $event.target.value">
                       </td>
                     </tr>
                   </tbody>
@@ -515,22 +515,22 @@
                   <form>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpInputName' + index">
-                          Name
-                        </label>
+                        Name
+                      </label>
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpInputName' + index" placeholder="Name"
                         [(ngModel)]="dataPoint.dataPointName" name="dataPointName" />
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputExpression' + index">
-                          Expression
-                        </label>
+                        Expression
+                      </label>
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpInputExpression' + index" placeholder="Expression"
                         [(ngModel)]="dataPoint.expression" name="expression" />
                     </div>
                     <div class="form-group" *ngIf="tempGraphObject.dataPointConfigurationList.length > 1">
                       <button type="button" class="btn btn-danger" (click)="deleteDataPoint(dataPoint)">
-                          Remove Data Point
-                        </button>
+                        Remove Data Point
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -540,22 +540,22 @@
                   <form>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpInputName' + index">
-                          Name
-                        </label>
+                        Name
+                      </label>
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpInputName' + index" placeholder="Name"
                         [(ngModel)]="dataPoint.dataPointName" name="dataPointName" />
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputExpression' + index">
-                          Expression
-                        </label>
+                        Expression
+                      </label>
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpInputExpression' + index" placeholder="Expression"
                         [(ngModel)]="dataPoint.expression" name="expression" />
                     </div>
                     <div class="form-group" *ngIf="tempGraphObject.dataPointConfigurationList.length > 1">
                       <button type="button" class="btn btn-danger" (click)="deleteDataPoint(dataPoint)">
-                          Remove Data Point
-                        </button>
+                        Remove Data Point
+                      </button>
                     </div>
                   </form>
                 </div>

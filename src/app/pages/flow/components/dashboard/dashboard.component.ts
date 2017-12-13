@@ -29,8 +29,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   avgTimeInStatesOptions;
   avgTimeInStatesData;
 
-  private statesConsumingMaxResTimeTransaction: StateConsumingMaxResTimeTransaction;
-  private workflowSummary: WorkflowSummary;
+  statesConsumingMaxResTimeTransaction: StateConsumingMaxResTimeTransaction;
+  workflowSummary: WorkflowSummary;
+
   private workflowSummarySubscription: Subscription;
   private statesConsumingMaxResTimeTransactionSubscription: Subscription;
   private flowTimelineSubscription: Subscription;
@@ -38,7 +39,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private groupResourceAllocationInStatesSubscription: Subscription;
   private transactionValueInStatesSubscription: Subscription;
   private avgTimeInStatesSubscription: Subscription;
-
   
   constructor(private dashboardService: FlowDashboardService) { }
 

@@ -1,46 +1,33 @@
 export class Intent {
-  // intentName: string;
-  // createdDt: Date;
   intentCd: string;
   intentParent: string;
   tags: string[];
   weight: number;
-  // defaultResponse: string;
 
   constructor() {
-    // this.intentName = '';
-    // this.createdDt = new Date();
     this.intentCd = '';
     this.intentParent = '';
     this.tags = [];
     this.weight = 0;
-    // this.defaultResponse = '';
   }
 }
 
 export class Entity {
-  // entityName: string;
-  // createdDt: Date;
   entityCd: string;
   entityParent: string;
   tags: string[];
   transactionValue: number;
-  // defaultResponse: string;
 
   constructor() {
-    // this.entityName = '';
-    // this.createdDt = new Date();
     this.entityCd = '';
     this.entityParent = '';
     this.tags = [];
     this.transactionValue = 0;
-    // this.defaultResponse = '';
   }
 }
 
 export class GoalStep {
   goalExpression: string;
-  // createdDt: Date;
   sequence: number;
   goalResponse: string;
   lang: string;
@@ -54,7 +41,6 @@ export class GoalStep {
 
   constructor() {
     this.goalExpression = '';
-    // this.createdDt = new Date();
     this.goalResponse = 'New Goal Response';
     this.lang = '';
     this.sequence = 0;
@@ -69,42 +55,45 @@ export class GoalStep {
 }
 
 export class Goal {
-  // intentName: string;
-  // entityName: string;
   expression: string;
   goalName: string;
-  // createdDt: Date;
   domainGoalSteps: GoalStep[];
   model: any;
   api: string;
-  triggerFlow: boolean;
+  responseExpression: string;
+  validationCheck: boolean;
+  flowFlag: boolean;
+  htmlFlag: boolean;
+  responseChange: boolean;
+  responseDependent: boolean;
+  valueExpression: string;
+  tagExpression: string;
 
   constructor() {
-    // this.intentName = '';
-    // this.entityName = '';
     this.expression = '';
     this.goalName = '';
-    // this.createdDt = new Date();
     this.domainGoalSteps = [];
     this.model = {};
     this.api = '';
-    this.triggerFlow = true;
+    this.responseExpression = '';
+    this.validationCheck = false;
+    this.flowFlag = true;
+    this.htmlFlag = true;
+    this.responseChange = false;
+    this.responseDependent = false;
+    this.valueExpression = '';
+    this.tagExpression = '';
   }
 }
 
 export class Response {
-  // intentName: string;
-  // entityName: string;
   level: number;
   actionHTML: string;
   expression: string;
   lang: string;
-  // createdDt: Date;
   response: string;
 
   constructor(expression?: string, lang?: string, response?: string) {
-    // this.intentName = '';
-    // this.entityName = '';
     this.level = 1;
     this.actionHTML = '';
 
@@ -117,8 +106,6 @@ export class Response {
       this.lang = '';
       this.response = '';
     }
-
-    // this.createdDt = new Date();
   }
 }
 

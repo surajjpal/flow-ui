@@ -11,8 +11,8 @@ import { StateService } from '../../../../services/inbox.service';
 })
 
 export class ActiveComponent implements OnInit, OnDestroy {
-  private groupStates: State[];
-  private personalStates: State[];
+  groupStates: State[];
+  personalStates: State[];
 
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;

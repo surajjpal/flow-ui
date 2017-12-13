@@ -75,13 +75,13 @@ export class CostModel{
 
 export class ManualAction {
   key: string;
-  action: any;
+  value: any;
   type: string;
 
-  constructor() {
-    this.key = '';
-    this.action = '';
-    this.type = '';
+  constructor(key?: string, value?: any, type?: string) {
+    this.key = key ? key :'';
+    this.value = value ? value : '';
+    this.type = type ? type : '';
   }
 }
 

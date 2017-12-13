@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AlertComponent } from './shared.component';
+import { AlertComponent, ApiCheckboxComponent } from './shared.component';
 import { UniversalFilterPipe } from './universal-data-filter.pipe';
 import { KeysPipe } from './key-filter.pipe';
 
@@ -11,11 +11,13 @@ import { KeysPipe } from './key-filter.pipe';
   ],
   declarations: [
     AlertComponent,
+    ApiCheckboxComponent,
     UniversalFilterPipe,
     KeysPipe
   ],
   exports: [
     AlertComponent,
+    ApiCheckboxComponent,
     UniversalFilterPipe,
     KeysPipe
   ]

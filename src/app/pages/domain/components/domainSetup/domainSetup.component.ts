@@ -394,6 +394,14 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     }
   }
 
+  toggleCheck(checkBox: string, checked: boolean) {
+    if (checkBox) {
+        this.tempGoal.htmlFlag = checkBox === 'HTML_FLAG' && checked;
+        this.tempGoal.responseChange = checkBox === 'RESPONSE_CHANGE' && checked;
+        this.tempGoal.responseDependent = checkBox === 'RESPONSE_DEPENDENT' && checked;
+    }
+  }
+
   // -------------------------------------------------------------------------------------------------
 
   onExcelUpload(event: any) {

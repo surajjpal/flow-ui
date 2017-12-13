@@ -12,7 +12,7 @@ import { StateService } from '../../../../services/inbox.service';
 
 export class ArchivedComponent implements OnInit, OnDestroy {
 
-  private closedStates: State[];
+  closedStates: State[];
 
   private subscription: Subscription;
 

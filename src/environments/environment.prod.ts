@@ -38,6 +38,7 @@ export const environment = {
   // auto
   autoServer: 'http://108.168.190.82:8080/flow/auto/',
   episodelisturl: 'load/episodes?query=',
+  episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',
   trainingdataurl: 'load/trainingdata',
   uploadtrainingexcelurl: 'load/excelupload',

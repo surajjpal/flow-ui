@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataTableModule } from 'angular2-datatable';
 
+import { TagInputModule } from 'ngx-chips';
 import { NgaModule } from '../../theme/nga.module';
 
 import { routing } from './inbox.routing';
@@ -21,6 +22,7 @@ import { SharedModule } from '../../shared/shared.module';
     FormsModule,
     NgaModule,
     routing,
+    TagInputModule,
     ApiTableModule,
     DataTableModule,
     SharedModule

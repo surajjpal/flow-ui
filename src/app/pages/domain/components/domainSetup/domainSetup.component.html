@@ -388,12 +388,28 @@
             <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="expressionLabel" placeholder="Expression" [(ngModel)]="tempGoal.expression"
               name="expression" />
           </div>
-          <div class="form-group">
-            <label class="col-md-12 col-sm-12 col-xs-12" for="triggerFlowLabel">Trigger Flow</label>
-            <select class="selectpicker form-control" required title="Select should trigger flow" [(ngModel)]="goalStep.triggerFlow" name="triggerFlow">
-              <option [ngValue]="true">Yes</option>
-              <option [ngValue]="false">No</option>
-            </select>
+          <div class="row">
+            <api-checkbox class="col-md-3" [checked]="tempGoal.flowFlag" [label]="'Flow Flag'" (event)="tempGoal.flowFlag = $event.target.checked"></api-checkbox>
+            <api-checkbox class="col-md-3" [checked]="tempGoal.validationCheck" [label]="'Validation Check'" (event)="tempGoal.validationCheck = $event.target.checked"></api-checkbox>
+          </div>
+          <div class="row">
+            <api-checkbox class="col-md-3" [checked]="tempGoal.htmlFlag" [label]="'HTML Flag'" (event)="toggleCheck('HTML_FLAG', $event.target.checked)"></api-checkbox>
+            <api-checkbox class="col-md-3" [checked]="tempGoal.responseChange" [label]="'Response Change'" (event)="toggleCheck('RESPONSE_CHANGE', $event.target.checked)"></api-checkbox>
+            <api-checkbox class="col-md-3" [checked]="tempGoal.responseDependent" [label]="'Response Dependent'" (event)="toggleCheck('RESPONSE_DEPENDENT', $event.target.checked)"></api-checkbox>
+          </div>
+          <div class="form-group" *ngIf="tempGoal.htmlFlag || tempGoal.responseChange || tempGoal.responseDependent">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="valueExpressionLabel">
+              Value Expression
+            </label>
+            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="valueExpressionLabel" placeholder="Value Expression" [(ngModel)]="tempGoal.valueExpression"
+              name="valueExpression" />
+          </div>
+          <div class="form-group" *ngIf="tempGoal.htmlFlag">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="tagExpressionLabel">
+              Tag Expression
+            </label>
+            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="tagExpressionLabel" placeholder="Tag Expression" [(ngModel)]="tempGoal.tagExpression"
+              name="tagExpression" />
           </div>
           <div class="form-group">
             <label class="col-md-12 col-sm-12 col-xs-12" for="goalApiLabel">
@@ -401,6 +417,13 @@
             </label>
             <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="goalApiLabel" placeholder="Goal API" [(ngModel)]="tempGoal.api"
               name="api" />
+          </div>
+          <div class="form-group">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="responseExpressionLabel">
+              Response Expression
+            </label>
+            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="responseExpression" placeholder="Response Expression" [(ngModel)]="tempGoal.responseExpression"
+              name="responseExpression" />
           </div>
         </form>
 
@@ -456,26 +479,10 @@
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsApi' + index" placeholder="API"
                         [(ngModel)]="goalStep.api" name="api" />
                     </div>
-                    <div class="form-group">
-                      <label>Auth Required</label>
-                      <select class="selectpicker form-control" required title="Select is auth required" [(ngModel)]="goalStep.authRequired" name="authRequired">
-                        <option [ngValue]="true">Yes</option>
-                        <option [ngValue]="false">No</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label>Mandatory</label>
-                      <select class="selectpicker form-control" required title="Select is mandatory" [(ngModel)]="goalStep.mandatory" name="mandatory">
-                        <option [ngValue]="true">Yes</option>
-                        <option [ngValue]="false">No</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label>Ignore Intent</label>
-                      <select class="selectpicker form-control" required title="Select if to ignore intent" [(ngModel)]="goalStep.ignoreIntent" name="ignoreIntent">
-                        <option [ngValue]="true">Yes</option>
-                        <option [ngValue]="false">No</option>
-                      </select>
+                    <div class="row">
+                      <api-checkbox class="col-md-4" [checked]="goalStep.authRequired" [label]="'Auth Required'" (event)="goalStep.authRequired = $event.target.checked"></api-checkbox>
+                      <api-checkbox class="col-md-4" [checked]="goalStep.mandatory" [label]="'Mandatory'" (event)="goalStep.mandatory = $event.target.checked"></api-checkbox>
+                      <api-checkbox class="col-md-4" [checked]="goalStep.ignoreIntent" [label]="'Ignore Intent'" (event)="goalStep.ignoreIntent = $event.target.checked"></api-checkbox>
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsKey' + index">
@@ -547,27 +554,11 @@
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsApi' + index" placeholder="API"
                         [(ngModel)]="goalStep.api" name="api" />
                     </div>
-                    <div class="form-group">
-                      <label>Auth Required</label>
-                      <select class="selectpicker form-control" required title="Select is auth required" [(ngModel)]="goalStep.authRequired" name="authRequired">
-                        <option [ngValue]="true">Yes</option>
-                        <option [ngValue]="false">No</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label>Mandatory</label>
-                      <select class="selectpicker form-control" required title="Select is mandatory" [(ngModel)]="goalStep.mandatory" name="mandatory">
-                        <option [ngValue]="true">Yes</option>
-                        <option [ngValue]="false">No</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label>Ignore Intent</label>
-                      <select class="selectpicker form-control" required title="Select if to ignore intent" [(ngModel)]="goalStep.ignoreIntent" name="ignoreIntent">
-                        <option [ngValue]="true">Yes</option>
-                        <option [ngValue]="false">No</option>
-                      </select>
-                    </div>
+                    <div class="row">
+                        <api-checkbox class="col-md-4" [checked]="goalStep.authRequired" [label]="'Auth Required'" (event)="goalStep.authRequired = $event.target.checked"></api-checkbox>
+                        <api-checkbox class="col-md-4" [checked]="goalStep.mandatory" [label]="'Mandatory'" (event)="goalStep.mandatory = $event.target.checked"></api-checkbox>
+                        <api-checkbox class="col-md-4" [checked]="goalStep.ignoreIntent" [label]="'Ignore Intent'" (event)="goalStep.ignoreIntent = $event.target.checked"></api-checkbox>
+                      </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsKey' + index">
                         Model Key

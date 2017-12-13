@@ -225,4 +225,33 @@ export class ConversationService {
 
     return subject.asObservable();
   }
+
+  getEpisode(episodeId: string): Observable<Episode> {
+    const subject = new Subject<Episode>();
+
+    const url = `${environment.autoServer + environment.episodebyidurl + episodeId}`;
+
+    this.httpClient.get<Episode>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Episode>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
 }
