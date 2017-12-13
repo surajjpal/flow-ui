@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { GlobalState } from '../../../global.state';
 import { AuthService } from '../../../services/auth.service';
+import { UniversalUser, DataSharingService } from '../../../services/shared.service';
 
 @Component({
   selector: 'ba-page-top',
@@ -18,7 +19,9 @@ export class BaPageTop {
     private router: Router,
     private route: ActivatedRoute,
     private _state: GlobalState,
-    private authService: AuthService
+    private authService: AuthService,
+    private universalUser: UniversalUser,
+    private sharingService: DataSharingService
   ) {
     this._state.subscribe('menu.isCollapsed', (isCollapsed) => {
       this.isMenuCollapsed = isCollapsed;
@@ -40,6 +43,7 @@ export class BaPageTop {
   }
 
   profile() {
-    this.router.navigate(['/pg/stp/stus/profile'], { relativeTo: this.route });
+    this.sharingService.setSharedObject(this.universalUser.getUser());
+    this.router.navigate(['/pg/stp/stus'], { relativeTo: this.route });
   }
 }
