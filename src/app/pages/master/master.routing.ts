@@ -17,6 +17,7 @@ const routes: Routes = [
       { path: 'stac', component: AccountCreationComponent },
       { path: 'stu', component: UserComponent },
       { path: 'stus', component: UpdateUserComponent },
+      { path: 'stus/:prf', component: UpdateUserComponent },
       { path: 'stm', component: RoutelinkComponent },
       { path: 'sta', component: ApiConfigComponent },
       { path: 'stas', component: ApiConfigSetupComponent }

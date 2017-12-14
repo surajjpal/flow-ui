@@ -43,7 +43,6 @@ export class BaPageTop {
   }
 
   profile() {
-    this.sharingService.setSharedObject(this.universalUser.getUser());
-    this.router.navigate(['/pg/stp/stus'], { relativeTo: this.route });
+    this.router.navigate(['/pg/stp/stus/prf'], { relativeTo: this.route });
   }
 }

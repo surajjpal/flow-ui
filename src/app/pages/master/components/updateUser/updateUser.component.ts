@@ -26,6 +26,7 @@ export class UpdateUserComponent implements OnInit, OnDestroy {
   profileEditMode: boolean = false;
 
   private userSubscription: Subscription;
+  private routeSubscription: Subscription;
 
   constructor(
     private alertService: AlertService,
@@ -46,13 +47,16 @@ export class UpdateUserComponent implements OnInit, OnDestroy {
     if (this.userSubscription && !this.userSubscription.closed) {
       this.userSubscription.unsubscribe();
     }
+    if (this.routeSubscription && !this.routeSubscription.closed) {
+      this.routeSubscription.unsubscribe();
+    }
   }
 
   initUI() {
-    this.route
+    this.routeSubscription = this.route
       .params
       .subscribe(params => {
-        this.profileEditMode = (params['profile'] === 'profile');
+        this.profileEditMode = (params['prf'] === 'prf');
         this.goAhead();
       });
   }
@@ -104,6 +108,9 @@ export class UpdateUserComponent implements OnInit, OnDestroy {
           .subscribe(
           data => {
             // set success message and pass true paramater to persist the message after redirecting to the login page
+            if (data && data.username === this.universalUser.getUser().username) {
+              this.universalUser.setUser(data);
+            }
             this.alertService.success('User updated successfully', true, 5000);
             this.location.back();
           });
