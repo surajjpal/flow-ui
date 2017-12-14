@@ -59,6 +59,16 @@
             <input type="text" class="form-control" required id="allocationGroup" placeholder="Allocate to group" [(ngModel)]="tempState.allocationModel.allocationGroup"
               name="allocationGroup" />
           </div>
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'User'">
+            <label for="allocationUser">Allocate to User</label>
+            <input type="text" class="form-control" required id="allocationUser" placeholder="Allocate to User" [(ngModel)]="tempState.allocationModel.allocatedUserCd"
+              name="allocatedUserCd" />
+          </div>
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'  && tempState.allocationModel.allocationType === 'User'">
+            <label for="api">Email API</label>
+            <input type="text" class="form-control" required id="api" placeholder="Email API" [(ngModel)]="tempState.allocationModel.api"
+              name="api" />
+          </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'  && tempState.allocationModel.allocationType === 'API'">
             <label for="api">API</label>
             <input type="text" class="form-control" required id="api" placeholder="API" [(ngModel)]="tempState.allocationModel.api"

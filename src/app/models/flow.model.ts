@@ -48,12 +48,14 @@ export class AllocationModel {
   allocationType: string;
   groups: string[];
   api: string;
+  allocatedUserCd: string;
 
   constructor() {
     this.allocationGroup = '';
     this.groups = [];
     this.allocationType = '';
     this.api = '';
+    this.allocatedUserCd = '';
   }
 }
 
