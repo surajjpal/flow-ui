@@ -38,6 +38,8 @@ export class GoalStep {
   ignoreIntent: boolean;
   goalValidationTypes: string[];
   dependencyExpression: string;
+  responseExpression: string;
+  actionHtml: string;
 
   constructor() {
     this.goalExpression = '';
@@ -51,6 +53,8 @@ export class GoalStep {
     this.ignoreIntent = false;
     this.goalValidationTypes = [];
     this.dependencyExpression = '';
+    this.responseExpression = '';
+    this.actionHtml = '';
   }
 }
 
@@ -93,19 +97,13 @@ export class Response {
   lang: string;
   response: string;
 
-  constructor(expression?: string, lang?: string, response?: string) {
+  constructor(expression?: string, lang?: string, response?: string, actionHTML?: string) {
     this.level = 1;
-    this.actionHTML = '';
 
-    if (expression && lang && response) {
-      this.expression = expression;
-      this.lang = lang;
-      this.response = response;
-    } else {
-      this.expression = '';
-      this.lang = '';
-      this.response = '';
-    }
+    this.expression = expression ? expression : '';
+    this.lang = lang ? lang : '';
+    this.response = response ? response : '';
+    this.actionHTML = actionHTML ? actionHTML : '';
   }
 }
 
