@@ -292,6 +292,15 @@ export class ApiConfigSetupComponent implements OnInit, OnDestroy {
       });
   }
 
+  deleteApiConfig() {
+    this.subscription = this.apiConfigService.deleteApiConfig(this.apiConfig)
+    .subscribe(
+      data => {
+        this.alertService.success('API Config deleted successfully', true);
+        this.router.navigate(['/pg/stp/sta'], { relativeTo: this.route });
+      });
+  }
+
   onResponseTypeChange() {
     if (this.selectedResponse) {
       this.selectedResponse.keyExpressionList = [];

@@ -294,6 +294,7 @@
         </form>
         <div class="panel-footer">
           <button type="button" class="btn btn-success" (click)="saveApiConfiguration()">Save API Configuration</button>
+          <button *ngIf="!createMode" type="button" class="btn btn-danger" (click)="deleteApiConfig()">Delete API Configuration</button>
         </div>
       </div>
     </ba-card>

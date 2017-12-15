@@ -168,9 +168,7 @@ export class RoutesService {
       )
         .subscribe(
         (response: HttpResponse<any>) => {
-          if (response.body) {
-            subject.next(response.body);
-          }
+          subject.next(response);
         },
         (err: HttpErrorResponse) => {
           // All errors are handled in ErrorInterceptor, no further handling required
@@ -372,9 +370,7 @@ export class ApiConfigService {
       )
         .subscribe(
         (response: HttpResponse<any>) => {
-          if (response.body) {
-            subject.next(response.body);
-          }
+          subject.next(response);
         },
         (err: HttpErrorResponse) => {
           // All errors are handled in ErrorInterceptor, no further handling required

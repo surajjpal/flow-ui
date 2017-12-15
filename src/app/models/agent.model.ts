@@ -5,12 +5,14 @@ export class UIComponent {
   font: string;
   logoUrl: string;
   typingGif: string;
+  avatarUrl: string;
 
   constructor() {
     this.colorCss = '';
     this.font = '';
     this.logoUrl = '';
     this.typingGif = '';
+    this.avatarUrl = '';
   }
 }
 
