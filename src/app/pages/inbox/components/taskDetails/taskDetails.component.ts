@@ -119,19 +119,23 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
         for (const key in this.selectedState.parameters) {
           const paramValue: any = this.selectedState.parameters[key];
           
-          if (key && paramValue) {
+          if (key) {
             let manualAction: ManualAction;
 
-            if (typeof paramValue === 'string' || paramValue instanceof String) {
-              manualAction = new ManualAction(key, paramValue, 'STRING');
-            } else if (typeof paramValue === 'number' || paramValue instanceof Number) {
-              manualAction = new ManualAction(key, paramValue, 'NUMBER');
-            } else if (typeof paramValue === 'boolean' || paramValue instanceof Boolean) {
-              manualAction = new ManualAction(key, paramValue, 'BOOLEAN');
-            } else if (paramValue instanceof Array) {
-              manualAction = new ManualAction(key, paramValue, 'ARRAY');
+            if (paramValue) {
+              if (typeof paramValue === 'string' || paramValue instanceof String) {
+                manualAction = new ManualAction(key, paramValue, 'STRING');
+              } else if (typeof paramValue === 'number' || paramValue instanceof Number) {
+                manualAction = new ManualAction(key, paramValue, 'NUMBER');
+              } else if (typeof paramValue === 'boolean' || paramValue instanceof Boolean) {
+                manualAction = new ManualAction(key, paramValue, 'BOOLEAN');
+              } else if (paramValue instanceof Array) {
+                manualAction = new ManualAction(key, paramValue, 'ARRAY');
+              } else {
+                manualAction = new ManualAction(key, paramValue, '');
+              }
             } else {
-              manualAction = new ManualAction(key, paramValue, '');
+              manualAction = new ManualAction(key, '', 'STRING');
             }
 
             this.manualActions.push(manualAction);
