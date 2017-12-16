@@ -14,7 +14,7 @@ import { Episode, ChatMessage } from '../../../../models/conversation.model';
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
 import { ConversationService } from '../../../../services/agent.service';
 import { AccountService } from '../../../../services/setup.service';
-import { UniversalUser } from '../../../../services/shared.service';
+import { UniversalUser, AlertService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'api-task-details',
@@ -43,6 +43,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     private conversationService: ConversationService,
     private accountService: AccountService,
     private universalUser: UniversalUser,
+    private alertService: AlertService,
     private dataCachingService: DataCachingService,
     private location: Location
   ) { }
@@ -239,7 +240,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
               this.onBack();
             });
         } else {
-
+          this.alertService.error('Company details not found.', false, 5000);
         }
       });
   }
