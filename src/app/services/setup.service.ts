@@ -458,7 +458,7 @@ export class AccountService {
   getAccountById(companyId: string): Observable<Account> {
     const subject = new Subject<Account>();
 
-    const url = `${environment.server + environment.fetchaccountbyidurl + companyId}`;
+    const url = `${environment.fetchaccountbyidurl + companyId}`;
 
     this.httpClient.get<Account[]>(
       url,
