@@ -13,6 +13,8 @@ import { Episode, ChatMessage } from '../../../../models/conversation.model';
 
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
 import { ConversationService } from '../../../../services/agent.service';
+import { AccountService } from '../../../../services/setup.service';
+import { UniversalUser } from '../../../../services/shared.service';
 
 @Component({
   selector: 'api-task-details',
@@ -26,12 +28,9 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   manualActions: ManualAction[];
   actionMap: any;
   graphObject: GraphObject;
-  // parameterKeys: Map<string, string> = new Map(); // to be removed
 
   selectedEpisode: Episode;
   chatMessageList: ChatMessage[];
-
-  // dataPointList: DataPoint[]; // to be removed
 
   private subscription: Subscription;
   private subscriptionEpisode: Subscription;
@@ -42,6 +41,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private stateService: StateService,
     private conversationService: ConversationService,
+    private accountService: AccountService,
+    private universalUser: UniversalUser,
     private dataCachingService: DataCachingService,
     private location: Location
   ) { }
@@ -135,55 +136,13 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
                 manualAction = new ManualAction(key, paramValue, '');
               }
             } else {
-              manualAction = new ManualAction(key, '', 'STRING');
+              manualAction = new ManualAction(key, null, 'STRING');
             }
 
             this.manualActions.push(manualAction);
             this.actionMap[key] = paramValue;
           }
         }
-
-        /*
-        let dataPoint = this.getDataPoint(key);
-
-        if (dataPoint.type === 'STRING' || dataPoint.type === 'NUMBER' || dataPoint.type === 'BOOLEAN') {
-          this.actionMap[key] = (this.selectedState.parameters[key] !== null && this.selectedState.parameters[key].toString().trim().length > 0) ? this.selectedState.parameters[key] : dataPoint.value;
-        } else if (dataPoint.type === 'EXPRESSION') {
-          this.actionMap[key] = (this.selectedState.parameters[key] !== null && this.selectedState.parameters[key].toString().trim().length > 0) ? this.selectedState.parameters[key] : '';
-        } else if (dataPoint.type === 'SINGLE_SELECT') {
-          this.actionMap[key] = (this.selectedState.parameters[key] !== null && this.selectedState.parameters[key].toString().trim().length > 0) ? this.selectedState.parameters[key] : '';
-        } else if (dataPoint.type === 'MULTI_SELECT') {
-          this.actionMap[key] = this.selectedState.parameters[key] !== null ? this.selectedState.parameters[key] : [];
-        } else {
-          this.actionMap[key] = this.selectedState.parameters[key];
-          dataPoint.key = key;
-          dataPoint.value = this.selectedState.parameters[key];
-          dataPoint.type = '';
-        }
-
-        this.dataPointList.push(dataPoint);
-
-        for (const dataPoint of this.graphObject.dataPointConfigurationList) {
-          let unique = true;
-          for (const innerDataPoint of this.dataPointList) {
-            if (innerDataPoint.key === dataPoint.key) {
-              unique = false;
-            }
-          }
-
-          if (unique) {
-            this.dataPointList.push(dataPoint);
-
-            if (dataPoint.type === 'STRING' || dataPoint.type === 'NUMBER' || dataPoint.type === 'BOOLEAN') {
-              this.actionMap[dataPoint.key] = dataPoint.value;
-            } else if (dataPoint.type === 'EXPRESSION' || dataPoint.type === 'SINGLE_SELECT') {
-              this.actionMap[dataPoint.key] = '';
-            } else if (dataPoint.type === 'MULTI_SELECT') {
-              this.actionMap[dataPoint.key] = [];
-            }
-          }
-        }
-        */
       }
     }
   }
@@ -271,22 +230,17 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       this.actionMap = {};
     }
 
-    this.subscription = this.stateService.update(this.selectedState.machineType,
-      this.selectedState.entityId, this.actionMap)
-      .subscribe(state => {
-        this.onBack();
+    this.subscription = this.accountService.getAccountById(this.universalUser.getUser().companyId)
+      .subscribe(account => {
+        if (account) {
+          this.subscription = this.stateService.update(this.selectedState.machineType,
+            this.selectedState.entityId, this.universalUser.getUser().companyId, account.companyName, this.actionMap)
+            .subscribe(state => {
+              this.onBack();
+            });
+        } else {
+
+        }
       });
   }
-
-  // getDataPoint(key: string) {
-  //   if (key && this.graphObject && this.graphObject.dataPointConfigurationList) {
-  //     for (const dataPoint of this.graphObject.dataPointConfigurationList) {
-  //       if (dataPoint.key === key) {
-  //         return dataPoint;
-  //       }
-  //     }
-  //   }
-
-  //   return new DataPoint();
-  // }
 }

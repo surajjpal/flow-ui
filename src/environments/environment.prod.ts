@@ -8,6 +8,7 @@ export const environment = {
 
   // Services
   saveaccounturl: 'http://108.168.190.82:8080/flow/services/saveaccount',
+  fetchaccountbyidurl: 'http://108.168.190.82:8080/flow/services/fetchaccountbyid?query=',
 
   // Flow
   server: 'http://108.168.190.82:8080/flow/console/',

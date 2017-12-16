@@ -8,7 +8,6 @@ export class Account extends BaseModel {
   flashInfo: string[];
   s3: boolean;
   apiKey: string;
-  agentName: string[];
 
   constructor() {
     super();
@@ -20,6 +19,5 @@ export class Account extends BaseModel {
     this.flashInfo = [];
     this.s3 = false;
     this.apiKey = '';
-    this.agentName = [];
   }
 }

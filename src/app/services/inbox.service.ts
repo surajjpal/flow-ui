@@ -146,8 +146,10 @@ export class StateService {
     return subject.asObservable();
   }
 
-  update(machineType: string, entityId: string, payload: any): Observable<State> {
+  update(machineType: string, entityId: string, companyId: string, companyName: string, payload: any): Observable<State> {
     const subject = new Subject<State>();
+
+    const customHttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json', 'x-consumer-custom-id': companyId, 'x-consumer-username': companyName });
 
     const map = {};
     map['payload'] = JSON.stringify(payload);
@@ -158,7 +160,7 @@ export class StateService {
       url,
       map,
       {
-        headers: this.httpHeaders,
+        headers: customHttpHeaders,
         observe: 'response',
         reportProgress: true,
         withCredentials: true

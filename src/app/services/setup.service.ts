@@ -454,4 +454,44 @@ export class AccountService {
 
     return subject.asObservable();
   }
+
+  getAccountById(companyId: string): Observable<Account> {
+    const subject = new Subject<Account>();
+
+    const url = `${environment.server + environment.fetchaccountbyidurl + companyId}`;
+
+    this.httpClient.get<Account[]>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+      (response: HttpResponse<Account[]>) => {
+        if (response.body) {
+          const accounts: Account[] = response.body;
+
+          // Currenlty service sends array of Account even though it has single object in it.
+          // So we are extracting object out of array in case array size is greater than 0.
+          // TODO: Once service is updated, expect object in api response and remove parsing.
+
+          if (accounts && accounts.length > 0) {
+            subject.next(accounts[0]);
+          } else {
+            subject.next(null);
+          }
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
 }
