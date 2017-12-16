@@ -231,6 +231,11 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       this.actionMap = {};
     }
 
+    /**
+
+    * Fetching company details is currently throwing 403 for non ROLE_ADMIN users
+    * Uncomment once issue is resolved and remove bypass which is currently being used
+
     this.subscription = this.accountService.getAccountById(this.universalUser.getUser().companyId)
       .subscribe(account => {
         if (account) {
@@ -242,6 +247,15 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
         } else {
           this.alertService.error('Company details not found.', false, 5000);
         }
+      });
+    */
+
+    // Bypass mechanism till company details service works
+    // Currently passing username instead of company name, remove once this bypass is not required and follow above implemented approach
+    this.subscription = this.stateService.update(this.selectedState.machineType,
+      this.selectedState.entityId, this.universalUser.getUser().companyId, this.universalUser.getUser().username, this.actionMap)
+      .subscribe(state => {
+        this.onBack();
       });
   }
 }
