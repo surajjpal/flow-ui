@@ -324,8 +324,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
   }
 
-  clearAllData(): void {
-    location.reload();
+  discardChanges(): void {
+    this.router.navigate(['/pg/flw/flsr'], { relativeTo: this.route });
   }
 
   deepCopy(object: Object) {

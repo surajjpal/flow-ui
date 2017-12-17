@@ -671,7 +671,8 @@ function createPopupMenu(graph, menu, cell, evt, horizontal) {
   });
   menu.addSeparator();
   menu.addItem('Print', './assets/js/mxGraph/images/print.gif', function () {
-    var preview = new mxPrintPreview(graph, 1);
+    var scale = mxUtils.getScaleForPageCount(1, graph);
+    var preview = new mxPrintPreview(graph, scale);
     preview.open();
   });
   menu.addItem('Poster Print', './assets/js/mxGraph/images/print.gif', function () {
