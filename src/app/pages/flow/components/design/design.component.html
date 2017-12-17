@@ -2,7 +2,7 @@
 
 <div>
   <div class="col-md-12 col-sm-12 col-xs-12">
-    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="clearAllData()" data-toggle="modal" data-target="#discardWarningModal"><i class="ion-ios-refresh"></i>Discard</button>
+    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" data-toggle="modal" data-target="#discardWarningModal"><i class="ion-ios-refresh"></i>Discard</button>
     <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="saveOnServer()" *ngIf="!readOnly"><i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
     <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="prepareDummyObject()" *ngIf="!readOnly" data-toggle="modal" data-target="#settignsModal"><i class="fa fa-cogs" aria-hidden="true"></i>Settings</button>
     <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)"><i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>
