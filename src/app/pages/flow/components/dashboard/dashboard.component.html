@@ -2,79 +2,77 @@
 
 <div class="row tile_count">
     <div *ngIf="workflowSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-tasks"></i> Total active states</span>
+        <span class="count_top"><i class="fa fa-tasks"></i>Total active tasks</span>
         <div class="count">{{workflowSummary.no_of_active_states}}</div>
-        <!-- <span class="count_bottom"><i class="green">{{conversationSummary.episode_percentage_change}}% </i> From last Week</span> -->
     </div>
     <div *ngIf="workflowSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-tasks"></i> Total closed states</span>
+        <span class="count_top"><i class="fa fa-tasks"></i>Total closed tasks</span>
         <div class="count">{{workflowSummary.no_of_closed_states}}</div>
     </div>
     <div *ngIf="workflowSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-tasks"></i> Total active process</span>
+        <span class="count_top"><i class="fa fa-tasks"></i>Total active processes</span>
         <div class="count">{{workflowSummary.no_of_active_business_process}}</div>
     </div>
     <div *ngIf="workflowSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-tasks"></i> Total closed process</span>
+        <span class="count_top"><i class="fa fa-tasks"></i>Total closed processes</span>
         <div class="count">{{workflowSummary.no_of_closed_business_process}}</div>
     </div>
     <div *ngIf="workflowSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-users"></i> Resource allocated efficiency</span>
+        <span class="count_top"><i class="fa fa-users"></i>Resource efficiency</span>
         <div class="count">{{workflowSummary.res_allocated_efficiency}}</div>
     </div>
     <div *ngIf="workflowSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-clock-o"></i> State average time </span>
+        <span class="count_top"><i class="fa fa-clock-o"></i>Average time in task</span>
         <div class="count">{{workflowSummary.avg_time_state}}</div>
     </div>
     
 </div>
 
 <div class="row">
-    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Sates in each states">
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Process timeline">
         <nvd3 [options]="flowTimelineOptions" [data]="flowTimelineData"></nvd3>
     </ba-card>
 </div>
 
 <div class="row">
-    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Range of transaction in each states">
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Range of transactions in each task">
         <nvd3 [options]="rangeOfTransactionInStatesOptions" [data]="rangeOfTransactionInStatesData"></nvd3>
     </ba-card>
 </div>
     
 
 <div class="row">
-    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Group resource allocation in each states">
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Group resource allocation in each task">
         <nvd3 [options]="groupResourceAllocationInStatesOptions" [data]="groupResourceAllocationInStatesData"></nvd3>
     </ba-card>
 </div>
 
 <div class="row">
-    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Transaction value in each states">
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Transaction value in each task">
         <nvd3 [options]="transactionValueInStatesOptions" [data]="transactionValueInStatesData"></nvd3>
     </ba-card>
 </div>
 
 <div class="row">
-    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Average time in states">
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Average time in task">
         <nvd3 [options]="avgTimeInStatesOptions" [data]="avgTimeInStatesData"></nvd3>
     </ba-card>
 </div>
 
 
 <div class="row">
-    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="state consume max resources">
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Resources Consumption">
         <div class="row tile_count">
             <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-                <span class="count_top"><i class="fa fa-user"></i> State</span>
+                <span class="count_top"><i class="fa fa-user"></i>Task consuming max resources</span>
                 <div class="count">{{statesConsumingMaxResTimeTransaction.stateConsumeMaxRes}}</div>
-                <!-- <span class="count_bottom"><i class="green">{{conversationSummary.episode_percentage_change}}% </i> From last Week</span> -->
             </div>
             <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-                <span class="count_top"><i class="fa fa-user"></i> resources</span>
+                <span class="count_top"><i class="fa fa-user"></i>Resources</span>
                 <div class="count">{{statesConsumingMaxResTimeTransaction.resources}}</div>
             </div>
             <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-                <span class="count_top"><i class="fa fa-user"></i> resource count</span>
+                <span class="count_top"><i class="fa fa-user"></i>Resource Count</span>
                 <div class="count">{{statesConsumingMaxResTimeTransaction.resourceCount}}</div>
             </div>
         </div>
@@ -82,14 +80,14 @@
 </div>
 
 <div class="row">
-    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="state consume max time">
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Time Consumption">
         <div class="row tile_count">
             <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-6 col-sm-4 col-xs-6 tile_stats_count">
-                <span class="count_top"><i class="fa fa-user"></i> State consume max time</span>
+                <span class="count_top"><i class="fa fa-user"></i>Task consuming max time</span>
                 <div class="count">{{statesConsumingMaxResTimeTransaction.stateConsumeMaxtime}}</div>
             </div>
             <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-6 col-sm-4 col-xs-6 tile_stats_count">
-                <span class="count_top"><i class="fa fa-user"></i> Average time (minutes)</span>
+                <span class="count_top"><i class="fa fa-user"></i>Average time (minutes)</span>
                 <div class="count">{{statesConsumingMaxResTimeTransaction.averageTime}}</div>
             </div>
         </div>     
@@ -97,18 +95,18 @@
 </div>
 
 <div class="row">
-    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="state consume max time">
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Transaction Consumption">
         <div class="row tile_count">
             <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-                <span class="count_top"><i class="fa fa-user"></i> State consume max transaction</span>
+                <span class="count_top"><i class="fa fa-user"></i>Task consuming max transaction</span>
                 <div class="count">{{statesConsumingMaxResTimeTransaction.stateConsumeMaxTransaction}}</div>
             </div>
             <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-                <span class="count_top"><i class="fa fa-user"></i> Trnsaction values</span>
+                <span class="count_top"><i class="fa fa-user"></i>Trnsaction values</span>
                 <div class="count">{{statesConsumingMaxResTimeTransaction.transactionValues}}</div>
             </div>
             <div *ngIf="statesConsumingMaxResTimeTransaction" class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-                <span class="count_top"><i class="fa fa-user"></i> Total value</span>
+                <span class="count_top"><i class="fa fa-user"></i>Total value</span>
                 <div class="count">{{statesConsumingMaxResTimeTransaction.totalTransactionValue}}</div>
             </div>
         </div>
