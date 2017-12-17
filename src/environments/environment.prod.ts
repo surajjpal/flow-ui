@@ -2,6 +2,9 @@ export const environment = {
   production: true,
   name: 'production',
 
+  // Root
+  root: 'https://flow.automatapi.com/flow/',
+    
   // API
   authurl: 'https://flow.automatapi.com/flow/auth/',
   updatestatemachineurl: 'https://flow.automatapi.com/flow/api/withState',

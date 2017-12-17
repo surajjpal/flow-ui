@@ -7,6 +7,9 @@ export const environment = {
   production: false,
   name: 'development',
 
+  // Root
+  root: 'http://108.168.190.82:8080/flow/',
+
   // API
   authurl: 'http://108.168.190.82:8080/flow/auth/',
   updatestatemachineurl: 'http://108.168.190.82:8080/flow/api/withState',

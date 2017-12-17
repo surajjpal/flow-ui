@@ -53,13 +53,69 @@ export class AuthService {
         (err: HttpErrorResponse) => {
           // All errors are handled in ErrorInterceptor, no further handling required
           // Unless any specific action is to be taken on some error
+          if (err.error instanceof Error) {
+            // A client-side or network error occurred. Handle it accordingly.
+            subject.error(err);
+          } else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            if (err) {
+              let statusCd = 0;
+              
+              if (err.status) {
+                statusCd = err.status;
+              }
 
-          subject.error(err);
+              if (statusCd === 0) {
+                this.redirect()
+                .subscribe(
+                  user => {
+                    subject.next(user);
+                  },
+                  error => {
+                    subject.error(error);
+                  }
+                );
+              } else {
+                subject.error(err);
+              }
+            }
+          }
         }
         );
     } else {
       subject.error('User object is null or empty');
     }
+
+    return subject.asObservable();
+  }
+
+  redirect(): Observable<User> {
+    const subject = new Subject<User>();
+    
+    const url = `${environment.root}`;
+
+    this.httpClient.get<User>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+      (response: HttpResponse<User>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
 
     return subject.asObservable();
   }

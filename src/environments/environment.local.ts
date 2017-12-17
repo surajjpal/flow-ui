@@ -2,7 +2,10 @@ export const environment = {
   production: false,
   name: 'local',
 
-  // API
+  // Root
+  root: 'http://localhost:8080/flow/',
+  
+    // API
   authurl: 'http://localhost:8080/flow/auth/',
   updatestatemachineurl: 'http://localhost:8080/flow/api/withState',
 
