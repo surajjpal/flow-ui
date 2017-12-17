@@ -19,9 +19,9 @@
       <th>
         <mfDefaultSorter by="">Assigned Group</mfDefaultSorter>
       </th>
-      <th>
+      <!-- <th>
         <mfDefaultSorter by="">Alloted to</mfDefaultSorter>
-      </th>
+      </th> -->
       <!-- <th>
         <mfDefaultSorter by="">Cost</mfDefaultSorter>
       </th> -->
@@ -34,7 +34,7 @@
       <td>{{s.statusCd}}</td>
       <td>{{s.startTime[0]}}/{{s.startTime[1]}}/{{s.startTime[2]}} {{s.startTime[3]}}:{{s.startTime[4]}}</td>
       <td>{{s.assignedUserGroupCd}}</td>
-      <td>{{s.assignedUserId}}</td>
+      <!-- <td>{{s.assignedUserId}}</td> -->
       <!-- <td *ngIf="s.businessCost">{{s.businessCost.amount}}</td> -->
     </tr>
     <tr *ngIf="mf.data.length === 0">
