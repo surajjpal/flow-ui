@@ -75,7 +75,13 @@ export class UnauthenticateInterceptor implements HttpInterceptor {
                 if (err.status === 401) {
                   // Kill current session for logged in user, and send user to Login page
                   this.universalUser.removeUser();
-                  this.alertService.error('Session timed out. Please login again.', true);
+                  if (err.message) {
+                    if (err.message === 'Access is denied') {
+                      this.alertService.error('Session timed out. Please login again.', true);
+                    } else {
+                      this.alertService.error('Authentication failed. Please login again.', true);
+                    }
+                  }
                   this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
                 }
               }
