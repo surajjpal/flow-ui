@@ -3,15 +3,15 @@ export const environment = {
   name: 'production',
 
   // API
-  authurl: 'http://108.168.190.82:8080/flow/auth/',
-  updatestatemachineurl: 'http://108.168.190.82:8080/flow/api/withState',
+  authurl: 'https://flow.automatapi.com/flow/auth/',
+  updatestatemachineurl: 'https://flow.automatapi.com/flow/api/withState',
 
   // Services
-  saveaccounturl: 'http://108.168.190.82:8080/flow/services/saveaccount',
-  fetchaccountbyidurl: 'http://108.168.190.82:8080/flow/services/fetchaccountbyid?query=',
+  saveaccounturl: 'https://flow.automatapi.com/flow/services/saveaccount',
+  fetchaccountbyidurl: 'https://flow.automatapi.com/flow/services/fetchaccountbyid?query=',
 
   // Flow
-  server: 'http://108.168.190.82:8080/flow/console/',
+  server: 'https://flow.automatapi.com/flow/console/',
   statebyfolderurl: 'state/page/0,200,', // folder: Group, Personal
   statebystatusurl: 'state/pagebystatus/0,200,', // status: CLOSED, ACTIVE
   menutreeurl: 'menu/tree',
@@ -37,7 +37,7 @@ export const environment = {
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
   // auto
-  autoServer: 'http://108.168.190.82:8080/flow/auto/',
+  autoServer: 'https://flow.automatapi.com/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',

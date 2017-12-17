@@ -3,10 +3,10 @@
 # ----------------------------
 
 # Normal Build
-ng build --env=prod --base-href / --deploy-url /
+#ng build --env=prod --base-href / --deploy-url /
 
 # AOT Compilation
-#ng build --env=prod --aot --build-optimizer --base-href / --deploy-url /
+ng build --env=prod --aot --build-optimizer --base-href / --deploy-url /
 
 rm -rf /var/www/html
 mkdir /var/www/html
