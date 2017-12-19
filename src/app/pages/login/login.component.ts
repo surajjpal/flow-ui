@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) {
     this.form = fb.group({
       'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
-      'password': ['', Validators.compose([Validators.required, Validators.minLength(4)])]
+      'password': ['', Validators.compose([Validators.required, Validators.minLength(1)])]
     });
 
     this.email = this.form.controls['email'];

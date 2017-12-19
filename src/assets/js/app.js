@@ -139,6 +139,7 @@ function createGraph(container) {
   style[mxConstants.STYLE_STROKECOLOR] = '#808080';
   style[mxConstants.STYLE_ROUNDED] = true;
   style[mxConstants.STYLE_SHADOW] = true;
+  style[mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#efefef';
 
   style = [];
   style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_SWIMLANE;
@@ -254,6 +255,8 @@ var horizontal = true;
 var sourceCell;   // Used as a parent cell while adding new cell in graph.
 var cellLabelChanged;
 var isReadOnly = false;;
+var newEdge;
+var existingEdgesBeforeUpdate;
 
 designFlowEditor = function (serverXml, readOnly) {
   isReadOnly = readOnly;
@@ -283,17 +286,9 @@ designFlowEditor = function (serverXml, readOnly) {
       new mxDivResizer(outline);
       new mxDivResizer(toolsContainer);
     }
-    // Sets a gradient background
-    if (mxClient.IS_GC || mxClient.IS_SF) {
-      container.style.background = '-webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFFFFF), to(#E7E7E7))';
-    }
-    else if (mxClient.IS_NS) {
-      container.style.background = '-moz-linear-gradient(top, #FFFFFF, #E7E7E7)';
-    }
-    else if (mxClient.IS_IE) {
-      container.style.filter = 'progid:DXImageTransform.Microsoft.Gradient(' +
-        'StartColorStr=\'#FFFFFF\', EndColorStr=\'#E7E7E7\', GradientType=0)';
-    }
+    // Sets background colour
+    container.style.background = '#FFFFFF';
+    
     // document.body.appendChild(container);
     // Creates the graph inside the given container
     graph = new mxGraph(container);
@@ -318,6 +313,14 @@ designFlowEditor = function (serverXml, readOnly) {
     // Disables tooltips on touch devices
     graph.setTooltips(!mxClient.IS_TOUCH);
     // Set some stylesheet options for the visual appearance of vertices
+    style = graph.getStylesheet().getDefaultEdgeStyle();
+    style[mxConstants.STYLE_EDGE] = mxEdgeStyle.ElbowConnector;
+    style[mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#ffffff';
+    style[mxConstants.STYLE_FONTCOLOR] = '#1d258f';
+    style[mxConstants.STYLE_FONTFAMILY] = 'Verdana';
+    style[mxConstants.STYLE_FONTSIZE] = '12';
+    style[mxConstants.STYLE_FONTSTYLE] = '1';
+
     var style = graph.getStylesheet().getDefaultVertexStyle();
     style[mxConstants.STYLE_SHAPE] = 'label';
 
@@ -494,7 +497,7 @@ designFlowEditor = function (serverXml, readOnly) {
     layout.edgeStyle = mxHierarchicalEdgeStyle.CURVE;
     layout.intraCellSpacing = 100;
     layout.parallelEdgeSpacing = 100;
-    layout.interRankCellSpacing = 100;
+    layout.interRankCellSpacing = 150;
     layout.interHierarchySpacing = 100;
     // Allows the layout to move cells even though cells
     // aren't movable in the graph
@@ -551,35 +554,46 @@ designFlowEditor = function (serverXml, readOnly) {
     // Cell label from custom object
     // graph.setHtmlLabels(true);
     graph.convertValueToString = function (cell) {
-      if (cell.getValue()) {
-        var state = cell.getValue();
+      var data = cell.getValue();
+
+      if (data) {
         try {
-          if (state.stateCd) {
-            return state.stateCd;
+          if (data.stateCd) {
+            return data.stateCd;
+          } else if (data.eventCd) {
+            return data.eventCd;
           }
         } catch (exception) {
-          // console.log(exception);
+
         }
 
-        return '';
+        return data;
       }
+
+      return '';
     };
 
     cellLabelChanged = graph.cellLabelChanged;
     graph.cellLabelChanged = function (cell, newValue, autoSize) {
-      if (!isReadOnly && cell.getValue()) {
-        var state = cell.getValue();
+      var data = cell.getValue();
+
+      if (data) {
         try {
-          if (state.stateCd) {
-            state.stateCd = newValue;
-            newValue = state;
+          if (data.eventCd) {
+            return;
+          } else if (data.stateCd) {
+            data.stateCd = newValue;
+            newValue = data;
 
             cellLabelChanged.apply(this, arguments);
+            return;
           }
         } catch (exception) {
-          // console.log(exception);
+          
         }
       }
+
+      cellLabelChanged.apply(this, arguments);
     };
 
     if (serverXml) {
@@ -621,8 +635,80 @@ designFlowEditor = function (serverXml, readOnly) {
       // To scroll graph so that our cell would appear in center
       graph.scrollCellToVisible(v1, true);
     }
+
+    mxConnectionHandlerInsertEdge = mxConnectionHandler.prototype.insertEdge;
+    mxConnectionHandler.prototype.insertEdge = function(parent, id, value, source, target, style)
+    {
+      if (target && target.id === 'treeRoot') {
+        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+          showAppJSWarning("Not Allowed", "You are not allowed to connect to the root state. Please select any other state."); 
+        });
+        $("#warningModal").modal();
+        return;
+      }
+
+      if (source && source.value && source.value.stateCd && !(typeof source.value === 'string' || source.value instanceof String)) {
+        
+        var sourceEvents = [];
+        var existingEdges = getEdgesByStateCd(source);
+
+        for (var edge of existingEdges) {
+          if (edge.target.value.stateCd === target.value.stateCd) {
+            window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+              showAppJSWarning("Used State", "The state you are trying to connect to is already connected from current state. Please choose any other state."); 
+            });
+            $("#warningModal").modal();
+            return;
+          }
+        }
+
+        for (var event of source.value.events) {
+          var unique = true;
+          for (var edge of existingEdges) {
+            if (event.eventCd === edge.value.eventCd) {
+              unique = false;
+              break;
+            }
+          }
+
+          if (unique) {
+            sourceEvents.push(event);
+          }
+        }
+
+        if (sourceEvents && sourceEvents.length > 0) {
+          newEdge = mxConnectionHandlerInsertEdge.apply(this, arguments);
+          window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.addEdge(sourceEvents); });
+          $("#newEdgeModal").modal();
+          return newEdge;
+        }
+      }
+
+      window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+        showAppJSWarning("No Events Left", "There aren't any source events left to be attached to the new state, thus this connection can't be made."); 
+      });
+      $("#warningModal").modal();
+      return;
+    };
   }
 };
+
+function getEdgesByStateCd(source) {
+  var sourceEdges = [];
+  var edges = graph.getChildEdges(graph.getDefaultParent());
+
+  for (var edge of edges) {
+    if (edge != null && edge.value != null && edge.source != null && edge.source.value != null && !(typeof edge.source.value === 'string' || edge.source.value instanceof String) && !(typeof edge.value === 'string' || edge.value instanceof String)) {
+      if (edge.source.value.stateId === source.value.stateId) {
+        sourceEdges.push(edge);
+      }
+    }
+  }
+
+  return sourceEdges;
+}
+
+
 
 // Function to create the entries in the popupmenu
 function createPopupMenu(graph, menu, cell, evt, horizontal) {
@@ -641,20 +727,14 @@ function createPopupMenu(graph, menu, cell, evt, horizontal) {
           sourceCell = cell;
 
           let state = cell.value;
-          let parentState = null;
-          if (cell.source) {
-            parentState = cell.source.value;
-          }
 
           if (state && (typeof state === 'string' || state instanceof String)) {
             state = null;
           }
 
-          if (parentState && (typeof parentState === 'string' || parentState instanceof String)) {
-            parentState = null;
-          }
+          existingEdgesBeforeUpdate = getEdgesByStateCd(sourceCell);
 
-          window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.addState(state, parentState); })
+          window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.updateState(state); })
           $("#stateModal").modal();
         } catch (exception) {
           // console.log(exception);
@@ -702,19 +782,56 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
 
     overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
       try {
+        sourceCell = cell;
         
-        let parentState = cell.value;
+        if (sourceCell.id === 'treeRoot') {
+          var existingEdges = getEdgesByStateCd(sourceCell);
+          if (existingEdges == 0) {
+            console.log('Adding child to treeRoot');
+            window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.addState(null); });
+            $("#stateModal").modal();
+            return;
+          } else {
+            window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+              showAppJSWarning("Not Allowed", "Root state can only have one child state. You can't create more than one child for root state.");
+            });
+            $("#warningModal").modal();
+            return;
+          }
+        } else {
+          let parentState = sourceCell.value;
+          var existingEdges = getEdgesByStateCd(sourceCell);
+          var sourceEvents = [];
 
-        if (typeof parentState === 'string' || parentState instanceof String) {
-          parentState = null;
+          for (var event of parentState.events) {
+            var unique = true;
+            for (var edge of existingEdges) {
+              if (event.eventCd === edge.value.eventCd) {
+                unique = false;
+                break;
+              }
+            }
+  
+            if (unique) {
+              sourceEvents.push(event);
+            }
+          }
+
+          if (sourceEvents && sourceEvents.length > 0) {
+            window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.addState(sourceEvents); });
+            $("#stateModal").modal();
+            return;
+          }
         }
         
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.addState(null, parentState); })
-        sourceCell = cell;
+        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+          showAppJSWarning("No Events Left", "There aren't any source events from which the new state can be created.");
+        });
+        $("#warningModal").modal();
+        return;
       } catch (exception) {
-        // console.log(exception);
+        
       }
-      $("#stateModal").modal();
     }));
     graph.addCellOverlay(cell, overlay);
   }
@@ -741,6 +858,12 @@ function addChild(graph, cell, customObject, horizontal, stateCode, stateLabel, 
   try {
     if (!stateLabel || stateLabel.length == 0) {
       stateLabel = 'Double click to set name';
+    }
+
+    var stateTrigger = null;
+    if (customObject && customObject.trigger && customObject.trigger.length > 0) {
+      stateTrigger = customObject.trigger[0];
+      customObject.trigger = [];
     }
 
     var circleSize = 50;
@@ -802,15 +925,14 @@ function addChild(graph, cell, customObject, horizontal, stateCode, stateLabel, 
 
     // vertex.source = cell;
 
-    var edge;
-    if (getSourceEdgesCount(graph, vertex) > 1) {
-      edge = graph.insertEdge(parent, null, '', cell, vertex, 'multipleParents');
+    var edge = null;
+    if (stateTrigger) {
+      edge = graph.insertEdge(parent, null, stateTrigger, cell, vertex, null);
     } else {
-      edge = graph.insertEdge(parent, null, '', cell, vertex, 'multipleParents');
+      edge = graph.insertEdge(parent, null, '', cell, vertex, null);
     }
     // Updates the geometry of the vertex with the
     // preferred size computed in the graph
-
 
     // Adds the edge between the existing cell
     // and the new vertex and executes the
@@ -819,9 +941,9 @@ function addChild(graph, cell, customObject, horizontal, stateCode, stateLabel, 
     // Configures the edge label "in-place" to reside
     // at the end of the edge (x = 1) and with an offset
     // of 20 pixels in negative, vertical direction.
-    edge.geometry.x = 1;
+    edge.geometry.x = 0;
     edge.geometry.y = 0;
-    edge.geometry.offset = new mxPoint(0, -20);
+    edge.geometry.offset = new mxPoint(0, -15);
     addOverlays(graph, vertex, true, horizontal);
   }
   finally {
@@ -888,6 +1010,50 @@ saveStateObject = function (state) {
 }
 
 updateStateObject = function (state) {
+  console.log('Trying to update state');
+
+  if (existingEdgesBeforeUpdate) {
+    console.log('Found existing edges');
+    var newEvents = state.events;
+
+    if (existingEdgesBeforeUpdate.length > newEvents) {
+      console.log('Child edges are more than source events');
+      var childStateCount = existingEdgesBeforeUpdate.length;
+      var newEventCount = newEvents.length;
+      var difference = childStateCount - newEventCount;
+      window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+        showAppJSWarning("Event Mismatch", "There already exisits " + childStateCount + " child state(s) for the current state. After update there will be a total number of " + newEventCount + " events left, which doesn't suffice the total child states. Please add " + difference + " more event(s) or delete " + difference + " child state(s) to suffice the conditions.");
+      });
+      $("#warningModal").modal();
+      return;
+    } else {
+      console.log('Child edges are less than or equal to source events');
+      for (var edge of existingEdgesBeforeUpdate) {
+        var notFound = true;
+        for (var event of newEvents) {
+          if (edge.value.eventCd === event.eventCd) {
+            notFound = false;
+            break;
+          }
+
+          if (notFound) {
+            var eventEdgeMap = {};
+            for (var edge of existingEdgesBeforeUpdate) {
+              eventEdgeMap[edge.target.value.stateCd] = edge.value;
+            }
+
+            console.log('Opening edge event mapping modal');
+            console.log(newEvents);
+            console.log(eventEdgeMap);
+            // window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.eventsMismatch(newEvents, eventEdgeMap); });
+            // $("#reassignEventsModal").modal();
+            return;
+          }
+        }
+      }
+    }
+  }
+
   if (sourceCell) {
     graph.getModel().beginUpdate();
     try {
@@ -918,6 +1084,29 @@ updateStateObject = function (state) {
       graph.getModel().endUpdate();
     }
   }
+}
+
+updateStateTrigger = function(eventEdgeMap, stateData) {
+  for (var key in eventEdgeMap) {
+    if (key && (!eventEdgeMap[key] || eventEdgeMap[key] === null)) {
+      window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+        showAppJSWarning("Error" ,"You can't leave trigger for any child state empty. Please fill in all values.");
+      });
+      $("#warningModal").modal();
+      return;
+    }
+  }
+
+  for (var edge in existingEdgesBeforeUpdate) {
+    graph.getModel().beginUpdate();
+    try {
+      edge.value = eventEdgeMap[edge.target.value.stateCd];
+    } finally {
+      graph.getModel().endUpdate();
+    }
+  }
+
+  updateStateObject(stateData);
 }
 
 exportGraphXml = function () {
@@ -987,6 +1176,28 @@ styleStates = function(activeStateIdList, closedStateIdList) {
     } finally {
       graph.getModel().endUpdate();
     }
+  }
+}
+
+updateNewEdge = function (event) {
+  if (newEdge) {
+    graph.getModel().beginUpdate();
+    try {
+      newEdge.setValue(event);
+      graph.getView().clear(newEdge, false, false);
+      graph.getView().validate();
+    } finally {
+      graph.getModel().endUpdate();
+    }
+  }
+}
+
+deleteNewEdge = function () {
+  if (newEdge) {
+    var cells = [];
+    cells.push(newEdge);
+
+    graph.removeCells(cells);
   }
 }
 

@@ -4,6 +4,9 @@ declare var updateStateObject: any;
 declare var designFlowEditor: any;
 declare var closeModal: any;
 declare var exportGraphXml: any;
+declare var updateNewEdge: any;
+declare var deleteNewEdge: any;
+declare var updateStateTrigger: any;
 
 import { Component, Input, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -50,6 +53,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   sourceEntryActionList: string[];
   sourceApiConfigList: ApiConfig[];
   sourceManualActionType: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT'];
+  sourceEvents: EventModel[];
+  sourceChildStates: StateModel[];
+  masterEventsList: EventModel[];
   
   // Models to bind with html
   readOnly: boolean;
@@ -58,6 +64,12 @@ export class DesignComponent implements OnInit, OnDestroy {
   tempState: StateModel;
   tempParentState: StateModel;
   tempEvent: EventModel;
+  tempEdgeEvent: EventModel;
+  childStateEventMap: any;
+
+  // Warning Modal properties
+  warningHeader: string;
+  warningBody: string;
   
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
@@ -152,34 +164,85 @@ export class DesignComponent implements OnInit, OnDestroy {
     new graphTools(choice);
   }  
 
-  addState(state: StateModel, parentState: StateModel): void {
-    if (parentState) {
-      this.tempParentState = parentState;
+  addState(sourceEvents: EventModel[]): void {
+    this.sourceEvents = sourceEvents;
+
+    this.stateDialogTitle = "Add State";
+    this.stateDialogButtonName = "Add";
+
+    this.tempState = new StateModel();
+    this.tempState.type = this.sourceStateTypes[0];
+    this.tempState.allocationModel.allocationType = this.allocationTypes[0];
+    
+    if (this.sourceEvents && this.sourceEvents.length > 0) {
+      this.tempState.trigger.push(this.sourceEvents[0]);
+      this.tempState.initialState = false;
     } else {
-      this.tempParentState = new StateModel();
-    }  
+      this.tempState.initialState = true;
+    }
+  }
 
-    if (state) {
-      this.stateDialogTitle = "Update State";
-      this.stateDialogButtonName = "Update";
-      this.tempState = state;
+  updateState(state: StateModel): void {
+    this.stateDialogTitle = "Update State";
+    this.stateDialogButtonName = "Update";
+    this.tempState = JSON.parse(JSON.stringify(state));
+  }
+
+  addEdge(sourceEvents: EventModel[]) {
+    if (sourceEvents && sourceEvents.length > 0) {
+      this.sourceEvents = sourceEvents;
+      this.tempEdgeEvent = this.sourceEvents[0];
     } else {
-      this.stateDialogTitle = "Add State";
-      this.stateDialogButtonName = "Add";
+      this.sourceEvents = [];
+    }
+  }
 
-      this.tempState = new StateModel();
-      this.tempState.type = this.sourceStateTypes[0];
-      this.tempState.allocationModel.allocationType = this.allocationTypes[0];
-      this.tempState.trigger = this.tempParentState.events[0];
+  saveEdge() {
+    console.log(this.tempEdgeEvent);
+    new updateNewEdge(this.tempEdgeEvent);
+  }
 
-      if (this.tempParentState.events && this.tempParentState.events.length > 0) {
-        this.tempState.initialState = false;
-      } else {
-        this.tempState.initialState = true;
-      }  
-      // this.addEvent();
-    }  
-  }  
+  deleteEdge() {
+    new deleteNewEdge();
+  }
+
+  eventsMismatch(newEvents: EventModel[], eventChildMap: any) {
+    this.masterEventsList = newEvents;
+    this.childStateEventMap = eventChildMap;
+    this.sourceEvents = this.fetchUniqueEvents(this.masterEventsList, this.childStateEventMap);
+    console.log(newEvents);
+    console.log(eventChildMap);
+    console.log(this.sourceEvents);
+  }
+
+  assignEventToChild(event: EventModel, key: string) {
+    this.childStateEventMap[key] = event;
+    this.sourceEvents = this.fetchUniqueEvents(this.masterEventsList, this.childStateEventMap);
+  }
+
+  fetchUniqueEvents(eventList: EventModel[], eventStateMap: any) {
+    const uniqueEventList: EventModel[] = [];
+
+    for (const key in eventStateMap) {
+      let unique = true;
+      for (const event of eventList) {
+        if (key && eventStateMap[key] && eventStateMap[key].eventCd && event && event.eventCd && eventStateMap[key].eventCd === event.eventCd) {
+          unique = false;
+          break;
+        }
+      }
+
+      if (unique) {
+        uniqueEventList.push(eventStateMap[key].eventCd);
+      }
+    }
+
+    return uniqueEventList;
+  }
+
+  updateStateTriggers() {
+    new updateStateTrigger(this.childStateEventMap, this.tempState);
+  }
 
   addEvent(): void {
     const tempEvent: EventModel = new EventModel();
@@ -330,5 +393,10 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   deepCopy(object: Object) {
     return JSON.parse(JSON.stringify(object));
+  }
+
+  showAppJSWarning(header: string, body: string) {
+    this.warningHeader = header;
+    this.warningBody = body;
   }
 }
