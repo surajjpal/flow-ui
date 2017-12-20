@@ -27,6 +27,7 @@ export class Amount{
 
 export class State extends BaseModel {
   machineType: string;
+  machineLabel: string;
   entityId: string;
   stateCd: string;
   stageCd: string;

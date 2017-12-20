@@ -316,6 +316,10 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.graphObject.states = states;
       this.graphObject.transitions = transitions;
 
+      this.graphObject.dataPointConfigurationList.sort(function(a, b) {
+        return a.sequence - b.sequence;
+      });
+      
       this.subscription = this.graphService.save(this.graphObject)
         .subscribe(graphObject => {
           this.graphObject = graphObject;

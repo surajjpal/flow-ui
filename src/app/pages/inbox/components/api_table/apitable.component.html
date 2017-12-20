@@ -29,7 +29,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let s of mf.data" (click)="onSelect(s)">
-      <td>{{s.machineType}}</td>
+      <td>{{s.machineLabel}}</td>
       <td>{{s.stateCd}}</td>
       <td>{{s.statusCd}}</td>
       <td>{{s.startTime[0]}}/{{s.startTime[1]}}/{{s.startTime[2]}} {{s.startTime[3]}}:{{s.startTime[4]}}</td>

@@ -2,12 +2,18 @@ import { BaseModel } from './base.model';
 import { ApiConfig, ApiKeyExpressionMap } from './setup.model';
 
 export class DataPoint {
+  sequence: number;
   dataPointName: string;
   expression: string;
+  dataPointLabel: string;
+  description: string;
 
   constructor() {
+    this.sequence = 0;
     this.dataPointName = '';
     this.expression = '';
+    this.dataPointLabel = '';
+    this.description = '';
   }
 }
 
@@ -76,14 +82,20 @@ export class CostModel{
 }
 
 export class ManualAction {
+  sequence: number;
   key: string;
   value: any;
   type: string;
+  label: string;
+  description: string;
 
-  constructor(key?: string, value?: any, type?: string) {
-    this.key = key ? key :'';
+  constructor(sequence?:number, key?: string, value?: any, type?: string, label?: string, description?: string) {
+    this.sequence = sequence ? sequence : 0;
+    this.key = key ? key : '';
     this.value = value ? value : '';
     this.type = type ? type : '';
+    this.label = label ? label : '';
+    this.description = description ? description : '';
   }
 }
 

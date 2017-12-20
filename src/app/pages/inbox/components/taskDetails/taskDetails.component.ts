@@ -62,7 +62,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.getEpisode();
     this.extractParams();
     this.extractManualStateAction();
-    this.initUI();
+    // this.initUI();
   }
 
   ngOnDestroy() {
@@ -117,32 +117,37 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
         this.manualActions = [];
       }
 
-      if (this.selectedState.parameters) {
-        for (const key in this.selectedState.parameters) {
-          const paramValue: any = this.selectedState.parameters[key];
-          
-          if (key) {
-            let manualAction: ManualAction;
+      if (this.selectedState.parameters && this.graphObject.dataPointConfigurationList) {
+        for (const dataPoint of this.graphObject.dataPointConfigurationList) {
+          const value = this.selectedState.parameters[dataPoint.dataPointName];
 
-            if (paramValue) {
-              if (typeof paramValue === 'string' || paramValue instanceof String) {
-                manualAction = new ManualAction(key, paramValue, 'STRING');
-              } else if (typeof paramValue === 'number' || paramValue instanceof Number) {
-                manualAction = new ManualAction(key, paramValue, 'NUMBER');
-              } else if (typeof paramValue === 'boolean' || paramValue instanceof Boolean) {
-                manualAction = new ManualAction(key, paramValue, 'BOOLEAN');
-              } else if (paramValue instanceof Array) {
-                manualAction = new ManualAction(key, paramValue, 'ARRAY');
+          // for (const key in this.selectedState.parameters) {
+            //const dataPoint = this.getDataPointForParam(key);
+
+            // if (key && dataPoint) {
+              const paramValue: any = this.selectedState.parameters[dataPoint.dataPointName];
+              let manualAction: ManualAction;
+
+              if (paramValue) {
+                if (typeof paramValue === 'string' || paramValue instanceof String) {
+                  manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'STRING', dataPoint.dataPointLabel, dataPoint.description);
+                } else if (typeof paramValue === 'number' || paramValue instanceof Number) {
+                  manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'NUMBER', dataPoint.dataPointLabel, dataPoint.description);
+                } else if (typeof paramValue === 'boolean' || paramValue instanceof Boolean) {
+                  manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'BOOLEAN', dataPoint.dataPointLabel, dataPoint.description);
+                } else if (paramValue instanceof Array) {
+                  manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'ARRAY', dataPoint.dataPointLabel, dataPoint.description);
+                } else {
+                  manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, '', dataPoint.dataPointLabel, dataPoint.description);
+                }
               } else {
-                manualAction = new ManualAction(key, paramValue, '');
+                manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, null, 'STRING', dataPoint.dataPointLabel, dataPoint.description);
               }
-            } else {
-              manualAction = new ManualAction(key, null, 'STRING');
-            }
 
-            this.manualActions.push(manualAction);
-            this.actionMap[key] = paramValue;
-          }
+              this.manualActions.push(manualAction);
+              this.actionMap[dataPoint.dataPointName] = paramValue;
+            // }
+          // }
         }
       }
     }
@@ -220,6 +225,16 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  // getDataPointForParam(key: string) {
+  //   for (const dataPoint of this.graphObject.dataPointConfigurationList) {
+  //     if (dataPoint.dataPointName === key) {
+  //       return dataPoint;
+  //     }
+  //   }
+
+  //   return null;
+  // }
 
   initUI() {
     new designFlowEditor(this.graphObject.xml, true);
