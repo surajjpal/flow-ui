@@ -52,6 +52,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.selectedState = this.dataCachingService.getSelectedState();
     if (!this.selectedState) {
       this.router.navigate(['/pg/tsk/tact'], { relativeTo: this.route });
+      return;
     }
     
     this.graphObject = this.dataCachingService.getGraphObject();
@@ -136,9 +137,6 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
                 } else if (typeof paramValue === 'boolean' || paramValue instanceof Boolean) {
                   manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'BOOLEAN', dataPoint.dataPointLabel, dataPoint.description);
                 } else if (paramValue instanceof Array) {
-                  if (paramValue.length > 0 && (JSON.stringify(paramValue[0]).includes('{'))) {
-                    continue;
-                  }
                   manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'ARRAY', dataPoint.dataPointLabel, dataPoint.description);
                 } else {
                   manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, '', dataPoint.dataPointLabel, dataPoint.description);
