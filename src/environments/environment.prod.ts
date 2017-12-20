@@ -7,7 +7,6 @@ export const environment = {
     
   // API
   authurl: 'https://flow.automatapi.com/flow/auth/',
-  updatestatemachineurl: 'https://flow.automatapi.com/flow/api/withState',
 
   // Services
   saveaccounturl: 'https://flow.automatapi.com/flow/services/saveaccount',
@@ -23,6 +22,7 @@ export const environment = {
   parentmenuurl: 'menu/fetchparent/',
   messageurl: 'data/message/byuser/Admin',
   stateflowimageurl: 'statemachine/stateflow/',
+  updatestatemachineurl: 'statemachine/updateflow/withState',
   autosummary: 'dashboard/CONVERSATION_SUMMARY',
   graphurl: 'graph/',
   graphbystatusurl: 'graph/findbystatus/',

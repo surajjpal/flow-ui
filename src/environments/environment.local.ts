@@ -7,7 +7,6 @@ export const environment = {
   
     // API
   authurl: 'http://localhost:8080/flow/auth/',
-  updatestatemachineurl: 'http://localhost:8080/flow/api/withState',
 
   // Services
   saveaccounturl: 'http://localhost:8080/flow/services/saveaccount',
@@ -23,6 +22,7 @@ export const environment = {
   parentmenuurl: 'menu/fetchparent/',
   messageurl: 'data/message/byuser/Admin',
   stateflowimageurl: 'statemachine/stateflow/',
+  updatestatemachineurl: 'statemachine/updateflow/withState',
   autosummary: 'dashboard/CONVERSATION_SUMMARY',
   graphurl: 'graph/',
   graphbystatusurl: 'graph/findbystatus/',

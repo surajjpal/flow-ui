@@ -146,21 +146,20 @@ export class StateService {
     return subject.asObservable();
   }
 
-  update(machineType: string, entityId: string, companyId: string, companyName: string, payload: any): Observable<State> {
+  update(machineType: string, entityId: string, param: any): Observable<State> {
     const subject = new Subject<State>();
 
-    const customHttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json', 'x-consumer-custom-id': companyId, 'x-consumer-username': companyName });
-
     const map = {};
-    map['payload'] = JSON.stringify(payload);
+    map['param'] = JSON.stringify(param);
+    map['payload'] = '{}';
 
-    const url = `${environment.updatestatemachineurl}/${machineType}/${entityId}`;
+    const url = `${environment.server + environment.updatestatemachineurl}/${machineType}/${entityId}`;
 
     this.httpClient.put<State>(
       url,
       map,
       {
-        headers: customHttpHeaders,
+        headers: this.httpHeaders,
         observe: 'response',
         reportProgress: true,
         withCredentials: true

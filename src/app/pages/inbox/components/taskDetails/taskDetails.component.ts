@@ -13,8 +13,6 @@ import { Episode, ChatMessage } from '../../../../models/conversation.model';
 
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
 import { ConversationService } from '../../../../services/agent.service';
-import { AccountService } from '../../../../services/setup.service';
-import { UniversalUser, AlertService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'api-task-details',
@@ -41,9 +39,6 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private stateService: StateService,
     private conversationService: ConversationService,
-    private accountService: AccountService,
-    private universalUser: UniversalUser,
-    private alertService: AlertService,
     private dataCachingService: DataCachingService,
     private location: Location
   ) { }
@@ -103,14 +98,6 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
   extractParams() {
     if (this.selectedState) {
-
-      // Comment to be able to edit params of CLOSED states
-      // if (this.selectedState.statusCd === 'CLOSED') {
-      //   this.manualActions = [];
-      //   this.actionMap = {};
-      //   return;
-      // }
-  
       if (!this.actionMap) {
         this.actionMap = {};
       }
@@ -120,43 +107,27 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
       if (this.selectedState.parameters && this.graphObject.dataPointConfigurationList) {
         for (const dataPoint of this.graphObject.dataPointConfigurationList) {
-          // const value = this.selectedState.parameters[dataPoint.dataPointName];
+          const paramValue: any = this.selectedState.parameters[dataPoint.dataPointName];
+          let manualAction: ManualAction;
 
-          // for (const key in this.selectedState.parameters) {
-            //const dataPoint = this.getDataPointForParam(key);
+          if (paramValue) {
+            if (typeof paramValue === 'string' || paramValue instanceof String) {
+              manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'STRING', dataPoint.dataPointLabel, dataPoint.description);
+            } else if (typeof paramValue === 'number' || paramValue instanceof Number) {
+              manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'NUMBER', dataPoint.dataPointLabel, dataPoint.description);
+            } else if (typeof paramValue === 'boolean' || paramValue instanceof Boolean) {
+              manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'BOOLEAN', dataPoint.dataPointLabel, dataPoint.description);
+            } else if (paramValue instanceof Array) {
+              manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'ARRAY', dataPoint.dataPointLabel, dataPoint.description);
+            } else {
+              manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, '', dataPoint.dataPointLabel, dataPoint.description);
+            }
+          } else {
+            manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, null, 'STRING', dataPoint.dataPointLabel, dataPoint.description);
+          }
 
-            // if (key && dataPoint) {
-              const paramValue: any = this.selectedState.parameters[dataPoint.dataPointName];
-              let manualAction: ManualAction;
-
-              if (paramValue) {
-                if (typeof paramValue === 'string' || paramValue instanceof String) {
-                  manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'STRING', dataPoint.dataPointLabel, dataPoint.description);
-                } else if (typeof paramValue === 'number' || paramValue instanceof Number) {
-                  manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'NUMBER', dataPoint.dataPointLabel, dataPoint.description);
-                } else if (typeof paramValue === 'boolean' || paramValue instanceof Boolean) {
-                  manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'BOOLEAN', dataPoint.dataPointLabel, dataPoint.description);
-                } else if (paramValue instanceof Array) {
-                  if (paramValue.length > 0) {
-                    if (JSON.stringify(paramValue[0]).includes('{')) {
-                      continue;
-                    } else {
-                      manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'ARRAY', dataPoint.dataPointLabel, dataPoint.description);  
-                    }
-                  } else {
-                    manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'ARRAY', dataPoint.dataPointLabel, dataPoint.description);
-                  }
-                } else {
-                  manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, '', dataPoint.dataPointLabel, dataPoint.description);
-                }
-              } else {
-                manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, null, 'STRING', dataPoint.dataPointLabel, dataPoint.description);
-              }
-
-              this.manualActions.push(manualAction);
-              this.actionMap[dataPoint.dataPointName] = paramValue;
-            // }
-          // }
+          this.manualActions.push(manualAction);
+          this.actionMap[dataPoint.dataPointName] = paramValue;
         }
       }
     }
@@ -235,16 +206,6 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  // getDataPointForParam(key: string) {
-  //   for (const dataPoint of this.graphObject.dataPointConfigurationList) {
-  //     if (dataPoint.dataPointName === key) {
-  //       return dataPoint;
-  //     }
-  //   }
-
-  //   return null;
-  // }
-
   initUI() {
     new designFlowEditor(this.graphObject.xml, true);
     new styleStates(this.graphObject.activeStateIdList, this.graphObject.closedStateIdList);
@@ -255,8 +216,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       this.actionMap = {};
     }
 
-    this.subscription = this.stateService.update(this.selectedState.machineType,
-      this.selectedState.entityId, this.universalUser.getUser().companyId, this.universalUser.getUser().username, this.actionMap)
+    this.subscription = this.stateService.update(this.selectedState.machineType, this.selectedState.entityId, this.actionMap)
       .subscribe(state => {
         this.onBack();
       });
