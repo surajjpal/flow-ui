@@ -120,7 +120,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
       if (this.selectedState.parameters && this.graphObject.dataPointConfigurationList) {
         for (const dataPoint of this.graphObject.dataPointConfigurationList) {
-          const value = this.selectedState.parameters[dataPoint.dataPointName];
+          // const value = this.selectedState.parameters[dataPoint.dataPointName];
 
           // for (const key in this.selectedState.parameters) {
             //const dataPoint = this.getDataPointForParam(key);
@@ -137,7 +137,15 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
                 } else if (typeof paramValue === 'boolean' || paramValue instanceof Boolean) {
                   manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'BOOLEAN', dataPoint.dataPointLabel, dataPoint.description);
                 } else if (paramValue instanceof Array) {
-                  manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'ARRAY', dataPoint.dataPointLabel, dataPoint.description);
+                  if (paramValue.length > 0) {
+                    if (JSON.stringify(paramValue[0]).includes('{')) {
+                      continue;
+                    } else {
+                      manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'ARRAY', dataPoint.dataPointLabel, dataPoint.description);  
+                    }
+                  } else {
+                    manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, 'ARRAY', dataPoint.dataPointLabel, dataPoint.description);
+                  }
                 } else {
                   manualAction = new ManualAction(dataPoint.sequence, dataPoint.dataPointName, paramValue, '', dataPoint.dataPointLabel, dataPoint.description);
                 }
