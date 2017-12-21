@@ -146,8 +146,8 @@ export class StateService {
     return subject.asObservable();
   }
 
-  update(machineType: string, entityId: string, companyId: string, companyName: string, payload: any): Observable<State> {
-    const subject = new Subject<State>();
+  update(machineType: string, entityId: string, companyId: string, companyName: string, payload: any): Observable<any> {
+    const subject = new Subject<any>();
 
     const customHttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json', 'x-consumer-custom-id': companyId, 'x-consumer-username': companyName });
 
@@ -156,7 +156,7 @@ export class StateService {
 
     const url = `${environment.updatestatemachineurl}/${machineType}/${entityId}`;
 
-    this.httpClient.put<State>(
+    this.httpClient.put<any>(
       url,
       map,
       {
@@ -166,10 +166,8 @@ export class StateService {
         withCredentials: true
       }
     ).subscribe(
-      (response: HttpResponse<State>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
+      (response: HttpResponse<any>) => {
+        subject.next(response);
       },
       (err: HttpErrorResponse) => {
         // All errors are handled in ErrorInterceptor, no further handling required

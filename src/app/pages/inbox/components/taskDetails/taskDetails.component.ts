@@ -233,7 +233,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
     this.subscription = this.stateService.update(this.selectedState.machineType,
       this.selectedState.entityId, this.universalUser.getUser().companyId, this.universalUser.getUser().username, this.actionMap)
-      .subscribe(state => {
+      .subscribe(response => {
         this.onBack();
       });
   }
