@@ -31,10 +31,10 @@
                       <label>Score</label>
                       <input class="form-control" placeholder="Score" disabled="disabled" value="{{selectedEpisode._score}}" />
                     </div> -->
-                    <div *ngIf="selectedEpisode && selectedEpisode._id" class="form-group">
+                    <!-- <div *ngIf="selectedEpisode && selectedEpisode._id" class="form-group">
                       <label>Id</label>
                       <input class="form-control" placeholder="Id" disabled="disabled" value="{{selectedEpisode._id}}" />
-                    </div>
+                    </div> -->
                     <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.status" class="form-group">
                       <label>Status</label>
                       <input class="form-control" placeholder="Status" disabled="disabled" value="{{selectedEpisode._source.status}}" />
@@ -50,11 +50,11 @@
                       <label>Name</label>
                       <input class="form-control" placeholder="Name" disabled="disabled" value="{{selectedEpisode._source.name}}" />
                     </div> -->
-                    <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.conversationId" class="form-group">
+                    <!-- <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.conversationId" class="form-group">
                       <label>Conversation Id</label>
                       <input class="form-control" placeholder="Conversation Id" disabled="disabled" value="{{selectedEpisode._source.conversationId}}"
                       />
-                    </div>
+                    </div> -->
                     <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.entities && selectedEpisode._source.entities.length > 0"
                       class="form-group">
                       <label>Entities</label>
