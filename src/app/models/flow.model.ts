@@ -94,7 +94,7 @@ export class StateModel {
   endState: boolean;
   events: EventModel[];
   type: string;
-  trigger: EventModel[];
+  trigger: EventModel;
   classifiers: Classifier[];
   entryActionList: string[];
   apiConfigurationList: string[];
@@ -110,7 +110,7 @@ export class StateModel {
     this.endState = false;
     this.events = [];
     this.type = '';
-    this.trigger = [];
+    this.trigger = new EventModel();
     this.classifiers = [];
     this.entryActionList = [];
     this.apiConfigurationList = [];

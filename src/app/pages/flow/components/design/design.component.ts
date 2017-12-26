@@ -40,8 +40,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   stateCount: number = 0;
   
   // Dynamic html titles for dialogs
-  stateDialogTitle: string = "Add State";
-  stateDialogButtonName: string = "Add";
+  stateCreateMode: boolean = true;
+  updateStateFlag: boolean = true;
   
   // Dropdown source list
   sourceStatusCodes: string[] = ['DRAFT', 'ACTIVE', 'ARCHIVE'];
@@ -49,13 +49,11 @@ export class DesignComponent implements OnInit, OnDestroy {
   allocationTypes: string[] = ['Group','Least_Allocated','Maximum_Efficiency','API','User'];
   amountTypes: string[] = ['FIXED','DERIVED','API'];
   sourceOperands: string[] = ['AND', 'OR'];
-  sourceClassifiers: Classifier[];
-  sourceEntryActionList: string[];
-  sourceApiConfigList: ApiConfig[];
+  sourceClassifiers: Classifier[] = [];
+  sourceEntryActionList: string[] = [];
+  sourceApiConfigList: ApiConfig[] = [];
   sourceManualActionType: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT'];
-  sourceEvents: EventModel[];
-  sourceChildStates: StateModel[];
-  masterEventsList: EventModel[];
+  sourceEvents: EventModel[] = [];
   
   // Models to bind with html
   readOnly: boolean;
@@ -66,10 +64,12 @@ export class DesignComponent implements OnInit, OnDestroy {
   tempEvent: EventModel;
   tempEdgeEvent: EventModel;
   childStateEventMap: any;
+  childStateList: string[];
 
   // Warning Modal properties
   warningHeader: string;
   warningBody: string;
+
   
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
@@ -165,26 +165,26 @@ export class DesignComponent implements OnInit, OnDestroy {
   }  
 
   addState(sourceEvents: EventModel[]): void {
+    this.stateCreateMode = true;
+    
     this.sourceEvents = sourceEvents;
-
-    this.stateDialogTitle = "Add State";
-    this.stateDialogButtonName = "Add";
 
     this.tempState = new StateModel();
     this.tempState.type = this.sourceStateTypes[0];
     this.tempState.allocationModel.allocationType = this.allocationTypes[0];
     
     if (this.sourceEvents && this.sourceEvents.length > 0) {
-      this.tempState.trigger.push(this.sourceEvents[0]);
+      this.tempState.trigger = this.sourceEvents[0];
       this.tempState.initialState = false;
     } else {
+      this.tempState.trigger = null;
       this.tempState.initialState = true;
     }
   }
 
   updateState(state: StateModel): void {
-    this.stateDialogTitle = "Update State";
-    this.stateDialogButtonName = "Update";
+    this.stateCreateMode = false;
+
     this.tempState = JSON.parse(JSON.stringify(state));
   }
 
@@ -198,7 +198,6 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   saveEdge() {
-    console.log(this.tempEdgeEvent);
     new updateNewEdge(this.tempEdgeEvent);
   }
 
@@ -206,38 +205,20 @@ export class DesignComponent implements OnInit, OnDestroy {
     new deleteNewEdge();
   }
 
-  eventsMismatch(newEvents: EventModel[], eventChildMap: any) {
-    this.masterEventsList = newEvents;
-    this.childStateEventMap = eventChildMap;
-    this.sourceEvents = this.fetchUniqueEvents(this.masterEventsList, this.childStateEventMap);
-    console.log(newEvents);
-    console.log(eventChildMap);
-    console.log(this.sourceEvents);
-  }
+  eventsMismatch(state: StateModel, newEvents: EventModel[], childStateList: string[], modalHeader: string, modalBody: string) {
+    this.warningHeader = modalHeader;
+    this.warningBody = modalBody;
 
-  assignEventToChild(event: EventModel, key: string) {
-    this.childStateEventMap[key] = event;
-    this.sourceEvents = this.fetchUniqueEvents(this.masterEventsList, this.childStateEventMap);
-  }
-
-  fetchUniqueEvents(eventList: EventModel[], eventStateMap: any) {
-    const uniqueEventList: EventModel[] = [];
-
-    for (const key in eventStateMap) {
-      let unique = true;
-      for (const event of eventList) {
-        if (key && eventStateMap[key] && eventStateMap[key].eventCd && event && event.eventCd && eventStateMap[key].eventCd === event.eventCd) {
-          unique = false;
-          break;
-        }
-      }
-
-      if (unique) {
-        uniqueEventList.push(eventStateMap[key].eventCd);
+    this.tempState = state;
+    this.sourceEvents = newEvents;
+    this.childStateList = childStateList;
+    this.childStateEventMap = {};
+    
+    for (const stateCd of childStateList) {
+      if (stateCd) {
+        this.childStateEventMap[stateCd] = null;
       }
     }
-
-    return uniqueEventList;
   }
 
   updateStateTriggers() {
@@ -290,9 +271,11 @@ export class DesignComponent implements OnInit, OnDestroy {
       const customObject: Object = JSON.parse(JSON.stringify(this.tempState));  // Very important line of code, don't remove
       new updateStateObject(customObject);
     } else {
+      const newState = JSON.parse(JSON.stringify(this.tempState));
+
       this.stateCount++;
-      this.tempState.stateId = 'state' + this.stateCount;
-      const customObject: Object = JSON.parse(JSON.stringify(this.tempState));  // Very important line of code, don't remove
+      newState.stateId = 'state' + this.stateCount;
+      const customObject: Object = JSON.parse(JSON.stringify(newState));  // Very important line of code, don't remove
       new saveStateObject(customObject);
     }  
   }  
