@@ -9,12 +9,15 @@ import { ApiTableComponent } from './apitable.component';
 
 import { SharedModule } from '../../../../shared/shared.module';
 
+import { MomentModule } from 'angular2-moment';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     NgaModule,
     DataTableModule,
+    MomentModule,
     SharedModule
   ],
   declarations: [
