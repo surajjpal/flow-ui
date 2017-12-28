@@ -11,13 +11,17 @@ import { StateService } from '../../../../services/inbox.service';
 })
 
 export class ArchivedComponent implements OnInit, OnDestroy {
+  groupStates: State[];
+  personalStates: State[];
+  loadingGroup: boolean = false;
+  loadingPersonal: boolean = false;
 
-  closedStates: State[];
-
-  private subscription: Subscription;
+  private subscriptionGroup: Subscription;
+  private subscriptionPersonal: Subscription;
 
   constructor(private stateService: StateService) {
-    this.closedStates = [];
+    this.groupStates = [];
+    this.personalStates = [];
   }
 
   ngOnInit(): void {
@@ -25,21 +29,36 @@ export class ArchivedComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.subscription && !this.subscription.closed) {
-      this.subscription.unsubscribe();
+    if (this.subscriptionGroup && !this.subscriptionGroup.closed) {
+      this.subscriptionGroup.unsubscribe();
+    }
+    if (this.subscriptionPersonal && !this.subscriptionPersonal.closed) {
+      this.subscriptionPersonal.unsubscribe();
     }
   }
 
   fetchData(): void {
-    this.subscription = this.stateService.getStatesByStatus('CLOSED')
-      .subscribe(states => {
-        this.closedStates = states;
-      });
+    this.loadingPersonal = true;
+    this.loadingGroup = true;
+
+    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Group')
+    .subscribe(states => {
+      this.loadingGroup = false;
+      this.groupStates = states;
+    }, error => {
+      this.loadingGroup = false;
+    });
+
+    this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Personal')
+    .subscribe(states => {
+      this.loadingPersonal = false;
+      this.personalStates = states;
+    }, error => {
+      this.loadingPersonal = false;
+    });
   }
 
   onSelect(selectedData: State): void {
-    if (selectedData) {
-
-    }
+    
   }
 }

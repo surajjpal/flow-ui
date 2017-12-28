@@ -13,6 +13,8 @@ import { StateService } from '../../../../services/inbox.service';
 export class ActiveComponent implements OnInit, OnDestroy {
   groupStates: State[];
   personalStates: State[];
+  loadingGroup: boolean = false;
+  loadingPersonal: boolean = false;
 
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
@@ -36,14 +38,23 @@ export class ActiveComponent implements OnInit, OnDestroy {
   }
 
   fetchData(): void {
-    this.subscriptionGroup = this.stateService.getStatesByFolder('Group')
+    this.loadingPersonal = true;
+    this.loadingGroup = true;
+
+    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Group')
     .subscribe(states => {
+      this.loadingGroup = false;
       this.groupStates = states;
+    }, error => {
+      this.loadingGroup = false;
     });
 
-    this.subscriptionPersonal = this.stateService.getStatesByFolder('Personal')
+    this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Personal')
     .subscribe(states => {
+      this.loadingPersonal = false;
       this.personalStates = states;
+    }, error => {
+      this.loadingPersonal = false;
     });
   }
 

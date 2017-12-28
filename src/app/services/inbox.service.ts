@@ -51,47 +51,18 @@ export class StateService {
   
   constructor(private httpClient: HttpClient) { }
 
-  getStatesByFolder(folder: string): Observable<State[]> {
-    const subject = new Subject<State[]>();
-
-    if (!folder) {
-      folder = 'ALL';
-    }
-
-    const url = `${environment.server + environment.statebyfolderurl + folder}`;
-
-    this.httpClient.get<State[]>(
-      url,
-      {
-        observe: 'response',
-        reportProgress: true,
-        withCredentials: true
-      }
-    ).subscribe(
-      (response: HttpResponse<State[]>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
-
-        subject.error(err);
-      }
-      );
-
-    return subject.asObservable();
-  }
-
-  getStatesByStatus(status: string): Observable<State[]> {
+  getStatesByStatusAndFolder(status: string, folder: string): Observable<State[]> {
     const subject = new Subject<State[]>();
 
     if (!status) {
       status = 'ACTIVE';
     }
 
-    const url = `${environment.server + environment.statebystatusurl + status}`;
+    if (!folder) {
+      folder = 'Public';
+    }
+
+    const url = `${environment.server + environment.statebystatusandfolderurl}${status},${folder}`;
 
     this.httpClient.get<State[]>(
       url,

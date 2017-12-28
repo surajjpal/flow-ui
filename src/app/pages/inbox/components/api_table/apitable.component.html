@@ -37,8 +37,11 @@
       <!-- <td>{{s.assignedUserId}}</td> -->
       <!-- <td *ngIf="s.businessCost">{{s.businessCost.amount}}</td> -->
     </tr>
-    <tr *ngIf="mf.data.length === 0">
-        <td colspan="100%">No records to display</td>
+    <tr *ngIf="mf.data.length === 0 && isLoading">
+      <td colspan="100%">Loading...</td>
+    </tr>
+    <tr *ngIf="mf.data.length === 0 && !isLoading">
+      <td colspan="100%">No records to display</td>
     </tr>
   </tbody>
   <tfoot>
