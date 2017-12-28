@@ -41,7 +41,7 @@ export class ArchivedComponent implements OnInit, OnDestroy {
     this.loadingPersonal = true;
     this.loadingGroup = true;
 
-    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Group')
+    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('CLOSED', 'Group')
     .subscribe(states => {
       this.loadingGroup = false;
       this.groupStates = states;
@@ -49,7 +49,7 @@ export class ArchivedComponent implements OnInit, OnDestroy {
       this.loadingGroup = false;
     });
 
-    this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Personal')
+    this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('CLOSED', 'Personal')
     .subscribe(states => {
       this.loadingPersonal = false;
       this.personalStates = states;
