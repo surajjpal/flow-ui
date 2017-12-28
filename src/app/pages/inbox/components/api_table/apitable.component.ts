@@ -28,6 +28,9 @@ export class ApiTableComponent implements OnInit, OnDestroy {
   @Input()
   rawDataArray: Map<string, string>[];
 
+  @Input()
+  isLoading: Boolean = false;
+
   @Output()
   selectedData: EventEmitter<any> = new EventEmitter<any>();
 

@@ -14,8 +14,7 @@ export const environment = {
 
   // Flow
   server: 'http://localhost:8080/flow/console/',
-  statebyfolderurl: 'state/page/0,200,', // folder: Group, Personal
-  statebystatusurl: 'state/pagebystatus/0,200,', // status: CLOSED, ACTIVE
+  statebystatusandfolderurl: 'state/pagebystatusandfolder/0,200,', // status: CLOSED, ACTIVE; folder: Group, Personal
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
