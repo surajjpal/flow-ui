@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { State } from '../../../../models/tasks.model';
 import { StateService } from '../../../../services/inbox.service';
+import {BaThemeSpinner } from '../../../../theme/services';
 
 @Component({
   selector: 'api-inbox-active',
@@ -19,12 +20,13 @@ export class ActiveComponent implements OnInit, OnDestroy {
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
 
-  constructor(private stateService: StateService) {
+  constructor(private stateService: StateService,private baThemeSpinner: BaThemeSpinner) {
     this.groupStates = [];
     this.personalStates = [];
   }
 
   ngOnInit(): void {
+    this.baThemeSpinner.show();
     this.fetchData();
   }
 
@@ -45,16 +47,30 @@ export class ActiveComponent implements OnInit, OnDestroy {
     .subscribe(states => {
       this.loadingGroup = false;
       this.groupStates = states;
+
+      if(!this.loadingGroup && !this.loadingPersonal){
+        this.baThemeSpinner.hide();
+      }
+
     }, error => {
       this.loadingGroup = false;
+      if(!this.loadingGroup && !this.loadingPersonal){
+        this.baThemeSpinner.hide();
+      }
     });
 
     this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Personal')
     .subscribe(states => {
       this.loadingPersonal = false;
       this.personalStates = states;
+      if(!this.loadingGroup && !this.loadingPersonal){
+        this.baThemeSpinner.hide();
+      }
     }, error => {
       this.loadingPersonal = false;
+      if(!this.loadingGroup && !this.loadingPersonal){
+        this.baThemeSpinner.hide();
+      }
     });
   }
 
