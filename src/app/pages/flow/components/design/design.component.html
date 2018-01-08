@@ -576,7 +576,7 @@
                         Expression
                       </label>
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpInputExpression' + index" placeholder="Expression"
-                         />
+                        [(ngModel)]="dataPoint.expression" name="expression"/>
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpDataType' + index">
@@ -631,7 +631,7 @@
                           <input type="text" class="form-control" placeholder="Expression" [(ngModel)]="validation.expression" name="expression">
                         </td>
                         <td>
-                          <input type="text" class="form-control" placeholder="Key" [(ngModel)]="validation.errorMessage" name="errorMessage">
+                          <input type="text" class="form-control" placeholder="Error Message" [(ngModel)]="validation.errorMessage" name="errorMessage">
                         </td>
                       </tr>
                     </tbody>
@@ -747,7 +747,7 @@
                           <input type="text" class="form-control" placeholder="Expression" [(ngModel)]="validation.expression" name="expression">
                         </td>
                         <td>
-                          <input type="text" class="form-control" placeholder="Key" [(ngModel)]="validation.errorMessage" name="errorMessage">
+                          <input type="text" class="form-control" placeholder="Error Message" [(ngModel)]="validation.errorMessage" name="errorMessage">
                         </td>
                       </tr>
                     </tbody>
