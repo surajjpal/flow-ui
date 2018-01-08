@@ -33,12 +33,15 @@ export class State extends BaseModel {
   stageCd: string;
   stateMachineInstanceModelId: string;
   assignedUserGroupCd: string;
+  assignedUserId: string;
   startTime: Time;
   endTime: Time;
+  allocatedTime: Time;
+  reservedTime: Time;
   payload: string;
   fromStateCd: string;
-  eventModel: string;
   parameters: [string, string];
   predictedParameters: [string, string];
   businessCost: Amount;
+  errorMessageMap: any;
 }
