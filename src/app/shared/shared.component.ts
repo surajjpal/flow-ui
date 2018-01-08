@@ -4,8 +4,7 @@ import { AlertService } from '../services/shared.service';
 @Component({
     selector: 'api-alert',
     template: `
-      <div *ngIf="message" [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-danger': message.type === 'error' }">
-        {{message.text}}
+      <div *ngIf="message" [innerHTML]="message.text" [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-danger': message.type === 'error' }">
       </div>
     `
 })

@@ -1,12 +1,31 @@
 import { BaseModel } from './base.model';
 import { ApiConfig, ApiKeyExpressionMap } from './setup.model';
 
+export class DataPointValidation {
+  sequence: number;
+  dataPointKey: string;
+  expression: string;
+  errorMessage: string;
+
+  constructor(dataPointKey?: string) {
+    this.sequence = 0;
+    this.dataPointKey = dataPointKey ? dataPointKey : '';
+    this.expression = '';
+    this.errorMessage = '';
+  }
+}
+
 export class DataPoint {
   sequence: number;
   dataPointName: string;
   expression: string;
   dataPointLabel: string;
   description: string;
+  dataType: string;
+  inputSource: string[];
+  validations: DataPointValidation[];
+  operand: string;
+  value: any;
 
   constructor() {
     this.sequence = 0;
@@ -14,8 +33,14 @@ export class DataPoint {
     this.expression = '';
     this.dataPointLabel = '';
     this.description = '';
+    this.dataType = 'STRING';
+    this.inputSource = [];
+    this.validations = [];
+    this.operand = 'AND';
+    this.value = null;
   }
 }
+
 
 export class Classifier {
   apiName: string;
@@ -29,7 +54,7 @@ export class Classifier {
 
 export class Expression {
   value: string;
-  
+
   constructor() {
     this.value = '';
   }
@@ -65,7 +90,7 @@ export class AllocationModel {
   }
 }
 
-export class CostModel{
+export class CostModel {
   expression: string;
   costType: string;
   amount: number;
@@ -74,7 +99,7 @@ export class CostModel{
 
   constructor() {
     this.expression = '';
-    this.amount = 0.0;
+    this.amount = 0;
     this.costType = '';
     this.apiCd = '';
     this.currency = '';
@@ -89,7 +114,7 @@ export class ManualAction {
   label: string;
   description: string;
 
-  constructor(sequence?:number, key?: string, value?: any, type?: string, label?: string, description?: string) {
+  constructor(sequence?: number, key?: string, value?: any, type?: string, label?: string, description?: string) {
     this.sequence = sequence ? sequence : 0;
     this.key = key ? key : '';
     this.value = value ? value : '';
@@ -114,6 +139,7 @@ export class StateModel {
   allocationModel: AllocationModel;
   costModel: CostModel;
   manualActions: ManualAction[];
+  mandatoryDataPoints: DataPoint[];
 
   constructor() {
     this.stateId = '';
@@ -130,6 +156,7 @@ export class StateModel {
     this.allocationModel = new AllocationModel();
     this.costModel = new CostModel();
     this.manualActions = [];
+    this.mandatoryDataPoints = [];
   }
 }
 
@@ -158,7 +185,7 @@ export class GraphObject extends BaseModel {
 
   constructor() {
     super();
-    
+
     this.machineLabel = '';
     this.machineType = '';
     this.version = 0;
