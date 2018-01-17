@@ -811,7 +811,7 @@
         <form>
           <div class="form-group">
             <label class="col-md-12 col-sm-12 col-xs-12">
-              Select event for which '{{tempState.stateCd}}' will get triggered
+              Select event for which the state will get triggered
             </label>
             <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" title="Select Event" [(ngModel)]="tempEdgeEvent" name="tempEdgeEvent">
               <option *ngFor="let event of sourceEvents" [ngValue]="event">{{event.eventCd}}</option>
