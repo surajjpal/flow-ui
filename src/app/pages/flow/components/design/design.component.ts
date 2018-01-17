@@ -14,8 +14,10 @@ import { Subscription } from 'rxjs/Subscription';
 // import 'rxjs/add/operator/switchMap';
 
 // Model Imports
-import { GraphObject, DataPoint, Classifier, StateModel,
-   EventModel, Expression, Transition, ManualAction } from '../../../../models/flow.model';
+import {
+  GraphObject, DataPoint, Classifier, StateModel,
+  EventModel, Expression, Transition, ManualAction, DataPointValidation
+} from '../../../../models/flow.model';
 import { ApiConfig, ApiKeyExpressionMap } from '../../../../models/setup.model';
 
 // Service Imports
@@ -27,18 +29,18 @@ import { GraphService, CommunicationService } from '../../../../services/flow.se
 })
 
 export class DesignComponent implements OnInit, OnDestroy {
-  
+
   // Final strings used in html as method parameter
   ZOOM_IN = 'ZOOM_IN';
   ZOOM_OUT = 'ZOOM_OUT';
   ZOOM_ACTUAL = 'ZOOM_ACTUAL';
   PRINT_PREVIEW = 'PRINT_PREVIEW';
   POSTER_PRINT = 'POSTER_PRINT';
-  
+
   // List counts
   dataPointCount: number = 0;
   stateCount: number = 0;
-  
+
   // Dynamic html titles for dialogs
   stateCreateMode: boolean = true;
   updateStateFlag: boolean = true;
@@ -46,15 +48,16 @@ export class DesignComponent implements OnInit, OnDestroy {
   // Dropdown source list
   sourceStatusCodes: string[] = ['DRAFT', 'ACTIVE', 'ARCHIVE'];
   sourceStateTypes: string[] = ['Manual', 'Auto', 'Cognitive'];
-  allocationTypes: string[] = ['Group','Least_Allocated','Maximum_Efficiency','API','User'];
-  amountTypes: string[] = ['FIXED','DERIVED','API'];
+  allocationTypes: string[] = ['Group', 'Least_Allocated', 'Maximum_Efficiency', 'API', 'User'];
+  amountTypes: string[] = ['FIXED', 'DERIVED', 'API'];
   sourceOperands: string[] = ['AND', 'OR'];
   sourceClassifiers: Classifier[] = [];
   sourceEntryActionList: string[] = [];
   sourceApiConfigList: ApiConfig[] = [];
   sourceManualActionType: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT'];
   sourceEvents: EventModel[] = [];
-  
+  sourceDataTypes: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT', 'ARRAY', 'ANY'];
+
   // Models to bind with html
   readOnly: boolean;
   graphObject: GraphObject;
@@ -69,12 +72,11 @@ export class DesignComponent implements OnInit, OnDestroy {
   // Warning Modal properties
   warningHeader: string;
   warningBody: string;
-
   
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
   private subscriptionApiConfig: Subscription;
-  
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -83,12 +85,12 @@ export class DesignComponent implements OnInit, OnDestroy {
     private communicationService: CommunicationService
   ) {
     window['flowComponentRef'] = { component: this, zone: zone };
-    
+
     this.readOnly = this.communicationService.isReadOnly();
     if (this.readOnly) {
       this.communicationService.setReadOnly(false);
     }
-    
+
     this.graphObject = this.communicationService.getGraphObject();
     if (this.graphObject) {
       this.communicationService.sendGraphObject(null);
@@ -104,8 +106,8 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.load();
-  }  
-  
+  }
+
   ngOnDestroy() {
     // prevent memory leak when component destroyed
     window['flowComponentRef'] = null;
@@ -128,20 +130,20 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (!this.graphObject || this.graphObject === null) {
       this.graphObject = new GraphObject();
       this.graphObject.statusCd = this.sourceStatusCodes[0],
-      this.addNewDataPoint(true);
-    }  
+        this.addNewDataPoint(true);
+    }
 
     new designFlowEditor(this.graphObject.xml, this.readOnly);
-  }  
+  }
 
   getSourceEntryActions() {
     this.subscriptionEntryAction = this.graphService.getEntryActions()
       .subscribe(entryActionList => {
         if (entryActionList) {
           this.sourceEntryActionList = entryActionList;
-        }  
-      });  
-  }    
+        }
+      });
+  }
 
   getApiConfigLookup() {
     this.subscriptionApiConfig = this.graphService.apiConfigLookup()
@@ -150,19 +152,19 @@ export class DesignComponent implements OnInit, OnDestroy {
           this.sourceApiConfigList = apiConfigList;
         }
       });
-  }  
+  }
 
   prepareDummyObject() {
     if (this.graphObject) {
       this.tempGraphObject = JSON.parse(JSON.stringify(this.graphObject));
     } else {
       this.tempGraphObject = new GraphObject();
-    }  
-  }  
+    }
+  }
 
   toolsChoice(choice: string): void {
     new graphTools(choice);
-  }  
+  }
 
   addState(sourceEvents: EventModel[]): void {
     this.stateCreateMode = true;
@@ -234,39 +236,39 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.addExpression(tempEvent);
 
     this.tempState.events.push(tempEvent);
-  }  
+  }
 
   addExpression(event: EventModel): void {
     const tempExpression: Expression = new Expression();
     tempExpression.value = 'Expression';
 
     event.expressionList.push(tempExpression);
-  }  
+  }
 
   deleteExpression(expression: Expression, event: EventModel): void {
     const index = event.expressionList.indexOf(expression);
     event.expressionList.splice(index, 1);
-  }  
+  }
 
   deleteEvent(event: EventModel): void {
     const index = this.tempState.events.indexOf(event);
     this.tempState.events.splice(index, 1);
-  }  
+  }
 
   saveEvent(): void {
     this.tempState.events.push(this.tempEvent);
-  }  
+  }
 
   saveState(): void {
     this.tempState.endState = (this.tempState.events.length === 0);
     if (!this.isStateApiCompatible()) {
       this.tempState.apiConfigurationList = [];
-    }  
+    }
 
     if (!this.isStateRuleCompatible()) {
       this.tempState.ruleList = [];
-    }  
-  
+    }
+
     if (this.tempState.stateId && this.tempState.stateId.toString().trim().length > 0) {
       const customObject: Object = JSON.parse(JSON.stringify(this.tempState));  // Very important line of code, don't remove
       new updateStateObject(customObject);
@@ -277,18 +279,18 @@ export class DesignComponent implements OnInit, OnDestroy {
       newState.stateId = 'state' + this.stateCount;
       const customObject: Object = JSON.parse(JSON.stringify(newState));  // Very important line of code, don't remove
       new saveStateObject(customObject);
-    }  
-  }  
+    }
+  }
 
   save(): void {
     this.graphObject = this.tempGraphObject;
-  }  
+  }
 
   saveOnServer() {
     // This will call a method in app.js and it will convert mxGraph into xml
     // and send it back to this component in method saveGraphXml(xml: string)
     new exportGraphXml();
-  }  
+  }
 
   addNewDataPoint(isInit?: boolean) {
     this.dataPointCount++;
@@ -306,6 +308,16 @@ export class DesignComponent implements OnInit, OnDestroy {
   deleteDataPoint(dataPoint: DataPoint) {
     const index = this.tempGraphObject.dataPointConfigurationList.indexOf(dataPoint);
     this.tempGraphObject.dataPointConfigurationList.splice(index, 1);
+  }
+
+  addDataPointValidation(dataPoint: DataPoint) {
+    const validation = new DataPointValidation();
+    dataPoint.validations.push(validation);
+  }
+
+  removeDataPointValidation(validation: DataPointValidation, dataPoint: DataPoint) {
+    const index = dataPoint.validations.indexOf(validation);
+    dataPoint.validations.splice(index, 1);
   }
 
   isStateApiCompatible() {
@@ -361,6 +373,24 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.graphObject.xml = xml;
       this.graphObject.states = states;
       this.graphObject.transitions = transitions;
+
+      this.graphObject.dataPointConfigurationList.sort(function (a, b) {
+        return a.sequence - b.sequence;
+      });
+
+      for (const dataPoint of this.graphObject.dataPointConfigurationList) {
+        dataPoint.validations.sort(function (a, b) {
+          return a.sequence - b.sequence;
+        });
+
+        if (dataPoint.dataType !== 'SINGLE_SELECT' && dataPoint.dataType !== 'MULTI_SELECT') {
+          dataPoint.inputSource = [];
+        }
+
+        for (const validation of dataPoint.validations) {
+          validation.dataPointKey = dataPoint.dataPointName;
+        }
+      }
 
       this.subscription = this.graphService.save(this.graphObject)
         .subscribe(graphObject => {

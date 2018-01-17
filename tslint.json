@@ -6,7 +6,7 @@
     "node_modules/codelyzer"
   ],
   "rules": {
-    "max-line-length": [true, 120],
+    "max-line-length": [true, 200],
     "class-name": true,
     "comment-format": [true, "check-space"],
     "indent": [true, "spaces"],
@@ -17,7 +17,7 @@
     "no-internal-module": true,
     "no-bitwise": true,
     "no-shadowed-variable": true,
-    "no-unused-expression": true,
+    "no-unused-expression": false,
     "one-line": [true, "check-catch", "check-else", "check-open-brace", "check-whitespace"],
     "quotemark": [true, "single", "avoid-escape"],
     "semicolon": true,
@@ -90,7 +90,7 @@
     "trailing-comma": [
       true,
       {
-        "multiline": "always",
+        "multiline": "never",
         "singleline": "never"
       }
     ],
@@ -113,8 +113,8 @@
     "no-boolean-literal-compare": true,
     "object-literal-shorthand": true,
 
-    "directive-selector": [true, "attribute", ["nga", "ngd", "ngt"], "camelCase"],
-    "component-selector": [true, "element", ["nga", "ngd", "ngt"], "kebab-case"],
+    "directive-selector": [true, "attribute", ["nga", "ngd", "ngt", "api"], "camelCase"],
+    "component-selector": [true, "element", ["nga", "ngd", "ngt", "api"], "kebab-case"],
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
     "use-host-property-decorator": true,

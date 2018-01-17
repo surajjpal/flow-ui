@@ -1,5 +1,6 @@
 declare var designFlowEditor: any;
 declare var styleStates: any;
+declare var showModal: any;
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
@@ -13,8 +14,6 @@ import { Episode, ChatMessage } from '../../../../models/conversation.model';
 
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
 import { ConversationService } from '../../../../services/agent.service';
-import { AccountService } from '../../../../services/setup.service';
-import { UniversalUser, AlertService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'api-task-details',
@@ -25,9 +24,11 @@ import { UniversalUser, AlertService } from '../../../../services/shared.service
 export class TaskDetailsComponent implements OnInit, OnDestroy {
 
   selectedState: State;
-  manualActions: ManualAction[];
+  dataPoints: DataPoint[];
   actionMap: any;
   graphObject: GraphObject;
+  responseError: string;
+  fieldKeyMap: any;
 
   selectedEpisode: Episode;
   chatMessageList: ChatMessage[];
@@ -41,9 +42,6 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private stateService: StateService,
     private conversationService: ConversationService,
-    private accountService: AccountService,
-    private universalUser: UniversalUser,
-    private alertService: AlertService,
     private dataCachingService: DataCachingService,
     private location: Location
   ) { }
@@ -52,6 +50,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.selectedState = this.dataCachingService.getSelectedState();
     if (!this.selectedState) {
       this.router.navigate(['/pg/tsk/tact'], { relativeTo: this.route });
+      return;
     }
     
     this.graphObject = this.dataCachingService.getGraphObject();
@@ -61,8 +60,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
     this.getEpisode();
     this.extractParams();
-    this.extractManualStateAction();
-    this.initUI();
+    // this.initUI();
   }
 
   ngOnDestroy() {
@@ -102,120 +100,67 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
   extractParams() {
     if (this.selectedState) {
-
-      // Comment to be able to edit params of CLOSED states
-      // if (this.selectedState.statusCd === 'CLOSED') {
-      //   this.manualActions = [];
-      //   this.actionMap = {};
-      //   return;
-      // }
-  
       if (!this.actionMap) {
         this.actionMap = {};
       }
-      if (!this.manualActions) {
-        this.manualActions = [];
+      if (!this.fieldKeyMap) {
+        this.fieldKeyMap = {};
+      }
+      if (!this.dataPoints) {
+        this.dataPoints = [];
       }
 
-      if (this.selectedState.parameters) {
-        for (const key in this.selectedState.parameters) {
-          const paramValue: any = this.selectedState.parameters[key];
+      if (this.selectedState.parameters && this.graphObject.dataPointConfigurationList) {
+        for (const dataPoint of this.graphObject.dataPointConfigurationList) {
+          const paramValue: any = this.selectedState.parameters[dataPoint.dataPointName];
+
+          if (dataPoint.dataType === 'STRING') {
+            dataPoint.value = paramValue ? paramValue : '';
+          } else if (dataPoint.dataType === 'BOOLEAN') {
+            dataPoint.value = (paramValue !== null && (typeof paramValue === 'boolean' || paramValue instanceof Boolean)) ? paramValue : false;
+          } else if (dataPoint.dataType === 'NUMBER') {
+            dataPoint.value = (paramValue && (typeof paramValue === 'number' || paramValue instanceof Number)) ? paramValue : 0;
+          } else if (dataPoint.dataType === 'SINGLE_SELECT') {
+            if (paramValue && !(paramValue instanceof Array) && !dataPoint.inputSource.includes(paramValue)) {
+              dataPoint.inputSource.push(paramValue);
+            }
+            
+            dataPoint.value = paramValue;
+          } else if (dataPoint.dataType === 'MULTI_SELECT') {
+            const uniqueValues: string[] = [];
+            
+            if (paramValue && paramValue instanceof Array && paramValue.length > 0) {
+              for (const value of paramValue) {
+                if (!dataPoint.inputSource.includes(value)) {
+                  uniqueValues.push(value);
+                }
+                
+              }
+              
+              dataPoint.inputSource = dataPoint.inputSource.concat(uniqueValues);
+            }
+            
+            dataPoint.value = paramValue;
+          } else if (dataPoint.dataType === 'ARRAY') {
+            dataPoint.value = (paramValue && paramValue instanceof Array) ? paramValue : [];
+          } else if (dataPoint.dataType === 'ANY') {
+            dataPoint.value = paramValue;
+          } else {
+            dataPoint.dataType = 'STRING';
+            dataPoint.value = '';
+          }
           
-          if (key) {
-            let manualAction: ManualAction;
+          /** ---------------------- IMPORTANT ----------------------
+           * This is done on purpose, please don't remove.
+           * Required for UI -> Inline form -> Label & Value
+           * Object at even indices are used to create label div
+           * Object at odd indices are used to create input field
+           * while updating info on server only odd indices objects are selected
+           **/
+          this.dataPoints.push(dataPoint);
+          this.dataPoints.push(dataPoint);
 
-            if (paramValue) {
-              if (typeof paramValue === 'string' || paramValue instanceof String) {
-                manualAction = new ManualAction(key, paramValue, 'STRING');
-              } else if (typeof paramValue === 'number' || paramValue instanceof Number) {
-                manualAction = new ManualAction(key, paramValue, 'NUMBER');
-              } else if (typeof paramValue === 'boolean' || paramValue instanceof Boolean) {
-                manualAction = new ManualAction(key, paramValue, 'BOOLEAN');
-              } else if (paramValue instanceof Array) {
-                manualAction = new ManualAction(key, paramValue, 'ARRAY');
-              } else {
-                manualAction = new ManualAction(key, paramValue, '');
-              }
-            } else {
-              manualAction = new ManualAction(key, null, 'STRING');
-            }
-
-            this.manualActions.push(manualAction);
-            this.actionMap[key] = paramValue;
-          }
-        }
-      }
-    }
-  }
-
-  extractManualStateAction() {
-    if (this.graphObject.states) {
-      if (!this.manualActions) {
-        this.manualActions = [];
-      }
-
-      for (const state of this.graphObject.states) {
-        if (state && state.stateCd && state.manualActions && this.selectedState.stageCd && this.selectedState.stateCd === state.stateCd) {
-          if (state.manualActions) {
-            for (const manualAction of state.manualActions) {
-              let uniqueAction: boolean = true;
-
-              for (const globalAction of this.manualActions) {
-                if (manualAction.key === globalAction.key) {
-                  uniqueAction = false;
-
-                  if (manualAction.type === 'SINGLE_SELECT') {
-                    const source: any[] = manualAction.value;
-                    if (globalAction.type !== 'ARRAY' && !source.includes(globalAction.value)) {
-                      source.push(globalAction.value);
-                    }
-
-                    globalAction.type = manualAction.type;
-                    globalAction.value = source;
-                  } else if (manualAction.type === 'MULTI_SELECT') {
-                    const source: any[] = manualAction.value;
-                    if (globalAction.type === 'ARRAY') {
-                      const oldSource: any[] = globalAction.value;
-                      
-                      for (const oldValue of oldSource) {
-                        let uniqueValue = true;
-                        for (const newValue of source) {
-                          if (oldValue === newValue) {
-                            uniqueValue = false;
-                            break;
-                          }
-                        }
-
-                        if (uniqueValue) {
-                          source.push(oldValue);
-                        }
-                      }
-                    }
-
-                    globalAction.type = manualAction.type;
-                    globalAction.value = source;
-                  }
-
-                  break;
-                }
-              }
-
-              if (uniqueAction) {
-                this.manualActions.push(manualAction);
-
-                if (manualAction.type === 'STRING' || manualAction.type === '') {
-                  this.actionMap[manualAction.key] = (manualAction.value && manualAction.value.toString().trim().length > 0) ? manualAction.value : '';
-                } else if (manualAction.type === 'NUMBER') {
-                  this.actionMap[manualAction.key] = (manualAction.value && (typeof manualAction.value === 'number' || manualAction.value instanceof Number)) ? manualAction.value : 0;
-                } else if (manualAction.type === 'BOOLEAN') {
-                  this.actionMap[manualAction.key] = (manualAction.value && (typeof manualAction.value === 'boolean' || manualAction.value instanceof Boolean)) ? manualAction.value : false;
-                } else if (manualAction.type === 'SINGLE_SELECT' || manualAction.type === 'MULTI_SELECT') {
-                  this.actionMap[manualAction.key] = (manualAction.value && manualAction.value instanceof Array && manualAction.value.length > 0) ? manualAction.value[0] : '';
-                }
-              }
-            }
-          }
-          break;
+          this.fieldKeyMap[dataPoint.dataPointName] = dataPoint.dataPointLabel;
         }
       }
     }
@@ -231,10 +176,46 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       this.actionMap = {};
     }
 
-    this.subscription = this.stateService.update(this.selectedState.machineType,
-      this.selectedState.entityId, this.universalUser.getUser().companyId, this.universalUser.getUser().username, this.actionMap)
+    for (let index = 0; index < this.dataPoints.length; index++) {
+      if (index % 2 === 1) {
+        const dataPoint = this.dataPoints[index];
+        if (dataPoint.dataType === 'NUMBER' && (typeof dataPoint.value === 'string' || dataPoint.value instanceof String)) {
+          dataPoint.value = +dataPoint.value;
+        } else if (dataPoint.dataType === 'BOOLEAN' && (typeof dataPoint.value === 'string' || dataPoint.value instanceof String)) {
+          dataPoint.value = (dataPoint.value === 'true');
+        }
+        this.actionMap[dataPoint.dataPointName] = dataPoint.value;
+      }
+    }
+
+    this.subscription = this.stateService.update(this.selectedState.machineType, this.selectedState.entityId, this.actionMap)
       .subscribe(response => {
-        this.onBack();
+        this.responseError = '';
+
+        const state: State = response;
+
+        if (state) {
+          if (state.errorMessageMap) {
+            for (const key in state.errorMessageMap) {
+              if (key) {
+                const errorList: string[] = state.errorMessageMap[key];
+
+                this.responseError += `${this.fieldKeyMap[key]}<br>`;
+                for (const error of errorList) {
+                  this.responseError += `  - ${error}<br>`;
+                }
+              }
+            }
+
+            if (!this.responseError || this.responseError.length <= 0) {
+              new showModal('successModal');
+            }
+          } else {
+            new showModal('successModal');
+          }
+        } else {
+          new showModal('successModal');
+        }
       });
   }
 }

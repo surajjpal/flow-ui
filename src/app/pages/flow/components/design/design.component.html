@@ -117,6 +117,13 @@
             <input type="text" class="form-control" required id="apiCd" placeholder="Cost API" [(ngModel)]="tempState.costModel.apiCd"
               name="apiCd" />
           </div>
+          <div class="form-group" *ngIf="graphObject.dataPointConfigurationList.length > 0">
+            <label for="selectMandatoryDataPoints">Mandatory Data Points</label>
+            <select multiple="true" class="selectpicker form-control" required id="selectMandatoryDataPoints" title="Choose Mandatory Data Points" [(ngModel)]="tempState.mandatoryDataPoints"
+              name="mandatoryDataPoints">
+              <option *ngFor="let dataPoint of graphObject.dataPointConfigurationList" [ngValue]="dataPoint">{{dataPoint.dataPointLabel}}</option>
+            </select>
+          </div>
         </form>
 
         <div id="manualActionAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'">
@@ -135,7 +142,10 @@
                   <thead>
                     <tr>
                       <th>Delete</th>
+                      <th>Sequence</th>
                       <th>Key to save Result</th>
+                      <th>Label</th>
+                      <th>Description</th>
                       <th>Type</th>
                       <th>Action</th>
                     </tr>
@@ -146,7 +156,16 @@
                         <button type="button" class="btn btn-danger" title="Delete" (click)="removeManualAction(manualAction)"><i class="ion-close-round"></i></button>
                       </td>
                       <td>
+                        <input type="number" class="form-control" placeholder="Sequence" [value]="manualAction.sequence" (input)="manualAction.sequence = $event.target.value" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)">
+                      </td>
+                      <td>
                         <input type="text" class="form-control" placeholder="Key" [value]="manualAction.key" (input)="manualAction.key = $event.target.value">
+                      </td>
+                      <td>
+                        <input type="text" class="form-control" placeholder="Label" [value]="manualAction.label" (input)="manualAction.label = $event.target.value">
+                      </td>
+                      <td>
+                        <input type="text" class="form-control" placeholder="Description" [value]="manualAction.description" (input)="manualAction.description = $event.target.value">
                       </td>
                       <td>
                         <select class="selectpicker form-control" title="Choose type" [(ngModel)]="manualAction.type"
@@ -507,7 +526,7 @@
                 <h5 class="mb-0">
                   <a data-toggle="collapse" data-parent="#dpAccordion" [href]="'#dpCollapse' + index" aria-expanded="true" [attr.aria-controls]="'dpCollapse' + index"
                     (click)="selectedDataPoint=dataPoint">
-                    {{dataPoint.dataPointName}}
+                    {{dataPoint.sequence}} - {{dataPoint.dataPointLabel}}
                   </a>
                 </h5>
               </div>
@@ -515,7 +534,7 @@
                 <h5 class="mb-0">
                   <a class="collapsed" data-toggle="collapse" data-parent="#dpAccordion" [href]="'#dpCollapse' + index" aria-expanded="false"
                     [attr.aria-controls]="'dpCollapse' + index" (click)="selectedDataPoint=dataPoint">
-                    {{dataPoint.dataPointName}}
+                    {{dataPoint.sequence}} - {{dataPoint.dataPointLabel}}
                   </a>
                 </h5>
               </div>
@@ -524,6 +543,14 @@
                 <div class="card-block">
                   <form>
                     <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpSequence' + index">
+                        Sequence
+                      </label>
+                      <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpSequence' + index" placeholder="Sequence"
+                        onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"
+                        [(ngModel)]="dataPoint.sequence" name="sequence" />
+                    </div>
+                    <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpInputName' + index">
                         Name
                       </label>
@@ -531,12 +558,95 @@
                         [(ngModel)]="dataPoint.dataPointName" name="dataPointName" />
                     </div>
                     <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpLabel' + index">
+                        Label
+                      </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpLabel' + index" placeholder="Label"
+                        [(ngModel)]="dataPoint.dataPointLabel" name="dataPointLabel" />
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpDescription' + index">
+                        Description
+                      </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpDescription' + index" placeholder="Description"
+                        [(ngModel)]="dataPoint.description" name="description" />
+                    </div>
+                    <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputExpression' + index">
                         Expression
                       </label>
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpInputExpression' + index" placeholder="Expression"
-                        [(ngModel)]="dataPoint.expression" name="expression" />
+                        [(ngModel)]="dataPoint.expression" name="expression"/>
                     </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpDataType' + index">
+                        DataType
+                      </label>
+                      <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'dpDataType' + index" title="Select data type"
+                        [(ngModel)]="dataPoint.dataType" name="dataType">
+                        <option *ngFor="let dataType of sourceDataTypes" [ngValue]="dataType">{{dataType}}</option>
+                      </select>
+                    </div>
+                    <div class="form-group" *ngIf="dataPoint.dataType === 'SINGLE_SELECT' || dataPoint.dataType === 'MULTI_SELECT'">
+                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputSource' + index">
+                        Valid Input Source
+                      </label>
+                      <tag-input class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" [id]="'dpInputSource' + index"
+                        [(ngModel)]="dataPoint.inputSource" name="inputSource" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]"
+                        placeholder="+Input (Enter separated)" secondaryPlaceholder="Populate source input" theme="minimal" class="custom-input-tag-border">
+                      </tag-input>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpOperand' + index">
+                        Validation Operand
+                      </label>
+                      <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'dpOperand' + index" title="Select valitdation operand"
+                        [(ngModel)]="dataPoint.operand" name="operand">
+                        <option *ngFor="let operand of sourceOperands" [ngValue]="operand">{{operand}}</option>
+                      </select>
+                    </div>
+                  </form>
+
+
+                  <br>      
+                  <table class="table" [mfData]="dataPoint.validations" [mfRowsOnPage]="5">
+                    <thead>
+                      <tr>
+                        <th>Action</th>
+                        <th>Sequence</th>
+                        <th>Expression</th>
+                        <th>Error Message</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let validation of dataPoint.validations">
+                        <td>
+                          <button type="button" class="btn btn-danger" title="Delete" (click)="removeDataPointValidation(validation, dataPoint)"><i class="ion-close-round"></i></button>
+                        </td>
+                        <td>
+                          <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="validation.sequence" name="sequence"
+                          onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"/>
+                        </td>
+                        <td>
+                          <input type="text" class="form-control" placeholder="Expression" [(ngModel)]="validation.expression" name="expression">
+                        </td>
+                        <td>
+                          <input type="text" class="form-control" placeholder="Error Message" [(ngModel)]="validation.errorMessage" name="errorMessage">
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="0" style="text-align: right;">
+                          <button type="button" class="btn btn-primary" (click)="addDataPointValidation(dataPoint)">Add Validation</button>
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                  <br>
+
+
+                  <form>
                     <div class="form-group" *ngIf="tempGraphObject.dataPointConfigurationList.length > 1">
                       <button type="button" class="btn btn-danger" (click)="deleteDataPoint(dataPoint)">
                         Remove Data Point
@@ -549,11 +659,33 @@
                 <div class="card-block">
                   <form>
                     <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpSequence' + index">
+                        Sequence
+                      </label>
+                      <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpSequence' + index" placeholder="Sequence"
+                        onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"
+                        [(ngModel)]="dataPoint.sequence" name="sequence" />
+                    </div>
+                    <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpInputName' + index">
                         Name
                       </label>
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpInputName' + index" placeholder="Name"
                         [(ngModel)]="dataPoint.dataPointName" name="dataPointName" />
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpLabel' + index">
+                        Label
+                      </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpLabel' + index" placeholder="Label"
+                        [(ngModel)]="dataPoint.dataPointLabel" name="dataPointLabel" />
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpDescription' + index">
+                        Description
+                      </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpDescription' + index" placeholder="Description"
+                        [(ngModel)]="dataPoint.description" name="description" />
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputExpression' + index">
@@ -562,6 +694,75 @@
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpInputExpression' + index" placeholder="Expression"
                         [(ngModel)]="dataPoint.expression" name="expression" />
                     </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpDataType' + index">
+                        DataType
+                      </label>
+                      <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'dpDataType' + index" title="Select data type"
+                        [(ngModel)]="dataPoint.dataType" name="dataType">
+                        <option *ngFor="let dataType of sourceDataTypes" [ngValue]="dataType">{{dataType}}</option>
+                      </select>
+                    </div>
+                    <div class="form-group" *ngIf="dataPoint.dataType === 'SINGLE_SELECT' || dataPoint.dataType === 'MULTI_SELECT'">
+                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputSource' + index">
+                        Valid Input Source
+                      </label>
+                      <tag-input class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" [id]="'dpInputSource' + index"
+                        [(ngModel)]="dataPoint.inputSource" name="inputSource" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]"
+                        placeholder="+Input (Enter separated)" secondaryPlaceholder="Populate source input" theme="minimal" class="custom-input-tag-border">
+                      </tag-input>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpOperand' + index">
+                        Validation Operand
+                      </label>
+                      <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'dpOperand' + index" title="Select valitdation operand"
+                        [(ngModel)]="dataPoint.operand" name="operand">
+                        <option *ngFor="let operand of sourceOperands" [ngValue]="operand">{{operand}}</option>
+                      </select>
+                    </div>
+                  </form>
+
+
+                  <br>      
+                  <table class="table" [mfData]="dataPoint.validations" [mfRowsOnPage]="5">
+                    <thead>
+                      <tr>
+                        <th>Action</th>
+                        <th>Sequence</th>
+                        <th>Expression</th>
+                        <th>Error Message</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let validation of dataPoint.validations">
+                        <td>
+                          <button type="button" class="btn btn-danger" title="Delete" (click)="removeDataPointValidation(validation, dataPoint)"><i class="ion-close-round"></i></button>
+                        </td>
+                        <td>
+                          <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="validation.sequence" name="sequence"
+                          onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"/>
+                        </td>
+                        <td>
+                          <input type="text" class="form-control" placeholder="Expression" [(ngModel)]="validation.expression" name="expression">
+                        </td>
+                        <td>
+                          <input type="text" class="form-control" placeholder="Error Message" [(ngModel)]="validation.errorMessage" name="errorMessage">
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="0" style="text-align: right;">
+                          <button type="button" class="btn btn-primary" (click)="addDataPointValidation(dataPoint)">Add Validation</button>
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                  <br>
+
+
+                  <form>
                     <div class="form-group" *ngIf="tempGraphObject.dataPointConfigurationList.length > 1">
                       <button type="button" class="btn btn-danger" (click)="deleteDataPoint(dataPoint)">
                         Remove Data Point

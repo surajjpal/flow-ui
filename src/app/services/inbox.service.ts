@@ -51,47 +51,18 @@ export class StateService {
   
   constructor(private httpClient: HttpClient) { }
 
-  getStatesByFolder(folder: string): Observable<State[]> {
-    const subject = new Subject<State[]>();
-
-    if (!folder) {
-      folder = 'ALL';
-    }
-
-    const url = `${environment.server + environment.statebyfolderurl + folder}`;
-
-    this.httpClient.get<State[]>(
-      url,
-      {
-        observe: 'response',
-        reportProgress: true,
-        withCredentials: true
-      }
-    ).subscribe(
-      (response: HttpResponse<State[]>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
-
-        subject.error(err);
-      }
-      );
-
-    return subject.asObservable();
-  }
-
-  getStatesByStatus(status: string): Observable<State[]> {
+  getStatesByStatusAndFolder(status: string, folder: string): Observable<State[]> {
     const subject = new Subject<State[]>();
 
     if (!status) {
       status = 'ACTIVE';
     }
 
-    const url = `${environment.server + environment.statebystatusurl + status}`;
+    if (!folder) {
+      folder = 'Public';
+    }
+
+    const url = `${environment.server + environment.statebystatusandfolderurl}${status},${folder}`;
 
     this.httpClient.get<State[]>(
       url,
@@ -146,28 +117,31 @@ export class StateService {
     return subject.asObservable();
   }
 
-  update(machineType: string, entityId: string, companyId: string, companyName: string, payload: any): Observable<any> {
-    const subject = new Subject<any>();
-
-    const customHttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json', 'x-consumer-custom-id': companyId, 'x-consumer-username': companyName });
+  update(machineType: string, entityId: string, param: any): Observable<State> {
+    const subject = new Subject<State>();
 
     const map = {};
-    map['payload'] = JSON.stringify(payload);
+    map['param'] = JSON.stringify(param);
+    map['payload'] = '{}';
 
-    const url = `${environment.updatestatemachineurl}/${machineType}/${entityId}`;
+    const url = `${environment.server + environment.updatestatemachineurl}/${machineType}/${entityId}`;
 
     this.httpClient.put<any>(
       url,
       map,
       {
-        headers: customHttpHeaders,
+        headers: this.httpHeaders,
         observe: 'response',
         reportProgress: true,
         withCredentials: true
       }
     ).subscribe(
-      (response: HttpResponse<any>) => {
-        subject.next(response);
+      (response: HttpResponse<State>) => {
+        if (response.body) {
+          subject.next(response.body);
+        } else {
+          subject.next();
+        }
       },
       (err: HttpErrorResponse) => {
         // All errors are handled in ErrorInterceptor, no further handling required

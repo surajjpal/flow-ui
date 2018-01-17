@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { State } from '../../../../models/tasks.model';
 import { StateService } from '../../../../services/inbox.service';
+import {BaThemeSpinner } from '../../../../theme/services';
 
 @Component({
   selector: 'api-inbox-active',
@@ -13,16 +14,19 @@ import { StateService } from '../../../../services/inbox.service';
 export class ActiveComponent implements OnInit, OnDestroy {
   groupStates: State[];
   personalStates: State[];
+  loadingGroup: boolean = false;
+  loadingPersonal: boolean = false;
 
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
 
-  constructor(private stateService: StateService) {
+  constructor(private stateService: StateService,private baThemeSpinner: BaThemeSpinner) {
     this.groupStates = [];
     this.personalStates = [];
   }
 
   ngOnInit(): void {
+    this.baThemeSpinner.show();
     this.fetchData();
   }
 
@@ -36,14 +40,37 @@ export class ActiveComponent implements OnInit, OnDestroy {
   }
 
   fetchData(): void {
-    this.subscriptionGroup = this.stateService.getStatesByFolder('Group')
+    this.loadingPersonal = true;
+    this.loadingGroup = true;
+
+    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Group')
     .subscribe(states => {
+      this.loadingGroup = false;
       this.groupStates = states;
+
+      if(!this.loadingGroup && !this.loadingPersonal){
+        this.baThemeSpinner.hide();
+      }
+
+    }, error => {
+      this.loadingGroup = false;
+      if(!this.loadingGroup && !this.loadingPersonal){
+        this.baThemeSpinner.hide();
+      }
     });
 
-    this.subscriptionPersonal = this.stateService.getStatesByFolder('Personal')
+    this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Personal')
     .subscribe(states => {
+      this.loadingPersonal = false;
       this.personalStates = states;
+      if(!this.loadingGroup && !this.loadingPersonal){
+        this.baThemeSpinner.hide();
+      }
+    }, error => {
+      this.loadingPersonal = false;
+      if(!this.loadingGroup && !this.loadingPersonal){
+        this.baThemeSpinner.hide();
+      }
     });
   }
 
