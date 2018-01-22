@@ -308,7 +308,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         for (const goal of this.selectedDomain.domainGoals) {
           for (const goalStep of goal.domainGoalSteps) {
             for (const response of this.selectedDomain.domainResponse) {
-              if (response.expression === goalStep.goalExpression) {
+              if (response.expression === goalStep.goalExpression && response.lang === goalStep.lang) {
                 responsesToBeRemoved.push(response);
               }
             }
