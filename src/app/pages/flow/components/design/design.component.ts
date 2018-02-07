@@ -59,6 +59,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   sourceDataTypes: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT', 'ARRAY', 'ANY'];
 
   // Models to bind with html
+  bulkEdit: boolean = false;
   readOnly: boolean;
   graphObject: GraphObject;
   tempGraphObject: GraphObject;
@@ -68,6 +69,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   tempEdgeEvent: EventModel;
   childStateEventMap: any;
   childStateList: string[];
+  selectedEvent: EventModel;
+  bulkExpressions: string = '';
 
   // Warning Modal properties
   warningHeader: string;
@@ -411,5 +414,44 @@ export class DesignComponent implements OnInit, OnDestroy {
   showAppJSWarning(header: string, body: string) {
     this.warningHeader = header;
     this.warningBody = body;
+  }
+
+  enableBulkEdit(selectedEvent: EventModel) {
+    if (this.bulkEdit) {
+      return;
+    }
+    this.bulkEdit = true;
+    this.selectedEvent = selectedEvent;
+    this.bulkExpressions = '';
+
+    if (this.selectedEvent && this.selectedEvent.expressionList && this.selectedEvent.expressionList.length > 0) {
+      for (let index = 0; index < this.selectedEvent.expressionList.length; index++) {
+        this.bulkExpressions += this.selectedEvent.expressionList[index].value;
+
+        if (index < this.selectedEvent.expressionList.length - 1) {
+          this.bulkExpressions += '\n';
+        }
+      }
+    }
+  }
+
+  disableBulkEdit() {
+    if (!this.bulkEdit) {
+      return;
+    }
+    
+    this.bulkEdit = false;
+    this.selectedEvent.expressionList = [];
+
+    if (this.bulkExpressions && this.bulkExpressions.trim().length > 0) {
+      for (const expression of this.bulkExpressions.split('\n')) {
+        this.selectedEvent.expressionList.push(new Expression(expression));
+      }
+    } else {
+      this.addExpression(this.selectedEvent);
+    }
+
+    this.selectedEvent = null;
+    this.bulkExpressions = '';
   }
 }

@@ -1,6 +1,7 @@
 declare var designFlowEditor: any;
 declare var styleStates: any;
 declare var showModal: any;
+declare var graphTools: any;
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
@@ -60,7 +61,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
     this.getEpisode();
     this.extractParams();
-    // this.initUI();
+    this.initUI();
   }
 
   ngOnDestroy() {
@@ -169,6 +170,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   initUI() {
     new designFlowEditor(this.graphObject.xml, true);
     new styleStates(this.graphObject.activeStateIdList, this.graphObject.closedStateIdList);
+    new graphTools('ZOOM_ACTUAL');
   }
 
   updateFlow() {

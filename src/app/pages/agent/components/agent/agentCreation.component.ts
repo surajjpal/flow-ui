@@ -203,10 +203,6 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
         this.selectedAgent.langSupported = ['ENG', 'HIN'];
       }
 
-      if (this.selectedAgent.companyId || this.selectedAgent.companyId.length <= 0) {
-        this.selectedAgent.companyId = 'bank123';
-      }
-
       if (this.isApiEnabled && this.apiClassifierValidator()) {
         this.selectedAgent.agentClassifier.push(this.apiClassifier);
       }

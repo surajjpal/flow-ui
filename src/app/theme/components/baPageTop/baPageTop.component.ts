@@ -39,7 +39,7 @@ export class BaPageTop {
   }
 
   signOut() {
-    this.authService.logout();
+    this.authService.logout(this.router.url);
   }
 
   profile() {

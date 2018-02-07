@@ -1034,7 +1034,8 @@ graphTools = function (choice) {
       graph.zoomActual();
       break;
     case 'PRINT_PREVIEW': // Print Preview
-      var preview = new mxPrintPreview(graph, 1);
+      var scale = mxUtils.getScaleForPageCount(1, graph);
+      var preview = new mxPrintPreview(graph, scale);
       preview.open();
       break;
     case 'POSTER_PRINT': // Poster Print

@@ -10,6 +10,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse, HttpResponseB
 import { environment } from '../../../environments/environment';
 
 import { Subscription } from 'rxjs/Subscription';
+import { commonKeys } from 'app/models/constants';
 
 @Component({
   selector: 'api-login',
@@ -60,19 +61,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this.route.snapshot.queryParams[commonKeys.returnUrl] || '/';
   }
 
   ngOnDestroy() {
     if (this.userSubscription && !this.userSubscription.closed) {
       this.userSubscription.unsubscribe();
-    }
-  }
-
-  saveUser(user: User) {
-    if (user) {
-      this.universalUser.setUser(user);
-      this.router.navigate([this.returnUrl]);
     }
   }
   
@@ -83,7 +77,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         user => {
           this.loading = false;
           this.user = user;
-          this.universalUser.setUser(user);
+          this.universalUser.setUser(user, true);
           this.router.navigate([this.returnUrl]);
         },
         error => {

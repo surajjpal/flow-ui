@@ -26,7 +26,7 @@
         <h4 class="modal-title" id="stateModalLabel">
           {{stateCreateMode ? 'Add State' : 'Update State'}}
         </h4>
-        <button type="button" class="close" data-dismiss="modal">
+        <button type="button" class="close" data-dismiss="modal" (click)="disableBulkEdit()">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -248,14 +248,14 @@
           <div *ngFor="let event of tempState.events; let eventIndex=index" class="panel">
             <div class="card">
 
-              <div *ngIf="eventIndex == 0" [id]="'eventTabHeading' + eventIndex" class="card-header" heightStyle="content" role="tab">
+              <div *ngIf="eventIndex == 0" [id]="'eventTabHeading' + eventIndex" class="card-header" heightStyle="content" role="tab" (click)="disableBulkEdit()">
                 <h5 class="mb-0">
                   <a data-toggle="collapse" data-parent="#eventAccordion" [href]="'#eventCollapse' + eventIndex" aria-expanded="true" [attr.aria-controls]="'eventCollapse' + eventIndex">
                     {{event.eventCd}}
                   </a>
                 </h5>
               </div>
-              <div *ngIf="eventIndex != 0" [id]="'eventTabHeading' + eventIndex" class="card-header" heightStyle="content" role="tab">
+              <div *ngIf="eventIndex != 0" [id]="'eventTabHeading' + eventIndex" class="card-header" heightStyle="content" role="tab" (click)="disableBulkEdit()">
                 <h5 class="mb-0">
                   <a class="collapsed" data-toggle="collapse" data-parent="#eventAccordion" [href]="'#eventCollapse' + eventIndex" aria-expanded="false"
                     [attr.aria-controls]="'eventCollapse' + eventIndex">
@@ -283,7 +283,7 @@
                       </select>
                     </div>
 
-                    <div [id]="'expAccordion' + eventIndex" role="tablist" aria-multiselectable="true" *ngIf="event.expressionList.length > 0">
+                    <div [id]="'expAccordion' + eventIndex" role="tablist" aria-multiselectable="true" *ngIf="!bulkEdit && event.expressionList.length > 0">
                       <div *ngFor="let expression of event.expressionList; let expIndex=index" class="panel">
                         <div class="card">
                           <div *ngIf="expIndex == 0" [id]="'event' + eventIndex + 'expTabHeading' + expIndex" class="card-header" heightStyle="content"
@@ -345,12 +345,25 @@
                       </div>
                     </div>
 
+                    <div *ngIf="bulkEdit" class="form-group">
+                      <label>
+                        Expressions Bulk Edit
+                      </label>
+                      <textarea class="form-control" placeholder="Enter event expressions (separated by line)" [(ngModel)]="bulkExpressions" name="bulkExpressions"></textarea>
+                    </div>
+
                     <div class="form-group">
-                      <button type="button" class="btn btn-danger" *ngIf="tempState.events.length > 1" (click)="deleteEvent(event)">
+                      <button type="button" class="btn btn-danger" (click)="disableBulkEdit(); deleteEvent(event);">
                         Remove Event
                       </button>
-                      <button type="button" class="btn btn-primary" (click)="addExpression(event)">
+                      <button *ngIf="!bulkEdit" type="button" class="btn btn-primary" (click)="addExpression(event)">
                         Add Expression
+                      </button>
+                      <button *ngIf="!bulkEdit" type="button" class="btn btn-primary" (click)="enableBulkEdit(event)">
+                        Bulk Edit
+                      </button>
+                      <button *ngIf="bulkEdit" type="button" class="btn btn-primary" (click)="disableBulkEdit()">
+                        Normal Edit
                       </button>
                     </div>
                   </form>
@@ -375,7 +388,7 @@
                       </select>
                     </div>
 
-                    <div [id]="'expAccordion' + eventIndex" role="tablist" aria-multiselectable="true" *ngIf="event.expressionList.length > 0">
+                    <div [id]="'expAccordion' + eventIndex" role="tablist" aria-multiselectable="true" *ngIf="!bulkEdit && event.expressionList.length > 0">
                       <div *ngFor="let expression of event.expressionList; let expIndex=index" class="panel">
                         <div class="card">
                           <div *ngIf="expIndex == 0" [id]="'event' + eventIndex + 'expTabHeading' + expIndex" class="card-header" heightStyle="content"
@@ -437,12 +450,25 @@
                       </div>
                     </div>
 
+                    <div *ngIf="bulkEdit" class="form-group">
+                      <label>
+                        Expressions Bulk Edit
+                      </label>
+                      <textarea class="form-control" placeholder="Enter event expressions (separated by line)" [(ngModel)]="bulkExpressions" name="bulkExpressions"></textarea>
+                    </div>
+
                     <div class="form-group">
-                      <button type="button" class="btn btn-danger" *ngIf="tempState.events.length > 1" (click)="deleteEvent(event)">
+                      <button type="button" class="btn btn-danger" (click)="disableBulkEdit(); deleteEvent(event)">
                         Remove Event
                       </button>
-                      <button type="button" class="btn btn-primary" (click)="addExpression(event)">
+                      <button *ngIf="!bulkEdit" type="button" class="btn btn-primary" (click)="addExpression(event)">
                         Add Expression
+                      </button>
+                      <button *ngIf="!bulkEdit" type="button" class="btn btn-primary" (click)="enableBulkEdit(event)">
+                        Bulk Edit
+                      </button>
+                      <button *ngIf="bulkEdit" type="button" class="btn btn-primary" (click)="disableBulkEdit()">
+                        Normal Edit
                       </button>
                     </div>
                   </form>
@@ -458,10 +484,10 @@
 
       <!-- Modal Footer -->
       <div class="modal-footer" id="modal_footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="disableBulkEdit()">Close</button>
         <!-- <button type="button" class="btn btn-default" data-toggle="modal" data-target="#eventModal" (click)="addEvent()">Add Event</button> -->
         <button type="button" class="btn btn-primary" (click)="addEvent()">Add Event</button>
-        <button type="submit" class="btn btn-success" (click)="saveState()">{{stateCreateMode ? 'Create' : 'Update'}}</button>
+        <button type="submit" class="btn btn-success" (click)="disableBulkEdit(); saveState();">{{stateCreateMode ? 'Create' : 'Update'}}</button>
       </div>
     </div>
   </div>

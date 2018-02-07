@@ -109,7 +109,8 @@ export class UpdateUserComponent implements OnInit, OnDestroy {
           data => {
             // set success message and pass true paramater to persist the message after redirecting to the login page
             if (data && data.username === this.universalUser.getUser().username) {
-              this.universalUser.setUser(data);
+              // this is just update operation thus sending false to prevent storage event broadcast
+              this.universalUser.setUser(data, false);
             }
             this.alertService.success('User updated successfully', true, 5000);
             this.location.back();
