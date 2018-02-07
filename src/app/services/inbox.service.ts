@@ -126,7 +126,7 @@ export class StateService {
 
     const url = `${environment.server + environment.updatestatemachineurl}/${machineType}/${entityId}`;
 
-    this.httpClient.put<State>(
+    this.httpClient.put<any>(
       url,
       map,
       {

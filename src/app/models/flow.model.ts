@@ -1,5 +1,6 @@
 import { BaseModel } from './base.model';
 import { ApiConfig, ApiKeyExpressionMap } from './setup.model';
+import { values } from 'd3';
 
 export class DataPointValidation {
   sequence: number;
@@ -55,8 +56,8 @@ export class Classifier {
 export class Expression {
   value: string;
 
-  constructor() {
-    this.value = '';
+  constructor(value?: string) {
+    this.value = value ? value : '';
   }
 }
 

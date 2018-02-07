@@ -18,10 +18,15 @@ export class AuthService {
     private httpClient: HttpClient
   ) { }
 
-  logout() {
+  logout(rediredUrl?: string) {
     // remove user from local storage to log user out
     this.universalUser.removeUser();
-    this.router.navigate(['/login']);
+
+    if (rediredUrl && rediredUrl.trim().length > 0) {
+      this.router.navigate(['/login'], { queryParams: { returnUrl: rediredUrl } });
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   authenticate(user: User): Observable<User> {

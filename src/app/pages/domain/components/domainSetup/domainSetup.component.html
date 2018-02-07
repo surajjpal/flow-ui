@@ -433,7 +433,7 @@
               <div *ngIf="index == 0" [id]="'gsTabHeading' + index" class="card-header" heightStyle="content" role="tab">
                 <h5 class="mb-0">
                   <a data-toggle="collapse" data-parent="#goalStepAccordion" [href]="'#gsCollapse' + index" aria-expanded="true" [attr.aria-controls]="'gsCollapse' + index">
-                    {{goalStep.goalResponse}}
+                    {{goalStep.goalResponse.length > 0 ? goalStep.goalResponse : 'Click to expand ' + goalStep.goalExpression}}
                   </a>
                 </h5>
               </div>
@@ -441,7 +441,7 @@
                 <h5 class="mb-0">
                   <a class="collapsed" data-toggle="collapse" data-parent="#goalStepAccordion" [href]="'#gsCollapse' + index" aria-expanded="false"
                     [attr.aria-controls]="'gsCollapse' + index" >
-                    {{goalStep.goalResponse}}
+                    {{goalStep.goalResponse.length > 0 ? goalStep.goalResponse : 'Click to expand ' + goalStep.goalExpression}}
                   </a>
                 </h5>
               </div>

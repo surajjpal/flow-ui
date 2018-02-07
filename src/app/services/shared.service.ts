@@ -3,6 +3,7 @@ import { Router, NavigationStart, CanActivate, ActivatedRouteSnapshot, RouterSta
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 import { User } from '../models/user.model';
+import { commonKeys } from '../models/constants';
 
 @Injectable()
 export class DataSharingService {
@@ -26,14 +27,18 @@ export class DataSharingService {
 export class UniversalUser {
   private user: User;
 
-  setUser(user: User) {
-    localStorage.setItem('universalUser', JSON.stringify(user));
+  setUser(user: User, shouldRedirect?: boolean) {
+    window.localStorage.setItem(commonKeys.uninversalUser, JSON.stringify(user));
     this.user = user;
+
+    if (shouldRedirect) {
+      window.localStorage.setItem(commonKeys.sessionAvailable, new Date().getTime().toString());  
+    }
   }
 
   getUser() {
     if (!this.user) {
-      this.user = JSON.parse(localStorage.getItem('universalUser'));
+      this.user = JSON.parse(window.localStorage.getItem(commonKeys.uninversalUser));
     }
 
     return this.user;
@@ -41,7 +46,8 @@ export class UniversalUser {
 
   removeUser() {
     this.user = null;
-    localStorage.removeItem('universalUser');
+    window.localStorage.removeItem(commonKeys.uninversalUser);
+    window.localStorage.setItem(commonKeys.sessionExpired, new Date().getTime().toString());
   }
 }
 

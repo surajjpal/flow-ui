@@ -4,6 +4,9 @@ declare var updateStateObject: any;
 declare var designFlowEditor: any;
 declare var closeModal: any;
 declare var exportGraphXml: any;
+declare var updateNewEdge: any;
+declare var deleteNewEdge: any;
+declare var updateStateTrigger: any;
 
 import { Component, Input, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -39,29 +42,40 @@ export class DesignComponent implements OnInit, OnDestroy {
   stateCount: number = 0;
 
   // Dynamic html titles for dialogs
-  stateDialogTitle: string = 'Add State';
-  stateDialogButtonName: string = 'Add';
-
+  stateCreateMode: boolean = true;
+  updateStateFlag: boolean = true;
+  
   // Dropdown source list
   sourceStatusCodes: string[] = ['DRAFT', 'ACTIVE', 'ARCHIVE'];
   sourceStateTypes: string[] = ['Manual', 'Auto', 'Cognitive'];
   allocationTypes: string[] = ['Group', 'Least_Allocated', 'Maximum_Efficiency', 'API', 'User'];
   amountTypes: string[] = ['FIXED', 'DERIVED', 'API'];
   sourceOperands: string[] = ['AND', 'OR'];
-  sourceClassifiers: Classifier[];
-  sourceEntryActionList: string[];
-  sourceApiConfigList: ApiConfig[];
+  sourceClassifiers: Classifier[] = [];
+  sourceEntryActionList: string[] = [];
+  sourceApiConfigList: ApiConfig[] = [];
   sourceManualActionType: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT'];
+  sourceEvents: EventModel[] = [];
   sourceDataTypes: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT', 'ARRAY', 'ANY'];
 
   // Models to bind with html
+  bulkEdit: boolean = false;
   readOnly: boolean;
   graphObject: GraphObject;
   tempGraphObject: GraphObject;
   tempState: StateModel;
   tempParentState: StateModel;
   tempEvent: EventModel;
+  tempEdgeEvent: EventModel;
+  childStateEventMap: any;
+  childStateList: string[];
+  selectedEvent: EventModel;
+  bulkExpressions: string = '';
 
+  // Warning Modal properties
+  warningHeader: string;
+  warningBody: string;
+  
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
   private subscriptionApiConfig: Subscription;
@@ -155,33 +169,65 @@ export class DesignComponent implements OnInit, OnDestroy {
     new graphTools(choice);
   }
 
-  addState(state: StateModel, parentState: StateModel): void {
-    if (parentState) {
-      this.tempParentState = parentState;
+  addState(sourceEvents: EventModel[]): void {
+    this.stateCreateMode = true;
+    
+    this.sourceEvents = sourceEvents;
+
+    this.tempState = new StateModel();
+    this.tempState.type = this.sourceStateTypes[0];
+    this.tempState.allocationModel.allocationType = this.allocationTypes[0];
+    
+    if (this.sourceEvents && this.sourceEvents.length > 0) {
+      this.tempState.trigger = this.sourceEvents[0];
+      this.tempState.initialState = false;
     } else {
-      this.tempParentState = new StateModel();
+      this.tempState.trigger = null;
+      this.tempState.initialState = true;
     }
+  }
 
-    if (state) {
-      this.stateDialogTitle = 'Update State';
-      this.stateDialogButtonName = 'Update';
-      this.tempState = state;
+  updateState(state: StateModel): void {
+    this.stateCreateMode = false;
+
+    this.tempState = JSON.parse(JSON.stringify(state));
+  }
+
+  addEdge(sourceEvents: EventModel[]) {
+    if (sourceEvents && sourceEvents.length > 0) {
+      this.sourceEvents = sourceEvents;
+      this.tempEdgeEvent = this.sourceEvents[0];
     } else {
-      this.stateDialogTitle = 'Add State';
-      this.stateDialogButtonName = 'Add';
+      this.sourceEvents = [];
+    }
+  }
 
-      this.tempState = new StateModel();
-      this.tempState.type = this.sourceStateTypes[0];
-      this.tempState.allocationModel.allocationType = this.allocationTypes[0];
-      this.tempState.trigger = this.tempParentState.events[0];
+  saveEdge() {
+    new updateNewEdge(this.tempEdgeEvent);
+  }
 
-      if (this.tempParentState.events && this.tempParentState.events.length > 0) {
-        this.tempState.initialState = false;
-      } else {
-        this.tempState.initialState = true;
+  deleteEdge() {
+    new deleteNewEdge();
+  }
+
+  eventsMismatch(state: StateModel, newEvents: EventModel[], childStateList: string[], modalHeader: string, modalBody: string) {
+    this.warningHeader = modalHeader;
+    this.warningBody = modalBody;
+
+    this.tempState = state;
+    this.sourceEvents = newEvents;
+    this.childStateList = childStateList;
+    this.childStateEventMap = {};
+    
+    for (const stateCd of childStateList) {
+      if (stateCd) {
+        this.childStateEventMap[stateCd] = null;
       }
-      // this.addEvent();
     }
+  }
+
+  updateStateTriggers() {
+    new updateStateTrigger(this.childStateEventMap, this.tempState);
   }
 
   addEvent(): void {
@@ -230,9 +276,11 @@ export class DesignComponent implements OnInit, OnDestroy {
       const customObject: Object = JSON.parse(JSON.stringify(this.tempState));  // Very important line of code, don't remove
       new updateStateObject(customObject);
     } else {
+      const newState = JSON.parse(JSON.stringify(this.tempState));
+
       this.stateCount++;
-      this.tempState.stateId = 'state' + this.stateCount;
-      const customObject: Object = JSON.parse(JSON.stringify(this.tempState));  // Very important line of code, don't remove
+      newState.stateId = 'state' + this.stateCount;
+      const customObject: Object = JSON.parse(JSON.stringify(newState));  // Very important line of code, don't remove
       new saveStateObject(customObject);
     }
   }
@@ -361,5 +409,49 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   deepCopy(object: Object) {
     return JSON.parse(JSON.stringify(object));
+  }
+
+  showAppJSWarning(header: string, body: string) {
+    this.warningHeader = header;
+    this.warningBody = body;
+  }
+
+  enableBulkEdit(selectedEvent: EventModel) {
+    if (this.bulkEdit) {
+      return;
+    }
+    this.bulkEdit = true;
+    this.selectedEvent = selectedEvent;
+    this.bulkExpressions = '';
+
+    if (this.selectedEvent && this.selectedEvent.expressionList && this.selectedEvent.expressionList.length > 0) {
+      for (let index = 0; index < this.selectedEvent.expressionList.length; index++) {
+        this.bulkExpressions += this.selectedEvent.expressionList[index].value;
+
+        if (index < this.selectedEvent.expressionList.length - 1) {
+          this.bulkExpressions += '\n';
+        }
+      }
+    }
+  }
+
+  disableBulkEdit() {
+    if (!this.bulkEdit) {
+      return;
+    }
+    
+    this.bulkEdit = false;
+    this.selectedEvent.expressionList = [];
+
+    if (this.bulkExpressions && this.bulkExpressions.trim().length > 0) {
+      for (const expression of this.bulkExpressions.split('\n')) {
+        this.selectedEvent.expressionList.push(new Expression(expression));
+      }
+    } else {
+      this.addExpression(this.selectedEvent);
+    }
+
+    this.selectedEvent = null;
+    this.bulkExpressions = '';
   }
 }

@@ -532,6 +532,10 @@
   background-color: #FFFFFF;
 }
 
+.modal {
+  overflow: auto !important;
+}
+
 .modal-backdrop{
   z-index: 9999;
 }
