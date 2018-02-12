@@ -8,9 +8,14 @@ _tag=$1
 
 #docker build --tag "api-flow:${_tag}"  --no-cache=true .
 
-
+echo "---------------------------------------------------------------"
+echo "--------- Trigering Build -------------------------------------"
 # AOT Compilation
 ng build --env=prod --aot --build-optimizer --base-href / --deploy-url /
+
+echo "---------------------------------------------------------------"
+echo "--------- Creating zip ----------------------------------------"
+
 
 rm -rf target
 mkdir target
