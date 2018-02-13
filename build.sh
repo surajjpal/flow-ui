@@ -1,13 +1,8 @@
 #!/bin/bash
-_tag=$1
+echo "---------------------------------------------------------------"
+echo "--------- Installing dependencies -----------------------------"
 
-#if [ -z "${_tag}" ]; then
-#    source _VERSION   
-#    _tag=${_VERSION}
-#fi
-
-#docker build --tag "api-flow:${_tag}"  --no-cache=true .
-
+npm install
 echo "---------------------------------------------------------------"
 echo "--------- Trigering Build -------------------------------------"
 # AOT Compilation
@@ -16,8 +11,10 @@ ng build --env=prod --aot --build-optimizer --base-href / --deploy-url /
 echo "---------------------------------------------------------------"
 echo "--------- Creating zip ----------------------------------------"
 
-
-rm -rf target
+if [ -d target ]
+then
+  rm -rf target
+fi
 mkdir target
 zip -r target/flow-ui.zip dist/*
 
