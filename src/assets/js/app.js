@@ -601,6 +601,7 @@ designFlowEditor = function (serverXml, readOnly) {
 
     if (serverXml) {
       // Reads xml for graph obtained from server and renders it
+      
       var doc = mxUtils.parseXml(serverXml);
       var codec = new mxCodec(doc);
       codec.decode(doc.documentElement, graph.getModel());
@@ -1000,6 +1001,7 @@ function deleteSubtree(graph, cell) {
   
       return true;
     });
+
     graph.removeCells(cells);
     graph.getView().validate();
   } finally {
@@ -1391,3 +1393,632 @@ initializeGraphOnInit = function () {
   try { init_autosize(); } catch (e) { }
   try { init_autocomplete(); } catch (e) { }
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+var sourceUserCell;
+var hierarchygraph;
+function userHierarchyEditor()
+{
+  
+  // Checks if browser is supported
+  if (!mxClient.isBrowserSupported())
+  {
+    // Displays an error message if the browser is
+    // not supported.
+    mxUtils.error('Browser is not supported!', 200, false);
+  }
+  else
+  {
+    // Workaround for Internet Explorer ignoring certain styles
+
+    var usercontainer = document.getElementById('editorGriduser');
+    // container.style.position = 'absolute';
+    // container.style.overflow = 'hidden';
+    // container.style.left = '0px';
+    // container.style.top = '0px';
+    // container.style.right = '0px';
+    // container.style.bottom = '0px';
+    var useroutline = document.getElementById('outlineContaineruser');
+    
+    mxEvent.disableContextMenu(usercontainer);
+    if (mxClient.IS_QUIRKS) {
+      document.body.style.overflow = 'hidden';
+      new mxDivResizer(usercontainer);
+      new mxDivResizer(useroutline);
+      
+    }
+    
+    if (mxClient.IS_GC || mxClient.IS_SF) {
+      usercontainer.style.background = '-webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFFFFF), to(#E7E7E7))';
+    }
+    else if (mxClient.IS_NS) {
+      usercontainer.style.background = '-moz-linear-gradient(top, #FFFFFF, #E7E7E7)';
+    }
+    else if (mxClient.IS_IE) {
+      usercontainer.style.filter = 'progid:DXImageTransform.Microsoft.Gradient(' +
+        'StartColorStr=\'#FFFFFF\', EndColorStr=\'#E7E7E7\', GradientType=0)';
+    }
+    // document.body.appendChild(container);
+    // Creates the graph inside the given container
+    hierarchygraph = new mxGraph(usercontainer);
+
+    // Enables automatic sizing for vertices after editing and
+    // panning by using the left mouse button.
+    hierarchygraph.setCellsMovable(false);
+    hierarchygraph.setConnectable(true);
+    hierarchygraph.setAutoSizeCells(true);
+    hierarchygraph.setPanning(true);
+    hierarchygraph.centerZoom = false;
+    hierarchygraph.panningHandler.useLeftButtonForPanning = true;
+    // Displays a popupmenu when the user clicks
+    // on a cell (using the left mouse button) but
+    // do not select the cell when the popup menu
+    // is displayed
+    hierarchygraph.panningHandler.popupMenuHandler = false;
+    // Creates the outline (navigator, overview) for moving
+    // around the graph in the top, right corner of the window.
+    var outln = new mxOutline(hierarchygraph, useroutline);
+    
+    // Disables tooltips on touch devices
+    hierarchygraph.setTooltips(!mxClient.IS_TOUCH);
+
+
+
+
+    // Set some stylesheet options for the visual appearance of vertices
+    var style = hierarchygraph.getStylesheet().getDefaultVertexStyle();
+    style[mxConstants.STYLE_SHAPE] = 'label';
+    
+    style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
+    style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_LEFT;
+    style[mxConstants.STYLE_SPACING_LEFT] = 54;
+    
+    style[mxConstants.STYLE_GRADIENTCOLOR] = '#7d85df';
+    style[mxConstants.STYLE_STROKECOLOR] = '#5d65df';
+    style[mxConstants.STYLE_FILLCOLOR] = '#adc5ff';
+    
+    style[mxConstants.STYLE_FONTCOLOR] = '#1d258f';
+    style[mxConstants.STYLE_FONTFAMILY] = 'Verdana';
+    style[mxConstants.STYLE_FONTSIZE] = '12';
+    style[mxConstants.STYLE_FONTSTYLE] = '1';
+    
+    style[mxConstants.STYLE_SHADOW] = '1';
+    style[mxConstants.STYLE_ROUNDED] = '1';
+    style[mxConstants.STYLE_GLASS] = '1';
+    
+    style[mxConstants.STYLE_IMAGE] = './assets/js/mxGraph/images/dude3.png';
+    style[mxConstants.STYLE_IMAGE_WIDTH] = '48';
+    style[mxConstants.STYLE_IMAGE_HEIGHT] = '48';
+    style[mxConstants.STYLE_SPACING] = 8;
+
+    // Sets the default style for edges
+    style = hierarchygraph.getStylesheet().getDefaultEdgeStyle();
+    style[mxConstants.STYLE_ROUNDED] = true;
+    style[mxConstants.STYLE_STROKEWIDTH] = 3;
+    style[mxConstants.STYLE_EXIT_X] = 0.5; // center
+    style[mxConstants.STYLE_EXIT_Y] = 1.0; // bottom
+    style[mxConstants.STYLE_EXIT_PERIMETER] = 0; // disabled
+    style[mxConstants.STYLE_ENTRY_X] = 0.5; // center
+    style[mxConstants.STYLE_ENTRY_Y] = 0; // top
+    style[mxConstants.STYLE_ENTRY_PERIMETER] = 0; // disabled
+    
+    // Disable the following for straight lines
+    style[mxConstants.STYLE_EDGE] = mxEdgeStyle.TopToBottom;
+
+    // Stops editing on enter or escape keypress
+    var keyHandler = new mxKeyHandler(hierarchygraph);
+
+    // Enables automatic layout on the graph and installs
+    // a tree layout for all groups who's children are
+    // being changed, added or removed.
+    var userlayout = new mxCompactTreeLayout(hierarchygraph, false);
+    userlayout.useBoundingBox = false;
+    userlayout.edgeRouting = false;
+    userlayout.levelDistance = 60;
+    userlayout.nodeDistance = 16;
+
+    // Allows the layout to move cells even though cells
+    // aren't movable in the graph
+    userlayout.isVertexMovable = function(cell)
+    {
+      return true;
+    };
+
+    var layoutMgr = new mxLayoutManager(hierarchygraph);
+
+    layoutMgr.getLayout = function(cell)
+    {
+      if (cell.getChildCount() > 0)
+      {
+        return userlayout;
+      }
+    };
+
+    // Installs a popupmenu handler using local function (see below).
+    hierarchygraph.popupMenuHandler.factoryMethod = function(menu, cell, evt)
+    {
+      return createPopupMenuUser(hierarchygraph, menu, cell, evt);
+    };
+
+    
+
+    // Fix for wrong preferred size
+    var oldGetPreferredSizeForCell = hierarchygraph.getPreferredSizeForCell;
+    hierarchygraph.getPreferredSizeForCell = function(cell)
+    {
+      var result = oldGetPreferredSizeForCell.apply(this, arguments);
+
+      if (result != null)
+      {
+        result.width = Math.max(80, result.width);
+      }
+
+      return result;
+    };
+
+    hierarchygraph.convertValueToString = function (cell) {
+      var data = cell.getValue();
+      
+      if (data) {
+        try {
+          if (data.userName) {
+            return data.userName;
+          } 
+        } catch (exception) {
+
+        }
+
+        return data;
+      }
+
+      return '';
+    };
+
+    
+    // var content = document.createElement('div');
+    // content.style.padding = '4px';
+
+    // var tb = new mxToolbar(content);
+
+    // tb.addItem('Zoom In', 'images/zoom_in32.png',function(evt)
+    // {
+    //   hierarchygraph.zoomIn();
+    // });
+
+    // tb.addItem('Zoom Out', 'images/zoom_out32.png',function(evt)
+    // {
+    //   hierarchygraph.zoomOut();
+    // });
+    
+    // tb.addItem('Actual Size', 'images/view_1_132.png',function(evt)
+    // {
+    //   hierarchygraph.zoomActual();
+    // });
+
+    // tb.addItem('Print', 'images/print32.png',function(evt)
+    // {
+    //   var preview = new mxPrintPreview(hierarchygraph, 1);
+    //   preview.open();
+    // });
+
+    // tb.addItem('Poster Print', 'images/press32.png',function(evt)
+    // {
+    //   var pageCount = mxUtils.prompt('Enter maximum page count', '1');
+
+    //   if (pageCount != null)
+    //   {
+    //     var scale = mxUtils.getScaleForPageCount(pageCount, hierarchygraph);
+    //     var preview = new mxPrintPreview(hierarchygraph, scale);
+    //     preview.open();
+    //   }
+    // });
+
+    // wnd = new mxWindow('Tools', content, 0, 0, 200, 66, false);
+    // wnd.setMaximizable(false);
+    // wnd.setScrollable(false);
+    // wnd.setResizable(false);
+    // wnd.setVisible(true);
+    document.getElementById('#discardHierarchy').style.visibility = 'hidden';
+    document.getElementById('#saveHierarchy').style.visibility = 'hidden';
+
+  }
+};
+
+
+
+function addRootUserOrLoad(serverXml,user){
+  if (serverXml) {
+    
+   
+    // Reads xml for graph obtained from server and renders it
+   // 
+    var doc = mxUtils.parseXml(serverXml);
+    var codec = new mxCodec(doc);
+    var users = []
+    codec.decode(doc.documentElement, hierarchygraph.getModel());
+
+    var allVertices = hierarchygraph.getChildVertices(hierarchygraph.getDefaultParent());
+    for (var index = 0; index < allVertices.length; index++) {
+      hierarchygraph.traverse(allVertices[index], true, function (vertex) {
+        if (index == 0) {
+          // To scroll graph so that our cell would appear in center
+          hierarchygraph.scrollCellToVisible(vertex, true);
+          
+        }
+        users.push(vertex.value);
+        console.log(vertex)
+       
+        if (vertex.value.parentUserId){
+        addOverlaysUser(hierarchygraph, vertex, true);
+        }
+        else{
+          addOverlaysUser(hierarchygraph, vertex, true);
+        }
+
+      });
+    }
+    
+    if (users.length > 0){
+      document.getElementById('#rootuser').style.visibility = 'hidden';
+      document.getElementById('#discardHierarchy').style.visibility = 'visible';
+      document.getElementById('#saveHierarchy').style.visibility = 'visible';
+    }
+    window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.updateUserListAfterAdd(users); })
+  } else{
+
+    
+    if(user.companyId && user.companyId.length > 0){
+
+        var parentUser = hierarchygraph.getDefaultParent();
+    
+        // Adds the root vertex of the tree
+        hierarchygraph.getModel().beginUpdate();
+    
+        try
+        {
+          var w1 = hierarchygraph.container.offsetWidth;
+          var h1 = hierarchygraph.container.offsetHeight;
+          var v2 = hierarchygraph.insertVertex(parentUser,"rootuser" ,user, w1/2 - 30, 20, 140, 60, 'image=./assets/js/mxGraph/images/dude3.png');
+            hierarchygraph.updateCellSize(v2);
+          addOverlaysUser(hierarchygraph, v2, true);
+          
+        }
+        finally
+        {
+          // Updates the display
+          hierarchygraph.getModel().endUpdate();
+          var users = getUsersForAllVertices();
+          window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.updateUserListAfterAdd(users); })
+          document.getElementById('#rootuser').style.visibility = 'hidden';
+          document.getElementById('#discardHierarchy').style.visibility = 'visible';
+          document.getElementById('#saveHierarchy').style.visibility = 'visible';
+        }
+      }
+      else{
+        window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.
+        showAppJSWarning("Please select a user first!!");
+      });
+      showModal("warningModal");  
+      return;
+      }
+  }
+  }
+
+
+  
+
+function discardGraph(userGraphObject){
+  
+  var allVertices = hierarchygraph.getChildVertices(hierarchygraph.getDefaultParent());
+  var rootcell;
+  for (var index = 0; index < allVertices.length; index++) {
+    hierarchygraph.traverse(allVertices[index], true, function (vertex) {
+      if (index == 0) {
+        // To scroll graph so that our cell would appear in center
+        
+        if(vertex.id === "rootuser"){
+          rootcell = vertex
+        }
+      }
+      deleteUserSubtree(hierarchygraph, rootcell);
+      document.getElementById('#rootuser').style.visibility = 'visible';
+      document.getElementById('#discardHierarchy').style.visibility = 'hidden';
+      document.getElementById('#saveHierarchy').style.visibility = 'hidden';
+
+      if (userGraphObject.xml.length > 0){
+      window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.deleteUserGraph(userGraphObject);})
+      }
+     
+    });
+  }
+}
+
+// Function to create the entries in the popupmenu
+function createPopupMenuUser(hierarchygraph, usermenu, cell, evt)
+{
+var model = hierarchygraph.getModel();
+console.log(cell)
+if (!isReadOnly && cell != null) {
+  
+  if (cell.id != 'rootuser' && cell.value && !(typeof cell.value === "string" || cell.value instanceof String)) {
+    usermenu.addItem('Delete', './assets/js/mxGraph/images/delete.gif', function () {
+      deleteUserSubtree(hierarchygraph, cell);
+    });
+  }
+  usermenu.addItem('Edit', '', function () {
+    try {
+      if (model.isVertex(cell)) {
+        sourceUserCell = cell;
+       
+        var user = cell.value;
+        if (user && (typeof  user === 'string' || user instanceof String)) {
+          user = null;
+        }
+        var users = getUsersForAllVertices();
+        window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.updateUserListAfterAdd(users); })
+        window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.updateSelectedUser(user); })
+        
+        
+        $("#userUpdateModal").modal();
+      } 
+    } catch (exception) {
+      // console.log(exception);
+    }
+  });
+  
+usermenu.addSeparator();
+}
+
+usermenu.addItem('Fit', 'editors/images/zoom.gif', function()
+{
+  hierarchygraph.fit();
+});
+
+usermenu.addItem('Actual', 'editors/images/zoomactual.gif', function()
+{
+  hierarchygraph.zoomActual();
+});
+
+usermenu.addSeparator();
+
+usermenu.addItem('Print', 'editors/images/print.gif', function()
+{
+var preview = new mxPrintPreview(hierarchygraph, 1);
+preview.open();
+});
+
+usermenu.addItem('Poster Print', 'editors/images/print.gif', function()
+{
+var pageCount = mxUtils.prompt('Enter maximum page count', '1');
+
+if (pageCount != null)
+{
+  var scale = mxUtils.getScaleForPageCount(pageCount, hierarchygraph);
+  var preview = new mxPrintPreview(hierarchygraph, scale);
+  preview.open();
+}
+});
+};
+
+function addOverlaysUser(hierarchygraph, cell, addDeleteIcon)
+{
+var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/add.png', 24, 24), 'Add child');
+overlay.cursor = 'hand';
+overlay.align = mxConstants.ALIGN_CENTER;
+overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
+  try {
+    
+    
+    
+    addUser(hierarchygraph,cell)
+    sourceUserCell = cell
+
+    }
+    catch (exception) {
+      // console.log(exception);
+    }
+    
+}));
+
+
+exportUserXml = function () {
+  var encoder = new mxCodec();
+  var node = encoder.encode(hierarchygraph.getModel());
+  var xml = mxUtils.getXml(node);
+  
+
+  var users = getUsersForAllVertices();
+  
+  
+
+  try {
+   
+    window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.saveUserXml(xml, users); })
+  
+  } catch (exception) {
+    // console.log(exception);
+  }
+}
+
+
+getUsersForAllVertices = function() {
+  var users = [];
+  var vertices = hierarchygraph.getChildVertices(hierarchygraph.getDefaultParent());
+  for (var vertex of vertices) {
+    if (vertex != null && vertex.value != null && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
+      users.push(vertex.value);
+    }
+  }
+
+  return users;
+}
+
+saveUserObject = function (user) {
+  
+  if(user.companyId && user.companyId.length > 0){
+    var vertex = addChildUser(hierarchygraph, sourceUserCell,user);
+  }
+  else{
+  window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.
+  showAppJSWarning("Please select a user first!!");
+});
+showModal("warningModal");  
+return;
+  }
+  
+}
+
+
+alertMessage = function(message){
+  window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.
+  showAppJSWarning(message);
+});
+closeModal("warningModal");
+showModal("warningModal");  
+return;
+
+}
+
+
+updateUserObject = function (user) {
+
+  if(user.companyId && user.companyId.length > 0){
+    hierarchygraph.getModel().beginUpdate();
+  try {
+    sourceUserCell.setValue(user);
+    hierarchygraph.getView().clear(sourceUserCell, false, false);
+    hierarchygraph.getView().validate();
+    hierarchygraph.cellSizeUpdated(sourceUserCell, false);
+  }
+  finally{
+    hierarchygraph.getModel().endUpdate();
+  }
+}
+else{
+  window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.
+  showAppJSWarning("Please select a user first!!");
+});
+showModal("warningModal");  
+return;
+}
+}
+
+// overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function(sender, evt)
+// {
+// addChildUser(hierarchygraph, cell);
+// }));
+
+hierarchygraph.addCellOverlay(cell, overlay);
+
+if (addDeleteIcon)
+{
+  overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/close.png', 30, 30), 'Delete');
+overlay.cursor = 'hand';
+overlay.offset = new mxPoint(-4, 8);
+overlay.align = mxConstants.ALIGN_RIGHT;
+overlay.verticalAlign = mxConstants.ALIGN_TOP;
+overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function(sender, evt)
+{
+  if(cell.id === "rootuser"){
+    document.getElementById('#rootuser').style.visibility = 'visible';
+    document.getElementById('#discardHierarchy').style.visibility = 'hidden';
+    document.getElementById('#saveHierarchy').style.visibility = 'hidden';
+  }
+  deleteUserSubtree(hierarchygraph, cell);
+  var users = getUsersForAllVertices();
+  window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.updateUserListAfterAdd(users); })
+}));
+
+hierarchygraph.addCellOverlay(cell, overlay);
+}
+};
+
+
+function addUser(hierarchygraph,cell)
+{
+try {
+  
+  let parentUser = cell.value;
+  var users = getUsersForAllVertices();
+  window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.updateUserListAfterAdd(users); })
+  window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.addUser(null, parentUser); })
+    $("#userModal").modal();
+  
+  
+  }
+  catch (exception) {
+    // console.log(exception);
+  }
+}
+
+
+function addChildUser(hierarchygraph, cell,user)
+{
+var model = hierarchygraph.getModel();
+var parentUser = hierarchygraph.getDefaultParent();
+var vertex;
+
+model.beginUpdate();
+try
+{
+var w1 = hierarchygraph.container.offsetWidth;
+var h1 = hierarchygraph.container.offsetHeight;
+vertex = hierarchygraph.insertVertex(parentUser, "", user,w1/2 - 30, 20, 140, 60,'image=./assets/js/mxGraph/images/dude3.png');
+var geometry = model.getGeometry(vertex);
+if (sourceUserCell != null) {
+  vertex.source = sourceUserCell;
+}
+
+// Updates the geometry of the vertex with the
+// preferred size computed in the graph
+var size = hierarchygraph.getPreferredSizeForCell(vertex);
+geometry.width = size.width;
+geometry.height = size.height;
+
+// Adds the edge between the existing cell
+// and the new vertex and executes the
+// automatic layout on the parent
+var edge = hierarchygraph.insertEdge(parentUser, null, '', cell, vertex);
+
+// Configures the edge label "in-place" to reside
+// at the end of the edge (x = 1) and with an offset
+// of 20 pixels in negative, vertical direction.
+edge.geometry.x = 1;
+edge.geometry.y = 0;
+edge.geometry.offset = new mxPoint(0, -20);
+
+addOverlaysUser(hierarchygraph, vertex, true);
+}
+finally
+{
+model.endUpdate();
+}
+
+return vertex;
+};
+
+function deleteUserSubtree(hierarchygraph, cell)
+{
+// Gets the subtree from cell downwards
+var cells = [];
+var users = [] 
+hierarchygraph.traverse(cell, true, function(vertex)
+{
+cells.push(vertex);
+users.push(vertex.value);
+return true;
+});
+window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.updateUserListAfterDelete(users); })
+hierarchygraph.removeCells(cells);
+};

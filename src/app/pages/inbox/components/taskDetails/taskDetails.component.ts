@@ -8,18 +8,21 @@ import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
-
+import {User, UserHierarchy, UserGroup,UserGraphObject} from '../../../../models/user.model';
 import { State } from '../../../../models/tasks.model';
 import { GraphObject, DataPoint, StateModel, ManualAction } from '../../../../models/flow.model';
 import { Episode, ChatMessage } from '../../../../models/conversation.model';
 
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
 import { ConversationService } from '../../../../services/agent.service';
+import { FetchUserService, UserGraphService ,AllocateTaskToUser} from '../../../../services/userhierarchy.service';
+import { UniversalUser } from '../../../../services/shared.service';
 
 @Component({
   selector: 'api-task-details',
   templateUrl: './taskDetails.component.html',
-  styleUrls: ['./taskDetails.scss']
+  styleUrls: ['./taskDetails.scss'],
+  providers: [FetchUserService,AllocateTaskToUser]
 })
 
 export class TaskDetailsComponent implements OnInit, OnDestroy {
@@ -30,13 +33,17 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   graphObject: GraphObject;
   responseError: string;
   fieldKeyMap: any;
-
+  userId:string;
   selectedEpisode: Episode;
   chatMessageList: ChatMessage[];
-
+  Users: UserHierarchy[] = [];
+  allocatedUserId:string;
+  userHierarchy:UserHierarchy = new UserHierarchy();
   private subscription: Subscription;
   private subscriptionEpisode: Subscription;
   private subscriptionChatMessages: Subscription;
+  private subscriptionUsers: Subscription;
+  
 
   constructor(
     private router: Router, 
@@ -44,10 +51,14 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     private stateService: StateService,
     private conversationService: ConversationService,
     private dataCachingService: DataCachingService,
-    private location: Location
+    private location: Location,
+    private fetchUserService:FetchUserService,
+    private allocateTaskToUser:AllocateTaskToUser,
+    private universalUser: UniversalUser
   ) { }
 
   ngOnInit(): void {
+    //document.getElementById('#alocateButton').style.visibility = 'hidden';
     this.selectedState = this.dataCachingService.getSelectedState();
     if (!this.selectedState) {
       this.router.navigate(['/pg/tsk/tact'], { relativeTo: this.route });
@@ -62,6 +73,12 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.getEpisode();
     this.extractParams();
     this.initUI();
+
+    this.userId = this.universalUser.getUser()._id
+    this.getUserList();
+    this.getParentUser();
+    // this.initUI();
+
   }
 
   ngOnDestroy() {
@@ -76,6 +93,70 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  getUserList(){
+    
+    this.subscriptionUsers = this.fetchUserService.fetchChildUsers(this.userId)
+      .subscribe(userList => {
+        if (userList && userList.length > 0) {
+          //document.getElementById('#alocateButton').style.visibility = 'visible';
+          this.Users = userList;
+
+             
+        }
+      });
+    }
+
+  getParentUser(){
+    this.subscriptionUsers = this.fetchUserService.getUserHierarchy(this.userId)
+    .subscribe(userHierarchyObject => {
+      
+      if (userHierarchyObject) {
+        //document.getElementById('#alocateButton').style.visibility = 'visible';
+        this.userHierarchy = userHierarchyObject;
+
+           
+      }
+      
+    });
+
+  }
+
+    allocate(){
+      
+      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.allocatedUserId,this.selectedState._id,"allocate")
+      .subscribe(any => {
+        this.router.navigate(['/pg/tsk/tact'], { relativeTo: this.route });
+    });
+    }
+
+    escalate(){
+      
+      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userHierarchy.parentUserId,this.selectedState._id,"escalate")
+      .subscribe(any => {
+        
+        this.router.navigate(['/pg/tsk/tact'], { relativeTo: this.route });
+        
+    });
+    }
+
+    reserve(){
+      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userId,this.selectedState._id,"reserve")
+      .subscribe(any => {
+        
+        this.router.navigate(['/pg/tsk/tact'], { relativeTo: this.route });
+        
+    });
+
+    }
+
+
+    onUserSelect(user){
+      
+      this.allocatedUserId = user.userId;
+      
+    }
+  
   onBack() {
     this.location.back();
   }

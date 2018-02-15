@@ -22,21 +22,30 @@ export const environment = {
   messageurl: 'data/message/byuser/Admin',
   stateflowimageurl: 'statemachine/stateflow/',
   updatestatemachineurl: 'statemachine/updateflow/withState',
+
+  alocateuserurl:'statemachine/allocateto',
   autosummary: 'dashboard/CONVERSATION_SUMMARY',
   graphurl: 'graph/',
+  usergraphurl: 'usergraph/saveUserGraph/',
+  getusergraphurl:'usergraph/',
   graphbystatusurl: 'graph/findbystatus/',
   entryactionurl: 'graph/actions',
   autodashboardurl: 'dashboard',
   userurl: 'user/',
   registerurl: 'user/createUser',
+  savehierarchy:'user/hierarchy',
+  getuserhierarchy:'user/getUserHierarchy/',
   createcompanyadminurl: 'user/createcompanyadmin',
   updateuserurl: 'user/update',
   authoritiesurl: 'user/roles',
+  userlisturl:'user/getUserList/',
   roleroutemapurl: 'master/roleroutemap',
   rolesurl: 'master/roles',
   routesurl: 'master/routes',
   apiconfigurl: 'apiConfig/',
+
   supportedmethodsurl: 'apiConfig/supportedMethods',
+  
 
 
   // Auto

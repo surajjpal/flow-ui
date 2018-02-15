@@ -40,6 +40,7 @@ export class PagesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.routesService.routes()
     .subscribe(routes => {
+      console.log(routes)
       this._menuService.updateMenuByRoutes(<Routes>routes);
     });
   }

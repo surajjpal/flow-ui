@@ -43,3 +43,39 @@ export class User extends BaseModel {
     this.accountNonExpired = true;
   }
 }
+  export class UserHierarchy extends BaseModel {
+    
+    parentUserId: string;
+    userId:string;
+    userName: string;
+    parentUserName: string;
+    reportingUserId:string
+    reportingUserName: string;
+    companyId: string;
+
+    constructor() {
+      super();
+      this.parentUserId = '';
+      this.userName = '';
+      this.parentUserName = '';
+      this.reportingUserId = '';
+      this.reportingUserName = '';
+      this.userId = "";
+      
+}
+  }
+
+  export class UserGraphObject extends BaseModel {
+    
+    xml:string;
+    userHierarchy:UserHierarchy[];
+
+    constructor() {
+      super();
+      this.xml = "";
+      this.userHierarchy=[];
+      }
+  }
+
+
+

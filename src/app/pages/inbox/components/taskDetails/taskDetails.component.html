@@ -175,10 +175,24 @@
             </form>
 
             <form>
-              <button *ngIf="selectedState.statusCd !== 'CLOSED'" type="button" class="btn btn-primary" (click)="updateFlow()">
-                Update Flow
-              </button>
-              <div class="ln_solid"></div>
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <button *ngIf="selectedState.statusCd !== 'CLOSED'" type="button" class="btn btn-primary" (click)="updateFlow()">
+                  Update Flow
+                </button>
+                
+                <button *ngIf="selectedState.statusCd !== 'CLOSED' && Users.length > 0 && selectedState.assignedUserId.length > 0"  type="button" data-toggle="modal" data-target="#userModal"class="btn btn-primary">
+                  Allocate
+                </button>
+
+                <button *ngIf="selectedState.statusCd !== 'CLOSED' && userHierarchy.parentUserId.length > 0  && selectedState.assignedUserId.length > 0"  type="button" (click)="escalate()" class="btn btn-primary">
+                    Escalate
+                </button>
+
+                <button *ngIf="selectedState.statusCd !== 'CLOSED' && selectedState.assignedUserGroupCd !== 'Personal' "  type="button" (click)="reserve()" class="btn btn-primary">
+                    Reserve
+                </button>
+                
+              </div>
             </form>
           </div>
           <div role="tabpanel" class="tab-pane fade" id="tabFlow" aria-labelledby="flow-tab">
@@ -218,3 +232,38 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="userModalLabel">
+            Allocate Task
+          </h4>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+  
+        <!-- Modal Body -->
+        <div class="modal-body" id="modal_body">
+          <form>
+            <div class="form-group">
+              <label for="selectUser">Select User</label>
+              <select class="selectpicker form-control" required id="selectUser" title="Choose User"
+                [ngModel]="tempUser" [ngModelOptions]="{standalone: true}"
+                (ngModelChange)="onUserSelect($event)">
+                  <option *ngFor="let user of Users" [ngValue]="user">{{user.userName}}</option>
+                </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer" id="modal_footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="allocate()">Allocate</button>
+        </div>
+      </div>
+    </div>
+  </div>
