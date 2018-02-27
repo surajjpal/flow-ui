@@ -124,7 +124,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
     allocate(){
       
-      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.allocatedUserId,this.selectedState._id,"allocate")
+      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.allocatedUserId,this.selectedState._id,"Allocate")
       .subscribe(any => {
         this.router.navigate(['/pg/tsk/tact'], { relativeTo: this.route });
     });
@@ -132,7 +132,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
     escalate(){
       
-      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userHierarchy.parentUserId,this.selectedState._id,"escalate")
+      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userHierarchy.parentUserId,this.selectedState._id,"Escalate")
       .subscribe(any => {
         
         this.router.navigate(['/pg/tsk/tact'], { relativeTo: this.route });
@@ -141,7 +141,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     }
 
     reserve(){
-      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userId,this.selectedState._id,"reserve")
+      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userId,this.selectedState._id,"Reserve")
       .subscribe(any => {
         
         this.router.navigate(['/pg/tsk/tact'], { relativeTo: this.route });

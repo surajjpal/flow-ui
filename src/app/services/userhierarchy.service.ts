@@ -290,7 +290,7 @@ export class AllocateTaskToUser {
   allocateTask(userId,stateId,type):Observable<State> {
     const subject = new Subject<State>();
     
-    console.log("===============")
+   
     var url = `${environment.server + environment.alocateuserurl}/${stateId}/${userId}/${type}`;
     console.log(url)
     this.httpClient.get<any>(
