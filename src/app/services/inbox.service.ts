@@ -3,10 +3,11 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angul
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
-import { State } from '../models/tasks.model';
+import { State,CommonInsightWrapper } from '../models/tasks.model';
 import { GraphObject } from '../models/flow.model';
 
 import { environment } from '../../environments/environment';
+
 
 @Injectable()
 export class DataCachingService {
@@ -73,6 +74,37 @@ export class StateService {
       }
     ).subscribe(
       (response: HttpResponse<State[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+  getInsightForState(stateId: string): Observable<CommonInsightWrapper> {
+    const subject = new Subject<CommonInsightWrapper>();
+
+  
+
+    const url = `${environment.server + environment.stateinsight}${stateId}`;
+
+    this.httpClient.get<CommonInsightWrapper>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<CommonInsightWrapper>) => {
         if (response.body) {
           subject.next(response.body);
         }

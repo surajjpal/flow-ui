@@ -9,7 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
 import {User, UserHierarchy, UserGroup,UserGraphObject} from '../../../../models/user.model';
-import { State } from '../../../../models/tasks.model';
+import { State,CommonInsightWrapper } from '../../../../models/tasks.model';
 import { GraphObject, DataPoint, StateModel, ManualAction } from '../../../../models/flow.model';
 import { Episode, ChatMessage } from '../../../../models/conversation.model';
 
@@ -27,6 +27,12 @@ import { UniversalUser } from '../../../../services/shared.service';
 
 export class TaskDetailsComponent implements OnInit, OnDestroy {
 
+  ZOOM_IN = 'ZOOM_IN';
+  ZOOM_OUT = 'ZOOM_OUT';
+  ZOOM_ACTUAL = 'ZOOM_ACTUAL';
+  PRINT_PREVIEW = 'PRINT_PREVIEW';
+  POSTER_PRINT = 'POSTER_PRINT';
+
   selectedState: State;
   dataPoints: DataPoint[];
   actionMap: any;
@@ -39,10 +45,12 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   Users: UserHierarchy[] = [];
   allocatedUserId:string;
   userHierarchy:UserHierarchy = new UserHierarchy();
+  commonInsightWrapper: CommonInsightWrapper;
   private subscription: Subscription;
   private subscriptionEpisode: Subscription;
   private subscriptionChatMessages: Subscription;
   private subscriptionUsers: Subscription;
+  private subscriptionInsight: Subscription;
   
 
   constructor(
@@ -70,9 +78,11 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       this.graphObject = new GraphObject();
     }
 
+    this.fetchInsight();
     this.getEpisode();
     this.extractParams();
     this.initUI();
+   
 
     this.userId = this.universalUser.getUser()._id
     this.getUserList();
@@ -91,8 +101,19 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     if (this.subscriptionChatMessages && !this.subscriptionChatMessages.closed) {
       this.subscriptionChatMessages.unsubscribe();
     }
+    if (this.subscriptionInsight && !this.subscriptionInsight.closed) {
+      this.subscriptionInsight.unsubscribe();
+    }
   }
 
+  fetchInsight(){
+    this.subscriptionInsight = this.stateService.getInsightForState(this.selectedState._id)
+      .subscribe(commonInsightWrapper => {
+        if (commonInsightWrapper) {
+          this.commonInsightWrapper = commonInsightWrapper;
+        }
+      });
+    }
 
   getUserList(){
     
@@ -252,6 +273,10 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     new designFlowEditor(this.graphObject.xml, true);
     new styleStates(this.graphObject.activeStateIdList, this.graphObject.closedStateIdList);
     new graphTools('ZOOM_ACTUAL');
+  }
+
+  toolsChoice(choice: string): void {
+    new graphTools(choice);
   }
 
   updateFlow() {

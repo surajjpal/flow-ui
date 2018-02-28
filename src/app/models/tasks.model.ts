@@ -40,8 +40,15 @@ export class State extends BaseModel {
   reservedTime: Time;
   payload: string;
   fromStateCd: string;
-  parameters: [string, string];
-  predictedParameters: [string, string];
+  parameters: Map<string,string>;
+  predictedParameters: Map<string,string>;
   businessCost: Amount;
   errorMessageMap: any;
+}
+
+export class CommonInsightWrapper extends BaseModel {
+  insightType: string;
+  insightMap: any;
+  reference_id: string;
+  createdTime: Time;
 }

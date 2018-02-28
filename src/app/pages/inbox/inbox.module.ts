@@ -16,6 +16,8 @@ import { ApiTableModule } from './components/api_table/apitable.module';
 
 import { SharedModule } from '../../shared/shared.module';
 
+import { MomentModule } from 'angular2-moment';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -25,7 +27,8 @@ import { SharedModule } from '../../shared/shared.module';
     TagInputModule,
     ApiTableModule,
     DataTableModule,
-    SharedModule
+    SharedModule,
+    MomentModule
   ],
   declarations: [
     InboxComponent,

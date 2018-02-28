@@ -15,6 +15,7 @@ export const environment = {
   // Flow
   server: 'https://flow.automatapi.com/flow/console/',
   statebystatusandfolderurl: 'state/pagebystatusandfolder/0,200,', // status: CLOSED, ACTIVE; folder: Group, Personal
+  stateinsight: 'state/insight/',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
