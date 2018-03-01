@@ -63,7 +63,7 @@ function update(graph, xml) {
             // Updates the cell color and adds some tooltip information
             if (cell != null) {
               // Resets the fillcolor and the overlay
-              graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [cell]);
+              graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#E3E3E3', [cell]);
               graph.removeCellOverlays(cell);
 
               // Changes the cell color for the known states
@@ -125,8 +125,8 @@ function createGraph(container) {
   var style = graph.getStylesheet().getDefaultVertexStyle();
   style[mxConstants.STYLE_FONTSIZE] = 11;
   style[mxConstants.STYLE_FONTCOLOR] = '#000000';
-  style[mxConstants.STYLE_STROKECOLOR] = '#CDDDF7';
-  style[mxConstants.STYLE_FILLCOLOR] = '#CDDDF7';
+  style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
+  style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
   style[mxConstants.STYLE_GRADIENTCOLOR] = 'white';
   style[mxConstants.STYLE_GRADIENT_DIRECTION] = mxConstants.DIRECTION_EAST;
   style[mxConstants.STYLE_ROUNDED] = true;
@@ -328,7 +328,7 @@ designFlowEditor = function (serverXml, readOnly) {
     style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
 
     var style = graph.getStylesheet().getDefaultVertexStyle();
-    style[mxConstants.STYLE_SHAPE] = 'label';
+    style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RECTANGLE;
     style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
     style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_MIDDLE;
     style[mxConstants.STYLE_SPACING_LEFT] = 20;
@@ -338,16 +338,12 @@ designFlowEditor = function (serverXml, readOnly) {
     style[mxConstants.STYLE_OVERFLOW] = 'width';
     style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
     style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
-
-
-    style[mxConstants.STYLE_STROKECOLOR] = 'CDDDF7';
-    style[mxConstants.STYLE_FILLCOLOR] = '#CDDDF7';
-
+    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
     style[mxConstants.STYLE_FONTCOLOR] = '#000000';
     style[mxConstants.STYLE_FONTFAMILY] = 'Raleway';
     style[mxConstants.STYLE_FONTSIZE] = '12';
     style[mxConstants.STYLE_FONTSTYLE] = '1';
-
     style[mxConstants.STYLE_SHADOW] = '1';
     style[mxConstants.STYLE_ROUNDED] = '1';
     style[mxConstants.STYLE_GLASS] = '0';
@@ -371,8 +367,8 @@ designFlowEditor = function (serverXml, readOnly) {
     style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
     style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
 
-    style[mxConstants.STYLE_STROKECOLOR] = 'CDDDF7';
-    style[mxConstants.STYLE_FILLCOLOR] = '#CDDDF7';
+    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
 
     style[mxConstants.STYLE_FONTCOLOR] = '#000000';
     style[mxConstants.STYLE_FONTFAMILY] = 'Raleway';
@@ -403,8 +399,8 @@ designFlowEditor = function (serverXml, readOnly) {
     style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
     style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
 
-    style[mxConstants.STYLE_STROKECOLOR] = 'black';
-    style[mxConstants.STYLE_FILLCOLOR] = '#CDDDF7';
+    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
 
     style[mxConstants.STYLE_FONTCOLOR] = '#000000';
     style[mxConstants.STYLE_FONTFAMILY] = 'Raleway';
@@ -420,8 +416,8 @@ designFlowEditor = function (serverXml, readOnly) {
     graph.getStylesheet().putCellStyle('PENDING_START', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#E5F9FF';
-    style[mxConstants.STYLE_STROKECOLOR] = '#E5F9FF';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
     graph.getStylesheet().putCellStyle('ACTIVE_START', style);
 
     style = mxUtils.clone(style);
@@ -432,25 +428,25 @@ designFlowEditor = function (serverXml, readOnly) {
     style = mxUtils.clone(style);
     style[mxConstants.STYLE_STROKEWIDTH] = '2';
     style[mxConstants.STYLE_STROKECOLOR] = '#000000';
-    style[mxConstants.STYLE_FILLCOLOR] = '#CDDDF7';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
     graph.getStylesheet().putCellStyle('end', style);
 
     style = mxUtils.clone(style);
     graph.getStylesheet().putCellStyle('PENDING_END', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#B7F7D1';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
     style[mxConstants.STYLE_STROKECOLOR] = '#000000';
     graph.getStylesheet().putCellStyle('ACTIVE_END', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#D9E1DC';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
     style[mxConstants.STYLE_STROKECOLOR] = '#000000';
     graph.getStylesheet().putCellStyle('CLOSED_END', style);
 
     // style[mxConstants.STYLE_IMAGE] = 'assets/js/mxGraph/images/dude3.png';
-    // style[mxConstants.STYLE_IMAGE_WIDTH] = '48';
-    // style[mxConstants.STYLE_IMAGE_HEIGHT] = '48';
+    // style[mxConstants.STYLE_IMAGE_WIDTH] = '24';
+    // style[mxConstants.STYLE_IMAGE_HEIGHT] = '24';
     // style[mxConstants.STYLE_SPACING] = 8;
     // Sets the default style for edges
     style = graph.getStylesheet().getDefaultEdgeStyle();
@@ -1375,13 +1371,19 @@ styleStates = function (activeStateIdList, closedStateIdList) {
       for (var vertex of vertices) {
         if (vertex != null && vertex.id != null) {
           if (activeStateIdList.indexOf(vertex.id) >= 0) {
-            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#DDFFDD', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#DDFFDD', [vertex]);
-            //graph.setCellStyles(mxConstants.STYLE_OVERFLOW, 'widht', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/warning.gif', 18, 18), 'Active');
+            overlay.align = mxConstants.ALIGN_RIGHT;
+            overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
+            graph.addCellOverlay(vertex, overlay);
           } else if (closedStateIdList.indexOf(vertex.id) >= 0) {
-            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#E3E3E3', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#E3E3E3', [vertex]);
-            //graph.setCellStyles(mxConstants.STYLE_OVERFLOW, 'widht', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 18, 18), 'Closed');
+            overlay.align = mxConstants.ALIGN_RIGHT;
+            overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
+            graph.addCellOverlay(vertex, overlay);
           }
         }
       }
@@ -1545,8 +1547,8 @@ function userHierarchyEditor() {
     style[mxConstants.STYLE_SPACING_LEFT] = 54;
 
     //style[mxConstants.STYLE_GRADIENTCOLOR] = '#FFFFFF';
-    style[mxConstants.STYLE_STROKECOLOR] = '#CDDDF7';
-    style[mxConstants.STYLE_FILLCOLOR] = '#CDDDF7';
+    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
 
     style[mxConstants.STYLE_FONTCOLOR] = '#000000';
     style[mxConstants.STYLE_FONTFAMILY] = 'Raleway';
@@ -1558,8 +1560,8 @@ function userHierarchyEditor() {
     style[mxConstants.STYLE_GLASS] = '0';
 
     style[mxConstants.STYLE_IMAGE] = './assets/js/mxGraph/images/dude3.png';
-    style[mxConstants.STYLE_IMAGE_WIDTH] = '36';
-    style[mxConstants.STYLE_IMAGE_HEIGHT] = '36';
+    style[mxConstants.STYLE_IMAGE_WIDTH] = '24';
+    style[mxConstants.STYLE_IMAGE_HEIGHT] = '24';
     style[mxConstants.STYLE_SPACING] = 8;
 
     // Sets the default style for edges

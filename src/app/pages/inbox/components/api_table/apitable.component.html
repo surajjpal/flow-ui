@@ -19,12 +19,6 @@
       <th>
         <mfDefaultSorter by="">Assigned Group</mfDefaultSorter>
       </th>
-      <!-- <th>
-        <mfDefaultSorter by="">Alloted to</mfDefaultSorter>
-      </th> -->
-      <!-- <th>
-        <mfDefaultSorter by="">Cost</mfDefaultSorter>
-      </th> -->
     </tr>
   </thead>
   <tbody>
@@ -34,8 +28,6 @@
       <td>{{s.statusCd}}</td>
       <td>{{s.startTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</td>
       <td>{{s.assignedUserGroupCd}}</td>
-      <!-- <td>{{s.assignedUserId}}</td> -->
-      <!-- <td *ngIf="s.businessCost">{{s.businessCost.amount}}</td> -->
     </tr>
     <tr *ngIf="mf.data.length === 0 && isLoading">
       <td colspan="100%">Loading...</td>
