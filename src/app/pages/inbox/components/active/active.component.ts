@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { State } from '../../../../models/tasks.model';
 import { StateService } from '../../../../services/inbox.service';
-import {BaThemeSpinner } from '../../../../theme/services';
+import { BaThemeSpinner } from '../../../../theme/services';
 
 @Component({
   selector: 'api-inbox-active',
@@ -16,13 +16,17 @@ export class ActiveComponent implements OnInit, OnDestroy {
   personalStates: State[];
   loadingGroup: boolean = false;
   loadingPersonal: boolean = false;
+  groupHeaderParamList: string[];
+  personalHeaderParamList: string[];
 
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
 
-  constructor(private stateService: StateService,private baThemeSpinner: BaThemeSpinner) {
+  constructor(private stateService: StateService, private baThemeSpinner: BaThemeSpinner) {
     this.groupStates = [];
     this.personalStates = [];
+    this.groupHeaderParamList = [];
+    this.personalHeaderParamList = [];
   }
 
   ngOnInit(): void {
@@ -44,37 +48,44 @@ export class ActiveComponent implements OnInit, OnDestroy {
     this.loadingGroup = true;
 
     this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Group')
-    .subscribe(states => {
-      this.loadingGroup = false;
-      this.groupStates = states;
+      .subscribe(states => {
+        this.loadingGroup = false;
+        this.groupStates = states;
+        if (this.groupStates != null && this.groupStates.length > 0 && this.groupStates[0].headerParamList != null) {
+          this.groupHeaderParamList = this.groupStates[0].headerParamList;
+        }
 
-      if(!this.loadingGroup && !this.loadingPersonal){
-        this.baThemeSpinner.hide();
-      }
+        if (!this.loadingGroup && !this.loadingPersonal) {
+          this.baThemeSpinner.hide();
+        }
 
-    }, error => {
-      this.loadingGroup = false;
-      if(!this.loadingGroup && !this.loadingPersonal){
-        this.baThemeSpinner.hide();
-      }
-    });
+      }, error => {
+        this.loadingGroup = false;
+        if (!this.loadingGroup && !this.loadingPersonal) {
+          this.baThemeSpinner.hide();
+        }
+      });
 
     this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Personal')
-    .subscribe(states => {
-      this.loadingPersonal = false;
-      this.personalStates = states;
-      if(!this.loadingGroup && !this.loadingPersonal){
-        this.baThemeSpinner.hide();
-      }
-    }, error => {
-      this.loadingPersonal = false;
-      if(!this.loadingGroup && !this.loadingPersonal){
-        this.baThemeSpinner.hide();
-      }
-    });
+      .subscribe(states => {
+        this.loadingPersonal = false;
+        this.personalStates = states;
+        if (this.personalStates != null && this.personalStates.length > 0 && this.personalStates[0].headerParamList != null) {
+          this.personalHeaderParamList = this.personalStates[0].headerParamList;
+        }
+
+        if (!this.loadingGroup && !this.loadingPersonal) {
+          this.baThemeSpinner.hide();
+        }
+      }, error => {
+        this.loadingPersonal = false;
+        if (!this.loadingGroup && !this.loadingPersonal) {
+          this.baThemeSpinner.hide();
+        }
+      });
   }
 
   onSelect(selectedData: State): void {
-    
+
   }
 }

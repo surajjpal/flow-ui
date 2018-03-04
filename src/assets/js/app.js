@@ -656,7 +656,7 @@ designFlowEditor = function (serverXml, readOnly) {
       if (target && target.id == 'treeRoot') {
         window['flowComponentRef'].zone.run(() => {
           window['flowComponentRef'].component.
-          showAppJSWarning("Not Allowed", "You are not allowed to connect to the root state. Please select any other state.");
+            showAppJSWarning("Not Allowed", "You are not allowed to connect to the root state. Please select any other state.");
         });
         showModal("warningModal");
         return;
@@ -671,7 +671,7 @@ designFlowEditor = function (serverXml, readOnly) {
           if (edge.target.value.stateCd == target.value.stateCd) {
             window['flowComponentRef'].zone.run(() => {
               window['flowComponentRef'].component.
-              showAppJSWarning("Used State", "The state you are trying to connect to is already connected from current state. Please choose any other state.");
+                showAppJSWarning("Used State", "The state you are trying to connect to is already connected from current state. Please choose any other state.");
             });
             showModal("warningModal");
             return;
@@ -702,13 +702,15 @@ designFlowEditor = function (serverXml, readOnly) {
 
       window['flowComponentRef'].zone.run(() => {
         window['flowComponentRef'].component.
-        showAppJSWarning("No Events Left", "There aren't any source events left to be attached to the new state, thus this connection can't be made.");
+          showAppJSWarning("No Events Left", "There aren't any source events left to be attached to the new state, thus this connection can't be made.");
       });
       showModal("warningModal");
       return;
     };
+    addTaskIconOverlays(graph)
   }
 };
+
 
 function getEdgesByStateCd(source) {
   var sourceEdges = [];
@@ -846,7 +848,7 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
           } else {
             window['flowComponentRef'].zone.run(() => {
               window['flowComponentRef'].component.
-              showAppJSWarning("Not Allowed", "Root state can only have one child state. You can't create more than one child for root state.");
+                showAppJSWarning("Not Allowed", "Root state can only have one child state. You can't create more than one child for root state.");
             });
             showModal("warningModal");
             return;
@@ -879,7 +881,7 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
 
         window['flowComponentRef'].zone.run(() => {
           window['flowComponentRef'].component.
-          showAppJSWarning("No Events Left", "There aren't any source events from which the new state can be created.");
+            showAppJSWarning("No Events Left", "There aren't any source events from which the new state can be created.");
         });
         showModal("warningModal");
         return;
@@ -1102,7 +1104,7 @@ saveStateObject = function (state) {
       if (state.stateCd == vertex.value.stateCd) {
         window['flowComponentRef'].zone.run(() => {
           window['flowComponentRef'].component.
-          showAppJSWarning("Duplicate State", "Duplicate states found. State '" + state.stateCd + "' is already being used. Please use different state code for defining the state.");
+            showAppJSWarning("Duplicate State", "Duplicate states found. State '" + state.stateCd + "' is already being used. Please use different state code for defining the state.");
         });
         showModal("warningModal");
         return;
@@ -1121,7 +1123,7 @@ saveStateObject = function (state) {
       if (repeatCount > 1) {
         window['flowComponentRef'].zone.run(() => {
           window['flowComponentRef'].component.
-          showAppJSWarning("Duplicate Events", "Duplicate events found. All the events must be unique.");
+            showAppJSWarning("Duplicate Events", "Duplicate events found. All the events must be unique.");
         });
         showModal("warningModal");
         return;
@@ -1134,7 +1136,7 @@ saveStateObject = function (state) {
           if (event.eventCd == stateEvent.eventCd) {
             window['flowComponentRef'].zone.run(() => {
               window['flowComponentRef'].component.
-              showAppJSWarning("Duplicate Events", "Duplicate events found. Event '" + event.eventCd + "' is already defined as a source event in state '" + vertex.value.stateCd + "'. Please use different event code for defining the event.");
+                showAppJSWarning("Duplicate Events", "Duplicate events found. Event '" + event.eventCd + "' is already defined as a source event in state '" + vertex.value.stateCd + "'. Please use different event code for defining the event.");
             });
             showModal("warningModal");
             return;
@@ -1155,7 +1157,7 @@ updateStateObject = function (state) {
       if ((state.stateCd == vertex.value.stateCd) && (vertex.value.stateCd != sourceCell.value.stateCd)) {
         window['flowComponentRef'].zone.run(() => {
           window['flowComponentRef'].component.
-          showAppJSWarning("Duplicate State", "Duplicate states found. State '" + state.stateCd + "' is already being used. Please use different state code for defining the state.");
+            showAppJSWarning("Duplicate State", "Duplicate states found. State '" + state.stateCd + "' is already being used. Please use different state code for defining the state.");
         });
         showModal("warningModal");
         return;
@@ -1174,7 +1176,7 @@ updateStateObject = function (state) {
       if (repeatCount > 1) {
         window['flowComponentRef'].zone.run(() => {
           window['flowComponentRef'].component.
-          showAppJSWarning("Duplicate Events", "Duplicate events found. All the events must be unique.");
+            showAppJSWarning("Duplicate Events", "Duplicate events found. All the events must be unique.");
         });
         showModal("warningModal");
         return;
@@ -1188,7 +1190,7 @@ updateStateObject = function (state) {
             if (event.eventCd == stateEvent.eventCd) {
               window['flowComponentRef'].zone.run(() => {
                 window['flowComponentRef'].component.
-                showAppJSWarning("Duplicate Events", "Duplicate events found. Event '" + event.eventCd + "' is already defined as a source event in state '" + vertex.value.stateCd + "'. Please use different event code for defining the event.");
+                  showAppJSWarning("Duplicate Events", "Duplicate events found. Event '" + event.eventCd + "' is already defined as a source event in state '" + vertex.value.stateCd + "'. Please use different event code for defining the event.");
               });
               showModal("warningModal");
               return;
@@ -1208,7 +1210,7 @@ updateStateObject = function (state) {
       var difference = childStateCount - newEventCount;
       window['flowComponentRef'].zone.run(() => {
         window['flowComponentRef'].component.
-        showAppJSWarning("Event Mismatch", "There already exisits " + childStateCount + " child state(s) for the current state. After update there will be a total number of " + newEventCount + " events left, which doesn't suffice the total child states. Please add " + difference + " more event(s) or delete " + difference + " child state(s) to suffice the conditions.");
+          showAppJSWarning("Event Mismatch", "There already exisits " + childStateCount + " child state(s) for the current state. After update there will be a total number of " + newEventCount + " events left, which doesn't suffice the total child states. Please add " + difference + " more event(s) or delete " + difference + " child state(s) to suffice the conditions.");
       });
       showModal("warningModal");
       return;
@@ -1276,7 +1278,7 @@ updateStateTrigger = function (eventEdgeMap, stateData) {
     if (key && (!eventEdgeMap[key] || eventEdgeMap[key] == null)) {
       window['flowComponentRef'].zone.run(() => {
         window['flowComponentRef'].component.
-        showAppJSWarning("Error", "You can't leave trigger for any child state empty. Please fill in all values.");
+          showAppJSWarning("Error", "You can't leave trigger for any child state empty. Please fill in all values.");
       });
       showModal("warningModal");
       return;
@@ -1384,14 +1386,24 @@ styleStates = function (activeStateIdList, closedStateIdList) {
             overlay.align = mxConstants.ALIGN_RIGHT;
             overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
             graph.addCellOverlay(vertex, overlay);
+          } else if (vertex != null && vertex.id == 'treeRoot') {
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 18, 18), 'Closed');
+            overlay.align = mxConstants.ALIGN_RIGHT;
+            overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
+            graph.addCellOverlay(vertex, overlay);
           }
+         
         }
       }
     } finally {
       graph.getModel().endUpdate();
     }
   }
+  addTaskIconOverlays(graph);
 }
+
 
 updateNewEdge = function (event) {
   if (newEdge) {
@@ -1762,7 +1774,7 @@ function addRootUserOrLoad(serverXml, user) {
     else {
       window['userHierarchyRef'].zone.run(() => {
         window['userHierarchyRef'].component.
-        showAppJSWarning("Please select a user first!!");
+          showAppJSWarning("Please select a user first!!");
       });
       showModal("warningModal");
       return;
@@ -1920,7 +1932,7 @@ function addOverlaysUser(hierarchygraph, cell, addDeleteIcon) {
     else {
       window['userHierarchyRef'].zone.run(() => {
         window['userHierarchyRef'].component.
-        showAppJSWarning("Please select a user first!!");
+          showAppJSWarning("Please select a user first!!");
       });
       showModal("warningModal");
       return;
@@ -1932,7 +1944,7 @@ function addOverlaysUser(hierarchygraph, cell, addDeleteIcon) {
   alertMessage = function (message) {
     window['userHierarchyRef'].zone.run(() => {
       window['userHierarchyRef'].component.
-      showAppJSWarning(message);
+        showAppJSWarning(message);
     });
     closeModal("warningModal");
     showModal("warningModal");
@@ -1958,7 +1970,7 @@ function addOverlaysUser(hierarchygraph, cell, addDeleteIcon) {
     else {
       window['userHierarchyRef'].zone.run(() => {
         window['userHierarchyRef'].component.
-        showAppJSWarning("Please select a user first!!");
+          showAppJSWarning("Please select a user first!!");
       });
       showModal("warningModal");
       return;
@@ -2065,3 +2077,35 @@ function deleteUserSubtree(hierarchygraph, cell) {
   window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.updateUserListAfterDelete(users); })
   hierarchygraph.removeCells(cells);
 };
+
+addTaskIconOverlays = function (graph) {
+  if (graph != null && graph.getModel() != null) {
+    graph.getModel().beginUpdate();
+    try {
+      var vertices = graph.getChildVertices(graph.getDefaultParent());
+      if (vertices != null) {
+        for (var vertex of vertices) {
+          if (vertex != null && vertex.id != null) {
+            if (vertex != null && vertex.value != null && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
+              if (vertex.value.type != null && vertex.value.type == 'Manual') {
+                var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/dude3.png', 18, 18), 'Manual Task');
+                overlay.align = mxConstants.ALIGN_LEFT;
+                overlay.verticalAlign = mxConstants.ALIGN_BOTTOM;
+                graph.addCellOverlay(vertex, overlay);
+              } else if (vertex.value.type != null && vertex.value.type == 'Auto') {
+                var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/gear.png', 18, 18), 'Auto Task');
+                overlay.align = mxConstants.ALIGN_LEFT;
+                overlay.verticalAlign = mxConstants.ALIGN_BOTTOM;
+                graph.addCellOverlay(vertex, overlay);
+              }
+            }
+          }
+        }
+      }
+
+    } finally {
+      graph.getModel().endUpdate();
+    }
+  }
+};
+

@@ -2,13 +2,21 @@
 
 <div>
   <div class="col-md-12 col-sm-12 col-xs-12">
-    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" data-toggle="modal" data-target="#discardWarningModal"><i class="ion-ios-refresh"></i>Discard</button>
-    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="saveOnServer()" *ngIf="!readOnly"><i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
-    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="prepareDummyObject()" *ngIf="!readOnly" data-toggle="modal" data-target="#settignsModal"><i class="fa fa-cogs" aria-hidden="true"></i>Settings</button>
-    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)"><i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>
-    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)"><i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>
-    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)"><i class="ion-arrow-expand"></i>Zoom Actual</button>
-    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)"><i class="ion-printer"></i>Print Preview</button>
+    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" data-toggle="modal" data-target="#discardWarningModal">
+      <i class="ion-ios-refresh"></i>Discard</button>
+    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="saveOnServer()" *ngIf="!readOnly">
+      <i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
+    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="prepareDummyObject()" *ngIf="!readOnly"
+      data-toggle="modal" data-target="#settignsModal">
+      <i class="fa fa-cogs" aria-hidden="true"></i>Settings</button>
+    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
+      <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>
+    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
+      <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>
+    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
+      <i class="ion-arrow-expand"></i>Zoom Actual</button>
+    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)">
+      <i class="ion-printer"></i>Print Preview</button>
   </div>
   <br>
   <div class="col-md-12 col-sm-12 col-xs-12">
@@ -18,7 +26,8 @@
 </div>
 
 <!-- Modal - Add State -->
-<div class="modal fade" data-backdrop="static" data-keyboard="false" id="stateModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="stateModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <!-- Modal Header -->
@@ -44,15 +53,15 @@
             <label for="selectStateType">State Type</label>
             <select class="selectpicker form-control" required id="selectStateType" title="Choose State Type" [(ngModel)]="tempState.type"
               name="type">
-                <option *ngFor="let stateType of sourceStateTypes" [value]="stateType">{{stateType}}</option>
-              </select>
+              <option *ngFor="let stateType of sourceStateTypes" [value]="stateType">{{stateType}}</option>
+            </select>
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'">
             <label for="selectAllocationType">Allocation Type</label>
             <select class="selectpicker form-control" required id="selectAllocationType" title="Choose Allocation Type" [(ngModel)]="tempState.allocationModel.allocationType"
               name="allocationType">
-                <option *ngFor="let allocationType of allocationTypes" [value]="allocationType">{{allocationType}}</option>
-              </select>
+              <option *ngFor="let allocationType of allocationTypes" [value]="allocationType">{{allocationType}}</option>
+            </select>
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'Group'">
             <label for="allocationGroup">Allocate to group</label>
@@ -60,8 +69,9 @@
               name="allocationGroup" />
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'Least_Allocated'|| tempState.allocationModel.allocationType === 'Round_Robin' ">
-          <label for="groups">Allocate to groups</label>
-              <tag-input [(ngModel)]="tempState.allocationModel.groups" name="groups" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
+            <label for="groups">Allocate to groups</label>
+            <tag-input [(ngModel)]="tempState.allocationModel.groups" name="groups" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]"
+              placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'User'">
             <label for="allocationUser">Allocate to User</label>
@@ -75,36 +85,36 @@
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'  && tempState.allocationModel.allocationType === 'API'">
             <label for="api">API</label>
-            <input type="text" class="form-control" required id="api" placeholder="API" [(ngModel)]="tempState.allocationModel.api"
-              name="api" />
+            <input type="text" class="form-control" required id="api" placeholder="API" [(ngModel)]="tempState.allocationModel.api" name="api"
+            />
           </div>
           <div class="form-group" *ngIf="stateCreateMode && sourceEvents && sourceEvents.length > 0">
             <label for="selectStateTrigger">State Trigger</label>
             <select class="selectpicker form-control" required id="selectStateTrigger" title="Choose trigger for this state" [(ngModel)]="tempState.trigger"
               name="trigger">
-                <option *ngFor="let event of sourceEvents" [ngValue]="event">{{event.eventCd}}</option>
-              </select>
+              <option *ngFor="let event of sourceEvents" [ngValue]="event">{{event.eventCd}}</option>
+            </select>
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto'">
             <label for="selectEntryActions">Entry Actions</label>
             <select multiple="true" class="selectpicker form-control" required id="selectEntryActions" title="Choose Entry Actions" [(ngModel)]="tempState.entryActionList"
               name="entryActionList">
-                <option *ngFor="let entryAction of sourceEntryActionList" [ngValue]="entryAction['key']">{{entryAction['value']}}</option>
-              </select>
+              <option *ngFor="let entryAction of sourceEntryActionList" [ngValue]="entryAction['key']">{{entryAction['value']}}</option>
+            </select>
           </div>
           <div class="form-group" *ngIf="isStateApiCompatible()">
             <label for="selectApiConfig">Select API</label>
             <select multiple="true" class="selectpicker form-control" required id="selectApiConfig" title="Choose API" [(ngModel)]="tempState.apiConfigurationList"
               name="apiConfigurationList">
-                <option *ngFor="let apiConfig of sourceApiConfigList" [ngValue]="apiConfig._id">{{apiConfig.name}}</option>
-              </select>
+              <option *ngFor="let apiConfig of sourceApiConfigList" [ngValue]="apiConfig._id">{{apiConfig.name}}</option>
+            </select>
           </div>
           <div class="form-group" *ngIf="tempState.costModel !== null">
             <label for="selectCostType">Cost Type</label>
             <select class="selectpicker form-control" required id="selectCostType" title="Choose Cost Type" [(ngModel)]="tempState.costModel.costType"
               name="costType">
-                <option *ngFor="let amountType of amountTypes" [value]="amountType">{{amountType}}</option>
-              </select>
+              <option *ngFor="let amountType of amountTypes" [value]="amountType">{{amountType}}</option>
+            </select>
           </div>
           <div class="form-group" *ngIf="tempState.costModel !== null && tempState.costModel.costType === 'FIXED'">
             <label for="amount">Fixed cost</label>
@@ -123,8 +133,8 @@
           </div>
           <div class="form-group" *ngIf="graphObject.dataPointConfigurationList.length > 0">
             <label for="selectMandatoryDataPoints">Mandatory Data Points</label>
-            <select multiple="true" class="selectpicker form-control" required id="selectMandatoryDataPoints" title="Choose Mandatory Data Points" [(ngModel)]="tempState.mandatoryDataPoints"
-              name="mandatoryDataPoints">
+            <select multiple="true" class="selectpicker form-control" required id="selectMandatoryDataPoints" title="Choose Mandatory Data Points"
+              [(ngModel)]="tempState.mandatoryDataPoints" name="mandatoryDataPoints">
               <option *ngFor="let dataPoint of graphObject.dataPointConfigurationList" [ngValue]="dataPoint">{{dataPoint.dataPointLabel}}</option>
             </select>
           </div>
@@ -157,10 +167,13 @@
                   <tbody>
                     <tr *ngFor="let manualAction of tempState.manualActions">
                       <td>
-                        <button type="button" class="btn btn-danger" title="Delete" (click)="removeManualAction(manualAction)"><i class="ion-close-round"></i></button>
+                        <button type="button" class="btn btn-danger" title="Delete" (click)="removeManualAction(manualAction)">
+                          <i class="ion-close-round"></i>
+                        </button>
                       </td>
                       <td>
-                        <input type="number" class="form-control" placeholder="Sequence" [value]="manualAction.sequence" (input)="manualAction.sequence = $event.target.value" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)">
+                        <input type="number" class="form-control" placeholder="Sequence" [value]="manualAction.sequence" (input)="manualAction.sequence = $event.target.value"
+                          onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)">
                       </td>
                       <td>
                         <input type="text" class="form-control" placeholder="Key" [value]="manualAction.key" (input)="manualAction.key = $event.target.value">
@@ -172,14 +185,16 @@
                         <input type="text" class="form-control" placeholder="Description" [value]="manualAction.description" (input)="manualAction.description = $event.target.value">
                       </td>
                       <td>
-                        <select class="selectpicker form-control" title="Choose type" [(ngModel)]="manualAction.type"
-                        name="type">
+                        <select class="selectpicker form-control" title="Choose type" [(ngModel)]="manualAction.type" name="type">
                           <option *ngFor="let type of sourceManualActionType" [ngValue]="type">{{type}}</option>
                         </select>
                       </td>
                       <td>
-                        <tag-input *ngIf="manualAction.type === 'SINGLE_SELECT' || manualAction.type === 'MULTI_SELECT'" [(ngModel)]="manualAction.value" name="action" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Action (Enter separated)" secondaryPlaceholder="Populate source actions" theme="minimal" class="custom-input-tag-border"></tag-input>
-                        <input *ngIf="manualAction.type === 'STRING' || manualAction.type === 'NUMBER' || manualAction.type === 'BOOLEAN'" type="text" disabled class="form-control" placeholder="Editable to client" [value]="manualAction.value" (input)="manualAction.value = $event.target.value">
+                        <tag-input *ngIf="manualAction.type === 'SINGLE_SELECT' || manualAction.type === 'MULTI_SELECT'" [(ngModel)]="manualAction.value"
+                          name="action" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Action (Enter separated)"
+                          secondaryPlaceholder="Populate source actions" theme="minimal" class="custom-input-tag-border"></tag-input>
+                        <input *ngIf="manualAction.type === 'STRING' || manualAction.type === 'NUMBER' || manualAction.type === 'BOOLEAN'" type="text"
+                          disabled class="form-control" placeholder="Editable to client" [value]="manualAction.value" (input)="manualAction.value = $event.target.value">
                       </td>
                     </tr>
                   </tbody>
@@ -222,13 +237,16 @@
                   <tbody>
                     <tr *ngFor="let rule of tempState.ruleList">
                       <td>
-                        <button type="button" class="btn btn-danger" title="Delete" (click)="removeRule(rule)"><i class="ion-close-round"></i></button>
+                        <button type="button" class="btn btn-danger" title="Delete" (click)="removeRule(rule)">
+                          <i class="ion-close-round"></i>
+                        </button>
                       </td>
                       <td>
                         <input type="text" class="form-control" placeholder="Key" [value]="rule.key" (input)="rule.key = $event.target.value">
                       </td>
                       <td>
-                        <input type="text" class="form-control" placeholder="Expression" [value]="rule.expression" (input)="rule.expression = $event.target.value"/>
+                        <input type="text" class="form-control" placeholder="Expression" [value]="rule.expression" (input)="rule.expression = $event.target.value"
+                        />
                       </td>
                     </tr>
                   </tbody>
@@ -332,15 +350,15 @@
                               <form>
                                 <div class="form-group">
                                   <label required [for]="'expValue' + expIndex">
-                                      Value
-                                    </label>
+                                    Value
+                                  </label>
                                   <input type="text" class="form-control" required [id]="'expValue' + expIndex" placeholder="Value" [(ngModel)]="expression.value"
                                     name="value" />
                                 </div>
                                 <div class="form-group" *ngIf="event.expressionList.length > 1">
                                   <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
-                                      Remove Expression
-                                    </button>
+                                    Remove Expression
+                                  </button>
                                 </div>
                               </form>
                             </div>
@@ -437,15 +455,15 @@
                               <form>
                                 <div class="form-group">
                                   <label required [for]="'expValue' + expIndex">
-                                      Value
-                                    </label>
+                                    Value
+                                  </label>
                                   <input type="text" class="form-control" required [id]="'expValue' + expIndex" placeholder="Value" [(ngModel)]="expression.value"
                                     name="value" />
                                 </div>
                                 <div class="form-group" *ngIf="event.expressionList.length > 1">
                                   <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
-                                      Remove Expression
-                                    </button>
+                                    Remove Expression
+                                  </button>
                                 </div>
                               </form>
                             </div>
@@ -498,7 +516,8 @@
 </div>
 
 <!-- Modal - Settings -->
-<div class="modal fade" data-backdrop="static" data-keyboard="false" id="settignsModal" tabindex="-1" role="dialog" attr.aria-labelledby="settingsModalLabel" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="settignsModal" tabindex="-1" role="dialog" attr.aria-labelledby="settingsModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <!-- Modal Header -->
@@ -517,19 +536,28 @@
         <form>
           <div class="form-group">
             <label class="col-md-12 col-sm-12 col-xs-12" for="inputMachineLabel">
-              Machine Label
+              Process Name
             </label>
-            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputMachineLabel" placeholder="Machine Label" [(ngModel)]="tempGraphObject.machineLabel"
+            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputMachineLabel" placeholder="Process Name" [(ngModel)]="tempGraphObject.machineLabel"
               name="machineLabel" />
           </div>
           <div class="form-group">
             <label class="col-md-12 col-sm-12 col-xs-12" for="inputMachineType">
-              Machine Type
+              Process Code
             </label>
-            <input *ngIf="graphObject.machineType && graphObject.machineType.length > 0" disabled type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputMachineType" placeholder="Machine Name" [(ngModel)]="tempGraphObject.machineType"
-              name="machineType" />
-            <input *ngIf="!graphObject.machineType || graphObject.machineType.length == 0" type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputMachineType" placeholder="Machine Name" [(ngModel)]="tempGraphObject.machineType"
-              name="machineType" />
+            <input *ngIf="graphObject.machineType && graphObject.machineType.length > 0" disabled type="text" class="col-md-12 col-sm-12 col-xs-12 form-control"
+              id="inputMachineType" placeholder="Process Code" [(ngModel)]="tempGraphObject.machineType" name="machineType"
+            />
+            <input *ngIf="!graphObject.machineType || graphObject.machineType.length == 0" type="text" class="col-md-12 col-sm-12 col-xs-12 form-control"
+              id="inputMachineType" placeholder="Process Code" [(ngModel)]="tempGraphObject.machineType" name="machineType"
+            />
+          </div>
+          <div class="form-group">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="inputProcessOwner">
+              Process Owner
+            </label>
+            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputProcessOwner" placeholder="Process Owner"
+              [(ngModel)]="tempGraphObject.processOwner" name="processOwner" />
           </div>
           <div class="form-group">
             <label class="col-md-12 col-sm-12 col-xs-12" for="inputVersionNumber">
@@ -602,11 +630,18 @@
                         [(ngModel)]="dataPoint.description" name="description" />
                     </div>
                     <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpHeaderFlag' + index">
+                        Header
+                      </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpHeaderFlag' + index" placeholder="Header"
+                        [(ngModel)]="dataPoint.headerFlag" name="headerFlag" />
+                    </div>
+                    <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputExpression' + index">
                         Expression
                       </label>
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpInputExpression' + index" placeholder="Expression"
-                        [(ngModel)]="dataPoint.expression" name="expression"/>
+                        [(ngModel)]="dataPoint.expression" name="expression" />
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpDataType' + index">
@@ -621,9 +656,9 @@
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputSource' + index">
                         Valid Input Source
                       </label>
-                      <tag-input class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" [id]="'dpInputSource' + index"
-                        [(ngModel)]="dataPoint.inputSource" name="inputSource" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]"
-                        placeholder="+Input (Enter separated)" secondaryPlaceholder="Populate source input" theme="minimal" class="custom-input-tag-border">
+                      <tag-input class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" [id]="'dpInputSource' + index" [(ngModel)]="dataPoint.inputSource"
+                        name="inputSource" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Input (Enter separated)"
+                        secondaryPlaceholder="Populate source input" theme="minimal" class="custom-input-tag-border">
                       </tag-input>
                     </div>
                     <div class="form-group">
@@ -638,7 +673,7 @@
                   </form>
 
 
-                  <br>      
+                  <br>
                   <table class="table" [mfData]="dataPoint.validations" [mfRowsOnPage]="5">
                     <thead>
                       <tr>
@@ -651,11 +686,13 @@
                     <tbody>
                       <tr *ngFor="let validation of dataPoint.validations">
                         <td>
-                          <button type="button" class="btn btn-danger" title="Delete" (click)="removeDataPointValidation(validation, dataPoint)"><i class="ion-close-round"></i></button>
+                          <button type="button" class="btn btn-danger" title="Delete" (click)="removeDataPointValidation(validation, dataPoint)">
+                            <i class="ion-close-round"></i>
+                          </button>
                         </td>
                         <td>
-                          <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="validation.sequence" name="sequence"
-                          onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"/>
+                          <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="validation.sequence" name="sequence" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"
+                          />
                         </td>
                         <td>
                           <input type="text" class="form-control" placeholder="Expression" [(ngModel)]="validation.expression" name="expression">
@@ -718,6 +755,13 @@
                         [(ngModel)]="dataPoint.description" name="description" />
                     </div>
                     <div class="form-group">
+                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpHeaderFlag' + index">
+                        Header
+                      </label>
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpHeaderFlag' + index" placeholder="Header"
+                        [(ngModel)]="dataPoint.headerFlag" name="headerFlag" />
+                    </div>
+                    <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputExpression' + index">
                         Expression
                       </label>
@@ -737,9 +781,9 @@
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputSource' + index">
                         Valid Input Source
                       </label>
-                      <tag-input class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" [id]="'dpInputSource' + index"
-                        [(ngModel)]="dataPoint.inputSource" name="inputSource" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]"
-                        placeholder="+Input (Enter separated)" secondaryPlaceholder="Populate source input" theme="minimal" class="custom-input-tag-border">
+                      <tag-input class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" [id]="'dpInputSource' + index" [(ngModel)]="dataPoint.inputSource"
+                        name="inputSource" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Input (Enter separated)"
+                        secondaryPlaceholder="Populate source input" theme="minimal" class="custom-input-tag-border">
                       </tag-input>
                     </div>
                     <div class="form-group">
@@ -754,7 +798,7 @@
                   </form>
 
 
-                  <br>      
+                  <br>
                   <table class="table" [mfData]="dataPoint.validations" [mfRowsOnPage]="5">
                     <thead>
                       <tr>
@@ -767,11 +811,13 @@
                     <tbody>
                       <tr *ngFor="let validation of dataPoint.validations">
                         <td>
-                          <button type="button" class="btn btn-danger" title="Delete" (click)="removeDataPointValidation(validation, dataPoint)"><i class="ion-close-round"></i></button>
+                          <button type="button" class="btn btn-danger" title="Delete" (click)="removeDataPointValidation(validation, dataPoint)">
+                            <i class="ion-close-round"></i>
+                          </button>
                         </td>
                         <td>
-                          <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="validation.sequence" name="sequence"
-                          onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"/>
+                          <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="validation.sequence" name="sequence" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"
+                          />
                         </td>
                         <td>
                           <input type="text" class="form-control" placeholder="Expression" [(ngModel)]="validation.expression" name="expression">
@@ -822,7 +868,8 @@
 </div>
 
 <!-- New Edge Modal -->
-<div class="modal fade" data-backdrop="static" data-keyboard="false" id="newEdgeModal" tabindex="-1" role="dialog" attr.aria-labelledby="newEdgeLabel" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="newEdgeModal" tabindex="-1" role="dialog" attr.aria-labelledby="newEdgeLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <!-- Modal Header -->
@@ -843,7 +890,8 @@
             <label class="col-md-12 col-sm-12 col-xs-12">
               Select event for which the state will get triggered
             </label>
-            <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" title="Select Event" [(ngModel)]="tempEdgeEvent" name="tempEdgeEvent">
+            <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" title="Select Event" [(ngModel)]="tempEdgeEvent"
+              name="tempEdgeEvent">
               <option *ngFor="let event of sourceEvents" [ngValue]="event">{{event.eventCd}}</option>
             </select>
           </div>
@@ -913,7 +961,7 @@
             <select class="selectpicker form-control" title="Select triggering event" [(ngModel)]="childStateEventMap[stateCd]" name="childStateEventMap">
               <option *ngFor="let event of sourceEvents" [ngValue]="event">{{event.eventCd}}</option>
             </select>
-            </div>
+          </div>
         </form>
       </div>
 

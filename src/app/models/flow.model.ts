@@ -27,6 +27,7 @@ export class DataPoint {
   validations: DataPointValidation[];
   operand: string;
   value: any;
+  headerFlag: boolean;
 
   constructor() {
     this.sequence = 0;
@@ -39,6 +40,7 @@ export class DataPoint {
     this.validations = [];
     this.operand = 'AND';
     this.value = null;
+    this.headerFlag = false;
   }
 }
 
@@ -141,6 +143,7 @@ export class StateModel {
   costModel: CostModel;
   manualActions: ManualAction[];
   mandatoryDataPoints: DataPoint[];
+ 
 
   constructor() {
     this.stateId = '';
@@ -158,6 +161,7 @@ export class StateModel {
     this.costModel = new CostModel();
     this.manualActions = [];
     this.mandatoryDataPoints = [];
+   
   }
 }
 
@@ -178,6 +182,7 @@ export class GraphObject extends BaseModel {
   machineType: string;
   version: number;
   xml: string;
+  processOwner: string;
   dataPointConfigurationList: DataPoint[];
   states: StateModel[];
   transitions: Transition[];
@@ -189,6 +194,7 @@ export class GraphObject extends BaseModel {
 
     this.machineLabel = '';
     this.machineType = '';
+    this.processOwner = '';
     this.version = 0;
     this.xml = '';
     this.dataPointConfigurationList = [];

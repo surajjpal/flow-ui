@@ -1,183 +1,188 @@
 <div class="widgets">
-  <ba-card baCardClass="with-scroll" class="data-table-container">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <a class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          <h3>State Insights</h3>
-        </a>
-      </div>
-      <hr/>
+  <div class="card">
+    <div class="card-header">
+      <a class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        <h3>
+          <b>Process Insights</b>
+        </h3>
+      </a>
+    </div>
+    <div class="card-block">
       <div id="collapseOne" class="collapse show">
         <div class="row">
-          <div class="col-md-4 col-sm-12">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <label><b>Complete By : </b></label>
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 ">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Allocated To :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <label *ngIf="selectedState">{{selectedState.assignedUserName}}</label>
+                </div>
               </div>
-              <div class="col-md-6 col-sm-12">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Allocated Group :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <label *ngIf="selectedState">{{selectedState.assignedUserGroupCd}}</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Process Owner :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <label *ngIf="selectedState">{{selectedState.processOwner}}</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Task Status :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <span class="badge badge-pill badge-success">{{selectedState.statusCd}}</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Escalated :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <span *ngIf="selectedState.escalatedFlag" class="badge badge-pill badge-danger">{{selectedState.escalatedFlag}}</span>
+                  <span *ngIf="!selectedState.escalatedFlag" class="badge badge-pill badge-success">{{selectedState.escalatedFlag}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 ">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>Complete By :</label>
+                </div>
+                <div class="col-md-6 col-sm-12">
 
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-12">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <label><b>Predicted working time : </b></label>
-              </div>
-              <div class="col-md-6 col-sm-12">
-                <label *ngIf="commonInsightWrapper">{{commonInsightWrapper.insightMap.State_WorkingTime | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</label>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-12">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <label><b>Allocated To : </b></label>
-              </div>
-              <div class="col-md-6 col-sm-12">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Time - complete (Avg) :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
 
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 col-sm-12">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <label><b>Time - complete (Average) : </b></label>
-              </div>
-              <div class="col-md-6 col-sm-12">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Time Remaining :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
 
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-12">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <label><b>Predicted end time : </b></label>
-              </div>
-              <div class="col-md-6 col-sm-12">
-                <label *ngIf="commonInsightWrapper">{{commonInsightWrapper.insightMap.State_EndTime | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</label>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-12">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <label><b>Escalated? : </b></label>
-              </div>
-              <div class="col-md-6 col-sm-12">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Time Spent :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
 
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 col-sm-12">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <label><b>Time Remaining : </b></label>
-              </div>
-              <div class="col-md-6 col-sm-12">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Overrun time (Avg) :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
 
+                </div>
               </div>
             </div>
           </div>
-          <div class="col-md-4 col-sm-12">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <label><b>Predicted end state : </b></label>
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 ">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Predicted working time :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <label *ngIf="commonInsightWrapper">{{commonInsightWrapper.insightMap.State_WorkingTime | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</label>
+                </div>
               </div>
-              <div class="col-md-6 col-sm-12">
-                <label *ngIf="commonInsightWrapper">{{commonInsightWrapper.insightMap.State_EndTask}}</label>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Predicted end time :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <label *ngIf="commonInsightWrapper">{{commonInsightWrapper.insightMap.State_EndTime | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</label>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-12">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <label><b>Process Owner : </b></label>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Predicted end state :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <label *ngIf="commonInsightWrapper">{{commonInsightWrapper.insightMap.State_EndTask}}</label>
+                </div>
               </div>
-              <div class="col-md-6 col-sm-12">
-
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Predicted next state :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <label *ngIf="commonInsightWrapper">{{commonInsightWrapper.insightMap.State_NextTask}}</label>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 col-sm-12">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <label><b>Time Spent : </b></label>
-              </div>
-              <div class="col-md-6 col-sm-12">
-
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-12">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <label><b>Predicted next state : </b></label>
-              </div>
-              <div class="col-md-6 col-sm-12">
-                <label *ngIf="commonInsightWrapper">{{commonInsightWrapper.insightMap.State_NextTask}}</label>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-12">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <label><b>Status : </b></label>
-              </div>
-              <div class="col-md-6 col-sm-12">
-
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4 col-sm-12">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <label><b>Overrun time (Average) : </b></label>
-              </div>
-              <div class="col-md-6 col-sm-12">
-
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-12">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <label><b>Critical task :</b></label>
-              </div>
-              <div class="col-md-6 col-sm-12">
-                <label *ngIf="commonInsightWrapper">{{commonInsightWrapper.insightMap.State_CriticalTask}}</label>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 col-sm-12">
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <label></label>
-              </div>
-              <div class="col-md-6 col-sm-12">
-
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Critical task :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <span *ngIf="commonInsightWrapper" class="badge badge-pill badge-danger">{{commonInsightWrapper.insightMap.State_CriticalTask}}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <hr/>
     </div>
-  </ba-card>
+  </div>
   <ba-card baCardClass="with-scroll" class="data-table-container">
     <div class="panel panel-default">
       <div class="panel-heading">
         <div class="row">
           <div class="col-md-6">
-            <h3>State Details</h3>
+            <h3>
+              <b>State Information</b>
+            </h3>
           </div>
           <div class="col-md-6 text-right">
           </div>
@@ -187,13 +192,19 @@
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" id="conversation-tab" data-toggle="tab" href="#tabConversation" role="tab" aria-controls="flow"
-            aria-expanded="true">Conversation</a>
+            aria-expanded="true">
+            <b>Conversation</b>
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="details-tab" data-toggle="tab" href="#tabDetails" role="tab" aria-controls="details">Details</a>
+          <a class="nav-link" id="details-tab" data-toggle="tab" href="#tabDetails" role="tab" aria-controls="details">
+            <b>Task details</b>
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="flow-tab" data-toggle="tab" href="#tabFlow" role="tab" aria-controls="flow">Flow</a>
+          <a class="nav-link" id="flow-tab" data-toggle="tab" href="#tabFlow" role="tab" aria-controls="flow">
+            <b>Process trail</b>
+          </a>
         </li>
       </ul>
       <div class="tab-content" id="myTabContent">
@@ -201,14 +212,6 @@
           <div class="row">
             <ba-card class="col-md-6 col-sm-12" cardTitle="Episode Details">
               <form style="max-height: 400px; overflow:scroll">
-                <!-- <div *ngIf="selectedEpisode && selectedEpisode._score" class="form-group">
-                      <label>Score</label>
-                      <input class="form-control" placeholder="Score" disabled="disabled" value="{{selectedEpisode._score}}" />
-                    </div> -->
-                <!-- <div *ngIf="selectedEpisode && selectedEpisode._id" class="form-group">
-                      <label>Id</label>
-                      <input class="form-control" placeholder="Id" disabled="disabled" value="{{selectedEpisode._id}}" />
-                    </div> -->
                 <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.status" class="form-group">
                   <label>Status</label>
                   <input class="form-control" placeholder="Status" disabled="disabled" value="{{selectedEpisode._source.status}}" />
@@ -220,15 +223,6 @@
                     <option *ngFor="let intent of selectedEpisode._source.intents">{{intent.intentName}}</option>
                   </select>
                 </div>
-                <!-- <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.name" class="form-group">
-                      <label>Name</label>
-                      <input class="form-control" placeholder="Name" disabled="disabled" value="{{selectedEpisode._source.name}}" />
-                    </div> -->
-                <!-- <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.conversationId" class="form-group">
-                      <label>Conversation Id</label>
-                      <input class="form-control" placeholder="Conversation Id" disabled="disabled" value="{{selectedEpisode._source.conversationId}}"
-                      />
-                    </div> -->
                 <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.entities && selectedEpisode._source.entities.length > 0"
                   class="form-group">
                   <label>Entities</label>
@@ -240,11 +234,6 @@
                   <label>Mode</label>
                   <input class="form-control" placeholder="Mode" disabled="disabled" value="{{selectedEpisode._source.mode}}" />
                 </div>
-                <!-- <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.lastEpisodeStatus" class="form-group">
-                      <label>Last Episode Status</label>
-                      <input class="form-control" placeholder="Last Episode Status" disabled="disabled" value="{{selectedEpisode._source.lastEpisodeStatus}}"
-                      />
-                    </div> -->
                 <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.startTime" class="form-group">
                   <label>Start Time</label>
                   <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode._source.startTime | date: 'dd/MM/y, h:mm:ss a'}}"
@@ -269,7 +258,6 @@
                 </div>
               </form>
             </ba-card>
-
             <ba-card baCardClass="with-scroll" class="data-table-container col-md-6 col-sm-12" cardTitle="Conversation">
               <form style="max-height: 400px; overflow:scroll">
                 <thead>
@@ -304,86 +292,103 @@
         </div>
         <div role="tabpanel" class="tab-pane fade" id="tabDetails" aria-labelledby="details-tab">
           <div class="row">
-            <div class="col-md-8 col-sm-12">
-              <form class="row form-inline">
-                <div class="form-group col-md-12 alert-danger" style="margin-bottom: 10px;" *ngIf="responseError && responseError.length > 0"
-                  [innerHTML]="responseError"></div>
-
-                <div class="form-group col-md-3 col-sm-6" style="margin-bottom: 10px;" *ngFor="let dataPoint of dataPoints; let index = index">
-                  <label *ngIf="index % 2 === 0 && dataPoint.dataType !== 'ANY'">{{dataPoint.dataPointLabel}}</label>
-
-                  <input *ngIf="index % 2 === 1 && (dataPoint.dataType === '' || dataPoint.dataType === 'STRING')" type="text" class="form-control col-md-12 col-sm-12"
-                    [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
-                  />
-
-                  <input *ngIf="index % 2 === 1 && dataPoint.dataType === 'NUMBER'" type="number" class="form-control col-md-12 col-sm-12"
-                    [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
-                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
-                  />
-
-                  <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'BOOLEAN'" class="selectpicker form-control col-md-12 col-sm-12"
-                    [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataPoint.value = $event">
-                    <option [ngValue]="true">True</option>
-                    <option [ngValue]="false">False</option>
-                  </select>
-
-                  <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'SINGLE_SELECT'" class="selectpicker form-control col-md-12 col-sm-12"
-                    [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataPoint.value = $event">
-                    <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
-                  </select>
-
-                  <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'MULTI_SELECT'" multiple="true" class="selectpicker form-control col-md-12 col-sm-12"
-                    [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataPoint.value = $event">
-                    <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
-                  </select>
-
-                  <tag-input *ngIf="index % 2 === 1 && dataPoint.dataType === 'ARRAY'" class="custom-input-tag-border form-control col-md-12 col-sm-12"
-                    [title]="dataPoint.description" [(ngModel)]="dataPoint.value" name="value" [modelAsStrings]="true" [editable]="true"
-                    [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'" [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'"
-                    theme="minimal">
-                  </tag-input>
+            <form>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <button *ngIf="selectedState.statusCd !== 'CLOSED'" type="button" class="btn btn-default btn-with-icon" (click)="updateFlow()">
+                  <i class="ion-checkmark"></i>Update Process</button>&nbsp;&nbsp;&nbsp;
+                <button *ngIf="selectedState.statusCd !== 'CLOSED' && Users.length > 0 && selectedState.assignedUserId.length > 0" type="button"
+                  data-toggle="modal" data-target="#userModal" class="btn btn-default btn-with-icon">
+                  <i class="ion-person-add"></i>Allocate User</button>&nbsp;&nbsp;&nbsp;
+                <button *ngIf="selectedState.statusCd !== 'CLOSED' && userHierarchy.parentUserId.length > 0  && selectedState.assignedUserId.length > 0"
+                  type="button" (click)="escalate()" class="btn btn-default btn-with-icon">
+                  <i class="ion-alert-circled"></i>Escalate Task</button>&nbsp;&nbsp;&nbsp;
+                <button *ngIf="selectedState.statusCd !== 'CLOSED' && selectedState.assignedUserGroupCd !== 'Personal' " type="button" (click)="reserve()"
+                  class="btn btn-default btn-with-icon">
+                  <i class="ion-archive"></i>Reserve Task</button>
+              </div>
+            </form>
+          </div>
+          <hr/>
+          <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-12">
+              <div class="card card-default">
+                <div class="card-header">
+                  <b>Input Parameters</b>
                 </div>
-              </form>
-              <form>
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                  <button *ngIf="selectedState.statusCd !== 'CLOSED'" type="button" class="btn btn-primary" (click)="updateFlow()">
-                    Update Flow
-                  </button>
-                  <button *ngIf="selectedState.statusCd !== 'CLOSED' && Users.length > 0 && selectedState.assignedUserId.length > 0" type="button"
-                    data-toggle="modal" data-target="#userModal" class="btn btn-primary">
-                    Allocate
-                  </button>
-                  <button *ngIf="selectedState.statusCd !== 'CLOSED' && userHierarchy.parentUserId.length > 0  && selectedState.assignedUserId.length > 0"
-                    type="button" (click)="escalate()" class="btn btn-primary">
-                    Escalate
-                  </button>
-                  <button *ngIf="selectedState.statusCd !== 'CLOSED' && selectedState.assignedUserGroupCd !== 'Personal' " type="button" (click)="reserve()"
-                    class="btn btn-primary">
-                    Reserve
-                  </button>
+                <div class="card-block">
+                  <form class="row form-inline">
+                    <div class="form-group col-md-12 alert-danger" style="margin-bottom: 10px;" *ngIf="responseError && responseError.length > 0"
+                      [innerHTML]="responseError"></div>
+
+                    <div class="form-group col-md-3 col-sm-6" style="margin-bottom: 10px;" *ngFor="let dataPoint of dataPoints; let index = index">
+                      <label *ngIf="index % 2 === 0 && dataPoint.dataType !== 'ANY'">{{dataPoint.dataPointLabel}} :</label>
+
+                      <input *ngIf="index % 2 === 1 && (dataPoint.dataType === '' || dataPoint.dataType === 'STRING')" type="text" class="form-control col-md-12 col-sm-12"
+                        [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
+                      />
+
+                      <input *ngIf="index % 2 === 1 && dataPoint.dataType === 'NUMBER'" type="number" class="form-control col-md-12 col-sm-12"
+                        [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
+                        onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                      />
+
+                      <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'BOOLEAN'" class="selectpicker form-control col-md-12 col-sm-12"
+                        [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataPoint.value = $event">
+                        <option [ngValue]="true">True</option>
+                        <option [ngValue]="false">False</option>
+                      </select>
+
+                      <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'SINGLE_SELECT'" class="selectpicker form-control col-md-12 col-sm-12"
+                        [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataPoint.value = $event">
+                        <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
+                      </select>
+
+                      <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'MULTI_SELECT'" multiple="true" class="selectpicker form-control col-md-12 col-sm-12"
+                        [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataPoint.value = $event">
+                        <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
+                      </select>
+
+                      <tag-input *ngIf="index % 2 === 1 && dataPoint.dataType === 'ARRAY'" class="custom-input-tag-border form-control col-md-12 col-sm-12"
+                        [title]="dataPoint.description" [(ngModel)]="dataPoint.value" name="value" [modelAsStrings]="true"
+                        [editable]="true" [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
+                        [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'" theme="minimal">
+                      </tag-input>
+                    </div>
+                  </form>
                 </div>
-              </form>
+              </div>
             </div>
             <div *ngIf="selectedState.predictedParameters" class="col-md-4 col-sm-12">
-              <div class="row" *ngFor="let e of selectedState.predictedParameters | keys">
-                <div class="col-md-6 col-sm-12">
-                  <label>{{e.key}}</label>
+              <div class="card card-default">
+                <div class="card-header">
+                  <b>Predicted Parameters</b>
                 </div>
-                <div class="col-md-6 col-sm-12">
-                  <label>{{e.value}}</label>
+                <div class="card-block">
+                  <div class="row" *ngFor="let e of selectedState.predictedParameters | keys">
+                    <div class="col-md-6 col-sm-12">
+                      <label>{{e.key}}</label> :
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                      <label>{{e.value}}</label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div role="tabpanel" class="tab-pane fade" id="tabFlow" aria-labelledby="flow-tab">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)"><i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>
-                <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)"><i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>
-                <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)"><i class="ion-arrow-expand"></i>Zoom Actual</button>
-                <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)"><i class="ion-printer"></i>Print Preview</button>
-              </div>
-              <br>
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
+              <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
+              <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
+              <i class="ion-arrow-expand"></i>Zoom Actual</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)">
+              <i class="ion-printer"></i>Print Preview</button>
+          </div>
+          <br>
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div id="editorGrid" class="col-md-12 col-sm-12 col-xs-12" style="height:68vh;overflow:hidden;margin-bottom:5px;border-style:solid;border-color:#1C2B36;"></div>
           </div>

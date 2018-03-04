@@ -34,6 +34,7 @@ export class State extends BaseModel {
   stateMachineInstanceModelId: string;
   assignedUserGroupCd: string;
   assignedUserId: string;
+  assignedUserName: string;
   startTime: Time;
   endTime: Time;
   allocatedTime: Time;
@@ -44,6 +45,9 @@ export class State extends BaseModel {
   predictedParameters: Map<string,string>;
   businessCost: Amount;
   errorMessageMap: any;
+  headerParamList: string[];
+  flagged:string;
+  flagLevel:number;
 }
 
 export class CommonInsightWrapper extends BaseModel {
