@@ -19,12 +19,15 @@ export class ArchivedComponent implements OnInit, OnDestroy {
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
 
+  progressBarFlag: boolean = false;
+
   constructor(private stateService: StateService) {
     this.groupStates = [];
     this.personalStates = [];
   }
 
   ngOnInit(): void {
+    this.progressBarFlag = true;
     this.fetchData();
   }
 
@@ -42,23 +45,47 @@ export class ArchivedComponent implements OnInit, OnDestroy {
     this.loadingGroup = true;
 
     this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('CLOSED', 'Group')
-    .subscribe(states => {
-      this.loadingGroup = false;
-      this.groupStates = states;
-    }, error => {
-      this.loadingGroup = false;
-    });
+      .subscribe(states => {
+        this.loadingGroup = false;
+        this.groupStates = states;
+
+        if (!this.loadingGroup && !this.loadingPersonal) {
+          this.progressBarFlag = false;
+          // this.baThemeSpinner.hide();
+        }
+
+      }, error => {
+        this.loadingGroup = false;
+
+        if (!this.loadingGroup && !this.loadingPersonal) {
+          this.progressBarFlag = false;
+          // this.baThemeSpinner.hide();
+        }
+
+      });
 
     this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('CLOSED', 'Personal')
-    .subscribe(states => {
-      this.loadingPersonal = false;
-      this.personalStates = states;
-    }, error => {
-      this.loadingPersonal = false;
-    });
+      .subscribe(states => {
+        this.loadingPersonal = false;
+        this.personalStates = states;
+
+        if (!this.loadingGroup && !this.loadingPersonal) {
+          this.progressBarFlag = false;
+          // this.baThemeSpinner.hide();
+        }
+
+      }, error => {
+        this.loadingPersonal = false;
+
+        if (!this.loadingGroup && !this.loadingPersonal) {
+          this.progressBarFlag = false;
+          // this.baThemeSpinner.hide();
+        }
+
+      });
   }
 
   onSelect(selectedData: State): void {
-    
+
   }
 }

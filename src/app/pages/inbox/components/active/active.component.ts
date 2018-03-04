@@ -18,6 +18,7 @@ export class ActiveComponent implements OnInit, OnDestroy {
   loadingPersonal: boolean = false;
   groupHeaderParamList: string[];
   personalHeaderParamList: string[];
+  progressBarFlag: boolean = false;
 
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
@@ -30,7 +31,8 @@ export class ActiveComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.baThemeSpinner.show();
+    //this.baThemeSpinner.show();
+    this.progressBarFlag = true;
     this.fetchData();
   }
 
@@ -56,13 +58,15 @@ export class ActiveComponent implements OnInit, OnDestroy {
         }
 
         if (!this.loadingGroup && !this.loadingPersonal) {
-          this.baThemeSpinner.hide();
+          this.progressBarFlag = false;
+          // this.baThemeSpinner.hide();
         }
 
       }, error => {
         this.loadingGroup = false;
         if (!this.loadingGroup && !this.loadingPersonal) {
-          this.baThemeSpinner.hide();
+          this.progressBarFlag = false;
+          // this.baThemeSpinner.hide();
         }
       });
 
@@ -75,12 +79,14 @@ export class ActiveComponent implements OnInit, OnDestroy {
         }
 
         if (!this.loadingGroup && !this.loadingPersonal) {
-          this.baThemeSpinner.hide();
+          this.progressBarFlag = false;
+          // this.baThemeSpinner.hide();
         }
       }, error => {
         this.loadingPersonal = false;
         if (!this.loadingGroup && !this.loadingPersonal) {
-          this.baThemeSpinner.hide();
+          this.progressBarFlag = false;
+          // this.baThemeSpinner.hide();
         }
       });
   }
