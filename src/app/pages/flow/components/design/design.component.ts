@@ -78,6 +78,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   // Warning Modal properties
   warningHeader: string;
   warningBody: string;
+
+  progressBarFlag: boolean = false;
   
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
