@@ -456,3 +456,63 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" attr.aria-labelledby="successModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="successModal">
+          State Information
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+          <form class="form-horizontal">
+              <div class="form-group row">
+                  <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Name :</label>
+                  <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.name}}</label>
+                </div>
+              <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Duration :</label>
+                <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.duration}}{{'  seconds'}}</label>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Early Start :</label>
+                <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.earlystart}}{{'  seconds'}}</label>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Early Finish :</label>
+                <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.earlyfinish}}{{'  seconds'}}</label>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Critical :</label>
+                <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.is_critical}}</label>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Late Start :</label>
+                <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.latestart}}{{'  seconds'}}</label>
+              </div>
+              <div class="form-group row">
+                  <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Slack :</label>
+                  <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.slack}}{{'  seconds'}}</label>
+                </div>
+              <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Late Finish :</label>
+                <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.latefinish}}</label>
+              </div>
+              
+            </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="onBack()">Dismiss</button>
+      </div>
+    </div>
+  </div>
+</div>

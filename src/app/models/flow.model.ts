@@ -83,6 +83,9 @@ export class AllocationModel {
   groups: string[];
   api: string;
   allocatedUserCd: string;
+  capabilities:string[];
+	stickyStates:string[];
+	emailerAPI:string;
 
   constructor() {
     this.allocationGroup = '';
@@ -90,6 +93,9 @@ export class AllocationModel {
     this.allocationType = '';
     this.api = '';
     this.allocatedUserCd = '';
+    this.capabilities = [];
+    this.stickyStates = [];
+    this.emailerAPI = '';
   }
 }
 
@@ -163,6 +169,40 @@ export class StateModel {
     this.mandatoryDataPoints = [];
    
   }
+}
+
+
+export class StateInfoModel{
+
+	name:string; 
+	duration:any;
+	is_critical:boolean;
+	earlyfinish:any;
+	slack:any;
+	latefinish:any;
+	predecessors:string[];
+	predecessor_ids:string[];
+	earlystart:any;
+	latestart:any;
+	flowId:string;
+	machineType:string;
+  type:string;
+  constructor(){
+    this.name = "";
+    this.duration = 0.0;
+    this.is_critical = false;
+    this.earlyfinish = 0.0;
+    this.slack = 0.0;
+    this.latefinish = 0.0;
+    this.predecessors = [];  
+    this.predecessor_ids = [];
+    this.earlystart = 0.0;
+    this.latestart = 0.0;
+    this.flowId = "";
+    this.machineType = "";
+    this.type = "";
+  }
+
 }
 
 export class Transition {

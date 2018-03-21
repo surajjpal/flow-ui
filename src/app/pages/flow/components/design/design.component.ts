@@ -7,6 +7,7 @@ declare var exportGraphXml: any;
 declare var updateNewEdge: any;
 declare var deleteNewEdge: any;
 declare var updateStateTrigger: any;
+declare var styleInfo:any;
 
 import { Component, Input, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -16,13 +17,13 @@ import { Subscription } from 'rxjs/Subscription';
 // Model Imports
 import {
   GraphObject, DataPoint, Classifier, StateModel,
-  EventModel, Expression, Transition, ManualAction, DataPointValidation
+  EventModel, Expression, Transition, ManualAction, DataPointValidation,StateInfoModel
 } from '../../../../models/flow.model';
 import { ApiConfig, ApiKeyExpressionMap } from '../../../../models/setup.model';
 
 // Service Imports
 import { GraphService, CommunicationService } from '../../../../services/flow.service';
-
+import { StateService, DataCachingService } from '../../../../services/inbox.service';
 @Component({
   selector: 'api-flow-design',
   templateUrl: './design.component.html'
@@ -71,7 +72,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   childStateList: string[];
   selectedEvent: EventModel;
   bulkExpressions: string = '';
-
+  orPayload:any; 
+  stateInfoModels:StateInfoModel[];
+  selectedModel:StateInfoModel;
   // Warning Modal properties
   warningHeader: string;
   warningBody: string;
@@ -79,11 +82,13 @@ export class DesignComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
   private subscriptionApiConfig: Subscription;
+  private subscriptionOrPayload: Subscription;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private zone: NgZone,
+    private stateService: StateService,
     private graphService: GraphService,
     private communicationService: CommunicationService
   ) {
@@ -129,6 +134,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   load(): void {
     this.getSourceEntryActions();
     this.getApiConfigLookup();
+    
 
     if (!this.graphObject || this.graphObject === null) {
       this.graphObject = new GraphObject();
@@ -137,6 +143,26 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
 
     new designFlowEditor(this.graphObject.xml, this.readOnly);
+    this.fetchStatesOrPayload();
+  }
+
+  fetchStatesOrPayload(){
+    this.subscriptionOrPayload = this.stateService.getStatesByMachineType(this.graphObject.machineType)
+    .subscribe(stateInfoModels => {
+      if (stateInfoModels) {
+        this.stateInfoModels = stateInfoModels;
+        new styleInfo(this.stateInfoModels,"design");
+      }
+      else{
+        this.stateInfoModels = null;
+      }
+     });
+    
+  }
+
+  storeModel(model){
+    
+    this.selectedModel = model;
   }
 
   getSourceEntryActions() {

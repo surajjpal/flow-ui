@@ -1404,6 +1404,12 @@ styleStates = function (activeStateIdList, closedStateIdList) {
   addTaskIconOverlays(graph);
 }
 
+styleInfo = function(orModels,type){
+  
+  addInfoOverlays(graph,orModels,type);
+}
+
+
 
 updateNewEdge = function (event) {
   if (newEdge) {
@@ -2078,6 +2084,64 @@ function deleteUserSubtree(hierarchygraph, cell) {
   hierarchygraph.removeCells(cells);
 };
 
+addInfoOverlays = function (graph,orModels,type) {
+  if (graph != null && graph.getModel() != null) {
+    graph.getModel().beginUpdate();
+    try {
+      var vertices = graph.getChildVertices(graph.getDefaultParent());
+      if (vertices != null) {
+        for (var vertex of vertices) {
+          if (vertex != null && vertex.id != null) {
+             if (vertex.value.stateCd != null && orModels != null) {
+                for (var model of orModels){
+                  if (model.name === vertex.value.stateCd){
+                    var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/info.png', 18, 18), 'Information');
+                    overlay.align = mxConstants.ALIGN_LEFT;
+                    overlay.verticalAlign = mxConstants.ALIGN_TOP;
+                    
+                    overlay.cursor = 'hand';
+                    overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
+                      try {
+                  
+                        var cell = evt.getProperty('cell')
+                        for (var model of orModels){
+                          if(model.name == cell.value.stateCd){
+                            //showModal("infoModal")
+                            if(type == "archive"){
+                              window['taskDetailsRef'].zone.run(() => { window['taskDetailsRef'].component.storeModel(model); })
+                              $("#infoModal").modal();
+                            }
+                            if(type == "design"){
+                              window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.storeModel(model); })
+                              $("#infoModalDesign").modal();
+                            }
+                          }
+                        }
+                      }
+                      catch (exception) {
+                        // console.log(exception);
+                      }
+                  
+                    }));
+                    
+                    graph.addCellOverlay(vertex, overlay);
+                  }
+                }
+                }
+              }
+          }
+        }
+    } finally {
+      graph.getModel().endUpdate();
+    }
+  }
+}
+
+
+
+
+
+
 addTaskIconOverlays = function (graph) {
   if (graph != null && graph.getModel() != null) {
     graph.getModel().beginUpdate();
@@ -2097,8 +2161,15 @@ addTaskIconOverlays = function (graph) {
                 overlay.align = mxConstants.ALIGN_LEFT;
                 overlay.verticalAlign = mxConstants.ALIGN_BOTTOM;
                 graph.addCellOverlay(vertex, overlay);
+              }else if (vertex.value.stateCd != null && orModels != null) {
+                
+                var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/info.png', 18, 18), 'Information');
+                overlay.align = mxConstants.ALIGN_LEFT;
+                overlay.verticalAlign = mxConstants.ALIGN_BOTTOM;
+                graph.addCellOverlay(vertex, overlay);
+                }
+                
               }
-            }
           }
         }
       }

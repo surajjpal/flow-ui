@@ -4,7 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
 import { State,CommonInsightWrapper } from '../models/tasks.model';
-import { GraphObject } from '../models/flow.model';
+import { GraphObject,StateInfoModel } from '../models/flow.model';
 
 import { environment } from '../../environments/environment';
 
@@ -89,14 +89,14 @@ export class StateService {
     return subject.asObservable();
   }
 
-  getInsightForState(stateId: string): Observable<CommonInsightWrapper> {
-    const subject = new Subject<CommonInsightWrapper>();
+  getInsightForState(stateId: string): Observable<any> {
+    const subject = new Subject<any>();
 
   
 
     const url = `${environment.server + environment.stateinsight}${stateId}`;
 
-    this.httpClient.get<CommonInsightWrapper>(
+    this.httpClient.get<any>(
       url,
       {
         observe: 'response',
@@ -104,7 +104,7 @@ export class StateService {
         withCredentials: true
       }
     ).subscribe(
-      (response: HttpResponse<CommonInsightWrapper>) => {
+      (response: HttpResponse<any>) => {
         if (response.body) {
           subject.next(response.body);
         }
@@ -119,6 +119,71 @@ export class StateService {
 
     return subject.asObservable();
   }
+
+
+  getStates(machineId: string): Observable<StateInfoModel[]> {
+    const subject = new Subject<StateInfoModel[]>();
+
+  
+
+    const url = `${environment.server + environment.orPayload}${machineId}`;
+
+    this.httpClient.get<StateInfoModel[]>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<StateInfoModel[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+
+  getStatesByMachineType(machineType: string): Observable<StateInfoModel[]> {
+    const subject = new Subject<StateInfoModel[]>();
+
+  
+
+    const url = `${environment.server + environment.orPayloadMachineType}${machineType}`;
+
+    this.httpClient.get<StateInfoModel[]>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<StateInfoModel[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+  
 
   getXMLforActiveState(stateId: string): Observable<GraphObject> {
     const subject = new Subject<GraphObject>();

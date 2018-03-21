@@ -68,10 +68,24 @@
             <input type="text" class="form-control" required id="allocationGroup" placeholder="Allocate to group" [(ngModel)]="tempState.allocationModel.allocationGroup"
               name="allocationGroup" />
           </div>
-          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'Least_Allocated'|| tempState.allocationModel.allocationType === 'Round_Robin' ">
-            <label for="groups">Allocate to groups</label>
-            <tag-input [(ngModel)]="tempState.allocationModel.groups" name="groups" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]"
-              placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
+
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType !== 'Group'">
+              <label for="allocationGroup">Allocate to default group</label>
+              <input type="text" class="form-control" required id="allocationGroup" placeholder="Allocate to default group" [(ngModel)]="tempState.allocationModel.allocationGroup"
+                name="allocationGroup" />
+          </div>
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'Least_Allocated'|| tempState.allocationModel.allocationType === 'Round_Robin'|| tempState.allocationModel.allocationType === 'Maximum_Efficiency' || tempState.allocationModel.allocationType === 'Seperation_Of_Duties' || tempState.allocationModel.allocationType === 'Random'">
+              <label for="groups">Allocate to groups</label>
+              <tag-input [(ngModel)]="tempState.allocationModel.groups" name="groups" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
+          </div>
+
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'Capability'">
+              <label for="groups">Allocate to Capabilities</label>
+                  <tag-input [(ngModel)]="tempState.allocationModel.capabilities" name="capabilities" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
+          </div>
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'Retain_Familiar'">
+              <label for="groups">Allocate to States</label>
+                  <tag-input [(ngModel)]="tempState.allocationModel.stickyStates" name="stickyStates" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'User'">
             <label for="allocationUser">Allocate to User</label>
@@ -79,10 +93,15 @@
               name="allocatedUserCd" />
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'  && tempState.allocationModel.allocationType === 'User'">
-            <label for="api">Email API</label>
-            <input type="text" class="form-control" required id="api" placeholder="Email API" [(ngModel)]="tempState.allocationModel.api"
+            <label for="api">API</label>
+            <input type="text" class="form-control" required id="api" placeholder="API" [(ngModel)]="tempState.allocationModel.api"
               name="api" />
           </div>
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'  && tempState.allocationModel.allocationType !== 'Group'">
+              <label for="api">Email API</label>
+              <input type="text" class="form-control" required id="api" placeholder="Email API" [(ngModel)]="tempState.allocationModel.emailerAPI"
+                name="api" />
+            </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'  && tempState.allocationModel.allocationType === 'API'">
             <label for="api">API</label>
             <input type="text" class="form-control" required id="api" placeholder="API" [(ngModel)]="tempState.allocationModel.api" name="api"
@@ -974,6 +993,69 @@
   </div>
 </div>
 
+
+<div class="modal fade" id="infoModalDesign" tabindex="-1" role="dialog" attr.aria-labelledby="successModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="successModal">
+            State Information
+          </h4>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+  
+        <!-- Modal Body -->
+        <div class="modal-body" id="modal_body">
+            <form class="form-horizontal">
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Name :</label>
+                    <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.name}}</label>
+                  </div>
+                <div class="form-group row">
+                  <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Duration :</label>
+                  <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.duration}}{{'  seconds'}}</label>
+                </div>
+                <div class="form-group row">
+                  <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Early Start :</label>
+                  <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.earlystart}}{{'  seconds'}}</label>
+                </div>
+                <div class="form-group row">
+                  <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Early Finish :</label>
+                  <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.earlyfinish}}{{'  seconds'}}</label>
+                </div>
+                <div class="form-group row">
+                  <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Critical :</label>
+                  <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.is_critical}}</label>
+                </div>
+                <div class="form-group row">
+                  <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Late Start :</label>
+                  <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.latestart}}{{'  seconds'}}</label>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Slack :</label>
+                    <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.slack}}{{'  seconds'}}</label>
+                  </div>
+                <div class="form-group row">
+                  <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Late Finish :</label>
+                  <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.latefinish}}</label>
+                </div>
+                
+              </form>
+        </div>
+  
+        <!-- Modal Footer -->
+        <div class="modal-footer" id="modal_footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" (click)="onBack()">Dismiss</button>
+        </div>
+    </div>
+  </div>
+</div>
+  
+
 <!-- Warning Modal -->
 <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -1001,6 +1083,9 @@
     </div>
   </div>
 </div>
+
+
+
 
 
 <!-- /page content -->

@@ -2,21 +2,24 @@ declare var designFlowEditor: any;
 declare var styleStates: any;
 declare var showModal: any;
 declare var graphTools: any;
+declare var styleInfo:any;
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
+
+import { Component, OnInit, OnDestroy,NgZone } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
 import {User, UserHierarchy, UserGroup,UserGraphObject} from '../../../../models/user.model';
 import { State,CommonInsightWrapper } from '../../../../models/tasks.model';
-import { GraphObject, DataPoint, StateModel, ManualAction } from '../../../../models/flow.model';
+import { GraphObject, DataPoint, StateModel, ManualAction,StateInfoModel } from '../../../../models/flow.model';
 import { Episode, ChatMessage } from '../../../../models/conversation.model';
 
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
 import { ConversationService } from '../../../../services/agent.service';
 import { FetchUserService, UserGraphService ,AllocateTaskToUser} from '../../../../services/userhierarchy.service';
 import { UniversalUser } from '../../../../services/shared.service';
+import { Map } from 'd3';
 
 @Component({
   selector: 'api-task-details',
@@ -46,6 +49,10 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   allocatedUserId:string;
   userHierarchy:UserHierarchy = new UserHierarchy();
   commonInsightWrapper: CommonInsightWrapper;
+  stateInfoModels:StateInfoModel[];
+  orPayload:any; 
+  selectedModel:StateInfoModel;
+  
   private subscription: Subscription;
   private subscriptionEpisode: Subscription;
   private subscriptionChatMessages: Subscription;
@@ -54,6 +61,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   
 
   constructor(
+    private zone: NgZone,
     private router: Router, 
     private route: ActivatedRoute,
     private stateService: StateService,
@@ -63,7 +71,9 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     private fetchUserService:FetchUserService,
     private allocateTaskToUser:AllocateTaskToUser,
     private universalUser: UniversalUser
-  ) { }
+  ) { 
+    window['taskDetailsRef'] = { component: this, zone: zone };
+  }
 
   ngOnInit(): void {
     //document.getElementById('#alocateButton').style.visibility = 'hidden';
@@ -79,6 +89,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     }
 
     this.fetchInsight();
+    this.fetchStatesOrPayload();
     this.getEpisode();
     this.extractParams();
     this.initUI();
@@ -114,6 +125,25 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
         }
       });
     }
+
+  fetchStatesOrPayload(){
+    this.subscriptionInsight = this.stateService.getStates(this.selectedState.stateMachineInstanceModelId)
+    .subscribe(stateInfoModels => {
+      if (stateInfoModels) {
+        this.stateInfoModels = stateInfoModels;
+        new styleInfo(this.stateInfoModels,"archive");
+      }
+      else{
+        this.stateInfoModels = null;
+      }
+    });
+    
+  }
+
+  storeModel(model){
+    
+    this.selectedModel = model;
+  }
 
   getUserList(){
     
