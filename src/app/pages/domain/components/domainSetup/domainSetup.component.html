@@ -221,10 +221,16 @@
                     <mfDefaultSorter by="lang">Language</mfDefaultSorter>
                   </th>
                   <th>
+                    <mfDefaultSorter by="stage">Stage</mfDefaultSorter>
+                  </th>
+                  <th>
                     <mfDefaultSorter by="response">Response</mfDefaultSorter>
                   </th>
                   <th>
                     <mfDefaultSorter by="actionHTML">Action HTML</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="disableUserInput">Disable User Input</mfDefaultSorter>
                   </th>
                 </tr>
               </thead>
@@ -232,8 +238,10 @@
                 <tr *ngFor="let response of mfResponse.data" (click)="onResponseSelect(response)" data-toggle="modal" data-target="#responseModal">
                   <td>{{response.expression}}</td>
                   <td>{{response.lang}}</td>
+                  <td>{{response.stage}}</td>
                   <td>{{response.response}}</td>
                   <td>{{response.actionHTML}}</td>
+                  <td>{{response.disableUserInput}}</td>
                 </tr>
               </tbody>
               <tfoot>
@@ -388,6 +396,13 @@
             <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="expressionLabel" placeholder="Expression" [(ngModel)]="tempGoal.expression"
               name="expression" />
           </div>
+          <div class="form-group">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="dependentGoalExpressionLabel">
+              Dependent Goal Expression
+            </label>
+            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="dependentGoalExpressionLabel" placeholder="Dependent Goal Expression" [(ngModel)]="tempGoal.dependentGoalExpression"
+              name="dependentGoalExpression" />
+          </div>
           <div class="row">
             <api-checkbox class="col-md-3" [checked]="tempGoal.flowFlag" [label]="'Flow Flag'" (event)="tempGoal.flowFlag = $event.target.checked"></api-checkbox>
             <api-checkbox class="col-md-3" [checked]="tempGoal.validationCheck" [label]="'Validation Check'" (event)="tempGoal.validationCheck = $event.target.checked"></api-checkbox>
@@ -433,7 +448,7 @@
               <div *ngIf="index == 0" [id]="'gsTabHeading' + index" class="card-header" heightStyle="content" role="tab">
                 <h5 class="mb-0">
                   <a data-toggle="collapse" data-parent="#goalStepAccordion" [href]="'#gsCollapse' + index" aria-expanded="true" [attr.aria-controls]="'gsCollapse' + index">
-                    {{goalStep.goalResponse.length > 0 ? goalStep.goalResponse : 'Click to expand ' + goalStep.goalExpression}}
+                    {{'Click to expand ' + goalStep.goalExpression}}
                   </a>
                 </h5>
               </div>
@@ -441,7 +456,7 @@
                 <h5 class="mb-0">
                   <a class="collapsed" data-toggle="collapse" data-parent="#goalStepAccordion" [href]="'#gsCollapse' + index" aria-expanded="false"
                     [attr.aria-controls]="'gsCollapse' + index" >
-                    {{goalStep.goalResponse.length > 0 ? goalStep.goalResponse : 'Click to expand ' + goalStep.goalExpression}}
+                    {{'Click to expand ' + goalStep.goalExpression}}
                   </a>
                 </h5>
               </div>
@@ -450,13 +465,12 @@
                 <div class="card-block">
                   <form>
                     <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsLanguage' + index">
-                        Language
+                      <label class="col-md-12 col-sm-12 col-xs-12" required for="'gsSequence' + index">
+                        Sequence
                       </label>
-                      <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'gsLanguage' + index" title="Select Language"
-                      [(ngModel)]="goalStep.lang" name="lang">
-                        <option *ngFor="let language of selectedDomain.langSupported" [ngValue]="language">{{language}}</option>
-                      </select>
+                      <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'gsSequence' + index" placeholder="Sequence"
+                        min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                        [(ngModel)]="goalStep.sequence" name="sequence" />
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsGoalExpression' + index">
@@ -464,13 +478,6 @@
                       </label>
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsGoalExpression' + index" placeholder="Expression"
                         [(ngModel)]="goalStep.goalExpression" name="goalExpression" />
-                    </div>
-                    <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsGoalResponse' + index">
-                        Goal Response
-                      </label>
-                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsGoalResponse' + index" placeholder="Goal Response"
-                        [(ngModel)]="goalStep.goalResponse" name="goalResponse" />
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsApi' + index">
@@ -485,13 +492,6 @@
                       </label>
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsResponseExpression' + index" placeholder="Response Expression"
                         [(ngModel)]="goalStep.responseExpression" name="responseExpression" />
-                    </div>
-                    <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsActionHtml' + index">
-                        Action HTML
-                      </label>
-                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsActionHtml' + index" placeholder="Action HTML"
-                        [(ngModel)]="goalStep.actionHtml" name="actionHtml" />
                     </div>
                     <div class="row">
                       <api-checkbox class="col-md-4" [checked]="goalStep.authRequired" [label]="'Auth Required'" (event)="goalStep.authRequired = $event.target.checked"></api-checkbox>
@@ -522,32 +522,233 @@
                         [(ngModel)]="goalStep.dependencyExpression" name="dependencyExpression" />
                     </div>
                     <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" required for="'gsSequence' + index">
-                        Sequence
-                      </label>
-                      <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'gsSequence' + index" placeholder="Sequence"
-                        min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
-                        [(ngModel)]="goalStep.sequence" name="sequence" />
-                    </div>
-                    <div class="form-group">
                       <button type="button" class="btn btn-danger" (click)="deleteGoalStep(goalStep)">
                         Remove Goal Response
                       </button>
                     </div>
                   </form>
+
+                  <div [id]="'gsLangAccordion' + index" role="tablist" aria-multiselectable="true" *ngIf="selectedDomain.langSupported.length > 0">
+                    <div *ngFor="let language of selectedDomain.langSupported; let langIndex=index" class="panel">
+                      <div class="card">
+                        <div *ngIf="langIndex == 0" [id]="'gsLangTabHeading' + index + langIndex" class="card-header" heightStyle="content" role="tab">
+                          <h5 class="mb-0">
+                            <a data-toggle="collapse" [attr.data-parent]="'#gsLangAccordion' + index" [href]="'#gsLangCollapse' + index + langIndex" aria-expanded="true" [attr.aria-controls]="'gsLangCollapse' + index + langIndex">
+                              Responses for {{language}} language
+                            </a>
+                          </h5>
+                        </div>
+                        <div *ngIf="langIndex != 0" [id]="'gsLangTabHeading' + index + langIndex" class="card-header" heightStyle="content" role="tab">
+                          <h5 class="mb-0">
+                            <a class="collapsed" data-toggle="collapse" [attr.data-parent]="'#gsLangAccordion' + index" [href]="'#gsLangCollapse' + index + langIndex" aria-expanded="false"
+                              [attr.aria-controls]="'gsLangCollapse' + index + langIndex" >
+                              Responses for {{language}} language
+                            </a>
+                          </h5>
+                        </div>
+                        <div *ngIf="langIndex == 0" [id]="'gsLangCollapse' + index + langIndex" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'gsLangTabHeading' + index + langIndex">
+                          <div class="card-block">
+                            <div [id]="'gsRespAccordion' + index + langIndex" role="tablist" aria-multiselectable="true" *ngIf="goalStep.responses && goalStep.responses.length > 0">
+                              <div *ngFor="let gsResponse of getLangSpecificResponses(goalStep.responses, language); let respIndex=index" class="panel">
+                                <div class="card">
+                                  <div *ngIf="respIndex == 0" [id]="'gsRespTabHeading' + index + langIndex + respIndex" class="card-header" heightStyle="content" role="tab">
+                                    <h5 class="mb-0">
+                                      <a data-toggle="collapse" [attr.data-parent]="'#gsRespAccordion' + index + langIndex" [href]="'#gsRespCollapse' + index + langIndex + respIndex" aria-expanded="true"
+                                      [attr.aria-controls]="'gsRespCollapse' + index + langIndex + respIndex">
+                                        {{gsResponse.response ? gsResponse.response : "(Emtpy Response)"}}
+                                      </a>
+                                    </h5>
+                                  </div>
+                                  <div *ngIf="respIndex != 0" [id]="'gsRespTabHeading' + index + langIndex + respIndex" class="card-header" heightStyle="content" role="tab">
+                                    <h5 class="mb-0">
+                                      <a class="collapsed" data-toggle="collapse" [attr.data-parent]="'#gsRespAccordion' + index + langIndex" [href]="'#gsRespCollapse' + index + langIndex + respIndex" aria-expanded="false"
+                                        [attr.aria-controls]="'gsRespCollapse' + index + langIndex + respIndex" >
+                                        {{gsResponse.response ? gsResponse.response : "(Emtpy Response)"}}
+                                      </a>
+                                    </h5>
+                                  </div>
+                                  <div *ngIf="respIndex == 0" [id]="'gsRespCollapse' + index + langIndex + respIndex" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'gsLangTabHeading' + respIndex">
+                                    <div class="card-block">
+                                      <form>
+                                        <div class="form-group">
+                                          <label>Sequence</label>
+                                          <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="gsResponse.sequence" name="sequence"
+                                            min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Stage</label>
+                                          <select class="selectpicker form-control" title="Choose Stage" [(ngModel)]="gsResponse.stage" name="stage">
+                                            <option *ngFor="let stage of stagesSource" [value]="stage.value">{{stage.label}}</option>
+                                          </select>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Response</label>
+                                          <input class="form-control" placeholder="Response" [(ngModel)]="gsResponse.response" name="response" />
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Action HTML</label>
+                                          <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                          <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
+                                        </div>
+                                        <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                          Remove Response
+                                        </button>
+                                      </form>
+                                    </div>
+                                  </div>
+                                  <div *ngIf="respIndex != 0" [id]="'gsRespCollapse' + index + langIndex + respIndex" class="collapse" role="tabpanel" [attr.aria-labelledby]="'gsLangTabHeading' + respIndex">
+                                    <div class="card-block">
+                                      <div class="card-block">
+                                        <form>
+                                          <div class="form-group">
+                                            <label>Sequence</label>
+                                            <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="gsResponse.sequence" name="sequence"
+                                              min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Stage</label>
+                                            <select class="selectpicker form-control" title="Choose Stage" [(ngModel)]="gsResponse.stage" name="stage">
+                                              <option *ngFor="let stage of stagesSource" [value]="stage.value">{{stage.label}}</option>
+                                            </select>
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Response</label>
+                                            <input class="form-control" placeholder="Response" [(ngModel)]="gsResponse.response" name="response" />
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Action HTML</label>
+                                            <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
+                                          </div>
+                                          <div class="form-group">
+                                            <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
+                                          </div>
+                                          <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                            Remove Response
+                                          </button>
+                                        </form>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <form>
+                              <button type="button" class="btn btn-success" (click)="addNewGoalStepResponse(goalStep, language)">Add Response</button>
+                            </form>
+                          </div>
+                        </div>
+                        <div *ngIf="langIndex != 0" [id]="'gsLangCollapse' + index + langIndex" class="collapse" role="tabpanel" [attr.aria-labelledby]="'gsLangTabHeading' + index + langIndex">
+                          <div class="card-block">
+                            <div [id]="'gsRespAccordion' + index + langIndex" role="tablist" aria-multiselectable="true" *ngIf="goalStep.responses && goalStep.responses.length > 0">
+                              <div *ngFor="let gsResponse of getLangSpecificResponses(goalStep.responses, language); let respIndex=index" class="panel">
+                                <div class="card">
+                                  <div *ngIf="respIndex == 0" [id]="'gsRespTabHeading' + index + langIndex + respIndex" class="card-header" heightStyle="content" role="tab">
+                                    <h5 class="mb-0">
+                                      <a data-toggle="collapse" [attr.data-parent]="'#gsRespAccordion' + index + langIndex" [href]="'#gsRespCollapse' + index + langIndex + respIndex" aria-expanded="true"
+                                      [attr.aria-controls]="'gsRespCollapse' + index + langIndex + respIndex">
+                                        {{gsResponse.response ? gsResponse.response : "(Emtpy Response)"}}
+                                      </a>
+                                    </h5>
+                                  </div>
+                                  <div *ngIf="respIndex != 0" [id]="'gsRespTabHeading' + index + langIndex + respIndex" class="card-header" heightStyle="content" role="tab">
+                                    <h5 class="mb-0">
+                                      <a class="collapsed" data-toggle="collapse" [attr.data-parent]="'#gsRespAccordion' + index + langIndex" [href]="'#gsRespCollapse' + index + langIndex + respIndex" aria-expanded="false"
+                                        [attr.aria-controls]="'gsRespCollapse' + index + langIndex + respIndex" >
+                                        {{gsResponse.response ? gsResponse.response : "(Emtpy Response)"}}
+                                      </a>
+                                    </h5>
+                                  </div>
+                                  <div *ngIf="respIndex == 0" [id]="'gsRespCollapse' + index + langIndex + respIndex" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'gsLangTabHeading' + respIndex">
+                                    <div class="card-block">
+                                      <form>
+                                        <div class="form-group">
+                                          <label>Sequence</label>
+                                          <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="gsResponse.sequence" name="sequence"
+                                            min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Stage</label>
+                                          <select class="selectpicker form-control" title="Choose Stage" [(ngModel)]="gsResponse.stage" name="stage">
+                                            <option *ngFor="let stage of stagesSource" [value]="stage.value">{{stage.label}}</option>
+                                          </select>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Response</label>
+                                          <input class="form-control" placeholder="Response" [(ngModel)]="gsResponse.response" name="response" />
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Action HTML</label>
+                                          <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                          <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
+                                        </div>
+                                        <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                          Remove Response
+                                        </button>
+                                      </form>
+                                    </div>
+                                  </div>
+                                  <div *ngIf="respIndex != 0" [id]="'gsRespCollapse' + index + langIndex + respIndex" class="collapse" role="tabpanel" [attr.aria-labelledby]="'gsLangTabHeading' + respIndex">
+                                    <div class="card-block">
+                                      <div class="card-block">
+                                        <form>
+                                          <div class="form-group">
+                                            <label>Sequence</label>
+                                            <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="gsResponse.sequence" name="sequence"
+                                              min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Stage</label>
+                                            <select class="selectpicker form-control" title="Choose Stage" [(ngModel)]="gsResponse.stage" name="stage">
+                                              <option *ngFor="let stage of stagesSource" [value]="stage.value">{{stage.label}}</option>
+                                            </select>
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Response</label>
+                                            <input class="form-control" placeholder="Response" [(ngModel)]="gsResponse.response" name="response" />
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Action HTML</label>
+                                            <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
+                                          </div>
+                                          <div class="form-group">
+                                            <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
+                                          </div>
+                                          <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                            Remove Response
+                                          </button>
+                                        </form>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <form>
+                              <button type="button" class="btn btn-success" (click)="addNewGoalStepResponse(goalStep, language)">Add Response</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div *ngIf="index != 0" [id]="'gsCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'gsTabHeading' + index">
                 <div class="card-block">
                   <form>
                     <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsLanguage' + index">
-                        Language
+                      <label class="col-md-12 col-sm-12 col-xs-12" required for="'gsSequence' + index">
+                        Sequence
                       </label>
-                      <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'gsLanguage' + index" title="Select Language"
-                      [(ngModel)]="goalStep.lang" name="lang">
-                        <option *ngFor="let language of selectedDomain.langSupported" [ngValue]="language">{{language}}</option>
-                      </select>
+                      <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'gsSequence' + index" placeholder="Sequence"
+                        min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                        [(ngModel)]="goalStep.sequence" name="sequence" />
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsGoalExpression' + index">
@@ -555,13 +756,6 @@
                       </label>
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsGoalExpression' + index" placeholder="Expression"
                         [(ngModel)]="goalStep.goalExpression" name="goalExpression" />
-                    </div>
-                    <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsGoalResponse' + index">
-                        Goal Response
-                      </label>
-                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsGoalResponse' + index" placeholder="Goal Response"
-                        [(ngModel)]="goalStep.goalResponse" name="goalResponse" />
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsApi' + index">
@@ -576,13 +770,6 @@
                       </label>
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsResponseExpression' + index" placeholder="Response Expression"
                         [(ngModel)]="goalStep.responseExpression" name="responseExpression" />
-                    </div>
-                    <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsActionHtml' + index">
-                        Action HTML
-                      </label>
-                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsActionHtml' + index" placeholder="Action HTML"
-                        [(ngModel)]="goalStep.actionHtml" name="actionHtml" />
                     </div>
                     <div class="row">
                       <api-checkbox class="col-md-4" [checked]="goalStep.authRequired" [label]="'Auth Required'" (event)="goalStep.authRequired = $event.target.checked"></api-checkbox>
@@ -613,19 +800,221 @@
                         [(ngModel)]="goalStep.dependencyExpression" name="dependencyExpression" />
                     </div>
                     <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" required for="'gsSequence' + index">
-                        Sequence
-                      </label>
-                      <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'gsSequence' + index" placeholder="Sequence"
-                        min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
-                        [(ngModel)]="goalStep.sequence" name="sequence" />
-                    </div>
-                    <div class="form-group">
                       <button type="button" class="btn btn-danger" (click)="deleteGoalStep(goalStep)">
                         Remove Goal Response
                       </button>
                     </div>
                   </form>
+
+                  <div [id]="'gsLangAccordion' + index" role="tablist" aria-multiselectable="true" *ngIf="selectedDomain.langSupported.length > 0">
+                    <div *ngFor="let language of selectedDomain.langSupported; let langIndex=index" class="panel">
+                      <div class="card">
+                        <div *ngIf="langIndex == 0" [id]="'gsLangTabHeading' + index + langIndex" class="card-header" heightStyle="content" role="tab">
+                          <h5 class="mb-0">
+                            <a data-toggle="collapse" [attr.data-parent]="'#gsLangAccordion' + index" [href]="'#gsLangCollapse' + index + langIndex" aria-expanded="true" [attr.aria-controls]="'gsLangCollapse' + index + langIndex">
+                              Responses for {{language}} language
+                            </a>
+                          </h5>
+                        </div>
+                        <div *ngIf="langIndex != 0" [id]="'gsLangTabHeading' + index + langIndex" class="card-header" heightStyle="content" role="tab">
+                          <h5 class="mb-0">
+                            <a class="collapsed" data-toggle="collapse" [attr.data-parent]="'#gsLangAccordion' + index" [href]="'#gsLangCollapse' + index + langIndex" aria-expanded="false"
+                              [attr.aria-controls]="'gsLangCollapse' + index + langIndex" >
+                              Responses for {{language}} language
+                            </a>
+                          </h5>
+                        </div>
+                        <div *ngIf="langIndex == 0" [id]="'gsLangCollapse' + index + langIndex" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'gsLangTabHeading' + index + langIndex">
+                          <div class="card-block">
+                            <div [id]="'gsRespAccordion' + index + langIndex" role="tablist" aria-multiselectable="true" *ngIf="goalStep.responses && goalStep.responses.length > 0">
+                              <div *ngFor="let gsResponse of getLangSpecificResponses(goalStep.responses, language); let respIndex=index" class="panel">
+                                <div class="card">
+                                  <div *ngIf="respIndex == 0" [id]="'gsRespTabHeading' + index + langIndex + respIndex" class="card-header" heightStyle="content" role="tab">
+                                    <h5 class="mb-0">
+                                      <a data-toggle="collapse" [attr.data-parent]="'#gsRespAccordion' + index + langIndex" [href]="'#gsRespCollapse' + index + langIndex + respIndex" aria-expanded="true"
+                                      [attr.aria-controls]="'gsRespCollapse' + index + langIndex + respIndex">
+                                        {{gsResponse.response ? gsResponse.response : "(Emtpy Response)"}}
+                                      </a>
+                                    </h5>
+                                  </div>
+                                  <div *ngIf="respIndex != 0" [id]="'gsRespTabHeading' + index + langIndex + respIndex" class="card-header" heightStyle="content" role="tab">
+                                    <h5 class="mb-0">
+                                      <a class="collapsed" data-toggle="collapse" [attr.data-parent]="'#gsRespAccordion' + index + langIndex" [href]="'#gsRespCollapse' + index + langIndex + respIndex" aria-expanded="false"
+                                        [attr.aria-controls]="'gsRespCollapse' + index + langIndex + respIndex" >
+                                        {{gsResponse.response ? gsResponse.response : "(Emtpy Response)"}}
+                                      </a>
+                                    </h5>
+                                  </div>
+                                  <div *ngIf="respIndex == 0" [id]="'gsRespCollapse' + index + langIndex + respIndex" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'gsLangTabHeading' + respIndex">
+                                    <div class="card-block">
+                                      <form>
+                                        <div class="form-group">
+                                          <label>Sequence</label>
+                                          <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="gsResponse.sequence" name="sequence"
+                                            min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Stage</label>
+                                          <select class="selectpicker form-control" title="Choose Stage" [(ngModel)]="gsResponse.stage" name="stage">
+                                            <option *ngFor="let stage of stagesSource" [value]="stage.value">{{stage.label}}</option>
+                                          </select>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Response</label>
+                                          <input class="form-control" placeholder="Response" [(ngModel)]="gsResponse.response" name="response" />
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Action HTML</label>
+                                          <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                          <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
+                                        </div>
+                                        <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                          Remove Response
+                                        </button>
+                                      </form>
+                                    </div>
+                                  </div>
+                                  <div *ngIf="respIndex != 0" [id]="'gsRespCollapse' + index + langIndex + respIndex" class="collapse" role="tabpanel" [attr.aria-labelledby]="'gsLangTabHeading' + respIndex">
+                                    <div class="card-block">
+                                      <div class="card-block">
+                                        <form>
+                                          <div class="form-group">
+                                            <label>Sequence</label>
+                                            <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="gsResponse.sequence" name="sequence"
+                                              min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Stage</label>
+                                            <select class="selectpicker form-control" title="Choose Stage" [(ngModel)]="gsResponse.stage" name="stage">
+                                              <option *ngFor="let stage of stagesSource" [value]="stage.value">{{stage.label}}</option>
+                                            </select>
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Response</label>
+                                            <input class="form-control" placeholder="Response" [(ngModel)]="gsResponse.response" name="response" />
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Action HTML</label>
+                                            <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
+                                          </div>
+                                          <div class="form-group">
+                                            <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
+                                          </div>
+                                          <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                            Remove Response
+                                          </button>
+                                        </form>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <form>
+                              <button type="button" class="btn btn-success" (click)="addNewGoalStepResponse(goalStep, language)">Add Response</button>
+                            </form>
+                          </div>
+                        </div>
+                        <div *ngIf="langIndex != 0" [id]="'gsLangCollapse' + index + langIndex" class="collapse" role="tabpanel" [attr.aria-labelledby]="'gsLangTabHeading' + index + langIndex">
+                          <div class="card-block">
+                            <div [id]="'gsRespAccordion' + index + langIndex" role="tablist" aria-multiselectable="true" *ngIf="goalStep.responses && goalStep.responses.length > 0">
+                              <div *ngFor="let gsResponse of getLangSpecificResponses(goalStep.responses, language); let respIndex=index" class="panel">
+                                <div class="card">
+                                  <div *ngIf="respIndex == 0" [id]="'gsRespTabHeading' + index + langIndex + respIndex" class="card-header" heightStyle="content" role="tab">
+                                    <h5 class="mb-0">
+                                      <a data-toggle="collapse" [attr.data-parent]="'#gsRespAccordion' + index + langIndex" [href]="'#gsRespCollapse' + index + langIndex + respIndex" aria-expanded="true"
+                                      [attr.aria-controls]="'gsRespCollapse' + index + langIndex + respIndex">
+                                        {{gsResponse.response ? gsResponse.response : "(Emtpy Response)"}}
+                                      </a>
+                                    </h5>
+                                  </div>
+                                  <div *ngIf="respIndex != 0" [id]="'gsRespTabHeading' + index + langIndex + respIndex" class="card-header" heightStyle="content" role="tab">
+                                    <h5 class="mb-0">
+                                      <a class="collapsed" data-toggle="collapse" [attr.data-parent]="'#gsRespAccordion' + index + langIndex" [href]="'#gsRespCollapse' + index + langIndex + respIndex" aria-expanded="false"
+                                        [attr.aria-controls]="'gsRespCollapse' + index + langIndex + respIndex" >
+                                        {{gsResponse.response ? gsResponse.response : "(Emtpy Response)"}}
+                                      </a>
+                                    </h5>
+                                  </div>
+                                  <div *ngIf="respIndex == 0" [id]="'gsRespCollapse' + index + langIndex + respIndex" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'gsLangTabHeading' + respIndex">
+                                    <div class="card-block">
+                                      <form>
+                                        <div class="form-group">
+                                          <label>Sequence</label>
+                                          <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="gsResponse.sequence" name="sequence"
+                                            min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Stage</label>
+                                          <select class="selectpicker form-control" title="Choose Stage" [(ngModel)]="gsResponse.stage" name="stage">
+                                            <option *ngFor="let stage of stagesSource" [value]="stage.value">{{stage.label}}</option>
+                                          </select>
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Response</label>
+                                          <input class="form-control" placeholder="Response" [(ngModel)]="gsResponse.response" name="response" />
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Action HTML</label>
+                                          <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                          <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
+                                        </div>
+                                        <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                          Remove Response
+                                        </button>
+                                      </form>
+                                    </div>
+                                  </div>
+                                  <div *ngIf="respIndex != 0" [id]="'gsRespCollapse' + index + langIndex + respIndex" class="collapse" role="tabpanel" [attr.aria-labelledby]="'gsLangTabHeading' + respIndex">
+                                    <div class="card-block">
+                                      <div class="card-block">
+                                        <form>
+                                          <div class="form-group">
+                                            <label>Sequence</label>
+                                            <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="gsResponse.sequence" name="sequence"
+                                              min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Stage</label>
+                                            <select class="selectpicker form-control" title="Choose Stage" [(ngModel)]="gsResponse.stage" name="stage">
+                                              <option *ngFor="let stage of stagesSource" [value]="stage.value">{{stage.label}}</option>
+                                            </select>
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Response</label>
+                                            <input class="form-control" placeholder="Response" [(ngModel)]="gsResponse.response" name="response" />
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Action HTML</label>
+                                            <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
+                                          </div>
+                                          <div class="form-group">
+                                            <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
+                                          </div>
+                                          <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                            Remove Response
+                                          </button>
+                                        </form>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <form>
+                              <button type="button" class="btn btn-success" (click)="addNewGoalStepResponse(goalStep, language)">Add Response</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -661,6 +1050,17 @@
       <div class="modal-body">
         <form>
           <div class="form-group">
+            <label>Sequence</label>
+            <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="tempResponse.sequence" name="sequence"
+              min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+          </div>
+          <div class="form-group">
+            <label>Stage</label>
+            <select class="selectpicker form-control" title="Choose Stage" [(ngModel)]="tempResponse.stage" name="stage">
+              <option *ngFor="let stage of stagesSource" [value]="stage.value">{{stage.label}}</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label>Expression</label>
             <input class="form-control" placeholder="Expression" [(ngModel)]="tempResponse.expression" name="expression" />
           </div>
@@ -677,6 +1077,9 @@
           <div class="form-group">
             <label>Action HTML</label>
             <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="tempResponse.actionHTML" name="actionHTML"></textarea>
+          </div>
+          <div class="form-group">
+            <api-checkbox [checked]="tempResponse.disableUserInput" [label]="'Disable User Input'" (event)="tempResponse.disableUserInput = $event.target.checked"></api-checkbox>
           </div>
         </form>
       </div>

@@ -40,6 +40,7 @@ export class GoalStep {
   dependencyExpression: string;
   responseExpression: string;
   actionHtml: string;
+  responses: Response[];
 
   constructor() {
     this.goalExpression = '';
@@ -55,6 +56,7 @@ export class GoalStep {
     this.dependencyExpression = '';
     this.responseExpression = '';
     this.actionHtml = '';
+    this.responses = [];
   }
 }
 
@@ -72,6 +74,7 @@ export class Goal {
   responseDependent: boolean;
   valueExpression: string;
   tagExpression: string;
+  dependentGoalExpression: string;
 
   constructor() {
     this.expression = '';
@@ -87,23 +90,40 @@ export class Goal {
     this.responseDependent = false;
     this.valueExpression = '';
     this.tagExpression = '';
+    this.dependentGoalExpression = '';
+  }
+}
+
+export class Stage {
+  label: string;
+  value: string;
+
+  constructor(label?: string, value?: string) {
+    this.label = label ? label : '';
+    this.value = value ? value : '';
   }
 }
 
 export class Response {
+  sequence: number;
   level: number;
   actionHTML: string;
   expression: string;
   lang: string;
   response: string;
+  stage: string;
+  disableUserInput: boolean;
 
-  constructor(expression?: string, lang?: string, response?: string, actionHTML?: string) {
+  constructor(expression?: string, lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean) {
     this.level = 1;
 
     this.expression = expression ? expression : '';
     this.lang = lang ? lang : '';
     this.response = response ? response : '';
     this.actionHTML = actionHTML ? actionHTML : '';
+    this.sequence = sequence ? sequence : 0;
+    this.stage = stage ? stage : '';
+    this.disableUserInput = disableUserInput ? disableUserInput : false;
   }
 }
 
