@@ -240,7 +240,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.alertService.error(error, false, 5000);
       // console.log('Validation error: ' + error);
     } else {
-      this.removeGoalStepResponseFromDomainResponse();
       this.tempGoal.model = '{}';
 
       if (this.tempGoal && this.tempGoal.domainGoalSteps) {
