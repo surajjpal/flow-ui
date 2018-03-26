@@ -1,0 +1,78 @@
+<div class="widget">
+    <div class="row">
+        <!-- <div class="col-md-12"> -->
+            <div class="card-block">
+
+                <div class="panel panel-default">
+                    <form>
+                        <div class="form-group">
+                            <label>Name </label>    
+                            <input type="text" class="form-control" required placeholder="Name" />
+                        </div>
+                        <div class="=form-group">
+                            <label>To email Ids</label>
+                            <tag-input [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
+                        </div>
+                        <div class="=form-group">
+                            <label>CC email Ids</label>
+                            <tag-input [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
+                        </div>
+                        <div class="form-group">
+                            <label >Select subscription</label>
+                            <select class="selectpicker form-control" required id="selectSubscription" title="Choose Subscription" [(ngModel)]="analyticsReportSetup.subscription" name="subscription"
+                                >
+                                <option *ngFor="let subscription of subscriptions" [value]="subscription">{{subscription}}</option>
+                            </select>
+                        </div>
+                        <div *ngIf= "analyticsReportSetup.subscription == 'TIMER'" class="form-group row">
+                            <!-- <div class="col-md-12"> -->
+                                <div class="col-md-4">
+                                    <label>Select Hour</label>
+                                    <select class="selectpicker form-control" required id="selectHour" title="Choose Subscription" [(ngModel)]="analyticsReportSetup.scheduleHour" name="scheduleHour"
+                                        >
+                                        <option *ngFor="let hour of scheduleHours" [value]="hour">{{hour}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Select Minute</label>
+                                    <select class="selectpicker form-control" required id="selectHour" title="Choose Subscription" [(ngModel)]="analyticsReportSetup.scheduleMinute" name="scheduleMinute"
+                                        >
+                                        <option *ngFor="let minute of scheduleMinutes" [value]="minute">{{minute}}</option>
+                                    </select>
+                                
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Select Second</label>
+                                    <select class="selectpicker form-control" required id="selectHour" title="Choose Subscription" [(ngModel)]="analyticsReportSetup.scheduleSecond" name="scheduleSecond"
+                                        >
+                                        <option *ngFor="let hour of scheduleSeconds" [value]="second">{{second}}</option>
+                                    </select>
+                                
+                                </div>
+                            <!-- </div> -->
+                        </div>
+                        <div *ngIf="analyticsReportSetup.subscription == 'WEEKLY'" class="form-group row">
+                            <div class="col-md-6">
+                                <label>Select Week day</label>
+                                <select class="selectpicker form-control" required id="selectWeekDay" title="Choose week day" [(ngModel)]="analyticsReportSetup.scheduleDayOfWeek" name="scheduleDayOfWeek"
+                                    >
+                                    <option *ngFor="let day of scheduleDayOfWeek" [value]="day">{{day}}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Select Time</label>
+                                <ngb-timepicker [(ngModel)]="analyticsReportSetup.scheduleTime" [seconds]="seconds" name="scheduleTime"></ngb-timepicker>
+                            </div>
+                            
+                                
+                            <!-- <api-daterangepicker [(ngModel)]="analyticsReportSetup.scheduleTime" name="scheduleTime"></api-daterangepicker> -->
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        <!-- </div> -->
+        
+    </div>
+
+</div>
