@@ -1,11 +1,12 @@
 declare var closeModal: any;
+declare var showAlertModal: any;
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Domain, Intent, Entity, Goal, GoalStep, Response } from '../../../../models/domain.model';
+import { Domain, Intent, Entity, Goal, GoalStep, Response, Stage } from '../../../../models/domain.model';
 
 import { DomainService } from '../../../../services/domain.service';
 import { AlertService, DataSharingService } from '../../../../services/shared.service';
@@ -26,6 +27,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   languageSource: string[];
   modelKeysSource: string[];
   validationKeysSource: string[];
+  stagesSource: Stage[];
   
   intentFilterQuery: string;
   entityFilterQuery: string;
@@ -59,6 +61,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.createMode = false;
     this.languageSource = ['ENG', 'HIN', 'MAR', 'ID'];
     this.modelKeysSource = [];
+
+    this.stagesSource = [];
+    this.stagesSource.push(new Stage('Initialization', 'INIT'));
+    this.stagesSource.push(new Stage('Context Setting', 'CONTEXT'));
+    this.stagesSource.push(new Stage('Information Input', 'INFO'));
+    this.stagesSource.push(new Stage('Goal Seek', 'GOAL'));
+    this.stagesSource.push(new Stage('Summarize', 'CLOSURE'));
     
     this.intentFilterQuery = '';
     this.entityFilterQuery = '';
@@ -227,12 +236,15 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   addGoal() {
-    const error = this.isInvalidGoalSteps(this.tempGoal.domainGoalSteps);
+    let error = this.isInvalidGoalSteps(this.tempGoal.domainGoalSteps);
     if (error) {
-      this.alertService.error(error, false, 5000);
-      // console.log('Validation error: ' + error);
+      new showAlertModal('Error', error);
+    }
+    
+    error = this.checkStageCodeInGoalResponses(this.tempGoal.domainGoalSteps);
+    if (error) {
+      new showAlertModal('Error', error);
     } else {
-      this.removeGoalStepResponseFromDomainResponse();
       this.tempGoal.model = '{}';
 
       if (this.tempGoal && this.tempGoal.domainGoalSteps) {
@@ -259,6 +271,29 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       new closeModal('goalModal');
     }
   }
+
+  checkStageCodeInGoalResponses(goalSteps: GoalStep[]) {
+    const errorExpressionList: string[] = [];
+    if (goalSteps && goalSteps.length > 0) {
+      for (const goalStep of goalSteps) {
+        if (goalStep && goalStep.responses && goalStep.responses.length > 0) {
+          for (const response of goalStep.responses) {
+            if (response) {
+              if (!response.stage || response.stage.trim().length === 0) {
+                errorExpressionList.push(response.expression);
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    if (errorExpressionList && errorExpressionList.length > 0) {
+      return 'Stage is missing in the responses of the following goal steps: ' + errorExpressionList;
+    } else {
+      return null;
+    }
+  }  
 
   removeGoal() {
     if (this.selectedGoal) {
@@ -289,10 +324,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
     if (goalSteps) {
       for (let i = 0, len = goalSteps.length; i < len; i++) {
-        toString += goalSteps[i].goalResponse;
-
-        if (i < (len - 1)) {
-          toString += ', ';
+        if (goalSteps[i] && goalSteps[i].responses) {
+          for (let j = 0, innerLength = goalSteps[i].responses.length; j < innerLength; j++) {
+            toString += goalSteps[i].responses[j].response;
+            if (i < (len - 1) || j < (innerLength - 1)) {
+              toString += ', ';
+            }
+          }
         }
       }
     }
@@ -306,12 +344,44 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         const responsesToBeRemoved: Response[] = [];
 
         for (const goal of this.selectedDomain.domainGoals) {
+          goal.domainGoalSteps = goal.domainGoalSteps.sort((gs1, gs2) => {
+              if (gs1.sequence > gs2.sequence) {
+                  return 1;
+              } else if (gs1.sequence < gs2.sequence) {
+                  return -1;
+              } else {
+                return 0;
+              }
+          });
+
           for (const goalStep of goal.domainGoalSteps) {
+            goalStep.responses = [];
             for (const response of this.selectedDomain.domainResponse) {
-              if (response.expression === goalStep.goalExpression && response.lang === goalStep.lang) {
+              if (response.sequence === null) {
+                response.sequence = 0;
+              }
+              if (response.disableUserInput === null) {
+                response.disableUserInput = false;
+              }
+              if (response.stage === null) {
+                response.stage = '';
+              }
+
+              if (response.expression === goalStep.goalExpression) {
                 responsesToBeRemoved.push(response);
+                goalStep.responses.push(response);
               }
             }
+
+            goalStep.responses = goalStep.responses.sort((gsr1, gsr2) => {
+              if (gsr1.sequence > gsr2.sequence) {
+                return 1;
+              } else if (gsr1.sequence < gsr2.sequence) {
+                  return -1;
+              } else {
+                return 0;
+              }
+          });
           }
         }
 
@@ -370,12 +440,22 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     if (response) {
       this.selectedDomain.domainResponse.push(response);
     } else if (this.selectedResponse) {
-      const index: number = this.selectedDomain.domainResponse.indexOf(this.selectedResponse);
-      if (index !== -1) {
-        this.selectedDomain.domainResponse[index] = this.tempResponse;
+      if (!this.selectedResponse.stage || this.selectedResponse.stage.trim().length === 0) {
+        new showAlertModal('Error', 'Stage can\'t be left empty.');
+      } else {
+        const index: number = this.selectedDomain.domainResponse.indexOf(this.selectedResponse);
+        if (index !== -1) {
+          this.selectedDomain.domainResponse[index] = this.tempResponse;
+        }
+        new closeModal('responseModal');
       }
     } else {
-      this.selectedDomain.domainResponse.push(this.tempResponse);
+      if (!this.tempResponse.stage || this.tempResponse.stage.trim().length === 0) {
+        new showAlertModal('Error', 'Stage can\'t be left empty.');
+      } else {
+        this.selectedDomain.domainResponse.push(this.tempResponse);
+        new closeModal('responseModal'); 
+      }
     }
   }
 
@@ -399,8 +479,14 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         for (const goal of this.selectedDomain.domainGoals) {
           if (goal && goal.domainGoalSteps) {
             for (const goalStep of goal.domainGoalSteps) {
-              const response: Response = new Response(goalStep.goalExpression, goalStep.lang, goalStep.goalResponse, goalStep.actionHtml);
-              this.addResponse(response);
+              if (goalStep && goalStep.responses) {
+                for (const response of goalStep.responses) {
+                  if (response) {
+                    this.selectedDomain.domainResponse.push(response);
+                  }
+                }
+                goalStep.responses = null;
+              }
             }
           }
         }
@@ -420,6 +506,40 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.tempGoal.htmlFlag = checkBox === 'HTML_FLAG' && checked;
         this.tempGoal.responseChange = checkBox === 'RESPONSE_CHANGE' && checked;
         this.tempGoal.responseDependent = checkBox === 'RESPONSE_DEPENDENT' && checked;
+    }
+  }
+
+  getLangSpecificResponses(responses: Response[], language: string) {
+    const langResponse: Response[] = [];
+
+    for (const response of responses) {
+      if (response && response.lang && language && response.lang === language) {
+        langResponse.push(response);
+      }
+    }
+    
+    return langResponse;
+  }
+
+  addNewGoalStepResponse(goalStep, language) {
+    if (goalStep && language) {
+      const gsResponse = new Response(goalStep.goalExpression, language);
+
+      if (goalStep.responses) {
+        goalStep.responses.push(gsResponse);
+      } else {
+        goalStep.responses = [];
+        goalStep.responses.push(gsResponse);
+      }
+    }
+  }
+
+  deleteGoalStepResponse(goalStep, gsResponse) {
+    if (goalStep && goalStep.responses && gsResponse) {
+      const index: number = goalStep.responses.indexOf(gsResponse);
+      if (index !== -1) {
+        goalStep.responses.splice(index, 1);
+      }
     }
   }
 
