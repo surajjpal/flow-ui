@@ -6,23 +6,25 @@ export class AnalyticsReportSetup {
     scheduleHour: number;
     scheduleMinute: number;
     scheduleSecond: number;
-    scheduleDayOfWeek: string;
-    scheduleTime: {hour: 0, minute: 0};
+    scheduleDayOfWeek: number;
+    scheduleTime: any;
     scheduleDayOfMonth: number;
     scheduleMonth: string;
+    scheduleDate: Date;
     endDateTime: Date;
 
-    constructor(reportName?, toEmailds?, ccEmailIds?, subscription?, scheduleHour?, scheduleMinute?, scheduleSecond?, scheduleDayOfweek?, scheduleDayOfMonthe?, scheduleMonth?, endDateTime?) {
-        this.reportName = reportName;
-        this.toEmailIds = toEmailds;
-        this.ccEmailIds = ccEmailIds;
-        this.subscription = subscription;
-        this.scheduleHour = scheduleHour;
-        this.scheduleMinute = scheduleMinute;
-        this.scheduleSecond = scheduleSecond;
-        this.scheduleDayOfWeek = scheduleDayOfweek;
-        this.scheduleDayOfMonth = scheduleMonth;
-        this.scheduleMonth = scheduleMonth;
-        this.endDateTime = endDateTime;
+    constructor() {
+        this.reportName = null;
+        this.toEmailIds = [];
+        this.ccEmailIds = [];
+        this.subscription = null;
+        this.scheduleHour = 0;
+        this.scheduleMinute = 0;
+        this.scheduleSecond = 0;
+        this.scheduleDayOfWeek = 0;
+        this.scheduleDayOfMonth = 0;
+        this.scheduleMonth = null;
+        this.endDateTime = null;
+        this.scheduleDate = new Date();
     }
 }

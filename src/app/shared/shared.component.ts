@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AlertService } from '../services/shared.service';
- 
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
     selector: 'api-alert',
     template: `
@@ -47,3 +48,61 @@ export class ApiCheckboxComponent {
         this.event.emit(checked);
     }
 }
+
+@Component({
+    selector: "api-datepicker",
+    template: `
+    <form class="form-inline">
+        <div class="form-group">
+            <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd"
+                    [value]="currentDate" (input)="setCurrentDate($event.target.value)" ngbDatepicker #d="ngbDatepicker">
+                <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                    <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                </button>
+                </div>
+            </div>
+        </div>
+    </form>
+    
+    <hr/>
+    `
+})
+export class NgbdDatepickerPopup {
+    currentDate: any;
+    @Output() selectedDateChange = new EventEmitter();
+    
+    setCurrentDate(newDate) {
+        this.currentDate = newDate;
+
+        let dateObject = new Date();
+        dateObject.setFullYear(this.currentDate.year, (this.currentDate.month - 1), this.currentDate.day);
+        this.selectedDateChange.emit(this.currentDate);
+    }
+
+    @Input()
+    get selectedDate() {
+        let dateObject = new Date();
+        dateObject.setFullYear(this.currentDate.year, (this.currentDate.month - 1), this.currentDate.day);
+
+        console.log(dateObject);
+        return dateObject;
+    }
+
+    
+    set selectedDate(dateObject: Date) {
+        if (!dateObject || dateObject == null) {
+            dateObject = new Date();
+        }
+
+        if (!this.currentDate || this.currentDate == null) {
+            this.currentDate = {};
+        }
+        this.currentDate.year = dateObject.getFullYear();
+        this.currentDate.month = dateObject.getMonth() + 1;
+        this.currentDate.day = dateObject.getDate();
+
+        this.selectedDateChange.emit(dateObject);
+    }
+  }

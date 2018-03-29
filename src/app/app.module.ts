@@ -27,6 +27,7 @@ import { FlowDashboardService, GraphService, CommunicationService } from './serv
 import { DataCachingService, StateService } from './services/inbox.service';
 import { AccountService, ApiConfigService, RoutesService } from './services/setup.service';
 import { AuthGuard, AntiAuthGuard, AlertService, DataSharingService, UniversalUser } from './services/shared.service';
+import { AnalyticsService } from './services/analytics.service';
 
 import { SharedModule } from './shared/shared.module';
 
@@ -52,7 +53,8 @@ const APP_PROVIDERS = [
   FlowDashboardService, GraphService, CommunicationService,
   DataCachingService, StateService,
   AccountService, ApiConfigService, RoutesService,
-  AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService, UniversalUser
+  AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService, UniversalUser,
+  AnalyticsService
 ];
 
 export type StoreType = {

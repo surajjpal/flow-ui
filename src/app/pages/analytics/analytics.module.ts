@@ -10,6 +10,8 @@ import { AnalyticsComponent } from './analytics.component';
 import { AnalyticsReportSetupComponent } from './components/analyticsReportSetup/analyticsReportSetup.component';
 import { routing } from './analytics.routing';
 import { DateRangePickerComponent } from './components/analyticsReportSetup/daterangepicker/daterangepicker.component';
+import { NgaModule } from '../../theme/nga.module';
+import { SharedModule } from 'app/shared/shared.module';
 
 
 
@@ -21,13 +23,14 @@ import { DateRangePickerComponent } from './components/analyticsReportSetup/date
         TagInputModule,
         Daterangepicker,
         routing,
-        NgbModule.forRoot()
+        NgbModule.forRoot(),
+        NgaModule,
+        SharedModule
     ],
     declarations: [
         AnalyticsComponent,
         AnalyticsReportSetupComponent,
         DateRangePickerComponent
-    
     ]
 })
 export class AnalyticsModule {}

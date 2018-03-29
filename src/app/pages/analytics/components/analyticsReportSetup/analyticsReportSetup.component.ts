@@ -4,13 +4,21 @@ import { NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
 import { Subscription } from 'rxjs/Subscription'
 import { AnalyticsReportSetup } from '../../../../models/analytics.model';
+import { AnalyticsService } from '../../../../services/analytics.service';
+import { AlertService, DataSharingService } from '../../../../services/shared.service';
+
+import { environment } from '../../../../../environments/environment';
+import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
+
 
 @Component({
     selector: 'api-analyticsReportSetup',
     templateUrl: './analyticsReportSetup.component.html'
 })
 export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
-    analyticsReportSetup: AnalyticsReportSetup;
+    private analyticsReportSetup: AnalyticsReportSetup;
+    private subscription: Subscription;
+    
     subscriptions: string[] = ["TIMER", "DAILY", "WEEKLY", "MONTHLY", "YEARLY"]
     scheduleDayOfWeek: string[] = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
     scheduleHours = this.range(1,24);
@@ -19,7 +27,14 @@ export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
     time: NgbTimeStruct = {hour: 13, minute: 30, second: 30};
     seconds = true;
 
-    constructor() {
+    
+    constructor(private router: Router,
+        private route: ActivatedRoute,
+        private alertService: AlertService,
+        private analyticsService: AnalyticsService,
+        private sharingService: DataSharingService,
+        private slimLoadingBarService: SlimLoadingBarService) 
+    {
         this.analyticsReportSetup = new AnalyticsReportSetup();
         //this.scheduleHours = this.range(1,24);
     }
@@ -29,7 +44,9 @@ export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        
+        if (this.subscription && !this.subscription.closed) {
+            this.subscription.unsubscribe();
+        }
     }
 
     onSubscriptionChange(newValue) {
@@ -48,5 +65,17 @@ export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
 
     toggleSeconds() {
         this.seconds = !this.seconds;
-      }
+    }
+
+    scheduleAnalyticsReport() {
+        
+        this.subscription = this.analyticsService.scheduleReport(this.analyticsReportSetup)
+        .subscribe(
+            response => {
+              this.router.navigate(['/anlt/anltst'], { relativeTo: this.route });
+            }
+          );
+        
+    }
+
 }
