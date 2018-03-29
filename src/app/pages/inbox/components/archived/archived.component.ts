@@ -15,7 +15,8 @@ export class ArchivedComponent implements OnInit, OnDestroy {
   personalStates: State[];
   loadingGroup: boolean = false;
   loadingPersonal: boolean = false;
-
+  pageNumber :any;
+  fetchRecords:any;
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
 
@@ -25,7 +26,9 @@ export class ArchivedComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.fetchData();
+    this.pageNumber= 0;
+    this.fetchRecords = 10;
+    this.fetchData(this.pageNumber,this.fetchRecords);
   }
 
   ngOnDestroy(): void {
@@ -37,11 +40,11 @@ export class ArchivedComponent implements OnInit, OnDestroy {
     }
   }
 
-  fetchData(): void {
+  fetchData(pageNumber,fetchRecords): void {
     this.loadingPersonal = true;
     this.loadingGroup = true;
 
-    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('CLOSED', 'Group')
+    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('CLOSED', 'Group',pageNumber,fetchRecords)
     .subscribe(states => {
       this.loadingGroup = false;
       this.groupStates = states;
@@ -49,12 +52,34 @@ export class ArchivedComponent implements OnInit, OnDestroy {
       this.loadingGroup = false;
     });
 
-    this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('CLOSED', 'Personal')
+    this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('CLOSED', 'Personal',pageNumber,fetchRecords)
     .subscribe(states => {
       this.loadingPersonal = false;
       this.personalStates = states;
     }, error => {
       this.loadingPersonal = false;
+    });
+  }
+
+  loadMore(status,type):void{
+    this.loadingPersonal = true;
+    this.loadingGroup = true;
+    this.pageNumber = this.pageNumber + 1; 
+    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder(status,type,this.pageNumber,this.fetchRecords)
+    .subscribe(states => {
+      this.loadingGroup = false;
+      if(type=='Group'){
+        this.groupStates = this.groupStates.concat(states)
+      }
+      else if(type=='Personal'){
+        this.personalStates = this.personalStates.concat(states)
+      }
+      
+     
+
+    }, error => {
+      this.loadingGroup = false;
+     
     });
   }
 
