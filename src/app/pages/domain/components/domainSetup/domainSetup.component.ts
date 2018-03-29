@@ -440,7 +440,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     if (response) {
       this.selectedDomain.domainResponse.push(response);
     } else if (this.selectedResponse) {
-      if (!this.selectedResponse.stage || this.selectedResponse.stage.trim().length === 0) {
+      if (!this.tempResponse.stage || this.tempResponse.stage.trim().length === 0) {
         new showAlertModal('Error', 'Stage can\'t be left empty.');
       } else {
         const index: number = this.selectedDomain.domainResponse.indexOf(this.selectedResponse);
