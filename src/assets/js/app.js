@@ -239,6 +239,13 @@ showModal = function (modalId) {
   }
 }
 
+showAlertModal = function (header, message) {
+  window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
+    showAppJSWarning(header, message); 
+  });
+  showModal("warningModal");
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -643,7 +650,7 @@ designFlowEditor = function (serverXml, readOnly) {
     mxConnectionHandler.prototype.insertEdge = function(parent, id, value, source, target, style)
     {
       if (target && target.id == 'treeRoot') {
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
           showAppJSWarning("Not Allowed", "You are not allowed to connect to the root state. Please select any other state."); 
         });
         showModal("warningModal");
@@ -657,7 +664,7 @@ designFlowEditor = function (serverXml, readOnly) {
 
         for (var edge of existingEdges) {
           if (edge.target.value.stateCd == target.value.stateCd) {
-            window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+            window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
               showAppJSWarning("Used State", "The state you are trying to connect to is already connected from current state. Please choose any other state."); 
             });
             showModal("warningModal");
@@ -687,7 +694,7 @@ designFlowEditor = function (serverXml, readOnly) {
         }
       }
 
-      window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+      window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
         showAppJSWarning("No Events Left", "There aren't any source events left to be attached to the new state, thus this connection can't be made."); 
       });
       showModal("warningModal");
@@ -828,7 +835,7 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
             showModal("stateModal");
             return;
           } else {
-            window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+            window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
               showAppJSWarning("Not Allowed", "Root state can only have one child state. You can't create more than one child for root state.");
             });
             showModal("warningModal");
@@ -860,7 +867,7 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
           }
         }
         
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
           showAppJSWarning("No Events Left", "There aren't any source events from which the new state can be created.");
         });
         showModal("warningModal");
@@ -1054,7 +1061,7 @@ saveStateObject = function (state) {
   for (var vertex of vertices) {
     if (vertex.value  && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
       if (state.stateCd == vertex.value.stateCd) {
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
           showAppJSWarning("Duplicate State", "Duplicate states found. State '" + state.stateCd + "' is already being used. Please use different state code for defining the state.");
         });
         showModal("warningModal");  
@@ -1072,7 +1079,7 @@ saveStateObject = function (state) {
       }
 
       if (repeatCount > 1) {
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
           showAppJSWarning("Duplicate Events", "Duplicate events found. All the events must be unique.");
         });
         showModal("warningModal");  
@@ -1084,7 +1091,7 @@ saveStateObject = function (state) {
       if (vertex.value && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
         for (var stateEvent of vertex.value.events) {
           if (event.eventCd == stateEvent.eventCd) {
-            window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+            window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
               showAppJSWarning("Duplicate Events", "Duplicate events found. Event '" + event.eventCd + "' is already defined as a source event in state '" + vertex.value.stateCd + "'. Please use different event code for defining the event.");
             });
             showModal("warningModal");  
@@ -1104,7 +1111,7 @@ updateStateObject = function (state) {
   for (var vertex of vertices) {
     if (vertex.value && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
       if ((state.stateCd == vertex.value.stateCd) && (vertex.value.stateCd != sourceCell.value.stateCd)) {
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
           showAppJSWarning("Duplicate State", "Duplicate states found. State '" + state.stateCd + "' is already being used. Please use different state code for defining the state.");
         });
         showModal("warningModal");  
@@ -1122,7 +1129,7 @@ updateStateObject = function (state) {
       }
 
       if (repeatCount > 1) {
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
           showAppJSWarning("Duplicate Events", "Duplicate events found. All the events must be unique.");
         });
         showModal("warningModal");  
@@ -1135,7 +1142,7 @@ updateStateObject = function (state) {
         if (vertex.value.stateCd !== sourceCell.value.stateCd) {
           for (var stateEvent of vertex.value.events) {
             if (event.eventCd == stateEvent.eventCd) {
-              window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+              window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
                 showAppJSWarning("Duplicate Events", "Duplicate events found. Event '" + event.eventCd + "' is already defined as a source event in state '" + vertex.value.stateCd + "'. Please use different event code for defining the event.");
               });
               showModal("warningModal");  
@@ -1154,7 +1161,7 @@ updateStateObject = function (state) {
       var childStateCount = existingEdgesBeforeUpdate.length;
       var newEventCount = newEvents.length;
       var difference = childStateCount - newEventCount;
-      window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+      window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
         showAppJSWarning("Event Mismatch", "There already exisits " + childStateCount + " child state(s) for the current state. After update there will be a total number of " + newEventCount + " events left, which doesn't suffice the total child states. Please add " + difference + " more event(s) or delete " + difference + " child state(s) to suffice the conditions.");
       });
       showModal("warningModal");
@@ -1219,7 +1226,7 @@ updateStateObject = function (state) {
 updateStateTrigger = function(eventEdgeMap, stateData) {
   for (var key in eventEdgeMap) {
     if (key && (!eventEdgeMap[key] || eventEdgeMap[key] == null)) {
-      window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+      window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
         showAppJSWarning("Error" ,"You can't leave trigger for any child state empty. Please fill in all values.");
       });
       showModal("warningModal");
@@ -1240,8 +1247,8 @@ updateStateTrigger = function(eventEdgeMap, stateData) {
           childStateList.push(edge.target.value.stateCd);
         }
 
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.showAppJSWarning(/*stateData.events, childStateList,*/ "Error",
-          "Same event has been assigned to '" + key + "' and '" + internalKey + "'. One event can be attached to only one child state at max");
+        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
+          showAppJSWarning("Error", "Same event has been assigned to '" + key + "' and '" + internalKey + "'. One event can be attached to only one child state at max");
         });
         showModal("warningModal");
         return;

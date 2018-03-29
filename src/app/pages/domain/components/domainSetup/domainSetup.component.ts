@@ -1,4 +1,5 @@
 declare var closeModal: any;
+declare var showAlertModal: any;
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -235,10 +236,14 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   addGoal() {
-    const error = this.isInvalidGoalSteps(this.tempGoal.domainGoalSteps);
+    let error = this.isInvalidGoalSteps(this.tempGoal.domainGoalSteps);
     if (error) {
-      this.alertService.error(error, false, 5000);
-      // console.log('Validation error: ' + error);
+      new showAlertModal('Error', error);
+    }
+    
+    error = this.checkStageCodeInGoalResponses(this.tempGoal.domainGoalSteps);
+    if (error) {
+      new showAlertModal('Error', error);
     } else {
       this.tempGoal.model = '{}';
 
@@ -266,6 +271,29 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       new closeModal('goalModal');
     }
   }
+
+  checkStageCodeInGoalResponses(goalSteps: GoalStep[]) {
+    const errorExpressionList: string[] = [];
+    if (goalSteps && goalSteps.length > 0) {
+      for (const goalStep of goalSteps) {
+        if (goalStep && goalStep.responses && goalStep.responses.length > 0) {
+          for (const response of goalStep.responses) {
+            if (response) {
+              if (!response.stage || response.stage.trim().length === 0) {
+                errorExpressionList.push(response.expression);
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    if (errorExpressionList && errorExpressionList.length > 0) {
+      return 'Stage is missing in the responses of the following goal steps: ' + errorExpressionList;
+    } else {
+      return null;
+    }
+  }  
 
   removeGoal() {
     if (this.selectedGoal) {
@@ -412,12 +440,22 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     if (response) {
       this.selectedDomain.domainResponse.push(response);
     } else if (this.selectedResponse) {
-      const index: number = this.selectedDomain.domainResponse.indexOf(this.selectedResponse);
-      if (index !== -1) {
-        this.selectedDomain.domainResponse[index] = this.tempResponse;
+      if (!this.selectedResponse.stage || this.selectedResponse.stage.trim().length === 0) {
+        new showAlertModal('Error', 'Stage can\'t be left empty.');
+      } else {
+        const index: number = this.selectedDomain.domainResponse.indexOf(this.selectedResponse);
+        if (index !== -1) {
+          this.selectedDomain.domainResponse[index] = this.tempResponse;
+        }
+        new closeModal('responseModal');
       }
     } else {
-      this.selectedDomain.domainResponse.push(this.tempResponse);
+      if (!this.tempResponse.stage || this.tempResponse.stage.trim().length === 0) {
+        new showAlertModal('Error', 'Stage can\'t be left empty.');
+      } else {
+        this.selectedDomain.domainResponse.push(this.tempResponse);
+        new closeModal('responseModal'); 
+      }
     }
   }
 

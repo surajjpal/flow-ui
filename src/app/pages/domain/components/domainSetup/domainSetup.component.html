@@ -1088,7 +1088,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeResponse()">Remove</button>
-        <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="addResponse()">{{createMode ? 'Create' : 'Update'}}</button>
+        <button type="submit" class="btn btn-primary" (click)="addResponse()">{{createMode ? 'Create' : 'Update'}}</button>
       </div>
     </div>
   </div>

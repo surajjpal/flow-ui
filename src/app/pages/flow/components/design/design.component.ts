@@ -72,10 +72,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   selectedEvent: EventModel;
   bulkExpressions: string = '';
 
-  // Warning Modal properties
   warningHeader: string;
   warningBody: string;
-  
+
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
   private subscriptionApiConfig: Subscription;
@@ -421,11 +420,6 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   deepCopy(object: Object) {
     return JSON.parse(JSON.stringify(object));
-  }
-
-  showAppJSWarning(header: string, body: string) {
-    this.warningHeader = header;
-    this.warningBody = body;
   }
 
   enableBulkEdit(selectedEvent: EventModel) {
