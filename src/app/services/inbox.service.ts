@@ -51,7 +51,7 @@ export class StateService {
   
   constructor(private httpClient: HttpClient) { }
 
-  getStatesByStatusAndFolder(status: string, folder: string): Observable<State[]> {
+  getStatesByStatusAndFolder(status: string, folder: string,pageNumber:any,fetchRecords:any): Observable<State[]> {
     const subject = new Subject<State[]>();
 
     if (!status) {
@@ -62,7 +62,7 @@ export class StateService {
       folder = 'Public';
     }
 
-    const url = `${environment.server + environment.statebystatusandfolderurl}${status},${folder}`;
+    const url = `${environment.server + environment.statebystatusandfolderurl}${pageNumber},${fetchRecords},${status},${folder}`;
 
     this.httpClient.get<State[]>(
       url,
