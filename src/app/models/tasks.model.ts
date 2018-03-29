@@ -48,6 +48,7 @@ export class State extends BaseModel {
   headerParamList: string[];
   flagged:string;
   flagLevel:number;
+  autoAllocation:boolean;
 }
 
 export class CommonInsightWrapper extends BaseModel {

@@ -26,6 +26,7 @@ export class User extends BaseModel {
   credentialsNonExpired: boolean;
   accountNonLocked: boolean;
   accountNonExpired: boolean;
+  autoAssignFlag: boolean;
 
   constructor() {
     super();
@@ -41,6 +42,7 @@ export class User extends BaseModel {
     this.credentialsNonExpired = true;
     this.accountNonLocked = true;
     this.accountNonExpired = true;
+    this.autoAssignFlag = false;
   }
 }
   export class UserHierarchy extends BaseModel {

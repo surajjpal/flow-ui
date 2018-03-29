@@ -69,12 +69,12 @@
               name="allocationGroup" />
           </div>
 
-          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType !== 'Group'">
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && ( tempState.allocationModel.allocationType !== 'Group' || tempState.allocationModel.allocationType === 'Auto_Agent_Allocation' )">
               <label for="allocationGroup">Allocate to default group</label>
               <input type="text" class="form-control" required id="allocationGroup" placeholder="Allocate to default group" [(ngModel)]="tempState.allocationModel.allocationGroup"
                 name="allocationGroup" />
           </div>
-          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'Least_Allocated'|| tempState.allocationModel.allocationType === 'Round_Robin'|| tempState.allocationModel.allocationType === 'Maximum_Efficiency' || tempState.allocationModel.allocationType === 'Seperation_Of_Duties' || tempState.allocationModel.allocationType === 'Random'">
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && ( tempState.allocationModel.allocationType === 'Least_Allocated' || tempState.allocationModel.allocationType === 'Round_Robin'|| tempState.allocationModel.allocationType === 'Maximum_Efficiency' || tempState.allocationModel.allocationType === 'Seperation_Of_Duties' || tempState.allocationModel.allocationType === 'Random' || tempState.allocationModel.allocationType === 'Auto_Agent_Allocation')">
               <label for="groups">Allocate to groups</label>
               <tag-input [(ngModel)]="tempState.allocationModel.groups" name="groups" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
           </div>
