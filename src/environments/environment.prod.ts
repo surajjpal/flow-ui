@@ -29,6 +29,7 @@ export const environment = {
   autodashboardurl: 'dashboard',
   userurl: 'user/',
   registerurl: 'user/createUser',
+  forgotpassword:'user/forgotPassword',
   createcompanyadminurl: 'user/createcompanyadmin',
   updateuserurl: 'user/update',
   authoritiesurl: 'user/roles',
