@@ -67,5 +67,8 @@ export const environment = {
   uploadintentexcelurl: 'uploadintents',
   uploadentityexcelurl: 'uploadentity',
   modelkeyslookupurl: 'load/modelkeys',
-  validationtypekeyslookupurl: 'load/validations'
+  validationtypekeyslookupurl: 'load/validations',
+
+  // Analytics
+  sendReportUrl: 'analyticsreport'
 };

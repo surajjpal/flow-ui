@@ -17,55 +17,80 @@
                             <tag-input [(ngModel)]="analyticsReportSetup.ccEmailIds" name="ccEmailIds" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
                         </div>
                         <div class="form-group">
-                            <label >Select subscription</label>
-                            <select class="selectpicker form-control" required id="selectSubscription" title="Choose Subscription" [(ngModel)]="analyticsReportSetup.subscription" name="subscription"
-                                >
-                                <option *ngFor="let subscription of subscriptions" [value]="subscription">{{subscription}}</option>
-                            </select>
+                            <label>Select report type</label>
+                            <select class="selectpicker form-control" required id="selectreporttype" title="Choose Report Type" [(ngModel)]="analyticsReportSetup.reportType" name="reportType"
+                            >
+                            <option *ngFor="let reportType of reportTypes" [value]="reportType">{{reportType}}</option>
+                        </select>
                         </div>
-                        <div *ngIf= "analyticsReportSetup.subscription == 'TIMER'" class="form-group">
-                            <label>Select Time</label>
-                            <ngb-timepicker [(ngModel)]="analyticsReportSetup.scheduleTime" [seconds]="seconds" name="scheduleTime"></ngb-timepicker>
+                        <div *ngIf="analyticsReportSetup.reportType == 'INSTANT_REPORT'">
+                            <div class="form-group">
+                                <label>Select date range</label>
+                                <api-daterangepicker (selectedRange)="setReportDateRange($event)"></api-daterangepicker>
+                            </div>
                         </div>
-                        <div *ngIf= "analyticsReportSetup.subscription == 'DAILY'" class="form-group">
-                            <label>Select Time</label>
-                            <ngb-timepicker [(ngModel)]="analyticsReportSetup.scheduleTime" [seconds]="seconds" name="scheduleTime"></ngb-timepicker>
-                        </div>
-                        <div *ngIf="analyticsReportSetup.subscription == 'WEEKLY'" class="form-group">
-                            <div class="col-md-6">
-                                <label>Select Week day</label>
-                                <select class="selectpicker form-control" required id="selectWeekDay" title="Choose week day" [(ngModel)]="analyticsReportSetup.scheduleDayOfWeek" name="scheduleDayOfWeek"
+                        <div *ngIf="analyticsReportSetup.reportType == 'SCHEDULE_REPORT'">
+                            <div class="form-group">
+                                <label >Select subscription</label>
+                                <select class="selectpicker form-control" required id="selectSubscription" title="Choose Subscription" [(ngModel)]="analyticsReportSetup.subscription" name="subscription"
                                     >
-                                    <option *ngFor="let day of scheduleDayOfWeek" [value]="day">{{day}}</option>
+                                    <option *ngFor="let subscription of subscriptions" [value]="subscription">{{subscription}}</option>
                                 </select>
                             </div>
-                            <div class="col-md-6">
+                            <div *ngIf= "analyticsReportSetup.subscription == 'TIMER'" class="form-group">
                                 <label>Select Time</label>
                                 <ngb-timepicker [(ngModel)]="analyticsReportSetup.scheduleTime" [seconds]="seconds" name="scheduleTime"></ngb-timepicker>
                             </div>
-                            
-                        </div>
-                        <div *ngIf="analyticsReportSetup.subscription == 'MONTHLY'" class="form-group">
-                            <label>Select date</label>
-                            <form class="form-inline">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <input class="form-control" placeholder="yyyy-mm-dd"
-                                            [(ngModel)]="analyticsReportSetup.scheduleDate" name="scheduleDate" ngbDatepicker #d="ngbDatepicker">
-                                        <div class="input-group-append">
-                                        <button class="btn btn-default" (click)="d.toggle()" type="button">
-                                            <i class="ion ion-calendar" style="width: 1.2rem; height: 1rem; cursor: pointer;"></i>
-                                            <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
-                                        </button>
-                                        </div>
+                            <div *ngIf= "analyticsReportSetup.subscription == 'DAILY'" class="form-group">
+                                <label>Select Time</label>
+                                <ngb-timepicker [(ngModel)]="analyticsReportSetup.scheduleTime" [seconds]="seconds" name="scheduleTime"></ngb-timepicker>
+                            </div>
+                            <div *ngIf="analyticsReportSetup.subscription == 'WEEKLY'" class="form-group">
+                                <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <label>Select Week day</label>
+                                        <select class="selectpicker form-control" required id="selectWeekDay" title="Choose week day" [(ngModel)]="analyticsReportSetup.scheduleDayOfWeek" name="scheduleDayOfWeek"
+                                            >
+                                            <option *ngFor="let day of scheduleDayOfWeek" [value]="day">{{day}}</option>
+                                        </select>
                                     </div>
+                                    <div class="col-md-6">
+                                        <label>Select Time</label>
+                                        <ngb-timepicker [(ngModel)]="analyticsReportSetup.scheduleTime" [seconds]="seconds" name="scheduleTime"></ngb-timepicker>
+                                    </div>
+                                    
                                 </div>
-                            </form>
-                            <!-- <api-datepicker [(selectedDate)]="analyticsReportSetup.scheduleDate"></api-datepicker> -->
+                                
+                            </div>
+                            <div *ngIf="analyticsReportSetup.subscription == 'MONTHLY'" class="form-group">
+                                <div class="col-md-6">
+                                    <label>Select date</label>
+                                    <form class="form-inline">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input class="form-control" placeholder="yyyy-mm-dd"
+                                                    [(ngModel)]="analyticsReportSetup.scheduleDate" name="scheduleDate" ngbDatepicker #d="ngbDatepicker">
+                                                <div class="input-group-append">
+                                                <button class="btn btn-default" (click)="d.toggle()" type="button">
+                                                    <i class="ion ion-calendar" style="width: 1.2rem; height: 1rem; cursor: pointer;"></i>
+                                                    <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                                                </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Select Time</label>
+                                    <ngb-timepicker [(ngModel)]="analyticsReportSetup.scheduleTime" [seconds]="seconds" name="scheduleTime"></ngb-timepicker>
+                                </div>
+                                <!-- <api-datepicker [(selectedDate)]="analyticsReportSetup.scheduleDate"></api-datepicker> -->
+                            </div>
                         </div>
+                       
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" (click)="scheduleAnalyticsReport()">
-                    
+                                Submit
                             </button>
                         </div>
                         

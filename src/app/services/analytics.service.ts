@@ -3,8 +3,10 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angul
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
-import { AnalyticsReportSetup } from '../models/analytics.model';
+import { AnalyticsReportSetup, AnalyticsReport } from '../models/analytics.model';
+import { ScheduleTaskConfiguration } from '../models/scheduler.model'
 import { environment } from '../../environments/environment';
+import { from } from 'rxjs/observable/from';
 
 @Injectable()
 export class AnalyticsService {
@@ -12,9 +14,41 @@ export class AnalyticsService {
 
     constructor(private httpClient: HttpClient) {}
 
-    scheduleReport(analyticsReportSetup: AnalyticsReportSetup): Observable<any> {
+    sendReport(analyticsReport: AnalyticsReport): Observable<any> {
         const subject = new Subject<any>();
-        console.log(analyticsReportSetup);
+        const url = `${environment.server + environment.sendReportUrl}`;
+        this.httpClient.post<AnalyticsReportSetup>(
+            url,
+            analyticsReport,
+            {
+              headers: this.httpHeaders,
+              observe: 'response',
+              reportProgress: true,
+              withCredentials: true
+            }
+          ).subscribe(
+            (response: HttpResponse<AnalyticsReportSetup>) => {
+                console.log("response")
+                console.log(response.body)
+                if (response.body) {
+                    subject.next(response.body);
+                }
+            },
+            (err: HttpErrorResponse) => {
+              // All errors are handled in ErrorInterceptor, no further handling required
+              // Unless any specific action is to be taken on some error
+      
+              subject.error(err);
+            }
+            );
+        console.log(analyticsReport);
+        return subject.asObservable();
+    }
+
+    scheduleReport(scheduleTaskConfiguration: ScheduleTaskConfiguration): Observable<any> {
+        const subject = new Subject<any>();
+        const analyticsReport = new AnalyticsReport();
+        console.log(scheduleTaskConfiguration);
         return subject.asObservable();
     }
 }
