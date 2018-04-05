@@ -51,6 +51,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   sourceStateTypes: string[] = ['Manual', 'Auto', 'Cognitive'];
   allocationTypes: string[] = ['Group', 'Least_Allocated', 'Maximum_Efficiency', 'API', 'User','Round_Robin','Auto_Agent_Allocation'];
   amountTypes: string[] = ['FIXED', 'DERIVED', 'API'];
+  timerUnitType: string[] = ['MINUTE','HOUR','DAY','WEEK','MONTH','YEAR'];
   sourceOperands: string[] = ['AND', 'OR'];
   sourceClassifiers: Classifier[] = [];
   sourceEntryActionList: string[] = [];

@@ -149,6 +149,8 @@ export class StateModel {
   costModel: CostModel;
   manualActions: ManualAction[];
   mandatoryDataPoints: DataPoint[];
+  timerUnitType: string;
+  timerUnit: number;
  
 
   constructor() {
@@ -167,6 +169,8 @@ export class StateModel {
     this.costModel = new CostModel();
     this.manualActions = [];
     this.mandatoryDataPoints = [];
+    this.timerUnitType = '';
+    this.timerUnit = 0;
    
   }
 }
@@ -223,6 +227,7 @@ export class GraphObject extends BaseModel {
   version: number;
   xml: string;
   processOwner: string;
+  primaryEntity: string;
   dataPointConfigurationList: DataPoint[];
   states: StateModel[];
   transitions: Transition[];
@@ -235,6 +240,7 @@ export class GraphObject extends BaseModel {
     this.machineLabel = '';
     this.machineType = '';
     this.processOwner = '';
+    this.primaryEntity = '';
     this.version = 0;
     this.xml = '';
     this.dataPointConfigurationList = [];

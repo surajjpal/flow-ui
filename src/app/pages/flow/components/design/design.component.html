@@ -121,6 +121,12 @@
               <option *ngFor="let entryAction of sourceEntryActionList" [ngValue]="entryAction['key']">{{entryAction['value']}}</option>
             </select>
           </div>
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto'">
+            <label for="timerUnitType">Timer Unit Type</label>
+            <input type="text" class="form-control" required id="timerUnitType" placeholder="Timer Unit Type" [(ngModel)]="tempState.timerUnitType" name="timerUnitType" />
+            <label for="timerUnit">Timer Units</label>
+            <input type="text" class="form-control" required id="timerUnit" placeholder="Timer Unit" [(ngModel)]="tempState.timerUnit" name="timerUnit" />
+          </div>
           <div class="form-group" *ngIf="isStateApiCompatible()">
             <label for="selectApiConfig">Select API</label>
             <select multiple="true" class="selectpicker form-control" required id="selectApiConfig" title="Choose API" [(ngModel)]="tempState.apiConfigurationList"
@@ -577,6 +583,13 @@
             </label>
             <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputProcessOwner" placeholder="Process Owner"
               [(ngModel)]="tempGraphObject.processOwner" name="processOwner" />
+          </div>
+          <div class="form-group">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="inputProcessOwner">
+              Process Entity
+            </label>
+            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputprimaryEntity" placeholder="Process Entity"
+              [(ngModel)]="tempGraphObject.primaryEntity" name="primaryEntity" />
           </div>
           <div class="form-group">
             <label class="col-md-12 col-sm-12 col-xs-12" for="inputVersionNumber">
