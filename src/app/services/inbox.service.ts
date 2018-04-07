@@ -52,7 +52,7 @@ export class StateService {
   
   constructor(private httpClient: HttpClient) { }
 
-  getStatesByStatusAndFolder(status: string, folder: string): Observable<State[]> {
+  getStatesByStatusAndFolder(status: string, folder: string,pageNumber:any,fetchRecords:any): Observable<State[]> {
     const subject = new Subject<State[]>();
 
     if (!status) {
@@ -62,8 +62,39 @@ export class StateService {
     if (!folder) {
       folder = 'Public';
     }
+    
+  
+    const url = `${environment.server + environment.statebystatusandfolderurl}${pageNumber},${fetchRecords},${status},${folder}`;
+    this.httpClient.get<State[]>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<State[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
 
-    const url = `${environment.server + environment.statebystatusandfolderurl}${status},${folder}`;
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+
+  
+  getStatesBySubStatusAndFolder(substatus: string, status: string,pageNumber:any,fetchRecords:any,type:string): Observable<State[]> {
+    const subject = new Subject<State[]>();
+    const url = `${environment.server + environment.statebysubstatusandfolderurl}${pageNumber},${fetchRecords},${substatus},${status},${type}`;
+
 
     this.httpClient.get<State[]>(
       url,
@@ -285,4 +316,39 @@ export class StateService {
 
     return subject.asObservable();
   }
+
+
+  saveFlaggedState(state: State): Observable<State> {
+    const subject = new Subject<State>();
+
+    console.log(state._id)
+
+    const url = `${environment.server + environment.saveflaggedstate}`;
+
+    this.httpClient.post<State>(
+      url,
+      state,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<State>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
 }

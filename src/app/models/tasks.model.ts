@@ -34,6 +34,7 @@ export class State extends BaseModel {
   stateMachineInstanceModelId: string;
   assignedUserGroupCd: string;
   assignedUserId: string;
+  flagReason:string;
   assignedUserName: string;
   startTime: Time;
   endTime: Time;
@@ -46,7 +47,7 @@ export class State extends BaseModel {
   businessCost: Amount;
   errorMessageMap: any;
   headerParamList: string[];
-  flagged:string;
+  flagged:boolean;
   flagLevel:number;
   autoAllocation:boolean;
 }
@@ -56,4 +57,5 @@ export class CommonInsightWrapper extends BaseModel {
   insightMap: any;
   reference_id: string;
   createdTime: Time;
+
 }

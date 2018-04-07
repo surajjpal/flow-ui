@@ -19,6 +19,9 @@ export class ActiveComponent implements OnInit, OnDestroy {
   groupHeaderParamList: string[];
   personalHeaderParamList: string[];
   progressBarFlag: boolean = false;
+  pageNumber:any;
+  fetchRecords:any;
+
 
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
@@ -31,9 +34,13 @@ export class ActiveComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
     //this.baThemeSpinner.show();
     this.progressBarFlag = true;
-    this.fetchData();
+    //this.baThemeSpinner.show();
+    this.pageNumber = 0
+    this.fetchRecords = 10
+    this.fetchData(this.pageNumber,this.fetchRecords);
   }
 
   ngOnDestroy(): void {
@@ -45,32 +52,29 @@ export class ActiveComponent implements OnInit, OnDestroy {
     }
   }
 
-  fetchData(): void {
+  fetchData(pageNumber,fetchRecords): void {
     this.loadingPersonal = true;
     this.loadingGroup = true;
 
-    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Group')
-      .subscribe(states => {
-        this.loadingGroup = false;
-        this.groupStates = states;
-        if (this.groupStates != null && this.groupStates.length > 0 && this.groupStates[0].headerParamList != null) {
-          this.groupHeaderParamList = this.groupStates[0].headerParamList;
-        }
 
-        if (!this.loadingGroup && !this.loadingPersonal) {
-          this.progressBarFlag = false;
-          // this.baThemeSpinner.hide();
-        }
+    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Group',pageNumber,fetchRecords)
 
-      }, error => {
-        this.loadingGroup = false;
-        if (!this.loadingGroup && !this.loadingPersonal) {
-          this.progressBarFlag = false;
-          // this.baThemeSpinner.hide();
-        }
-      });
+    .subscribe(states => {
+      this.loadingGroup = false;
+      this.groupStates = states;
 
-    this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Personal')
+      if(!this.loadingGroup && !this.loadingPersonal){
+        this.baThemeSpinner.hide();
+      }
+
+    }, error => {
+      this.loadingGroup = false;
+      if(!this.loadingGroup && !this.loadingPersonal){
+        this.baThemeSpinner.hide();
+      }
+    });
+
+    this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Personal',pageNumber,fetchRecords)
       .subscribe(states => {
         this.loadingPersonal = false;
         this.personalStates = states;
@@ -89,6 +93,34 @@ export class ActiveComponent implements OnInit, OnDestroy {
           // this.baThemeSpinner.hide();
         }
       });
+
+  }
+
+
+  loadMore(status,type):void{
+    this.loadingPersonal = true;
+    this.loadingGroup = true;
+    this.pageNumber = this.pageNumber + 1; 
+    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder(status,type,this.pageNumber,this.fetchRecords)
+    .subscribe(states => {
+      this.loadingGroup = false;
+      
+      if(type=='Group'){
+        this.groupStates = this.groupStates.concat(states)
+      }
+      else if(type=='Personal'){
+        this.personalStates = this.personalStates.concat(states)
+      }
+      if(!this.loadingGroup && !this.loadingPersonal){
+        this.baThemeSpinner.hide();
+      }
+
+    }, error => {
+      this.loadingGroup = false;
+      if(!this.loadingGroup && !this.loadingPersonal){
+        this.baThemeSpinner.hide();
+      }
+    });
   }
 
   onSelect(selectedData: State): void {

@@ -1475,6 +1475,7 @@ initializeGraphOnInit = function () {
   try { init_CustomNotification(); } catch (e) { }
   try { init_autosize(); } catch (e) { }
   try { init_autocomplete(); } catch (e) { }
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2001,6 +2002,9 @@ function addOverlaysUser(hierarchygraph, cell, addDeleteIcon) {
         document.getElementById('#rootuser').style.visibility = 'visible';
         document.getElementById('#discardHierarchy').style.visibility = 'hidden';
         document.getElementById('#saveHierarchy').style.visibility = 'hidden';
+
+        window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.discard();})
+
       }
       deleteUserSubtree(hierarchygraph, cell);
       var users = getUsersForAllVertices();
@@ -2179,4 +2183,3 @@ addTaskIconOverlays = function (graph) {
     }
   }
 };
-
