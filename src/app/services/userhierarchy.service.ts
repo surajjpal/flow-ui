@@ -101,7 +101,35 @@ export class FetchUserService {
     return subject.asObservable();
   }
 
+  getUserChildren(): Observable<UserHierarchy[]> {
+    const subject = new Subject<UserHierarchy[]>();
+    
+    
+    var url = `${environment.server + environment.userchildren}`;
+    
+    this.httpClient.get<UserHierarchy[]>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<UserHierarchy[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
 
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
 
 }
 

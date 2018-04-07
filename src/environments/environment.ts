@@ -19,10 +19,15 @@ export const environment = {
 
   // Flow
   server: 'http://108.168.190.82:8080/flow/console/',
-  statebystatusandfolderurl: 'state/pagebystatusandfolder/0,200,', // status: CLOSED, ACTIVE; folder: Group, Personal
+
+
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
   orPayloadMachineType:'state/saveOrPayload/machineType/',
+  statebystatusandfolderurl: 'state/pagebystatusandfolder/,', // status: CLOSED, ACTIVE; folder: Group, Personal
+  statebysubstatusandfolderurl:'state/pagebysubstatusandfolder/',
+  saveflaggedstate:'state/saveFlaggedState',
+
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
@@ -39,10 +44,13 @@ export const environment = {
   entryactionurl: 'graph/actions',
   autodashboardurl: 'dashboard',
   userurl: 'user/',
-  forgotpassword:'user/forgotPassword',
+
   registerurl: 'user/createUser',
+  forgotpassword:'user/forgotPassword',
   savehierarchy:'user/hierarchy',
   getuserhierarchy:'user/getUserHierarchy/',
+  userchildren:'user/userChildren',
+
   createcompanyadminurl: 'user/createcompanyadmin',
   updateuserurl: 'user/update',
   authoritiesurl: 'user/roles',

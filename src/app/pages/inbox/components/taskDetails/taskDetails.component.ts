@@ -79,7 +79,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     //document.getElementById('#alocateButton').style.visibility = 'hidden';
     this.selectedState = this.dataCachingService.getSelectedState();
     if (!this.selectedState) {
-      this.router.navigate(['/pg/tsk/tact'], { relativeTo: this.route });
+      this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
       return;
     }
     
@@ -112,6 +112,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     if (this.subscriptionChatMessages && !this.subscriptionChatMessages.closed) {
       this.subscriptionChatMessages.unsubscribe();
     }
+
     if (this.subscriptionInsight && !this.subscriptionInsight.closed) {
       this.subscriptionInsight.unsubscribe();
     }
@@ -173,11 +174,13 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
   }
 
+
     allocate(){
       
       this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.allocatedUserId,this.selectedState._id,"Allocate")
       .subscribe(any => {
-        this.router.navigate(['/pg/tsk/tact'], { relativeTo: this.route });
+
+        this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
     });
     }
 
@@ -186,7 +189,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userHierarchy.parentUserId,this.selectedState._id,"Escalate")
       .subscribe(any => {
         
-        this.router.navigate(['/pg/tsk/tact'], { relativeTo: this.route });
+
+        this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
         
     });
     }
@@ -195,7 +199,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userId,this.selectedState._id,"Reserve")
       .subscribe(any => {
         
-        this.router.navigate(['/pg/tsk/tact'], { relativeTo: this.route });
+
+        this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
         
     });
 
@@ -208,6 +213,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       
     }
   
+
   onBack() {
     this.location.back();
   }

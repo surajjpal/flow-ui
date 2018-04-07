@@ -2,6 +2,7 @@ export class BaseModel {
   _id: string;
   statusCd: string;
   companyId: string;
+  subStatus:string;
   // companyName: string;
 
   constructor() {
