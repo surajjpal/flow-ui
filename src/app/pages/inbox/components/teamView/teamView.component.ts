@@ -158,6 +158,9 @@ import { FetchUserService } from '../../../../services/userhierarchy.service';
             this.UserChildren = userChildren;
             this.fetchData()
           }
+          else{
+            this.progressBarFlag = false;
+          }
         });
     }
 
