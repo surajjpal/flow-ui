@@ -111,6 +111,18 @@ export const PAGES_MENU = [
             order: 4
           }
         }
+      },
+      {
+        path: 'settings',
+        data: {
+          menu: {
+            title: 'Settings',
+            icon: 'ion-locked',
+            selected: false,
+            expanded: false,
+            order: 1
+          }
+        }
       }
     ]
   }

@@ -20,6 +20,7 @@ import { KeysPipe } from './key-filter.pipe';
     ApiCheckboxComponent,
     UniversalFilterPipe,
     KeysPipe
+
   ]
 })
 export class SharedModule { }
