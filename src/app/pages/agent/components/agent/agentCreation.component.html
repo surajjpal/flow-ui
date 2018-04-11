@@ -59,6 +59,19 @@
                 <input type="text" class="form-control" required placeholder="Avatar URL (Optional)" [(ngModel)]="selectedAgent.uiComponent.avatarUrl" name="avatarUrl"
                 />
               </div>
+              <div class="form-group">
+                <label>Agent Placeholder Text</label>
+                <input type="text" class="form-control" required placeholder="Agent Placeholder Text (Optional)" [(ngModel)]="selectedAgent.uiComponent.placeHolderText" name="placeHolderText"
+                />
+              </div>
+              <div class="form-group">
+                <label>Episode Idle Timeout (in Minutes)</label>
+                <input type="number" class="form-control" required placeholder="Episode Idle Timeout (in Minutes)" [(ngModel)]="selectedAgent.uiComponent.episodeIdleTimeout" name="episodeIdleTimeout"
+                  min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+              </div>
+              <div class="checkbox">
+                <ba-checkbox [(ngModel)]="selectedAgent.uiComponent.delayInMessages" [label]="'Delay in messages'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+              </div>
             </form>
           </div>
         </div>

@@ -6,6 +6,9 @@ export class UIComponent {
   logoUrl: string;
   typingGif: string;
   avatarUrl: string;
+  placeHolderText: string;
+  episodeIdleTimeout: number;
+  delayInMessages: boolean;
 
   constructor() {
     this.colorCss = '';
@@ -13,6 +16,9 @@ export class UIComponent {
     this.logoUrl = '';
     this.typingGif = '';
     this.avatarUrl = '';
+    this.placeHolderText = 'Type your query...';
+    this.episodeIdleTimeout = 240;      // In minutes - default 4hrs - 240 mins
+    this.delayInMessages = false;
   }
 }
 
@@ -69,6 +75,7 @@ export class Agent {
   agentClassifier: Classifier[];
   companyId: string;
   uiComponent: UIComponent;
+  episodeCloseTimeout: number;
 
   constructor() {
     this._id = null;
@@ -85,5 +92,6 @@ export class Agent {
     this.agentClassifier = [];
     this.companyId = '';
     this.uiComponent = new UIComponent();
+    this.episodeCloseTimeout = 2880;      // In minutes - default 48hrs - 2880 mins
   }
 }
