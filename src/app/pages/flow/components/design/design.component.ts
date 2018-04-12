@@ -152,7 +152,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
 
     new designFlowEditor(this.graphObject.xml, this.readOnly);
-    this.fetchStatesOrPayload();
+    //this.fetchStatesOrPayload();
   }
 
   fetchStatesOrPayload(){
@@ -422,13 +422,25 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.graphObject.states = states;
       this.graphObject.transitions = transitions;
 
-      this.graphObject.dataPointConfigurationList.sort(function (a, b) {
-        return a.sequence - b.sequence;
+      this.graphObject.dataPointConfigurationList = this.graphObject.dataPointConfigurationList.sort((dp1, dp2) => {
+        if (dp1.sequence > dp2.sequence) {
+          return 1;
+        } else if (dp1.sequence < dp2.sequence) {
+            return -1;
+        } else {
+          return 0;
+        }
       });
 
       for (const dataPoint of this.graphObject.dataPointConfigurationList) {
-        dataPoint.validations.sort(function (a, b) {
-          return a.sequence - b.sequence;
+        dataPoint.validations = dataPoint.validations.sort((v1, v2) => {
+          if (v1.sequence > v2.sequence) {
+            return 1;
+          } else if (v1.sequence < v2.sequence) {
+            return -1;
+          } else {
+            return 0;
+          }
         });
 
         if (dataPoint.dataType !== 'SINGLE_SELECT' && dataPoint.dataType !== 'MULTI_SELECT') {
@@ -454,11 +466,6 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   deepCopy(object: Object) {
     return JSON.parse(JSON.stringify(object));
-  }
-
-  showAppJSWarning(header: string, body: string) {
-    this.warningHeader = header;
-    this.warningBody = body;
   }
 
   enableBulkEdit(selectedEvent: EventModel) {

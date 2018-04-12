@@ -15,9 +15,8 @@ export class ArchivedComponent implements OnInit, OnDestroy {
   personalStates: State[];
   loadingGroup: boolean = false;
   loadingPersonal: boolean = false;
-  pageNumber:any
-  fetchRecords:any
-
+  pageNumber :any;
+  fetchRecords:any;
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
 
@@ -29,8 +28,6 @@ export class ArchivedComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
-    //this.progressBarFlag = true;
     this.pageNumber= 0;
     this.fetchRecords = 10;
     this.fetchData(this.pageNumber,this.fetchRecords);
@@ -49,7 +46,6 @@ export class ArchivedComponent implements OnInit, OnDestroy {
     this.loadingPersonal = true;
     this.loadingGroup = true;
 
-
     this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('CLOSED', 'Group',pageNumber,fetchRecords)
     .subscribe(states => {
       this.loadingGroup = false;
@@ -66,10 +62,6 @@ export class ArchivedComponent implements OnInit, OnDestroy {
       this.loadingPersonal = false;
     });
   }
-
-
-
-
 
   loadMore(status,type):void{
     this.loadingPersonal = true;

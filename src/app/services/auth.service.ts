@@ -162,7 +162,6 @@ export class AuthService {
   }
 
 
-
   redirect(): Observable<User> {
     const subject = new Subject<User>();
     

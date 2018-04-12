@@ -27,7 +27,8 @@ export const routes: Routes = [
       { path: 'flw', loadChildren: './flow/flow.module#FlowModule' },
       { path: 'agnt', loadChildren: './agent/agent.module#AgentModule' },
       { path: 'dmn', loadChildren: './domain/domain.module#DomainModule' },
-      { path: 'stp', loadChildren: './master/master.module#MasterModule' }
+      { path: 'stp', loadChildren: './master/master.module#MasterModule' },
+      { path: 'stn', loadChildren: './settings/settings.module#SettingsModule' }
     ]
   }
 ];

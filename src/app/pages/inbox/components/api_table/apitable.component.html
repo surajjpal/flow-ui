@@ -1,4 +1,5 @@
 <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
+
 <br>
 <table class="table table-striped" [mfData]="rawDataArray | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage"
   [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
@@ -51,7 +52,7 @@
   <tfoot>
     <tr>
       <td colspan="5">
-        <mfBootstrapPaginator></mfBootstrapPaginator>
+        <mfBootstrapPaginator ></mfBootstrapPaginator>
       </td>
     </tr>
   </tfoot>

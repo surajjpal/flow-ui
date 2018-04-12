@@ -28,6 +28,7 @@ export const environment = {
   statebysubstatusandfolderurl:'state/pagebysubstatusandfolder/',
   saveflaggedstate:'state/saveFlaggedState',
 
+
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',

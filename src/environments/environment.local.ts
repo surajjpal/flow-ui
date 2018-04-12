@@ -22,6 +22,7 @@ export const environment = {
   statebysubstatusandfolderurl:'state/pagebysubstatusandfolder/',
   saveflaggedstate:'state/saveFlaggedState',
 
+
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
@@ -47,6 +48,7 @@ export const environment = {
   savehierarchy:'user/hierarchy',
   getuserhierarchy:'user/getUserHierarchy/',
   userchildren:'user/userChildren',
+
 
   createcompanyadminurl: 'user/createcompanyadmin',
   updateuserurl: 'user/update',

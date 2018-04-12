@@ -56,9 +56,7 @@ export class ActiveComponent implements OnInit, OnDestroy {
     this.loadingPersonal = true;
     this.loadingGroup = true;
 
-
     this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Group',pageNumber,fetchRecords)
-
     .subscribe(states => {
       this.loadingGroup = false;
       this.groupStates = states;
@@ -95,6 +93,9 @@ export class ActiveComponent implements OnInit, OnDestroy {
       });
 
   }
+
+
+  
 
 
   loadMore(status,type):void{
