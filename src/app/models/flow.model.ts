@@ -169,7 +169,6 @@ export class StateModel {
     this.costModel = new CostModel();
     this.manualActions = [];
     this.mandatoryDataPoints = [];
-    this.timerUnitType = '';
     this.timerUnit = 0;
    
   }

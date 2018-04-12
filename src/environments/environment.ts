@@ -42,6 +42,7 @@ export const environment = {
   getusergraphurl:'usergraph/',
   graphbystatusurl: 'graph/findbystatus/',
   entryactionurl: 'graph/actions',
+  timeruniturl: 'graph/timerunit',
   autodashboardurl: 'dashboard',
   userurl: 'user/',
 

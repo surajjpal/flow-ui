@@ -59,6 +59,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   sourceManualActionType: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT'];
   sourceEvents: EventModel[] = [];
   sourceDataTypes: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT', 'ARRAY', 'ANY'];
+  sourceTimerUnitList: string[] = [];
 
   // Models to bind with html
   bulkEdit: boolean = false;
@@ -86,6 +87,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   private subscriptionEntryAction: Subscription;
   private subscriptionApiConfig: Subscription;
   private subscriptionOrPayload: Subscription;
+  private subscriptionTimerUnit: Subscription;
 
   constructor(
     private router: Router,
@@ -132,10 +134,14 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (this.subscriptionApiConfig && !this.subscriptionApiConfig.closed) {
       this.subscriptionApiConfig.unsubscribe();
     }
+    if (this.subscriptionTimerUnit && !this.subscriptionTimerUnit.closed) {
+      this.subscriptionTimerUnit.unsubscribe();
+    }
   }
 
   load(): void {
     this.getSourceEntryActions();
+    this.getTimerUnits();
     this.getApiConfigLookup();
     
 
@@ -176,6 +182,16 @@ export class DesignComponent implements OnInit, OnDestroy {
         }
       });
   }
+
+  getTimerUnits() {
+    this.subscriptionTimerUnit = this.graphService.getTimerUnits()
+      .subscribe(sourceTimerUnitList => {
+        if (sourceTimerUnitList) {
+          this.sourceTimerUnitList = sourceTimerUnitList;
+        }
+      });
+  }
+
 
   getApiConfigLookup() {
     this.subscriptionApiConfig = this.graphService.apiConfigLookup()
