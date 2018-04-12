@@ -69,12 +69,15 @@
                           <mfDefaultSorter by=""><h6><b>Flag Level</b></h6></mfDefaultSorter>
                         </th>
                         <th>
-                          <mfDefaultSorter by=""><h6><b>Escalated</b></h6></mfDefaultSorter>
+                          <mfDefaultSorter by=""><h6><b>Flagged By</b></h6></mfDefaultSorter>
+                        </th>
+                        <th>
+                          <mfDefaultSorter by=""><h6><b>Action</b></h6></mfDefaultSorter>
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let s of flaggedStates" (click)="onSelect(s)">
+                      <tr *ngFor="let s of flaggedStates">
                         <td>{{s.machineLabel}}</td>
                         <td>{{s.stateCd}}</td>
                         <td>{{s.statusCd}}</td>
@@ -82,8 +85,16 @@
                         <td>{{s.assignedUserGroupCd}}</td>
                         <td>{{s.flagged}}</td>
                         <td>{{s.flagReason}}</td>
-                        <td>{{s.flagLevel}}</td>
-                        <td>{{s.escalatedFlag}}</td>
+                        <td  align="center">{{s.flagLevel}}</td>
+                        <td  align="center">{{s.assignedUserDisplayName}}</td>
+                        <td><div class="btn-group" role="group">
+                          <button type="button" class="btn btn-primary" title="View" (click)="onSelect(s)">
+                            <i class="ion-eye"></i>
+                          </button>
+                          <button type="button" class="btn btn-success" title="Approve Flag" data-toggle="modal" *ngIf="s.flagLevel == 3" (click)="onSelectUnFlag(s)" data-target="#finalWarningModal">
+                            <i class="ion-flag"></i>
+                          </button>
+                        </div></td>
                       </tr>
                       <tr *ngIf="flaggedStates.length === 0 && isLoading">
                         <td colspan="100%">Loading...</td>
@@ -100,7 +111,7 @@
                       </tr>
                     </tfoot>
                   </table>
-                  <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px" *ngIf="flaggedStates.length !== 0" (click)="loadMore('FLAGGED')" >Load More</button>
+                  <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px" *ngIf="flaggedStates.length > 10" (click)="loadMore('FLAGGED')" >Load More</button>
                 </div>
               </div>
             </div>
@@ -112,5 +123,33 @@
           <h5 class="card-title">MESSAGE</h5>
           <p class="card-text">We are sorry but you need to have team under you to view this page</p>
         </div>
+</div>
+
+<div class="modal fade" id="flagWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagWarningLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="finalWarningLabel">
+          Warning
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        Once you approve the flag the task will be moved to Archive, are you sure you want to continue?
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="moveToArchive(selectedFlagState)">Finalise</button>
+      </div>
+    </div>
+  </div>
 </div>
       

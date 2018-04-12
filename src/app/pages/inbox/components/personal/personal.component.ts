@@ -46,7 +46,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
   pageNumber:any;
   fetchRecords:any;
   flagLevel:number;
-  FlagReasons: string[] = ['A','B','C','D','E'];
+  FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
 
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
@@ -207,7 +207,12 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.selectedStateForFlag = state;
   }
 
+  onReasonSelect(reason):void{
+    this.selectedStateForFlag.flagReason = reason;
+  }
+
   confirm():void{
+    console.log(this.selectedStateForFlag)
     this.selectedStateForFlag.flagged = true;
     this.flagLevel = this.selectedStateForFlag.flagLevel;
     this.flagLevel = this.flagLevel + 1;

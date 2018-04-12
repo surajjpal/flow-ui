@@ -32,6 +32,7 @@ import { FetchUserService } from '../../../../services/userhierarchy.service';
     selectedData: EventEmitter<any> = new EventEmitter<any>();
   
     selectedState: State;
+    selectedFlagState:State;
     selectedStateCd: string;
     assignedStates: State[];
     unassignedStates: State[];
@@ -199,6 +200,20 @@ import { FetchUserService } from '../../../../services/userhierarchy.service';
             }
             
       
+          });
+        }
+
+        onSelectUnFlag(state):void{
+          this.selectedFlagState = state
+          this.selectedFlagState.statusCd = "CLOSED"
+          
+        }
+
+        moveToArchive():void{
+          this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedFlagState)
+          .subscribe(State => {
+            new closeModal('flagWarningLabel');
+            this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
           });
         }
   }

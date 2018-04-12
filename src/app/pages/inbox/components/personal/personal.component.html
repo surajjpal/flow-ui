@@ -55,6 +55,9 @@
                         <mfDefaultSorter by=""><h6><b>Escalated</b></h6></mfDefaultSorter>
                       </th>
                       <th>
+                        <mfDefaultSorter by=""><h6><b>Flag Reason</b></h6></mfDefaultSorter>
+                      </th>
+                      <th>
                         <mfDefaultSorter by=""><h6><b>Action</b></h6></mfDefaultSorter>
                       </th>
                     </tr>
@@ -68,12 +71,16 @@
                       
                       <td>{{s.flagLevel}}</td>
                       <td>{{s.escalatedFlag}}</td>
+                      <td>{{s.flagReason}}</td>
                       
                       <td><div class="btn-group" role="group">
                         <button type="button" class="btn btn-primary" title="View" (click)="onSelect(s)">
                           <i class="ion-eye"></i>
                         </button>
-                        <button type="button" class="btn btn-danger" title="Flag" data-toggle="modal" data-target="#flagModal" (click)="selectedForFlag(s)">
+                        <button type="button" class="btn btn-danger" title="Flag" *ngIf="s.flagLevel < 3" data-toggle="modal" data-target="#flagModal" (click)="selectedForFlag(s)">
+                          <i class="ion-flag"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger" title="Flag" *ngIf="s.flagLevel == 3" data-toggle="modal" data-target="#flagPersonalWarningModal">
                           <i class="ion-flag"></i>
                         </button>
                       </div></td>
@@ -93,15 +100,15 @@
                     </tr>
                   </tfoot>
                 </table>
-              <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; width: 200px" *ngIf="assignedStates.length !== 0" (click)="loadMore('ACTIVE','Personal')" >Load More</button>
+              <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; width: 200px" *ngIf="assignedStates.length > 10" (click)="loadMore('ACTIVE','Personal')" >Load More</button>
             </div>
             <div role="tabpanel" class="tab-pane fade" id="tab_unassigned">
               <apitable *ngIf="unassignedStates" [rawDataArray]="unassignedStates" [isLoading]="loadingUnassigned" (selectedData)="onSelect($event)"></apitable>
-              <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px" *ngIf="unassignedStates.length !== 0" (click)="loadMore('ACTIVE','Group')" >Load More</button>
+              <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px" *ngIf="unassignedStates.length > 10" (click)="loadMore('ACTIVE','Group')" >Load More</button>
             </div>
             <div role="tabpanel" class="tab-pane fade" id="tab_flagged">
                 <apitable *ngIf="flaggedStates" [rawDataArray]="flaggedStates" [isLoading]="loadingFlagged" (selectedData)="onSelect($event)"></apitable>
-                <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px" *ngIf="flaggedStates.length !== 0" (click)="loadMore('FLAGGED','Personal')" >Load More</button>
+                <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px" *ngIf="flaggedStates.length > 10" (click)="loadMore('FLAGGED','Personal')" >Load More</button>
               </div>
           </div>
         </div>
@@ -128,7 +135,7 @@
             <div class="form-group" *ngIf="selectedStateForFlag">
               <label for="selectReason">Select Reason</label>
               <select class="selectpicker form-control" required id="selectReason" title="Choose Flag Reason"  [ngModel]="selectedStateForFlag.flagReason" [ngModelOptions]="{standalone: true}"
-              name="flagReason">
+              (ngModelChange)="onReasonSelect($event)">
                 <option *ngFor="let flagReason of FlagReasons" [value]="flagReason">{{flagReason}}</option>
               </select>
             </div>
@@ -141,3 +148,31 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="flagPersonalWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagWarningLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="finalWarningLabel">
+            Warning
+          </h4>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+  
+        <!-- Modal Body -->
+        <div class="modal-body" id="modal_body">
+          The Task is already flagged three times, appropriate action will be taken by the team lead!!! 
+        </div>
+  
+        <!-- Modal Footer -->
+        <div class="modal-footer" id="modal_footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+        

@@ -32,6 +32,7 @@ export class State extends BaseModel {
   stateCd: string;
   stageCd: string;
   stateMachineInstanceModelId: string;
+  assignedUserDisplayName:string;
   assignedUserGroupCd: string;
   assignedUserId: string;
   flagReason:string;
