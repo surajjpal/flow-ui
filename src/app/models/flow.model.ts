@@ -151,6 +151,8 @@ export class StateModel {
   mandatoryDataPoints: DataPoint[];
   timerUnitType: string;
   timerUnit: number;
+  runAtDateExpression: string;
+  runAtTimeExpression: string;
  
 
   constructor() {
@@ -170,6 +172,8 @@ export class StateModel {
     this.manualActions = [];
     this.mandatoryDataPoints = [];
     this.timerUnit = 0;
+    this.runAtDateExpression = '';
+    this.runAtTimeExpression = '';
    
   }
 }

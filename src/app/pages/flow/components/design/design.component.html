@@ -134,6 +134,14 @@
             <input type="number" class="form-control" required id="timerUnit" placeholder="Timer Unit" [(ngModel)]="tempState.timerUnit" name="timerUnit" min="0" 
             onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)" />
           </div>
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'TimerStateEntryAction'">
+            <label for="timerUnit">Timer Date Paramter</label>
+            <input type="text" class="form-control" required id="runAtDateExpression" placeholder="Enter parameter to pick Run Date" [(ngModel)]="tempState.runAtDateExpression" name="runAtDateExpression" min="0" />
+          </div>
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'TimerStateEntryAction'">
+            <label for="timerUnit">Timer Time Parameter</label>
+            <input type="text" class="form-control" required id="runAtTimeExpression" placeholder="Enter parameter to pick Run Time" [(ngModel)]="tempState.runAtTimeExpression" name="runAtTimeExpression" min="0" />
+          </div>
           <div class="form-group" *ngIf="isStateApiCompatible()">
             <label for="selectApiConfig">Select API</label>
             <select multiple="true" class="selectpicker form-control" required id="selectApiConfig" title="Choose API" [(ngModel)]="tempState.apiConfigurationList"
