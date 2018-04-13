@@ -305,6 +305,12 @@
                 <button *ngIf="selectedState.statusCd !== 'CLOSED' && selectedState.assignedUserGroupCd !== 'Personal' " type="button" (click)="reserve()"
                   class="btn btn-default btn-with-icon">
                   <i class="ion-archive"></i>Reserve Task</button>
+                  <button type="button" class="btn btn-danger" title="Flag" *ngIf="selectedState.assignedUserGroupCd == 'Personal' && selectedState.flagLevel < 3" data-toggle="modal" data-target="#flagTaskModal">
+                    <i class="ion-flag"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger" title="Flag" *ngIf="selectedState.flagLevel == 3 && selectedState.assignedUserGroupCd == 'Personal'" data-toggle="modal" data-target="#flagTaskWarningModal">
+                    <i class="ion-flag"></i>
+                  </button>
               </div>
             </form>
           </div>
@@ -507,6 +513,67 @@
           </div>
 
         </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="flagTaskModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagmodalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="userModalLabel">
+          Flag Reason
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        <form>
+          <div class="form-group" *ngIf="selectedState">
+            <label for="selectReason">Select Reason</label>
+            <select class="selectpicker form-control" required id="selectReason" title="Choose Flag Reason"  [ngModel]="selectedState.flagReason" [ngModelOptions]="{standalone: true}"
+            (ngModelChange)="onReasonSelect($event)">
+              <option *ngFor="let flagReason of FlagReasons" [value]="flagReason">{{flagReason}}</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="confirm()">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="flagTaskWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagWarningLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="finalWarningLabel">
+          Warning
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        The Task is already flagged three times, appropriate action will be taken by the team lead!!! 
       </div>
 
       <!-- Modal Footer -->

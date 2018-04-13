@@ -3,7 +3,7 @@ declare var styleStates: any;
 declare var showModal: any;
 declare var graphTools: any;
 declare var styleInfo:any;
-
+declare var closeModal: any;
 
 import { Component, OnInit, OnDestroy,NgZone } from '@angular/core';
 import { Location } from '@angular/common';
@@ -52,6 +52,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   stateInfoModels:StateInfoModel[];
   orPayload:any; 
   selectedModel:StateInfoModel;
+  flagLevel:number;
+  FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
   
   private subscription: Subscription;
   private subscriptionEpisode: Subscription;
@@ -361,5 +363,22 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
           new showModal('successModal');
         }
       });
+  }
+
+  onReasonSelect(reason):void{
+    this.selectedState.flagReason = reason;
+  }
+
+  confirm():void{
+    this.selectedState.flagged = true;
+    this.flagLevel = this.selectedState.flagLevel;
+    this.flagLevel = this.flagLevel + 1;
+    this.selectedState.flagLevel = this.flagLevel;
+    this.selectedState.subStatus = "FLAGGED"
+    this.subscription = this.stateService.saveFlaggedState(this.selectedState)
+    .subscribe(State => {
+      new closeModal('flagTaskModal');
+      this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
+    });
   }
 }

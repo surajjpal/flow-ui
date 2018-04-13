@@ -212,7 +212,7 @@ import { FetchUserService } from '../../../../services/userhierarchy.service';
         moveToArchive():void{
           this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedFlagState)
           .subscribe(State => {
-            new closeModal('flagWarningLabel');
+            new closeModal('flagWarningModal');
             this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
           });
         }
