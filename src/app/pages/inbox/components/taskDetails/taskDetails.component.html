@@ -304,19 +304,16 @@
                   <i class="ion-alert-circled"></i>Escalate Task</button>&nbsp;&nbsp;&nbsp;
                 <button *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd !== 'Personal' " type="button"
                   (click)="reserve()" class="btn btn-default btn-with-icon">
-                  <i class="ion-archive"></i>Reserve Task</button>
-                <button type="button" class="btn btn-danger" title="Flag" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd == 'Personal' && selectedState.iterationLevel < 3"
+                  <i class="ion-archive"></i>Reserve Task</button>&nbsp;&nbsp;&nbsp;
+                <button type="button" class="btn btn-danger btn-with-icon" title="Flag" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd == 'Personal' && selectedState.iterationLevel < 3"
                   data-toggle="modal" data-target="#flagTaskModal">
-                  <i class="ion-flag"></i>
-                </button>
-                <button type="button" class="btn btn-danger" title="Flag" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.iterationLevel == 3 && selectedState.assignedUserGroupCd == 'Personal'"
+                  <i class="ion-flag"></i>Flag</button>&nbsp;&nbsp;&nbsp;
+                <button type="button" class="btn btn-danger btn-with-icon" title="Flag" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.iterationLevel == 3 && selectedState.assignedUserGroupCd == 'Personal'"
                   data-toggle="modal" data-target="#flagTaskWarningModal">
-                  <i class="ion-flag"></i>
-                  <button type="button" class="btn btn-danger" title="Archive" *ngIf="selectedState.statusCd !=='ACTIVE' && selectedState.assignedUserGroupCd == 'Personal' " data-toggle="modal"
+                  <i class="ion-flag"></i>Flag</button>&nbsp;&nbsp;&nbsp;
+                <button type="button" class="btn btn-danger btn-with-icon" title="Archive" *ngIf="selectedState.statusCd ==='ACTIVE' && selectedState.assignedUserGroupCd == 'Personal' " data-toggle="modal"
                     data-target="#archiveTaskWarningModal">
-                    <i class="ion-ios-trash"></i>Archive
-                  </button>
-                </button>
+                    <i class="ion-ios-trash"></i>Archive</button>&nbsp;&nbsp;&nbsp;
               </div>
             </form>
           </div>
