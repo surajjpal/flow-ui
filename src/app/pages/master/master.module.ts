@@ -17,6 +17,7 @@ import { ApiConfigComponent } from './components/apiConfig/apiConfig.component';
 import { ApiConfigSetupComponent } from './components/apiConfigSetup/apiConfigSetup.component';
 
 import { SharedModule } from '../../shared/shared.module';
+import { UserHierarchyComponent } from 'app/pages/master/components/userHierarchy/userHierarchy.component';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { SharedModule } from '../../shared/shared.module';
     UpdateUserComponent,
     RoutelinkComponent,
     ApiConfigComponent,
-    ApiConfigSetupComponent
+    ApiConfigSetupComponent,
+    UserHierarchyComponent
   ]
 })
 export class MasterModule { }

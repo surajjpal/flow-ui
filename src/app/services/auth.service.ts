@@ -95,7 +95,6 @@ export class AuthService {
     return subject.asObservable();
   }
 
-
   forgotPassword(user: User): Observable<User> {
     const subject = new Subject<User>();
 

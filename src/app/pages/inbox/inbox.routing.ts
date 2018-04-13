@@ -1,5 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
-
+import { TeamViewComponent} from './components/teamView/teamView.component';
+import { PersonalComponent} from './components/personal/personal.component';
 import { InboxComponent } from './inbox.component';
 import { ActiveComponent } from './components/active/active.component';
 import { ArchivedComponent } from './components/archived/archived.component';
@@ -13,7 +14,9 @@ const routes: Routes = [
       { path: '', redirectTo: 'tact', pathMatch: 'full' },
       { path: 'tact', component: ActiveComponent },
       { path: 'trch', component: ArchivedComponent },
-      { path: 'tdts', component: TaskDetailsComponent }
+      { path: 'tdts', component: TaskDetailsComponent },
+      { path: 'tmvi', component: TeamViewComponent},
+      { path: 'pervi', component: PersonalComponent}
     ]
   }
 ];

@@ -7,6 +7,7 @@ import { UpdateUserComponent } from './components/updateUser/updateUser.componen
 import { RoutelinkComponent } from './components/routelink/routelink.component';
 import { ApiConfigComponent } from './components/apiConfig/apiConfig.component';
 import { ApiConfigSetupComponent } from './components/apiConfigSetup/apiConfigSetup.component';
+import { UserHierarchyComponent } from './components/userHierarchy/userHierarchy.component';
 
 const routes: Routes = [
   {
@@ -20,7 +21,9 @@ const routes: Routes = [
       { path: 'stus/:prf', component: UpdateUserComponent },
       { path: 'stm', component: RoutelinkComponent },
       { path: 'sta', component: ApiConfigComponent },
-      { path: 'stas', component: ApiConfigSetupComponent }
+      { path: 'stas', component: ApiConfigSetupComponent },
+      { path:'stuh', component: UserHierarchyComponent }
+
     ]
   }
 ];

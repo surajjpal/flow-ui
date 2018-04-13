@@ -27,6 +27,7 @@ export class DataPoint {
   validations: DataPointValidation[];
   operand: string;
   value: any;
+  headerFlag: boolean;
 
   constructor() {
     this.sequence = 0;
@@ -39,6 +40,7 @@ export class DataPoint {
     this.validations = [];
     this.operand = 'AND';
     this.value = null;
+    this.headerFlag = false;
   }
 }
 
@@ -81,6 +83,9 @@ export class AllocationModel {
   groups: string[];
   api: string;
   allocatedUserCd: string;
+  capabilities:string[];
+	stickyStates:string[];
+	emailerAPI:string;
 
   constructor() {
     this.allocationGroup = '';
@@ -88,6 +93,9 @@ export class AllocationModel {
     this.allocationType = '';
     this.api = '';
     this.allocatedUserCd = '';
+    this.capabilities = [];
+    this.stickyStates = [];
+    this.emailerAPI = '';
   }
 }
 
@@ -141,6 +149,11 @@ export class StateModel {
   costModel: CostModel;
   manualActions: ManualAction[];
   mandatoryDataPoints: DataPoint[];
+  timerUnitType: string;
+  timerUnit: number;
+  runAtDateExpression: string;
+  runAtTimeExpression: string;
+ 
 
   constructor() {
     this.stateId = '';
@@ -158,7 +171,45 @@ export class StateModel {
     this.costModel = new CostModel();
     this.manualActions = [];
     this.mandatoryDataPoints = [];
+    this.timerUnit = 0;
+    this.runAtDateExpression = '';
+    this.runAtTimeExpression = '';
+   
   }
+}
+
+
+export class StateInfoModel{
+
+	name:string; 
+	duration:any;
+	is_critical:boolean;
+	earlyfinish:any;
+	slack:any;
+	latefinish:any;
+	predecessors:string[];
+	predecessor_ids:string[];
+	earlystart:any;
+	latestart:any;
+	flowId:string;
+	machineType:string;
+  type:string;
+  constructor(){
+    this.name = "";
+    this.duration = 0.0;
+    this.is_critical = false;
+    this.earlyfinish = 0.0;
+    this.slack = 0.0;
+    this.latefinish = 0.0;
+    this.predecessors = [];  
+    this.predecessor_ids = [];
+    this.earlystart = 0.0;
+    this.latestart = 0.0;
+    this.flowId = "";
+    this.machineType = "";
+    this.type = "";
+  }
+
 }
 
 export class Transition {
@@ -178,6 +229,8 @@ export class GraphObject extends BaseModel {
   machineType: string;
   version: number;
   xml: string;
+  processOwner: string;
+  primaryEntity: string;
   dataPointConfigurationList: DataPoint[];
   states: StateModel[];
   transitions: Transition[];
@@ -189,6 +242,8 @@ export class GraphObject extends BaseModel {
 
     this.machineLabel = '';
     this.machineType = '';
+    this.processOwner = '';
+    this.primaryEntity = '';
     this.version = 0;
     this.xml = '';
     this.dataPointConfigurationList = [];

@@ -20,6 +20,8 @@ export class ArchivedComponent implements OnInit, OnDestroy {
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
 
+  progressBarFlag: boolean = false;
+
   constructor(private stateService: StateService) {
     this.groupStates = [];
     this.personalStates = [];
@@ -84,6 +86,6 @@ export class ArchivedComponent implements OnInit, OnDestroy {
   }
 
   onSelect(selectedData: State): void {
-    
+
   }
 }

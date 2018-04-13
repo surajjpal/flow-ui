@@ -34,6 +34,7 @@ export class RoutesService {
       .subscribe(
       (response: HttpResponse<Routes>) => {
         if (response.body) {
+         // console.log(response.body)
           subject.next(response.body);
         }
       },
@@ -44,7 +45,7 @@ export class RoutesService {
         subject.error(err);
       }
       );
-
+    console.log(subject.asObservable());
     return subject.asObservable();
   }
   
@@ -365,6 +366,7 @@ export class ApiConfigService {
         {
           observe: 'response',
           reportProgress: true,
+          
           withCredentials: true
         }
       )

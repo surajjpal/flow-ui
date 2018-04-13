@@ -40,6 +40,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   dictionaryGraphObjectList: GraphObject[];
   selectedGraphObject: GraphObject = new GraphObject();
 
+  progressBarFlag: boolean = false;
+
   private subscription: Subscription;
   private subscriptionActive: Subscription;
   private subscriptionClosed: Subscription;

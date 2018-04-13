@@ -69,7 +69,6 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   
   login() {
     this.loading = true;
-    console.log("=======================================")
     this.userSubscription = this.authService.forgotPassword(this.user)
       .subscribe(
         user => {

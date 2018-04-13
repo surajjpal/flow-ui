@@ -22,7 +22,7 @@ export const routes: Routes = [
     component: PagesComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'tsk/tact', pathMatch: 'full' },
+      { path: '', redirectTo: 'tsk/pervi', pathMatch: 'full' },
       { path: 'tsk', loadChildren: './inbox/inbox.module#InboxModule' },
       { path: 'flw', loadChildren: './flow/flow.module#FlowModule' },
       { path: 'agnt', loadChildren: './agent/agent.module#AgentModule' },

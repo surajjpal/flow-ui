@@ -1,197 +1,411 @@
 <div class="widgets">
-  <div class="row">
-    <ba-card baCardClass="with-scroll" class="data-table-container">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <div class="row">
-            <div class="col-md-6">
-              <h2>Active States</h2>
-            </div>
-            <div class="col-md-6 text-right">
-            </div>
-          </div>
-        </div>
-        <br>
-
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" id="conversation-tab" data-toggle="tab" href="#tabConversation" role="tab" aria-controls="flow"
-              aria-expanded="true">Conversation</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="details-tab" data-toggle="tab" href="#tabDetails" role="tab" aria-controls="details">Details</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="flow-tab" data-toggle="tab" href="#tabFlow" role="tab" aria-controls="flow">Flow</a>
-          </li>
-        </ul>
-        <div class="tab-content" id="myTabContent">
-          <div role="tabpanel" class="tab-pane fade show active" id="tabConversation" aria-labelledby="conversation-tab">
-            <div class="row">
-              <ba-card class="col-md-6 col-sm-12" cardTitle="Episode Details">
-                <form style="max-height: 400px; overflow:scroll">
-                  <!-- <div *ngIf="selectedEpisode && selectedEpisode._score" class="form-group">
-                      <label>Score</label>
-                      <input class="form-control" placeholder="Score" disabled="disabled" value="{{selectedEpisode._score}}" />
-                    </div> -->
-                  <!-- <div *ngIf="selectedEpisode && selectedEpisode._id" class="form-group">
-                      <label>Id</label>
-                      <input class="form-control" placeholder="Id" disabled="disabled" value="{{selectedEpisode._id}}" />
-                    </div> -->
-                  <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.status" class="form-group">
-                    <label>Status</label>
-                    <input class="form-control" placeholder="Status" disabled="disabled" value="{{selectedEpisode._source.status}}" />
-                  </div>
-                  <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.intents && selectedEpisode._source.intents.length > 0"
-                    class="form-group">
-                    <label>Intents</label>
-                    <select multiple class="form-control" disabled="disabled">
-                      <option *ngFor="let intent of selectedEpisode._source.intents">{{intent.intentName}}</option>
-                    </select>
-                  </div>
-                  <!-- <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.name" class="form-group">
-                      <label>Name</label>
-                      <input class="form-control" placeholder="Name" disabled="disabled" value="{{selectedEpisode._source.name}}" />
-                    </div> -->
-                  <!-- <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.conversationId" class="form-group">
-                      <label>Conversation Id</label>
-                      <input class="form-control" placeholder="Conversation Id" disabled="disabled" value="{{selectedEpisode._source.conversationId}}"
-                      />
-                    </div> -->
-                  <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.entities && selectedEpisode._source.entities.length > 0"
-                    class="form-group">
-                    <label>Entities</label>
-                    <select multiple class="form-control" disabled="disabled">
-                      <option *ngFor="let entity of selectedEpisode._source.entities">{{entity}}</option>
-                    </select>
-                  </div>
-                  <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.mode" class="form-group">
-                    <label>Mode</label>
-                    <input class="form-control" placeholder="Mode" disabled="disabled" value="{{selectedEpisode._source.mode}}" />
-                  </div>
-                  <!-- <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.lastEpisodeStatus" class="form-group">
-                      <label>Last Episode Status</label>
-                      <input class="form-control" placeholder="Last Episode Status" disabled="disabled" value="{{selectedEpisode._source.lastEpisodeStatus}}"
-                      />
-                    </div> -->
-                  <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.startTime" class="form-group">
-                    <label>Start Time</label>
-                    <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode._source.startTime | date: 'dd/MM/y, h:mm:ss a'}}"
-                    />
-                  </div>
-                  <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.endTime" class="form-group">
-                    <label>End Time</label>
-                    <input class="form-control" placeholder="End Time" disabled="disabled" value="{{selectedEpisode._source.endTime | date: 'dd/MM/y, h:mm:ss a'}}"
-                    />
-                  </div>
-                  <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.goalStatus" class="form-group">
-                    <label>Goal Status</label>
-                    <input class="form-control" placeholder="Goal Status" disabled="disabled" value="{{selectedEpisode._source.goalStatus}}"
-                    />
-                  </div>
-                  <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.goals && selectedEpisode._source.goals.length > 0"
-                    class="form-group">
-                    <label>Goals</label>
-                    <select multiple class="form-control" disabled="disabled">
-                      <option *ngFor="let goal of selectedEpisode._source.goals">{{goal.goalName}}</option>
-                    </select>
-                  </div>
-                </form>
-              </ba-card>
-
-              <ba-card baCardClass="with-scroll" class="data-table-container col-md-6 col-sm-12" cardTitle="Conversation">
-                <form style="max-height: 400px; overflow:scroll">
-                  <thead>
-                    <th style="width: 50%"></th>
-                    <th style="width: 50%"></th>
-                  </thead>
-                  <tbody *ngFor="let message of chatMessageList">
-                    <tr *ngIf="message.messageFrom === 'auto'">
-                      <td align="left" style="width: 50%">
-                        <div class="talk-bubble tri-right round top-left" style="background-color: #E4E4E4">
-                          <div class="talktext">
-                            <div [innerHTML]="message.inputText"></div>
-                          </div>
-                        </div>
-                      </td>
-                      <td></td>
-                    </tr>
-                    <tr *ngIf="message.messageFrom === 'user'">
-                      <td></td>
-                      <td align="right" style="width: 50%">
-                        <div class="talk-bubble tri-right round top-right" style="background-color: #B9F1FB">
-                          <div class="talktext">
-                            <p>{{message.inputText}}</p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </form>
-              </ba-card>
-            </div>
-          </div>
-          <div role="tabpanel" class="tab-pane fade" id="tabDetails" aria-labelledby="details-tab">
-            <form class="row form-inline">
-              <div class="form-group col-md-12 alert-danger" style="margin-bottom: 10px;" *ngIf="responseError && responseError.length > 0" [innerHTML]="responseError"></div>
-
-              <div class="form-group col-md-3 col-sm-6" style="margin-bottom: 10px;" *ngFor="let dataPoint of dataPoints; let index = index">
-                <label *ngIf="index % 2 === 0 && dataPoint.dataType !== 'ANY'">{{dataPoint.dataPointLabel}}</label>
-                
-                <input *ngIf="index % 2 === 1 && (dataPoint.dataType === '' || dataPoint.dataType === 'STRING')" type="text" class="form-control col-md-12 col-sm-12"
-                  [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
-                />
-
-                <input *ngIf="index % 2 === 1 && dataPoint.dataType === 'NUMBER'" type="number" class="form-control col-md-12 col-sm-12"
-                [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
-                  onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
-                />
-
-                <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'BOOLEAN'" class="selectpicker form-control col-md-12 col-sm-12"
-                  [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
-                  (ngModelChange)="dataPoint.value = $event">
-                  <option [ngValue]="true">True</option>
-                  <option [ngValue]="false">False</option>
-                </select>
-
-                <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'SINGLE_SELECT'" class="selectpicker form-control col-md-12 col-sm-12"
-                  [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
-                  (ngModelChange)="dataPoint.value = $event">
-                  <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
-                </select>
-
-                <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'MULTI_SELECT'" multiple="true" class="selectpicker form-control col-md-12 col-sm-12"
-                  [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
-                  (ngModelChange)="dataPoint.value = $event">
-                  <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
-                </select>
-
-                <tag-input *ngIf="index % 2 === 1 && dataPoint.dataType === 'ARRAY'" class="custom-input-tag-border form-control col-md-12 col-sm-12"
-                  [title]="dataPoint.description" [(ngModel)]="dataPoint.value" name="value" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]"
-                  [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'" [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'"
-                  theme="minimal">
-                </tag-input>
+  <!-- <div class="card">
+    <div class="card-header">
+      <a class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        <h3>
+          <b>Process Insights</b>
+        </h3>
+      </a>
+    </div>
+    <div class="card-block">
+      <div id="collapseOne" class="collapse show">
+        <div class="row">
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 ">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Allocated To :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <label *ngIf="selectedState">{{selectedState.assignedUserName}}</label>
+                </div>
               </div>
-            </form>
-
-            <form>
-              <button *ngIf="selectedState.statusCd !== 'CLOSED'" type="button" class="btn btn-primary" (click)="updateFlow()">
-                Update Flow
-              </button>
-              <div class="ln_solid"></div>
-            </form>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Allocated Group :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <label *ngIf="selectedState">{{selectedState.assignedUserGroupCd}}</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Process Owner :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <label *ngIf="selectedState">{{selectedState.processOwner}}</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Task Status :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <span class="badge badge-pill badge-success">{{selectedState.statusCd}}</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Escalated :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <span *ngIf="selectedState.escalatedFlag" class="badge badge-pill badge-danger">{{selectedState.escalatedFlag}}</span>
+                  <span *ngIf="!selectedState.escalatedFlag" class="badge badge-pill badge-success">{{selectedState.escalatedFlag}}</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div role="tabpanel" class="tab-pane fade" id="tabFlow" aria-labelledby="flow-tab">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-              <div id="editorGrid" class="col-md-12 col-sm-12 col-xs-12" style="height:68vh;overflow:hidden;margin-bottom:5px;border-style:solid;border-color:#1C2B36;"></div>
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 ">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>Complete By :</label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Time - complete (Avg) :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Time Remaining :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Time Spent :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Overrun time (Avg) :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 ">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Predicted working time :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <label *ngIf="commonInsightWrapper">{{commonInsightWrapper.insightMap.State_WorkingTime | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Predicted end time :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <label *ngIf="commonInsightWrapper">{{commonInsightWrapper.insightMap.State_EndTime | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Predicted end state :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <label *ngIf="commonInsightWrapper">{{commonInsightWrapper.insightMap.State_EndTask}}</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Predicted next state :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <label *ngIf="commonInsightWrapper">{{commonInsightWrapper.insightMap.State_NextTask}}</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <label>
+                    Critical task :
+                  </label>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <span *ngIf="commonInsightWrapper" class="badge badge-pill badge-danger">{{commonInsightWrapper.insightMap.State_CriticalTask}}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </ba-card>
-  </div>
-</div>
+    </div>
+  </div> -->
+  <ba-card baCardClass="with-scroll" class="data-table-container">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-md-6">
+            <h3>
+              <b>State Information</b>
+            </h3>
+          </div>
+          <div class="col-md-6 text-right">
+          </div>
+        </div>
+      </div>
+      <br>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="conversation-tab" data-toggle="tab" href="#tabConversation" role="tab" aria-controls="flow"
+            aria-expanded="true">
+            <b>Conversation</b>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="details-tab" data-toggle="tab" href="#tabDetails" role="tab" aria-controls="details">
+            <b>Task details</b>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="flow-tab" data-toggle="tab" href="#tabFlow" role="tab" aria-controls="flow">
+            <b>Process trail</b>
+          </a>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div role="tabpanel" class="tab-pane fade show active" id="tabConversation" aria-labelledby="conversation-tab">
+          <div class="row">
+            <ba-card class="col-md-6 col-sm-12" cardTitle="Episode Details">
+              <form style="max-height: 400px; overflow:scroll">
+                <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.status" class="form-group">
+                  <label>Status</label>
+                  <input class="form-control" placeholder="Status" disabled="disabled" value="{{selectedEpisode._source.status}}" />
+                </div>
+                <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.intents && selectedEpisode._source.intents.length > 0"
+                  class="form-group">
+                  <label>Intents</label>
+                  <select multiple class="form-control" disabled="disabled">
+                    <option *ngFor="let intent of selectedEpisode._source.intents">{{intent.intentName}}</option>
+                  </select>
+                </div>
+                <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.entities && selectedEpisode._source.entities.length > 0"
+                  class="form-group">
+                  <label>Entities</label>
+                  <select multiple class="form-control" disabled="disabled">
+                    <option *ngFor="let entity of selectedEpisode._source.entities">{{entity}}</option>
+                  </select>
+                </div>
+                <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.mode" class="form-group">
+                  <label>Mode</label>
+                  <input class="form-control" placeholder="Mode" disabled="disabled" value="{{selectedEpisode._source.mode}}" />
+                </div>
+                <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.startTime" class="form-group">
+                  <label>Start Time</label>
+                  <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode._source.startTime | date: 'dd/MM/y, h:mm:ss a'}}"
+                  />
+                </div>
+                <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.endTime" class="form-group">
+                  <label>End Time</label>
+                  <input class="form-control" placeholder="End Time" disabled="disabled" value="{{selectedEpisode._source.endTime | date: 'dd/MM/y, h:mm:ss a'}}"
+                  />
+                </div>
+                <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.goalStatus" class="form-group">
+                  <label>Goal Status</label>
+                  <input class="form-control" placeholder="Goal Status" disabled="disabled" value="{{selectedEpisode._source.goalStatus}}"
+                  />
+                </div>
+                <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.goals && selectedEpisode._source.goals.length > 0"
+                  class="form-group">
+                  <label>Goals</label>
+                  <select multiple class="form-control" disabled="disabled">
+                    <option *ngFor="let goal of selectedEpisode._source.goals">{{goal.goalName}}</option>
+                  </select>
+                </div>
+              </form>
+            </ba-card>
+            <ba-card baCardClass="with-scroll" class="data-table-container col-md-6 col-sm-12" cardTitle="Conversation">
+              <form style="max-height: 400px; overflow:scroll">
+                <thead>
+                  <th style="width: 50%"></th>
+                  <th style="width: 50%"></th>
+                </thead>
+                <tbody *ngFor="let message of chatMessageList">
+                  <tr *ngIf="message.messageFrom === 'auto'">
+                    <td align="left" style="width: 50%">
+                      <div class="talk-bubble tri-right round top-left" style="background-color: #E4E4E4">
+                        <div class="talktext">
+                          <div [innerHTML]="message.inputText"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td></td>
+                  </tr>
+                  <tr *ngIf="message.messageFrom === 'user'">
+                    <td></td>
+                    <td align="right" style="width: 50%">
+                      <div class="talk-bubble tri-right round top-right" style="background-color: #B9F1FB">
+                        <div class="talktext">
+                          <p>{{message.inputText}}</p>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </form>
+            </ba-card>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="tabDetails" aria-labelledby="details-tab">
+          <div class="row">
+            <form>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <button *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE')" type="button" class="btn btn-default btn-with-icon" (click)="updateFlow()">
+                  <i class="ion-checkmark"></i>Update Process</button>&nbsp;&nbsp;&nbsp;
+                <button *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && Users.length > 0" type="button" data-toggle="modal"
+                  data-target="#userModal" class="btn btn-default btn-with-icon">
+                  <i class="ion-person-add"></i>Allocate User</button>&nbsp;&nbsp;&nbsp;
+                <button *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && userHierarchy.parentUserId.length > 0" type="button"
+                  (click)="escalate()" class="btn btn-default btn-with-icon">
+                  <i class="ion-alert-circled"></i>Escalate Task</button>&nbsp;&nbsp;&nbsp;
+                <button *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd !== 'Personal' " type="button"
+                  (click)="reserve()" class="btn btn-default btn-with-icon">
+                  <i class="ion-archive"></i>Reserve Task</button>&nbsp;&nbsp;&nbsp;
+                <button type="button" class="btn btn-danger btn-with-icon" title="Flag" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd == 'Personal' && selectedState.iterationLevel < 3"
+                  data-toggle="modal" data-target="#flagTaskModal">
+                  <i class="ion-flag"></i>Flag</button>&nbsp;&nbsp;&nbsp;
+                <button type="button" class="btn btn-danger btn-with-icon" title="Flag" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.iterationLevel == 3 && selectedState.assignedUserGroupCd == 'Personal'"
+                  data-toggle="modal" data-target="#flagTaskWarningModal">
+                  <i class="ion-flag"></i>Flag</button>&nbsp;&nbsp;&nbsp;
+                <button type="button" class="btn btn-danger btn-with-icon" title="Archive" *ngIf="selectedState.statusCd ==='ACTIVE' && selectedState.assignedUserGroupCd == 'Personal' " data-toggle="modal"
+                    data-target="#archiveTaskWarningModal">
+                    <i class="ion-ios-trash"></i>Archive</button>&nbsp;&nbsp;&nbsp;
+              </div>
+            </form>
+          </div>
+          <hr/>
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="card card-default">
+                <div class="card-header">
+                  <b>Input Parameters</b>
+                </div>
+                <div class="card-block">
+                  <form class="row form-inline">
+                    <div class="form-group col-md-12 alert-danger" style="margin-bottom: 10px;" *ngIf="responseError && responseError.length > 0"
+                      [innerHTML]="responseError"></div>
 
+                    <div class="form-group col-md-3 col-sm-6" style="margin-bottom: 10px;" *ngFor="let dataPoint of dataPoints; let index = index">
+                      <label *ngIf="index % 2 === 0 && dataPoint.dataType !== 'ANY'">{{dataPoint.dataPointLabel}} :</label>
+
+                      <input *ngIf="index % 2 === 1 && (dataPoint.dataType === '' || dataPoint.dataType === 'STRING')" type="text" class="form-control col-md-12 col-sm-12"
+                        [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
+                      />
+
+                      <input *ngIf="index % 2 === 1 && dataPoint.dataType === 'NUMBER'" type="number" class="form-control col-md-12 col-sm-12"
+                        [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
+                        onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                      />
+
+                      <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'BOOLEAN'" class="selectpicker form-control col-md-12 col-sm-12"
+                        [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataPoint.value = $event">
+                        <option [ngValue]="true">True</option>
+                        <option [ngValue]="false">False</option>
+                      </select>
+
+                      <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'SINGLE_SELECT'" class="selectpicker form-control col-md-12 col-sm-12"
+                        [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataPoint.value = $event">
+                        <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
+                      </select>
+
+                      <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'MULTI_SELECT'" multiple="true" class="selectpicker form-control col-md-12 col-sm-12"
+                        [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataPoint.value = $event">
+                        <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
+                      </select>
+
+                      <tag-input *ngIf="index % 2 === 1 && dataPoint.dataType === 'ARRAY'" class="custom-input-tag-border form-control col-md-12 col-sm-12"
+                        [title]="dataPoint.description" [(ngModel)]="dataPoint.value" name="value" [modelAsStrings]="true"
+                        [editable]="true" [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
+                        [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'" theme="minimal">
+                      </tag-input>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- <div *ngIf="selectedState.predictedParameters" class="col-md-4 col-sm-12">
+              <div class="card card-default">
+                <div class="card-header">
+                  <b>Predicted Parameters</b>
+                </div>
+                <div class="card-block">
+                  <div class="row" *ngFor="let e of selectedState.predictedParameters | keys">
+                    <div class="col-md-6 col-sm-12">
+                      <label>{{e.key}}</label> :
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                      <label>{{e.value}}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="tabFlow" aria-labelledby="flow-tab">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
+              <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
+              <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
+              <i class="ion-arrow-expand"></i>Zoom Actual</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)">
+              <i class="ion-printer"></i>Print Preview</button>
+          </div>
+          <br>
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div id="editorGrid" class="col-md-12 col-sm-12 col-xs-12" style="height:68vh;overflow:hidden;margin-bottom:5px;border-style:solid;border-color:#1C2B36;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ba-card>
+</div>
 <div class="modal fade" id="successModal" tabindex="-1" role="dialog" attr.aria-labelledby="successModal" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -214,6 +428,189 @@
       <!-- Modal Footer -->
       <div class="modal-footer" id="modal_footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" (click)="onBack()">Dismiss</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="userModalLabel">
+          Allocate Task
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        <form>
+          <div class="form-group">
+            <label for="selectUser">Select User</label>
+            <select class="selectpicker form-control" required id="selectUser" title="Choose User" [ngModel]="tempUser" [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="onUserSelect($event)">
+              <option *ngFor="let user of Users" [ngValue]="user">{{user.userName}}</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="allocate()">Allocate</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" attr.aria-labelledby="successModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="successModal">
+          State Information
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        <form class="form-horizontal">
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Name :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.name}}</label>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Duration :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.duration}}{{' seconds'}}</label>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Early Start :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.earlystart}}{{' seconds'}}</label>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Early Finish :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.earlyfinish}}{{' seconds'}}</label>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Critical :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.is_critical}}</label>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Late Start :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.latestart}}{{' seconds'}}</label>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Slack :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.slack}}{{' seconds'}}</label>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Late Finish :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.latefinish}}</label>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="flagTaskModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagmodalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="userModalLabel">
+          Flag Reason
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        <form>
+          <div class="form-group" *ngIf="selectedState">
+            <label for="selectReason">Select Reason</label>
+            <select class="selectpicker form-control" required id="selectReason" title="Choose Flag Reason" [ngModel]="selectedState.flagReason"
+              [ngModelOptions]="{standalone: true}" (ngModelChange)="onReasonSelect($event)">
+              <option *ngFor="let flagReason of FlagReasons" [value]="flagReason">{{flagReason}}</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="confirm()">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="flagTaskWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagWarningLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="finalWarningLabel">
+          Warning
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        The Task is already flagged three times, appropriate action will be taken by the team lead!!!
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="archiveTaskWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="archiveWarningLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="finalWarningLabel">
+          Warning
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        The Task will be archived and the associated process will be closed.
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="archive()">Archive</button>
       </div>
     </div>
   </div>
