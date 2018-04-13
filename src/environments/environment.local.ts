@@ -21,7 +21,7 @@ export const environment = {
   statebystatusandfolderurl: 'state/pagebystatusandfolder/',// status: CLOSED, ACTIVE; folder: Group, Personal
   statebysubstatusandfolderurl:'state/pagebysubstatusandfolder/',
   saveflaggedstate:'state/saveFlaggedState',
-
+  savearchivestate:'state/archive',
 
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',

@@ -45,7 +45,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
   progressBarFlag: boolean = false;
   pageNumber:any;
   fetchRecords:any;
-  flagLevel:number;
+  iterationLevel:number;
   FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
 
   private subscriptionGroup: Subscription;
@@ -214,9 +214,9 @@ export class PersonalComponent implements OnInit, OnDestroy {
   confirm():void{
     console.log(this.selectedStateForFlag)
     this.selectedStateForFlag.flagged = true;
-    this.flagLevel = this.selectedStateForFlag.flagLevel;
-    this.flagLevel = this.flagLevel + 1;
-    this.selectedStateForFlag.flagLevel = this.flagLevel;
+    this.iterationLevel = this.selectedStateForFlag.iterationLevel;
+    this.iterationLevel = this.iterationLevel + 1;
+    this.selectedStateForFlag.iterationLevel = this.iterationLevel;
     this.selectedStateForFlag.subStatus = "FLAGGED"
     this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedStateForFlag)
     .subscribe(State => {

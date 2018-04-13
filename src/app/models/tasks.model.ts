@@ -49,7 +49,7 @@ export class State extends BaseModel {
   errorMessageMap: any;
   headerParamList: string[];
   flagged:boolean;
-  flagLevel:number;
+  iterationLevel:number;
   autoAllocation:boolean;
 }
 

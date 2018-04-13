@@ -351,4 +351,37 @@ export class StateService {
     return subject.asObservable();
   }
 
+  saveArchivedState(state: State): Observable<State> {
+    const subject = new Subject<State>();
+
+    console.log(state._id)
+
+    const url = `${environment.server + environment.savearchivestate}`;
+
+    this.httpClient.post<State>(
+      url,
+      state,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<State>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
 }

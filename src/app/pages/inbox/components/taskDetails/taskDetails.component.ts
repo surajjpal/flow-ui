@@ -52,7 +52,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   stateInfoModels:StateInfoModel[];
   orPayload:any; 
   selectedModel:StateInfoModel;
-  flagLevel:number;
+  iterationLevel:number;
   FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
   
   private subscription: Subscription;
@@ -371,11 +371,17 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
   confirm():void{
     this.selectedState.flagged = true;
-    this.flagLevel = this.selectedState.flagLevel;
-    this.flagLevel = this.flagLevel + 1;
-    this.selectedState.flagLevel = this.flagLevel;
+    this.iterationLevel = this.selectedState.iterationLevel;
+    this.iterationLevel = this.iterationLevel + 1;
+    this.selectedState.iterationLevel = this.iterationLevel;
     this.selectedState.subStatus = "FLAGGED"
-    this.subscription = this.stateService.saveFlaggedState(this.selectedState)
+    this.updateFlow();
+    
+  }
+
+  archive():void{
+    
+    this.subscription = this.stateService.saveArchivedState(this.selectedState)
     .subscribe(State => {
       new closeModal('flagTaskModal');
       this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });

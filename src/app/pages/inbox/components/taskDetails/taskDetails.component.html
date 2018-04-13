@@ -294,23 +294,29 @@
           <div class="row">
             <form>
               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <button *ngIf="selectedState.statusCd !== 'CLOSED'" type="button" class="btn btn-default btn-with-icon" (click)="updateFlow()">
+                <button *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE')" type="button" class="btn btn-default btn-with-icon" (click)="updateFlow()">
                   <i class="ion-checkmark"></i>Update Process</button>&nbsp;&nbsp;&nbsp;
-                <button *ngIf="selectedState.statusCd !== 'CLOSED' && Users.length > 0" type="button" data-toggle="modal" data-target="#userModal"
-                  class="btn btn-default btn-with-icon">
+                <button *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && Users.length > 0" type="button" data-toggle="modal"
+                  data-target="#userModal" class="btn btn-default btn-with-icon">
                   <i class="ion-person-add"></i>Allocate User</button>&nbsp;&nbsp;&nbsp;
-                <button *ngIf="selectedState.statusCd !== 'CLOSED' && userHierarchy.parentUserId.length > 0" type="button" (click)="escalate()"
-                  class="btn btn-default btn-with-icon">
+                <button *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && userHierarchy.parentUserId.length > 0" type="button"
+                  (click)="escalate()" class="btn btn-default btn-with-icon">
                   <i class="ion-alert-circled"></i>Escalate Task</button>&nbsp;&nbsp;&nbsp;
-                <button *ngIf="selectedState.statusCd !== 'CLOSED' && selectedState.assignedUserGroupCd !== 'Personal' " type="button" (click)="reserve()"
-                  class="btn btn-default btn-with-icon">
+                <button *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd !== 'Personal' " type="button"
+                  (click)="reserve()" class="btn btn-default btn-with-icon">
                   <i class="ion-archive"></i>Reserve Task</button>
-                  <button type="button" class="btn btn-danger" title="Flag" *ngIf="selectedState.assignedUserGroupCd == 'Personal' && selectedState.flagLevel < 3" data-toggle="modal" data-target="#flagTaskModal">
-                    <i class="ion-flag"></i>
+                <button type="button" class="btn btn-danger" title="Flag" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd == 'Personal' && selectedState.iterationLevel < 3"
+                  data-toggle="modal" data-target="#flagTaskModal">
+                  <i class="ion-flag"></i>
+                </button>
+                <button type="button" class="btn btn-danger" title="Flag" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.iterationLevel == 3 && selectedState.assignedUserGroupCd == 'Personal'"
+                  data-toggle="modal" data-target="#flagTaskWarningModal">
+                  <i class="ion-flag"></i>
+                  <button type="button" class="btn btn-danger" title="Archive" *ngIf="selectedState.statusCd !=='ACTIVE' && selectedState.assignedUserGroupCd == 'Personal' " data-toggle="modal"
+                    data-target="#archiveTaskWarningModal">
+                    <i class="ion-ios-trash"></i>Archive
                   </button>
-                  <button type="button" class="btn btn-danger" title="Flag" *ngIf="selectedState.flagLevel == 3 && selectedState.assignedUserGroupCd == 'Personal'" data-toggle="modal" data-target="#flagTaskWarningModal">
-                    <i class="ion-flag"></i>
-                  </button>
+                </button>
               </div>
             </form>
           </div>
@@ -542,8 +548,8 @@
         <form>
           <div class="form-group" *ngIf="selectedState">
             <label for="selectReason">Select Reason</label>
-            <select class="selectpicker form-control" required id="selectReason" title="Choose Flag Reason"  [ngModel]="selectedState.flagReason" [ngModelOptions]="{standalone: true}"
-            (ngModelChange)="onReasonSelect($event)">
+            <select class="selectpicker form-control" required id="selectReason" title="Choose Flag Reason" [ngModel]="selectedState.flagReason"
+              [ngModelOptions]="{standalone: true}" (ngModelChange)="onReasonSelect($event)">
               <option *ngFor="let flagReason of FlagReasons" [value]="flagReason">{{flagReason}}</option>
             </select>
           </div>
@@ -573,12 +579,41 @@
 
       <!-- Modal Body -->
       <div class="modal-body" id="modal_body">
-        The Task is already flagged three times, appropriate action will be taken by the team lead!!! 
+        The Task is already flagged three times, appropriate action will be taken by the team lead!!!
       </div>
 
       <!-- Modal Footer -->
       <div class="modal-footer" id="modal_footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="archiveTaskWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="archiveWarningLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="finalWarningLabel">
+          Warning
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        The Task will be archived and the associated process will be closed.
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="archive()">Archive</button>
       </div>
     </div>
   </div>

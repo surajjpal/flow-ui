@@ -85,13 +85,13 @@
                         <td>{{s.assignedUserGroupCd}}</td>
                         <td>{{s.flagged}}</td>
                         <td>{{s.flagReason}}</td>
-                        <td  align="center">{{s.flagLevel}}</td>
+                        <td  align="center">{{s.iterationLevel}}</td>
                         <td  align="center">{{s.assignedUserDisplayName}}</td>
                         <td><div class="btn-group" role="group">
                           <button type="button" class="btn btn-primary" title="View" (click)="onSelect(s)">
                             <i class="ion-eye"></i>
                           </button>
-                          <button type="button" class="btn btn-success" title="Approve Flag" data-toggle="modal" *ngIf="s.flagLevel == 3" (click)="onSelectUnFlag(s)" data-target="#flagWarningModal">
+                          <button type="button" class="btn btn-success" title="Approve Flag" data-toggle="modal" *ngIf="s.iterationLevel == 3" (click)="onSelectUnFlag(s)" data-target="#flagWarningModal">
                             <i class="ion-flag"></i>
                           </button>
                         </div></td>
