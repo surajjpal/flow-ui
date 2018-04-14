@@ -25,7 +25,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             if (err.error instanceof Error) {
               // A client-side or network error occurred. Handle it accordingly.
               if (err && err.error && err.error.message) {
-                this.alertService.error(err.error.message);
+                this.alertService.error(err.error.message, false, 3000);
               }
             } else {
               // The backend returned an unsuccessful response code.
@@ -42,7 +42,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 }
 
                 if (statusCd !== 401) {
-                  this.alertService.error(`${message}`);
+                  this.alertService.error(`${message}`, false, 3000);
                 }
               }
             }

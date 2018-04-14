@@ -32,16 +32,31 @@ export class State extends BaseModel {
   stateCd: string;
   stageCd: string;
   stateMachineInstanceModelId: string;
+  assignedUserDisplayName:string;
   assignedUserGroupCd: string;
   assignedUserId: string;
+  flagReason:string;
+  assignedUserName: string;
   startTime: Time;
   endTime: Time;
   allocatedTime: Time;
   reservedTime: Time;
   payload: string;
   fromStateCd: string;
-  parameters: [string, string];
-  predictedParameters: [string, string];
+  parameters: Map<string,string>;
+  predictedParameters: Map<string,string>;
   businessCost: Amount;
   errorMessageMap: any;
+  headerParamList: string[];
+  flagged:boolean;
+  iterationLevel:number;
+  autoAllocation:boolean;
+}
+
+export class CommonInsightWrapper extends BaseModel {
+  insightType: string;
+  insightMap: any;
+  reference_id: string;
+  createdTime: Time;
+
 }

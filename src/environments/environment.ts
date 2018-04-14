@@ -19,7 +19,17 @@ export const environment = {
 
   // Flow
   server: 'http://108.168.190.82:8080/flow/console/',
-  statebystatusandfolderurl: 'state/pagebystatusandfolder/0,200,', // status: CLOSED, ACTIVE; folder: Group, Personal
+
+
+  stateinsight: 'state/insight/',
+  orPayload: 'state/orPayload/',
+  orPayloadMachineType:'state/saveOrPayload/machineType/',
+  statebystatusandfolderurl: 'state/pagebystatusandfolder/,', // status: CLOSED, ACTIVE; folder: Group, Personal
+  statebysubstatusandfolderurl:'state/pagebysubstatusandfolder/',
+  saveflaggedstate:'state/saveFlaggedState',
+  savearchivestate:'state/archive',
+
+
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
@@ -27,16 +37,27 @@ export const environment = {
   messageurl: 'data/message/byuser/Admin',
   stateflowimageurl: 'statemachine/stateflow/',
   updatestatemachineurl: 'statemachine/updateflow/withState',
+  alocateuserurl:'statemachine/allocateto',
   autosummary: 'dashboard/CONVERSATION_SUMMARY',
   graphurl: 'graph/',
+  usergraphurl: 'usergraph/saveUserGraph/',
+  getusergraphurl:'usergraph/',
   graphbystatusurl: 'graph/findbystatus/',
   entryactionurl: 'graph/actions',
+  timeruniturl: 'graph/timerunit',
   autodashboardurl: 'dashboard',
   userurl: 'user/',
+
   registerurl: 'user/createUser',
+  forgotpassword:'user/forgotPassword',
+  savehierarchy:'user/hierarchy',
+  getuserhierarchy:'user/getUserHierarchy/',
+  userchildren:'user/userChildren',
+
   createcompanyadminurl: 'user/createcompanyadmin',
   updateuserurl: 'user/update',
   authoritiesurl: 'user/roles',
+  userlisturl:'user/getUserList/',
   roleroutemapurl: 'master/roleroutemap',
   rolesurl: 'master/roles',
   routesurl: 'master/routes',

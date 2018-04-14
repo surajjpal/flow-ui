@@ -2,27 +2,39 @@ declare var designFlowEditor: any;
 declare var styleStates: any;
 declare var showModal: any;
 declare var graphTools: any;
+declare var styleInfo:any;
+declare var closeModal: any;
 
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy,NgZone } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
-
-import { State } from '../../../../models/tasks.model';
-import { GraphObject, DataPoint, StateModel, ManualAction } from '../../../../models/flow.model';
+import {User, UserHierarchy, UserGroup,UserGraphObject} from '../../../../models/user.model';
+import { State,CommonInsightWrapper } from '../../../../models/tasks.model';
+import { GraphObject, DataPoint, StateModel, ManualAction,StateInfoModel } from '../../../../models/flow.model';
 import { Episode, ChatMessage } from '../../../../models/conversation.model';
 
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
 import { ConversationService } from '../../../../services/agent.service';
+import { FetchUserService, UserGraphService ,AllocateTaskToUser} from '../../../../services/userhierarchy.service';
+import { UniversalUser } from '../../../../services/shared.service';
+import { Map } from 'd3';
 
 @Component({
   selector: 'api-task-details',
   templateUrl: './taskDetails.component.html',
-  styleUrls: ['./taskDetails.scss']
+  styleUrls: ['./taskDetails.scss'],
+  providers: [FetchUserService,AllocateTaskToUser]
 })
 
 export class TaskDetailsComponent implements OnInit, OnDestroy {
+
+  ZOOM_IN = 'ZOOM_IN';
+  ZOOM_OUT = 'ZOOM_OUT';
+  ZOOM_ACTUAL = 'ZOOM_ACTUAL';
+  PRINT_PREVIEW = 'PRINT_PREVIEW';
+  POSTER_PRINT = 'POSTER_PRINT';
 
   selectedState: State;
   dataPoints: DataPoint[];
@@ -30,27 +42,46 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   graphObject: GraphObject;
   responseError: string;
   fieldKeyMap: any;
-
+  userId:string;
   selectedEpisode: Episode;
   chatMessageList: ChatMessage[];
-
+  Users: UserHierarchy[] = [];
+  allocatedUserId:string;
+  userHierarchy:UserHierarchy = new UserHierarchy();
+  commonInsightWrapper: CommonInsightWrapper;
+  stateInfoModels:StateInfoModel[];
+  orPayload:any; 
+  selectedModel:StateInfoModel;
+  iterationLevel:number;
+  FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
+  
   private subscription: Subscription;
   private subscriptionEpisode: Subscription;
   private subscriptionChatMessages: Subscription;
+  private subscriptionUsers: Subscription;
+  private subscriptionInsight: Subscription;
+  
 
   constructor(
+    private zone: NgZone,
     private router: Router, 
     private route: ActivatedRoute,
     private stateService: StateService,
     private conversationService: ConversationService,
     private dataCachingService: DataCachingService,
-    private location: Location
-  ) { }
+    private location: Location,
+    private fetchUserService:FetchUserService,
+    private allocateTaskToUser:AllocateTaskToUser,
+    private universalUser: UniversalUser
+  ) { 
+    window['taskDetailsRef'] = { component: this, zone: zone };
+  }
 
   ngOnInit(): void {
+    //document.getElementById('#alocateButton').style.visibility = 'hidden';
     this.selectedState = this.dataCachingService.getSelectedState();
     if (!this.selectedState) {
-      this.router.navigate(['/pg/tsk/tact'], { relativeTo: this.route });
+      this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
       return;
     }
     
@@ -59,9 +90,18 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       this.graphObject = new GraphObject();
     }
 
+    this.fetchInsight();
+    //this.fetchStatesOrPayload();
     this.getEpisode();
     this.extractParams();
     this.initUI();
+   
+
+    this.userId = this.universalUser.getUser()._id
+    this.getUserList();
+    this.getParentUser();
+    // this.initUI();
+
   }
 
   ngOnDestroy() {
@@ -74,7 +114,107 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     if (this.subscriptionChatMessages && !this.subscriptionChatMessages.closed) {
       this.subscriptionChatMessages.unsubscribe();
     }
+
+    if (this.subscriptionInsight && !this.subscriptionInsight.closed) {
+      this.subscriptionInsight.unsubscribe();
+    }
   }
+
+  fetchInsight(){
+    this.subscriptionInsight = this.stateService.getInsightForState(this.selectedState._id)
+      .subscribe(commonInsightWrapper => {
+        if (commonInsightWrapper) {
+          this.commonInsightWrapper = commonInsightWrapper;
+        }
+      });
+    }
+
+  fetchStatesOrPayload(){
+    this.subscriptionInsight = this.stateService.getStates(this.selectedState.stateMachineInstanceModelId)
+    .subscribe(stateInfoModels => {
+      if (stateInfoModels) {
+        this.stateInfoModels = stateInfoModels;
+        new styleInfo(this.stateInfoModels,"archive");
+      }
+      else{
+        this.stateInfoModels = null;
+      }
+    });
+    
+  }
+
+  storeModel(model){
+    
+    this.selectedModel = model;
+  }
+
+  getUserList(){
+    
+    this.subscriptionUsers = this.fetchUserService.fetchChildUsers(this.userId)
+      .subscribe(userList => {
+        if (userList && userList.length > 0) {
+          //document.getElementById('#alocateButton').style.visibility = 'visible';
+          this.Users = userList;
+
+             
+        }
+      });
+    }
+
+  getParentUser(){
+    this.subscriptionUsers = this.fetchUserService.getUserHierarchy(this.userId)
+    .subscribe(userHierarchyObject => {
+      
+      if (userHierarchyObject) {
+        //document.getElementById('#alocateButton').style.visibility = 'visible';
+        this.userHierarchy = userHierarchyObject;
+
+           
+      }
+      
+    });
+
+  }
+
+
+    allocate(){
+      
+      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.allocatedUserId,this.selectedState._id,"Allocate")
+      .subscribe(any => {
+
+        this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
+    });
+    }
+
+    escalate(){
+      
+      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userHierarchy.parentUserId,this.selectedState._id,"Escalate")
+      .subscribe(any => {
+        
+
+        this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
+        
+    });
+    }
+
+    reserve(){
+      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userId,this.selectedState._id,"Reserve")
+      .subscribe(any => {
+        
+
+        this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
+        
+    });
+
+    }
+
+
+    onUserSelect(user){
+      
+      this.allocatedUserId = user.userId;
+      
+    }
+  
 
   onBack() {
     this.location.back();
@@ -173,6 +313,10 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     new graphTools('ZOOM_ACTUAL');
   }
 
+  toolsChoice(choice: string): void {
+    new graphTools(choice);
+  }
+
   updateFlow() {
     if (!this.actionMap) {
       this.actionMap = {};
@@ -219,5 +363,28 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
           new showModal('successModal');
         }
       });
+  }
+
+  onReasonSelect(reason):void{
+    this.selectedState.flagReason = reason;
+  }
+
+  confirm():void{
+    this.selectedState.flagged = true;
+    this.iterationLevel = this.selectedState.iterationLevel;
+    this.iterationLevel = this.iterationLevel + 1;
+    this.selectedState.iterationLevel = this.iterationLevel;
+    this.selectedState.subStatus = "FLAGGED"
+    this.updateFlow();
+    
+  }
+
+  archive():void{
+    
+    this.subscription = this.stateService.saveArchivedState(this.selectedState)
+    .subscribe(State => {
+      new closeModal('flagTaskModal');
+      this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
+    });
   }
 }

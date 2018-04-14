@@ -237,6 +237,37 @@ export class GraphService {
     return subject.asObservable();
   }
 
+  getTimerUnits(): Observable<string[]> {
+    const subject = new Subject<string[]>();
+
+    const url = `${environment.server + environment.timeruniturl}`;
+
+    this.httpClient.get<string[]>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<string[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+    return subject.asObservable();
+  }
+
+
+  
+
   apiConfigLookup(): Observable<ApiConfig[]> {
     const subject = new Subject<ApiConfig[]>();
 

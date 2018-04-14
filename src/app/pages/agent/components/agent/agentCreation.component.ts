@@ -97,6 +97,16 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
         this.selectedAgent.uiComponent = new UIComponent();
       }
 
+      if (!this.selectedAgent.uiComponent.placeHolderText) {
+        this.selectedAgent.uiComponent.placeHolderText = 'Type your query...';
+      }
+      if (!this.selectedAgent.uiComponent.episodeIdleTimeout) {
+        this.selectedAgent.uiComponent.episodeIdleTimeout = 240;
+      }
+      if (!this.selectedAgent.episodeCloseTimeout) {
+        this.selectedAgent.episodeCloseTimeout = 2880;
+      }
+
       if (this.selectedAgent.agentPlugins && this.selectedAgent.agentPlugins.length > 0) {
         const pluginsToBeRemoved: Plugin[] = [];
         for (const plugin of this.selectedAgent.agentPlugins) {

@@ -63,7 +63,7 @@ function update(graph, xml) {
             // Updates the cell color and adds some tooltip information
             if (cell != null) {
               // Resets the fillcolor and the overlay
-              graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, 'white', [cell]);
+              graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#E3E3E3', [cell]);
               graph.removeCellOverlays(cell);
 
               // Changes the cell color for the known states
@@ -124,9 +124,9 @@ function createGraph(container) {
   // Creates the stylesheet for the process display
   var style = graph.getStylesheet().getDefaultVertexStyle();
   style[mxConstants.STYLE_FONTSIZE] = 11;
-  style[mxConstants.STYLE_FONTCOLOR] = 'black';
-  style[mxConstants.STYLE_STROKECOLOR] = '#808080';
-  style[mxConstants.STYLE_FILLCOLOR] = 'white';
+  style[mxConstants.STYLE_FONTCOLOR] = '#000000';
+  style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
+  style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
   style[mxConstants.STYLE_GRADIENTCOLOR] = 'white';
   style[mxConstants.STYLE_GRADIENT_DIRECTION] = mxConstants.DIRECTION_EAST;
   style[mxConstants.STYLE_ROUNDED] = true;
@@ -143,8 +143,8 @@ function createGraph(container) {
   style = [];
   style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_SWIMLANE;
   style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
-  style[mxConstants.STYLE_STROKECOLOR] = '#a0a0a0';
-  style[mxConstants.STYLE_FONTCOLOR] = '#606060';
+  style[mxConstants.STYLE_STROKECOLOR] = '#E0E0DF';
+  style[mxConstants.STYLE_FONTCOLOR] = '#000000';
   style[mxConstants.STYLE_FILLCOLOR] = '#E0E0DF';
   style[mxConstants.STYLE_GRADIENTCOLOR] = 'white';
   style[mxConstants.STYLE_STARTSIZE] = 30;
@@ -161,7 +161,7 @@ function createGraph(container) {
   style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RHOMBUS;
   style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RhombusPerimeter;
   style[mxConstants.STYLE_STROKECOLOR] = '#91BCC0';
-  style[mxConstants.STYLE_FONTCOLOR] = 'gray';
+  style[mxConstants.STYLE_FONTCOLOR] = '000000';
   style[mxConstants.STYLE_FILLCOLOR] = '#91BCC0';
   style[mxConstants.STYLE_GRADIENTCOLOR] = 'white';
   style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
@@ -172,7 +172,7 @@ function createGraph(container) {
   style = [];
   style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_ELLIPSE;
   style[mxConstants.STYLE_PERIMETER] = mxPerimeter.EllipsePerimeter;
-  style[mxConstants.STYLE_FONTCOLOR] = 'gray';
+  style[mxConstants.STYLE_FONTCOLOR] = '000000';
   style[mxConstants.STYLE_FILLCOLOR] = '#A0C88F';
   style[mxConstants.STYLE_GRADIENTCOLOR] = 'white';
   style[mxConstants.STYLE_STROKECOLOR] = '#A0C88F';
@@ -183,25 +183,25 @@ function createGraph(container) {
 
   style = mxUtils.clone(style);
   style[mxConstants.STYLE_FILLCOLOR] = '#DACCBC';
-  style[mxConstants.STYLE_STROKECOLOR] = '#AF7F73';
+  style[mxConstants.STYLE_STROKECOLOR] = '#DACCBC';
   graph.getStylesheet().putCellStyle('end', style);
 
   style = graph.getStylesheet().getDefaultVertexStyle();
   style = mxUtils.clone(style);
   style[mxConstants.STYLE_FILLCOLOR] = '#f8cecc';
-  style[mxConstants.STYLE_STROKECOLOR] = '#AF7F73';
+  style[mxConstants.STYLE_STROKECOLOR] = '#f8cecc';
   graph.getStylesheet().putCellStyle('CLOSED', style);
 
   style = graph.getStylesheet().getDefaultVertexStyle();
   style = mxUtils.clone(style);
   style[mxConstants.STYLE_FILLCOLOR] = '#9ceda9';
-  style[mxConstants.STYLE_STROKECOLOR] = '#AF7F73';
+  style[mxConstants.STYLE_STROKECOLOR] = '#9ceda9';
   graph.getStylesheet().putCellStyle('ACTIVE', style);
 
   style = graph.getStylesheet().getDefaultVertexStyle();
   style = mxUtils.clone(style);
   style[mxConstants.STYLE_FILLCOLOR] = '#c4cdff';
-  style[mxConstants.STYLE_STROKECOLOR] = '#AF7F73';
+  style[mxConstants.STYLE_STROKECOLOR] = '#c4cdff';
   graph.getStylesheet().putCellStyle('FLOW', style);
 
   return graph;
@@ -237,6 +237,13 @@ showModal = function (modalId) {
   if (!$('#' + modalId).is(':visible')) {
     $('#' + modalId).modal();
   }
+}
+
+showAlertModal = function (header, message) {
+  window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
+    showAppJSWarning(header, message); 
+  });
+  showModal("warningModal");
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -291,7 +298,7 @@ designFlowEditor = function (serverXml, readOnly) {
     }
     // Sets background colour
     container.style.background = '#FFFFFF';
-    
+
     // document.body.appendChild(container);
     // Creates the graph inside the given container
     graph = new mxGraph(container);
@@ -319,30 +326,32 @@ designFlowEditor = function (serverXml, readOnly) {
     style = graph.getStylesheet().getDefaultEdgeStyle();
     style[mxConstants.STYLE_EDGE] = mxEdgeStyle.ElbowConnector;
     style[mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#ffffff';
-    style[mxConstants.STYLE_FONTCOLOR] = '#1d258f';
-    style[mxConstants.STYLE_FONTFAMILY] = 'Verdana';
+    style[mxConstants.STYLE_FONTCOLOR] = '#000000';
+    style[mxConstants.STYLE_FONTFAMILY] = 'Raleway';
     style[mxConstants.STYLE_FONTSIZE] = '12';
     style[mxConstants.STYLE_FONTSTYLE] = '1';
+    style[mxConstants.STYLE_OVERFLOW] = 'width';
+    style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
+    style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
 
     var style = graph.getStylesheet().getDefaultVertexStyle();
-    style[mxConstants.STYLE_SHAPE] = 'label';
-
+    style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RECTANGLE;
     style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
-    style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_LEFT;
-    style[mxConstants.STYLE_SPACING_LEFT] = 15;
-    style[mxConstants.STYLE_SPACING_RIGHT] = 35;
+    style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_MIDDLE;
+    style[mxConstants.STYLE_SPACING_LEFT] = 20;
+    style[mxConstants.STYLE_SPACING_RIGHT] = 20;
     style[mxConstants.STYLE_SPACING_TOP] = 25;
     style[mxConstants.STYLE_SPACING_BOTTOM] = 25;
-
-    style[mxConstants.STYLE_STROKECOLOR] = 'black';
-    style[mxConstants.STYLE_FILLCOLOR] = 'white';
-
-    style[mxConstants.STYLE_FONTCOLOR] = '#1d258f';
-    style[mxConstants.STYLE_FONTFAMILY] = 'Verdana';
+    style[mxConstants.STYLE_OVERFLOW] = 'width';
+    style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
+    style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
+    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_FONTCOLOR] = '#000000';
+    style[mxConstants.STYLE_FONTFAMILY] = 'Raleway';
     style[mxConstants.STYLE_FONTSIZE] = '12';
     style[mxConstants.STYLE_FONTSTYLE] = '1';
-
-    style[mxConstants.STYLE_SHADOW] = '0';
+    style[mxConstants.STYLE_SHADOW] = '1';
     style[mxConstants.STYLE_ROUNDED] = '1';
     style[mxConstants.STYLE_GLASS] = '0';
 
@@ -350,11 +359,13 @@ designFlowEditor = function (serverXml, readOnly) {
     graph.getStylesheet().putCellStyle('PENDING_STATE', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#99D9EA';
+    style[mxConstants.STYLE_FILLCOLOR] = '#B7F7D1';
+    style[mxConstants.STYLE_STROKECOLOR] = '#B7F7D1';
     graph.getStylesheet().putCellStyle('ACTIVE_STATE', style);
 
     style = mxUtils.clone(style);
     style[mxConstants.STYLE_FILLCOLOR] = '#D9E1DC';
+    style[mxConstants.STYLE_STROKECOLOR] = '#D9E1DC';
     graph.getStylesheet().putCellStyle('CLOSED_STATE', style);
 
     style = [];
@@ -363,11 +374,11 @@ designFlowEditor = function (serverXml, readOnly) {
     style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
     style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
 
-    style[mxConstants.STYLE_STROKECOLOR] = 'black';
-    style[mxConstants.STYLE_FILLCOLOR] = 'white';
+    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
 
-    style[mxConstants.STYLE_FONTCOLOR] = '#1d258f';
-    style[mxConstants.STYLE_FONTFAMILY] = 'Verdana';
+    style[mxConstants.STYLE_FONTCOLOR] = '#000000';
+    style[mxConstants.STYLE_FONTFAMILY] = 'Raleway';
     style[mxConstants.STYLE_FONTSIZE] = '12';
     style[mxConstants.STYLE_FONTSTYLE] = '1';
 
@@ -380,11 +391,13 @@ designFlowEditor = function (serverXml, readOnly) {
     graph.getStylesheet().putCellStyle('PENDING_DECISION', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#99D9EA';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E5F9FF';
+    style[mxConstants.STYLE_STROKECOLOR] = '#E5F9FF';
     graph.getStylesheet().putCellStyle('ACTIVE_DECISION', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#D9E1DC';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
     graph.getStylesheet().putCellStyle('CLOSED_DECISION', style);
 
     style = [];
@@ -393,16 +406,16 @@ designFlowEditor = function (serverXml, readOnly) {
     style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
     style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
 
-    style[mxConstants.STYLE_STROKECOLOR] = 'black';
-    style[mxConstants.STYLE_FILLCOLOR] = 'white';
+    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
 
-    style[mxConstants.STYLE_FONTCOLOR] = '#1d258f';
-    style[mxConstants.STYLE_FONTFAMILY] = 'Verdana';
+    style[mxConstants.STYLE_FONTCOLOR] = '#000000';
+    style[mxConstants.STYLE_FONTFAMILY] = 'Raleway';
     style[mxConstants.STYLE_FONTSIZE] = '12';
     style[mxConstants.STYLE_FONTSTYLE] = '1';
 
-    style[mxConstants.STYLE_SHADOW] = '0';
-    style[mxConstants.STYLE_GLASS] = '0';
+    //style[mxConstants.STYLE_SHADOW] = '1';
+    //style[mxConstants.STYLE_GLASS] = '0';
 
     graph.getStylesheet().putCellStyle('start', style);
 
@@ -410,37 +423,42 @@ designFlowEditor = function (serverXml, readOnly) {
     graph.getStylesheet().putCellStyle('PENDING_START', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#99D9EA';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
     graph.getStylesheet().putCellStyle('ACTIVE_START', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#D9E1DC';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_STROKECOLOR] = '#000000';
     graph.getStylesheet().putCellStyle('CLOSED_START', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_STROKEWIDTH] = '3';
-    style[mxConstants.STYLE_FILLCOLOR] = 'white';
+    style[mxConstants.STYLE_STROKEWIDTH] = '2';
+    style[mxConstants.STYLE_STROKECOLOR] = '#000000';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
     graph.getStylesheet().putCellStyle('end', style);
 
     style = mxUtils.clone(style);
     graph.getStylesheet().putCellStyle('PENDING_END', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#99D9EA';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_STROKECOLOR] = '#000000';
     graph.getStylesheet().putCellStyle('ACTIVE_END', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#D9E1DC';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_STROKECOLOR] = '#000000';
     graph.getStylesheet().putCellStyle('CLOSED_END', style);
 
     // style[mxConstants.STYLE_IMAGE] = 'assets/js/mxGraph/images/dude3.png';
-    // style[mxConstants.STYLE_IMAGE_WIDTH] = '48';
-    // style[mxConstants.STYLE_IMAGE_HEIGHT] = '48';
+    // style[mxConstants.STYLE_IMAGE_WIDTH] = '24';
+    // style[mxConstants.STYLE_IMAGE_HEIGHT] = '24';
     // style[mxConstants.STYLE_SPACING] = 8;
     // Sets the default style for edges
     style = graph.getStylesheet().getDefaultEdgeStyle();
     style[mxConstants.STYLE_ROUNDED] = true;
-    style[mxConstants.STYLE_STROKEWIDTH] = 3;
+    style[mxConstants.STYLE_STROKEWIDTH] = 2;
     // style[mxConstants.STYLE_EXIT_X] = 1.0; // right
     // style[mxConstants.STYLE_EXIT_Y] = 0.5; // center
     style[mxConstants.STYLE_EXIT_PERIMETER] = 1; // disabled
@@ -592,7 +610,7 @@ designFlowEditor = function (serverXml, readOnly) {
             return;
           }
         } catch (exception) {
-          
+
         }
       }
 
@@ -601,6 +619,7 @@ designFlowEditor = function (serverXml, readOnly) {
 
     if (serverXml) {
       // Reads xml for graph obtained from server and renders it
+
       var doc = mxUtils.parseXml(serverXml);
       var codec = new mxCodec(doc);
       codec.decode(doc.documentElement, graph.getModel());
@@ -640,10 +659,9 @@ designFlowEditor = function (serverXml, readOnly) {
     }
 
     mxConnectionHandlerInsertEdge = mxConnectionHandler.prototype.insertEdge;
-    mxConnectionHandler.prototype.insertEdge = function(parent, id, value, source, target, style)
-    {
+    mxConnectionHandler.prototype.insertEdge = function (parent, id, value, source, target, style) {
       if (target && target.id == 'treeRoot') {
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
           showAppJSWarning("Not Allowed", "You are not allowed to connect to the root state. Please select any other state."); 
         });
         showModal("warningModal");
@@ -651,13 +669,13 @@ designFlowEditor = function (serverXml, readOnly) {
       }
 
       if (source && source.value && source.value.stateCd && !(typeof source.value === 'string' || source.value instanceof String)) {
-        
+
         var sourceEvents = [];
         var existingEdges = getEdgesByStateCd(source);
 
         for (var edge of existingEdges) {
           if (edge.target.value.stateCd == target.value.stateCd) {
-            window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+            window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
               showAppJSWarning("Used State", "The state you are trying to connect to is already connected from current state. Please choose any other state."); 
             });
             showModal("warningModal");
@@ -687,14 +705,16 @@ designFlowEditor = function (serverXml, readOnly) {
         }
       }
 
-      window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+      window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
         showAppJSWarning("No Events Left", "There aren't any source events left to be attached to the new state, thus this connection can't be made."); 
       });
       showModal("warningModal");
       return;
     };
+    addTaskIconOverlays(graph)
   }
 };
+
 
 function getEdgesByStateCd(source) {
   var sourceEdges = [];
@@ -733,7 +753,7 @@ function createPopupMenu(graph, menu, cell, evt, horizontal) {
         try {
           if (model.isVertex(cell)) {
             sourceCell = cell;
-            
+
             var state = cell.value;
             if (state && (typeof state === 'string' || state instanceof String)) {
               state = null;
@@ -754,22 +774,24 @@ function createPopupMenu(graph, menu, cell, evt, horizontal) {
                 }
               }
             }
-            
+
             if (sourceCell) {
               var state = sourceCell.value;
               if (state && (typeof state === 'string' || state instanceof String)) {
                 state = null;
               }
-              
+
               existingEdgesBeforeUpdate = getEdgesByStateCd(sourceCell);
 
               var childStateList = [];
               for (var edge of existingEdgesBeforeUpdate) {
                 childStateList.push(edge.target.value.stateCd);
               }
-        
-              window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.eventsMismatch(state, state.events, childStateList, "Reassign Events",
-                "Select unique event for each child state. Don't assign same event to multiple states or leave any child state unassigned."); });
+
+              window['flowComponentRef'].zone.run(() => {
+                window['flowComponentRef'].component.eventsMismatch(state, state.events, childStateList, "Reassign Events",
+                  "Select unique event for each child state. Don't assign same event to multiple states or leave any child state unassigned.");
+              });
               showModal("reassignEventsModal");
             }
           }
@@ -804,10 +826,10 @@ function createPopupMenu(graph, menu, cell, evt, horizontal) {
 
 function addOverlays(graph, cell, addDeleteIcon, horizontal) {
   graph.removeCellOverlays(cell);
-  
+
   if (!isReadOnly && cell.style != 'end') {
     var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/add.png', 24, 24), 'Add child');
-    
+
     overlay.cursor = 'hand';
     if (horizontal) {
       overlay.align = mxConstants.ALIGN_RIGHT;
@@ -820,7 +842,7 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
     overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
       try {
         sourceCell = cell;
-        
+
         if (sourceCell.id == 'treeRoot') {
           var existingEdges = getEdgesByStateCd(sourceCell);
           if (existingEdges == 0) {
@@ -828,7 +850,7 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
             showModal("stateModal");
             return;
           } else {
-            window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+            window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
               showAppJSWarning("Not Allowed", "Root state can only have one child state. You can't create more than one child for root state.");
             });
             showModal("warningModal");
@@ -847,7 +869,7 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
                 break;
               }
             }
-  
+
             if (unique) {
               sourceEvents.push(event);
             }
@@ -860,13 +882,13 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
           }
         }
         
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
           showAppJSWarning("No Events Left", "There aren't any source events from which the new state can be created.");
         });
         showModal("warningModal");
         return;
       } catch (exception) {
-        
+
       }
     }));
     graph.addCellOverlay(cell, overlay);
@@ -909,7 +931,7 @@ function addChild(graph, cell, customObject, horizontal, stateCode, stateLabel, 
       var stateData = vertex.value;
       stateData.stateId = cellId;
       vertex.value = stateData;
-      
+
       var geometry = model.getGeometry(vertex);
       geometry.width = circleSize;
       geometry.height = circleSize;
@@ -990,16 +1012,17 @@ function addChild(graph, cell, customObject, horizontal, stateCode, stateLabel, 
 };
 
 function deleteSubtree(graph, cell) {
-  
+
   graph.getModel().beginUpdate();
   try {
     // Gets the subtree from cell downwards
     var cells = [];
     graph.traverse(cell, true, function (vertex) {
       cells.push(vertex);
-  
+
       return true;
     });
+
     graph.removeCells(cells);
     graph.getView().validate();
   } finally {
@@ -1019,6 +1042,33 @@ function getSourceEdgesCount(graph, cell) {
     return sourceEdgesCount;
   } else {
     return 0;
+  }
+}
+
+hierarchyGraphTools = function (choice) {
+  switch (choice) {
+    case 'ZOOM_IN': // Zoom In
+      hierarchygraph.zoomIn();
+      break;
+    case 'ZOOM_OUT': // Zoom Out
+      hierarchygraph.zoomOut();
+      break;
+    case 'ZOOM_ACTUAL': // Zoom Actual
+      hierarchygraph.zoomActual();
+      break;
+    case 'PRINT_PREVIEW': // Print Preview
+      var scale = mxUtils.getScaleForPageCount(1, hierarchygraph);
+      var preview = new mxPrintPreview(hierarchygraph, scale);
+      preview.open();
+      break;
+    case 'POSTER_PRINT': // Poster Print
+      var pageCount = prompt('Enter maximum page count', '1');
+      if (pageCount != null) {
+        var scale = mxUtils.getScaleForPageCount(pageCount, hierarchygraph);
+        var preview = new mxPrintPreview(hierarchygraph, scale);
+        preview.open();
+      }
+      break;
   }
 }
 
@@ -1052,12 +1102,12 @@ graphTools = function (choice) {
 saveStateObject = function (state) {
   var vertices = graph.getChildVertices(graph.getDefaultParent());
   for (var vertex of vertices) {
-    if (vertex.value  && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
+    if (vertex.value && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
       if (state.stateCd == vertex.value.stateCd) {
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
           showAppJSWarning("Duplicate State", "Duplicate states found. State '" + state.stateCd + "' is already being used. Please use different state code for defining the state.");
         });
-        showModal("warningModal");  
+        showModal("warningModal");
         return;
       }
     }
@@ -1072,10 +1122,10 @@ saveStateObject = function (state) {
       }
 
       if (repeatCount > 1) {
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
           showAppJSWarning("Duplicate Events", "Duplicate events found. All the events must be unique.");
         });
-        showModal("warningModal");  
+        showModal("warningModal");
         return;
       }
     }
@@ -1084,10 +1134,10 @@ saveStateObject = function (state) {
       if (vertex.value && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
         for (var stateEvent of vertex.value.events) {
           if (event.eventCd == stateEvent.eventCd) {
-            window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+            window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
               showAppJSWarning("Duplicate Events", "Duplicate events found. Event '" + event.eventCd + "' is already defined as a source event in state '" + vertex.value.stateCd + "'. Please use different event code for defining the event.");
             });
-            showModal("warningModal");  
+            showModal("warningModal");
             return;
           }
         }
@@ -1104,11 +1154,11 @@ updateStateObject = function (state) {
   for (var vertex of vertices) {
     if (vertex.value && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
       if ((state.stateCd == vertex.value.stateCd) && (vertex.value.stateCd != sourceCell.value.stateCd)) {
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
           showAppJSWarning("Duplicate State", "Duplicate states found. State '" + state.stateCd + "' is already being used. Please use different state code for defining the state.");
         });
-        showModal("warningModal");  
-        return;  
+        showModal("warningModal");
+        return;
       }
     }
   }
@@ -1122,10 +1172,10 @@ updateStateObject = function (state) {
       }
 
       if (repeatCount > 1) {
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
           showAppJSWarning("Duplicate Events", "Duplicate events found. All the events must be unique.");
         });
-        showModal("warningModal");  
+        showModal("warningModal");
         return;
       }
     }
@@ -1135,10 +1185,10 @@ updateStateObject = function (state) {
         if (vertex.value.stateCd !== sourceCell.value.stateCd) {
           for (var stateEvent of vertex.value.events) {
             if (event.eventCd == stateEvent.eventCd) {
-              window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+              window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
                 showAppJSWarning("Duplicate Events", "Duplicate events found. Event '" + event.eventCd + "' is already defined as a source event in state '" + vertex.value.stateCd + "'. Please use different event code for defining the event.");
               });
-              showModal("warningModal");  
+              showModal("warningModal");
               return;
             }
           }
@@ -1149,12 +1199,12 @@ updateStateObject = function (state) {
   closeModal('stateModal');
 
   if (existingEdgesBeforeUpdate) {
-    
+
     if (existingEdgesBeforeUpdate.length > newEvents.length) {
       var childStateCount = existingEdgesBeforeUpdate.length;
       var newEventCount = newEvents.length;
       var difference = childStateCount - newEventCount;
-      window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+      window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
         showAppJSWarning("Event Mismatch", "There already exisits " + childStateCount + " child state(s) for the current state. After update there will be a total number of " + newEventCount + " events left, which doesn't suffice the total child states. Please add " + difference + " more event(s) or delete " + difference + " child state(s) to suffice the conditions.");
       });
       showModal("warningModal");
@@ -1175,8 +1225,10 @@ updateStateObject = function (state) {
             childStateList.push(edge.target.value.stateCd);
           }
 
-          window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.eventsMismatch(state, newEvents, childStateList, "Event Mismatch",
-            "One or more events doesn't match with already assigned events to the child states. Please reassign the updated event(s) to each child state."); });
+          window['flowComponentRef'].zone.run(() => {
+            window['flowComponentRef'].component.eventsMismatch(state, newEvents, childStateList, "Event Mismatch",
+              "One or more events doesn't match with already assigned events to the child states. Please reassign the updated event(s) to each child state.");
+          });
           showModal("reassignEventsModal");
           return;
         }
@@ -1216,10 +1268,10 @@ updateStateObject = function (state) {
   }
 }
 
-updateStateTrigger = function(eventEdgeMap, stateData) {
+updateStateTrigger = function (eventEdgeMap, stateData) {
   for (var key in eventEdgeMap) {
     if (key && (!eventEdgeMap[key] || eventEdgeMap[key] == null)) {
-      window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.
+      window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
         showAppJSWarning("Error" ,"You can't leave trigger for any child state empty. Please fill in all values.");
       });
       showModal("warningModal");
@@ -1240,8 +1292,8 @@ updateStateTrigger = function(eventEdgeMap, stateData) {
           childStateList.push(edge.target.value.stateCd);
         }
 
-        window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.showAppJSWarning(/*stateData.events, childStateList,*/ "Error",
-          "Same event has been assigned to '" + key + "' and '" + internalKey + "'. One event can be attached to only one child state at max");
+        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
+          showAppJSWarning("Error", "Same event has been assigned to '" + key + "' and '" + internalKey + "'. One event can be attached to only one child state at max");
         });
         showModal("warningModal");
         return;
@@ -1276,7 +1328,7 @@ exportGraphXml = function () {
   }
 }
 
-getValueForAllVertices = function() {
+getValueForAllVertices = function () {
   var states = [];
   var vertices = graph.getChildVertices(graph.getDefaultParent());
   for (var vertex of vertices) {
@@ -1288,13 +1340,13 @@ getValueForAllVertices = function() {
   return states;
 }
 
-getTransitionForAllVertices = function() {
+getTransitionForAllVertices = function () {
   var transitions = [];
   var edges = graph.getChildEdges(graph.getDefaultParent());
   for (var edge of edges) {
     if (edge != null && edge.value != null && edge.source.value != null && edge.target.value != null && !(typeof edge.value == "string" || edge.value instanceof String) && !(typeof edge.source.value == "string" || edge.source.value instanceof String) && !(typeof edge.target.value == "string" || edge.target.value instanceof String)) {
       var transition = {};
-     
+
       transition.sourceStateCd = edge.source.value.stateCd;
       transition.targetStateCd = edge.target.value.stateCd;
       transition.eventCd = edge.value.eventCd;
@@ -1306,7 +1358,7 @@ getTransitionForAllVertices = function() {
   return transitions;
 }
 
-styleStates = function(activeStateIdList, closedStateIdList) {
+styleStates = function (activeStateIdList, closedStateIdList) {
   if (activeStateIdList != null && closedStateIdList != null) {
     graph.getModel().beginUpdate();
     try {
@@ -1314,17 +1366,43 @@ styleStates = function(activeStateIdList, closedStateIdList) {
       for (var vertex of vertices) {
         if (vertex != null && vertex.id != null) {
           if (activeStateIdList.indexOf(vertex.id) >= 0) {
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#87CEEB', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/warning.gif', 18, 18), 'Active');
+            overlay.align = mxConstants.ALIGN_RIGHT;
+            overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
+            graph.addCellOverlay(vertex, overlay);
           } else if (closedStateIdList.indexOf(vertex.id) >= 0) {
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#D9E1DC', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 18, 18), 'Closed');
+            overlay.align = mxConstants.ALIGN_RIGHT;
+            overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
+            graph.addCellOverlay(vertex, overlay);
+          } else if (vertex != null && vertex.id == 'treeRoot') {
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 18, 18), 'Closed');
+            overlay.align = mxConstants.ALIGN_RIGHT;
+            overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
+            graph.addCellOverlay(vertex, overlay);
           }
+         
         }
       }
     } finally {
       graph.getModel().endUpdate();
     }
   }
+  addTaskIconOverlays(graph);
 }
+
+styleInfo = function(orModels,type){
+  
+  addInfoOverlays(graph,orModels,type);
+}
+
+
 
 updateNewEdge = function (event) {
   if (newEdge) {
@@ -1345,7 +1423,7 @@ deleteNewEdge = function () {
     try {
       var cells = [];
       cells.push(newEdge);
-  
+
       graph.removeCells(cells);
       graph.getView().validate();
     } finally {
@@ -1390,4 +1468,711 @@ initializeGraphOnInit = function () {
   try { init_CustomNotification(); } catch (e) { }
   try { init_autosize(); } catch (e) { }
   try { init_autocomplete(); } catch (e) { }
+
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+var sourceUserCell;
+var hierarchygraph;
+function userHierarchyEditor() {
+
+  // Checks if browser is supported
+  if (!mxClient.isBrowserSupported()) {
+    // Displays an error message if the browser is
+    // not supported.
+    mxUtils.error('Browser is not supported!', 200, false);
+  }
+  else {
+    // Workaround for Internet Explorer ignoring certain styles
+
+    var usercontainer = document.getElementById('editorGriduser');
+    // container.style.position = 'absolute';
+    // container.style.overflow = 'hidden';
+    // container.style.left = '0px';
+    // container.style.top = '0px';
+    // container.style.right = '0px';
+    // container.style.bottom = '0px';
+    var useroutline = document.getElementById('outlineContaineruser');
+
+    mxEvent.disableContextMenu(usercontainer);
+    if (mxClient.IS_QUIRKS) {
+      document.body.style.overflow = 'hidden';
+      new mxDivResizer(usercontainer);
+      new mxDivResizer(useroutline);
+
+    }
+
+    if (mxClient.IS_GC || mxClient.IS_SF) {
+      usercontainer.style.background = '-webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFFFFF), to(#E7E7E7))';
+    }
+    else if (mxClient.IS_NS) {
+      usercontainer.style.background = '-moz-linear-gradient(top, #FFFFFF, #E7E7E7)';
+    }
+    else if (mxClient.IS_IE) {
+      usercontainer.style.filter = 'progid:DXImageTransform.Microsoft.Gradient(' +
+        'StartColorStr=\'#FFFFFF\', EndColorStr=\'#E7E7E7\', GradientType=0)';
+    }
+    // document.body.appendChild(container);
+    // Creates the graph inside the given container
+    hierarchygraph = new mxGraph(usercontainer);
+
+    // Enables automatic sizing for vertices after editing and
+    // panning by using the left mouse button.
+    hierarchygraph.setCellsMovable(false);
+    hierarchygraph.setConnectable(true);
+    hierarchygraph.setAutoSizeCells(true);
+    hierarchygraph.setPanning(true);
+    hierarchygraph.centerZoom = false;
+    hierarchygraph.panningHandler.useLeftButtonForPanning = true;
+    // Displays a popupmenu when the user clicks
+    // on a cell (using the left mouse button) but
+    // do not select the cell when the popup menu
+    // is displayed
+    hierarchygraph.panningHandler.popupMenuHandler = false;
+    // Creates the outline (navigator, overview) for moving
+    // around the graph in the top, right corner of the window.
+    var outln = new mxOutline(hierarchygraph, useroutline);
+
+    // Disables tooltips on touch devices
+    hierarchygraph.setTooltips(!mxClient.IS_TOUCH);
+
+
+
+
+    // Set some stylesheet options for the visual appearance of vertices
+    var style = hierarchygraph.getStylesheet().getDefaultVertexStyle();
+    style[mxConstants.STYLE_SHAPE] = 'label';
+
+    style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
+    style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_LEFT;
+    style[mxConstants.STYLE_SPACING_LEFT] = 54;
+
+    //style[mxConstants.STYLE_GRADIENTCOLOR] = '#FFFFFF';
+    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
+
+    style[mxConstants.STYLE_FONTCOLOR] = '#000000';
+    style[mxConstants.STYLE_FONTFAMILY] = 'Raleway';
+    style[mxConstants.STYLE_FONTSIZE] = '12';
+    style[mxConstants.STYLE_FONTSTYLE] = '1';
+
+    style[mxConstants.STYLE_SHADOW] = '1';
+    style[mxConstants.STYLE_ROUNDED] = '1';
+    style[mxConstants.STYLE_GLASS] = '0';
+
+    style[mxConstants.STYLE_IMAGE] = './assets/js/mxGraph/images/dude3.png';
+    style[mxConstants.STYLE_IMAGE_WIDTH] = '24';
+    style[mxConstants.STYLE_IMAGE_HEIGHT] = '24';
+    style[mxConstants.STYLE_SPACING] = 8;
+
+    // Sets the default style for edges
+    style = hierarchygraph.getStylesheet().getDefaultEdgeStyle();
+    style[mxConstants.STYLE_ROUNDED] = true;
+    style[mxConstants.STYLE_STROKEWIDTH] = 2;
+    style[mxConstants.STYLE_EXIT_X] = 0.5; // center
+    style[mxConstants.STYLE_EXIT_Y] = 1.0; // bottom
+    style[mxConstants.STYLE_EXIT_PERIMETER] = 0; // disabled
+    style[mxConstants.STYLE_ENTRY_X] = 0.5; // center
+    style[mxConstants.STYLE_ENTRY_Y] = 0; // top
+    style[mxConstants.STYLE_ENTRY_PERIMETER] = 0; // disabled
+
+    // Disable the following for straight lines
+    style[mxConstants.STYLE_EDGE] = mxEdgeStyle.TopToBottom;
+
+    // Stops editing on enter or escape keypress
+    var keyHandler = new mxKeyHandler(hierarchygraph);
+
+    // Enables automatic layout on the graph and installs
+    // a tree layout for all groups who's children are
+    // being changed, added or removed.
+    var userlayout = new mxCompactTreeLayout(hierarchygraph, false);
+    userlayout.useBoundingBox = false;
+    userlayout.edgeRouting = false;
+    userlayout.levelDistance = 60;
+    userlayout.nodeDistance = 16;
+
+    // Allows the layout to move cells even though cells
+    // aren't movable in the graph
+    userlayout.isVertexMovable = function (cell) {
+      return true;
+    };
+
+    var layoutMgr = new mxLayoutManager(hierarchygraph);
+
+    layoutMgr.getLayout = function (cell) {
+      if (cell.getChildCount() > 0) {
+        return userlayout;
+      }
+    };
+
+    // Installs a popupmenu handler using local function (see below).
+    hierarchygraph.popupMenuHandler.factoryMethod = function (menu, cell, evt) {
+      return createPopupMenuUser(hierarchygraph, menu, cell, evt);
+    };
+
+
+
+    // Fix for wrong preferred size
+    var oldGetPreferredSizeForCell = hierarchygraph.getPreferredSizeForCell;
+    hierarchygraph.getPreferredSizeForCell = function (cell) {
+      var result = oldGetPreferredSizeForCell.apply(this, arguments);
+
+      if (result != null) {
+        result.width = Math.max(80, result.width);
+      }
+
+      return result;
+    };
+
+    hierarchygraph.convertValueToString = function (cell) {
+      var data = cell.getValue();
+
+      if (data) {
+        try {
+          if (data.userName) {
+            return data.userName;
+          }
+        } catch (exception) {
+
+        }
+
+        return data;
+      }
+
+      return '';
+    };
+
+
+    // var content = document.createElement('div');
+    // content.style.padding = '4px';
+
+    // var tb = new mxToolbar(content);
+
+    // tb.addItem('Zoom In', 'images/zoom_in32.png',function(evt)
+    // {
+    //   hierarchygraph.zoomIn();
+    // });
+
+    // tb.addItem('Zoom Out', 'images/zoom_out32.png',function(evt)
+    // {
+    //   hierarchygraph.zoomOut();
+    // });
+
+    // tb.addItem('Actual Size', 'images/view_1_132.png',function(evt)
+    // {
+    //   hierarchygraph.zoomActual();
+    // });
+
+    // tb.addItem('Print', 'images/print32.png',function(evt)
+    // {
+    //   var preview = new mxPrintPreview(hierarchygraph, 1);
+    //   preview.open();
+    // });
+
+    // tb.addItem('Poster Print', 'images/press32.png',function(evt)
+    // {
+    //   var pageCount = mxUtils.prompt('Enter maximum page count', '1');
+
+    //   if (pageCount != null)
+    //   {
+    //     var scale = mxUtils.getScaleForPageCount(pageCount, hierarchygraph);
+    //     var preview = new mxPrintPreview(hierarchygraph, scale);
+    //     preview.open();
+    //   }
+    // });
+
+    // wnd = new mxWindow('Tools', content, 0, 0, 200, 66, false);
+    // wnd.setMaximizable(false);
+    // wnd.setScrollable(false);
+    // wnd.setResizable(false);
+    // wnd.setVisible(true);
+    document.getElementById('#discardHierarchy').style.visibility = 'hidden';
+    document.getElementById('#saveHierarchy').style.visibility = 'hidden';
+
+  }
+};
+
+
+
+function addRootUserOrLoad(serverXml, user) {
+  if (serverXml) {
+
+
+    // Reads xml for graph obtained from server and renders it
+    // 
+    var doc = mxUtils.parseXml(serverXml);
+    var codec = new mxCodec(doc);
+    var users = []
+    codec.decode(doc.documentElement, hierarchygraph.getModel());
+
+    var allVertices = hierarchygraph.getChildVertices(hierarchygraph.getDefaultParent());
+    for (var index = 0; index < allVertices.length; index++) {
+      hierarchygraph.traverse(allVertices[index], true, function (vertex) {
+        if (index == 0) {
+          // To scroll graph so that our cell would appear in center
+          hierarchygraph.scrollCellToVisible(vertex, true);
+
+        }
+        users.push(vertex.value);
+        console.log(vertex)
+
+        if (vertex.value.parentUserId) {
+          addOverlaysUser(hierarchygraph, vertex, true);
+        }
+        else {
+          addOverlaysUser(hierarchygraph, vertex, true);
+        }
+
+      });
+    }
+
+    if (users.length > 0) {
+      document.getElementById('#rootuser').style.visibility = 'hidden';
+      document.getElementById('#discardHierarchy').style.visibility = 'visible';
+      document.getElementById('#saveHierarchy').style.visibility = 'visible';
+    }
+    window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.updateUserListAfterAdd(users); })
+  } else {
+
+
+    if (user.companyId && user.companyId.length > 0) {
+
+      var parentUser = hierarchygraph.getDefaultParent();
+
+      // Adds the root vertex of the tree
+      hierarchygraph.getModel().beginUpdate();
+
+      try {
+        var w1 = hierarchygraph.container.offsetWidth;
+        var h1 = hierarchygraph.container.offsetHeight;
+        var v2 = hierarchygraph.insertVertex(parentUser, "rootuser", user, w1 / 2 - 30, 20, 140, 60, 'image=./assets/js/mxGraph/images/dude3.png');
+        hierarchygraph.updateCellSize(v2);
+        addOverlaysUser(hierarchygraph, v2, true);
+
+      }
+      finally {
+        // Updates the display
+        hierarchygraph.getModel().endUpdate();
+        var users = getUsersForAllVertices();
+        window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.updateUserListAfterAdd(users); })
+        document.getElementById('#rootuser').style.visibility = 'hidden';
+        document.getElementById('#discardHierarchy').style.visibility = 'visible';
+        document.getElementById('#saveHierarchy').style.visibility = 'visible';
+      }
+    }
+    else {
+      window['userHierarchyRef'].zone.run(() => {
+        window['userHierarchyRef'].component.
+          showAppJSWarning("Please select a user first!!");
+      });
+      showModal("warningModal");
+      return;
+    }
+  }
+}
+
+
+
+
+function discardGraph(userGraphObject) {
+
+  var allVertices = hierarchygraph.getChildVertices(hierarchygraph.getDefaultParent());
+  var rootcell;
+  for (var index = 0; index < allVertices.length; index++) {
+    hierarchygraph.traverse(allVertices[index], true, function (vertex) {
+      if (index == 0) {
+        // To scroll graph so that our cell would appear in center
+
+        if (vertex.id === "rootuser") {
+          rootcell = vertex
+        }
+      }
+      deleteUserSubtree(hierarchygraph, rootcell);
+      document.getElementById('#rootuser').style.visibility = 'visible';
+      document.getElementById('#discardHierarchy').style.visibility = 'hidden';
+      document.getElementById('#saveHierarchy').style.visibility = 'hidden';
+
+      if (userGraphObject.xml.length > 0) {
+        window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.deleteUserGraph(userGraphObject); })
+      }
+
+    });
+  }
+}
+
+// Function to create the entries in the popupmenu
+function createPopupMenuUser(hierarchygraph, usermenu, cell, evt) {
+  var model = hierarchygraph.getModel();
+  console.log(cell)
+  if (!isReadOnly && cell != null) {
+
+    if (cell.id != 'rootuser' && cell.value && !(typeof cell.value === "string" || cell.value instanceof String)) {
+      usermenu.addItem('Delete', './assets/js/mxGraph/images/delete.gif', function () {
+        deleteUserSubtree(hierarchygraph, cell);
+      });
+    }
+    usermenu.addItem('Edit', '', function () {
+      try {
+        if (model.isVertex(cell)) {
+          sourceUserCell = cell;
+
+          var user = cell.value;
+          if (user && (typeof user === 'string' || user instanceof String)) {
+            user = null;
+          }
+          var users = getUsersForAllVertices();
+          window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.updateUserListAfterAdd(users); })
+          window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.updateSelectedUser(user); })
+
+
+          $("#userUpdateModal").modal();
+        }
+      } catch (exception) {
+        // console.log(exception);
+      }
+    });
+
+    usermenu.addSeparator();
+  }
+
+  usermenu.addItem('Fit', 'editors/images/zoom.gif', function () {
+    hierarchygraph.fit();
+  });
+
+  usermenu.addItem('Actual', 'editors/images/zoomactual.gif', function () {
+    hierarchygraph.zoomActual();
+  });
+
+  usermenu.addSeparator();
+
+  usermenu.addItem('Print', 'editors/images/print.gif', function () {
+    var preview = new mxPrintPreview(hierarchygraph, 1);
+    preview.open();
+  });
+
+  usermenu.addItem('Poster Print', 'editors/images/print.gif', function () {
+    var pageCount = mxUtils.prompt('Enter maximum page count', '1');
+
+    if (pageCount != null) {
+      var scale = mxUtils.getScaleForPageCount(pageCount, hierarchygraph);
+      var preview = new mxPrintPreview(hierarchygraph, scale);
+      preview.open();
+    }
+  });
+};
+
+function addOverlaysUser(hierarchygraph, cell, addDeleteIcon) {
+  var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/add.png', 24, 24), 'Add child');
+  overlay.cursor = 'hand';
+  overlay.align = mxConstants.ALIGN_CENTER;
+  overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
+    try {
+
+
+
+      addUser(hierarchygraph, cell)
+      sourceUserCell = cell
+
+    }
+    catch (exception) {
+      // console.log(exception);
+    }
+
+  }));
+
+
+  exportUserXml = function () {
+    var encoder = new mxCodec();
+    var node = encoder.encode(hierarchygraph.getModel());
+    var xml = mxUtils.getXml(node);
+
+
+    var users = getUsersForAllVertices();
+
+
+
+    try {
+
+      window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.saveUserXml(xml, users); })
+
+    } catch (exception) {
+      // console.log(exception);
+    }
+  }
+
+
+  getUsersForAllVertices = function () {
+    var users = [];
+    var vertices = hierarchygraph.getChildVertices(hierarchygraph.getDefaultParent());
+    for (var vertex of vertices) {
+      if (vertex != null && vertex.value != null && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
+        users.push(vertex.value);
+      }
+    }
+
+    return users;
+  }
+
+  saveUserObject = function (user) {
+
+    if (user.companyId && user.companyId.length > 0) {
+      var vertex = addChildUser(hierarchygraph, sourceUserCell, user);
+    }
+    else {
+      window['userHierarchyRef'].zone.run(() => {
+        window['userHierarchyRef'].component.
+          showAppJSWarning("Please select a user first!!");
+      });
+      showModal("warningModal");
+      return;
+    }
+
+  }
+
+
+  alertMessage = function (message) {
+    window['userHierarchyRef'].zone.run(() => {
+      window['userHierarchyRef'].component.
+        showAppJSWarning(message);
+    });
+    closeModal("warningModal");
+    showModal("warningModal");
+    return;
+
+  }
+
+
+  updateUserObject = function (user) {
+
+    if (user.companyId && user.companyId.length > 0) {
+      hierarchygraph.getModel().beginUpdate();
+      try {
+        sourceUserCell.setValue(user);
+        hierarchygraph.getView().clear(sourceUserCell, false, false);
+        hierarchygraph.getView().validate();
+        hierarchygraph.cellSizeUpdated(sourceUserCell, false);
+      }
+      finally {
+        hierarchygraph.getModel().endUpdate();
+      }
+    }
+    else {
+      window['userHierarchyRef'].zone.run(() => {
+        window['userHierarchyRef'].component.
+          showAppJSWarning("Please select a user first!!");
+      });
+      showModal("warningModal");
+      return;
+    }
+  }
+
+  // overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function(sender, evt)
+  // {
+  // addChildUser(hierarchygraph, cell);
+  // }));
+
+  hierarchygraph.addCellOverlay(cell, overlay);
+
+  if (addDeleteIcon) {
+    overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/close.png', 30, 30), 'Delete');
+    overlay.cursor = 'hand';
+    overlay.offset = new mxPoint(-4, 8);
+    overlay.align = mxConstants.ALIGN_RIGHT;
+    overlay.verticalAlign = mxConstants.ALIGN_TOP;
+    overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
+      if (cell.id === "rootuser") {
+        document.getElementById('#rootuser').style.visibility = 'visible';
+        document.getElementById('#discardHierarchy').style.visibility = 'hidden';
+        document.getElementById('#saveHierarchy').style.visibility = 'hidden';
+
+        window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.discard();})
+
+      }
+      deleteUserSubtree(hierarchygraph, cell);
+      var users = getUsersForAllVertices();
+      window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.updateUserListAfterAdd(users); })
+    }));
+
+    hierarchygraph.addCellOverlay(cell, overlay);
+  }
+};
+
+
+function addUser(hierarchygraph, cell) {
+  try {
+
+    let parentUser = cell.value;
+    var users = getUsersForAllVertices();
+    window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.updateUserListAfterAdd(users); })
+    window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.addUser(null, parentUser); })
+    $("#userModal").modal();
+
+
+  }
+  catch (exception) {
+    // console.log(exception);
+  }
+}
+
+
+function addChildUser(hierarchygraph, cell, user) {
+  var model = hierarchygraph.getModel();
+  var parentUser = hierarchygraph.getDefaultParent();
+  var vertex;
+
+  model.beginUpdate();
+  try {
+    var w1 = hierarchygraph.container.offsetWidth;
+    var h1 = hierarchygraph.container.offsetHeight;
+    vertex = hierarchygraph.insertVertex(parentUser, "", user, w1 / 2 - 30, 20, 140, 60, 'image=./assets/js/mxGraph/images/dude3.png');
+    var geometry = model.getGeometry(vertex);
+    if (sourceUserCell != null) {
+      vertex.source = sourceUserCell;
+    }
+
+    // Updates the geometry of the vertex with the
+    // preferred size computed in the graph
+    var size = hierarchygraph.getPreferredSizeForCell(vertex);
+    geometry.width = size.width;
+    geometry.height = size.height;
+
+    // Adds the edge between the existing cell
+    // and the new vertex and executes the
+    // automatic layout on the parent
+    var edge = hierarchygraph.insertEdge(parentUser, null, '', cell, vertex);
+
+    // Configures the edge label "in-place" to reside
+    // at the end of the edge (x = 1) and with an offset
+    // of 20 pixels in negative, vertical direction.
+    edge.geometry.x = 1;
+    edge.geometry.y = 0;
+    edge.geometry.offset = new mxPoint(0, -20);
+
+    addOverlaysUser(hierarchygraph, vertex, true);
+  }
+  finally {
+    model.endUpdate();
+  }
+
+  return vertex;
+};
+
+function deleteUserSubtree(hierarchygraph, cell) {
+  // Gets the subtree from cell downwards
+  var cells = [];
+  var users = []
+  hierarchygraph.traverse(cell, true, function (vertex) {
+    cells.push(vertex);
+    users.push(vertex.value);
+    return true;
+  });
+  window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.updateUserListAfterDelete(users); })
+  hierarchygraph.removeCells(cells);
+};
+
+addInfoOverlays = function (graph,orModels,type) {
+  if (graph != null && graph.getModel() != null) {
+    graph.getModel().beginUpdate();
+    try {
+      var vertices = graph.getChildVertices(graph.getDefaultParent());
+      if (vertices != null) {
+        for (var vertex of vertices) {
+          if (vertex != null && vertex.id != null) {
+             if (vertex.value.stateCd != null && orModels != null) {
+                for (var model of orModels){
+                  if (model.name === vertex.value.stateCd){
+                    var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/info.png', 18, 18), 'Information');
+                    overlay.align = mxConstants.ALIGN_LEFT;
+                    overlay.verticalAlign = mxConstants.ALIGN_TOP;
+                    
+                    overlay.cursor = 'hand';
+                    overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
+                      try {
+                  
+                        var cell = evt.getProperty('cell')
+                        for (var model of orModels){
+                          if(model.name == cell.value.stateCd){
+                            //showModal("infoModal")
+                            if(type == "archive"){
+                              window['taskDetailsRef'].zone.run(() => { window['taskDetailsRef'].component.storeModel(model); })
+                              $("#infoModal").modal();
+                            }
+                            if(type == "design"){
+                              window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.storeModel(model); })
+                              $("#infoModalDesign").modal();
+                            }
+                          }
+                        }
+                      }
+                      catch (exception) {
+                        // console.log(exception);
+                      }
+                  
+                    }));
+                    
+                    graph.addCellOverlay(vertex, overlay);
+                  }
+                }
+                }
+              }
+          }
+        }
+    } finally {
+      graph.getModel().endUpdate();
+    }
+  }
+}
+
+
+
+
+
+
+addTaskIconOverlays = function (graph) {
+  if (graph != null && graph.getModel() != null) {
+    graph.getModel().beginUpdate();
+    try {
+      var vertices = graph.getChildVertices(graph.getDefaultParent());
+      if (vertices != null) {
+        for (var vertex of vertices) {
+          if (vertex != null && vertex.id != null) {
+            if (vertex != null && vertex.value != null && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
+              if (vertex.value.type != null && vertex.value.type == 'Manual') {
+                var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/dude3.png', 18, 18), 'Manual Task');
+                overlay.align = mxConstants.ALIGN_LEFT;
+                overlay.verticalAlign = mxConstants.ALIGN_BOTTOM;
+                graph.addCellOverlay(vertex, overlay);
+              } else if (vertex.value.type != null && vertex.value.type == 'Auto') {
+                var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/gear.png', 18, 18), 'Auto Task');
+                overlay.align = mxConstants.ALIGN_LEFT;
+                overlay.verticalAlign = mxConstants.ALIGN_BOTTOM;
+                graph.addCellOverlay(vertex, overlay);
+              }else if (vertex.value.stateCd != null && orModels != null) {
+                
+                var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/info.png', 18, 18), 'Information');
+                overlay.align = mxConstants.ALIGN_LEFT;
+                overlay.verticalAlign = mxConstants.ALIGN_BOTTOM;
+                graph.addCellOverlay(vertex, overlay);
+                }
+                
+              }
+          }
+        }
+      }
+
+    } finally {
+      graph.getModel().endUpdate();
+    }
+  }
+};

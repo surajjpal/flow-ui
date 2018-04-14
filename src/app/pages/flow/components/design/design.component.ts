@@ -7,6 +7,7 @@ declare var exportGraphXml: any;
 declare var updateNewEdge: any;
 declare var deleteNewEdge: any;
 declare var updateStateTrigger: any;
+declare var styleInfo:any;
 
 import { Component, Input, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -16,13 +17,13 @@ import { Subscription } from 'rxjs/Subscription';
 // Model Imports
 import {
   GraphObject, DataPoint, Classifier, StateModel,
-  EventModel, Expression, Transition, ManualAction, DataPointValidation
+  EventModel, Expression, Transition, ManualAction, DataPointValidation,StateInfoModel
 } from '../../../../models/flow.model';
 import { ApiConfig, ApiKeyExpressionMap } from '../../../../models/setup.model';
 
 // Service Imports
 import { GraphService, CommunicationService } from '../../../../services/flow.service';
-
+import { StateService, DataCachingService } from '../../../../services/inbox.service';
 @Component({
   selector: 'api-flow-design',
   templateUrl: './design.component.html'
@@ -48,8 +49,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   // Dropdown source list
   sourceStatusCodes: string[] = ['DRAFT', 'ACTIVE', 'ARCHIVE'];
   sourceStateTypes: string[] = ['Manual', 'Auto', 'Cognitive'];
-  allocationTypes: string[] = ['Group', 'Least_Allocated', 'Maximum_Efficiency', 'API', 'User'];
+  allocationTypes: string[] = ['Group', 'Least_Allocated', 'Maximum_Efficiency', 'API', 'User','Round_Robin','Auto_Agent_Allocation'];
   amountTypes: string[] = ['FIXED', 'DERIVED', 'API'];
+  timerUnitType: string[] = ['MINUTE','HOUR','DAY','WEEK','MONTH','YEAR'];
   sourceOperands: string[] = ['AND', 'OR'];
   sourceClassifiers: Classifier[] = [];
   sourceEntryActionList: string[] = [];
@@ -57,6 +59,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   sourceManualActionType: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT'];
   sourceEvents: EventModel[] = [];
   sourceDataTypes: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT', 'ARRAY', 'ANY'];
+  sourceTimerUnitList: string[] = [];
 
   // Models to bind with html
   bulkEdit: boolean = false;
@@ -71,19 +74,26 @@ export class DesignComponent implements OnInit, OnDestroy {
   childStateList: string[];
   selectedEvent: EventModel;
   bulkExpressions: string = '';
-
+  orPayload:any; 
+  stateInfoModels:StateInfoModel[];
+  selectedModel:StateInfoModel;
   // Warning Modal properties
   warningHeader: string;
   warningBody: string;
+
+  progressBarFlag: boolean = false;
   
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
   private subscriptionApiConfig: Subscription;
+  private subscriptionOrPayload: Subscription;
+  private subscriptionTimerUnit: Subscription;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private zone: NgZone,
+    private stateService: StateService,
     private graphService: GraphService,
     private communicationService: CommunicationService
   ) {
@@ -124,11 +134,16 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (this.subscriptionApiConfig && !this.subscriptionApiConfig.closed) {
       this.subscriptionApiConfig.unsubscribe();
     }
+    if (this.subscriptionTimerUnit && !this.subscriptionTimerUnit.closed) {
+      this.subscriptionTimerUnit.unsubscribe();
+    }
   }
 
   load(): void {
     this.getSourceEntryActions();
+    this.getTimerUnits();
     this.getApiConfigLookup();
+    
 
     if (!this.graphObject || this.graphObject === null) {
       this.graphObject = new GraphObject();
@@ -137,6 +152,26 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
 
     new designFlowEditor(this.graphObject.xml, this.readOnly);
+    //this.fetchStatesOrPayload();
+  }
+
+  fetchStatesOrPayload(){
+    this.subscriptionOrPayload = this.stateService.getStatesByMachineType(this.graphObject.machineType)
+    .subscribe(stateInfoModels => {
+      if (stateInfoModels) {
+        this.stateInfoModels = stateInfoModels;
+        new styleInfo(this.stateInfoModels,"design");
+      }
+      else{
+        this.stateInfoModels = null;
+      }
+     });
+    
+  }
+
+  storeModel(model){
+    
+    this.selectedModel = model;
   }
 
   getSourceEntryActions() {
@@ -147,6 +182,16 @@ export class DesignComponent implements OnInit, OnDestroy {
         }
       });
   }
+
+  getTimerUnits() {
+    this.subscriptionTimerUnit = this.graphService.getTimerUnits()
+      .subscribe(sourceTimerUnitList => {
+        if (sourceTimerUnitList) {
+          this.sourceTimerUnitList = sourceTimerUnitList;
+        }
+      });
+  }
+
 
   getApiConfigLookup() {
     this.subscriptionApiConfig = this.graphService.apiConfigLookup()
@@ -377,13 +422,25 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.graphObject.states = states;
       this.graphObject.transitions = transitions;
 
-      this.graphObject.dataPointConfigurationList.sort(function (a, b) {
-        return a.sequence - b.sequence;
+      this.graphObject.dataPointConfigurationList = this.graphObject.dataPointConfigurationList.sort((dp1, dp2) => {
+        if (dp1.sequence > dp2.sequence) {
+          return 1;
+        } else if (dp1.sequence < dp2.sequence) {
+            return -1;
+        } else {
+          return 0;
+        }
       });
 
       for (const dataPoint of this.graphObject.dataPointConfigurationList) {
-        dataPoint.validations.sort(function (a, b) {
-          return a.sequence - b.sequence;
+        dataPoint.validations = dataPoint.validations.sort((v1, v2) => {
+          if (v1.sequence > v2.sequence) {
+            return 1;
+          } else if (v1.sequence < v2.sequence) {
+            return -1;
+          } else {
+            return 0;
+          }
         });
 
         if (dataPoint.dataType !== 'SINGLE_SELECT' && dataPoint.dataType !== 'MULTI_SELECT') {
@@ -409,11 +466,6 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   deepCopy(object: Object) {
     return JSON.parse(JSON.stringify(object));
-  }
-
-  showAppJSWarning(header: string, body: string) {
-    this.warningHeader = header;
-    this.warningBody = body;
   }
 
   enableBulkEdit(selectedEvent: EventModel) {

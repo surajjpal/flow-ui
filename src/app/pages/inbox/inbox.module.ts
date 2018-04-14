@@ -12,9 +12,13 @@ import { InboxComponent } from './inbox.component';
 import { ActiveComponent } from './components/active/active.component';
 import { ArchivedComponent } from './components/archived/archived.component';
 import { TaskDetailsComponent } from './components/taskDetails/taskDetails.component';
+import { TeamViewComponent} from './components/teamView/teamView.component';
+import { PersonalComponent} from './components/personal/personal.component';
 import { ApiTableModule } from './components/api_table/apitable.module';
 
 import { SharedModule } from '../../shared/shared.module';
+
+import { MomentModule } from 'angular2-moment';
 
 @NgModule({
   imports: [
@@ -25,13 +29,17 @@ import { SharedModule } from '../../shared/shared.module';
     TagInputModule,
     ApiTableModule,
     DataTableModule,
-    SharedModule
+    SharedModule,
+    MomentModule
   ],
   declarations: [
     InboxComponent,
     ActiveComponent,
     ArchivedComponent,
-    TaskDetailsComponent
+    TaskDetailsComponent,
+    TeamViewComponent,
+    PersonalComponent
+    
   ]
 })
 export class InboxModule { }
