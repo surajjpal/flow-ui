@@ -36,6 +36,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   PRINT_PREVIEW = 'PRINT_PREVIEW';
   POSTER_PRINT = 'POSTER_PRINT';
 
+  isButtonEnabled: boolean = true;
+
   selectedState: State;
   dataPoints: DataPoint[];
   actionMap: any;
@@ -53,6 +55,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   orPayload:any; 
   selectedModel:StateInfoModel;
   iterationLevel:number;
+  tempUser:User;
   FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
   
   private subscription: Subscription;
@@ -178,7 +181,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
 
     allocate(){
-      
+      this.isButtonEnabled = false;
       this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.allocatedUserId,this.selectedState._id,"Allocate")
       .subscribe(any => {
 
@@ -187,7 +190,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     }
 
     escalate(){
-      
+      this.isButtonEnabled = false;
       this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userHierarchy.parentUserId,this.selectedState._id,"Escalate")
       .subscribe(any => {
         
@@ -198,6 +201,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     }
 
     reserve(){
+      this.isButtonEnabled = false;
       this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userId,this.selectedState._id,"Reserve")
       .subscribe(any => {
         
@@ -318,6 +322,9 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   }
 
   updateFlow() {
+
+    this.isButtonEnabled = false;
+    
     if (!this.actionMap) {
       this.actionMap = {};
     }
@@ -370,6 +377,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   }
 
   confirm():void{
+    this.isButtonEnabled = false;
     this.selectedState.flagged = true;
     this.iterationLevel = this.selectedState.iterationLevel;
     this.iterationLevel = this.iterationLevel + 1;
@@ -380,7 +388,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   }
 
   archive():void{
-    
+    this.isButtonEnabled = false;
     this.subscription = this.stateService.saveArchivedState(this.selectedState)
     .subscribe(State => {
       new closeModal('flagTaskModal');

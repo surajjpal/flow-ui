@@ -32,7 +32,7 @@
             <div role="tabpanel" class="tab-pane fade show active" id="tab_assigned">
                 <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
                 <br>
-                <table class="table table-striped" [mfData]="assignedStates | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage"
+                <table class="table table-striped" [mfData]="assignedStates | universalDataFilter : filterQuery" #mf="mfDataTable" 
                   [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
                   <thead>
                     <tr>
