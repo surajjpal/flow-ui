@@ -40,7 +40,7 @@
                 <div role="tabpanel" class="tab-pane fade" id="tab_flagged">
                   <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
                   <br>
-                  <table class="table table-striped" [mfData]="flaggedStates | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage"
+                  <table class="table table-striped" [mfData]="flaggedStates | universalDataFilter : filterQuery" #mf="mfDataTable" 
                     [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
                     <thead>
                       <tr>
@@ -148,7 +148,7 @@
       <!-- Modal Footer -->
       <div class="modal-footer" id="modal_footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="moveToArchive(selectedFlagState)">Finalise</button>
+        <button type="button" class="btn btn-primary" (click)="moveToArchive()">Finalise</button>
       </div>
     </div>
   </div>
