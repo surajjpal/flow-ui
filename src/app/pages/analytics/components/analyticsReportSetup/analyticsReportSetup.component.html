@@ -86,8 +86,26 @@
                                 </div>
                                 <!-- <api-datepicker [(selectedDate)]="analyticsReportSetup.scheduleDate"></api-datepicker> -->
                             </div>
+                            <div class="col-md-6">
+                                <label>Select end date</label>
+                                <form class="form-inline">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="yyyy-mm-dd"
+                                                [(ngModel)]="analyticsReportSetup.endDateTime" name="endDateTime" ngbDatepicker #d="ngbDatepicker">
+                                            <div class="input-group-append">
+                                            <button class="btn btn-default" (click)="d.toggle()" type="button">
+                                                <i class="ion ion-calendar" style="width: 1.2rem; height: 1rem; cursor: pointer;"></i>
+                                                <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                                            </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            
                         </div>
-                       
+                        
                         <div class="form-group">
                             <button type="button" class="btn btn-primary" (click)="scheduleAnalyticsReport()">
                                 Submit
