@@ -55,6 +55,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   orPayload:any; 
   selectedModel:StateInfoModel;
   iterationLevel:number;
+  tempUser:User;
   FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
   
   private subscription: Subscription;
