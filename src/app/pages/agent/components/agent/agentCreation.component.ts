@@ -12,6 +12,7 @@ import { AgentService } from '../../../../services/agent.service';
 import { DomainService } from '../../../../services/domain.service';
 import { GraphService } from '../../../../services/flow.service';
 import { DataSharingService } from '../../../../services/shared.service';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'api-agent-agent',
@@ -21,9 +22,10 @@ import { DataSharingService } from '../../../../services/shared.service';
 export class AgentCreationComponent implements OnInit, OnDestroy {
 
   agentCreateMode: boolean;
+  isCreated:boolean;
   modalHeader: string;
   createMode: boolean;
-
+  autoUrl:string;
   selectedAgent: Agent;
   selectedDomain: Domain;
   domainSource: Domain[];
@@ -87,7 +89,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.fetchLookups();
-
+    this.isCreated = false;
     const agent: Agent = this.sharingService.getSharedObject();
     if (agent) {
       this.selectedAgent = agent;
@@ -229,7 +231,8 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
         .subscribe(
           createdAgent => {
             this.isSuccess = true;
-
+            this.isCreated = true;
+            this.autoUrl = environment.autourl +"param1=" +createdAgent._id + "&" + "param2=" + "welcomeTo" + "&" + "param3=" + "agentName" 
             if (createdAgent) {
               if (createdAgent.agentPlugins && createdAgent.agentPlugins.length > 0) {
                 const facebookPlugin: Plugin = createdAgent.agentPlugins[0];
@@ -240,6 +243,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
                   new showModal('successModal');
                   return;
                 }
+              
               }
 
               this.facebookIntegrated = false;
@@ -384,7 +388,12 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
 
   goToAgentsListing() {
     if (this.isSuccess) {
-      this.router.navigate(['/pg/agnt/agsr'], { relativeTo: this.route });
+      this.router.navigate(['/pg/agnt/ags'], { relativeTo: this.route });
     }
   }
+
+  goBack(){
+    this.router.navigate(['/pg/agnt/agsr'], { relativeTo: this.route });
+  }
+
 }

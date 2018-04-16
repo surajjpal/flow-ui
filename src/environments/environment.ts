@@ -19,7 +19,7 @@ export const environment = {
 
   // Flow
   server: 'http://108.168.190.82:8080/flow/console/',
-
+  autourl:'https://api.automatapi.io/?',
 
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
