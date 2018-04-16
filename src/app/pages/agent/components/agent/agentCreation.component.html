@@ -1,4 +1,4 @@
-<div class="widgets">
+<div class="widgets" *ngIf="isCreated == false">
   <div class="row">
     <ba-card [cardTitle]="agentCreateMode ? 'Create Agent' : 'Update Agent'" baCardClass="with-scroll" class="col-md-12">
       <ul class="nav nav-tabs" role="tablist">
@@ -264,5 +264,13 @@
         <button type="button" class="btn btn-default" data-dismiss="modal" (click)="goToAgentsListing();">Close</button>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="card" style="width: 100rem;"  *ngIf="isCreated" >
+  <div class="card-body">
+    <h5 class="card-title">Agent Url to use</h5>
+    <p class="card-text"><b>{{autoUrl}}</b></p>
+    <button type="button" class="btn btn-success" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px" (click)="goBack();">Got It</button>
   </div>
 </div>

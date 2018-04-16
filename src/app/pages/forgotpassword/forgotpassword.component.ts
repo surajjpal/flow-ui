@@ -74,6 +74,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
         user => {
           this.loading = false;
           this.router.navigate([this.returnUrl]);
+          this.alertService.success('User updated successfully', true, 5000);
         },
         error => {
           this.loading = false;
