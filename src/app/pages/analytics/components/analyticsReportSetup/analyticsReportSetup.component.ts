@@ -22,7 +22,7 @@ export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
     private analyticsReport: AnalyticsReport;
     private scheduleTaskConfiguration: ScheduleTaskConfiguration;
     private subscription: Subscription;
-    reportTypes: string[] = ["INSTANT_REPORT", "SCHEDULE_REPORT"]
+    reportTypes: string[] = ["INSTANT", "SCHEDULE"]
     subscriptions: string[] = ["TIMER", "DAILY", "WEEKLY", "MONTHLY", "YEARLY"]
     scheduleDayOfWeek: string[] = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
     scheduleHours = this.range(1,24);
@@ -74,37 +74,14 @@ export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
     }
 
     scheduleAnalyticsReport() {
-        if (this.analyticsReportSetup.reportType == 'INSTANT_REPORT') {
-            this.analyticsReport.setValues(this.analyticsReportSetup.reportName, this.analyticsReportSetup.toEmailIds,
-                this.analyticsReportSetup.ccEmailIds, this.analyticsReportSetup.reportType, this.analyticsReportSetup.startDate,
-                this.analyticsReportSetup.endDate
-            )
-            this.subscription = this.analyticsService.sendReport(this.analyticsReport)
-            .subscribe(
+        console.log("schedule analytics report");
+        console.log(this.analyticsReportSetup);
+        this.subscription = this.analyticsService.sendReport(this.analyticsReportSetup)
+            .subscribe (
                 response => {
-                  this.router.navigate(['/anlt/anltst'], { relativeTo: this.route });
+                    this.router.navigate(['/anlt/anltst'], { relativeTo: this.route});
                 }
-              );
-        }
-        else if (this.analyticsReportSetup.reportType == 'SCHEDULE_REPORT') {
-            this.analyticsReport.setValues(this.analyticsReportSetup.reportName, this.analyticsReportSetup.toEmailIds,
-                this.analyticsReportSetup.ccEmailIds, this.analyticsReportSetup.reportType, this.analyticsReportSetup.startDate,
-                this.analyticsReportSetup.endDate
             )
-            this.subscription = this.analyticsService.sendReport(this.analyticsReport)
-            .subscribe(
-                response => {
-                    this.scheduleTaskConfiguration.setValues("system",null,this.analyticsReportSetup.endDate, this.analyticsReportSetup.subscription,
-                        this.analyticsReportSetup.timeZone, this.analyticsReportSetup.scheduleSecond, this.analyticsReportSetup.scheduleMinute,
-                        this.analyticsReportSetup.scheduleHour, this.analyticsReportSetup.scheduleDayOfWeek, this.analyticsReportSetup.scheduleMonth,
-                        this.analyticsReportSetup.scheduleDayOfMonth, this.analyticsReportSetup.repeateCount, this.analyticsReportSetup.status
-                    )
-                    this.analyticsService.scheduleReport(this.scheduleTaskConfiguration)  
-                  
-                }
-              );
-        }
-        
     }
 
     setReportDateRange(dateRange) {

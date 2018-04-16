@@ -23,13 +23,13 @@
                             <option *ngFor="let reportType of reportTypes" [value]="reportType">{{reportType}}</option>
                         </select>
                         </div>
-                        <div *ngIf="analyticsReportSetup.reportType == 'INSTANT_REPORT'">
+                        <div *ngIf="analyticsReportSetup.reportType == 'INSTANT'">
                             <div class="form-group">
                                 <label>Select date range</label>
                                 <api-daterangepicker (selectedRange)="setReportDateRange($event)"></api-daterangepicker>
                             </div>
                         </div>
-                        <div *ngIf="analyticsReportSetup.reportType == 'SCHEDULE_REPORT'">
+                        <div *ngIf="analyticsReportSetup.reportType == 'SCHEDULE'">
                             <div class="form-group">
                                 <label >Select subscription</label>
                                 <select class="selectpicker form-control" required id="selectSubscription" title="Choose Subscription" [(ngModel)]="analyticsReportSetup.subscription" name="subscription"

@@ -14,7 +14,7 @@ export class AnalyticsService {
 
     constructor(private httpClient: HttpClient) {}
 
-    sendReport(analyticsReport: AnalyticsReport): Observable<any> {
+    sendReport(analyticsReport: AnalyticsReportSetup): Observable<any> {
         const subject = new Subject<any>();
         const url = `${environment.server + environment.sendReportUrl}`;
         this.httpClient.post<AnalyticsReportSetup>(
@@ -48,6 +48,7 @@ export class AnalyticsService {
     scheduleReport(scheduleTaskConfiguration: ScheduleTaskConfiguration): Observable<any> {
         const subject = new Subject<any>();
         const analyticsReport = new AnalyticsReport();
+        console.log("schedule report");
         console.log(scheduleTaskConfiguration);
         return subject.asObservable();
     }
