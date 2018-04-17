@@ -63,7 +63,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   private subscriptionChatMessages: Subscription;
   private subscriptionUsers: Subscription;
   private subscriptionInsight: Subscription;
-  
+  private subscriptionXML: Subscription;
 
   constructor(
     private zone: NgZone,
@@ -384,6 +384,11 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.selectedState.iterationLevel = this.iterationLevel;
     this.selectedState.subStatus = "FLAGGED"
     this.updateFlow();
+    this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedState)
+    .subscribe(State => {
+      new closeModal('flagTaskModal');
+      this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
+    });
     
   }
 
