@@ -353,7 +353,6 @@ export class PersonalComponent implements OnInit, OnDestroy {
       this.selectedStateForFlag = state;
       this.extractParams();
       this.updateFlow();
-      this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
     });
   }
 }
