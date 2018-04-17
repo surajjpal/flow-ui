@@ -675,14 +675,11 @@
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpDescription' + index" placeholder="Description"
                         [(ngModel)]="dataPoint.description" name="description" />
                     </div>
-                    <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpHeaderFlag' + index">
-                        Header
-                      </label>
-                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpHeaderFlag' + index" placeholder="Header"
-                        [(ngModel)]="dataPoint.headerFlag" name="headerFlag" />
+                    <div class="row">
+                      <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.headerFlag" [label]="'Header Flag'" (event)="dataPoint.headerFlag = $event.target.checked"></api-checkbox>
+                      <api-checkbox class="col-md-9 col-sm-9 col-xs-9" [checked]="dataPoint.businessKeyFlag" [label]="'Business Key Flag'" (event)="dataPoint.businessKeyFlag = $event.target.checked"></api-checkbox>
                     </div>
-                    <div class="form-group">
+                   <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputExpression' + index">
                         Expression
                       </label>
@@ -800,12 +797,9 @@
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpDescription' + index" placeholder="Description"
                         [(ngModel)]="dataPoint.description" name="description" />
                     </div>
-                    <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpHeaderFlag' + index">
-                        Header
-                      </label>
-                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpHeaderFlag' + index" placeholder="Header"
-                        [(ngModel)]="dataPoint.headerFlag" name="headerFlag" />
+                    <div class="row">
+                      <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.headerFlag" [label]="'Header Flag'" (event)="dataPoint.headerFlag = $event.target.checked"></api-checkbox>
+                      <api-checkbox class="col-md-9 col-sm-9 col-xs-9" [checked]="dataPoint.businessKeyFlag" [label]="'Business Key Flag'" (event)="dataPoint.businessKeyFlag = $event.target.checked"></api-checkbox>
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputExpression' + index">

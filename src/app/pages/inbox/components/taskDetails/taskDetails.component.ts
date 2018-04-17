@@ -383,11 +383,10 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.iterationLevel = this.iterationLevel + 1;
     this.selectedState.iterationLevel = this.iterationLevel;
     this.selectedState.subStatus = "FLAGGED"
-    this.updateFlow();
     this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedState)
     .subscribe(State => {
+      this.updateFlow();
       new closeModal('flagTaskModal');
-      this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
     });
     
   }
