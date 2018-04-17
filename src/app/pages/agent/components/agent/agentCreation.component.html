@@ -71,7 +71,7 @@
               </div>
               <div class="form-group">
                 <label>Episode Close Timeout (in Minutes)</label>
-                <input type="number" class="form-control" required placeholder="Episode Close Timeout (in Minutes)" [(ngModel)]="selectedAgent.episodeCloseTimeout" name="episodeCloseTimeout"
+                <input type="number" class="form-control" required placeholder="Episode Close Timeout (in Minutes)" [(ngModel)]="selectedAgent.uiComponent.episodeCloseTimeout" name="episodeCloseTimeout"
                   min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
               </div>
               <div class="checkbox">

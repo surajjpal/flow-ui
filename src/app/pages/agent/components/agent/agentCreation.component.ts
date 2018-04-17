@@ -105,8 +105,8 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       if (!this.selectedAgent.uiComponent.episodeIdleTimeout) {
         this.selectedAgent.uiComponent.episodeIdleTimeout = 240;
       }
-      if (!this.selectedAgent.episodeCloseTimeout) {
-        this.selectedAgent.episodeCloseTimeout = 2880;
+      if (!this.selectedAgent.uiComponent.episodeCloseTimeout) {
+        this.selectedAgent.uiComponent.episodeCloseTimeout = 2880;
       }
 
       if (this.selectedAgent.agentPlugins && this.selectedAgent.agentPlugins.length > 0) {
