@@ -346,12 +346,13 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.iterationLevel = this.iterationLevel + 1;
     this.selectedStateForFlag.iterationLevel = this.iterationLevel;
     this.selectedStateForFlag.subStatus = "FLAGGED"
-    this.extractParams()
-    this.updateFlow()
+    
     this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedStateForFlag)
-    .subscribe(State => {
+    .subscribe(state => {
       new closeModal('flagModal');
-      this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
+      this.selectedStateForFlag = state;
+      this.extractParams();
+      this.updateFlow();
     });
   }
 }
