@@ -329,13 +329,13 @@ export class PersonalComponent implements OnInit, OnDestroy {
                 }
     
                 if (!this.responseError || this.responseError.length <= 0) {
-                  new showModal('successModal');
+                  new showModal('successModalPersonal');
                 }
               } else {
-                new showModal('successModal');
+                new showModal('successModalPersonal');
               }
             } else {
-              new showModal('successModal');
+              new showModal('successModalPersonal');
             }
           });
       }
