@@ -137,7 +137,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
       });
      
 
-      this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED','ACTIVE',this.pageNumber,this.fetchRecords,'PERSONAL')
+      this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED','CLOSED',this.pageNumber,this.fetchRecords,'PERSONAL')
       .subscribe(states => {
         this.loadingFlagged = false;
         this.flaggedStates = states;
@@ -190,7 +190,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
       });
     }
     else{
-      this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED','ACTIVE',this.pageNumber,this.fetchRecords,'PERSONAL')
+      this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED','CLOSED',this.pageNumber,this.fetchRecords,'PERSONAL')
       .subscribe(states => {
       this.flaggedStates = this.flaggedStates.concat(states) 
       });
