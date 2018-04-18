@@ -190,7 +190,7 @@ import { FetchUserService } from '../../../../services/userhierarchy.service';
           this.subscriptionPersonal = this.stateService.getStatesBySubStatusAndFolder(substatus,'CLOSED',this.pageNumber,this.fetchRecords,this.type)
           
             .subscribe(states => {
-              this.assignedStates = this.assignedStates.concat(states)
+              this.flaggedStates = this.flaggedStates.concat(states)
            });
           }
 
