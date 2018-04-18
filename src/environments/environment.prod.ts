@@ -14,7 +14,7 @@ export const environment = {
 
   // Flow
   server: 'https://flow.automatapi.com/flow/console/',
-  autourl:'https://api.automatapi.io/?',
+  autourl:'https://api.automatapi.com/?',
 
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',

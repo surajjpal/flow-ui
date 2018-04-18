@@ -49,7 +49,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   // Dropdown source list
   sourceStatusCodes: string[] = ['DRAFT', 'ACTIVE', 'ARCHIVE'];
   sourceStateTypes: string[] = ['Manual', 'Auto', 'Cognitive'];
-  allocationTypes: string[] = ['Group', 'Least_Allocated', 'Maximum_Efficiency', 'API', 'User','Round_Robin','Auto_Agent_Allocation'];
+  allocationTypes: string[] = ['Group', 'Least_Allocated', 'Maximum_Efficiency', 'API', 'User','Round_Robin','Auto_Agent_Allocation','Allocate_To_TeamLeader'];
   amountTypes: string[] = ['FIXED', 'DERIVED', 'API'];
   timerUnitType: string[] = ['MINUTE','HOUR','DAY','WEEK','MONTH','YEAR'];
   sourceOperands: string[] = ['AND', 'OR'];
