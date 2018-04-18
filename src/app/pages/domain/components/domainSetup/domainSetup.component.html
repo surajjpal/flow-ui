@@ -198,6 +198,7 @@
           </div>
         </div>
         <div role="tabpanel" class="tab-pane fade" id="responseMessagesContent" aria-labelledby="responseMessagesTab">
+          <!--Contents of Response messages tab-->
           <div class="panel panel-default">
             <form class="row form-inline">
               <div class="form-group col-sm-10">
@@ -592,6 +593,51 @@
                                         <div class="form-group">
                                           <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
                                         </div>
+                                        <div class="form-group">
+                                            <label>Response options</label>            
+                                            <table class = "table table-striped">
+                                              <thead>
+                                                <tr>
+                                                  <th>Input type</th>
+                                                  <th>URL</th>
+                                                  <th>Options</th>
+                                                  <th><button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)"><i class="ion-plus-round"></i></button></th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <tr *ngFor="let option of gsResponse.options">
+                                                  <td>
+                                                    <select name="type" id="type" [(ngModel)]="option.type">
+                                                      <option value="">Choose One</option>
+                                                      <option value="BUTTON">Button</option>
+                                                      <option value="CHECKBOX">Checkbox</option>
+                                                      <option value="RADIO">Radio</option>
+                                                    </select>
+                                                  </td>
+                                                  <td><input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url"></td>
+                                                  <td>
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                          <tr>
+                                                              <th>Value</th>
+                                                              <th>Label</th>
+                                                              <th><button type="button" class="btn btn-primary" (click)="onAddData(option)"><i class="ion-plus-round"></i></button></th>
+                                                            </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <tr *ngFor="let row of option.data">
+                                                          <td><input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"/></td>
+                                                          <td><input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"/></td>
+                                                          <td><button type="button" class="btn btn-danger" (click) = "delete(option.data,row)"><i class="ion-ios-trash"></i></button></td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                  <td><button type="button" class="btn btn-danger" (click) = "delete(gsResponse.options, option)"><i class="ion-ios-trash"></i></button></td>
+                                                </tr>
+                                              </tbody>
+                                            </table>                                          
+                                        </div>
                                         <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                           Remove Response
                                         </button>
@@ -623,6 +669,51 @@
                                           </div>
                                           <div class="form-group">
                                             <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
+                                          </div>
+                                          <div class="form-group">
+                                              <label>Response options</label>            
+                                              <table class = "table table-striped">
+                                                <thead>
+                                                  <tr>
+                                                    <th>Input type</th>
+                                                    <th>URL</th>
+                                                    <th>Options</th>
+                                                    <th><button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)"><i class="ion-plus-round"></i></button></th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <tr *ngFor="let option of gsResponse.options">
+                                                    <td>
+                                                      <select name="type" id="type" [(ngModel)]="option.type">
+                                                        <option value="">Choose One</option>
+                                                        <option value="BUTTON">Button</option>
+                                                        <option value="CHECKBOX">Checkbox</option>
+                                                        <option value="RADIO">Radio</option>
+                                                      </select>
+                                                    </td>
+                                                    <td><input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url"></td>
+                                                    <td>
+                                                      <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Value</th>
+                                                                <th>Label</th>
+                                                                <th><button type="button" class="btn btn-primary" (click)="onAddData(option)"><i class="ion-plus-round"></i></button></th>
+                                                              </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          <tr *ngFor="let row of option.data">
+                                                            <td><input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"/></td>
+                                                            <td><input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"/></td>
+                                                            <td><button type="button" class="btn btn-danger" (click) = "delete(option.data,row)"><i class="ion-ios-trash"></i></button></td>
+                                                          </tr>
+                                                        </tbody>
+                                                      </table>
+                                                    </td>
+                                                    <td><button type="button" class="btn btn-danger" (click) = "delete(gsResponse.options, option)"><i class="ion-ios-trash"></i></button></td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>                                          
                                           </div>
                                           <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                             Remove Response
@@ -686,6 +777,51 @@
                                         <div class="form-group">
                                           <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
                                         </div>
+                                        <div class="form-group">
+                                            <label>Response options</label>            
+                                            <table class = "table table-striped">
+                                              <thead>
+                                                <tr>
+                                                  <th>Input type</th>
+                                                  <th>URL</th>
+                                                  <th>Options</th>
+                                                  <th><button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)"><i class="ion-plus-round"></i></button></th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <tr *ngFor="let option of gsResponse.options">
+                                                  <td>
+                                                    <select name="type" id="type" [(ngModel)]="option.type">
+                                                      <option value="">Choose One</option>
+                                                      <option value="BUTTON">Button</option>
+                                                      <option value="CHECKBOX">Checkbox</option>
+                                                      <option value="RADIO">Radio</option>
+                                                    </select>
+                                                  </td>
+                                                  <td><input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url"></td>
+                                                  <td>
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                          <tr>
+                                                              <th>Value</th>
+                                                              <th>Label</th>
+                                                              <th><button type="button" class="btn btn-primary" (click)="onAddData(option)"><i class="ion-plus-round"></i></button></th>
+                                                            </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <tr *ngFor="let row of option.data">
+                                                          <td><input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"/></td>
+                                                          <td><input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"/></td>
+                                                          <td><button type="button" class="btn btn-danger" (click) = "delete(option.data,row)"><i class="ion-ios-trash"></i></button></td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                  <td><button type="button" class="btn btn-danger" (click) = "delete(gsResponse.options, option)"><i class="ion-ios-trash"></i></button></td>
+                                                </tr>
+                                              </tbody>
+                                            </table>                                          
+                                        </div>
                                         <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                           Remove Response
                                         </button>
@@ -717,6 +853,51 @@
                                           </div>
                                           <div class="form-group">
                                             <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
+                                          </div>
+                                          <div class="form-group">
+                                              <label>Response options</label>            
+                                              <table class = "table table-striped">
+                                                <thead>
+                                                  <tr>
+                                                    <th>Input type</th>
+                                                    <th>URL</th>
+                                                    <th>Options</th>
+                                                    <th><button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)"><i class="ion-plus-round"></i></button></th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <tr *ngFor="let option of gsResponse.options">
+                                                    <td>
+                                                      <select name="type" id="type" [(ngModel)]="option.type">
+                                                        <option value="">Choose One</option>
+                                                        <option value="BUTTON">Button</option>
+                                                        <option value="CHECKBOX">Checkbox</option>
+                                                        <option value="RADIO">Radio</option>
+                                                      </select>
+                                                    </td>
+                                                    <td><input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url"></td>
+                                                    <td>
+                                                      <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Value</th>
+                                                                <th>Label</th>
+                                                                <th><button type="button" class="btn btn-primary" (click)="onAddData(option)"><i class="ion-plus-round"></i></button></th>
+                                                              </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          <tr *ngFor="let row of option.data">
+                                                            <td><input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"/></td>
+                                                            <td><input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"/></td>
+                                                            <td><button type="button" class="btn btn-danger" (click) = "delete(option.data,row)"><i class="ion-ios-trash"></i></button></td>
+                                                          </tr>
+                                                        </tbody>
+                                                      </table>
+                                                    </td>
+                                                    <td><button type="button" class="btn btn-danger" (click) = "delete(gsResponse.options, option)"><i class="ion-ios-trash"></i></button></td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>                                          
                                           </div>
                                           <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                             Remove Response
@@ -870,6 +1051,51 @@
                                         <div class="form-group">
                                           <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
                                         </div>
+                                        <div class="form-group">
+                                            <label>Response options</label>            
+                                            <table class = "table table-striped">
+                                              <thead>
+                                                <tr>
+                                                  <th>Input type</th>
+                                                  <th>URL</th>
+                                                  <th>Options</th>
+                                                  <th><button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)"><i class="ion-plus-round"></i></button></th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <tr *ngFor="let option of gsResponse.options">
+                                                  <td>
+                                                    <select name="type" id="type" [(ngModel)]="option.type">
+                                                      <option value="">Choose One</option>
+                                                      <option value="BUTTON">Button</option>
+                                                      <option value="CHECKBOX">Checkbox</option>
+                                                      <option value="RADIO">Radio</option>
+                                                    </select>
+                                                  </td>
+                                                  <td><input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url"></td>
+                                                  <td>
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                          <tr>
+                                                              <th>Value</th>
+                                                              <th>Label</th>
+                                                              <th><button type="button" class="btn btn-primary" (click)="onAddData(option)"><i class="ion-plus-round"></i></button></th>
+                                                            </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <tr *ngFor="let row of option.data">
+                                                          <td><input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"/></td>
+                                                          <td><input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"/></td>
+                                                          <td><button type="button" class="btn btn-danger" (click) = "delete(option.data,row)"><i class="ion-ios-trash"></i></button></td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                  <td><button type="button" class="btn btn-danger" (click) = "delete(gsResponse.options, option)"><i class="ion-ios-trash"></i></button></td>
+                                                </tr>
+                                              </tbody>
+                                            </table>                                          
+                                        </div>
                                         <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                           Remove Response
                                         </button>
@@ -901,6 +1127,51 @@
                                           </div>
                                           <div class="form-group">
                                             <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
+                                          </div>
+                                          <div class="form-group">
+                                              <label>Response options</label>            
+                                              <table class = "table table-striped">
+                                                <thead>
+                                                  <tr>
+                                                    <th>Input type</th>
+                                                    <th>URL</th>
+                                                    <th>Options</th>
+                                                    <th><button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)"><i class="ion-plus-round"></i></button></th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <tr *ngFor="let option of gsResponse.options">
+                                                    <td>
+                                                      <select name="type" id="type" [(ngModel)]="option.type">
+                                                        <option value="">Choose One</option>
+                                                        <option value="BUTTON">Button</option>
+                                                        <option value="CHECKBOX">Checkbox</option>
+                                                        <option value="RADIO">Radio</option>
+                                                      </select>
+                                                    </td>
+                                                    <td><input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url"></td>
+                                                    <td>
+                                                      <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Value</th>
+                                                                <th>Label</th>
+                                                                <th><button type="button" class="btn btn-primary" (click)="onAddData(option)"><i class="ion-plus-round"></i></button></th>
+                                                              </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          <tr *ngFor="let row of option.data">
+                                                            <td><input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"/></td>
+                                                            <td><input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"/></td>
+                                                            <td><button type="button" class="btn btn-danger" (click) = "delete(option.data,row)"><i class="ion-ios-trash"></i></button></td>
+                                                          </tr>
+                                                        </tbody>
+                                                      </table>
+                                                    </td>
+                                                    <td><button type="button" class="btn btn-danger" (click) = "delete(gsResponse.options, option)"><i class="ion-ios-trash"></i></button></td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>                                          
                                           </div>
                                           <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                             Remove Response
@@ -963,6 +1234,51 @@
                                         </div>
                                         <div class="form-group">
                                           <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
+                                          <div class="form-group">
+                                              <label>Response options</label>            
+                                              <table class = "table table-striped">
+                                                <thead>
+                                                  <tr>
+                                                    <th>Input type</th>
+                                                    <th>URL</th>
+                                                    <th>Options</th>
+                                                    <th><button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)"><i class="ion-plus-round"></i></button></th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <tr *ngFor="let option of gsResponse.options">
+                                                    <td>
+                                                      <select name="type" id="type" [(ngModel)]="option.type">
+                                                        <option value="">Choose One</option>
+                                                        <option value="BUTTON">Button</option>
+                                                        <option value="CHECKBOX">Checkbox</option>
+                                                        <option value="RADIO">Radio</option>
+                                                      </select>
+                                                    </td>
+                                                    <td><input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url"></td>
+                                                    <td>
+                                                      <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Value</th>
+                                                                <th>Label</th>
+                                                                <th><button type="button" class="btn btn-primary" (click)="onAddData(option)"><i class="ion-plus-round"></i></button></th>
+                                                              </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          <tr *ngFor="let row of option.data">
+                                                            <td><input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"/></td>
+                                                            <td><input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"/></td>
+                                                            <td><button type="button" class="btn btn-danger" (click) = "delete(option.data,row)"><i class="ion-ios-trash"></i></button></td>
+                                                          </tr>
+                                                        </tbody>
+                                                      </table>
+                                                    </td>
+                                                    <td><button type="button" class="btn btn-danger" (click) = "delete(gsResponse.options, option)"><i class="ion-ios-trash"></i></button></td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>                                          
+                                          </div>
                                         </div>
                                         <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                           Remove Response
@@ -995,6 +1311,51 @@
                                           </div>
                                           <div class="form-group">
                                             <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
+                                          </div>
+                                          <div class="form-group">
+                                              <label>Response options</label>            
+                                              <table class = "table table-striped">
+                                                <thead>
+                                                  <tr>
+                                                    <th>Input type</th>
+                                                    <th>URL</th>
+                                                    <th>Options</th>
+                                                    <th><button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)"><i class="ion-plus-round"></i></button></th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <tr *ngFor="let option of gsResponse.options">
+                                                    <td>
+                                                      <select name="type" id="type" [(ngModel)]="option.type">
+                                                        <option value="">Choose One</option>
+                                                        <option value="BUTTON">Button</option>
+                                                        <option value="CHECKBOX">Checkbox</option>
+                                                        <option value="RADIO">Radio</option>
+                                                      </select>
+                                                    </td>
+                                                    <td><input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url"></td>
+                                                    <td>
+                                                      <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Value</th>
+                                                                <th>Label</th>
+                                                                <th><button type="button" class="btn btn-primary" (click)="onAddData(option)"><i class="ion-plus-round"></i></button></th>
+                                                              </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          <tr *ngFor="let row of option.data">
+                                                            <td><input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"/></td>
+                                                            <td><input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"/></td>
+                                                            <td><button type="button" class="btn btn-danger" (click) = "delete(option.data,row)"><i class="ion-ios-trash"></i></button></td>
+                                                          </tr>
+                                                        </tbody>
+                                                      </table>
+                                                    </td>
+                                                    <td><button type="button" class="btn btn-danger" (click) = "delete(gsResponse.options, option)"><i class="ion-ios-trash"></i></button></td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>                                          
                                           </div>
                                           <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                             Remove Response
@@ -1080,6 +1441,55 @@
           </div>
           <div class="form-group">
             <api-checkbox [checked]="tempResponse.disableUserInput" [label]="'Disable User Input'" (event)="tempResponse.disableUserInput = $event.target.checked"></api-checkbox>
+          </div>
+          <div class="form-group">
+            <label>Response options</label>            
+            <table class = "table table-striped">
+              <thead>
+                <tr>
+                  <th>Input type</th>
+                  <th>URL</th>
+                  <th>Options</th>
+                  <th><button type="button" class="btn btn-primary" (click)="onAddResponseOption(tempResponse)"><i class="ion-plus-round"></i></button></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let option of tempResponse.options">
+                  <td>
+                    <select name="type" id="type" [(ngModel)]="option.type">
+                      <option value="">Choose One</option>
+                      <option value="BUTTON">Button</option>
+                      <option value="CHECKBOX">Checkbox</option>
+                      <option value="RADIO">Radio</option>
+                    </select>
+                  </td>
+                  <td><input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url"></td>
+                  <td>
+                    <table class="table table-striped">
+                      <thead>
+                          <tr>
+                              <th>Value</th>
+                              <th>Label</th>
+                              <th>
+                                <button type="button" class="btn btn-primary" (click) = "onAddData(option)"><i class="ion-plus-round"></i></button>
+                              </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let row of option.data">
+                          <td><input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"/></td>
+                          <td><input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"/></td>
+                          <td><button type="button" class="btn btn-danger" (click) = "delete(option.data,row)"><i class="ion-ios-trash"></i></button></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-danger" title="delete" (click)="delete(tempResponse.options, option)"><i class="ion-ios-trash"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </form>
       </div>

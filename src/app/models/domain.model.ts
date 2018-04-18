@@ -104,6 +104,28 @@ export class Stage {
   }
 }
 
+export class ResponseOption {
+  value : string;
+  label : string;
+
+  constructor(value? : string, label? : string) {
+    this.value = value ? value : '';
+    this.label = label? label : '';
+  }
+}
+
+export class ResponseData {
+  url: string;
+  type: string;
+  data: ResponseOption[];
+
+  constructor(url? : string, type? : string, data?: ResponseOption[]) {
+    this.url = url ? url : '';
+    this.type = type ? type : '';
+    this.data = data ? data : [];
+  }
+}
+
 export class Response {
   sequence: number;
   level: number;
@@ -113,8 +135,9 @@ export class Response {
   response: string;
   stage: string;
   disableUserInput: boolean;
+  options : ResponseData[];
 
-  constructor(expression?: string, lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean) {
+  constructor(expression?: string, lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean, options? : ResponseData[]) {
     this.level = 1;
 
     this.expression = expression ? expression : '';
@@ -124,6 +147,7 @@ export class Response {
     this.sequence = sequence ? sequence : 0;
     this.stage = stage ? stage : '';
     this.disableUserInput = disableUserInput ? disableUserInput : false;
+    this.options = options ? options : [];
   }
 }
 
