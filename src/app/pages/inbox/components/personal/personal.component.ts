@@ -339,6 +339,10 @@ export class PersonalComponent implements OnInit, OnDestroy {
             }
           });
       }
+  
+  onBack() {
+   
+  }
 
   confirm():void{
     this.selectedStateForFlag.flagged = true;
