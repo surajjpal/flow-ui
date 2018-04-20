@@ -128,7 +128,7 @@ import { FetchUserService } from '../../../../services/userhierarchy.service';
             }
           });
 
-          this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED','ACTIVE',this.pageNumber,this.fetchRecords,this.type)
+          this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED','CLOSED',this.pageNumber,this.fetchRecords,this.type)
           .subscribe(states => {
             this.loadingFlagged = false;
             this.flaggedStates = states;
@@ -184,8 +184,18 @@ import { FetchUserService } from '../../../../services/userhierarchy.service';
 
     loadMore(substatus):void{
           
-          this.pageNumber = this.pageNumber + 1; 
-        this.subscriptionPersonal = this.stateService.getStatesBySubStatusAndFolder(substatus,'ACTIVE',this.pageNumber,this.fetchRecords,this.type)
+        this.pageNumber = this.pageNumber + 1; 
+
+        if (substatus == 'FlAGGED'){
+          this.subscriptionPersonal = this.stateService.getStatesBySubStatusAndFolder(substatus,'CLOSED',this.pageNumber,this.fetchRecords,this.type)
+          
+            .subscribe(states => {
+              this.flaggedStates = this.flaggedStates.concat(states)
+           });
+          }
+
+        else{
+          this.subscriptionPersonal = this.stateService.getStatesBySubStatusAndFolder(substatus,'ACTIVE',this.pageNumber,this.fetchRecords,this.type)
         
           .subscribe(states => {
             
@@ -195,12 +205,8 @@ import { FetchUserService } from '../../../../services/userhierarchy.service';
             else if(substatus=='UNASSIGNED'){
               this.unassignedStates = this.unassignedStates.concat(states)
             }
-            else if(substatus=='FLAGGED'){
-              this.flaggedStates = this.flaggedStates.concat(states)
-            }
-            
-      
           });
+        }
         }
 
         onSelectUnFlag(state):void{

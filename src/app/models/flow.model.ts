@@ -28,6 +28,7 @@ export class DataPoint {
   operand: string;
   value: any;
   headerFlag: boolean;
+  businessKeyFlag: boolean;
 
   constructor() {
     this.sequence = 0;
@@ -41,6 +42,7 @@ export class DataPoint {
     this.operand = 'AND';
     this.value = null;
     this.headerFlag = false;
+    this.businessKeyFlag = false;
   }
 }
 

@@ -1,178 +1,245 @@
 <div *ngIf="progressBarFlag">
-    <div class="row">
-      <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="progress">
-          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;" aria-valuenow="99"
-            aria-valuemin="0" aria-valuemax="100">Loading...</div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-12 col-md-12 col-sm-12">
-        <br/>
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;" aria-valuenow="99"
+          aria-valuemin="0" aria-valuemax="100">Loading...</div>
       </div>
     </div>
   </div>
-  <div class="widgets">
-    <div class="row">
-      <ba-card baCardClass="with-scroll" class="data-table-container" style="width: 100rem;">
-        <div class="panel panel-default">
-          <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" data-toggle="tab" href="#tab_assigned" role="tab" aria-expanded="true">Assigned</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="tab" href="#tab_unassigned" role="tab">Unassigned</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#tab_flagged" role="tab">Flagged</a>
-              </li>
-          </ul>
-          <div class="tab-content">
-            <div role="tabpanel" class="tab-pane fade show active" id="tab_assigned">
-                <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
-                <br>
-                <table class="table table-striped" [mfData]="assignedStates | universalDataFilter : filterQuery" #mf="mfDataTable" 
-                  [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
-                  <thead>
-                    <tr>
-                      <th>
-                        <mfDefaultSorter by=""><h6><b>Process</b></h6></mfDefaultSorter>
-                      </th>
-                      <th>
-                        <mfDefaultSorter by=""><h6><b>Task</b></h6></mfDefaultSorter>
-                      </th>
-                      <th>
-                        <mfDefaultSorter by=""><h6><b>Status</b></h6></mfDefaultSorter>
-                      </th>
-                      <th>
-                        <mfDefaultSorter by=""><h6><b>Start Time</b></h6></mfDefaultSorter>
-                      </th>
-                      <th>
-                        <mfDefaultSorter by=""><h6><b>Flag Level</b></h6></mfDefaultSorter>
-                      </th>
-                      <th>
-                        <mfDefaultSorter by=""><h6><b>Escalated</b></h6></mfDefaultSorter>
-                      </th>
-                      <th>
-                        <mfDefaultSorter by=""><h6><b>Flag Reason</b></h6></mfDefaultSorter>
-                      </th>
-                      <th>
-                        <mfDefaultSorter by=""><h6><b>Action</b></h6></mfDefaultSorter>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let s of assignedStates">
-                      <td>{{s.machineLabel}}</td>
-                      <td>{{s.stateCd}}</td>
-                      <td>{{s.statusCd}}</td>
-                      <td>{{s.startTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</td>
-                      
-                      <td>{{s.iterationLevel}}</td>
-                      <td>{{s.escalatedFlag}}</td>
-                      <td>{{s.flagReason}}</td>
-                      
-                      <td><div class="btn-group" role="group">
-                        <button type="button" class="btn btn-primary" title="View" (click)="onSelect(s)">
-                          <i class="ion-eye"></i>
-                        </button>
-                        <button type="button" class="btn btn-danger" title="Flag" *ngIf="s.iterationLevel < 3" data-toggle="modal" data-target="#flagModal" (click)="selectedForFlag(s)">
-                          <i class="ion-flag"></i>
-                        </button>
-                        <button type="button" class="btn btn-danger" title="Flag" *ngIf="s.iterationLevel == 3" data-toggle="modal" data-target="#flagPersonalWarningModal">
-                          <i class="ion-flag"></i>
-                        </button>
-                      </div></td>
-                    </tr>
-                    <tr *ngIf="assignedStates.length === 0 && isLoading">
-                      <td colspan="100%">Loading...</td>
-                    </tr>
-                    <tr *ngIf="assignedStates.length === 0 && !isLoading">
-                      <td colspan="100%">No records to display</td>
-                    </tr>
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <td colspan="5">
-                        <mfBootstrapPaginator ></mfBootstrapPaginator>
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
-              <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; width: 200px" *ngIf="assignedStates.length > 10" (click)="loadMore('ACTIVE','Personal')" >Load More</button>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="tab_unassigned">
-              <apitable *ngIf="unassignedStates" [rawDataArray]="unassignedStates" [isLoading]="loadingUnassigned" (selectedData)="onSelect($event)"></apitable>
-              <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px" *ngIf="unassignedStates.length > 10" (click)="loadMore('ACTIVE','Group')" >Load More</button>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="tab_flagged">
-                <apitable *ngIf="flaggedStates" [rawDataArray]="flaggedStates" [isLoading]="loadingFlagged" (selectedData)="onSelect($event)"></apitable>
-                <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px" *ngIf="flaggedStates.length > 10" (click)="loadMore('FLAGGED','Personal')" >Load More</button>
-              </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <br/>
+    </div>
+  </div>
+</div>
+<div class="widgets">
+  <div class="row">
+    <ba-card baCardClass="with-scroll" class="data-table-container" style="width: 100rem;">
+      <div class="panel panel-default">
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#tab_assigned" role="tab" aria-expanded="true">Assigned</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#tab_unassigned" role="tab">Unassigned</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#tab_flagged" role="tab">Flagged</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane fade show active" id="tab_assigned">
+            <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
+            <br>
+            <table class="table table-striped" [mfData]="assignedStates | universalDataFilter : filterQuery" #mf="mfDataTable" [(mfSortBy)]="sortBy"
+              [(mfSortOrder)]="sortOrder">
+              <thead>
+                <tr>
+                  <th>
+                    <mfDefaultSorter by="">
+                      <h6>
+                        <b>Business Key</b>
+                      </h6>
+                    </mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="">
+                      <h6>
+                        <b>Process</b>
+                      </h6>
+                    </mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="">
+                      <h6>
+                        <b>Task</b>
+                      </h6>
+                    </mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="">
+                      <h6>
+                        <b>Status</b>
+                      </h6>
+                    </mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="">
+                      <h6>
+                        <b>Start Time</b>
+                      </h6>
+                    </mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="">
+                      <h6>
+                        <b>Flag Level</b>
+                      </h6>
+                    </mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="">
+                      <h6>
+                        <b>Escalated</b>
+                      </h6>
+                    </mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="">
+                      <h6>
+                        <b>Flag Reason</b>
+                      </h6>
+                    </mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="">
+                      <h6>
+                        <b>Action</b>
+                      </h6>
+                    </mfDefaultSorter>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let s of  mf.data">
+                  <td>{{s.businessKey}}</td>
+                  <td>{{s.machineLabel}}</td>
+                  <td>{{s.stateCd}}</td>
+                  <td>{{s.statusCd}}</td>
+                  <td>{{s.startTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</td>
+
+                  <td>{{s.iterationLevel}}</td>
+                  <td>{{s.escalatedFlag}}</td>
+                  <td>{{s.flagReason}}</td>
+
+                  <td>
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-primary" title="View" (click)="onSelect(s)">
+                        <i class="ion-eye"></i>
+                      </button>
+                      <button type="button" class="btn btn-danger" title="Flag" *ngIf="s.iterationLevel < 3" data-toggle="modal" data-target="#flagModal"
+                        (click)="selectedForFlag(s)">
+                        <i class="ion-flag"></i>
+                      </button>
+                      <button type="button" class="btn btn-danger" title="Flag" *ngIf="s.iterationLevel == 3" data-toggle="modal" data-target="#flagPersonalWarningModal">
+                        <i class="ion-flag"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="assignedStates.length === 0 && isLoading">
+                  <td colspan="100%">Loading...</td>
+                </tr>
+                <tr *ngIf="assignedStates.length === 0 && !isLoading">
+                  <td colspan="100%">No records to display</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="5">
+                    <mfBootstrapPaginator></mfBootstrapPaginator>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; width: 200px"
+              *ngIf="assignedStates.length > 10" (click)="loadMore('ACTIVE','Personal')">Load More</button>
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="tab_unassigned">
+            <apitable *ngIf="unassignedStates" [rawDataArray]="unassignedStates" [isLoading]="loadingUnassigned" (selectedData)="onSelect($event)"></apitable>
+            <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
+              *ngIf="unassignedStates.length > 10" (click)="loadMore('ACTIVE','Group')">Load More</button>
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="tab_flagged">
+            <apitable *ngIf="flaggedStates" [rawDataArray]="flaggedStates" [isLoading]="loadingFlagged" (selectedData)="onSelect($event)"></apitable>
+            <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
+              *ngIf="flaggedStates.length > 10" (click)="loadMore('FLAGGED','Personal')">Load More</button>
           </div>
         </div>
-      </ba-card>
-    </div>
-  </div>
-  <div class="modal fade" id="flagModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagmodalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title" id="userModalLabel">
-            Flag Reason
-          </h4>
-          <button type="button" class="close" data-dismiss="modal">
-            <span aria-hidden="true">&times;</span>
-            <span class="sr-only">Close</span>
-          </button>
-        </div>
-  
-        <!-- Modal Body -->
-        <div class="modal-body" id="modal_body">
-          <form>
-            <div class="form-group" *ngIf="selectedStateForFlag">
-              <label for="selectReason">Select Reason</label>
-              <select class="selectpicker form-control" required id="selectReason" title="Choose Flag Reason"  [ngModel]="selectedStateForFlag.flagReason" [ngModelOptions]="{standalone: true}"
-              (ngModelChange)="onReasonSelect($event)">
-                <option *ngFor="let flagReason of FlagReasons" [value]="flagReason">{{flagReason}}</option>
-              </select>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer" id="modal_footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="confirm()">Confirm</button>
-        </div>
       </div>
-    </div>
+    </ba-card>
   </div>
+</div>
+<div class="modal fade" id="flagModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagmodalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="userModalLabel">
+          Flag Reason
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
 
-  <div class="modal fade" id="flagPersonalWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagWarningLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title" id="finalWarningLabel">
-            Warning
-          </h4>
-          <button type="button" class="close" data-dismiss="modal">
-            <span aria-hidden="true">&times;</span>
-            <span class="sr-only">Close</span>
-          </button>
-        </div>
-  
-        <!-- Modal Body -->
-        <div class="modal-body" id="modal_body">
-          The Task is already flagged three times, appropriate action will be taken by the team lead!!! 
-        </div>
-  
-        <!-- Modal Footer -->
-        <div class="modal-footer" id="modal_footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        <form>
+          <div class="form-group" *ngIf="selectedStateForFlag">
+            <label for="selectReason">Select Reason</label>
+            <select class="selectpicker form-control" required id="selectReason" title="Choose Flag Reason" [ngModel]="selectedStateForFlag.flagReason"
+              [ngModelOptions]="{standalone: true}" (ngModelChange)="onReasonSelect($event)">
+              <option *ngFor="let flagReason of FlagReasons" [value]="flagReason">{{flagReason}}</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="confirm()">Confirm</button>
       </div>
     </div>
   </div>
-        
+</div>
+
+<div class="modal fade" id="flagPersonalWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagWarningLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="finalWarningLabel">
+          Warning
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        The Task is already flagged three times, appropriate action will be taken by the team lead!!!
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="successModalPersonal" tabindex="-1" role="dialog" attr.aria-labelledby="successModalPersonal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="successModalPersonal">
+          Success
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal_body">
+        Task Flagged successfully.
+      </div>
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="onBack()">Dismiss</button>
+      </div>
+    </div>
+  </div>
+</div>

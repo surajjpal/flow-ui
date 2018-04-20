@@ -137,7 +137,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
       });
      
 
-      this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED','ACTIVE',this.pageNumber,this.fetchRecords,'PERSONAL')
+      this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED','CLOSED',this.pageNumber,this.fetchRecords,'PERSONAL')
       .subscribe(states => {
         this.loadingFlagged = false;
         this.flaggedStates = states;
@@ -190,7 +190,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
       });
     }
     else{
-      this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED','ACTIVE',this.pageNumber,this.fetchRecords,'PERSONAL')
+      this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED','CLOSED',this.pageNumber,this.fetchRecords,'PERSONAL')
       .subscribe(states => {
       this.flaggedStates = this.flaggedStates.concat(states) 
       });
@@ -329,16 +329,20 @@ export class PersonalComponent implements OnInit, OnDestroy {
                 }
     
                 if (!this.responseError || this.responseError.length <= 0) {
-                  new showModal('successModal');
+                  new showModal('successModalPersonal');
                 }
               } else {
-                new showModal('successModal');
+                new showModal('successModalPersonal');
               }
             } else {
-              new showModal('successModal');
+              new showModal('successModalPersonal');
             }
           });
       }
+  
+  onBack() {
+   
+  }
 
   confirm():void{
     this.selectedStateForFlag.flagged = true;
@@ -346,12 +350,13 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.iterationLevel = this.iterationLevel + 1;
     this.selectedStateForFlag.iterationLevel = this.iterationLevel;
     this.selectedStateForFlag.subStatus = "FLAGGED"
-    this.extractParams()
-    this.updateFlow()
+    
     this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedStateForFlag)
-    .subscribe(State => {
+    .subscribe(state => {
       new closeModal('flagModal');
-      this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
+      this.selectedStateForFlag = state;
+      this.extractParams();
+      this.updateFlow();
     });
   }
 }
