@@ -77,6 +77,9 @@
               <div class="checkbox">
                 <ba-checkbox [(ngModel)]="selectedAgent.uiComponent.delayInMessages" [label]="'Delay in messages'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
               </div>
+              <div class="checkbox">
+                <ba-checkbox [(ngModel)]="selectedAgent.uiComponent.cronEnabled" [label]="'Cron Enabled'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+              </div>
             </form>
           </div>
         </div>

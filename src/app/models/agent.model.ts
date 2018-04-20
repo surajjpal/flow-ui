@@ -10,6 +10,7 @@ export class UIComponent {
   episodeIdleTimeout: number;
   delayInMessages: boolean;
   episodeCloseTimeout: number;
+  cronEnabled: boolean;
 
   constructor() {
     this.colorCss = '';
@@ -21,6 +22,7 @@ export class UIComponent {
     this.episodeIdleTimeout = 240;      // In minutes - default 4hrs - 240 mins
     this.delayInMessages = false;
     this.episodeCloseTimeout = 2880;
+    this.cronEnabled = false;
   }
 }
 
