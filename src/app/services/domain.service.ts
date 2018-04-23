@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angul
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
-import { Domain } from '../models/domain.model';
+import { Domain, MissedExpression } from '../models/domain.model';
 import { environment } from '../../environments/environment';
 
 @Injectable()
@@ -26,6 +26,71 @@ export class DomainService {
       }
     ).subscribe(
       (response: HttpResponse<string[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+  
+
+
+
+  
+
+  updateMixedExpression(id): Observable<any> {
+    const subject = new Subject<any>();
+
+    const url = `${environment.autoServer + environment.updatemissedexpressionurl + id}`;
+
+    this.httpClient.get<any>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+
+
+  gwtMissedExpressions(id): Observable<MissedExpression[]> {
+    const subject = new Subject<MissedExpression[]>();
+
+    const url = `${environment.autoServer + environment.missedexpressionsurl + id}`;
+
+    this.httpClient.get<MissedExpression[]>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<MissedExpression[]>) => {
         if (response.body) {
           subject.next(response.body);
         }
@@ -133,4 +198,39 @@ export class DomainService {
 
     return subject.asObservable();
   }
+
+
+  buildExpression(body): Observable<any> {
+    const subject = new Subject<any>();
+  
+    const url = `${environment.autoServer + environment.expressionBuilder}`;
+  
+    this.httpClient.post<any>(
+      url,
+      body,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+  
+        subject.error(err);
+      }
+      );
+  
+    return subject.asObservable();
+  }
 }
+
+
+

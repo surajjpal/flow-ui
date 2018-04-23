@@ -178,3 +178,20 @@ export class Domain {
     this.domainResponse = [];
   }
 }
+
+export class MissedExpression {
+  _id: string;
+  expression: string;
+  companyId: string;
+  domainIds: string[];
+  message:string;
+
+  constructor() {
+    this._id = null;
+    this.expression = '';
+    this.companyId = '';
+    this.domainIds = [];
+    this.message = '';
+  }
+}
+

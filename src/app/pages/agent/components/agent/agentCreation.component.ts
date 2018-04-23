@@ -232,7 +232,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
           createdAgent => {
             this.isSuccess = true;
             this.isCreated = true;
-            this.autoUrl = environment.autourl +"param1=" +createdAgent._id + "&" + "param2=" + "welcomeTo" + "&" + "param3=" + "agentName" 
+            this.autoUrl = environment.autourl +"param1=" +createdAgent._id + "&" + "param2=" + createdAgent.name + "&" + "param3=" + createdAgent.name
             if (createdAgent) {
               if (createdAgent.agentPlugins && createdAgent.agentPlugins.length > 0) {
                 const facebookPlugin: Plugin = createdAgent.agentPlugins[0];

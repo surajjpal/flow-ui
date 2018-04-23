@@ -21,6 +21,9 @@
         <li class="nav-item">
           <a class="nav-link" id="responseMessagesTab" data-toggle="tab" href="#responseMessagesContent" role="tab" aria-controls="responseMessages">Response Messages</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" id="advancedtab" data-toggle="tab" href="#advancedTabContent" role="tab" aria-controls="missedExpressions">Advanced</a>
+        </li>
       </ul>
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade show active" id="domainContent" aria-labelledby="domainTab">
@@ -255,8 +258,66 @@
             </table>
           </div>
         </div>
-      </div>
-
+        <div role="tabpanel" class="tab-pane fade" id="advancedTabContent" aria-labelledby="advancedTab">
+          <div class="panel panel-default">
+            <form class="row form-inline">
+              <div class="form-group col-sm-10">
+                <input class="form-control" [(ngModel)]="missedFilterQuery" name="missedFilterQuery" placeholder="Filter Query" />
+              </div>
+              <div class="form-group col-sm-2">
+                <button type="button" class="btn btn-primary" (click)="onExpressionsBuiler()" data-toggle="modal" data-target="#expressionbuilder">
+                  Expression Builder
+                </button>
+              </div>
+            </form>
+            <br>
+  
+        <table class="table table-striped" [mfData]="missedExpressionsArr | universalDataFilter : missedFilterQuery" #mfmissedExpression="mfDataTable" [mfRowsOnPage]="10" mfSortBy="response">
+          <thead>
+            <tr>
+              <th>
+                <mfDefaultSorter by="expression">Expression</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="message">Message</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="count">Count</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="count">Action</mfDefaultSorter>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of mfmissedExpression.data">
+              <td>{{r.expression}}</td>
+              <td>{{r.message}}</td>
+              <td>{{r.count}}</td>
+              <td>
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-danger" title="discard" (click)="onRemoveMissExpr(r)">
+                    <i class="ion-android-close"></i>
+                  </button>
+                  <button type="button" class="btn btn-success" title="Train" data-toggle="modal" (click)="onSelectMissedExpression(r)"
+                    data-target="#trainingModal">
+                    <i class="ion-android-done-all"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="100%">
+                <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div> 
+    </div>
+  </div>
       <form>
         <div class="form-group">
           <button type="button" class="btn btn-primary" (click)="createDomain()">
@@ -264,9 +325,6 @@
           </button>
         </div>
       </form>
-
-
-
     </ba-card>
   </div>
 </div>
@@ -1422,8 +1480,128 @@
             </select>
           </div>
           <div class="form-group">
+            <label>User Response</label>
+            <input class="form-control" placeholder="User Response" [(ngModel)]="userResponse" name="userResponse" />
+          </div>
+          <div>
+          <button type="button" class="btn btn-success" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px" (click) = "buildExpression()"><i class="ion-flash"></i> Build Expression</button>
+          </div>
+          <div class="form-group" >
             <label>Expression</label>
             <input class="form-control" placeholder="Expression" [(ngModel)]="tempResponse.expression" name="expression" />
+          </div>
+          <div class="form-group">
+            <label>Language</label>
+            <select class="selectpicker form-control" title="Select Language" [(ngModel)]="tempResponse.lang" name="lang">
+              <option *ngFor="let language of selectedDomain.langSupported" [ngValue]="language">{{language}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Response</label>
+            <input class="form-control" placeholder="Response" [(ngModel)]="tempResponse.response" name="response" />
+          </div>
+          
+          <div class="form-group">
+            <label>Action HTML</label>
+            <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="tempResponse.actionHTML" name="actionHTML"></textarea>
+          </div>
+          <div class="form-group">
+            <api-checkbox [checked]="tempResponse.disableUserInput" [label]="'Disable User Input'" (event)="tempResponse.disableUserInput = $event.target.checked"></api-checkbox>
+          </div>
+          <div class="form-group">
+            <label>Response options</label>            
+            <table class = "table table-striped">
+              <thead>
+                <tr>
+                  <th>Input type</th>
+                  <th>URL</th>
+                  <th>Options</th>
+                  <th><button type="button" class="btn btn-primary" (click)="onAddResponseOption(tempResponse)"><i class="ion-plus-round"></i></button></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let option of tempResponse.options">
+                  <td>
+                    <select name="type" id="type" [(ngModel)]="option.type">
+                      <option value="">Choose One</option>
+                      <option value="BUTTON">Button</option>
+                      <option value="CHECKBOX">Checkbox</option>
+                      <option value="RADIO">Radio</option>
+                    </select>
+                  </td>
+                  <td><input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url"></td>
+                  <td>
+                    <table class="table table-striped">
+                      <thead>
+                          <tr>
+                              <th>Value</th>
+                              <th>Label</th>
+                              <th>
+                                <button type="button" class="btn btn-primary" (click) = "onAddData(option)"><i class="ion-plus-round"></i></button>
+                              </th>
+                            </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let row of option.data">
+                          <td><input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"/></td>
+                          <td><input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"/></td>
+                          <td><button type="button" class="btn btn-danger" (click) = "delete(option.data,row)"><i class="ion-ios-trash"></i></button></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-danger" title="delete" (click)="delete(tempResponse.options, option)"><i class="ion-ios-trash"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeResponse()">Remove</button>
+        <button type="submit" class="btn btn-primary" (click)="addResponse()">{{createMode ? 'Create' : 'Update'}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="trainingModal" tabindex="-1" role="dialog" attr.aria-labelledby="trainingModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="trainingModalLabel">
+          {{modalHeader}}
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label>Sequence</label>
+            <input type="number" class="form-control" placeholder="Sequence" [(ngModel)]="tempResponse.sequence" name="sequence"
+              min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+          </div>
+          <div class="form-group">
+            <label>Stage</label>
+            <select class="selectpicker form-control" title="Choose Stage" [(ngModel)]="tempResponse.stage" name="stage">
+              <option *ngFor="let stage of stagesSource" [value]="stage.value">{{stage.label}}</option>
+            </select>
+          </div>
+          <div class="form-group" *ngIf="missedExpFlag == true">
+            <label>Expression</label>
+            <input class="form-control" placeholder="expression" [(ngModel)]="missedExpression.expression" name="expression" />
           </div>
           <div class="form-group">
             <label>Language</label>
@@ -1503,3 +1681,4 @@
     </div>
   </div>
 </div>
+

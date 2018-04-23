@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Domain, Intent, Entity, Goal, GoalStep, Response, Stage, ResponseData, ResponseOption } from '../../../../models/domain.model';
+import { Domain, Intent, Entity, Goal, GoalStep, Response, Stage, ResponseData, ResponseOption,MissedExpression } from '../../../../models/domain.model';
 
 import { DomainService } from '../../../../services/domain.service';
 import { AlertService, DataSharingService } from '../../../../services/shared.service';
@@ -28,11 +28,14 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   modelKeysSource: string[];
   validationKeysSource: string[];
   stagesSource: Stage[];
-  
+  missedExpressionsArr : MissedExpression[];
   intentFilterQuery: string;
   entityFilterQuery: string;
   goalFilterQuery: string;
   responseFilterQuery: string;
+  missedExpFlag:boolean;
+  userResponse:string;
+  body:any;
   
   selectedDomain: Domain;
   tempIntent: Intent;
@@ -43,8 +46,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   selectedGoal: Goal;
   tempResponse: Response;
   selectedResponse: Response;
+  missedExpression: MissedExpression;
 
   private subscription: Subscription;
+  private subscriptionExpressions: Subscription;
   private subscriptionModelKeys: Subscription;
   private subscriptionValidationKeys: Subscription;
   
@@ -59,6 +64,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.domainCreateMode = true;
     this.modalHeader = '';
     this.createMode = false;
+    this.missedExpFlag = false;
     this.languageSource = ['ENG', 'HIN', 'MAR', 'ID', 'ML'];
     this.modelKeysSource = [];
 
@@ -83,6 +89,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.selectedGoal = new Goal();
     this.tempResponse = new Response();
     this.selectedResponse = new Response();
+    
     
     const uploadIntentUrl = `${environment.autoServer}${environment.uploadintentexcelurl}`;
     this.intentUploaderOptions = {
@@ -110,7 +117,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.selectedDomain = new Domain();
       this.domainCreateMode = true;
     }
-    
+    this.fetchMissedExpressions();
     this.removeGoalStepResponseFromDomainResponse();
   }
   
@@ -124,6 +131,22 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     if (this.subscriptionValidationKeys && !this.subscriptionValidationKeys.closed) {
       this.subscriptionValidationKeys.unsubscribe();
     }
+    if (this.subscriptionExpressions && !this.subscriptionExpressions.closed) {
+      this.subscriptionExpressions.unsubscribe();
+    }
+    
+  }
+
+  fetchMissedExpressions(){
+    this.subscriptionExpressions = this.domainService.gwtMissedExpressions(this.selectedDomain._id)
+    .subscribe(
+      missedExpressions => {
+        if (missedExpressions) {
+          console.log(missedExpressions)
+          this.missedExpressionsArr = missedExpressions;
+        }
+      }
+    );
   }
 
   intentUploaderOptions: NgUploaderOptions;
@@ -435,6 +458,15 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.tempResponse = new Response();
     }
   }
+  
+  onSelectMissedExpression(missedExp){
+    this.createMode = true;
+    this.missedExpFlag = true;
+    this.modalHeader = "Training"
+    this.selectedResponse = null;
+    this.tempResponse = new Response();
+    this.missedExpression = JSON.parse(JSON.stringify(missedExp));
+  }
 
   addResponse(response?: Response) {
     if (response) {
@@ -453,11 +485,62 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       if (!this.tempResponse.stage || this.tempResponse.stage.trim().length === 0) {
         new showAlertModal('Error', 'Stage can\'t be left empty.');
       } else {
+        if (this.missedExpFlag){
+           this.tempResponse.expression = this.missedExpression.expression
+        }
         this.selectedDomain.domainResponse.push(this.tempResponse);
         new closeModal('responseModal'); 
+        if (this.missedExpFlag){
+          this.subscriptionExpressions = this.domainService.updateMixedExpression(this.missedExpression._id)
+          .subscribe(
+            success => {
+              if (success) {
+                console.log(success)
+                this.missedExpFlag = false;
+                new closeModal('trainingModal');
+              }
+            }
+          );
+        }
       }
     }
   }
+
+  onRemoveMissExpr(missedExp){
+    this.subscriptionExpressions = this.domainService.updateMixedExpression(missedExp._id)
+    .subscribe(
+      success => {
+        if (success) {
+          this.missedExpFlag = false;
+        }
+      }
+    );
+  }
+
+  buildExpression(){
+    if(this.userResponse.length > 0){
+    this.body = {"text":this.userResponse,"domain":this.selectedDomain.name}
+    this.subscriptionExpressions = this.domainService.buildExpression(this.body)
+    .subscribe(
+      exp => {
+        
+        exp = JSON.parse(JSON.stringify(exp))
+        console.log(exp.expression)
+        if (exp.expression.length > 0) {
+          this.tempResponse.expression = exp.expression;
+        }
+        else{
+          this.tempResponse.expression = "You need to configure Intents or Entities to generate expression for this response"
+        }
+      }
+    );
+  }
+  else{
+    //this.user
+    this.tempResponse.expression = ""
+  }
+  }
+
 
   removeResponse(response?: Response) {
     if (response) {
