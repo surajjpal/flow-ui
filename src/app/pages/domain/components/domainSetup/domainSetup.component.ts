@@ -491,14 +491,34 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           }
         }
       }
-
       this.subscription = this.domainService.saveDomain(this.selectedDomain)
         .subscribe(
           response => {
-            this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
+            this.updateIntenTrainingData();
+            //this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
           }
         );
     }
+  }
+
+  updateIntenTrainingData() {
+    this.subscription = this.domainService.updateIntentTraining(this.selectedDomain)
+    .subscribe(
+      response => {
+        this.updateEntityTrainingData();
+        //this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
+      }
+    )
+      
+  }
+
+  updateEntityTrainingData() {
+    this.subscription = this.domainService.updateEntityTraining(this.selectedDomain)
+    .subscribe(
+      response => {
+        this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
+      }
+    )
   }
 
   toggleCheck(checkBox: string, checked: boolean) {

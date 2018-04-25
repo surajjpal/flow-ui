@@ -12,6 +12,10 @@ export const environment = {
   saveaccounturl: 'https://flow.automatapi.com/flow/services/saveaccount',
   fetchaccountbyidurl: 'https://flow.automatapi.com/flow/services/fetchaccountbyid?query=',
 
+  // Interfaces
+  updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'https://flow.automatapi.com/flow/interfaces/entity_classification_training',
+
   // Flow
   server: 'https://flow.automatapi.com/flow/console/',
   autourl:'https://api.automatapi.com/?',
