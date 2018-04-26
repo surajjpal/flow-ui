@@ -12,6 +12,11 @@ export const environment = {
   saveaccounturl: 'http://localhost:8080/flow/services/saveaccount',
   fetchaccountbyidurl: 'http://localhost:8080/flow/services/fetchaccountbyid?query=',
 
+  // Interfaces
+  updateIntentTraining: 'http://localhost:8080/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'http://localhost:8080/flow/interfaces/entity_classification_training',
+  
+
   // Flow
   server: 'http://localhost:8080/flow/console/',
   autourl:'http://localhost:5002/?',

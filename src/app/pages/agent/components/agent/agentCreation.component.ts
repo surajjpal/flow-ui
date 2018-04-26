@@ -325,10 +325,12 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
 
   addDomain(domain?: Domain) {
     if (domain) {
+      this.selectedAgent.domainId = domain._id;
       if (!this.domainAddedToList(domain)) {
         this.selectedDomainList.push(domain);
       }
     } else {
+      this.selectedAgent.domainId = this.selectedDomain._id;
       if (!this.domainAddedToList()) {
         this.selectedDomainList.push(this.selectedDomain);
       }
@@ -340,6 +342,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       const index: number = this.selectedDomainList.indexOf(this.selectedDomain);
       if (index !== -1) {
         this.selectedDomainList.splice(index, 1);
+        this.selectedAgent.domainId = "";
       }
     }
   }
