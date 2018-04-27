@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Domain, Intent, Entity, Goal, GoalStep, Response, Stage, ResponseData, ResponseOption } from '../../../../models/domain.model';
+import { Domain, Intent, Entity, Goal, GoalStep, Response, Stage, ResponseData, ResponseOption, Settings } from '../../../../models/domain.model';
 
 import { DomainService } from '../../../../services/domain.service';
 import { AlertService, DataSharingService } from '../../../../services/shared.service';
@@ -365,6 +365,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
               }
               if (response.stage === null) {
                 response.stage = '';
+              }
+
+              if(response.settings == null) {
+                response.settings = new Settings()
               }
 
               if (response.expression === goalStep.goalExpression) {
