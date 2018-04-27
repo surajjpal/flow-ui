@@ -126,6 +126,20 @@ export class ResponseData {
   }
 }
 
+export class Settings {
+  mask: string;
+  secured: boolean;
+  validationRegex: string;
+  placeholder: string;
+  
+  constructor() {
+    this.mask = '';
+    this.secured = false;
+    this.validationRegex = '';
+    this.placeholder = '';
+  }
+}
+
 export class Response {
   sequence: number;
   level: number;
@@ -136,8 +150,9 @@ export class Response {
   stage: string;
   disableUserInput: boolean;
   options : ResponseData[];
+  settings: Settings;
 
-  constructor(expression?: string, lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean, options? : ResponseData[]) {
+  constructor(expression?: string, lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean, options? : ResponseData[], settings? : Settings) {
     this.level = 1;
 
     this.expression = expression ? expression : '';
@@ -148,6 +163,7 @@ export class Response {
     this.stage = stage ? stage : '';
     this.disableUserInput = disableUserInput ? disableUserInput : false;
     this.options = options ? options : [];
+    this.settings = settings ? settings : new Settings();
   }
 }
 
