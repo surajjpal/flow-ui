@@ -35,6 +35,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   responseFilterQuery: string;
   
   selectedDomain: Domain;
+  tempDomainIntents: Intent[];
+  tempDomainEntities: Entity[];
   tempIntent: Intent;
   selectedIntent: Intent;
   tempEntity: Entity;
@@ -105,6 +107,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     const domain: Domain = this.sharingService.getSharedObject();
     if (domain) {
       this.selectedDomain = domain;
+      this.tempDomainIntents = domain.domainIntents;
+      this.tempDomainEntities = domain.domainEntities;
       this.domainCreateMode = false;
     } else {
       this.selectedDomain = new Domain();
@@ -494,32 +498,28 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.subscription = this.domainService.saveDomain(this.selectedDomain)
         .subscribe(
           response => {
-            this.updateIntenTrainingData();
-            //this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
+            if (JSON.stringify(this.selectedDomain.domainIntents) !=  JSON.stringify(this.tempDomainIntents) || JSON.stringify(this.selectedDomain.domainEntities) !=  JSON.stringify(this.tempDomainEntities)) {
+              this.updateClassifierTraining();
+            }
+            else {
+              this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
+            }
           }
         );
     }
   }
 
-  updateIntenTrainingData() {
-    this.subscription = this.domainService.updateIntentTraining(this.selectedDomain)
+  updateClassifierTraining() {
+    this.subscription = this.domainService.updateDomainClassifierTraining(this.selectedDomain)
     .subscribe(
       response => {
-        this.updateEntityTrainingData();
-        //this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
-      }
-    )
-      
-  }
-
-  updateEntityTrainingData() {
-    this.subscription = this.domainService.updateEntityTraining(this.selectedDomain)
-    .subscribe(
-      response => {
+        //this.updateEntityTrainingData();
         this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
       }
     )
   }
+
+  
 
   toggleCheck(checkBox: string, checked: boolean) {
     if (checkBox) {

@@ -18,6 +18,7 @@ export const environment = {
   fetchaccountbyidurl: 'http://108.168.190.82:8080/flow/services/fetchaccountbyid?query=',
 
   // Interfaces
+  updateClassifierTraining : 'http://108.168.190.82:8080/flow/interfaces/auto_decorate_training',
   updateIntentTraining: 'http://108.168.190.82:8080/flow/interfaces/intent_classification_training',
   updateEntityTraining: 'http://108.168.190.82:8080/flow/interfaces/entity_classification_training',
 

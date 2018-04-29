@@ -134,12 +134,12 @@ export class DomainService {
     return subject.asObservable();
   }
 
-  updateIntentTraining(domain: Domain): Observable<any> {
+  updateDomainClassifierTraining(domain: Domain): Observable<any> {
     const subject = new Subject<any>();
     let requestBody = new Map<string, string>();
-    requestBody["domain"] = domain.name;
-    requestBody["version"] = "v1.0"   // currently we do not have any versioning system
-    const url = `${environment.updateIntentTraining}`;
+    requestBody["domainId"] = domain._id;
+    //requestBody["version"] = "v1.0"   // currently we do not have any versioning system
+    const url = `${environment.updateClassifierTraining}`;
     this.httpClient.post<any>(
       url,
       requestBody,
@@ -151,14 +151,14 @@ export class DomainService {
     ).subscribe(
      (response: HttpResponse<any>) => {
        if (response.status == 401) {
-         subject.error("Unauthorized to train intents");
+         subject.error("Unauthorized to train classifier");
        }
        else{
-         if (response.body !=null && response.body["result"] != null && response.body["result"]["train"]) {
+         if (response.body !=null && response.body["entityResult"] != null && response.body["intentResult"] != null) {
            subject.next(response.body);
          }
          else{
-           subject.error(response.body["result"]);
+           subject.error(response.body);
          }
        }
      },
