@@ -13,6 +13,7 @@ export const environment = {
   fetchaccountbyidurl: 'http://localhost:8080/flow/services/fetchaccountbyid?query=',
 
   // Interfaces
+  updateClassifierTraining : 'http://localhost:8080/flow/interfaces/auto_decorate_training',
   updateIntentTraining: 'http://localhost:8080/flow/interfaces/intent_classification_training',
   updateEntityTraining: 'http://localhost:8080/flow/interfaces/entity_classification_training',
   
