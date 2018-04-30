@@ -46,7 +46,7 @@ export class DomainService {
 
   
 
-  updateMixedExpression(id): Observable<any> {
+  updateMissedExpression(id): Observable<any> {
     const subject = new Subject<any>();
 
     const url = `${environment.autoServer + environment.updatemissedexpressionurl + id}`;

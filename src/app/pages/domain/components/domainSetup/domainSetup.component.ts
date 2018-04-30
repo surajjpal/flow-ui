@@ -36,7 +36,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   missedExpFlag:boolean;
   userResponse:string;
   body:any;
-  
+  expressionIntents: string[];
+  expressionEntities: string[];
+
+
   selectedDomain: Domain;
   tempIntent: Intent;
   selectedIntent: Intent;
@@ -484,14 +487,20 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     } else {
       if (!this.tempResponse.stage || this.tempResponse.stage.trim().length === 0) {
         new showAlertModal('Error', 'Stage can\'t be left empty.');
-      } else {
+      } 
+      if (!this.tempResponse.expression || this.tempResponse.expression.trim().length === 0) {
+        new showAlertModal('Error', 'Expression can\'t be left empty.');
+      } 
+     
+      else {
         if (this.missedExpFlag){
            this.tempResponse.expression = this.missedExpression.expression
         }
+        //this.validateExpression(this.tempResponse.expression)
         this.selectedDomain.domainResponse.push(this.tempResponse);
         new closeModal('responseModal'); 
         if (this.missedExpFlag){
-          this.subscriptionExpressions = this.domainService.updateMixedExpression(this.missedExpression._id)
+          this.subscriptionExpressions = this.domainService.updateMissedExpression(this.missedExpression._id)
           .subscribe(
             success => {
               if (success) {
@@ -506,8 +515,41 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     }
   }
 
+  validateExpression(expression){
+    let splits = expression.split("and")
+    this.expressionIntents = [];
+    this.expressionEntities = [];
+    if (splits.length > 0){
+      for (let s of splits) {
+        if(s.indexOf("vb_") != -1 || s.indexOf("VB_") != -1 ){
+          
+         let intents_split = s.split("_")
+         if(intents_split.length > 0){
+           this.expressionIntents.push(intents_split[1])
+         }
+        }
+        if(s.indexOf("nn_") != -1 || s.indexOf("NN_") != -1 ){
+          
+         let entities_split = s.split("_")
+         if(entities_split.length > 0){
+           this.expressionEntities.push(entities_split[1])
+         }
+        }
+
+    }
+     
+    }
+    for (let d in this.selectedDomain.domainIntents){
+      
+    }
+    console.log(this.selectedDomain.domainIntents)
+    console.log(this.expressionIntents)
+  }
+
+
+
   onRemoveMissExpr(missedExp){
-    this.subscriptionExpressions = this.domainService.updateMixedExpression(missedExp._id)
+    this.subscriptionExpressions = this.domainService.updateMissedExpression(missedExp._id)
     .subscribe(
       success => {
         if (success) {
