@@ -36,6 +36,7 @@ export class GoalStep {
   authRequired: boolean;
   mandatory: boolean;
   ignoreIntent: boolean;
+  pickFromNoun: boolean;
   goalValidationTypes: string[];
   dependencyExpression: string;
   responseExpression: string;
@@ -52,6 +53,7 @@ export class GoalStep {
     this.authRequired = false;
     this.mandatory = false;
     this.ignoreIntent = false;
+    this.pickFromNoun = false;
     this.goalValidationTypes = [];
     this.dependencyExpression = '';
     this.responseExpression = '';
