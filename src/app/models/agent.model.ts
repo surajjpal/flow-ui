@@ -79,6 +79,7 @@ export class Agent {
   agentClassifier: Classifier[];
   companyId: string;
   uiComponent: UIComponent;
+  domainId: string;
 
   constructor() {
     this._id = null;
@@ -95,5 +96,6 @@ export class Agent {
     this.agentClassifier = [];
     this.companyId = '';
     this.uiComponent = new UIComponent();
+    this.domainId = "";
   }
 }
