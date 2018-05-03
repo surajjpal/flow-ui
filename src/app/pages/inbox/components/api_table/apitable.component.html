@@ -48,6 +48,13 @@
         </mfDefaultSorter>
       </th>
       <th>
+          <mfDefaultSorter by="">
+            <h6>
+              <b>Assigned To</b>
+            </h6>
+          </mfDefaultSorter>
+        </th>
+      <th>
         <mfDefaultSorter by="">
           <h6>
             <b>Flagged</b>
@@ -78,6 +85,7 @@
       <td>{{s.statusCd}}</td>
       <td>{{s.startTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</td>
       <td>{{s.assignedUserGroupCd}}</td>
+      <td>{{s.assignedUserDisplayName}}</td>
       <td>{{s.flagged}}</td>
       <td>{{s.iterationLevel}}</td>
       <td>{{s.escalatedFlag}}</td>

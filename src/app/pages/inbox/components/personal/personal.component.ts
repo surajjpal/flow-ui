@@ -217,6 +217,12 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
   selectedForFlag(state):void{
     this.selectedStateForFlag = state;
+    this.subscriptionXML = this.stateService.getXMLforActiveState(state.stateMachineInstanceModelId)
+    .subscribe(graphObject => {
+      this.dataCachingService.setSharedObject(graphObject, state);
+      this.graphObject = graphObject
+      
+    });
   }
 
   onReasonSelect(reason):void{
@@ -350,13 +356,12 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.iterationLevel = this.iterationLevel + 1;
     this.selectedStateForFlag.iterationLevel = this.iterationLevel;
     this.selectedStateForFlag.subStatus = "FLAGGED"
-    
     this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedStateForFlag)
     .subscribe(state => {
-      new closeModal('flagModal');
-      this.selectedStateForFlag = state;
       this.extractParams();
       this.updateFlow();
+      this.selectedStateForFlag = state;
+      new closeModal('flagModal');
     });
   }
 }
