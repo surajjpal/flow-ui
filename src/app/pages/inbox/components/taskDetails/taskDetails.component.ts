@@ -385,9 +385,9 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.selectedState.subStatus = "FLAGGED"
     this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedState)
     .subscribe(state => {
-      this.selectedState = state;
       this.extractParams();
       this.updateFlow();
+      this.selectedState = state;
       new closeModal('flagTaskModal');
     });
     

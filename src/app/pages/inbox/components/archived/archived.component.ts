@@ -50,6 +50,7 @@ export class ArchivedComponent implements OnInit, OnDestroy {
     .subscribe(states => {
       this.loadingGroup = false;
       this.groupStates = states;
+
     }, error => {
       this.loadingGroup = false;
     });
