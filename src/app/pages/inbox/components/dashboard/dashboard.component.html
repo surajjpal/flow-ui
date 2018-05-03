@@ -81,7 +81,7 @@
         </ba-card>
         </div>
         <div class="col-sm-6" *ngIf="!personal">
-        <ba-card style="width:50px;"cardTitle="Overall">
+        <ba-card style="width:50px;"cardTitle="Team">
             <table class="table table-striped" style="display: inline-block; border: 1px solid; ">
                 <thead>
                     <tr>
@@ -108,10 +108,10 @@
                     </tr>
                   </thead>
                   <tbody>
-                        <td>{{personalStateReportModel.pendingStatusCount}}</td>
-                        <td>{{personalStateReportModel.activeStatusCount}}</td>
-                        <td>{{personalStateReportModel.archiveStatusCount}}</td>
-                        <td>{{personalStateReportModel.flaggedStatusCount}}</td>
+                        <td>{{overallStateReportModel.pendingStatusCount}}</td>
+                        <td>{{overallStateReportModel.activeStatusCount}}</td>
+                        <td>{{overallStateReportModel.archiveStatusCount}}</td>
+                        <td>{{overallStateReportModel.flaggedStatusCount}}</td>
                   </tbody>
             </table>
           </ba-card>
