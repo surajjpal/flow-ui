@@ -115,7 +115,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                }
 
                     
-                this.stateReportModel.statusCd = this.status;
+                //this.stateReportModel.statusCd = this.status;
                 this.stateReportModel.reportStatusCd = this.status;
                 this.stateReportModel.companyId = this.companyId;
                 this.progressBarFlag = true;
