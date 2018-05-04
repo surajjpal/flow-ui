@@ -500,6 +500,9 @@
                       <api-checkbox class="col-md-4" [checked]="goalStep.ignoreIntent" [label]="'Ignore Intent'" (event)="goalStep.ignoreIntent = $event.target.checked"></api-checkbox>
                     </div>
                     <div class="form-group">
+                      <api-checkbox [checked]="goalStep.pickFromNoun" [label]="'Pick nouns from user input'" (event)="goalStep.pickFromNoun = $event.target.checked"></api-checkbox>
+                    </div>
+                    <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsKey' + index">
                         Model Key
                       </label>
@@ -1024,6 +1027,9 @@
                       <api-checkbox class="col-md-4" [checked]="goalStep.authRequired" [label]="'Auth Required'" (event)="goalStep.authRequired = $event.target.checked"></api-checkbox>
                       <api-checkbox class="col-md-4" [checked]="goalStep.mandatory" [label]="'Mandatory'" (event)="goalStep.mandatory = $event.target.checked"></api-checkbox>
                       <api-checkbox class="col-md-4" [checked]="goalStep.ignoreIntent" [label]="'Ignore Intent'" (event)="goalStep.ignoreIntent = $event.target.checked"></api-checkbox>
+                    </div>
+                    <div class="form-group">
+                      <api-checkbox [checked]="goalStep.pickFromNoun" [label]="'Pick nouns from user input'" (event)="goalStep.pickFromNoun = $event.target.checked"></api-checkbox>
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsKey' + index">
