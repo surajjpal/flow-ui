@@ -27,7 +27,9 @@ export const environment = {
     statebysubstatusandfolderurl:'state/pagebysubstatusandfolder/',
     saveflaggedstate:'state/saveFlaggedState',
     savearchivestate:'state/archive',
-  
+    gettatrecords:'state/fetchtat',
+    getallstats:'state/fetchstatestatus',
+    getpersonalstats:'state/getstatestatusbyuser',
     menutreeurl: 'menu/tree',
     menuurl: 'menu/',
     menurouteurl: 'menu/route',
