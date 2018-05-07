@@ -235,7 +235,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   }
 
   getChatMessages() {
-    this.subscriptionChatMessages = this.conversationService.getChat(this.selectedEpisode._id)
+    this.subscriptionChatMessages = this.conversationService.getChat(this.selectedState.entityId)
     .subscribe(chatMessages => {
       if (chatMessages) {
         this.chatMessageList = chatMessages;
