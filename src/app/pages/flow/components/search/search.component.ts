@@ -26,6 +26,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private readonly OPEN_IN_READONLY_MODE = 1;
   private readonly OPEN_IN_EDIT_MODE = 2;
   private readonly CLONE_AND_EDIT_MODE = 3;
+  private readonly TEMPLATE_AND_CLONE_MODE = 4;
 
   data;
   filterQuery = '';
@@ -80,7 +81,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       .subscribe(graphObjects => this.activeGraphObjectList = graphObjects);
     this.subscriptionActive = this.graphService.fetch('CLOSED')
       .subscribe(graphObjects => this.closedGraphObjectList = graphObjects);
-    this.subscriptionActive = this.graphService.fetch('TEMPLATE')
+    this.subscriptionActive = this.graphService.library()
       .subscribe(graphObjects => this.dictionaryGraphObjectList = graphObjects);
   }
 
@@ -103,6 +104,14 @@ export class SearchComponent implements OnInit, OnDestroy {
       } else if (task === this.CLONE_AND_EDIT_MODE) {
         this.selectedGraphObject._id = null;
         this.selectedGraphObject.statusCd = this.DRAFT;
+        this.openInDesigner(this.selectedGraphObject);
+      } else if (task === this.TEMPLATE_AND_CLONE_MODE) {
+        this.selectedGraphObject._id = null;
+        this.selectedGraphObject.statusCd = this.DRAFT;
+        this.selectedGraphObject.machineLabel = null;
+        this.selectedGraphObject.processOwner = null;
+        this.selectedGraphObject.version = 1;
+        this.selectedGraphObject.templateFlag = false;
 
         this.openInDesigner(this.selectedGraphObject);
       }

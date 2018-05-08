@@ -44,6 +44,7 @@ export const environment = {
   usergraphurl: 'usergraph/saveUserGraph/',
   getusergraphurl:'usergraph/',
   graphbystatusurl: 'graph/findbystatus/',
+  graphlibrary: 'graph/library',
   entryactionurl: 'graph/actions',
   timeruniturl: 'graph/timerunit',
   autodashboardurl: 'dashboard',

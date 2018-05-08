@@ -238,6 +238,7 @@ export class GraphObject extends BaseModel {
   transitions: Transition[];
   activeStateIdList: string[];
   closedStateIdList: string[];
+  templateFlag: boolean;
 
   constructor() {
     super();
@@ -248,6 +249,7 @@ export class GraphObject extends BaseModel {
     this.primaryEntity = '';
     this.version = 0;
     this.xml = '';
+    this.templateFlag = false;
     this.dataPointConfigurationList = [];
     this.states = [];
     this.transitions = [];

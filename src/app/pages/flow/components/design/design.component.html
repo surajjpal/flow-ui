@@ -40,7 +40,7 @@
           <span class="sr-only">Close</span>
         </button>
       </div>
-    
+
       <!-- Modal Body -->
       <div class="modal-body" id="modal_body">
         <form>
@@ -69,22 +69,27 @@
               name="allocationGroup" />
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType !== 'Group'">
-              <label for="allocationGroup">Allocate to default group</label>
-              <input type="text" class="form-control" required id="allocationGroup" placeholder="Allocate to default group" [(ngModel)]="tempState.allocationModel.allocationGroup"
-                name="allocationGroup" />
+            <label for="allocationGroup">Allocate to default group</label>
+            <input type="text" class="form-control" required id="allocationGroup" placeholder="Allocate to default group" [(ngModel)]="tempState.allocationModel.allocationGroup"
+              name="allocationGroup" />
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType !== 'Group'">
-              <label for="groups">Allocate to groups</label>
-              <tag-input [(ngModel)]="tempState.allocationModel.groups" name="groups" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
+            <label for="groups">Allocate to groups</label>
+            <tag-input [(ngModel)]="tempState.allocationModel.groups" name="groups" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]"
+              placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
           </div>
 
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'Capability'">
-              <label for="groups">Allocate to Capabilities</label>
-                  <tag-input [(ngModel)]="tempState.allocationModel.capabilities" name="capabilities" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
+            <label for="groups">Allocate to Capabilities</label>
+            <tag-input [(ngModel)]="tempState.allocationModel.capabilities" name="capabilities" [modelAsStrings]="true" [editable]="true"
+              [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal"
+              class="custom-input-tag-border"></tag-input>
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'Retain_Familiar'">
-              <label for="groups">Allocate to States</label>
-                  <tag-input [(ngModel)]="tempState.allocationModel.stickyStates" name="stickyStates" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
+            <label for="groups">Allocate to States</label>
+            <tag-input [(ngModel)]="tempState.allocationModel.stickyStates" name="stickyStates" [modelAsStrings]="true" [editable]="true"
+              [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal"
+              class="custom-input-tag-border"></tag-input>
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'User'">
             <label for="allocationUser">Allocate to User</label>
@@ -93,14 +98,14 @@
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'  && tempState.allocationModel.allocationType === 'User'">
             <label for="api">API</label>
-            <input type="text" class="form-control" required id="api" placeholder="API" [(ngModel)]="tempState.allocationModel.api"
-              name="api" />
+            <input type="text" class="form-control" required id="api" placeholder="API" [(ngModel)]="tempState.allocationModel.api" name="api"
+            />
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'  && tempState.allocationModel.allocationType !== 'Group'">
-              <label for="api">Email API</label>
-              <input type="text" class="form-control" required id="api" placeholder="Email API" [(ngModel)]="tempState.allocationModel.emailerAPI"
-                name="api" />
-            </div>
+            <label for="api">Email API</label>
+            <input type="text" class="form-control" required id="api" placeholder="Email API" [(ngModel)]="tempState.allocationModel.emailerAPI"
+              name="api" />
+          </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'  && tempState.allocationModel.allocationType === 'API'">
             <label for="api">API</label>
             <input type="text" class="form-control" required id="api" placeholder="API" [(ngModel)]="tempState.allocationModel.api" name="api"
@@ -128,18 +133,21 @@
               <option *ngFor="let timerUnitType of sourceTimerUnitList" [ngValue]="timerUnitType['key']">{{timerUnitType['value']}}</option>
             </select>
           </div>
-           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'TimerStateEntryAction'">
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'TimerStateEntryAction'">
             <label for="timerUnit">Timer Units</label>
-            <input type="number" class="form-control" required id="timerUnit" placeholder="Timer Unit" [(ngModel)]="tempState.timerUnit" name="timerUnit" min="0" 
-            onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)" />
+            <input type="number" class="form-control" required id="timerUnit" placeholder="Timer Unit" [(ngModel)]="tempState.timerUnit"
+              name="timerUnit" min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"
+            />
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'TimerStateEntryAction'">
             <label for="timerUnit">Timer Date Paramter</label>
-            <input type="text" class="form-control" required id="runAtDateExpression" placeholder="Enter parameter to pick Run Date" [(ngModel)]="tempState.runAtDateExpression" name="runAtDateExpression" min="0" />
+            <input type="text" class="form-control" required id="runAtDateExpression" placeholder="Enter parameter to pick Run Date"
+              [(ngModel)]="tempState.runAtDateExpression" name="runAtDateExpression" min="0" />
           </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'TimerStateEntryAction'">
             <label for="timerUnit">Timer Time Parameter</label>
-            <input type="text" class="form-control" required id="runAtTimeExpression" placeholder="Enter parameter to pick Run Time" [(ngModel)]="tempState.runAtTimeExpression" name="runAtTimeExpression" min="0" />
+            <input type="text" class="form-control" required id="runAtTimeExpression" placeholder="Enter parameter to pick Run Time"
+              [(ngModel)]="tempState.runAtTimeExpression" name="runAtTimeExpression" min="0" />
           </div>
           <div class="form-group" *ngIf="isStateApiCompatible()">
             <label for="selectApiConfig">Select API</label>
@@ -158,7 +166,8 @@
           <div class="form-group" *ngIf="tempState.costModel !== null && tempState.costModel.costType === 'FIXED'">
             <label for="amount">Fixed cost</label>
             <input type="number" class="form-control" required id="amount" placeholder="Fixed cost" [(ngModel)]="tempState.costModel.amount"
-              name="amount" min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)" />
+              name="amount" min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"
+            />
           </div>
           <div class="form-group" *ngIf="tempState.costModel !== null && tempState.costModel.costType === 'DERIVED'">
             <label for="expression">Fixed cost</label>
@@ -569,60 +578,76 @@
           <span class="sr-only">Close</span>
         </button>
       </div>
-
       <!-- Modal Body -->
       <div class="modal-body">
         <form>
-          <div class="form-group">
-            <label class="col-md-12 col-sm-12 col-xs-12" for="inputMachineLabel">
-              Process Name
-            </label>
-            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputMachineLabel" placeholder="Process Name" [(ngModel)]="tempGraphObject.machineLabel"
-              name="machineLabel" />
+          <div class="row">
+            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+              <label class="col-md-12 col-sm-12 col-xs-12" for="inputMachineLabel">
+                  <p class="font-weight-bold">Process Name</p>
+              </label>
+              <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputMachineLabel" placeholder="Process Name" [(ngModel)]="tempGraphObject.machineLabel"
+                name="machineLabel" />
+            </div>
+            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+              <label class="col-md-12 col-sm-12 col-xs-12" for="inputMachineType">
+                  <p class="font-weight-bold">Process Code</p>
+              </label>
+              <input *ngIf="graphObject.machineType && graphObject.machineType.length > 0" disabled type="text" class="col-md-12 col-sm-12 col-xs-12 form-control"
+                id="inputMachineType" placeholder="Process Code" [(ngModel)]="tempGraphObject.machineType" name="machineType"
+              />
+              <input *ngIf="!graphObject.machineType || graphObject.machineType.length == 0" type="text" class="col-md-12 col-sm-12 col-xs-12 form-control"
+                id="inputMachineType" placeholder="Process Code" [(ngModel)]="tempGraphObject.machineType" name="machineType"
+              />
+            </div>
           </div>
-          <div class="form-group">
-            <label class="col-md-12 col-sm-12 col-xs-12" for="inputMachineType">
-              Process Code
-            </label>
-            <input *ngIf="graphObject.machineType && graphObject.machineType.length > 0" disabled type="text" class="col-md-12 col-sm-12 col-xs-12 form-control"
-              id="inputMachineType" placeholder="Process Code" [(ngModel)]="tempGraphObject.machineType" name="machineType"
-            />
-            <input *ngIf="!graphObject.machineType || graphObject.machineType.length == 0" type="text" class="col-md-12 col-sm-12 col-xs-12 form-control"
-              id="inputMachineType" placeholder="Process Code" [(ngModel)]="tempGraphObject.machineType" name="machineType"
-            />
+          <div class="row">
+            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+              <label class="col-md-12 col-sm-12 col-xs-12" for="inputProcessOwner">
+                  <p class="font-weight-bold">Process Owner</p>
+              </label>
+              <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputProcessOwner" placeholder="Process Owner"
+                [(ngModel)]="tempGraphObject.processOwner" name="processOwner" />
+            </div>
+            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+              <label class="col-md-12 col-sm-12 col-xs-12" for="inputProcessOwner">
+                  <p class="font-weight-bold">Process Entity</p>
+              </label>
+              <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputprimaryEntity" placeholder="Process Entity"
+                [(ngModel)]="tempGraphObject.primaryEntity" name="primaryEntity" />
+            </div>
           </div>
-          <div class="form-group">
-            <label class="col-md-12 col-sm-12 col-xs-12" for="inputProcessOwner">
-              Process Owner
-            </label>
-            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputProcessOwner" placeholder="Process Owner"
-              [(ngModel)]="tempGraphObject.processOwner" name="processOwner" />
+          <div class="row">
+            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+              <label class="col-md-12 col-sm-12 col-xs-12" for="inputVersionNumber">
+                  <p class="font-weight-disabled">Version Number</p>
+              </label>
+              <input type="number" disabled class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputVersionNumber" placeholder="Version Number"
+                min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                [(ngModel)]="tempGraphObject.version" name="version" />
+            </div>
+            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+              <label class="col-md-12 col-sm-12 col-xs-12" for="inputStatus">
+                  <p class="font-weight-disabled">Status</p>
+              </label>
+              <select disabled="true" class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" id="inputStatus" title="Select Status">
+                <option *ngFor="let status of sourceStatusCodes" [value]="status">{{status}}</option>
+              </select>
+            </div>
           </div>
-          <div class="form-group">
-            <label class="col-md-12 col-sm-12 col-xs-12" for="inputProcessOwner">
-              Process Entity
-            </label>
-            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputprimaryEntity" placeholder="Process Entity"
-              [(ngModel)]="tempGraphObject.primaryEntity" name="primaryEntity" />
-          </div>
-          <div class="form-group">
-            <label class="col-md-12 col-sm-12 col-xs-12" for="inputVersionNumber">
-              Version Number
-            </label>
-            <input type="number" disabled class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputVersionNumber" placeholder="Version Number"
-              min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
-              [(ngModel)]="tempGraphObject.version" name="version" />
-          </div>
-          <div class="form-group">
-            <label class="col-md-12 col-sm-12 col-xs-12" for="inputStatus">
-              Status
-            </label>
-            <select disabled="true" class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" id="inputStatus" title="Select Status">
-              <option *ngFor="let status of sourceStatusCodes" [value]="status">{{status}}</option>
-            </select>
+          <div class="row">
+            <div class="form-group col-md-6 col-sm-12 col-xs-12">
+              <label class="col-md-12 col-sm-12 col-xs-12" for="templateFlag">
+                  <p class="font-weight-bold">Template</p>
+              </label>
+              <api-checkbox class="col-md-12 col-sm-12 col-xs-12" [checked]="tempGraphObject.templateFlag" [label]="'Template Flag'" (event)="tempGraphObject.templateFlag = $event.target.checked"></api-checkbox>
+            </div>
           </div>
         </form>
-
+        <h4 class="modal-title" id="datapointslabel">
+          Process Datapoints
+        </h4>
+        <br>
         <div id="dpAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempGraphObject.dataPointConfigurationList.length > 0">
           <div *ngFor="let dataPoint of tempGraphObject.dataPointConfigurationList; let index=index" class="panel">
             <div class="card">
@@ -679,7 +704,7 @@
                       <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.headerFlag" [label]="'Header Flag'" (event)="dataPoint.headerFlag = $event.target.checked"></api-checkbox>
                       <api-checkbox class="col-md-9 col-sm-9 col-xs-9" [checked]="dataPoint.businessKeyFlag" [label]="'Business Key Flag'" (event)="dataPoint.businessKeyFlag = $event.target.checked"></api-checkbox>
                     </div>
-                   <div class="form-group">
+                    <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputExpression' + index">
                         Expression
                       </label>
@@ -714,8 +739,6 @@
                       </select>
                     </div>
                   </form>
-
-
                   <br>
                   <table class="table" [mfData]="dataPoint.validations" [mfRowsOnPage]="5">
                     <thead>
@@ -754,8 +777,6 @@
                     </tfoot>
                   </table>
                   <br>
-
-
                   <form>
                     <div class="form-group" *ngIf="tempGraphObject.dataPointConfigurationList.length > 1">
                       <button type="button" class="btn btn-danger" (click)="deleteDataPoint(dataPoint)">
@@ -836,8 +857,6 @@
                       </select>
                     </div>
                   </form>
-
-
                   <br>
                   <table class="table" [mfData]="dataPoint.validations" [mfRowsOnPage]="5">
                     <thead>
@@ -876,8 +895,6 @@
                     </tfoot>
                   </table>
                   <br>
-
-
                   <form>
                     <div class="form-group" *ngIf="tempGraphObject.dataPointConfigurationList.length > 1">
                       <button type="button" class="btn btn-danger" (click)="deleteDataPoint(dataPoint)">
@@ -906,7 +923,6 @@
     </div>
   </div>
 </div>
-
 <!-- New Edge Modal -->
 <div class="modal fade" data-backdrop="static" data-keyboard="false" id="newEdgeModal" tabindex="-1" role="dialog" attr.aria-labelledby="newEdgeLabel"
   aria-hidden="true">
@@ -922,7 +938,6 @@
           <span class="sr-only">Close</span>
         </button>
       </div>
-
       <!-- Modal Body -->
       <div class="modal-body" id="modal_body">
         <form>
@@ -937,7 +952,6 @@
           </div>
         </form>
       </div>
-
       <!-- Modal Footer -->
       <div class="modal-footer" id="modal_footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" (click)="deleteEdge()">Cancel</button>
@@ -946,7 +960,6 @@
     </div>
   </div>
 </div>
-
 <!-- Discard Warning Modal -->
 <div class="modal fade" id="discardWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="discardWarningLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -961,12 +974,10 @@
           <span class="sr-only">Close</span>
         </button>
       </div>
-
       <!-- Modal Body -->
       <div class="modal-body" id="modal_body">
         Are you sure you want to discard all the changes you have made?
       </div>
-
       <!-- Modal Footer -->
       <div class="modal-footer" id="modal_footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -975,7 +986,6 @@
     </div>
   </div>
 </div>
-
 <!-- Reassign Events Modal -->
 <div class="modal fade" id="reassignEventsModal" tabindex="-1" role="dialog" attr.aria-labelledby="reassignEventsLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -990,11 +1000,9 @@
           <span class="sr-only">Close</span>
         </button>
       </div>
-
       <!-- Modal Body -->
       <div class="modal-body" id="modal_body">
         <p>{{warningBody}}</p>
-
         <form>
           <div class="form-group" *ngFor="let stateCd of childStateList">
             <label>{{stateCd}}</label>
@@ -1004,7 +1012,6 @@
           </div>
         </form>
       </div>
-
       <!-- Modal Footer -->
       <div class="modal-footer" id="modal_footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -1013,70 +1020,63 @@
     </div>
   </div>
 </div>
-
-
 <div class="modal fade" id="infoModalDesign" tabindex="-1" role="dialog" attr.aria-labelledby="successModal" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title" id="successModal">
-            State Information
-          </h4>
-          <button type="button" class="close" data-dismiss="modal">
-            <span aria-hidden="true">&times;</span>
-            <span class="sr-only">Close</span>
-          </button>
-        </div>
-  
-        <!-- Modal Body -->
-        <div class="modal-body" id="modal_body">
-            <form class="form-horizontal">
-                <div class="form-group row">
-                    <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Name :</label>
-                    <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.name}}</label>
-                  </div>
-                <div class="form-group row">
-                  <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Duration :</label>
-                  <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.duration}}{{'  seconds'}}</label>
-                </div>
-                <div class="form-group row">
-                  <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Early Start :</label>
-                  <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.earlystart}}{{'  seconds'}}</label>
-                </div>
-                <div class="form-group row">
-                  <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Early Finish :</label>
-                  <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.earlyfinish}}{{'  seconds'}}</label>
-                </div>
-                <div class="form-group row">
-                  <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Critical :</label>
-                  <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.is_critical}}</label>
-                </div>
-                <div class="form-group row">
-                  <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Late Start :</label>
-                  <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.latestart}}{{'  seconds'}}</label>
-                </div>
-                <div class="form-group row">
-                    <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Slack :</label>
-                    <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.slack}}{{'  seconds'}}</label>
-                  </div>
-                <div class="form-group row">
-                  <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Late Finish :</label>
-                  <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.latefinish}}</label>
-                </div>
-                
-              </form>
-        </div>
-  
-        <!-- Modal Footer -->
-        <div class="modal-footer" id="modal_footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="successModal">
+          State Information
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        <form class="form-horizontal">
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Name :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.name}}</label>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Duration :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.duration}}{{' seconds'}}</label>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Early Start :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.earlystart}}{{' seconds'}}</label>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Early Finish :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.earlyfinish}}{{' seconds'}}</label>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Critical :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.is_critical}}</label>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Late Start :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.latestart}}{{' seconds'}}</label>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Slack :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.slack}}{{' seconds'}}</label>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 form-control-label" *ngIf="selectedModel">Late Finish :</label>
+            <label for="inputEmail3" class="form-control-label" *ngIf="selectedModel">{{selectedModel.latefinish}}</label>
+          </div>
+        </form>
+      </div>
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>
-  
-
 <!-- Warning Modal -->
 <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -1091,12 +1091,10 @@
           <span class="sr-only">Close</span>
         </button>
       </div>
-
       <!-- Modal Body -->
       <div class="modal-body" id="modal_body">
         {{warningBody}}
       </div>
-
       <!-- Modal Footer -->
       <div class="modal-footer" id="modal_footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
@@ -1104,9 +1102,4 @@
     </div>
   </div>
 </div>
-
-
-
-
-
 <!-- /page content -->
