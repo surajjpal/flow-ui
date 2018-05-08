@@ -378,17 +378,17 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           for (const goalStep of goal.domainGoalSteps) {
             goalStep.responses = [];
             for (const response of this.selectedDomain.domainResponse) {
-              if (response.sequence === null) {
+              if (!response.sequence || response.sequence === null) {
                 response.sequence = 0;
               }
-              if (response.disableUserInput === null) {
+              if (!response.disableUserInput || response.disableUserInput === null) {
                 response.disableUserInput = false;
               }
-              if (response.stage === null) {
+              if (!response.stage || response.stage === null) {
                 response.stage = '';
               }
 
-              if (response.settings === null) {
+              if (!response.settings || response.settings === null) {
                 response.settings = new Settings();
               }
 
