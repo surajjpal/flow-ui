@@ -51,6 +51,7 @@ export class State extends BaseModel {
   flagged:boolean;
   iterationLevel:number;
   autoAllocation:boolean;
+  
 }
 
 export class CommonInsightWrapper extends BaseModel {
@@ -59,4 +60,29 @@ export class CommonInsightWrapper extends BaseModel {
   reference_id: string;
   createdTime: Time;
 
+}
+
+
+export class StateReportModel extends BaseModel {
+  activeStatusCount: number;
+  flaggedStatusCount: number;
+  archiveStatusCount: number;
+  pendingStatusCount: number;
+  assignedUserName: string;
+  assignedUserId: string;
+  closedStatus:number;
+  fromDate: string;
+  toDate: string;
+  frDt:any;
+  toDt: any;
+  bussinessKeyMobile: string;
+  reportStartTime: string;
+  reportEndTime:string;
+  reportStatusCd:string;
+  reportSubStatusCd:string;
+  tatTime:any;
+  reportTatTime:string;
+  chatType:string;
+  businessKeyImeiEmail:string;
+  assignedList:string[] = [];
 }

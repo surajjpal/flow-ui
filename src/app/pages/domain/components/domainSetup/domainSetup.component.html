@@ -500,12 +500,17 @@
                       <api-checkbox class="col-md-4" [checked]="goalStep.ignoreIntent" [label]="'Ignore Intent'" (event)="goalStep.ignoreIntent = $event.target.checked"></api-checkbox>
                     </div>
                     <div class="form-group">
+                      <api-checkbox [checked]="goalStep.pickFromNoun" [label]="'Pick nouns from user input'" (event)="goalStep.pickFromNoun = $event.target.checked"></api-checkbox>
+                    </div>
+                    <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsKey' + index">
                         Model Key
                       </label>
-                      <select class="selectpicker form-control" title="Select Model Keys" [(ngModel)]="goalStep.key" name="key">
+                      <!--<select class="selectpicker form-control" title="Select Model Keys" [(ngModel)]="goalStep.key" name="key">
                         <option *ngFor="let key of modelKeysSource" [ngValue]="key">{{key}}</option>
-                      </select>
+                      </select>-->
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'goalStepKey' + index" placeholder="Model key(Dont use any spaces)"
+                        [(ngModel)]="goalStep.key" name="key" />
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsValidationTypes' + index">
@@ -1026,12 +1031,17 @@
                       <api-checkbox class="col-md-4" [checked]="goalStep.ignoreIntent" [label]="'Ignore Intent'" (event)="goalStep.ignoreIntent = $event.target.checked"></api-checkbox>
                     </div>
                     <div class="form-group">
+                      <api-checkbox [checked]="goalStep.pickFromNoun" [label]="'Pick nouns from user input'" (event)="goalStep.pickFromNoun = $event.target.checked"></api-checkbox>
+                    </div>
+                    <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsKey' + index">
                         Model Key
                       </label>
-                      <select class="selectpicker form-control" title="Select Model Keys" [(ngModel)]="goalStep.key" name="key">
+                      <!-- <select class="selectpicker form-control" title="Select Model Keys" [(ngModel)]="goalStep.key" name="key">
                         <option *ngFor="let key of modelKeysSource" [ngValue]="key">{{key}}</option>
-                      </select>
+                      </select> -->
+                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'goalStepKey' + index" placeholder="Model key(Dont use any spaces)"
+                        [(ngModel)]="goalStep.key" name="key" />
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsValidationTypes' + index">

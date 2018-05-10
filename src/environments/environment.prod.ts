@@ -3,23 +3,23 @@ export const environment = {
   name: 'production',
 
   // Root
-  root: 'https://flow.automatapi.com/flow/',
+  root: 'https://flow.automatapi.io/flow/',
     
   // API
-  authurl: 'https://flow.automatapi.com/flow/auth/',
+  authurl: 'https://flow.automatapi.io/flow/auth/',
 
   // Services
-  saveaccounturl: 'https://flow.automatapi.com/flow/services/saveaccount',
-  fetchaccountbyidurl: 'https://flow.automatapi.com/flow/services/fetchaccountbyid?query=',
+  saveaccounturl: 'https://flow.automatapi.io/flow/services/saveaccount',
+  fetchaccountbyidurl: 'https://flow.automatapi.io/flow/services/fetchaccountbyid?query=',
 
   // Interfaces
-  updateClassifierTraining : 'https://flow.automatapi.com/flow/interfaces/auto_decorate_training',
-  updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'https://flow.automatapi.com/flow/interfaces/entity_classification_training',
+  updateClassifierTraining : 'https://flow.automatapi.io/flow/interfaces/auto_decorate_training',
+  updateIntentTraining: 'https://flow.automatapi.io/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'https://flow.automatapi.io/flow/interfaces/entity_classification_training',
 
   // Flow
-  server: 'https://flow.automatapi.com/flow/console/',
-  autourl:'https://api.automatapi.com/?',
+  server: 'https://flow.automatapi.io/flow/console/',
+  autourl:'https://api.automatapi.io/?',
 
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
@@ -28,7 +28,9 @@ export const environment = {
   statebysubstatusandfolderurl:'state/pagebysubstatusandfolder/',
   saveflaggedstate:'state/saveFlaggedState',
   savearchivestate:'state/archive',
-
+  gettatrecords:'state/fetchtat',
+  getallstats:'state/fetchstatestatus',
+  getpersonalstats:'state/getstatestatusbyuser',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
@@ -65,7 +67,7 @@ export const environment = {
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
   // auto
-  autoServer: 'https://flow.automatapi.com/flow/auto/',
+  autoServer: 'https://flow.automatapi.io/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',

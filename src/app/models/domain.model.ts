@@ -36,6 +36,7 @@ export class GoalStep {
   authRequired: boolean;
   mandatory: boolean;
   ignoreIntent: boolean;
+  pickFromNoun: boolean;
   goalValidationTypes: string[];
   dependencyExpression: string;
   responseExpression: string;
@@ -52,6 +53,7 @@ export class GoalStep {
     this.authRequired = false;
     this.mandatory = false;
     this.ignoreIntent = false;
+    this.pickFromNoun = false;
     this.goalValidationTypes = [];
     this.dependencyExpression = '';
     this.responseExpression = '';
@@ -105,12 +107,12 @@ export class Stage {
 }
 
 export class ResponseOption {
-  value : string;
-  label : string;
+  value: string;
+  label: string;
 
-  constructor(value? : string, label? : string) {
+  constructor(value?: string, label?: string) {
     this.value = value ? value : '';
-    this.label = label? label : '';
+    this.label = label ? label : '';
   }
 }
 
@@ -119,7 +121,7 @@ export class ResponseData {
   type: string;
   data: ResponseOption[];
 
-  constructor(url? : string, type? : string, data?: ResponseOption[]) {
+  constructor(url?: string, type?: string, data?: ResponseOption[]) {
     this.url = url ? url : '';
     this.type = type ? type : '';
     this.data = data ? data : [];
@@ -131,7 +133,7 @@ export class Settings {
   secured: boolean;
   validationRegex: string;
   placeholder: string;
-  
+
   constructor() {
     this.mask = '';
     this.secured = false;
@@ -149,10 +151,10 @@ export class Response {
   response: string;
   stage: string;
   disableUserInput: boolean;
-  options : ResponseData[];
+  options: ResponseData[];
   settings: Settings;
 
-  constructor(expression?: string, lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean, options? : ResponseData[], settings? : Settings) {
+  constructor(expression?: string, lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean, options?: ResponseData[], settings?: Settings) {
     this.level = 1;
 
     this.expression = expression ? expression : '';

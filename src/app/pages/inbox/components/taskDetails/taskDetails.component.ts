@@ -235,7 +235,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   }
 
   getChatMessages() {
-    this.subscriptionChatMessages = this.conversationService.getChat(this.selectedEpisode._id)
+    this.subscriptionChatMessages = this.conversationService.getChat(this.selectedState.entityId)
     .subscribe(chatMessages => {
       if (chatMessages) {
         this.chatMessageList = chatMessages;
@@ -385,9 +385,9 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.selectedState.subStatus = "FLAGGED"
     this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedState)
     .subscribe(state => {
-      this.selectedState = state;
       this.extractParams();
       this.updateFlow();
+      this.selectedState = state;
       new closeModal('flagTaskModal');
     });
     

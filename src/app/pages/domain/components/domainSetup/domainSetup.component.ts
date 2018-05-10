@@ -20,7 +20,7 @@ import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 })
 export class DomainSetupComponent implements OnInit, OnDestroy {
   entityUploaderOptions: NgUploaderOptions;
-  
+
   domainCreateMode: boolean;
   modalHeader: string;
   createMode: boolean;
@@ -28,12 +28,12 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   modelKeysSource: string[];
   validationKeysSource: string[];
   stagesSource: Stage[];
-  
+
   intentFilterQuery: string;
   entityFilterQuery: string;
   goalFilterQuery: string;
   responseFilterQuery: string;
-  
+
   selectedDomain: Domain;
   tempDomainIntents: Intent[];
   tempDomainEntities: Entity[];
@@ -49,7 +49,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
   private subscriptionValidationKeys: Subscription;
-  
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -70,12 +70,12 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.stagesSource.push(new Stage('Information Input', 'INFO'));
     this.stagesSource.push(new Stage('Goal Seek', 'GOAL'));
     this.stagesSource.push(new Stage('Summarize', 'CLOSURE'));
-    
+
     this.intentFilterQuery = '';
     this.entityFilterQuery = '';
     this.goalFilterQuery = '';
     this.responseFilterQuery = '';
-    
+
     this.selectedDomain = new Domain();
     this.tempIntent = new Intent();
     this.selectedIntent = new Intent();
@@ -85,25 +85,25 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.selectedGoal = new Goal();
     this.tempResponse = new Response();
     this.selectedResponse = new Response();
-    
+
     const uploadIntentUrl = `${environment.autoServer}${environment.uploadintentexcelurl}`;
     this.intentUploaderOptions = {
       url: uploadIntentUrl
     };
-    
+
     const uploadEntityUrl = `${environment.autoServer}${environment.uploadentityexcelurl}`;
     this.entityUploaderOptions = {
       url: uploadEntityUrl
     };
-    
+
     this.slimLoadingBarService.color = '#2DACD1'; // Primary color
     this.slimLoadingBarService.height = '4px';
   }
-  
+
   ngOnInit() {
     this.fetchModelKeys();
     this.fetchValidationKeys();
-    
+
     const domain: Domain = this.sharingService.getSharedObject();
     if (domain) {
       this.selectedDomain = domain;
@@ -114,10 +114,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.selectedDomain = new Domain();
       this.domainCreateMode = true;
     }
-    
+
     this.removeGoalStepResponseFromDomainResponse();
   }
-  
+
   ngOnDestroy(): void {
     if (this.subscription && !this.subscription.closed) {
       this.subscription.unsubscribe();
@@ -133,24 +133,24 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   intentUploaderOptions: NgUploaderOptions;
   fetchModelKeys() {
     this.subscriptionModelKeys = this.domainService.modelKeysLookup()
-    .subscribe(
-      modelKeys => {
-        if (modelKeys) {
-          this.modelKeysSource = modelKeys;
+      .subscribe(
+        modelKeys => {
+          if (modelKeys) {
+            this.modelKeysSource = modelKeys;
+          }
         }
-      }
-    );
+      );
   }
 
   fetchValidationKeys() {
     this.subscriptionValidationKeys = this.domainService.validationKeysLookup()
-    .subscribe(
-      validationKeys => {
-        if (validationKeys) {
-          this.validationKeysSource = validationKeys;
+      .subscribe(
+        validationKeys => {
+          if (validationKeys) {
+            this.validationKeysSource = validationKeys;
+          }
         }
-      }
-    );
+      );
   }
 
   resetFields() {
@@ -170,7 +170,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.tempIntent = new Intent();
     }
   }
-
+  
   addIntent() {
     if (this.selectedIntent) {
       const index: number = this.selectedDomain.domainIntents.indexOf(this.selectedIntent);
@@ -180,6 +180,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     } else {
       this.selectedDomain.domainIntents.push(this.tempIntent);
     }
+
+    // This is to forcefully call the digest cycle of angular so that,
+    // the filtered list would get updated with these chanegs made in master list
+    this.intentFilterQuery = (` ${this.intentFilterQuery}`);
+    setTimeout(() => {
+      this.intentFilterQuery = this.intentFilterQuery.slice(1);
+    }, 10);
   }
 
   removeIntent() {
@@ -214,6 +221,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     } else {
       this.selectedDomain.domainEntities.push(this.tempEntity);
     }
+
+    // This is to forcefully call the digest cycle of angular so that,
+    // the filtered list would get updated with these chanegs made in master list
+    this.entityFilterQuery = (` ${this.entityFilterQuery}`);
+    setTimeout(() => {
+      this.entityFilterQuery = this.entityFilterQuery.slice(1);
+    }, 10);
   }
 
   removeEntity() {
@@ -244,25 +258,25 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     if (error) {
       new showAlertModal('Error', error);
     }
-    
+
     error = this.checkStageCodeInGoalResponses(this.tempGoal.domainGoalSteps);
     if (error) {
       new showAlertModal('Error', error);
     } else {
       this.tempGoal.model = '{}';
-
+      
       if (this.tempGoal && this.tempGoal.domainGoalSteps) {
         const tempMap: any = {};
-
+        
         for (const goalStep of this.tempGoal.domainGoalSteps) {
           if (goalStep.key && goalStep.key.length > 0) {
             tempMap[goalStep.key] = 'NOTMET';
           }
         }
-
+        
         this.tempGoal.model = JSON.stringify(tempMap);
       }
-
+      
       if (this.selectedGoal) {
         const index: number = this.selectedDomain.domainGoals.indexOf(this.selectedGoal);
         if (index !== -1) {
@@ -271,8 +285,15 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       } else {
         this.selectedDomain.domainGoals.push(this.tempGoal);
       }
-
+      
       new closeModal('goalModal');
+
+      // This is to forcefully call the digest cycle of angular so that,
+      // the filtered list would get updated with these chanegs made in master list
+      this.goalFilterQuery = (` ${this.goalFilterQuery}`);
+      setTimeout(() => {
+        this.goalFilterQuery = this.goalFilterQuery.slice(1);
+      }, 10);
     }
   }
 
@@ -291,13 +312,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         }
       }
     }
-    
+
     if (errorExpressionList && errorExpressionList.length > 0) {
-      return 'Stage is missing in the responses of the following goal steps: ' + errorExpressionList;
+      return `Stage is missing in the responses of the following goal steps: ${errorExpressionList}`;
     } else {
       return null;
     }
-  }  
+  }
 
   removeGoal() {
     if (this.selectedGoal) {
@@ -349,30 +370,30 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
         for (const goal of this.selectedDomain.domainGoals) {
           goal.domainGoalSteps = goal.domainGoalSteps.sort((gs1, gs2) => {
-              if (gs1.sequence > gs2.sequence) {
-                  return 1;
-              } else if (gs1.sequence < gs2.sequence) {
-                  return -1;
-              } else {
-                return 0;
-              }
+            if (gs1.sequence > gs2.sequence) {
+              return 1;
+            } else if (gs1.sequence < gs2.sequence) {
+              return -1;
+            } else {
+              return 0;
+            }
           });
 
           for (const goalStep of goal.domainGoalSteps) {
             goalStep.responses = [];
             for (const response of this.selectedDomain.domainResponse) {
-              if (response.sequence === null) {
+              if (!response.sequence || response.sequence === null) {
                 response.sequence = 0;
               }
-              if (response.disableUserInput === null) {
+              if (!response.disableUserInput || response.disableUserInput === null) {
                 response.disableUserInput = false;
               }
-              if (response.stage === null) {
+              if (!response.stage || response.stage === null) {
                 response.stage = '';
               }
 
-              if(response.settings == null) {
-                response.settings = new Settings()
+              if (!response.settings || response.settings === null) {
+                response.settings = new Settings();
               }
 
               if (response.expression === goalStep.goalExpression) {
@@ -385,11 +406,11 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
               if (gsr1.sequence > gsr2.sequence) {
                 return 1;
               } else if (gsr1.sequence < gsr2.sequence) {
-                  return -1;
+                return -1;
               } else {
                 return 0;
               }
-          });
+            });
           }
         }
 
@@ -456,13 +477,27 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           this.selectedDomain.domainResponse[index] = this.tempResponse;
         }
         new closeModal('responseModal');
+        
+        // This is to forcefully call the digest cycle of angular so that,
+        // the filtered list would get updated with these chanegs made in master list
+        this.responseFilterQuery = (` ${this.responseFilterQuery}`);
+        setTimeout(() => {
+          this.responseFilterQuery = this.responseFilterQuery.slice(1);
+        }, 10);
       }
     } else {
       if (!this.tempResponse.stage || this.tempResponse.stage.trim().length === 0) {
         new showAlertModal('Error', 'Stage can\'t be left empty.');
       } else {
         this.selectedDomain.domainResponse.push(this.tempResponse);
-        new closeModal('responseModal'); 
+        new closeModal('responseModal');
+
+        // This is to forcefully call the digest cycle of angular so that,
+        // the filtered list would get updated with these chanegs made in master list
+        this.responseFilterQuery = (` ${this.responseFilterQuery}`);
+        setTimeout(() => {
+          this.responseFilterQuery = this.responseFilterQuery.slice(1);
+        }, 10);
       }
     }
   }
@@ -499,15 +534,11 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           }
         }
       }
+      this.updateClassifierTraining();
       this.subscription = this.domainService.saveDomain(this.selectedDomain)
         .subscribe(
           response => {
-            if (JSON.stringify(this.selectedDomain.domainIntents) !=  JSON.stringify(this.tempDomainIntents) || JSON.stringify(this.selectedDomain.domainEntities) !=  JSON.stringify(this.tempDomainEntities)) {
-              this.updateClassifierTraining();
-            }
-            else {
               this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
-            }
           }
         );
     }
@@ -518,7 +549,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     .subscribe(
       response => {
         //this.updateEntityTrainingData();
-        this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
+        //this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
       }
     )
   }
@@ -527,9 +558,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
   toggleCheck(checkBox: string, checked: boolean) {
     if (checkBox) {
-        this.tempGoal.htmlFlag = checkBox === 'HTML_FLAG' && checked;
-        this.tempGoal.responseChange = checkBox === 'RESPONSE_CHANGE' && checked;
-        this.tempGoal.responseDependent = checkBox === 'RESPONSE_DEPENDENT' && checked;
+      this.tempGoal.htmlFlag = checkBox === 'HTML_FLAG' && checked;
+      this.tempGoal.responseChange = checkBox === 'RESPONSE_CHANGE' && checked;
+      this.tempGoal.responseDependent = checkBox === 'RESPONSE_DEPENDENT' && checked;
     }
   }
 
@@ -541,7 +572,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         langResponse.push(response);
       }
     }
-    
+
     return langResponse;
   }
 
@@ -613,25 +644,20 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   onAddResponseOption(response) {
-    console.log(response.options)
     if (!response.options) {
-      response.options = []
+      response.options = [];
     }
-    response.options.push(new ResponseData())
-
-    console.log(response.options)
+    response.options.push(new ResponseData());
   }
 
   onAddData(option) {
-    console.log(option.data)
-    option.data.push(new ResponseOption())
-    console.log(option.data)
+    option.data.push(new ResponseOption());
   }
 
-  delete(data,row) {
+  delete(data, row) {
     const index: number = data.indexOf(row);
-    if(index != -1) {
-      data.splice(index, 1)
+    if (index !== -1) {
+      data.splice(index, 1);
     }
   }
 }

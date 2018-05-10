@@ -90,7 +90,6 @@ import { FetchUserService } from '../../../../services/userhierarchy.service';
           .subscribe(states => {
             this.loadingAssigned = false;
             this.assignedStates = states;
-            
             if (this.assignedStates != null && this.assignedStates.length > 0 && this.assignedStates[0].headerParamList != null) {
               this.unassignedHeaderParamList = this.assignedStates[0].headerParamList;
             }
