@@ -72,6 +72,8 @@ export const environment = {
 
   // auto
   autoServer: 'http://108.168.190.82:8080/flow/auto/',
+  clearDomainCache: 'cleardomaincache',
+  clearAgentCache: 'clearagentcache',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',

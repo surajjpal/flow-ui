@@ -535,6 +535,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         }
       }
       this.updateClassifierTraining();
+      this.clearDomainCache();
       this.subscription = this.domainService.saveDomain(this.selectedDomain)
         .subscribe(
           response => {
@@ -542,6 +543,15 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           }
         );
     }
+  }
+
+  clearDomainCache() {
+    this.subscription = this.domainService.clearDomainCache(this.selectedDomain)
+    .subscribe(
+      response => {
+
+      }
+    )
   }
 
   updateClassifierTraining() {

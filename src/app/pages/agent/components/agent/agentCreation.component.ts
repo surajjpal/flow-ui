@@ -254,7 +254,17 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
             this.isSuccess = false;
           }
         );
+
     }
+  }
+
+  clearAgentCache() {
+    this.subscription = this.agentService.clearAgentCahe(this.selectedAgent)
+    .subscribe(
+      response => {
+        
+      }
+    )
   }
 
   onDomainSelect(domain: Domain) {

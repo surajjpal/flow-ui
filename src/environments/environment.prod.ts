@@ -68,6 +68,8 @@ export const environment = {
 
   // auto
   autoServer: 'https://flow.automatapi.io/flow/auto/',
+  clearDomainCache: 'cleardomaincache',
+  clearAgentCache: 'clearagentcache',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',

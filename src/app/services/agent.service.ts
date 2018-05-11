@@ -82,6 +82,37 @@ export class AgentService {
     return subject.asObservable();
   }
 
+  clearAgentCahe(agent: Agent): Observable<any> {
+    const subject = new Subject<any>();
+    
+    let requestBody = new Map<string, string>();
+    requestBody["agentId"] = agent._id;
+    //requestBody["version"] = "v1.0"   // currently we do not have any versioning system
+    const url = `${environment.autoServer}` + `${environment.clearAgentCache}`;
+    this.httpClient.post<any>(
+      url,
+      requestBody,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+     (response: HttpResponse<any>) => {
+       if (response.status == 400) {
+         subject.error(response.body);
+       }
+       else{
+         subject.next(response.body);
+       }
+     },
+     (err: HttpErrorResponse) => {
+       subject.error(err);
+     }
+    )
+    return subject.asObservable();
+  }
+
   saveAgent(agent: Agent): Observable<any> {
     const subject = new Subject<any>();
 

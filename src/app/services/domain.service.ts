@@ -134,6 +134,36 @@ export class DomainService {
     return subject.asObservable();
   }
 
+  clearDomainCache(domain: Domain): Observable<any> {
+    const subject = new Subject<any>();
+    let requestBody = new Map<string, string>();
+    requestBody["domainId"] = domain._id;
+    //requestBody["version"] = "v1.0"   // currently we do not have any versioning system
+    const url = `${environment.autoServer}` + `${environment.clearDomainCache}`;
+    this.httpClient.post<any>(
+      url,
+      requestBody,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+     (response: HttpResponse<any>) => {
+       if (response.status == 400) {
+         subject.error(response.body);
+       }
+       else{
+         subject.next(response.body);
+       }
+     },
+     (err: HttpErrorResponse) => {
+       subject.error(err);
+     }
+    )
+    return subject.asObservable();
+  }
+
   updateDomainClassifierTraining(domain: Domain): Observable<any> {
     const subject = new Subject<any>();
     let requestBody = new Map<string, string>();
