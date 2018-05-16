@@ -259,7 +259,7 @@
 
       <form>
         <div class="form-group">
-          <button type="button" class="btn btn-primary" (click)="createDomain()">
+          <button type="button" class="btn btn-primary" (click)="createDomain()" data-toggle="modal" data-target="#domainUpdateModal">
               {{domainCreateMode ? 'Create Domain' : 'Update Domain'}}
           </button>
         </div>
@@ -1662,6 +1662,30 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeResponse()">Remove</button>
         <button type="submit" class="btn btn-primary" (click)="addResponse()">{{createMode ? 'Create' : 'Update'}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Warning Modal -->
+<div class="modal fade" id="domainUpdateModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="warningLabel">
+          {{domainUpdate}}
+        </h4>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        {{domainBody}}
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer" *ngIf="domainSucess">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
       </div>
     </div>
   </div>
