@@ -43,6 +43,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   selectedGoal: Goal;
   tempResponse: Response;
   selectedResponse: Response;
+  domainUpdate:string;
+  domainBody:string;
+  domainSucess:boolean;
 
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
@@ -61,7 +64,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.createMode = false;
     this.languageSource = ['ENG', 'HIN', 'MAR', 'ID', 'ML'];
     this.modelKeysSource = [];
-
+    this.domainUpdate = "Domain";
+    this.domainBody = "Please wait updating domain........";
+    this.domainSucess = false;
     this.stagesSource = [];
     this.stagesSource.push(new Stage('Initialization', 'INIT'));
     this.stagesSource.push(new Stage('Context Setting', 'CONTEXT'));
@@ -533,7 +538,17 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.subscription = this.domainService.saveDomain(this.selectedDomain)
         .subscribe(
           response => {
+            if (response){
+              this.domainBody = "Domain updated successfully!!"
+              this.domainSucess = true;
+              this.selectedDomain = response;
+            }
+            else{
+              this.domainBody = "Something went wrong please try again!!"
+              this.domainSucess = true;
+            }
             this.updateIntenTrainingData();
+
             // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
           }
         );
@@ -554,7 +569,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.subscription = this.domainService.updateEntityTraining(this.selectedDomain)
       .subscribe(
         response => {
-          this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
+         // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
         }
       );
   }
