@@ -214,7 +214,7 @@
               <form style="max-height: 400px; overflow:scroll">
                 <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.status" class="form-group">
                   <label>Status</label>
-                  <input class="form-control" placeholder="Status" disabled="disabled" value="{{selectedEpisode._source.status}}" />
+                  <input class="form-control" placeholder="Status" disabled="disabled" value="{{selectedEpisode._source.statusCd}}" />
                 </div>
                 <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.intents && selectedEpisode._source.intents.length > 0"
                   class="form-group">
@@ -305,11 +305,8 @@
                 <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd === 'Personal' && userHierarchy.parentUserId.length > 0" type="button"
                   (click)="escalate()" class="btn btn-warning btn-with-icon">
                   <i class="ion-alert-circled"></i>Escalate Task</button>
-                <button [disabled]="!isButtonEnabled" type="button" class="btn btn-warning btn-with-icon" title="Flag" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd == 'Personal' && selectedState.iterationLevel < 3"
+                <button [disabled]="!isButtonEnabled" type="button" class="btn btn-warning btn-with-icon" title="Flag" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd == 'Personal' && selectedState.subStatus !== 'FLAGGED'"
                   data-toggle="modal" data-target="#flagTaskModal">
-                  <i class="ion-flag"></i>Flag Task</button>
-                <button [disabled]="!isButtonEnabled" type="button" class="btn btn-warning btn-with-icon" title="Flag" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.iterationLevel == 3 && selectedState.assignedUserGroupCd == 'Personal'"
-                  data-toggle="modal" data-target="#flagTaskWarningModal">
                   <i class="ion-flag"></i>Flag Task</button>
                 <button [disabled]="!isButtonEnabled" type="button" class="btn btn-danger btn-with-icon" title="Archive" *ngIf="selectedState.statusCd ==='ACTIVE' && selectedState.assignedUserGroupCd == 'Personal' "
                   data-toggle="modal" data-target="#archiveTaskWarningModal">

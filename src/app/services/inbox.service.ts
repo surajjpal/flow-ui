@@ -318,16 +318,18 @@ export class StateService {
   }
 
 
-  saveFlaggedState(state: State): Observable<State> {
+  saveFlaggedState(state: State,inputMap:any): Observable<State> {
     const subject = new Subject<State>();
-
+    const map = {};
+    map['param'] = JSON.stringify(inputMap);
+    map['payload'] = '{}';
     console.log(state._id)
 
-    const url = `${environment.server + environment.saveflaggedstate}`;
+    const url = `${environment.server + environment.saveflaggedstate}/${state._id}/${state.flagReason}/`;
 
     this.httpClient.post<State>(
       url,
-      state,
+      map,
       {
         headers: this.httpHeaders,
         observe: 'response',
