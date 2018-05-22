@@ -341,35 +341,35 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.subscription = this.stateService.update(this.selectedState.machineType, this.selectedState.entityId, this.actionMap)
-      .subscribe(response => {
-        this.responseError = '';
+    // this.subscription = this.stateService.update(this.selectedState.machineType, this.selectedState.entityId, this.actionMap)
+    //   .subscribe(response => {
+    //     this.responseError = '';
 
-        const state: State = response;
+    //     const state: State = response;
 
-        if (state) {
-          if (state.errorMessageMap) {
-            for (const key in state.errorMessageMap) {
-              if (key) {
-                const errorList: string[] = state.errorMessageMap[key];
+    //     if (state) {
+    //       if (state.errorMessageMap) {
+    //         for (const key in state.errorMessageMap) {
+    //           if (key) {
+    //             const errorList: string[] = state.errorMessageMap[key];
 
-                this.responseError += `${this.fieldKeyMap[key]}<br>`;
-                for (const error of errorList) {
-                  this.responseError += `  - ${error}<br>`;
-                }
-              }
-            }
+    //             this.responseError += `${this.fieldKeyMap[key]}<br>`;
+    //             for (const error of errorList) {
+    //               this.responseError += `  - ${error}<br>`;
+    //             }
+    //           }
+    //         }
 
-            if (!this.responseError || this.responseError.length <= 0) {
-              new showModal('successModal');
-            }
-          } else {
-            new showModal('successModal');
-          }
-        } else {
-          new showModal('successModal');
-        }
-      });
+    //         if (!this.responseError || this.responseError.length <= 0) {
+    //           new showModal('successModal');
+    //         }
+    //       } else {
+    //         new showModal('successModal');
+    //       }
+    //     } else {
+    //       new showModal('successModal');
+    //     }
+    //   });
   }
 
   onReasonSelect(reason):void{
@@ -383,14 +383,16 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.iterationLevel = this.iterationLevel + 1;
     this.selectedState.iterationLevel = this.iterationLevel;
     this.selectedState.subStatus = "FLAGGED"
-    this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedState)
+
+    this.extractParams();
+    this.updateFlow();
+    this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedState,this.actionMap)
     .subscribe(state => {
-      this.extractParams();
-      this.updateFlow();
-      this.selectedState = state;
-      new closeModal('flagTaskModal');
+     this.selectedState = state;
+     new closeModal('flagTaskModal');
+     new showModal('successModal');
+     
     });
-    
   }
 
   archive():void{

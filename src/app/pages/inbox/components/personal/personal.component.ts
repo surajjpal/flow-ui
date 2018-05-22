@@ -314,36 +314,36 @@ export class PersonalComponent implements OnInit, OnDestroy {
             this.actionMap[dataPoint.dataPointName] = dataPoint.value;
           }
         }
+        
+        // this.subscription = this.stateService.update(this.selectedStateForFlag.machineType, this.selectedStateForFlag.entityId, this.actionMap)
+        //   .subscribe(response => {
+        //     this.responseError = '';
     
-        this.subscription = this.stateService.update(this.selectedStateForFlag.machineType, this.selectedStateForFlag.entityId, this.actionMap)
-          .subscribe(response => {
-            this.responseError = '';
+        //     const state: State = response;
     
-            const state: State = response;
+        //     if (state) {
+        //       if (state.errorMessageMap) {
+        //         for (const key in state.errorMessageMap) {
+        //           if (key) {
+        //             const errorList: string[] = state.errorMessageMap[key];
     
-            if (state) {
-              if (state.errorMessageMap) {
-                for (const key in state.errorMessageMap) {
-                  if (key) {
-                    const errorList: string[] = state.errorMessageMap[key];
+        //             this.responseError += `${this.fieldKeyMap[key]}<br>`;
+        //             for (const error of errorList) {
+        //               this.responseError += `  - ${error}<br>`;
+        //             }
+        //           }
+        //         }
     
-                    this.responseError += `${this.fieldKeyMap[key]}<br>`;
-                    for (const error of errorList) {
-                      this.responseError += `  - ${error}<br>`;
-                    }
-                  }
-                }
-    
-                if (!this.responseError || this.responseError.length <= 0) {
-                  new showModal('successModalPersonal');
-                }
-              } else {
-                new showModal('successModalPersonal');
-              }
-            } else {
-              new showModal('successModalPersonal');
-            }
-          });
+        //         if (!this.responseError || this.responseError.length <= 0) {
+        //           new showModal('successModalPersonal');
+        //         }
+        //       } else {
+        //         new showModal('successModalPersonal');
+        //       }
+        //     } else {
+        //       new showModal('successModalPersonal');
+        //     }
+        //   });
       }
   
   onBack() {
@@ -356,12 +356,15 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.iterationLevel = this.iterationLevel + 1;
     this.selectedStateForFlag.iterationLevel = this.iterationLevel;
     this.selectedStateForFlag.subStatus = "FLAGGED"
-    this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedStateForFlag)
+    this.extractParams();
+    this.updateFlow();
+    this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedStateForFlag,this.actionMap)
     .subscribe(state => {
-      this.extractParams();
-      this.updateFlow();
-      this.selectedStateForFlag = state;
+      
+      console.log(state)
+     // this.selectedStateForFlag = state;
       new closeModal('flagModal');
+      new showModal('successModalPersonal');
     });
   }
 }
