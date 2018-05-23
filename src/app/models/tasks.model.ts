@@ -51,6 +51,7 @@ export class State extends BaseModel {
   flagged:boolean;
   iterationLevel:number;
   autoAllocation:boolean;
+  assignedDueToFlagged:boolean;
   
 }
 
