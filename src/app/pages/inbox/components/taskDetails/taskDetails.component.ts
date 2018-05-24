@@ -321,6 +321,29 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     new graphTools(choice);
   }
 
+
+  getInputMap(){
+    this.isButtonEnabled = false;
+    
+    if (!this.actionMap) {
+      this.actionMap = {};
+    }
+
+    for (let index = 0; index < this.dataPoints.length; index++) {
+      if (index % 2 === 1) {
+        const dataPoint = this.dataPoints[index];
+        if (dataPoint.dataType === 'NUMBER' && (typeof dataPoint.value === 'string' || dataPoint.value instanceof String)) {
+          dataPoint.value = +dataPoint.value;
+        } else if (dataPoint.dataType === 'BOOLEAN' && (typeof dataPoint.value === 'string' || dataPoint.value instanceof String)) {
+          dataPoint.value = (dataPoint.value === 'true');
+        }
+        this.actionMap[dataPoint.dataPointName] = dataPoint.value;
+      }
+    }
+
+
+  }
+
   updateFlow() {
 
     this.isButtonEnabled = false;
@@ -341,35 +364,35 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       }
     }
 
-    // this.subscription = this.stateService.update(this.selectedState.machineType, this.selectedState.entityId, this.actionMap)
-    //   .subscribe(response => {
-    //     this.responseError = '';
+    this.subscription = this.stateService.update(this.selectedState.machineType, this.selectedState.entityId, this.actionMap)
+      .subscribe(response => {
+        this.responseError = '';
 
-    //     const state: State = response;
+        const state: State = response;
 
-    //     if (state) {
-    //       if (state.errorMessageMap) {
-    //         for (const key in state.errorMessageMap) {
-    //           if (key) {
-    //             const errorList: string[] = state.errorMessageMap[key];
+        if (state) {
+          if (state.errorMessageMap) {
+            for (const key in state.errorMessageMap) {
+              if (key) {
+                const errorList: string[] = state.errorMessageMap[key];
 
-    //             this.responseError += `${this.fieldKeyMap[key]}<br>`;
-    //             for (const error of errorList) {
-    //               this.responseError += `  - ${error}<br>`;
-    //             }
-    //           }
-    //         }
+                this.responseError += `${this.fieldKeyMap[key]}<br>`;
+                for (const error of errorList) {
+                  this.responseError += `  - ${error}<br>`;
+                }
+              }
+            }
 
-    //         if (!this.responseError || this.responseError.length <= 0) {
-    //           new showModal('successModal');
-    //         }
-    //       } else {
-    //         new showModal('successModal');
-    //       }
-    //     } else {
-    //       new showModal('successModal');
-    //     }
-    //   });
+            if (!this.responseError || this.responseError.length <= 0) {
+              new showModal('successModal');
+            }
+          } else {
+            new showModal('successModal');
+          }
+        } else {
+          new showModal('successModal');
+        }
+      });
   }
 
   onReasonSelect(reason):void{
@@ -385,7 +408,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.selectedState.subStatus = "FLAGGED"
 
     this.extractParams();
-    this.updateFlow();
+    this.getInputMap();
     this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedState,this.actionMap)
     .subscribe(state => {
      this.selectedState = state;
