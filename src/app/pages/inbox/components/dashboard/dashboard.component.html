@@ -45,78 +45,48 @@
   <div *ngIf="buttonSelected">
     <div class="row">
       <div class="col-sm-6">
-      <ba-card style="width:50px;"cardTitle="Personal">
-          <table class="table table-striped" style="display: inline-block; border: 1px solid;">
-              <thead>
-                  <tr>
-                    <th>
-                        <h6>
-                          <b>Pending</b>
-                        </h6>
-                    </th>
-                    <th>
-                        <h6>
-                          <b>Active</b>
-                        </h6>
-                    </th>
-                    <th>
-                        <h6>
-                          <b>Archived</b>
-                        </h6>
-                    </th>
-                    <th>
-                        <h6>
-                          <b>Flagged</b>
-                        </h6>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                      <td>{{personalStateReportModel.pendingStatusCount}}</td>
-                      <td>{{personalStateReportModel.activeStatusCount}}</td>
-                      <td>{{personalStateReportModel.archiveStatusCount}}</td>
-                      <td>{{personalStateReportModel.flaggedStatusCount}}</td>
-                </tbody>
-          </table>
-        </ba-card>
-        </div>
-        <div class="col-sm-6" *ngIf="!personal">
-        <ba-card style="width:50px;"cardTitle="Team">
-            <table class="table table-striped" style="display: inline-block; border: 1px solid; ">
-                <thead>
-                    <tr>
-                      <th>
-                          <h6>
-                            <b>Pending</b>
-                          </h6>
-                      </th>
-                      <th>
-                          <h6>
-                            <b>Active</b>
-                          </h6>
-                      </th>
-                      <th>
-                          <h6>
-                            <b>Archived</b>
-                          </h6>
-                      </th>
-                      <th>
-                          <h6>
-                            <b>Flagged</b>
-                          </h6>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                        <td>{{overallStateReportModel.pendingStatusCount}}</td>
-                        <td>{{overallStateReportModel.activeStatusCount}}</td>
-                        <td>{{overallStateReportModel.archiveStatusCount}}</td>
-                        <td>{{overallStateReportModel.flaggedStatusCount}}</td>
-                  </tbody>
-            </table>
-          </ba-card>
+        <div class="row tile_count">
+          <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i>Personal Pending</span>
+              <div class="count">{{personalStateReportModel.pendingStatusCount}}</div>
+          </div>
+          <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i>Personal Active</span>
+              <div class="count ">{{personalStateReportModel.activeStatusCount}}</div>
+          </div>
+          <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i>Personal Flagged</span>
+              <div class="count">{{personalStateReportModel.flaggedStatusCount}}</div>
+          </div>
+          <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i>Personal Archived</span>
+              <div class="count ">{{personalStateReportModel.archiveStatusCount}}</div>
+          </div>
       </div>
     </div>
+    <div class="col-sm-6" *ngIf="!personal"> 
+        <div class="row tile_count">
+            <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i>Team Pending</span>
+                <div class="count">{{overallStateReportModel.pendingStatusCount}}</div>
+            </div>
+            <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i>Team Active</span>
+                <div class="count ">{{overallStateReportModel.activeStatusCount}}</div>
+            </div>
+            <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i>Team Flagged</span>
+                <div class="count">{{overallStateReportModel.flaggedStatusCount}}</div>
+            </div>
+            <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i>Team Archived</span>
+                <div class="count ">{{overallStateReportModel.archiveStatusCount}}</div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    
   <div class="widgets">
     <div class="row">
       <ba-card baCardClass="with-scroll" class="data-table-container">
