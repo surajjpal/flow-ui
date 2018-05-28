@@ -124,17 +124,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
                 this.tatSubscription = this.stateService.getPersonalStats(this.stateReportModel)
                 .subscribe(report => {
-                  console.log("personal")
-                  console.log(report)
+                  
                   this.personalStateReportModel = report;
                 });
 
                 if (this.personal == false){
                   this.tatSubscription = this.stateService.getOverallStats(this.stateReportModel)
                   .subscribe(report => {
-                    console.log("overall")
-                    console.log(report)
-                    console.log(this.stateReportModel)
+                    
                     this.overallStateReportModel = report;
                   });
                 }
