@@ -99,5 +99,19 @@ export const environment = {
   uploadintentexcelurl: 'uploadintents',
   uploadentityexcelurl: 'uploadentity',
   modelkeyslookupurl: 'load/modelkeys',
-  validationtypekeyslookupurl: 'load/validations'
+  validationtypekeyslookupurl: 'load/validations',
+
+  //autoDashboard
+  dashboardServer: 'http://localhost:8080/flow/autodashboard/',
+  dashboardsummary:'api/dashboard_summary',
+  episodetimeline:'api/episode_timeline',
+  intentcount:'api/intent_count',
+  entitycount:'api/entity_count',
+  sentimentcount:'api/sentiment_count',
+  goal_count:'api/goal_count',
+  episodemessages:'api/episode_message'
+  
+  
+
+
 };

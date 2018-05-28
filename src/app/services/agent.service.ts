@@ -125,17 +125,15 @@ export class AgentDashboardService {
 
   constructor(private httpClient: HttpClient) { }
 
-  fetch(configurationCode: string, dateRange: any): Observable<Dashboard> {
-    const subject = new Subject<Dashboard>();
+  fetchSummary(body:any): Observable<any> {
+    const subject = new Subject<any>();
 
-    const body: any = {};
-    body.params = {};
-    body.params.startDate = dateRange.start.format('YYYY-MM-DD HH:mm:ss');
-    body.params.endDate = dateRange.end.format('YYYY-MM-DD HH:mm:ss');
+    
+    
 
-    const url = `${environment.server + environment.autodashboardurl}/${configurationCode}`;
+    const url = `${environment.dashboardServer + environment.dashboardsummary}`;
 
-    this.httpClient.post<Dashboard>(
+    this.httpClient.post<any>(
       url,
       body,
       {
@@ -145,7 +143,7 @@ export class AgentDashboardService {
         withCredentials: true
       }
     ).subscribe(
-      (response: HttpResponse<Dashboard>) => {
+      (response: HttpResponse<any>) => {
         if (response.body) {
           subject.next(response.body);
         }
@@ -160,6 +158,199 @@ export class AgentDashboardService {
 
     return subject.asObservable();
   }
+
+
+
+  fetchEpisodeTimeline(body:any): Observable<any> {
+    const subject = new Subject<any>();
+
+    const url = `${environment.dashboardServer + environment.episodetimeline}`;
+
+    this.httpClient.post<any>(
+      url,
+      body,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+
+  fetchIntentCount(body:any): Observable<any> {
+    const subject = new Subject<any>();
+
+    const url = `${environment.dashboardServer + environment.intentcount}`;
+
+    this.httpClient.post<any>(
+      url,
+      body,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+      
+          return subject.asObservable();
+      }
+
+
+      fetchEntityCount(body:any): Observable<any> {
+        const subject = new Subject<any>();
+    
+        const url = `${environment.dashboardServer + environment.entitycount}`;
+    
+        this.httpClient.post<any>(
+          url,
+          body,
+          {
+            headers: this.httpHeaders,
+            observe: 'response',
+            reportProgress: true,
+            withCredentials: true
+          }
+        ).subscribe(
+          (response: HttpResponse<any>) => {
+            if (response.body) {
+              subject.next(response.body);
+            }
+          },
+          (err: HttpErrorResponse) => {
+            // All errors are handled in ErrorInterceptor, no further handling required
+            // Unless any specific action is to be taken on some error
+    
+            subject.error(err);
+          }
+          );
+          
+              return subject.asObservable();
+          }
+
+
+          fetchSentimentCount(body:any): Observable<any> {
+            const subject = new Subject<any>();
+        
+            const url = `${environment.dashboardServer + environment.sentimentcount}`;
+        
+            this.httpClient.post<any>(
+              url,
+              body,
+              {
+                headers: this.httpHeaders,
+                observe: 'response',
+                reportProgress: true,
+                withCredentials: true
+              }
+            ).subscribe(
+              (response: HttpResponse<any>) => {
+                if (response.body) {
+                  subject.next(response.body);
+                }
+              },
+              (err: HttpErrorResponse) => {
+                // All errors are handled in ErrorInterceptor, no further handling required
+                // Unless any specific action is to be taken on some error
+        
+                subject.error(err);
+              }
+              );
+              
+                  return subject.asObservable();
+              }
+
+
+              fetchGoalCount(body:any): Observable<any> {
+                const subject = new Subject<any>();
+            
+                const url = `${environment.dashboardServer + environment.goal_count}`;
+            
+                this.httpClient.post<any>(
+                  url,
+                  body,
+                  {
+                    headers: this.httpHeaders,
+                    observe: 'response',
+                    reportProgress: true,
+                    withCredentials: true
+                  }
+                ).subscribe(
+                  (response: HttpResponse<any>) => {
+                    if (response.body) {
+                      subject.next(response.body);
+                    }
+                  },
+                  (err: HttpErrorResponse) => {
+                    // All errors are handled in ErrorInterceptor, no further handling required
+                    // Unless any specific action is to be taken on some error
+            
+                    subject.error(err);
+                  }
+                  );
+                  
+                      return subject.asObservable();
+                  }
+
+                  fetchEpisodeMessages(body:any): Observable<any> {
+                    const subject = new Subject<any>();
+                
+                    const url = `${environment.dashboardServer + environment.episodemessages}`;
+                
+                    this.httpClient.post<any>(
+                      url,
+                      body,
+                      {
+                        headers: this.httpHeaders,
+                        observe: 'response',
+                        reportProgress: true,
+                        withCredentials: true
+                      }
+                    ).subscribe(
+                      (response: HttpResponse<any>) => {
+                        if (response.body) {
+                          subject.next(response.body);
+                        }
+                      },
+                      (err: HttpErrorResponse) => {
+                        // All errors are handled in ErrorInterceptor, no further handling required
+                        // Unless any specific action is to be taken on some error
+                
+                        subject.error(err);
+                      }
+                      );
+                      
+                          return subject.asObservable();
+                      }
+
 }
 
 @Injectable()
