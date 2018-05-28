@@ -547,7 +547,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
               this.domainBody = "Something went wrong please try again!!"
               this.domainSucess = true;
             }
-            this.updateIntenTrainingData();
+            //this.updateIntenTrainingData();
 
             // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
           }
