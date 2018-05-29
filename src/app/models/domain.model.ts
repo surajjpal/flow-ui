@@ -153,8 +153,11 @@ export class Response {
   disableUserInput: boolean;
   options: ResponseData[];
   settings: Settings;
+  selectionExpressions: string[];
+  selectionExpressionOperator: string;
 
-  constructor(expression?: string, lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean, options?: ResponseData[], settings?: Settings) {
+  constructor(expression?: string, lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
+      options?: ResponseData[], settings?: Settings, selectionExpressions?: string[], selectionExpressionOperator?: string) {
     this.level = 1;
 
     this.expression = expression ? expression : '';
@@ -166,6 +169,8 @@ export class Response {
     this.disableUserInput = disableUserInput ? disableUserInput : false;
     this.options = options ? options : [];
     this.settings = settings ? settings : new Settings();
+    this.selectionExpressions = selectionExpressions ? selectionExpressions : [];
+    this.selectionExpressionOperator = selectionExpressionOperator ? selectionExpressionOperator : 'AND';
   }
 }
 
