@@ -82,6 +82,13 @@ export class PersonalComponent implements OnInit, OnDestroy {
     }
   }
 
+  refresh(){
+    this.progressBarFlag = true;
+    this.pageNumber = 0
+    this.fetchRecords = 10
+    this.fetchData(this.pageNumber,this.fetchRecords);
+  }
+
   ngOnDestroy(): void {
     if (this.subscriptionGroup && !this.subscriptionGroup.closed) {
       this.subscriptionGroup.unsubscribe();
