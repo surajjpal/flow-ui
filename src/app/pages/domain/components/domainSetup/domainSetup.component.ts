@@ -43,9 +43,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   selectedGoal: Goal;
   tempResponse: Response;
   selectedResponse: Response;
-  domainUpdate:string;
-  domainBody:string;
-  domainSucess:boolean;
+  domainUpdate: string;
+  domainBody: string;
+  domainSucess: boolean;
+  operandSource: string[];
 
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
@@ -63,9 +64,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.modalHeader = '';
     this.createMode = false;
     this.languageSource = ['ENG', 'HIN', 'MAR', 'ID', 'ML'];
+    this.operandSource = ['AND', 'OR'];
     this.modelKeysSource = [];
-    this.domainUpdate = "Domain";
-    this.domainBody = "Please wait updating domain........";
+    this.domainUpdate = 'Domain';
+    this.domainBody = 'Please wait updating domain........';
     this.domainSucess = false;
     this.stagesSource = [];
     this.stagesSource.push(new Stage('Initialization', 'INIT'));
@@ -171,7 +173,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.tempIntent = new Intent();
     }
   }
-  
+
   addIntent() {
     if (this.selectedIntent) {
       const index: number = this.selectedDomain.domainIntents.indexOf(this.selectedIntent);
@@ -265,19 +267,25 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       new showAlertModal('Error', error);
     } else {
       this.tempGoal.model = '{}';
-      
+
       if (this.tempGoal && this.tempGoal.domainGoalSteps) {
         const tempMap: any = {};
-        
+
         for (const goalStep of this.tempGoal.domainGoalSteps) {
           if (goalStep.key && goalStep.key.length > 0) {
             tempMap[goalStep.key] = 'NOTMET';
           }
+
+          if (goalStep.responses) {
+            for (const goalStepResponse of goalStep.responses) {
+              goalStepResponse.expression = goalStep.goalExpression;
+            }
+          }
         }
-        
+
         this.tempGoal.model = JSON.stringify(tempMap);
       }
-      
+
       if (this.selectedGoal) {
         const index: number = this.selectedDomain.domainGoals.indexOf(this.selectedGoal);
         if (index !== -1) {
@@ -286,7 +294,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       } else {
         this.selectedDomain.domainGoals.push(this.tempGoal);
       }
-      
+
       new closeModal('goalModal');
 
       // This is to forcefully call the digest cycle of angular so that,
@@ -397,6 +405,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
                 response.settings = new Settings();
               }
 
+              if (!response.selectionExpression || response.selectionExpression === null) {
+                response.selectionExpression = '';
+              }
+
               if (response.expression === goalStep.goalExpression) {
                 responsesToBeRemoved.push(response);
                 goalStep.responses.push(response);
@@ -433,7 +445,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       }
 
       if (occurance > 1) {
-        return 'Duplicate goal response code: ' + goalStep.goalExpression;
+        return `Duplicate goal response code: ${goalStep.goalExpression}`;
       }
     }
 
@@ -442,7 +454,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         for (const goalStep of goal.domainGoalSteps) {
           for (const tempGoalStep of goalSteps) {
             if (goalStep.goalExpression === tempGoalStep.goalExpression) {
-              return 'Duplicate goal response code present in other than current goal: ' + goalStep.goalExpression;
+              return `Duplicate goal response code present in other than current goal: ${goalStep.goalExpression}`;
             }
           }
         }
@@ -478,7 +490,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           this.selectedDomain.domainResponse[index] = this.tempResponse;
         }
         new closeModal('responseModal');
-        
+
         // This is to forcefully call the digest cycle of angular so that,
         // the filtered list would get updated with these chanegs made in master list
         this.responseFilterQuery = (` ${this.responseFilterQuery}`);
@@ -538,18 +550,21 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.subscription = this.domainService.saveDomain(this.selectedDomain)
         .subscribe(
           response => {
-            if (response){
-              this.domainBody = "Domain updated successfully!!"
+            if (response) {
+              this.domainBody = `Domain updated successfully!!`;
               this.domainSucess = true;
               this.selectedDomain = response;
-            }
-            else{
-              this.domainBody = "Something went wrong please try again!!"
+            } else {
+              this.domainBody = `Something went wrong please try again!!`;
               this.domainSucess = true;
             }
-            //this.updateIntenTrainingData();
+            // this.updateIntenTrainingData();
 
             // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
+          },
+          error => {
+            this.domainBody = `Something went wrong please try again!!`;
+            this.domainSucess = true;
           }
         );
     }
@@ -569,7 +584,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.subscription = this.domainService.updateEntityTraining(this.selectedDomain)
       .subscribe(
         response => {
-         // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
+          // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
         }
       );
   }
@@ -677,5 +692,17 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     if (index !== -1) {
       data.splice(index, 1);
     }
+  }
+
+  onAddSelectionExpression(expressionList) {
+    if (expressionList) {
+      expressionList.push('');
+    }
+  }
+
+  // Don't remove. Very important.
+  // Being used by for loop in html to keep track of a string in array of strings
+  customTrackBy(index: number, obj: any): any {
+    return index;
   }
 }
