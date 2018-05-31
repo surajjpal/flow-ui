@@ -616,44 +616,10 @@
                                         </div>
                                         <!--Response settings end-->
 
-                                        <!-- Response Selection Expressions -->
                                         <div class="form-group">
-                                          <label>Selection Expression Operator</label>
-                                          <select class="selectpicker form-control" title="Select Operator" [(ngModel)]="gsResponse.selectionExpressionOperator" name="selectionExpressionOperator">
-                                            <option *ngFor="let operand of operandSource" [ngValue]="operand">{{operand}}</option>
-                                          </select>
+                                          <label>Response Selection Expression</label>
+                                          <input class="form-control" placeholder="Response Selection Expression" [(ngModel)]="gsResponse.selectionExpression" name="selectionExpression"/>
                                         </div>
-                                        
-                                        <div class="form-group">
-                                          <label>Selection Expressions</label>
-                                          <table class="table table-striped">
-                                            <thead>
-                                              <tr>
-                                                <th>
-                                                  Expression
-                                                </th>
-                                                <th>
-                                                  <button type="button" class="btn btn-primary" (click)="onAddSelectionExpression(gsResponse.selectionExpressions)">
-                                                    <i class="ion-plus-round"></i>
-                                                  </button>
-                                                </th>
-                                              </tr>
-                                            </thead>
-                                            <tbody>
-                                              <tr *ngFor="let selectionExpression of gsResponse.selectionExpressions; let indexSelection = index; trackBy: customTrackBy">
-                                                <td>
-                                                  <input class="form-control" placeholder="Expression" [(ngModel)]="gsResponse.selectionExpressions[indexSelection]" [ngModelOptions]="{standalone: true}">
-                                                </td>
-                                                <td>
-                                                  <button type="button" class="btn btn-danger" title="delete" (click)="delete(gsResponse.selectionExpressions, gsResponse.selectionExpressions[indexSelection])">
-                                                    <i class="ion-ios-trash"></i>
-                                                  </button>
-                                                </td>
-                                              </tr>
-                                            </tbody>
-                                          </table>
-                                        </div>
-                                        <!-- Response Selection Expressions -->
 
                                         <div class="form-group">
                                             <label>Response options</label>            
@@ -751,44 +717,10 @@
                                           </div>
                                           <!--Response settings end-->
 
-                                          <!-- Response Selection Expressions -->
                                           <div class="form-group">
-                                            <label>Selection Expression Operator</label>
-                                            <select class="selectpicker form-control" title="Select Operator" [(ngModel)]="gsResponse.selectionExpressionOperator" name="selectionExpressionOperator">
-                                              <option *ngFor="let operand of operandSource" [ngValue]="operand">{{operand}}</option>
-                                            </select>
+                                            <label>Response Selection Expression</label>
+                                            <input class="form-control" placeholder="Response Selection Expression" [(ngModel)]="gsResponse.selectionExpression" name="selectionExpression"/>
                                           </div>
-                                          
-                                          <div class="form-group">
-                                            <label>Selection Expressions</label>
-                                            <table class="table table-striped">
-                                              <thead>
-                                                <tr>
-                                                  <th>
-                                                    Expression
-                                                  </th>
-                                                  <th>
-                                                    <button type="button" class="btn btn-primary" (click)="onAddSelectionExpression(gsResponse.selectionExpressions)">
-                                                      <i class="ion-plus-round"></i>
-                                                    </button>
-                                                  </th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                <tr *ngFor="let selectionExpression of gsResponse.selectionExpressions; let indexSelection = index; trackBy: customTrackBy">
-                                                  <td>
-                                                    <input class="form-control" placeholder="Expression" [(ngModel)]="gsResponse.selectionExpressions[indexSelection]" [ngModelOptions]="{standalone: true}">
-                                                  </td>
-                                                  <td>
-                                                    <button type="button" class="btn btn-danger" title="delete" (click)="delete(gsResponse.selectionExpressions, gsResponse.selectionExpressions[indexSelection])">
-                                                      <i class="ion-ios-trash"></i>
-                                                    </button>
-                                                  </td>
-                                                </tr>
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                          <!-- Response Selection Expressions -->
 
                                           <div class="form-group">
                                               <label>Response options</label>            
@@ -916,44 +848,10 @@
                                         </div>
                                         <!--Response settings end-->
 
-                                        <!-- Response Selection Expressions -->
                                         <div class="form-group">
-                                          <label>Selection Expression Operator</label>
-                                          <select class="selectpicker form-control" title="Select Operator" [(ngModel)]="gsResponse.selectionExpressionOperator" name="selectionExpressionOperator">
-                                            <option *ngFor="let operand of operandSource" [ngValue]="operand">{{operand}}</option>
-                                          </select>
+                                          <label>Response Selection Expression</label>
+                                          <input class="form-control" placeholder="Response Selection Expression" [(ngModel)]="gsResponse.selectionExpression" name="selectionExpression"/>
                                         </div>
-                                        
-                                        <div class="form-group">
-                                          <label>Selection Expressions</label>
-                                          <table class="table table-striped">
-                                            <thead>
-                                              <tr>
-                                                <th>
-                                                  Expression
-                                                </th>
-                                                <th>
-                                                  <button type="button" class="btn btn-primary" (click)="onAddSelectionExpression(gsResponse.selectionExpressions)">
-                                                    <i class="ion-plus-round"></i>
-                                                  </button>
-                                                </th>
-                                              </tr>
-                                            </thead>
-                                            <tbody>
-                                              <tr *ngFor="let selectionExpression of gsResponse.selectionExpressions; let indexSelection = index; trackBy: customTrackBy">
-                                                <td>
-                                                  <input class="form-control" placeholder="Expression" [(ngModel)]="gsResponse.selectionExpressions[indexSelection]" [ngModelOptions]="{standalone: true}">
-                                                </td>
-                                                <td>
-                                                  <button type="button" class="btn btn-danger" title="delete" (click)="delete(gsResponse.selectionExpressions, gsResponse.selectionExpressions[indexSelection])">
-                                                    <i class="ion-ios-trash"></i>
-                                                  </button>
-                                                </td>
-                                              </tr>
-                                            </tbody>
-                                          </table>
-                                        </div>
-                                        <!-- Response Selection Expressions -->
 
                                         <div class="form-group">
                                             <label>Response options</label>            
@@ -1051,44 +949,10 @@
                                           </div>
                                           <!--Response settings end-->
 
-                                          <!-- Response Selection Expressions -->
                                           <div class="form-group">
-                                            <label>Selection Expression Operator</label>
-                                            <select class="selectpicker form-control" title="Select Operator" [(ngModel)]="gsResponse.selectionExpressionOperator" name="selectionExpressionOperator">
-                                              <option *ngFor="let operand of operandSource" [ngValue]="operand">{{operand}}</option>
-                                            </select>
+                                            <label>Response Selection Expression</label>
+                                            <input class="form-control" placeholder="Response Selection Expression" [(ngModel)]="gsResponse.selectionExpression" name="selectionExpression"/>
                                           </div>
-                                          
-                                          <div class="form-group">
-                                            <label>Selection Expressions</label>
-                                            <table class="table table-striped">
-                                              <thead>
-                                                <tr>
-                                                  <th>
-                                                    Expression
-                                                  </th>
-                                                  <th>
-                                                    <button type="button" class="btn btn-primary" (click)="onAddSelectionExpression(gsResponse.selectionExpressions)">
-                                                      <i class="ion-plus-round"></i>
-                                                    </button>
-                                                  </th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                <tr *ngFor="let selectionExpression of gsResponse.selectionExpressions; let indexSelection = index; trackBy: customTrackBy">
-                                                  <td>
-                                                    <input class="form-control" placeholder="Expression" [(ngModel)]="gsResponse.selectionExpressions[indexSelection]" [ngModelOptions]="{standalone: true}">
-                                                  </td>
-                                                  <td>
-                                                    <button type="button" class="btn btn-danger" title="delete" (click)="delete(gsResponse.selectionExpressions, gsResponse.selectionExpressions[indexSelection])">
-                                                      <i class="ion-ios-trash"></i>
-                                                    </button>
-                                                  </td>
-                                                </tr>
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                          <!-- Response Selection Expressions -->
 
                                           <div class="form-group">
                                               <label>Response options</label>            
@@ -1311,44 +1175,10 @@
                                         </div>
                                         <!--Response settings end-->
 
-                                        <!-- Response Selection Expressions -->
                                         <div class="form-group">
-                                          <label>Selection Expression Operator</label>
-                                          <select class="selectpicker form-control" title="Select Operator" [(ngModel)]="gsResponse.selectionExpressionOperator" name="selectionExpressionOperator">
-                                            <option *ngFor="let operand of operandSource" [ngValue]="operand">{{operand}}</option>
-                                          </select>
+                                          <label>Response Selection Expression</label>
+                                          <input class="form-control" placeholder="Response Selection Expression" [(ngModel)]="gsResponse.selectionExpression" name="selectionExpression"/>
                                         </div>
-                                        
-                                        <div class="form-group">
-                                          <label>Selection Expressions</label>
-                                          <table class="table table-striped">
-                                            <thead>
-                                              <tr>
-                                                <th>
-                                                  Expression
-                                                </th>
-                                                <th>
-                                                  <button type="button" class="btn btn-primary" (click)="onAddSelectionExpression(gsResponse.selectionExpressions)">
-                                                    <i class="ion-plus-round"></i>
-                                                  </button>
-                                                </th>
-                                              </tr>
-                                            </thead>
-                                            <tbody>
-                                              <tr *ngFor="let selectionExpression of gsResponse.selectionExpressions; let indexSelection = index; trackBy: customTrackBy">
-                                                <td>
-                                                  <input class="form-control" placeholder="Expression" [(ngModel)]="gsResponse.selectionExpressions[indexSelection]" [ngModelOptions]="{standalone: true}">
-                                                </td>
-                                                <td>
-                                                  <button type="button" class="btn btn-danger" title="delete" (click)="delete(gsResponse.selectionExpressions, gsResponse.selectionExpressions[indexSelection])">
-                                                    <i class="ion-ios-trash"></i>
-                                                  </button>
-                                                </td>
-                                              </tr>
-                                            </tbody>
-                                          </table>
-                                        </div>
-                                        <!-- Response Selection Expressions -->
 
                                         <div class="form-group">
                                             <label>Response options</label>            
@@ -1446,44 +1276,10 @@
                                           </div>
                                           <!--Response settings end-->
 
-                                          <!-- Response Selection Expressions -->
                                           <div class="form-group">
-                                            <label>Selection Expression Operator</label>
-                                            <select class="selectpicker form-control" title="Select Operator" [(ngModel)]="gsResponse.selectionExpressionOperator" name="selectionExpressionOperator">
-                                              <option *ngFor="let operand of operandSource" [ngValue]="operand">{{operand}}</option>
-                                            </select>
+                                            <label>Response Selection Expression</label>
+                                            <input class="form-control" placeholder="Response Selection Expression" [(ngModel)]="gsResponse.selectionExpression" name="selectionExpression"/>
                                           </div>
-                                          
-                                          <div class="form-group">
-                                            <label>Selection Expressions</label>
-                                            <table class="table table-striped">
-                                              <thead>
-                                                <tr>
-                                                  <th>
-                                                    Expression
-                                                  </th>
-                                                  <th>
-                                                    <button type="button" class="btn btn-primary" (click)="onAddSelectionExpression(gsResponse.selectionExpressions)">
-                                                      <i class="ion-plus-round"></i>
-                                                    </button>
-                                                  </th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                <tr *ngFor="let selectionExpression of gsResponse.selectionExpressions; let indexSelection = index; trackBy: customTrackBy">
-                                                  <td>
-                                                    <input class="form-control" placeholder="Expression" [(ngModel)]="gsResponse.selectionExpressions[indexSelection]" [ngModelOptions]="{standalone: true}">
-                                                  </td>
-                                                  <td>
-                                                    <button type="button" class="btn btn-danger" title="delete" (click)="delete(gsResponse.selectionExpressions, gsResponse.selectionExpressions[indexSelection])">
-                                                      <i class="ion-ios-trash"></i>
-                                                    </button>
-                                                  </td>
-                                                </tr>
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                          <!-- Response Selection Expressions -->
 
                                           <div class="form-group">
                                               <label>Response options</label>            
@@ -1611,44 +1407,10 @@
                                         </div>
                                         <!--Response settings end-->
 
-                                        <!-- Response Selection Expressions -->
                                         <div class="form-group">
-                                          <label>Selection Expression Operator</label>
-                                          <select class="selectpicker form-control" title="Select Operator" [(ngModel)]="gsResponse.selectionExpressionOperator" name="selectionExpressionOperator">
-                                            <option *ngFor="let operand of operandSource" [ngValue]="operand">{{operand}}</option>
-                                          </select>
+                                          <label>Response Selection Expression</label>
+                                          <input class="form-control" placeholder="Response Selection Expression" [(ngModel)]="gsResponse.selectionExpression" name="selectionExpression"/>
                                         </div>
-                                        
-                                        <div class="form-group">
-                                          <label>Selection Expressions</label>
-                                          <table class="table table-striped">
-                                            <thead>
-                                              <tr>
-                                                <th>
-                                                  Expression
-                                                </th>
-                                                <th>
-                                                  <button type="button" class="btn btn-primary" (click)="onAddSelectionExpression(gsResponse.selectionExpressions)">
-                                                    <i class="ion-plus-round"></i>
-                                                  </button>
-                                                </th>
-                                              </tr>
-                                            </thead>
-                                            <tbody>
-                                              <tr *ngFor="let selectionExpression of gsResponse.selectionExpressions; let indexSelection = index; trackBy: customTrackBy">
-                                                <td>
-                                                  <input class="form-control" placeholder="Expression" [(ngModel)]="gsResponse.selectionExpressions[indexSelection]" [ngModelOptions]="{standalone: true}">
-                                                </td>
-                                                <td>
-                                                  <button type="button" class="btn btn-danger" title="delete" (click)="delete(gsResponse.selectionExpressions, gsResponse.selectionExpressions[indexSelection])">
-                                                    <i class="ion-ios-trash"></i>
-                                                  </button>
-                                                </td>
-                                              </tr>
-                                            </tbody>
-                                          </table>
-                                        </div>
-                                        <!-- Response Selection Expressions -->
 
                                         <div class="form-group">
                                             <label>Response options</label>            
@@ -1746,44 +1508,10 @@
                                           </div>
                                           <!--Response settings end-->
 
-                                          <!-- Response Selection Expressions -->
                                           <div class="form-group">
-                                            <label>Selection Expression Operator</label>
-                                            <select class="selectpicker form-control" title="Select Operator" [(ngModel)]="gsResponse.selectionExpressionOperator" name="selectionExpressionOperator">
-                                              <option *ngFor="let operand of operandSource" [ngValue]="operand">{{operand}}</option>
-                                            </select>
+                                            <label>Response Selection Expression</label>
+                                            <input class="form-control" placeholder="Response Selection Expression" [(ngModel)]="gsResponse.selectionExpression" name="selectionExpression"/>
                                           </div>
-                                          
-                                          <div class="form-group">
-                                            <label>Selection Expressions</label>
-                                            <table class="table table-striped">
-                                              <thead>
-                                                <tr>
-                                                  <th>
-                                                    Expression
-                                                  </th>
-                                                  <th>
-                                                    <button type="button" class="btn btn-primary" (click)="onAddSelectionExpression(gsResponse.selectionExpressions)">
-                                                      <i class="ion-plus-round"></i>
-                                                    </button>
-                                                  </th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                <tr *ngFor="let selectionExpression of gsResponse.selectionExpressions; let indexSelection = index; trackBy: customTrackBy">
-                                                  <td>
-                                                    <input class="form-control" placeholder="Expression" [(ngModel)]="gsResponse.selectionExpressions[indexSelection]" [ngModelOptions]="{standalone: true}">
-                                                  </td>
-                                                  <td>
-                                                    <button type="button" class="btn btn-danger" title="delete" (click)="delete(gsResponse.selectionExpressions, gsResponse.selectionExpressions[indexSelection])">
-                                                      <i class="ion-ios-trash"></i>
-                                                    </button>
-                                                  </td>
-                                                </tr>
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                          <!-- Response Selection Expressions -->
 
                                           <div class="form-group">
                                               <label>Response options</label>            
@@ -1934,44 +1662,10 @@
           </div>
           <!--Response settings end-->
           
-          <!-- Response Selection Expressions -->
           <div class="form-group">
-            <label>Selection Expression Operator</label>
-            <select class="selectpicker form-control" title="Select Operator" [(ngModel)]="tempResponse.selectionExpressionOperator" name="selectionExpressionOperator">
-              <option *ngFor="let operand of operandSource" [ngValue]="operand">{{operand}}</option>
-            </select>
+            <label>Response Selection Expression</label>
+            <input class="form-control" placeholder="Response Selection Expression" [(ngModel)]="tempResponse.selectionExpression" name="selectionExpression"/>
           </div>
-          
-          <div class="form-group">
-            <label>Selection Expressions</label>
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>
-                    Expression
-                  </th>
-                  <th>
-                    <button type="button" class="btn btn-primary" (click)="onAddSelectionExpression(tempResponse.selectionExpressions)">
-                      <i class="ion-plus-round"></i>
-                    </button>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let selectionExpression of tempResponse.selectionExpressions; let indexSelection = index; trackBy: customTrackBy">
-                  <td>
-                    <input class="form-control" placeholder="Expression" [(ngModel)]="tempResponse.selectionExpressions[indexSelection]" [ngModelOptions]="{standalone: true}">
-                  </td>
-                  <td>
-                    <button type="button" class="btn btn-danger" title="delete" (click)="delete(tempResponse.selectionExpressions, tempResponse.selectionExpressions[indexSelection])">
-                      <i class="ion-ios-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <!-- Response Selection Expressions -->
           
           <div class="form-group">
             <label>Response options</label>            
