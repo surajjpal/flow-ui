@@ -405,12 +405,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
                 response.settings = new Settings();
               }
 
-              if (!response.selectionExpressions || response.selectionExpressions === null) {
-                response.selectionExpressions = [];
-              }
-
-              if (!response.selectionExpressionOperator || response.selectionExpressionOperator === null) {
-                response.selectionExpressionOperator = 'AND';
+              if (!response.selectionExpression || response.selectionExpression === null) {
+                response.selectionExpression = '';
               }
 
               if (response.expression === goalStep.goalExpression) {
