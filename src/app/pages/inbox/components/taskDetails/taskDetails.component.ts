@@ -57,6 +57,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   iterationLevel:number;
   tempUser:User;
   FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
+  showChatTab: boolean = false;
   
   private subscription: Subscription;
   private subscriptionEpisode: Subscription;
@@ -425,5 +426,21 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       new closeModal('flagTaskModal');
       this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
     });
+  }
+
+  getTabClass(isActive: boolean) {
+    if (isActive) {
+      return 'nav-link active';
+    }
+
+    return 'nav-link';
+  }
+
+  getTabPanelClass(isActive: boolean) {
+    if (isActive) {
+      return 'tab-pane fade show active';
+    }
+
+    return 'tab-pane fade';
   }
 }

@@ -190,14 +190,14 @@
       </div>
       <br>
       <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link active" id="conversation-tab" data-toggle="tab" href="#tabConversation" role="tab" aria-controls="flow"
+        <li *ngIf="showChatTab" class="nav-item">
+          <a [class]="getTabClass(showChatTab)" id="conversation-tab" data-toggle="tab" href="#tabConversation" role="tab" aria-controls="flow"
             aria-expanded="true">
             <b>Conversation</b>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="details-tab" data-toggle="tab" href="#tabDetails" role="tab" aria-controls="details">
+          <a [class]="getTabClass(!showChatTab)" id="details-tab" data-toggle="tab" href="#tabDetails" role="tab" aria-controls="details">
             <b>Task details</b>
           </a>
         </li>
@@ -208,7 +208,7 @@
         </li>
       </ul>
       <div class="tab-content" id="myTabContent">
-        <div role="tabpanel" class="tab-pane fade show active" id="tabConversation" aria-labelledby="conversation-tab">
+        <div *ngIf="showChatTab" role="tabpanel" [class]="getTabPanelClass(showChatTab)" id="tabConversation" aria-labelledby="conversation-tab">
           <div class="row">
             <ba-card class="col-md-6 col-sm-12" cardTitle="Episode Details">
               <form style="max-height: 400px; overflow:scroll">
@@ -290,7 +290,7 @@
             </ba-card>
           </div>
         </div>
-        <div role="tabpanel" class="tab-pane fade" id="tabDetails" aria-labelledby="details-tab">
+        <div role="tabpanel" [class]="getTabPanelClass(!showChatTab)" id="tabDetails" aria-labelledby="details-tab">
           <div class="row">
             <form>
               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
