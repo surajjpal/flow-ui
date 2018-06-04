@@ -223,13 +223,19 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
 
   selectedForFlag(state):void{
+    
     this.selectedStateForFlag = state;
+    this.selectedStateForFlag.flagReason = this.FlagReasons[0];
     this.subscriptionXML = this.stateService.getXMLforActiveState(state.stateMachineInstanceModelId)
     .subscribe(graphObject => {
       this.dataCachingService.setSharedObject(graphObject, state);
       this.graphObject = graphObject
       
     });
+  }
+
+  close(){
+    this.selectedStateForFlag.flagReason = "";
   }
 
   onReasonSelect(reason):void{
