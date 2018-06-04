@@ -48,7 +48,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   selectedEpisode: Episode;
   chatMessageList: ChatMessage[];
   Users: UserHierarchy[] = [];
-  allocatedUserId:string;
+  allocatedUserId:string = "";
   userHierarchy:UserHierarchy = new UserHierarchy();
   commonInsightWrapper: CommonInsightWrapper;
   stateInfoModels:StateInfoModel[];
@@ -82,6 +82,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     //document.getElementById('#alocateButton').style.visibility = 'hidden';
+    
     this.selectedState = this.dataCachingService.getSelectedState();
     if (!this.selectedState) {
       this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
@@ -150,6 +151,15 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     
     this.selectedModel = model;
   }
+  setFlagReason(){
+    this.selectedState.flagReason = this.FlagReasons[0];
+  }
+
+  flagClose(){
+    this.selectedState.flagReason = "";
+  }
+
+
 
   getUserList(){
     
@@ -158,7 +168,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
         if (userList && userList.length > 0) {
           //document.getElementById('#alocateButton').style.visibility = 'visible';
           this.Users = userList;
-
+          
              
         }
       });
@@ -181,12 +191,22 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
 
     allocate(){
+      
       this.isButtonEnabled = false;
-      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.allocatedUserId,this.selectedState._id,"Allocate")
+      console.log(this.allocatedUserId)
+      if(this.allocatedUserId.length > 0){
+        this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.allocatedUserId,this.selectedState._id,"Allocate")
       .subscribe(any => {
 
         this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
     });
+      }
+      else{
+        new closeModal('userModal');
+        new showModal('userNotSelected');
+        this.isButtonEnabled = true;
+      }
+      
     }
 
     escalate(){
@@ -413,7 +433,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     .subscribe(state => {
      this.selectedState = state;
      new closeModal('flagTaskModal');
-     new showModal('successModal');
+     new showModal('flagSuccessModal');
      
     });
   }
