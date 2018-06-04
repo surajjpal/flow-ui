@@ -409,6 +409,37 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
                 response.selectionExpression = '';
               }
 
+              if (!response.options || response.options === null) {
+                response.options = [];
+              }
+
+              for (const option of response.options) {
+                if (!option.type || option.type === null) {
+                  option.type = '';
+                }
+                if (!option.url || option.url === null) {
+                  option.url = '';
+                }
+                if (!option.data || option.data === null) {
+                  option.data = [];
+                }
+
+                for (const d of option.data) {
+                  if (!d.label || d.label === null) {
+                    d.label = '';
+                  }
+                  if (!d.value || d.value === null) {
+                    d.value = '';
+                  }
+                  if (!d.url || d.url === null) {
+                    d.url = '';
+                  }
+                  if (!d.agentId || d.agentId === null) {
+                    d.agentId = '';
+                  }
+                }
+              }
+
               if (response.expression === goalStep.goalExpression) {
                 responsesToBeRemoved.push(response);
                 goalStep.responses.push(response);
