@@ -63,6 +63,9 @@
               <option *ngFor="let allocationType of allocationTypes" [value]="allocationType">{{allocationType}}</option>
             </select>
           </div>
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'">
+            <api-checkbox class="col-md-9 col-sm-9 col-xs-9" [checked]="tempState.allowFlagging" [label]="'Allow FLagging'" (event)="tempState.allowFlagging = $event.target.checked"></api-checkbox>
+          </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType !== 'Personal'">
             <label for="allocationGroup">Allocate to group</label>
             <input type="text" class="form-control" required id="allocationGroup" placeholder="Allocate to group" [(ngModel)]="tempState.allocationModel.allocationGroup"
