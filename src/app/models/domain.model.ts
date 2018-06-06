@@ -120,15 +120,39 @@ export class ResponseOption {
   }
 }
 
+export class CardData {
+  cardName: string;
+  templateName: string;
+  title: string;
+  subTitle: string;
+  avatarImageUrl: string;
+  imageUrl: string;
+  content: string;
+  actionable: ResponseData[];
+
+  constructor() {
+    this.cardName = '';
+    this.templateName = '';
+    this.title = '';
+    this.subTitle = '';
+    this.avatarImageUrl = '';
+    this.imageUrl = '';
+    this.content = '';
+    this.actionable = [];
+  }
+}
+
 export class ResponseData {
   url: string;
   type: string;
   data: ResponseOption[];
+  cardData: CardData[];
 
-  constructor(url?: string, type?: string, data?: ResponseOption[]) {
+  constructor(url?: string, type?: string, data?: ResponseOption[], cardData?: CardData[]) {
     this.url = url ? url : '';
     this.type = type ? type : '';
     this.data = data ? data : [];
+    this.cardData = cardData ? cardData : [];
   }
 }
 
@@ -188,6 +212,7 @@ export class Domain {
   domainEntities: Entity[];
   domainGoals: Goal[];
   domainResponse: Response[];
+  cards: CardData[];
 
   constructor() {
     this._id = null;
@@ -201,5 +226,6 @@ export class Domain {
     this.domainEntities = [];
     this.domainGoals = [];
     this.domainResponse = [];
+    this.cards = [];
   }
 }
