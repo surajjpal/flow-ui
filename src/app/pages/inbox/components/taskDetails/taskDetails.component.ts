@@ -391,6 +391,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
         const state: State = response;
 
         if (state) {
+          this.isButtonEnabled = true;
           if (state.errorMessageMap) {
             for (const key in state.errorMessageMap) {
               if (key) {
