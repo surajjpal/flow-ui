@@ -28,8 +28,8 @@ export const routes: Routes = [
       { path: 'agnt', loadChildren: './agent/agent.module#AgentModule' },
       { path: 'dmn', loadChildren: './domain/domain.module#DomainModule' },
       { path: 'stp', loadChildren: './master/master.module#MasterModule' },
-      { path: 'stn', loadChildren: './settings/settings.module#SettingsModule' },
-      { path: 'apidgn', loadChildren: './apidesign/apidesign.module#ApiDesignModule'}
+      { path: 'stn', loadChildren: './settings/settings.module#SettingsModule' }
+      //{ path: 'apidgn', loadChildren: './apidesign/apidesign.module#ApiDesignModule'}
     ]
   }
 ];
