@@ -146,9 +146,9 @@ export class ResponseData {
   url: string;
   type: string;
   data: ResponseOption[];
-  cardData: CardData[];
+  cardData: string[];
 
-  constructor(url?: string, type?: string, data?: ResponseOption[], cardData?: CardData[]) {
+  constructor(url?: string, type?: string, data?: ResponseOption[], cardData?: string[]) {
     this.url = url ? url : '';
     this.type = type ? type : '';
     this.data = data ? data : [];

@@ -29,6 +29,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   validationKeysSource: string[];
   stagesSource: Stage[];
   templateNames: string[];
+  
 
   intentFilterQuery: string;
   entityFilterQuery: string;
@@ -312,6 +313,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.goalFilterQuery = this.goalFilterQuery.slice(1);
       }, 10);
     }
+    
   }
 
   checkStageCodeInGoalResponses(goalSteps: GoalStep[]) {
@@ -567,6 +569,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         }, 10);
       }
     }
+    
   }
 
   removeResponse(response?: Response) {
@@ -625,11 +628,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       if (!this.tempCard.cardName || this.tempCard.cardName.trim().length === 0) {
         new showAlertModal('Error', 'card name can\'t be left empty.');
       } else {
-        console.log("selected domain");
-        console.log(this.selectedDomain);
+        if(!this.selectedDomain.cards) {
+          this.selectedDomain.cards = [];
+        }
         this.selectedDomain.cards.push(this.tempCard);
-        console.log("temp card");
-        console.log(this.tempCard);
         new closeModal('cardModal');
 
         // This is to forcefully call the digest cycle of angular so that,
@@ -805,11 +807,24 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     option.data.push(new ResponseOption());
   }
 
+  onAddCardData(option) {
+    option.cardData.push('');
+  }
+
   onAddCardActionOption(cardData) {
     if (!cardData.actionable) {
       cardData.actionable = [];
     }
     cardData.actionable.push(new ResponseData())
+  }
+
+  
+
+  deleteCardData(cardData,row) {
+    const index: number = cardData.indexOf(row);
+    if (index !== -1) {
+      cardData.slice(index, 1);
+    }
   }
 
   delete(data, row) {
