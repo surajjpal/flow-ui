@@ -13,6 +13,30 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane fade show active" id="businessObjectContent" aria-labelledby="businessObjectTab">
                     <div class="panel panel-default">
+                        <form>
+                            <div class="form-group">
+                                <label>Business Object Code</label>
+                                <input type="text" class="form-control" required placeholder="Business Object Code" [(ngModel)]="selectedBusinessObject.code" name="code"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Business Object Display Name</label>
+                                <input type="text" class="form-control" required placeholder="Business Object Display Name" [(ngModel)]="selectedBusinessObject.displayName" name="displayName"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <select class="selectpicker form-control" title="Select supported algorith category" [(ngModel)]="selectedBusinessObject.algorithmCategory"
+                                name="algorithmCategory">
+                                    <option *ngFor="let algorithmCategory of supportedAlgorithmCategory" [ngValue]="algorithmCategory">{{ algorithmCategory }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Algorithms </label>
+                                <button type="button" class="btn btn-primary pull-right" (click)="onAlgorithmAdd()">
+                                    Add Algorithms <i class="ion-plus-round"></i>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="businessObjectTrainingContent" aria-labelledby="businessObjectTrainingTab">
@@ -20,7 +44,40 @@
                     </div>
                 </div>
             </div>
+
+            <form>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" (click)="createBusinesObject()" data-toggle="modal" data-target="#businessObjectMsgModal">
+                    {{apiDesignCreateMode ? 'Create Business Object' : 'Update Business Object'}}
+                </button>
+                </div>
+            </form>
         </ba-card>
     </div>
 </div>
+
+<!-- Warning Modal -->
+<div class="modal fade" id="businessObjectMsgModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h4 class="modal-title" id="warningLabel">
+            Business Object
+            </h4>
+        </div>
+    
+        <!-- Modal Body -->
+        <div class="modal-body" id="modal_body">
+            {{businessObjectUpdateCreateMsg}}
+        </div>
+    
+        <!-- Modal Footer -->
+        <div class="modal-footer" id="modal_footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+        </div>
+        </div>
+    </div>
+</div>
+      
         
