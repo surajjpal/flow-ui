@@ -94,6 +94,10 @@ export const environment = {
     uploadintentexcelurl: 'uploadintents',
     uploadentityexcelurl: 'uploadentity',
     modelkeyslookupurl: 'load/modelkeys',
-    validationtypekeyslookupurl: 'load/validations'
+    validationtypekeyslookupurl: 'load/validations',
+    
+    // api design
+    apiDesignUrl: 'http://localhost:5000',
+    algorithmUrl: '/automatons/algorithm'
   };
   

@@ -8,9 +8,9 @@ import { Subscription } from 'rxjs/Subscription';
 
 
 import { AlertService, DataSharingService } from '../../../../services/shared.service';
-
+import { ApiDesignService } from '../../../../services/apidesign.service'
 import { environment } from '../../../../../environments/environment';
-import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
+
 
 @Component({
   selector: 'api-apidesign-setup',
@@ -18,19 +18,26 @@ import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 })
 export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     apiDesignCreateMode: boolean;
-    
-    constructor(
+    private subscription: Subscription;
 
+    constructor(
+          private apiDesignService: ApiDesignService
         ) {
         this.apiDesignCreateMode = true;
     }
 
   ngOnInit() {
-    
+    console.log("apidesign setup on init");
+    this.subscription = this.apiDesignService.getAlgorithms()
+    .subscribe(
+      response => {
+        console.log(response);
+      }
+    );
   }
 
   ngOnDestroy(): void {
-    
+    console.log("apidesign setup on destroy");
   }
 
   
