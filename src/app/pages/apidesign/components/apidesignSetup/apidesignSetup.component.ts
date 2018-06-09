@@ -11,7 +11,7 @@ import { AlertService, DataSharingService } from '../../../../services/shared.se
 import { ApiDesignService } from '../../../../services/apidesign.service'
 import { environment } from '../../../../../environments/environment';
 import { error } from 'selenium-webdriver';
-import { Algorithm, BusinessObject, BusinessObjectAlgorithm } from '../../../../models/businessobject.model';
+import { Algorithm, BusinessObject, BusinessObjectAlgorithm, ConfigParams } from '../../../../models/businessobject.model';
 
 
 @Component({
@@ -20,12 +20,15 @@ import { Algorithm, BusinessObject, BusinessObjectAlgorithm } from '../../../../
 })
 export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     apiDesignCreateMode: boolean;
+    algorithmAddUpdateMode: boolean;
     private subscription: Subscription;
     private definedAlgorithms: Algorithm[];
     private selectedBusinessObject: BusinessObject;
-    tempAlgorithm: BusinessObjectAlgorithm;
+    tempBusinessAlgorithm: BusinessObjectAlgorithm;
+    selectedAlgorithmName: string;
 
     businessObjectUpdateCreateMsg = '';
+    algorithmsModalHeader = '';
     supportedAlgorithmCategory = ["CLASSIFIER", "REGRESSION"];
 
     constructor(
@@ -36,10 +39,13 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
           private sharingService: DataSharingService
         ) {
         this.apiDesignCreateMode = true;
+        this.algorithmAddUpdateMode = true;
         this.definedAlgorithms = [];
         this.selectedBusinessObject = new BusinessObject();
         this.businessObjectUpdateCreateMsg = '';
-        this.tempAlgorithm = new BusinessObjectAlgorithm();
+        this.selectedAlgorithmName = '';
+        this.tempBusinessAlgorithm = new BusinessObjectAlgorithm();
+
     }
 
   ngOnInit() {
@@ -73,13 +79,47 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     this.businessObjectUpdateCreateMsg = "business object created successfully";
   }
 
-  onAlgorithmAdd() {
-    if (this.selectedBusinessObject && this.selectedBusinessObject.algorithms) {
-      this.selectedBusinessObject.algorithms.push(new BusinessObjectAlgorithm());
+  onAlgorithmAdd(businessAlgorithm?: BusinessObjectAlgorithm) {
+    if(businessAlgorithm) {
+      this.algorithmsModalHeader = 'Update Algorithm';
+      this.tempBusinessAlgorithm = businessAlgorithm;
+      for(var i; i<=this.definedAlgorithms.length; i++) {
+        if (this.definedAlgorithms[i]._id == this.tempBusinessAlgorithm.algorithmId) {
+          this.selectedAlgorithmName = this.definedAlgorithms[i].name;
+        }
+      }
+      if(businessAlgorithm.configParametrs) {
+        businessAlgorithm.configParametrs.forEach((value, key) => {
+          businessAlgorithm.configList.push(new ConfigParams(key, value));
+        })
+      }
     }
     else{
-      this.selectedBusinessObject.algorithms = [];
+      this.algorithmsModalHeader = 'Add Algorithm';
+      this.selectedAlgorithmName = '';
+      this.tempBusinessAlgorithm = new BusinessObjectAlgorithm();
     }
+  }
+
+  addConfigParameters(tempBusinessAlgorithm) {
+    if(tempBusinessAlgorithm.configList) {
+      tempBusinessAlgorithm.configList.push(new ConfigParams());
+    }
+    else {
+      tempBusinessAlgorithm.configList = [];
+    }
+  }
+
+  addAlgorithm() {
+    this.tempBusinessAlgorithm.configParametrs = new Map<string, any>();
+    if(this.tempBusinessAlgorithm.configList.length > 0) {
+      for (let configParam of this.tempBusinessAlgorithm.configList) {
+        this.tempBusinessAlgorithm.configParametrs.set(configParam.param, configParam.value);
+      }
+    }
+    console.log("addAlgorithm");
+    console.log(this.tempBusinessAlgorithm.configParametrs);
+    new closeModal('algorithmModal');
   }
   
 }

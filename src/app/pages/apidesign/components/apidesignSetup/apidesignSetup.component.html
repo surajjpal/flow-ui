@@ -32,7 +32,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Algorithms </label>
-                                <button type="button" class="btn btn-primary pull-right" (click)="onAlgorithmAdd()">
+                                <button type="button" class="btn btn-primary pull-right" (click)="onAlgorithmAdd()" data-toggle="modal" data-target="#algorithmModal">
                                     Add Algorithms <i class="ion-plus-round"></i>
                                 </button>
                             </div>
@@ -55,6 +55,71 @@
         </ba-card>
     </div>
 </div>
+
+<!-- algorithm modal -->
+<div class="modal fade" id="algorithmModal" tabindex="-1" role="dialog" attr.aria-labelledby="algorithmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="agorithmModalLabel">
+            {{ algorithmsModalHeader }}
+          </h4>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+  
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <form>
+                <div class="form-group">
+                    <select class="selectpicker form-control" title="Select supported algorith category" [(ngModel)]="selectedAlgorithmName"
+                    name="selectedAlgorithmName">
+                        <option *ngFor="let algo of definedAlgorithms" [ngValue]="algo._id">{{ algo.name }}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" (click)="addConfigParameters(tempBusinessAlgorithm)">
+                        Add Config <i class="ion-plus-round"></i>
+                    </button>
+                </div>
+                <div class="form-group">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Config</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of tempBusinessAlgorithm.configList">
+                                <td>
+                                    <input type="text" class="form-control" placeholder="Config Param" [value]="row.param"
+                                        (input)="row.param = $event.target.value" />
+                                </td>
+                                <td>
+                                <input type="text" class="form-control" placeholder="Value" [value]="row.value"
+                                    (input)="row.value = $event.target.value" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+  
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button *ngIf="!algorithmAddUpdateMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeAlgorithm()">Remove</button>
+          <button type="submit" class="btn btn-primary" (click)="addAlgorithm()">{{algorithmAddUpdateMode ? 'Add' : 'Update'}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 <!-- Warning Modal -->
 <div class="modal fade" id="businessObjectMsgModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
