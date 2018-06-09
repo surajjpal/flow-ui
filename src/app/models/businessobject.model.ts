@@ -33,13 +33,13 @@ export class Training {
 
 export class BusinessObjectAlgorithm {
     algorithmId: string;
-    configParametrs: Map<string, any>;
+    configParametrs: {};
     algorithmScore: {};
     configList: ConfigParams[]
 
     constructor(algorithmId?: string) {
         this.algorithmId = '';
-        this.configParametrs = new Map();
+        this.configParametrs = {};
         this.algorithmScore = {};
         this.configList = [];
     }

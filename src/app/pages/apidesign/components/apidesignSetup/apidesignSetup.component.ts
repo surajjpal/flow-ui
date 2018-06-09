@@ -11,7 +11,7 @@ import { AlertService, DataSharingService } from '../../../../services/shared.se
 import { ApiDesignService } from '../../../../services/apidesign.service'
 import { environment } from '../../../../../environments/environment';
 import { error } from 'selenium-webdriver';
-import { Algorithm, BusinessObject, BusinessObjectAlgorithm, ConfigParams } from '../../../../models/businessobject.model';
+import { Algorithm, BusinessObject, BusinessObjectAlgorithm, ConfigParams, Training } from '../../../../models/businessobject.model';
 
 
 @Component({
@@ -27,6 +27,7 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     selectedBusinessObjectAlgorithm: BusinessObjectAlgorithm;
     tempBusinessAlgorithm: BusinessObjectAlgorithm;
     selectedAlgorithmName: string;
+    trainingFilterQuery: string;
 
     businessObjectUpdateCreateMsg = '';
     algorithmsModalHeader = '';
@@ -45,6 +46,7 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
         this.selectedBusinessObject = new BusinessObject();
         this.businessObjectUpdateCreateMsg = '';
         this.selectedAlgorithmName = '';
+        this.trainingFilterQuery = '';
         this.tempBusinessAlgorithm = new BusinessObjectAlgorithm();
         this.selectedBusinessObjectAlgorithm = new BusinessObjectAlgorithm();
     }
@@ -87,11 +89,16 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
       this.tempBusinessAlgorithm = businessAlgorithm;
       this.algorithmAddUpdateMode = false;
       if(businessAlgorithm.configParametrs) {
-        businessAlgorithm.configParametrs.forEach((value, key) => {
+        for(let key in businessAlgorithm.configParametrs) {
           if(this.tempBusinessAlgorithm.configList.length == 0) {
-            this.tempBusinessAlgorithm.configList.push(new ConfigParams(key, value));
+            this.tempBusinessAlgorithm.configList.push(new ConfigParams(key, businessAlgorithm.configParametrs[key]));
           }
-        })
+        }
+        // businessAlgorithm.configParametrs.forEach((value, key) => {
+        //   if(this.tempBusinessAlgorithm.configList.length == 0) {
+        //     this.tempBusinessAlgorithm.configList.push(new ConfigParams(key, value));
+        //   }
+        // })
       }
     }
     else{
@@ -115,7 +122,7 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     this.tempBusinessAlgorithm.configParametrs = new Map<string, any>();
     if(this.tempBusinessAlgorithm.configList.length > 0) {
       for (let configParam of this.tempBusinessAlgorithm.configList) {
-        this.tempBusinessAlgorithm.configParametrs.set(configParam.param, configParam.value);
+        this.tempBusinessAlgorithm.configParametrs[configParam.param] = configParam.value;
       }
     }
     this.tempBusinessAlgorithm.configList = [];
@@ -166,6 +173,16 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
           }
         );
     }
+  }
+
+  activateTriner(trainer: Training) {
+    console.log("activate trainer");
+    console.log(trainer);
+  }
+
+  deactivateTriner(trainer: Training) {
+    console.log("desctiavte trainer");
+    console.log(trainer);
   }
   
 }
