@@ -657,18 +657,16 @@
                                             <tbody>
                                               <tr *ngFor="let option of gsResponse.options">
                                                 <td>
-                                                  <select name="type" id="type" [(ngModel)]="option.type">
+                                                  <select class="selectpicker form-control" name="type" id="type" [(ngModel)]="option.type">
                                                     <option value="">Choose One</option>
                                                     <option value="BUTTON">Button</option>
                                                     <option value="CHECKBOX">Checkbox</option>
                                                     <option value="RADIO">Radio</option>
                                                     <option value="FILE_UPLOAD">File Upload</option>
-                                                    <option value="AGENT_SWITCH">Agent Switch</option>
                                                   </select>
                                                 </td>
                                                 <td>
-                                                  <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url"
-                                                    name="url">
+                                                  <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
                                                 <td>
                                                   <table class="table table-striped">
@@ -677,7 +675,8 @@
                                                         <th>Value</th>
                                                         <th>Label</th>
                                                         <th>URL</th>
-                                                        <th *ngIf="option.type == 'AGENT_SWITCH'">Agent ID</th>
+                                                        <th>Language</th>
+                                                        <th>Agent ID</th>
                                                         <th>
                                                           <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                             <i class="ion-plus-round"></i>
@@ -688,20 +687,21 @@
                                                     <tbody>
                                                       <tr *ngFor="let row of option.data">
                                                         <td>
-                                                          <input type="text" class="form-control" placeholder="Value" [value]="row.value"
-                                                            (input)="row.value = $event.target.value" />
+                                                          <input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"
+                                                          />
                                                         </td>
                                                         <td>
-                                                          <input type="text" class="form-control" placeholder="Label" [value]="row.label"
-                                                            (input)="row.label = $event.target.value" />
+                                                          <input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"
+                                                          />
                                                         </td>
                                                         <td>
-                                                          <input type="text" class="form-control" placeholder="URL" [value]="row.url"
-                                                            (input)="row.url = $event.target.value">
+                                                          <input type="text" class="form-control" placeholder="URL" [value]="row.url" (input)="row.url = $event.target.value">
                                                         </td>
-                                                        <td *ngIf="option.type == 'AGENT_SWITCH'">
-                                                          <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId"
-                                                            (input)="row.agentId = $event.target.value">
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Language" [value]="row.language" (input)="row.language = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                         </td>
                                                         <td>
                                                           <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
@@ -797,18 +797,16 @@
                                               <tbody>
                                                 <tr *ngFor="let option of gsResponse.options">
                                                   <td>
-                                                    <select name="type" id="type" [(ngModel)]="option.type">
+                                                    <select class="selectpicker form-control" name="type" id="type" [(ngModel)]="option.type">
                                                       <option value="">Choose One</option>
                                                       <option value="BUTTON">Button</option>
                                                       <option value="CHECKBOX">Checkbox</option>
                                                       <option value="RADIO">Radio</option>
                                                       <option value="FILE_UPLOAD">File Upload</option>
-                                                      <option value="AGENT_SWITCH">Agent Switch</option>
                                                     </select>
                                                   </td>
                                                   <td>
-                                                    <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url"
-                                                      name="url">
+                                                    <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
                                                   <td>
                                                     <table class="table table-striped">
@@ -817,7 +815,8 @@
                                                           <th>Value</th>
                                                           <th>Label</th>
                                                           <th>URL</th>
-                                                          <th *ngIf="option.type == 'AGENT_SWITCH'">Agent ID</th>
+                                                          <th>Language</th>
+                                                          <th>Agent ID</th>
                                                           <th>
                                                             <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                               <i class="ion-plus-round"></i>
@@ -828,20 +827,21 @@
                                                       <tbody>
                                                         <tr *ngFor="let row of option.data">
                                                           <td>
-                                                            <input type="text" class="form-control" placeholder="Value" [value]="row.value"
-                                                              (input)="row.value = $event.target.value" />
+                                                            <input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"
+                                                            />
                                                           </td>
                                                           <td>
-                                                            <input type="text" class="form-control" placeholder="Label" [value]="row.label"
-                                                              (input)="row.label = $event.target.value" />
+                                                            <input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"
+                                                            />
                                                           </td>
                                                           <td>
-                                                            <input type="text" class="form-control" placeholder="URL" [value]="row.url"
-                                                              (input)="row.url = $event.target.value">
+                                                            <input type="text" class="form-control" placeholder="URL" [value]="row.url" (input)="row.url = $event.target.value">
                                                           </td>
-                                                          <td *ngIf="option.type == 'AGENT_SWITCH'">
-                                                            <input type="text" class="form-control" placeholder="Agent ID"
-                                                              [value]="row.agentId" (input)="row.agentId = $event.target.value">
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="Language" [value]="row.language" (input)="row.language = $event.target.value">
+                                                          </td>
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                           </td>
                                                           <td>
                                                             <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
@@ -970,18 +970,16 @@
                                             <tbody>
                                               <tr *ngFor="let option of gsResponse.options">
                                                 <td>
-                                                  <select name="type" id="type" [(ngModel)]="option.type">
+                                                  <select class="selectpicker form-control" name="type" id="type" [(ngModel)]="option.type">
                                                     <option value="">Choose One</option>
                                                     <option value="BUTTON">Button</option>
                                                     <option value="CHECKBOX">Checkbox</option>
                                                     <option value="RADIO">Radio</option>
                                                     <option value="FILE_UPLOAD">File Upload</option>
-                                                    <option value="AGENT_SWITCH">Agent Switch</option>
                                                   </select>
                                                 </td>
                                                 <td>
-                                                  <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url"
-                                                    name="url">
+                                                  <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
                                                 <td>
                                                   <table class="table table-striped">
@@ -990,7 +988,8 @@
                                                         <th>Value</th>
                                                         <th>Label</th>
                                                         <th>URL</th>
-                                                        <th *ngIf="option.type == 'AGENT_SWITCH'">Agent ID</th>
+                                                        <th>Language</th>
+                                                        <th>Agent ID</th>
                                                         <th>
                                                           <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                             <i class="ion-plus-round"></i>
@@ -1001,20 +1000,21 @@
                                                     <tbody>
                                                       <tr *ngFor="let row of option.data">
                                                         <td>
-                                                          <input type="text" class="form-control" placeholder="Value" [value]="row.value"
-                                                            (input)="row.value = $event.target.value" />
+                                                          <input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"
+                                                          />
                                                         </td>
                                                         <td>
-                                                          <input type="text" class="form-control" placeholder="Label" [value]="row.label"
-                                                            (input)="row.label = $event.target.value" />
+                                                          <input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"
+                                                          />
                                                         </td>
                                                         <td>
-                                                          <input type="text" class="form-control" placeholder="URL" [value]="row.url"
-                                                            (input)="row.url = $event.target.value">
+                                                          <input type="text" class="form-control" placeholder="URL" [value]="row.url" (input)="row.url = $event.target.value">
                                                         </td>
-                                                        <td *ngIf="option.type == 'AGENT_SWITCH'">
-                                                          <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId"
-                                                            (input)="row.agentId = $event.target.value">
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Language" [value]="row.language" (input)="row.language = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                         </td>
                                                         <td>
                                                           <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
@@ -1110,18 +1110,16 @@
                                               <tbody>
                                                 <tr *ngFor="let option of gsResponse.options">
                                                   <td>
-                                                    <select name="type" id="type" [(ngModel)]="option.type">
+                                                    <select class="selectpicker form-control" name="type" id="type" [(ngModel)]="option.type">
                                                       <option value="">Choose One</option>
                                                       <option value="BUTTON">Button</option>
                                                       <option value="CHECKBOX">Checkbox</option>
                                                       <option value="RADIO">Radio</option>
                                                       <option value="FILE_UPLOAD">File Upload</option>
-                                                      <option value="AGENT_SWITCH">Agent Switch</option>
                                                     </select>
                                                   </td>
                                                   <td>
-                                                    <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url"
-                                                      name="url">
+                                                    <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
                                                   <td>
                                                     <table class="table table-striped">
@@ -1130,7 +1128,8 @@
                                                           <th>Value</th>
                                                           <th>Label</th>
                                                           <th>URL</th>
-                                                          <th *ngIf="option.type == 'AGENT_SWITCH'">Agent ID</th>
+                                                          <th>Language</th>
+                                                          <th>Agent ID</th>
                                                           <th>
                                                             <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                               <i class="ion-plus-round"></i>
@@ -1141,20 +1140,21 @@
                                                       <tbody>
                                                         <tr *ngFor="let row of option.data">
                                                           <td>
-                                                            <input type="text" class="form-control" placeholder="Value" [value]="row.value"
-                                                              (input)="row.value = $event.target.value" />
+                                                            <input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"
+                                                            />
                                                           </td>
                                                           <td>
-                                                            <input type="text" class="form-control" placeholder="Label" [value]="row.label"
-                                                              (input)="row.label = $event.target.value" />
+                                                            <input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"
+                                                            />
                                                           </td>
                                                           <td>
-                                                            <input type="text" class="form-control" placeholder="URL" [value]="row.url"
-                                                              (input)="row.url = $event.target.value">
+                                                            <input type="text" class="form-control" placeholder="URL" [value]="row.url" (input)="row.url = $event.target.value">
                                                           </td>
-                                                          <td *ngIf="option.type == 'AGENT_SWITCH'">
-                                                            <input type="text" class="form-control" placeholder="Agent ID"
-                                                              [value]="row.agentId" (input)="row.agentId = $event.target.value">
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="Language" [value]="row.language" (input)="row.language = $event.target.value">
+                                                          </td>
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                           </td>
                                                           <td>
                                                             <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
@@ -1380,18 +1380,16 @@
                                             <tbody>
                                               <tr *ngFor="let option of gsResponse.options">
                                                 <td>
-                                                  <select name="type" id="type" [(ngModel)]="option.type">
+                                                  <select class="selectpicker form-control" name="type" id="type" [(ngModel)]="option.type">
                                                     <option value="">Choose One</option>
                                                     <option value="BUTTON">Button</option>
                                                     <option value="CHECKBOX">Checkbox</option>
                                                     <option value="RADIO">Radio</option>
                                                     <option value="FILE_UPLOAD">File Upload</option>
-                                                    <option value="AGENT_SWITCH">Agent Switch</option>
                                                   </select>
                                                 </td>
                                                 <td>
-                                                  <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url"
-                                                    name="url">
+                                                  <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
                                                 <td>
                                                   <table class="table table-striped">
@@ -1400,7 +1398,8 @@
                                                         <th>Value</th>
                                                         <th>Label</th>
                                                         <th>URL</th>
-                                                        <th *ngIf="option.type == 'AGENT_SWITCH'">Agent ID</th>
+                                                        <th>Language</th>
+                                                        <th>Agent ID</th>
                                                         <th>
                                                           <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                             <i class="ion-plus-round"></i>
@@ -1411,20 +1410,21 @@
                                                     <tbody>
                                                       <tr *ngFor="let row of option.data">
                                                         <td>
-                                                          <input type="text" class="form-control" placeholder="Value" [value]="row.value"
-                                                            (input)="row.value = $event.target.value" />
+                                                          <input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"
+                                                          />
                                                         </td>
                                                         <td>
-                                                          <input type="text" class="form-control" placeholder="Label" [value]="row.label"
-                                                            (input)="row.label = $event.target.value" />
+                                                          <input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"
+                                                          />
                                                         </td>
                                                         <td>
-                                                          <input type="text" class="form-control" placeholder="URL" [value]="row.url"
-                                                            (input)="row.url = $event.target.value">
+                                                          <input type="text" class="form-control" placeholder="URL" [value]="row.url" (input)="row.url = $event.target.value">
                                                         </td>
-                                                        <td *ngIf="option.type == 'AGENT_SWITCH'">
-                                                          <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId"
-                                                            (input)="row.agentId = $event.target.value">
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Language" [value]="row.language" (input)="row.language = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                         </td>
                                                         <td>
                                                           <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
@@ -1520,18 +1520,16 @@
                                               <tbody>
                                                 <tr *ngFor="let option of gsResponse.options">
                                                   <td>
-                                                    <select name="type" id="type" [(ngModel)]="option.type">
+                                                    <select class="selectpicker form-control" name="type" id="type" [(ngModel)]="option.type">
                                                       <option value="">Choose One</option>
                                                       <option value="BUTTON">Button</option>
                                                       <option value="CHECKBOX">Checkbox</option>
                                                       <option value="RADIO">Radio</option>
                                                       <option value="FILE_UPLOAD">File Upload</option>
-                                                      <option value="AGENT_SWITCH">Agent Switch</option>
                                                     </select>
                                                   </td>
                                                   <td>
-                                                    <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url"
-                                                      name="url">
+                                                    <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
                                                   <td>
                                                     <table class="table table-striped">
@@ -1540,7 +1538,8 @@
                                                           <th>Value</th>
                                                           <th>Label</th>
                                                           <th>URL</th>
-                                                          <th *ngIf="option.type == 'AGENT_SWITCH'">Agent ID</th>
+                                                          <th>Language</th>
+                                                          <th>Agent ID</th>
                                                           <th>
                                                             <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                               <i class="ion-plus-round"></i>
@@ -1551,20 +1550,21 @@
                                                       <tbody>
                                                         <tr *ngFor="let row of option.data">
                                                           <td>
-                                                            <input type="text" class="form-control" placeholder="Value" [value]="row.value"
-                                                              (input)="row.value = $event.target.value" />
+                                                            <input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"
+                                                            />
                                                           </td>
                                                           <td>
-                                                            <input type="text" class="form-control" placeholder="Label" [value]="row.label"
-                                                              (input)="row.label = $event.target.value" />
+                                                            <input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"
+                                                            />
                                                           </td>
                                                           <td>
-                                                            <input type="text" class="form-control" placeholder="URL" [value]="row.url"
-                                                              (input)="row.url = $event.target.value">
+                                                            <input type="text" class="form-control" placeholder="URL" [value]="row.url" (input)="row.url = $event.target.value">
                                                           </td>
-                                                          <td *ngIf="option.type == 'AGENT_SWITCH'">
-                                                            <input type="text" class="form-control" placeholder="Agent ID"
-                                                              [value]="row.agentId" (input)="row.agentId = $event.target.value">
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="Language" [value]="row.language" (input)="row.language = $event.target.value">
+                                                          </td>
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                           </td>
                                                           <td>
                                                             <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
@@ -1693,18 +1693,16 @@
                                             <tbody>
                                               <tr *ngFor="let option of gsResponse.options">
                                                 <td>
-                                                  <select name="type" id="type" [(ngModel)]="option.type">
+                                                  <select class="selectpicker form-control" name="type" id="type" [(ngModel)]="option.type">
                                                     <option value="">Choose One</option>
                                                     <option value="BUTTON">Button</option>
                                                     <option value="CHECKBOX">Checkbox</option>
                                                     <option value="RADIO">Radio</option>
                                                     <option value="FILE_UPLOAD">File Upload</option>
-                                                    <option value="AGENT_SWITCH">Agent Switch</option>
                                                   </select>
                                                 </td>
                                                 <td>
-                                                  <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url"
-                                                    name="url">
+                                                  <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
                                                 <td>
                                                   <table class="table table-striped">
@@ -1713,7 +1711,8 @@
                                                         <th>Value</th>
                                                         <th>Label</th>
                                                         <th>URL</th>
-                                                        <th *ngIf="option.type == 'AGENT_SWITCH'">Agent ID</th>
+                                                        <th>Language</th>
+                                                        <th>Agent ID</th>
                                                         <th>
                                                           <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                             <i class="ion-plus-round"></i>
@@ -1724,20 +1723,21 @@
                                                     <tbody>
                                                       <tr *ngFor="let row of option.data">
                                                         <td>
-                                                          <input type="text" class="form-control" placeholder="Value" [value]="row.value"
-                                                            (input)="row.value = $event.target.value" />
+                                                          <input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"
+                                                          />
                                                         </td>
                                                         <td>
-                                                          <input type="text" class="form-control" placeholder="Label" [value]="row.label"
-                                                            (input)="row.label = $event.target.value" />
+                                                          <input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"
+                                                          />
                                                         </td>
                                                         <td>
-                                                          <input type="text" class="form-control" placeholder="URL" [value]="row.url"
-                                                            (input)="row.url = $event.target.value">
+                                                          <input type="text" class="form-control" placeholder="URL" [value]="row.url" (input)="row.url = $event.target.value">
                                                         </td>
-                                                        <td *ngIf="option.type == 'AGENT_SWITCH'">
-                                                          <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId"
-                                                            (input)="row.agentId = $event.target.value">
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Language" [value]="row.language" (input)="row.language = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                         </td>
                                                         <td>
                                                           <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
@@ -1833,18 +1833,16 @@
                                               <tbody>
                                                 <tr *ngFor="let option of gsResponse.options">
                                                   <td>
-                                                    <select name="type" id="type" [(ngModel)]="option.type">
+                                                    <select class="selectpicker form-control" name="type" id="type" [(ngModel)]="option.type">
                                                       <option value="">Choose One</option>
                                                       <option value="BUTTON">Button</option>
                                                       <option value="CHECKBOX">Checkbox</option>
                                                       <option value="RADIO">Radio</option>
                                                       <option value="FILE_UPLOAD">File Upload</option>
-                                                      <option value="AGENT_SWITCH">Agent Switch</option>
                                                     </select>
                                                   </td>
                                                   <td>
-                                                    <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url"
-                                                      name="url">
+                                                    <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
                                                   <td>
                                                     <table class="table table-striped">
@@ -1853,7 +1851,8 @@
                                                           <th>Value</th>
                                                           <th>Label</th>
                                                           <th>URL</th>
-                                                          <th *ngIf="option.type == 'AGENT_SWITCH'">Agent ID</th>
+                                                          <th>Language</th>
+                                                          <th>Agent ID</th>
                                                           <th>
                                                             <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                               <i class="ion-plus-round"></i>
@@ -1864,20 +1863,21 @@
                                                       <tbody>
                                                         <tr *ngFor="let row of option.data">
                                                           <td>
-                                                            <input type="text" class="form-control" placeholder="Value" [value]="row.value"
-                                                              (input)="row.value = $event.target.value" />
+                                                            <input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"
+                                                            />
                                                           </td>
                                                           <td>
-                                                            <input type="text" class="form-control" placeholder="Label" [value]="row.label"
-                                                              (input)="row.label = $event.target.value" />
+                                                            <input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"
+                                                            />
                                                           </td>
                                                           <td>
-                                                            <input type="text" class="form-control" placeholder="URL" [value]="row.url"
-                                                              (input)="row.url = $event.target.value">
+                                                            <input type="text" class="form-control" placeholder="URL" [value]="row.url" (input)="row.url = $event.target.value">
                                                           </td>
-                                                          <td *ngIf="option.type == 'AGENT_SWITCH'">
-                                                            <input type="text" class="form-control" placeholder="Agent ID"
-                                                              [value]="row.agentId" (input)="row.agentId = $event.target.value">
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="Language" [value]="row.language" (input)="row.language = $event.target.value">
+                                                          </td>
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                           </td>
                                                           <td>
                                                             <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
@@ -2027,13 +2027,12 @@
               <tbody>
                 <tr *ngFor="let option of tempResponse.options">
                   <td>
-                    <select name="type" id="type" [(ngModel)]="option.type">
+                    <select class="selectpicker form-control" name="type" id="type" [(ngModel)]="option.type">
                       <option value="">Choose One</option>
                       <option value="BUTTON">Button</option>
                       <option value="CHECKBOX">Checkbox</option>
                       <option value="RADIO">Radio</option>
                       <option value="FILE_UPLOAD">File Upload</option>
-                      <option value="AGENT_SWITCH">Agent Switch</option>
                     </select>
                   </td>
                   <td>
@@ -2046,7 +2045,8 @@
                           <th>Value</th>
                           <th>Label</th>
                           <th>URL</th>
-                          <th *ngIf="option.type == 'AGENT_SWITCH'">Agent ID</th>
+                          <th>Language</th>
+                          <th>Agent ID</th>
                           <th>
                             <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                               <i class="ion-plus-round"></i>
@@ -2067,7 +2067,10 @@
                           <td>
                             <input type="text" class="form-control" placeholder="URL" [value]="row.url" (input)="row.url = $event.target.value">
                           </td>
-                          <td *ngIf="option.type == 'AGENT_SWITCH'">
+                          <td>
+                            <input type="text" class="form-control" placeholder="Language" [value]="row.language" (input)="row.language = $event.target.value">
+                          </td>
+                          <td>
                             <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId" (input)="row.agentId = $event.target.value">
                           </td>
                           <td>
