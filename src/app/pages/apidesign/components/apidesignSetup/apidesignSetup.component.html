@@ -36,6 +36,30 @@
                                     Add Algorithms <i class="ion-plus-round"></i>
                                 </button>
                             </div>
+                            <div class="form-group">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Algorithm Name</th>
+                                            <th>Version</th>
+                                            <th>F-score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let algo of selectedBusinessObject.algorithms">
+                                            <td>
+                                                {{ getAlgorithmName(algo.algorithmId) }}
+                                            </td>
+                                            <td>
+                                                {{ algo.versio }}
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -75,7 +99,7 @@
         <div class="modal-body">
             <form>
                 <div class="form-group">
-                    <select class="selectpicker form-control" title="Select supported algorith category" [(ngModel)]="selectedAlgorithmName"
+                    <select class="selectpicker form-control" title="Select supported algorith category" [(ngModel)]="tempBusinessAlgorithm.algorithmId"
                     name="selectedAlgorithmName">
                         <option *ngFor="let algo of definedAlgorithms" [ngValue]="algo._id">{{ algo.name }}</option>
                     </select>

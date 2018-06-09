@@ -117,9 +117,23 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
         this.tempBusinessAlgorithm.configParametrs.set(configParam.param, configParam.value);
       }
     }
+    console.log("tempbusinessobjectalgorithm");
+    console.log(this.tempBusinessAlgorithm);
+    if (this.algorithmAddUpdateMode) {
+      this.selectedBusinessObject.algorithms.push(this.tempBusinessAlgorithm);
+    }
     console.log("addAlgorithm");
     console.log(this.tempBusinessAlgorithm.configParametrs);
     new closeModal('algorithmModal');
+  }
+
+  getAlgorithmName(algorithmId) {
+      for(let exalgo of this.definedAlgorithms) {
+        if (exalgo._id == algorithmId) {
+          return exalgo.name;
+        }
+      }
+      return '';
   }
   
 }
