@@ -24,6 +24,7 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
     private definedAlgorithms: Algorithm[];
     private selectedBusinessObject: BusinessObject;
+    selectedBusinessObjectAlgorithm: BusinessObjectAlgorithm;
     tempBusinessAlgorithm: BusinessObjectAlgorithm;
     selectedAlgorithmName: string;
 
@@ -45,7 +46,7 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
         this.businessObjectUpdateCreateMsg = '';
         this.selectedAlgorithmName = '';
         this.tempBusinessAlgorithm = new BusinessObjectAlgorithm();
-
+        this.selectedBusinessObjectAlgorithm = new BusinessObjectAlgorithm();
     }
 
   ngOnInit() {
@@ -82,15 +83,14 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
   onAlgorithmAdd(businessAlgorithm?: BusinessObjectAlgorithm) {
     if(businessAlgorithm) {
       this.algorithmsModalHeader = 'Update Algorithm';
+      this.selectedBusinessObjectAlgorithm = businessAlgorithm;
       this.tempBusinessAlgorithm = businessAlgorithm;
-      for(var i; i<=this.definedAlgorithms.length; i++) {
-        if (this.definedAlgorithms[i]._id == this.tempBusinessAlgorithm.algorithmId) {
-          this.selectedAlgorithmName = this.definedAlgorithms[i].name;
-        }
-      }
+      this.algorithmAddUpdateMode = false;
       if(businessAlgorithm.configParametrs) {
         businessAlgorithm.configParametrs.forEach((value, key) => {
-          businessAlgorithm.configList.push(new ConfigParams(key, value));
+          if(this.tempBusinessAlgorithm.configList.length == 0) {
+            this.tempBusinessAlgorithm.configList.push(new ConfigParams(key, value));
+          }
         })
       }
     }
@@ -98,6 +98,7 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
       this.algorithmsModalHeader = 'Add Algorithm';
       this.selectedAlgorithmName = '';
       this.tempBusinessAlgorithm = new BusinessObjectAlgorithm();
+      this.algorithmAddUpdateMode = true;
     }
   }
 
@@ -117,14 +118,28 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
         this.tempBusinessAlgorithm.configParametrs.set(configParam.param, configParam.value);
       }
     }
+    this.tempBusinessAlgorithm.configList = [];
     console.log("tempbusinessobjectalgorithm");
     console.log(this.tempBusinessAlgorithm);
     if (this.algorithmAddUpdateMode) {
       this.selectedBusinessObject.algorithms.push(this.tempBusinessAlgorithm);
     }
+    else {
+      const index: number = this.selectedBusinessObject.algorithms.indexOf(this.selectedBusinessObjectAlgorithm);
+      if (index !== -1) {
+        this.selectedBusinessObject.algorithms[index] = this.tempBusinessAlgorithm;
+      }
+    }
     console.log("addAlgorithm");
     console.log(this.tempBusinessAlgorithm.configParametrs);
     new closeModal('algorithmModal');
+  }
+
+  removeAlgorithm() {
+    const index: number = this.selectedBusinessObject.algorithms.indexOf(this.selectedBusinessObjectAlgorithm);
+    if (index != -1) {
+      this.selectedBusinessObject.algorithms.splice(index, 1);
+    }
   }
 
   getAlgorithmName(algorithmId) {
@@ -134,6 +149,22 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
         }
       }
       return '';
+  }
+
+  createBusinessObject() {
+    console.log("createbusinessobject");
+    console.log(this.selectedBusinessObject);
+    if (this.apiDesignCreateMode) {
+      this.subscription = this.apiDesignService.createBusinessObject(this.selectedBusinessObject)
+        .subscribe(
+          response => {
+            console.log(response);
+            
+          }, error => {
+            console.log(error);
+          }
+        );
+    }
   }
   
 }

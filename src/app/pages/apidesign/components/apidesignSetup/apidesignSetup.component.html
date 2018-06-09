@@ -46,7 +46,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let algo of selectedBusinessObject.algorithms">
+                                        <tr *ngFor="let algo of selectedBusinessObject.algorithms" (click) = "onAlgorithmAdd(algo)" data-toggle="modal" data-target="#algorithmModal">
                                             <td>
                                                 {{ getAlgorithmName(algo.algorithmId) }}
                                             </td>
@@ -71,7 +71,7 @@
 
             <form>
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary" (click)="createBusinesObject()" data-toggle="modal" data-target="#businessObjectMsgModal">
+                    <button type="button" class="btn btn-primary" (click)="createBusinessObject()" data-toggle="modal" data-target="#businessObjectMsgModal">
                     {{apiDesignCreateMode ? 'Create Business Object' : 'Update Business Object'}}
                 </button>
                 </div>
@@ -143,6 +143,7 @@
       </div>
     </div>
   </div>
+
 
 
 <!-- Warning Modal -->

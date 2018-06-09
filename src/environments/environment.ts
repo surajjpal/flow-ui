@@ -102,5 +102,6 @@ export const environment = {
 
   // api design
   apiDesignUrl: 'http://localhost:5000',
-  algorithmUrl: '/automatons/algorithm'
+  algorithmUrl: '/automatons/algorithm',
+  businessObjectUrl: '/automatons/businessobject'
 };
