@@ -3,21 +3,21 @@ export const environment = {
   name: 'production',
 
   // Root
-  root: 'https://compusoft-flow.automatapi.xyz/flow/',
+  root: 'https://compusoft-console.automatapi.xyz/flow/',
     
   // API
-  authurl: 'https://compusoft-flow.automatapi.xyz/flow/auth/',
+  authurl: 'https://compusoft-console.automatapi.xyz/flow/auth/',
 
   // Services
-  saveaccounturl: 'https://compusoft-flow.automatapi.xyz/flow/services/saveaccount',
-  fetchaccountbyidurl: 'https://compusoft-flow.automatapi.xyz/flow/services/fetchaccountbyid?query=',
+  saveaccounturl: 'https://compusoft-console.automatapi.xyz/flow/services/saveaccount',
+  fetchaccountbyidurl: 'https://compusoft-console.automatapi.xyz/flow/services/fetchaccountbyid?query=',
 
   // Interfaces
-  updateIntentTraining: 'https://compusoft-flow.automatapi.xyz/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'https://compusoft-flow.automatapi.xyz/flow/interfaces/entity_classification_training',
+  updateIntentTraining: 'https://compusoft-console.automatapi.xyz/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'https://compusoft-console.automatapi.xyz/flow/interfaces/entity_classification_training',
 
   // Flow
-  server: 'https://compusoft-flow.automatapi.xyz/flow/console/',
+  server: 'https://compusoft-console.automatapi.xyz/flow/console/',
   autourl:'https://api.automatapi.io/?',
 
   stateinsight: 'state/insight/',
@@ -66,7 +66,7 @@ export const environment = {
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
   // auto
-  autoServer: 'https://compusoft-flow.automatapi.xyz/flow/auto/',
+  autoServer: 'https://compusoft-console.automatapi.xyz/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',
