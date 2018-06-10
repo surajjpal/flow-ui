@@ -18,7 +18,7 @@ export const environment = {
 
   // Flow
   server: 'https://compusoft-console.automatapi.xyz/flow/console/',
-  autourl:'https://api.automatapi.io/?',
+  autourl:'https://compusoft-agent.automatapi.xyz/?',
 
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
