@@ -3,21 +3,21 @@ export const environment = {
   name: 'production',
 
   // Root
-  root: 'https://flow.automatapi.io/flow/',
+  root: 'https://compusoft-flow.automatapi.xyz/flow/',
     
   // API
-  authurl: 'https://flow.automatapi.io/flow/auth/',
+  authurl: 'https://compusoft-flow.automatapi.xyz/flow/auth/',
 
   // Services
-  saveaccounturl: 'https://flow.automatapi.io/flow/services/saveaccount',
-  fetchaccountbyidurl: 'https://flow.automatapi.io/flow/services/fetchaccountbyid?query=',
+  saveaccounturl: 'https://compusoft-flow.automatapi.xyz/flow/services/saveaccount',
+  fetchaccountbyidurl: 'https://compusoft-flow.automatapi.xyz/flow/services/fetchaccountbyid?query=',
 
   // Interfaces
-  updateIntentTraining: 'https://flow.automatapi.io/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'https://flow.automatapi.io/flow/interfaces/entity_classification_training',
+  updateIntentTraining: 'https://compusoft-flow.automatapi.xyz/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'https://compusoft-flow.automatapi.xyz/flow/interfaces/entity_classification_training',
 
   // Flow
-  server: 'https://flow.automatapi.io/flow/console/',
+  server: 'https://compusoft-flow.automatapi.xyz/flow/console/',
   autourl:'https://api.automatapi.io/?',
 
   stateinsight: 'state/insight/',
@@ -66,7 +66,7 @@ export const environment = {
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
   // auto
-  autoServer: 'https://flow.automatapi.io/flow/auto/',
+  autoServer: 'https://compusoft-flow.automatapi.xyz/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',

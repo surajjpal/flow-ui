@@ -16,5 +16,5 @@ then
   rm -rf target
 fi
 mkdir target
-zip -r target/flow-ui.zip dist/*
+zip -r target/flow-ui-onprem.zip dist/*
 
