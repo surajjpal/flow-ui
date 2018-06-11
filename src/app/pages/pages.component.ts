@@ -22,10 +22,7 @@ import { RoutesService } from '../services/setup.service';
         <div class="al-copy">&copy;<a href="http://www.automatapi.com" translate>{{'general.auto'}}</a> 2018</div>
       </div>
       <div class="al-footer-main clearfix">
-        <ul class="al-share clearfix">
-          <li><a href="https://www.facebook.com/automatapi/"><i class="socicon socicon-facebook"></i></a></li>
-          <li><a href="https://twitter.com/AutomataPi"><i class="socicon socicon-twitter"></i></a></li>
-        </ul>
+        
       </div>
     </footer>
     <ba-back-top position="200"></ba-back-top>
