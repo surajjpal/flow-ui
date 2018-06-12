@@ -63,6 +63,6 @@ export class Algorithm {
 
     constructor() {
         this._id = '';
-        this
+        this.configParameters = {};
     }
 }

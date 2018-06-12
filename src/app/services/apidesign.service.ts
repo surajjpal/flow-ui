@@ -115,4 +115,34 @@ export class ApiDesignService {
         return subject.asObservable();
     }
 
+    updateBusinessObject(businessObject: BusinessObject):Observable<BusinessObject> {
+        const subject = new Subject<BusinessObject>();
+        const companyId = this.univaersalUser.getUser().companyId;
+        const headers = new HttpHeaders({'Content-Type' : 'application/json', 'x-customer-id' : companyId});
+        const url = `${environment.apiDesignUrl + environment.businessObjectUrl}` + "/" + businessObject._id;
+        this.httpClient.put<BusinessObject>(
+            url,
+            businessObject,
+            {
+                headers: headers,
+                observe: 'response',
+                reportProgress: true,
+                withCredentials: true
+            }
+        )
+        .subscribe(
+            (response: HttpResponse<BusinessObject>) => {
+                if (response.body) {
+                    console.log("algorithms response success");
+                    console.log(response.body);
+                    subject.next(response.body);
+                }
+            },
+            (err: HttpErrorResponse) => {
+                
+            }
+        );
+        return subject.asObservable();
+    }
+
 }

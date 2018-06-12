@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
 import { BusinessObject, Algorithm, BusinessObjectAlgorithm } from '../../../../models/businessobject.model';
 
 import { AlertService, DataSharingService } from '../../../../services/shared.service';
@@ -19,6 +20,7 @@ export class ApiDesignsComponent implements OnInit, OnDestroy {
   private definedAlgorithms: Algorithm[];
   selectedBusinessObject: BusinessObject;
   filterQuery: string;
+  
   
   constructor(
     private apiDesignService: ApiDesignService,

@@ -8,7 +8,7 @@
             </form>
             <br>
             
-            <table class="table table-striped" [mfData]="businessObjects | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="displayName">
+            <table class="table table-striped" [mfData]="businessObjects | universalDataFilter : filterQuery" #mfBusinessObjects="mfDataTable" [mfRowsOnPage]="10" mfSortBy="displayName">
                 <thead>
                     <tr>
                         <td><mfDefaultSorter by="name">Name</mfDefaultSorter></td>
@@ -21,17 +21,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let businessObj of businessObjects" (click)="onBusinessObjectSelect(businessObj)">
+                    <tr *ngFor="let businessObj of mfBusinessObjects.data" (click)="onBusinessObjectSelect(businessObj)">
                         <td>{{ businessObj.displayName }}</td>
                         <td>{{ businessObj.algorithmCategory }}</td>
                         <td>{{ businessObj.createdTime }}</td>
                         <td>{{ businessObj.modifiedTime }}</td>
                         <td>{{ businessObj.selfTrain }}</td>
                         <td>{{ getActiveVersion(businessObj) }}</td>
-                        <td *ngFor="let algo of businessObj.algorithms">
-                            <div>
-                                {{ getAlgorithmName(algo) }}
-                            </div>
+                        <td>
+                            <!-- <table> -->
+                                <tr *ngFor="let algo of businessObj.algorithms">
+                                    <td>
+                                        {{ getAlgorithmName(algo) }}
+                                    </td>
+                                </tr>
+                            <!-- </table> -->
                         </td>
                     </tr>
                 </tbody>

@@ -28,6 +28,9 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     tempBusinessAlgorithm: BusinessObjectAlgorithm;
     selectedAlgorithmName: string;
     trainingFilterQuery: string;
+    apiEndPoint: string;
+    selectedConfigList: ConfigParams[];
+    trainingDataUploaderOptions: NgUploaderOptions;
 
     businessObjectUpdateCreateMsg = '';
     algorithmsModalHeader = '';
@@ -47,8 +50,13 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
         this.businessObjectUpdateCreateMsg = '';
         this.selectedAlgorithmName = '';
         this.trainingFilterQuery = '';
+        this.apiEndPoint = '';
         this.tempBusinessAlgorithm = new BusinessObjectAlgorithm();
         this.selectedBusinessObjectAlgorithm = new BusinessObjectAlgorithm();
+        this.selectedConfigList = [];
+        this.trainingDataUploaderOptions = {
+          url: ''
+        };
     }
 
   ngOnInit() {
@@ -66,6 +74,7 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     if (businessObject) {
       this.selectedBusinessObject = businessObject;
       this.apiDesignCreateMode = false;
+      this.apiEndPoint = "/automatons/businessobject/predict/" + this.selectedBusinessObject.code
     }
     else {
       this.selectedBusinessObject = new BusinessObject();
@@ -86,12 +95,15 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     if(businessAlgorithm) {
       this.algorithmsModalHeader = 'Update Algorithm';
       this.selectedBusinessObjectAlgorithm = businessAlgorithm;
-      this.tempBusinessAlgorithm = businessAlgorithm;
+      this.tempBusinessAlgorithm = JSON.parse(JSON.stringify(businessAlgorithm));
       this.algorithmAddUpdateMode = false;
+      console.log("onAlgorithmAdd");
+      console.log(businessAlgorithm.configParametrs);
       if(businessAlgorithm.configParametrs) {
-        for(let key in businessAlgorithm.configParametrs) {
-          if(this.tempBusinessAlgorithm.configList.length == 0) {
+        if(this.tempBusinessAlgorithm.configList.length == 0) {
+          for(let key in businessAlgorithm.configParametrs) {
             this.tempBusinessAlgorithm.configList.push(new ConfigParams(key, businessAlgorithm.configParametrs[key]));
+            this.selectedConfigList.push(new ConfigParams(key, businessAlgorithm.configParametrs[key]));
           }
         }
         // businessAlgorithm.configParametrs.forEach((value, key) => {
@@ -173,6 +185,17 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
           }
         );
     }
+    else {
+      this.subscription = this.apiDesignService.updateBusinessObject(this.selectedBusinessObject)
+        .subscribe(
+          response => {
+            console.log(response);
+          },
+          error => {
+            console.log(error);
+          }
+        )
+    }
   }
 
   activateTriner(trainer: Training) {
@@ -183,6 +206,31 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
   deactivateTriner(trainer: Training) {
     console.log("desctiavte trainer");
     console.log(trainer);
+  }
+
+  onBusinessAlgorithmChange() {
+    console.log("on change");
+    console.log(this.selectedBusinessObjectAlgorithm.algorithmId)
+    this.tempBusinessAlgorithm.configList = []
+    if (this.selectedBusinessObjectAlgorithm && this.selectedBusinessObjectAlgorithm.algorithmId == this.tempBusinessAlgorithm.algorithmId) {
+      for (let config of this.selectedConfigList) {
+        this.tempBusinessAlgorithm.configList.push(config);
+      }
+    }
+    else {
+      console.log("defined algo");
+      console.log(this.definedAlgorithms);
+      for (let algo of  this.definedAlgorithms) {
+        if (algo._id == this.tempBusinessAlgorithm.algorithmId) {
+          for (let param in algo.configParameters) {
+            console.log(param)
+            this.tempBusinessAlgorithm.configList.push(new ConfigParams(param, algo.configParameters[param]));
+          }
+        }
+      }
+    }
+    console.log("configlist");
+    console.log(this.tempBusinessAlgorithm.configList);
   }
   
 }
