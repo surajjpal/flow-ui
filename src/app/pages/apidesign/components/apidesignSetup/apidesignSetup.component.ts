@@ -5,10 +5,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
 import { Subscription } from 'rxjs/Subscription';
+import { HttpHeaders } from '@angular/common/http'
 
 
 import { AlertService, DataSharingService } from '../../../../services/shared.service';
+import { FileUploaderService } from '../../../../shared/services/file-uploader.service'
 import { ApiDesignService } from '../../../../services/apidesign.service'
+import { UniversalUser} from '../../../../services/shared.service'
 import { environment } from '../../../../../environments/environment';
 import { error } from 'selenium-webdriver';
 import { Algorithm, BusinessObject, BusinessObjectAlgorithm, ConfigParams, Training } from '../../../../models/businessobject.model';
@@ -29,11 +32,13 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     selectedAlgorithmName: string;
     trainingFilterQuery: string;
     apiEndPoint: string;
+    fileUploadUrl: string;
     selectedConfigList: ConfigParams[];
     trainingDataUploaderOptions: NgUploaderOptions;
 
     businessObjectUpdateCreateMsg = '';
     algorithmsModalHeader = '';
+    
     supportedAlgorithmCategory = ["CLASSIFIER", "REGRESSION"];
 
     constructor(
@@ -41,7 +46,9 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
           private router: Router,
           private route: ActivatedRoute,
           private alertService: AlertService,
-          private sharingService: DataSharingService
+          private sharingService: DataSharingService,
+          private fileUploaderService: FileUploaderService,
+          private universalUser: UniversalUser
         ) {
         this.apiDesignCreateMode = true;
         this.algorithmAddUpdateMode = true;
@@ -54,6 +61,7 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
         this.tempBusinessAlgorithm = new BusinessObjectAlgorithm();
         this.selectedBusinessObjectAlgorithm = new BusinessObjectAlgorithm();
         this.selectedConfigList = [];
+        this.fileUploadUrl = '';
         this.trainingDataUploaderOptions = {
           url: ''
         };
@@ -179,9 +187,11 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
         .subscribe(
           response => {
             console.log(response);
-            
+            this.selectedBusinessObject = response;
+            new showAlertModal('Create', "successfully created");
           }, error => {
             console.log(error);
+            new showAlertModal('Error', error);
           }
         );
     }
@@ -189,10 +199,15 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
       this.subscription = this.apiDesignService.updateBusinessObject(this.selectedBusinessObject)
         .subscribe(
           response => {
+            console.log("success update");
             console.log(response);
+            this.selectedBusinessObject = response;
+            new showAlertModal('Update', "successfully updated");
           },
           error => {
+            console.log("error update");
             console.log(error);
+            new showAlertModal('Error', error);
           }
         )
     }
@@ -201,6 +216,17 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
   activateTriner(trainer: Training) {
     console.log("activate trainer");
     console.log(trainer);
+    this.subscription = this.apiDesignService.activateBusinessObjectTraining(this.selectedBusinessObject, trainer.version)
+      .subscribe(
+        response => {
+          console.log(response)
+          this.selectedBusinessObject = response;
+        },
+        error => {
+          console.log(error);
+          new showAlertModal('Error', error);
+        }
+      )
   }
 
   deactivateTriner(trainer: Training) {
@@ -232,5 +258,41 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     console.log("configlist");
     console.log(this.tempBusinessAlgorithm.configList);
   }
-  
+
+  onTrainingFileUpload(fileData: FormData) {
+    console.log("onFileUpload");
+    //console.log(fileData);
+    const activeVersion = this.getActiveVersion();
+    if (!activeVersion) {
+      new showAlertModal('Error', "Activate atleast one version");
+    }
+    else {
+      const companyId = this.universalUser.getUser().companyId;
+      const headers = new HttpHeaders({'Content-Type' : 'application/json', 'x-customer-id' : companyId});
+      const trainingFileUploadUrl = `${environment.apiDesignUrl + environment.businessObjectTrainingUrl}` + "/" + this.selectedBusinessObject.code + "/" + activeVersion
+      this.fileUploaderService.upload(fileData, trainingFileUploadUrl, headers)
+        .subscribe(
+          resposne => {
+            console.log("success response");
+            console.log(resposne);
+            this.router.navigate(['/pg/apidgn/apidgn'], { relativeTo: this.route })
+          },
+          error => {
+            console.log("error");
+            console.log(error);
+            new showAlertModal('Error', error);
+          }
+        )
+    }
+    
+  }
+
+  getActiveVersion() {
+    for (let train of this.selectedBusinessObject.training) {
+      if (train.status == "ACTIVE") {
+        return train.version;
+      }
+    }
+    return null;
+  }
 }

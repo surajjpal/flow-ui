@@ -45,7 +45,8 @@
                                         <tr>
                                             <th>Algorithm Name</th>
                                             <th>Version</th>
-                                            <th>F-score</th>
+                                            <th>Score</th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -56,8 +57,16 @@
                                             <td>
                                                 {{ algo.version }}
                                             </td>
-                                            <td>
-
+                                            <td *ngIf="selectedBusinessObject && algo.score" >
+                                                
+                                                <div *ngFor="let score of algo.score">
+                                                    <div *ngFor="let e of score | keys">
+                                                        {{ e.key }}
+                                                        <div *ngFor="let s of e.value | keys">
+                                                            {{ s.key }} : {{ s.value}}
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -68,15 +77,10 @@
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="businessObjectTrainingContent" aria-labelledby="businessObjectTrainingTab">
                     <div class="panel panel-default">
-                        <div class="data-table-container">
-                            <ba-file-uploader [defaultValue]="'Upload Training Excel'" [fileUploaderOptions]="trainingDataUploaderOptions" (onFileUpload)="onExcelUpload($event)"
-                                (onFileUploadCompleted)="onExcelUploadComplete($event)"></ba-file-uploader>
-                        </div>
-                        <form class="row form-inline">
-                            <div class="form-group col-sm-10">
-                                <input class="form-control" [(ngModel)]="trainingFilterQuery" name="trainingFilterQuery" placeholder="Filter Training" />
+                            <div class="form-group pull-right">
+                                <api-file-uploader [fileUploadUrl]="fileUploadUrl" [multiple]="false" (uploadEvent)="onTrainingFileUpload($event)"></api-file-uploader>
+                                <!-- <input class="form-control" [(ngModel)]="trainingFilterQuery" name="trainingFilterQuery" placeholder="Filter Training" /> -->
                             </div>
-                        </form>
                         <br>
                         
                         <table class="table table-striped" [mfData]="selectedBusinessObject.training | universalDataFilter : trainingFilterQuery" #mfTrainingData="mfDataTable" [mfRowsOnPage]="10" mfSortBy="version">
@@ -100,7 +104,7 @@
                                         <button type="submit" class="btn btn-primary" (click)="activateTriner(trainer)">Activate</button>
                                     </td>
                                     <td *ngIf="trainer.status == 'ACTIVE'">
-                                        <button type="submit" class="btn btn-danger" (click)="deactivateTriner(trainer)">Activate</button>
+                                        <!-- <button type="submit" class="btn btn-danger" (click)="deactivateTriner(trainer)">Deactivate</button> -->
                                     </td>
                                     <td>
                                         <i class="fa fa-download"></i>
@@ -110,7 +114,7 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="100%">
-                                    <mfBootstrapPaginator [rowsOnPageSet]="[2,10,25,50,100]"></mfBootstrapPaginator>
+                                    <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
                                     </td>
                                 </tr>
                             </tfoot>
@@ -131,7 +135,7 @@
 
             <form>
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary" (click)="createBusinessObject()" data-toggle="modal" data-target="#businessObjectMsgModal">
+                    <button type="button" class="btn btn-primary" (click)="createBusinessObject()" data-toggle="modal">
                     {{apiDesignCreateMode ? 'Create Business Object' : 'Update Business Object'}}
                 </button>
                 </div>

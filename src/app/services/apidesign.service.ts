@@ -79,7 +79,7 @@ export class ApiDesignService {
                 }
             },
             (error: HttpErrorResponse) => {
-
+                subject.error(error);
             }
         )
         return subject.asObservable();
@@ -109,7 +109,7 @@ export class ApiDesignService {
                 }
             },
             (err: HttpErrorResponse) => {
-                
+                subject.error(err);
             }
         );
         return subject.asObservable();
@@ -139,7 +139,38 @@ export class ApiDesignService {
                 }
             },
             (err: HttpErrorResponse) => {
-                
+                subject.error(err);
+            }
+        );
+        return subject.asObservable();
+    }
+
+    activateBusinessObjectTraining(businessObject: BusinessObject, version: string):Observable<BusinessObject> {
+        const subject = new Subject<BusinessObject>();
+        const companyId = this.univaersalUser.getUser().companyId;
+        const headers = new HttpHeaders({'Content-Type' : 'application/json', 'x-customer-id' : companyId});
+        const url = `${environment.apiDesignUrl + environment.businessObjectActivateTrainerUrl}` + "/" + businessObject.code + "/" + version;
+        this.httpClient.post<BusinessObject>(
+            url,
+            businessObject,
+            {
+                headers: headers,
+                observe: 'response',
+                reportProgress: true,
+                withCredentials: true
+            }
+        )
+        .subscribe(
+            (response: HttpResponse<BusinessObject>) => {
+                if (response.body) {
+                    console.log("activate version success");
+                    console.log(response.body);
+                    subject.next(response.body);
+                }
+            },
+            (err: HttpErrorResponse) => {
+                console.log("active version error");
+                console.log(err);
             }
         );
         return subject.asObservable();
