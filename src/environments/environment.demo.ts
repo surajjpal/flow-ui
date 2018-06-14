@@ -9,7 +9,7 @@ export const environment = {
     authurl: 'https://flow.automatapi.com/flow/auth/',
   
     // Services
-    saveaccounturl: 'https://flow.automatapi.com/flow/services/saveaccount',
+    saveaccounturl: 'https://flow.automatapi.com/flow/account/create',
     fetchaccountbyidurl: 'https://flow.automatapi.com/flow/services/fetchaccountbyid?query=',
   
     // Interfaces

@@ -9,7 +9,7 @@ export const environment = {
   authurl: 'http://localhost:8080/flow/auth/',
 
   // Services
-  saveaccounturl: 'http://localhost:8080/flow/services/saveaccount',
+  saveaccounturl: 'http://localhost:8080/flow/account/create',
   fetchaccountbyidurl: 'http://localhost:8080/flow/services/fetchaccountbyid?query=',
 
   // Interfaces
