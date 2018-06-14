@@ -10,7 +10,7 @@ export const environment = {
 
   // Services
   saveaccounturl: 'http://localhost:8080/flow/account/create',
-  fetchaccountbyidurl: 'http://localhost:8080/flow/services/fetchaccountbyid?query=',
+  fetchaccountbyidurl: 'http://localhost:8080/flow/account/',
 
   // Interfaces
   updateIntentTraining: 'http://localhost:8080/flow/interfaces/intent_classification_training',
