@@ -96,14 +96,20 @@ export const environment = {
     modelkeyslookupurl: 'load/modelkeys',
     validationtypekeyslookupurl: 'load/validations',
 
-    //autoDashboard
-   dashboardServer: 'http://localhost:8080/flow/autodashboard/',
-   dashboardsummary:'api/dashboard_summary',
-   episodetimeline:'api/episode_timeline',
-   intentcount:'api/intent_count',
-   entitycount:'api/entity_count',
-   sentimentcount:'api/sentiment_count',
-   goal_count:'api/goal_count',
-   episodemessages:'api/episode_message'
+   //Dashboard
+   dashboardServer: 'http://localhost:8080/flow/dashboard/',
+   dashboardsummary:'auto/dashboard_summary',
+   episodetimeline:'auto/episode_timeline',
+   intentcount:'auto/intent_count',
+   entitycount:'auto/entity_count',
+   sentimentcount:'auto/sentiment_count',
+   goal_count:'auto/goal_count',
+   episodemessages:'auto/episode_message',
+   flowdashboardsummary:'flow/dashboard_summary',
+   flowtimeline:'flow/flow_timeline',
+   transactionvalues:'flow/transaction_values',
+   avgstatetime:'flow/avgstate_time',
+   resourcevalues:'flow/resources_values',
+   statetransactionvalue:'flow/state_transaction_value'
   };
   
