@@ -115,5 +115,8 @@ export const environment = {
   transactionvalues:'flow/transaction_values',
   avgstatetime:'flow/avgstate_time',
   resourcevalues:'flow/resources_values',
-  statetransactionvalue:'flow/state_transaction_value'
+  statetransactionvalue:'flow/state_transaction_value',
+
+  //Dashboard from interfaces
+  dashboardinterface: 'http://108.168.190.82:8080/flow/interfaces/dashboard'
 };

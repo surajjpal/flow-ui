@@ -53,10 +53,10 @@ export class FlowDashboardService {
 
   dashboard_summary(body): Observable<Dashboard> {
     const subject = new Subject<Dashboard>();
-
+    body['operation'] = "get_flow_dashboard_summary"
+    body['dashboard'] = "flow"
    
-
-    const url = `${environment.dashboardServer + environment.flowdashboardsummary}`;
+    const url = `${environment.dashboardinterface}`;
 
     this.httpClient.post<Dashboard>(
       url,
@@ -86,8 +86,9 @@ export class FlowDashboardService {
 
   flow_timeline(body): Observable<Dashboard> {
     const subject = new Subject<Dashboard>();
-
-    const url = `${environment.dashboardServer + environment.flowtimeline}`;
+    body['operation'] = "get_flow_timeline"
+    body['dashboard'] = "flow"
+    const url = `${environment.dashboardinterface}`;
 
     this.httpClient.post<Dashboard>(
       url,
@@ -117,9 +118,10 @@ export class FlowDashboardService {
 
   transaction_range(body): Observable<Dashboard> {
     const subject = new Subject<Dashboard>();
-
-    const url = `${environment.dashboardServer + environment.transactionvalues}`;
-
+    body['operation'] = "range_of_transaction";
+    body['dashboard'] = "flow";
+    const url = `${environment.dashboardinterface}`;
+    
     this.httpClient.post<Dashboard>(
       url,
       body,
@@ -149,7 +151,9 @@ export class FlowDashboardService {
   consumption(body): Observable<Dashboard> {
     const subject = new Subject<Dashboard>();
 
-    const url = `${environment.dashboardServer + environment.resourcevalues}`;
+    body['operation'] = "get_max_resources_values";
+    body['dashboard'] = "flow";
+    const url = `${environment.dashboardinterface}`;
 
     this.httpClient.post<Dashboard>(
       url,
@@ -180,7 +184,10 @@ export class FlowDashboardService {
   avg_time_states(body): Observable<Dashboard> {
     const subject = new Subject<Dashboard>();
 
-    const url = `${environment.dashboardServer + environment.avgstatetime}`;
+    body['operation'] = "avg_state_time";
+    body['dashboard'] = "flow";
+    const url = `${environment.dashboardinterface}`;
+
 
     this.httpClient.post<Dashboard>(
       url,
@@ -211,7 +218,9 @@ export class FlowDashboardService {
   state_transactions(body): Observable<Dashboard> {
     const subject = new Subject<Dashboard>();
 
-    const url = `${environment.dashboardServer + environment.statetransactionvalue}`;
+    body['operation'] = "transactionValue_each_state";
+    body['dashboard'] = "flow";
+    const url = `${environment.dashboardinterface}`;
 
     this.httpClient.post<Dashboard>(
       url,

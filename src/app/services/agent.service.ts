@@ -128,10 +128,9 @@ export class AgentDashboardService {
   fetchSummary(body:any): Observable<any> {
     const subject = new Subject<any>();
 
-    
-    
-
-    const url = `${environment.dashboardServer + environment.dashboardsummary}`;
+    body['operation'] = "get_dashboard_summary";
+    body['dashboard'] = "auto"
+    const url = `${environment.dashboardinterface}`;
 
     this.httpClient.post<any>(
       url,
@@ -163,8 +162,9 @@ export class AgentDashboardService {
 
   fetchEpisodeTimeline(body:any): Observable<any> {
     const subject = new Subject<any>();
-
-    const url = `${environment.dashboardServer + environment.episodetimeline}`;
+    body['operation'] = "get_episode_timeline";
+    body['dashboard'] = "auto"
+    const url = `${environment.dashboardinterface}`;
 
     this.httpClient.post<any>(
       url,
@@ -195,8 +195,10 @@ export class AgentDashboardService {
 
   fetchIntentCount(body:any): Observable<any> {
     const subject = new Subject<any>();
+    body['operation'] = "get_intent_count";
+    body['dashboard'] = "auto"
+    const url = `${environment.dashboardinterface}`;
 
-    const url = `${environment.dashboardServer + environment.intentcount}`;
 
     this.httpClient.post<any>(
       url,
@@ -227,8 +229,9 @@ export class AgentDashboardService {
 
       fetchEntityCount(body:any): Observable<any> {
         const subject = new Subject<any>();
-    
-        const url = `${environment.dashboardServer + environment.entitycount}`;
+        body['operation'] = "get_entity_count";
+        body['dashboard'] = "auto"
+        const url = `${environment.dashboardinterface}`;
     
         this.httpClient.post<any>(
           url,
@@ -259,8 +262,10 @@ export class AgentDashboardService {
 
           fetchSentimentCount(body:any): Observable<any> {
             const subject = new Subject<any>();
+            body['operation'] = "get_sentiment_count";
+            body['dashboard'] = "auto"
+            const url = `${environment.dashboardinterface}`;
         
-            const url = `${environment.dashboardServer + environment.sentimentcount}`;
         
             this.httpClient.post<any>(
               url,
@@ -291,8 +296,11 @@ export class AgentDashboardService {
 
               fetchGoalCount(body:any): Observable<any> {
                 const subject = new Subject<any>();
+
+                body['operation'] = "get_goal_count_effeciency";
+                body['dashboard'] = "auto"
+                const url = `${environment.dashboardinterface}`;
             
-                const url = `${environment.dashboardServer + environment.goal_count}`;
             
                 this.httpClient.post<any>(
                   url,
@@ -323,7 +331,9 @@ export class AgentDashboardService {
                   fetchEpisodeMessages(body:any): Observable<any> {
                     const subject = new Subject<any>();
                 
-                    const url = `${environment.dashboardServer + environment.episodemessages}`;
+                    body['operation'] = "get_episode_messages";
+                    body['dashboard'] = "auto"
+                    const url = `${environment.dashboardinterface}`;
                 
                     this.httpClient.post<any>(
                       url,

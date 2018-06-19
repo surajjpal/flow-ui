@@ -110,5 +110,8 @@ export const environment = {
   transactionvalues:'flow/transaction_values',
   avgstatetime:'flow/avgstate_time',
   resourcevalues:'flow/resources_values',
-  statetransactionvalue:'flow/state_transaction_value'
+  statetransactionvalue:'flow/state_transaction_value',
+
+  //Dashboard from interfaces
+  dashboardinterface: 'https://flow.automatapi.io/flow/interfaces/dashboard'
 };
