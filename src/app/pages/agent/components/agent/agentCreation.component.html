@@ -36,43 +36,45 @@
               </div>
               <div class="form-group">
                 <label>Color CSS</label>
-                <input type="text" class="form-control" required placeholder="Color CSS (Optional)" [(ngModel)]="selectedAgent.uiComponent.colorCss" name="colorCss"
-                />
+                <input type="text" class="form-control" required placeholder="Color CSS (Optional)" [(ngModel)]="selectedAgent.uiComponent.colorCss"
+                  name="colorCss" />
               </div>
               <div class="form-group">
                 <label>Font</label>
-                <input type="text" class="form-control" required placeholder="Font (Optional)" [(ngModel)]="selectedAgent.uiComponent.font" name="font"
-                />
+                <input type="text" class="form-control" required placeholder="Font (Optional)" [(ngModel)]="selectedAgent.uiComponent.font"
+                  name="font" />
               </div>
               <div class="form-group">
                 <label>Logo URL</label>
-                <input type="text" class="form-control" required placeholder="Logo URL (Optional)" [(ngModel)]="selectedAgent.uiComponent.logoUrl" name="logoUrl"
-                />
+                <input type="text" class="form-control" required placeholder="Logo URL (Optional)" [(ngModel)]="selectedAgent.uiComponent.logoUrl"
+                  name="logoUrl" />
               </div>
               <div class="form-group">
                 <label>Typing GIF</label>
-                <input type="text" class="form-control" required placeholder="Typing GIF (Optional)" [(ngModel)]="selectedAgent.uiComponent.typingGif" name="typingGif"
-                />
+                <input type="text" class="form-control" required placeholder="Typing GIF (Optional)" [(ngModel)]="selectedAgent.uiComponent.typingGif"
+                  name="typingGif" />
               </div>
               <div class="form-group">
                 <label>Avatar URL</label>
-                <input type="text" class="form-control" required placeholder="Avatar URL (Optional)" [(ngModel)]="selectedAgent.uiComponent.avatarUrl" name="avatarUrl"
-                />
+                <input type="text" class="form-control" required placeholder="Avatar URL (Optional)" [(ngModel)]="selectedAgent.uiComponent.avatarUrl"
+                  name="avatarUrl" />
               </div>
               <div class="form-group">
                 <label>Agent Placeholder Text</label>
-                <input type="text" class="form-control" required placeholder="Agent Placeholder Text (Optional)" [(ngModel)]="selectedAgent.uiComponent.placeHolderText" name="placeHolderText"
-                />
+                <input type="text" class="form-control" required placeholder="Agent Placeholder Text (Optional)" [(ngModel)]="selectedAgent.uiComponent.placeHolderText"
+                  name="placeHolderText" />
               </div>
               <div class="form-group">
                 <label>Episode Idle Timeout (in Minutes)</label>
-                <input type="number" class="form-control" required placeholder="Episode Idle Timeout (in Minutes)" [(ngModel)]="selectedAgent.uiComponent.episodeIdleTimeout" name="episodeIdleTimeout"
-                  min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                <input type="number" class="form-control" required placeholder="Episode Idle Timeout (in Minutes)" [(ngModel)]="selectedAgent.uiComponent.episodeIdleTimeout"
+                  name="episodeIdleTimeout" min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                />
               </div>
               <div class="form-group">
                 <label>Episode Close Timeout (in Minutes)</label>
-                <input type="number" class="form-control" required placeholder="Episode Close Timeout (in Minutes)" [(ngModel)]="selectedAgent.uiComponent.episodeCloseTimeout" name="episodeCloseTimeout"
-                  min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                <input type="number" class="form-control" required placeholder="Episode Close Timeout (in Minutes)" [(ngModel)]="selectedAgent.uiComponent.episodeCloseTimeout"
+                  name="episodeCloseTimeout" min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                />
               </div>
               <div class="checkbox">
                 <ba-checkbox [(ngModel)]="selectedAgent.uiComponent.delayInMessages" [label]="'Delay in messages'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
@@ -89,8 +91,17 @@
               <div class="form-group">
                 <label>Select Flows</label>
                 <select class="selectpicker form-control" multiple="true" title="Select Flows" [(ngModel)]="selectedAgent.agentFlow" name="agentFlow">
-                    <option *ngFor="let flow of flowSource" [ngValue]="flow.machineType">{{flow.machineType + ' v' + flow.version}}</option>
-                  </select>
+                  <option *ngFor="let flow of flowSource" [ngValue]="flow.machineType">{{flow.machineType + ' v' + flow.version}}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Select Default Language</label>
+                <select class="selectpicker form-control" title="Select Language" [(ngModel)]="selectedAgent.defaultLanguage" name="defaultLanguage">
+                  <option *ngFor="let lang of supportedLanguageSource" [ngValue]="lang">{{lang}}</option>
+                </select>
+              </div>
+              <div class="form-group checkbox">
+                <ba-checkbox [(ngModel)]="selectedAgent.autodetectLanguage" [label]="'Autodetect Language'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
               </div>
             </form>
           </div>
@@ -246,7 +257,8 @@
       <!-- Modal Body -->
       <div class="modal-body">
         <div *ngIf="isSuccess && facebookIntegrated">
-          You have successfully {{agentCreateMode ? 'created' : 'updated'}} the agent. Following is the webhook for Facebook plugin integrated.
+          You have successfully {{agentCreateMode ? 'created' : 'updated'}} the agent. Following is the webhook for Facebook plugin
+          integrated.
           <form>
             <div class="form-group">
               <label>Webhook</label>
@@ -270,10 +282,13 @@
   </div>
 </div>
 
-<div class="card" style="width: 100rem;"  *ngIf="isCreated" >
+<div class="card" style="width: 100rem;" *ngIf="isCreated">
   <div class="card-body">
     <h5 class="card-title">Agent Url to use</h5>
-    <p class="card-text"><b>{{autoUrl}}</b></p>
-    <button type="button" class="btn btn-success" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px" (click)="goBack();">Got It</button>
+    <p class="card-text">
+      <b>{{autoUrl}}</b>
+    </p>
+    <button type="button" class="btn btn-success" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
+      (click)="goBack();">Got It</button>
   </div>
 </div>
