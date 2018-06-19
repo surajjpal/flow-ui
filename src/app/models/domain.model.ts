@@ -111,12 +111,14 @@ export class ResponseOption {
   label: string;
   url: string;
   agentId: string;
+  language: string;
 
-  constructor(value?: string, label?: string, url?: string, agentId?: string) {
+  constructor(value?: string, label?: string, url?: string, agentId?: string, language?: string) {
     this.value = value ? value : '';
     this.label = label ? label : '';
     this.url = url ? url : '';
     this.agentId = agentId ? agentId : '';
+    this.language = language ? language : '';
   }
 }
 

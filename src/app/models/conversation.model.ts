@@ -44,6 +44,7 @@ export class Context {
 }
 
 export class ChatMessage {
+  from: string;
   messageFrom: string;
   sentiment: Sentiment;
   messageTime: Date;

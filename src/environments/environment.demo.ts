@@ -9,8 +9,8 @@ export const environment = {
     authurl: 'https://flow.automatapi.com/flow/auth/',
   
     // Services
-    saveaccounturl: 'https://flow.automatapi.com/flow/services/saveaccount',
-    fetchaccountbyidurl: 'https://flow.automatapi.com/flow/services/fetchaccountbyid?query=',
+    saveaccounturl: 'https://flow.automatapi.com/flow/account/create',
+    fetchaccountbyidurl: 'https://flow.automatapi.com/flow/account/',
   
     // Interfaces
     updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',

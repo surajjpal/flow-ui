@@ -43,3 +43,5 @@ testem.log
 Thumbs.db
 nohup.out
 run.sh
+package-lock.json
+*.code-workspace
