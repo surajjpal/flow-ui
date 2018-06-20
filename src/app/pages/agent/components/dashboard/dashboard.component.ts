@@ -2,9 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
-
-import { AgentDashboardService } from '../../../../services/agent.service';
+import { Agent, Plugin, Classifier } from '../../../../models/agent.model';
+import { AgentDashboardService,AgentService } from '../../../../services/agent.service';
 import { ConversationSummary, Dashboard } from '../../../../models/dashboard.model';
+import { DomainService } from '../../../../services/domain.service';
+import { Domain, Goal } from '../../../../models/domain.model';
 
 declare let d3: any;
 declare let moment: any;
@@ -45,6 +47,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
   SENTIMENT_COUNT_FLAG = false;
   GOAL_COUNT_AND_EFFICIENCY_FLAG = false;
   MESSAGES_IN_EPISODE_FLAG = false;
+  selectedDate:any;
+  agentSource: Agent[] = [];
+  selectedAgents:Agent[] = [];
+  domainSource: Domain[] = [];
+  selectedDomains:Domain[] = [];
+  selectedSources:string[] = [];
+  selectedLanguages:string[] = [];
+  Sources = ["website"];
+  Language:string[]=[];
+  domain:Domain;
 
   private conversationSubscription: Subscription;
   private episodeSubscription: Subscription;
@@ -54,11 +66,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private goalSubscription: Subscription;
   private messagesSubscription: Subscription;
   
-  constructor(private dashboardService: AgentDashboardService, private slimLoadingBarService: SlimLoadingBarService) {}
+  constructor(private dashboardService: AgentDashboardService, private slimLoadingBarService: SlimLoadingBarService,private agentService: AgentService,private domainService: DomainService) {}
 
   ngOnInit(): void {
     // this.fetchAutoStats();
     this.setupChartOptions();
+    this.fetchAgents();
+    this.fetchDomains();
   }
 
   ngOnDestroy() {
@@ -87,64 +101,130 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.slimLoadingBarService.complete();
   }
 
-  fetchAutoStats(dateRange: any) {
+  private subscription: Subscription;
+  fetchAgents() {
+    this.subscription = this.agentService.agentLookup()
+      .subscribe(
+        agents => {
+          if (agents) {
+            this.agentSource = agents;
+            this.selectedAgents.push(agents[0])
+          }
+        }
+      );
+  }
+
+  fetchDomains() {
+    this.subscription = this.domainService.domainLookup()
+      .subscribe(
+        domains => {
+          if (domains) {
+            this.domainSource = domains;
+            this.selectedDomains.push(domains[0]);
+            domains.forEach( (element) => {
+              for(let lang of element.langSupported){
+                this.Language.push(lang);
+              }
+          });
+            this.Language = this.removeDuplicates(this.Language)
+            this.selectedLanguages.push(this.Language[0]);
+          }
+        }
+      );
+  }
+
+  selectDate(date:any){
+    this.selectedDate = date;
+}
+
+  submit(){
+    
+    let fromDate = this.selectedDate.start.format('DD/MM/YYYY');
+    let toDate = this.selectedDate.end.format('DD/MM/YYYY');
+    console.log(fromDate)
+    let agentIds:string[] = []
+    let domainIds:string[] = []
+    let companyId:string;
+    for (let agent of this.selectedAgents) {
+        agentIds.push(agent._id);
+        companyId = agent.companyId
+    }
+    for (let domain of this.selectedDomains) {
+      domainIds.push(domain.name);
+      
+    }
+    let body = {}
+    body['startDate'] = fromDate;
+    body['endDate'] = toDate;
+    body['agent'] = agentIds;
+    body['domain'] = domainIds;
+    body['language'] = this.selectedLanguages;
+    body['source'] = this.selectedSources;
+    body['companyId'] = companyId;
+    console.log(body)
+    this.fetchAutoStats(body)
+   
+  }
+
+  fetchAutoStats(body: any) {
 
     this.slimLoadingBarService.color = '#2DACD1'; // Primary color
     this.slimLoadingBarService.height = '10px';
     this.slimLoadingBarService.stop();
     
 
-    this.conversationSubscription = this.dashboardService.fetch('CONVERSATION_SUMMARY', dateRange)
-      .subscribe(autoDashboard => {
+    this.conversationSubscription = this.dashboardService.fetchSummary(body)
+      .subscribe(summary => {
         this.CONVERSATION_SUMMARY_FLAG = true;
         this.updateProgressBar();
-        this.conversationSummary = autoDashboard.conversationSummary;
+        this.conversationSummary = summary
       }, err => {
         this.CONVERSATION_SUMMARY_FLAG = true;
         this.updateProgressBar();
       }
     );
-    this.episodeSubscription = this.dashboardService.fetch('EPISODE_TIMELINE', dateRange)
+  
+    this.episodeSubscription = this.dashboardService.fetchEpisodeTimeline(body)
       .subscribe(autoDashboard => {
         this.EPISODE_TIMELINE_FLAG = true;
         this.updateProgressBar();
-        this.episodeCountData = autoDashboard.nvd3ChartInputList[0];
+        this.episodeCountData = autoDashboard;
       }, err => {
         this.EPISODE_TIMELINE_FLAG = true;
         this.updateProgressBar();
       }
     );
-    this.intentSubscription = this.dashboardService.fetch('INTENT_COUNT', dateRange)
+    this.intentSubscription = this.dashboardService.fetchIntentCount(body)
       .subscribe(autoDashboard => {
         this.INTENT_COUNT_FLAG = true;
         this.updateProgressBar();
-        this.intentCountData = autoDashboard.nvd3ChartInputList[0][0].values;
+        this.intentCountData = autoDashboard[0].values;
       }, err => {
         this.INTENT_COUNT_FLAG = true;
         this.updateProgressBar();
       }
     );
-    this.entitySubscription = this.dashboardService.fetch('ENTITY_COUNT', dateRange)
+    this.entitySubscription = this.dashboardService.fetchEntityCount(body)
       .subscribe(autoDashboard => {
         this.ENTITY_COUNT_FLAG = true;
         this.updateProgressBar();
-        this.entityCountData = autoDashboard.nvd3ChartInputList[0][0].values;
+        this.entityCountData = autoDashboard[0].values;
       }, err => {
         this.ENTITY_COUNT_FLAG = true;
         this.updateProgressBar();
       }
     );
-    this.sentimentSubscription = this.dashboardService.fetch('SENTIMENT_COUNT', dateRange)
+    this.sentimentSubscription = this.dashboardService.fetchSentimentCount(body)
       .subscribe(autoDashboard => {
         this.SENTIMENT_COUNT_FLAG = true;
         this.updateProgressBar();
-        this.sentimentCountData = autoDashboard.nvd3ChartInputList[0][0].values;
+        this.sentimentCountData = autoDashboard[0].values;
       }, err => {
         this.SENTIMENT_COUNT_FLAG = true;
         this.updateProgressBar();
       }
     );
-    this.goalSubscription = this.dashboardService.fetch('GOAL_COUNT_AND_EFFICIENCY', dateRange)
+    this.goalSubscription = this.dashboardService.fetchGoalCount(body)
       .subscribe(autoDashboard => {
         this.GOAL_COUNT_AND_EFFICIENCY_FLAG = true;
         this.updateProgressBar();
@@ -154,17 +234,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.updateProgressBar();
       }
     );
-    this.messagesSubscription = this.dashboardService.fetch('MESSAGES_IN_EPISODE', dateRange)
+    this.messagesSubscription = this.dashboardService.fetchEpisodeMessages(body)
       .subscribe(autoDashboard => {
         this.MESSAGES_IN_EPISODE_FLAG = true;
         this.updateProgressBar();
-        this.messagesInEpisodeData = autoDashboard.nvd3ChartInputList[0];
+        this.messagesInEpisodeData = autoDashboard;
       }, err => {
         this.MESSAGES_IN_EPISODE_FLAG = true;
         this.updateProgressBar();
       }
     );
-  }
+   }
 
   updateProgressBar() {
     this.slimLoadingBarService.progress = this.slimLoadingBarService.progress + (100 / 7);
@@ -185,9 +265,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.goalsEfficiencyOptions = this.goalEfficiencyBarChartOptions();
   }
 
-  parseGoalsCountAndEfficiency(autoDashboard: Dashboard) {
-    this.goalsCountData = autoDashboard.nvd3ChartInputList[0][0].values;
-    this.goalsEfficiencyData = autoDashboard.nvd3ChartInputList[1];
+  parseGoalsCountAndEfficiency(autoDashboard: any) {
+    this.goalsCountData = autoDashboard[0].values;
+    this.goalsEfficiencyData = autoDashboard[1];
   }
 
   donutChartOptions() {
@@ -364,4 +444,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
   */
+
+  removeDuplicates(arr){
+    let unique_array = []
+    for(let i = 0;i < arr.length; i++){
+        if(unique_array.indexOf(arr[i]) == -1){
+            unique_array.push(arr[i])
+        }
+    }
+    return unique_array
+}
+
 }
