@@ -102,7 +102,7 @@ export const environment = {
 
 
   //Dashboard
-  dashboardServer: 'http://localhost:8080/flow/dashboard/',
+  dashboardServer: 'http://108.168.190.82:8080/flow/dashboard/',
   dashboardsummary:'auto/dashboard_summary',
   episodetimeline:'auto/episode_timeline',
   intentcount:'auto/intent_count',
