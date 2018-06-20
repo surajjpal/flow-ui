@@ -80,6 +80,8 @@ export class Agent {
   companyId: string;
   uiComponent: UIComponent;
   domainId: string;
+  autodetectLanguage: boolean;
+  defaultLanguage: string;
 
   constructor() {
     this._id = null;
@@ -96,6 +98,8 @@ export class Agent {
     this.agentClassifier = [];
     this.companyId = '';
     this.uiComponent = new UIComponent();
-    this.domainId = "";
+    this.domainId = '';
+    this.autodetectLanguage = false;
+    this.defaultLanguage = '';
   }
 }

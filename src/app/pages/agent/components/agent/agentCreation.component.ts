@@ -22,13 +22,14 @@ import { environment } from 'environments/environment';
 export class AgentCreationComponent implements OnInit, OnDestroy {
 
   agentCreateMode: boolean;
-  isCreated:boolean;
+  isCreated: boolean;
   modalHeader: string;
   createMode: boolean;
-  autoUrl:string;
+  autoUrl: string;
   selectedAgent: Agent;
   selectedDomain: Domain;
   domainSource: Domain[];
+  supportedLanguageSource: string[];
   selectedDomainList: Domain[];
   flowSource: GraphObject[];
 
@@ -98,7 +99,12 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       if (!this.selectedAgent.uiComponent) {
         this.selectedAgent.uiComponent = new UIComponent();
       }
-
+      if (!this.selectedAgent.autodetectLanguage || this.selectedAgent.autodetectLanguage === null) {
+        this.selectedAgent.autodetectLanguage = false;
+      }
+      if (!this.selectedAgent.defaultLanguage || this.selectedAgent.defaultLanguage === null) {
+        this.selectedAgent.defaultLanguage = '';
+      }
       if (!this.selectedAgent.uiComponent.placeHolderText) {
         this.selectedAgent.uiComponent.placeHolderText = 'Type your query...';
       }
@@ -154,7 +160,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       this.agentCreateMode = true;
     }
   }
-  
+
   ngOnDestroy(): void {
     if (this.subscription && !this.subscription.closed) {
       this.subscription.unsubscribe();
@@ -170,24 +176,24 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
   fetchLookups() {
     this.subscriptionDomain = this.domainService.domainLookup()
       .subscribe(
-      domainList => {
-        if (domainList) {
-          this.domainSource = domainList;
+        domainList => {
+          if (domainList) {
+            this.domainSource = domainList;
 
-          if (!this.agentCreateMode) {
-            if (this.selectedAgent.domainNameList && this.selectedAgent.domainNameList.length > 0) {
-              for (const domainName of this.selectedAgent.domainNameList) {
-                for (const domain of this.domainSource) {
-                  if (domainName === domain.name) {
-                    this.addDomain(domain);
-                    break;
+            if (!this.agentCreateMode) {
+              if (this.selectedAgent.domainNameList && this.selectedAgent.domainNameList.length > 0) {
+                for (const domainName of this.selectedAgent.domainNameList) {
+                  for (const domain of this.domainSource) {
+                    if (domainName === domain.name) {
+                      this.addDomain(domain);
+                      break;
+                    }
                   }
                 }
               }
             }
           }
         }
-      }
       );
 
     this.subscriptionGraph = this.graphService.fetch('ACTIVE')
@@ -211,8 +217,8 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (this.selectedAgent.langSupported || this.selectedAgent.langSupported.length <= 0) {
-        this.selectedAgent.langSupported = ['ENG', 'HIN'];
+      if (!this.selectedAgent.langSupported || this.selectedAgent.langSupported === null) {
+        this.selectedAgent.langSupported = [];
       }
 
       if (this.isApiEnabled && this.apiClassifierValidator()) {
@@ -232,7 +238,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
           createdAgent => {
             this.isSuccess = true;
             this.isCreated = true;
-            this.autoUrl = environment.autourl +"param1=" +createdAgent._id + "&" + "param2=" + "welcomeTo" + "&" + "param3=" + "agentName" 
+            this.autoUrl = `${environment.autourl}param1=${createdAgent._id}&param2=welcomeTo&param3=agentName`;
             if (createdAgent) {
               if (createdAgent.agentPlugins && createdAgent.agentPlugins.length > 0) {
                 const facebookPlugin: Plugin = createdAgent.agentPlugins[0];
@@ -243,7 +249,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
                   new showModal('successModal');
                   return;
                 }
-              
+
               }
 
               this.facebookIntegrated = false;
@@ -335,6 +341,8 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
         this.selectedDomainList.push(this.selectedDomain);
       }
     }
+
+    this.updateLanguageLookup();
   }
 
   removeDomain() {
@@ -342,9 +350,11 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       const index: number = this.selectedDomainList.indexOf(this.selectedDomain);
       if (index !== -1) {
         this.selectedDomainList.splice(index, 1);
-        this.selectedAgent.domainId = "";
+        this.selectedAgent.domainId = '';
       }
     }
+
+    this.updateLanguageLookup();
   }
 
   addAllDomain() {
@@ -355,6 +365,8 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
         }
       }
     }
+
+    this.updateLanguageLookup();
   }
 
   removeAllDomain() {
@@ -365,6 +377,31 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
           if (index !== -1) {
             this.selectedDomainList.splice(index, 1);
           }
+        }
+      }
+    }
+
+    this.updateLanguageLookup();
+  }
+
+  updateLanguageLookup() {
+    if (this.selectedDomainList) {
+      this.supportedLanguageSource = [];
+      for (const domain of this.selectedDomainList) {
+        if (domain && domain.langSupported && domain.langSupported) {
+          for (const lang of domain.langSupported) {
+            if (lang && !this.supportedLanguageSource.includes(lang)) {
+              this.supportedLanguageSource.push(lang);
+            }
+          }
+        }
+      }
+
+      if (!this.supportedLanguageSource.includes(this.selectedAgent.defaultLanguage)) {
+        if (this.supportedLanguageSource.length > 0) {
+          this.selectedAgent.defaultLanguage = this.supportedLanguageSource[0];
+        } else {
+          this.selectedAgent.defaultLanguage = '';
         }
       }
     }
@@ -395,7 +432,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
     }
   }
 
-  goBack(){
+  goBack() {
     this.router.navigate(['/pg/agnt/agsr'], { relativeTo: this.route });
   }
 

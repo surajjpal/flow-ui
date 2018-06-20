@@ -444,6 +444,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
                   if (!d.url || d.url === null) {
                     d.url = '';
                   }
+                  if (!d.language || d.language === null) {
+                    d.language = '';
+                  }
                   if (!d.agentId || d.agentId === null) {
                     d.agentId = '';
                   }
