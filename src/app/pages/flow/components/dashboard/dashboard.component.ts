@@ -83,7 +83,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.workflowSummarySubscription = this.dashboardService.dashboard_summary(body)
       .subscribe(flowDashboard => { 
         console.log(flowDashboard); 
-        this.workflowSummary = flowDashboard;
+        this.workflowSummary = flowDashboard['result'];
       })
 
 
@@ -91,28 +91,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.flowTimelineSubscription = this.dashboardService.flow_timeline(body)
       .subscribe(flowDashboard => { 
         console.log(flowDashboard)
-        this.flowTimelineData = flowDashboard ;
+        this.flowTimelineData = flowDashboard['result'] ;
        
       })
 
 
     this.rangeOfTransactionInStatesSubscription = this.dashboardService.transaction_range(body)
-      .subscribe(flowDashboard => { this.rangeOfTransactionInStatesData = flowDashboard; })
+      .subscribe(flowDashboard => { this.rangeOfTransactionInStatesData = flowDashboard['result']; })
 
 
     // this.groupResourceAllocationInStatesSubscription = this.dashboardService.fetch('GROUP_RESOURCE_ALLOCATION_STATES_COUNT', dateRange)
     //   .subscribe(flowDashboard => { this.groupResourceAllocationInStatesData = flowDashboard.nvd3ChartInputList[0]; })
     this.transactionValueInStatesSubscription = this.dashboardService.state_transactions(body)
-      .subscribe(flowDashboard => { this.transactionValueInStatesData = flowDashboard; })
+      .subscribe(flowDashboard => { this.transactionValueInStatesData = flowDashboard['result']; })
 
 
     this.avgTimeInStatesSubscription = this.dashboardService.avg_time_states(body)
       .subscribe(flowDashboard => { 
         console.log(flowDashboard);
-        this.avgTimeInStatesData = flowDashboard; })
+        this.avgTimeInStatesData = flowDashboard['result']; })
 
     this.statesConsumingMaxResTimeTransactionSubscription = this.dashboardService.consumption(body)
-      .subscribe(flowDashboard => { this.statesConsumingMaxResTimeTransaction = flowDashboard; })
+      .subscribe(flowDashboard => { this.statesConsumingMaxResTimeTransaction = flowDashboard['result']; })
   }
 
   setupChartOptions() {

@@ -177,7 +177,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe(summary => {
         this.CONVERSATION_SUMMARY_FLAG = true;
         this.updateProgressBar();
-        this.conversationSummary = summary
+        this.conversationSummary = summary['result']
       }, err => {
         this.CONVERSATION_SUMMARY_FLAG = true;
         this.updateProgressBar();
@@ -188,7 +188,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe(autoDashboard => {
         this.EPISODE_TIMELINE_FLAG = true;
         this.updateProgressBar();
-        this.episodeCountData = autoDashboard;
+        this.episodeCountData = autoDashboard['result'];
       }, err => {
         this.EPISODE_TIMELINE_FLAG = true;
         this.updateProgressBar();
@@ -198,7 +198,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe(autoDashboard => {
         this.INTENT_COUNT_FLAG = true;
         this.updateProgressBar();
-        this.intentCountData = autoDashboard[0].values;
+        this.intentCountData = autoDashboard['result'][0].values;
       }, err => {
         this.INTENT_COUNT_FLAG = true;
         this.updateProgressBar();
@@ -208,7 +208,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe(autoDashboard => {
         this.ENTITY_COUNT_FLAG = true;
         this.updateProgressBar();
-        this.entityCountData = autoDashboard[0].values;
+        this.entityCountData = autoDashboard['result'][0].values;
       }, err => {
         this.ENTITY_COUNT_FLAG = true;
         this.updateProgressBar();
@@ -218,7 +218,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe(autoDashboard => {
         this.SENTIMENT_COUNT_FLAG = true;
         this.updateProgressBar();
-        this.sentimentCountData = autoDashboard[0].values;
+        this.sentimentCountData = autoDashboard['result'][0].values;
       }, err => {
         this.SENTIMENT_COUNT_FLAG = true;
         this.updateProgressBar();
@@ -228,7 +228,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe(autoDashboard => {
         this.GOAL_COUNT_AND_EFFICIENCY_FLAG = true;
         this.updateProgressBar();
-        this.parseGoalsCountAndEfficiency(autoDashboard);
+        this.parseGoalsCountAndEfficiency(autoDashboard['result']);
       }, err => {
         this.GOAL_COUNT_AND_EFFICIENCY_FLAG = true;
         this.updateProgressBar();
@@ -238,7 +238,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe(autoDashboard => {
         this.MESSAGES_IN_EPISODE_FLAG = true;
         this.updateProgressBar();
-        this.messagesInEpisodeData = autoDashboard;
+        this.messagesInEpisodeData = autoDashboard['result'];
       }, err => {
         this.MESSAGES_IN_EPISODE_FLAG = true;
         this.updateProgressBar();

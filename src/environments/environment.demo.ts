@@ -97,7 +97,7 @@ export const environment = {
     validationtypekeyslookupurl: 'load/validations',
 
    //Dashboard
-   dashboardServer: 'http://localhost:8080/flow/dashboard/',
+   dashboardServer: 'https://flow.automatapi.com/flow/dashboard/',
    dashboardsummary:'auto/dashboard_summary',
    episodetimeline:'auto/episode_timeline',
    intentcount:'auto/intent_count',
