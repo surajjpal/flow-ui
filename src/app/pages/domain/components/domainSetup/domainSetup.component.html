@@ -20,6 +20,9 @@
         <li class="nav-item">
           <a class="nav-link" id="responseMessagesTab" data-toggle="tab" href="#responseMessagesContent" role="tab" aria-controls="responseMessages">Response Messages</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" id="cardsTab" data-toggle="tab" href="#cardsContent" role="tab" aria-controls="cards">Cards</a>
+        </li>
       </ul>
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade show active" id="domainContent" aria-labelledby="domainTab">
@@ -262,6 +265,44 @@
             </table>
           </div>
         </div>
+        <div role="tabpanel" class="tab-pane fade" id="cardsContent" aria-labelledby="cardsTab">
+            <div class="panel panel-default">
+                <form class="row form-inline">
+                  <div class="form-group col-sm-10">
+                    <input class="form-control" [(ngModel)]="cardsFilterQuery" name="cardsFilterQuery" placeholder="Filter Query" />
+                  </div>
+                  <div class="form-group col-sm-2">
+                    <button type="button" class="btn btn-primary" (click)="onCardSelect()" data-toggle="modal" data-target="#cardModal">
+                      Add Card
+                    </button>
+                  </div>
+                </form>
+                <br>
+                <table class="table table-striped" [mfData]="selectedDomain.cards | universalDataFilter : cardsFilterQuery" #mfCard="mfDataTable"
+                [mfRowsOnPage]="10" mfSortBy="cardName">
+                <thead>
+                  <tr>
+                    <th><mfDefaultSorter by="cardName">Name</mfDefaultSorter></th>
+                    <th><mfDefaultSorter by="templateName">Template</mfDefaultSorter></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let card of mfCard.data" (click)="onCardSelect(card)" data-toggle="modal" data-target="#cardModal">
+                      <td>{{card.cardName}}</td>
+                      <td>{{card.templateName}}</td>
+                      
+                    </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="100%">
+                      <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+        </div>
       </div>
 
       <form>
@@ -389,7 +430,7 @@
           <span class="sr-only">Close</span>
         </button>
       </div>
-
+      
       <!-- Modal Body -->
       <div class="modal-body">
         <form>
@@ -628,6 +669,11 @@
                                           />
                                         </div>
                                         <div class="form-group">
+                                          <label>Error Message On Validation Failed</label>
+                                          <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
+                                          />
+                                        </div>
+                                        <div class="form-group">
                                           <label>Placeholder</label>
                                           <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                         </div>
@@ -663,12 +709,13 @@
                                                     <option value="CHECKBOX">Checkbox</option>
                                                     <option value="RADIO">Radio</option>
                                                     <option value="FILE_UPLOAD">File Upload</option>
+                                                    <option value="CARD">Card</option>
                                                   </select>
                                                 </td>
                                                 <td>
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
-                                                <td>
+                                                <td *ngIf="option.type != 'CARD'">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
@@ -711,6 +758,36 @@
                                                       </tr>
                                                     </tbody>
                                                   </table>
+                                                </td>
+                                                <td *ngIf="option.type === 'CARD'">
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                        <tr>
+                                                          <th>card</th>
+                                                          <!-- <th>
+                                                            <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
+                                                              <i class="ion-plus-round"></i>
+                                                            </button>
+                                                          </th> -->
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <tr>
+                                                          <td>
+                                                            <select class="selectpicker form-control" id="selectStatus" title="Choose card" [(ngModel)]="option.cardData" name="cardData" multiple="true"
+                                                            >
+                                                              <option *ngFor="let cardData of selectedDomain.cards" [ngValue]="cardData.cardName">{{ cardData.cardName }}</option>
+                                                            </select>
+                                                          </td>
+                                                          <!-- <td>
+                                                            <button type="button" class="btn btn-danger" (click)="deleteCardData(option.cardData,rowCard)">
+                                                              <i class="ion-ios-trash"></i>
+                                                            </button>
+                                                          </td> -->
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                    
                                                 </td>
                                                 <td>
                                                   <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
@@ -768,6 +845,11 @@
                                             />
                                           </div>
                                           <div class="form-group">
+                                            <label>Error Message On Validation Failed</label>
+                                            <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
+                                            />
+                                          </div>
+                                          <div class="form-group">
                                             <label>Placeholder</label>
                                             <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                           </div>
@@ -803,12 +885,13 @@
                                                       <option value="CHECKBOX">Checkbox</option>
                                                       <option value="RADIO">Radio</option>
                                                       <option value="FILE_UPLOAD">File Upload</option>
+                                                      <option value="CARD">Card</option>
                                                     </select>
                                                   </td>
                                                   <td>
                                                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td>
+                                                  <td *ngIf="option.type != 'CARD'">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
@@ -851,6 +934,36 @@
                                                         </tr>
                                                       </tbody>
                                                     </table>
+                                                  </td>
+                                                  <td *ngIf="option.type === 'CARD'">
+                                                      <table class="table table-striped">
+                                                        <thead>
+                                                          <tr>
+                                                            <th>card</th>
+                                                            <!-- <th>
+                                                              <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
+                                                                <i class="ion-plus-round"></i>
+                                                              </button>
+                                                            </th> -->
+                                                          </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          <tr>
+                                                            <td>
+                                                              <select class="selectpicker form-control" id="selectStatus" title="Choose card" [(ngModel)]="option.cardData" name="cardData" multiple="true"
+                                                              >
+                                                                <option *ngFor="let cardData of selectedDomain.cards" [ngValue]="cardData.cardName">{{ cardData.cardName }}</option>
+                                                              </select>
+                                                            </td>
+                                                            <!-- <td>
+                                                              <button type="button" class="btn btn-danger" (click)="deleteCardData(option.cardData,rowCard)">
+                                                                <i class="ion-ios-trash"></i>
+                                                              </button>
+                                                            </td> -->
+                                                          </tr>
+                                                        </tbody>
+                                                      </table>
+                                                      
                                                   </td>
                                                   <td>
                                                     <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
@@ -941,6 +1054,11 @@
                                           />
                                         </div>
                                         <div class="form-group">
+                                          <label>Error Message On Validation Failed</label>
+                                          <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
+                                          />
+                                        </div>
+                                        <div class="form-group">
                                           <label>Placeholder</label>
                                           <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                         </div>
@@ -976,12 +1094,13 @@
                                                     <option value="CHECKBOX">Checkbox</option>
                                                     <option value="RADIO">Radio</option>
                                                     <option value="FILE_UPLOAD">File Upload</option>
+                                                    <option value="CARD">Card</option>
                                                   </select>
                                                 </td>
                                                 <td>
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
-                                                <td>
+                                                <td *ngIf="option.type != 'CARD'">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
@@ -1024,6 +1143,36 @@
                                                       </tr>
                                                     </tbody>
                                                   </table>
+                                                </td>
+                                                <td *ngIf="option.type === 'CARD'">
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                        <tr>
+                                                          <th>card</th>
+                                                          <!-- <th>
+                                                            <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
+                                                              <i class="ion-plus-round"></i>
+                                                            </button>
+                                                          </th> -->
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <tr>
+                                                          <td>
+                                                            <select class="selectpicker form-control" id="selectStatus" title="Choose card" [(ngModel)]="option.cardData" name="cardData" multiple="true"
+                                                            >
+                                                              <option *ngFor="let cardData of selectedDomain.cards" [ngValue]="cardData.cardName">{{ cardData.cardName }}</option>
+                                                            </select>
+                                                          </td>
+                                                          <!-- <td>
+                                                            <button type="button" class="btn btn-danger" (click)="deleteCardData(option.cardData,rowCard)">
+                                                              <i class="ion-ios-trash"></i>
+                                                            </button>
+                                                          </td> -->
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                    
                                                 </td>
                                                 <td>
                                                   <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
@@ -1081,6 +1230,11 @@
                                             />
                                           </div>
                                           <div class="form-group">
+                                            <label>Error Message On Validation Failed</label>
+                                            <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
+                                            />
+                                          </div>
+                                          <div class="form-group">
                                             <label>Placeholder</label>
                                             <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                           </div>
@@ -1116,12 +1270,13 @@
                                                       <option value="CHECKBOX">Checkbox</option>
                                                       <option value="RADIO">Radio</option>
                                                       <option value="FILE_UPLOAD">File Upload</option>
+                                                      <option value="CARD">Card</option>
                                                     </select>
                                                   </td>
                                                   <td>
                                                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td>
+                                                  <td *ngIf="option.type != 'CARD'">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
@@ -1164,6 +1319,36 @@
                                                         </tr>
                                                       </tbody>
                                                     </table>
+                                                  </td>
+                                                  <td *ngIf="option.type === 'CARD'">
+                                                      <table class="table table-striped">
+                                                        <thead>
+                                                          <tr>
+                                                            <th>card</th>
+                                                            <!-- <th>
+                                                              <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
+                                                                <i class="ion-plus-round"></i>
+                                                              </button>
+                                                            </th> -->
+                                                          </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          <tr>
+                                                            <td>
+                                                              <select class="selectpicker form-control" id="selectStatus" title="Choose card" [(ngModel)]="option.cardData" name="cardData" multiple="true"
+                                                              >
+                                                                <option *ngFor="let cardData of selectedDomain.cards" [ngValue]="cardData.cardName">{{ cardData.cardName }}</option>
+                                                              </select>
+                                                            </td>
+                                                            <!-- <td>
+                                                              <button type="button" class="btn btn-danger" (click)="deleteCardData(option.cardData,rowCard)">
+                                                                <i class="ion-ios-trash"></i>
+                                                              </button>
+                                                            </td> -->
+                                                          </tr>
+                                                        </tbody>
+                                                      </table>
+                                                      
                                                   </td>
                                                   <td>
                                                     <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
@@ -1351,6 +1536,11 @@
                                           />
                                         </div>
                                         <div class="form-group">
+                                          <label>Error Message On Validation Failed</label>
+                                          <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
+                                          />
+                                        </div>
+                                        <div class="form-group">
                                           <label>Placeholder</label>
                                           <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                         </div>
@@ -1386,12 +1576,13 @@
                                                     <option value="CHECKBOX">Checkbox</option>
                                                     <option value="RADIO">Radio</option>
                                                     <option value="FILE_UPLOAD">File Upload</option>
+                                                    <option value="CARD">Card</option>
                                                   </select>
                                                 </td>
                                                 <td>
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
-                                                <td>
+                                                <td *ngIf="option.type != 'CARD'">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
@@ -1434,6 +1625,36 @@
                                                       </tr>
                                                     </tbody>
                                                   </table>
+                                                </td>
+                                                <td *ngIf="option.type === 'CARD'">
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                        <tr>
+                                                          <th>card</th>
+                                                          <!-- <th>
+                                                            <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
+                                                              <i class="ion-plus-round"></i>
+                                                            </button>
+                                                          </th> -->
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <tr>
+                                                          <td>
+                                                            <select class="selectpicker form-control" id="selectStatus" title="Choose card" [(ngModel)]="option.cardData" name="cardData" multiple="true"
+                                                            >
+                                                              <option *ngFor="let cardData of selectedDomain.cards" [ngValue]="cardData.cardName">{{ cardData.cardName }}</option>
+                                                            </select>
+                                                          </td>
+                                                          <!-- <td>
+                                                            <button type="button" class="btn btn-danger" (click)="deleteCardData(option.cardData,rowCard)">
+                                                              <i class="ion-ios-trash"></i>
+                                                            </button>
+                                                          </td> -->
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                    
                                                 </td>
                                                 <td>
                                                   <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
@@ -1491,6 +1712,11 @@
                                             />
                                           </div>
                                           <div class="form-group">
+                                            <label>Error Message On Validation Failed</label>
+                                            <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
+                                            />
+                                          </div>
+                                          <div class="form-group">
                                             <label>Placeholder</label>
                                             <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                           </div>
@@ -1526,12 +1752,13 @@
                                                       <option value="CHECKBOX">Checkbox</option>
                                                       <option value="RADIO">Radio</option>
                                                       <option value="FILE_UPLOAD">File Upload</option>
+                                                      <option value="CARD">Card</option>
                                                     </select>
                                                   </td>
                                                   <td>
                                                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td>
+                                                  <td *ngIf="option.type != 'CARD'">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
@@ -1574,6 +1801,36 @@
                                                         </tr>
                                                       </tbody>
                                                     </table>
+                                                  </td>
+                                                  <td *ngIf="option.type === 'CARD'">
+                                                      <table class="table table-striped">
+                                                        <thead>
+                                                          <tr>
+                                                            <th>card</th>
+                                                            <!-- <th>
+                                                              <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
+                                                                <i class="ion-plus-round"></i>
+                                                              </button>
+                                                            </th> -->
+                                                          </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          <tr>
+                                                            <td>
+                                                              <select class="selectpicker form-control" id="selectStatus" title="Choose card" [(ngModel)]="option.cardData" name="cardData" multiple="true"
+                                                              >
+                                                                <option *ngFor="let cardData of selectedDomain.cards" [ngValue]="cardData.cardName">{{ cardData.cardName }}</option>
+                                                              </select>
+                                                            </td>
+                                                            <!-- <td>
+                                                              <button type="button" class="btn btn-danger" (click)="deleteCardData(option.cardData,rowCard)">
+                                                                <i class="ion-ios-trash"></i>
+                                                              </button>
+                                                            </td> -->
+                                                          </tr>
+                                                        </tbody>
+                                                      </table>
+                                                      
                                                   </td>
                                                   <td>
                                                     <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
@@ -1664,6 +1921,11 @@
                                           />
                                         </div>
                                         <div class="form-group">
+                                          <label>Error Message On Validation Failed</label>
+                                          <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
+                                          />
+                                        </div>
+                                        <div class="form-group">
                                           <label>Placeholder</label>
                                           <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                         </div>
@@ -1699,12 +1961,13 @@
                                                     <option value="CHECKBOX">Checkbox</option>
                                                     <option value="RADIO">Radio</option>
                                                     <option value="FILE_UPLOAD">File Upload</option>
+                                                    <option value="CARD">Card</option>
                                                   </select>
                                                 </td>
                                                 <td>
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
-                                                <td>
+                                                <td *ngIf="option.type != 'CARD'">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
@@ -1747,6 +2010,36 @@
                                                       </tr>
                                                     </tbody>
                                                   </table>
+                                                </td>
+                                                <td *ngIf="option.type === 'CARD'">
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                        <tr>
+                                                          <th>card</th>
+                                                          <!-- <th>
+                                                            <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
+                                                              <i class="ion-plus-round"></i>
+                                                            </button>
+                                                          </th> -->
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <tr>
+                                                          <td>
+                                                            <select class="selectpicker form-control" id="selectStatus" title="Choose card" [(ngModel)]="option.cardData" name="cardData" multiple="true"
+                                                            >
+                                                              <option *ngFor="let cardData of selectedDomain.cards" [ngValue]="cardData.cardName">{{ cardData.cardName }}</option>
+                                                            </select>
+                                                          </td>
+                                                          <!-- <td>
+                                                            <button type="button" class="btn btn-danger" (click)="deleteCardData(option.cardData,rowCard)">
+                                                              <i class="ion-ios-trash"></i>
+                                                            </button>
+                                                          </td> -->
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                    
                                                 </td>
                                                 <td>
                                                   <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
@@ -1804,6 +2097,11 @@
                                             />
                                           </div>
                                           <div class="form-group">
+                                            <label>Error Message On Validation Failed</label>
+                                            <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
+                                            />
+                                          </div>
+                                          <div class="form-group">
                                             <label>Placeholder</label>
                                             <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                           </div>
@@ -1839,12 +2137,13 @@
                                                       <option value="CHECKBOX">Checkbox</option>
                                                       <option value="RADIO">Radio</option>
                                                       <option value="FILE_UPLOAD">File Upload</option>
+                                                      <option value="CARD">Card</option>
                                                     </select>
                                                   </td>
                                                   <td>
                                                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td>
+                                                  <td *ngIf="option.type != 'CARD'">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
@@ -1887,6 +2186,36 @@
                                                         </tr>
                                                       </tbody>
                                                     </table>
+                                                  </td>
+                                                  <td *ngIf="option.type === 'CARD'">
+                                                      <table class="table table-striped">
+                                                        <thead>
+                                                          <tr>
+                                                            <th>card</th>
+                                                            <!-- <th>
+                                                              <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
+                                                                <i class="ion-plus-round"></i>
+                                                              </button>
+                                                            </th> -->
+                                                          </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          <tr>
+                                                            <td>
+                                                              <select class="selectpicker form-control" id="selectStatus" title="Choose card" [(ngModel)]="option.cardData" name="cardData" multiple="true"
+                                                              >
+                                                                <option *ngFor="let cardData of selectedDomain.cards" [ngValue]="cardData.cardName">{{ cardData.cardName }}</option>
+                                                              </select>
+                                                            </td>
+                                                            <!-- <td>
+                                                              <button type="button" class="btn btn-danger" (click)="deleteCardData(option.cardData,rowCard)">
+                                                                <i class="ion-ios-trash"></i>
+                                                              </button>
+                                                            </td> -->
+                                                          </tr>
+                                                        </tbody>
+                                                      </table>
+                                                      
                                                   </td>
                                                   <td>
                                                     <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
@@ -1997,6 +2326,11 @@
             />
           </div>
           <div class="form-group">
+            <label>Error Message On Validation Failed</label>
+            <input class="form-control" placeholder="Error Message" [(ngModel)]="tempResponse.settings.errorMessage" name="errorMessage"
+            />
+          </div>
+          <div class="form-group">
             <label>Placeholder</label>
             <input class="form-control" placeholder="Placeholder" [(ngModel)]="tempResponse.settings.placeholder" name="placeholder"
             />
@@ -2008,7 +2342,34 @@
             <input class="form-control" placeholder="Response Selection Expression" [(ngModel)]="tempResponse.selectionExpression" name="selectionExpression"
             />
           </div>
-
+          <div class="form-group">
+            <label>File Upload</label>
+            <button type="button" class="btn btn-primary pull-right" (click)="onAddFileUploadResponse()">
+                <i class="ion-plus-round"></i>
+            </button>
+          </div>
+          <div *ngIf="isAddFileUploadResponse">
+              <div class="form-group">
+                <label>Function Name</label>
+                <input class="form-control" placeholder="Function Name" [(ngModel)]="tempResponse.uploadDocument.functionInstanceName" name="functionInstanceName"/>
+              </div>
+              <div class="form-group">
+                <label>Entity Type</label>
+                <input class="form-control" placeholder="Entity Type" [(ngModel)]="tempResponse.uploadDocument.entityType" name="entityType"/>
+              </div>
+              <div class="form-group">
+                <label>Entity Reference</label>
+                <input class="form-control" placeholder="Entity Reference" [(ngModel)]="tempResponse.uploadDocument.entityRef" name="entityRef"/>
+              </div>
+              <div class="form-group">
+                  <label>Version</label>
+                  <input class="form-control" placeholder="Version" [(ngModel)]="tempResponse.uploadDocument.version" name="version"/>
+              </div>
+              <div class="form-group">
+                  <label>File Name</label>
+                  <input class="form-control" placeholder="File Name" [(ngModel)]="tempResponse.uploadDocument.fileName" name="fileName"/>
+              </div>
+          </div>
           <div class="form-group">
             <label>Response options</label>
             <table class="table table-striped">
@@ -2033,12 +2394,13 @@
                       <option value="CHECKBOX">Checkbox</option>
                       <option value="RADIO">Radio</option>
                       <option value="FILE_UPLOAD">File Upload</option>
+                      <option value="CARD">Card</option>
                     </select>
                   </td>
                   <td>
                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                   </td>
-                  <td>
+                  <td *ngIf="option.type != 'CARD'">
                     <table class="table table-striped">
                       <thead>
                         <tr>
@@ -2082,6 +2444,36 @@
                       </tbody>
                     </table>
                   </td>
+                  <td *ngIf="option.type === 'CARD'">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>card</th>
+                            <!-- <th>
+                              <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
+                                <i class="ion-plus-round"></i>
+                              </button>
+                            </th> -->
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <select class="selectpicker form-control" id="selectStatus" title="Choose card" [(ngModel)]="option.cardData" name="cardData" multiple="true"
+                              >
+                                <option *ngFor="let cardData of selectedDomain.cards" [ngValue]="cardData.cardName">{{ cardData.cardName }}</option>
+                              </select>
+                            </td>
+                            <!-- <td>
+                              <button type="button" class="btn btn-danger" (click)="deleteCardData(option.cardData,rowCard)">
+                                <i class="ion-ios-trash"></i>
+                              </button>
+                            </td> -->
+                          </tr>
+                        </tbody>
+                      </table>
+                      
+                  </td>
                   <td>
                     <button type="button" class="btn btn-danger" title="delete" (click)="delete(tempResponse.options, option)">
                       <i class="ion-ios-trash"></i>
@@ -2103,6 +2495,164 @@
     </div>
   </div>
 </div>
+
+<!-- card modal -->
+<div class="modal fade" id="cardModal" tabindex="-1" role="dialog" attr.aria-labelledby="cardModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="cardModalLabel">
+            {{modalHeader}}
+          </h4>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+  
+        <!-- Modal Body -->
+        <div class="modal-body">
+          <form>
+              <div class="form-group">
+                <label>Card Name</label>
+                <input class="form-control" placeholder="Card Name" [(ngModel)]="tempCard.cardName" name="cardName"/>
+              </div>
+              <div class="form-group">
+                <label>Template</label>
+                <select class="selectpicker form-control" title="Select Template" [(ngModel)]="tempCard.templateName" name="templateName">
+                  <option *ngFor="let template of templateNames" [ngValue]="template">{{template}}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Title</label>
+                <input class="form-control" placeholder="Title" [(ngModel)]="tempCard.title" name="title"/>
+              </div>
+              <div class="form-group">
+                <label>Sub Title</label>
+                <input class="form-control" placeholder="Sub Title" [(ngModel)]="tempCard.subTitle" name="subTitle"/>
+              </div>
+              <div class="form-group">
+                <label>Avatar URL</label>
+                <input class="form-control" placeholder="Avatar Image Url" [(ngModel)]="tempCard.avatarImageUrl" name="avatarImageUrl"/>
+              </div>
+              <div class="form-group">
+                <label>Image Url</label>
+                <input class="form-control" placeholder="Image Url" [(ngModel)]="tempCard.imageUrl" name="imageUrl"/>
+              </div>
+              <div class="form-group">
+                <label>Content</label>
+                <input class="form-control" placeholder="Content" [(ngModel)]="tempCard.content" name="content"/>
+              </div>
+              <div *ngIf="tempCard.templateName === 'default'" class="form-group">
+                  <label>Response options</label>
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Input type</th>
+                        <th>Options</th>
+                        <th>
+                          <button type="button" class="btn btn-primary" (click)="onAddCardActionOption(tempCard)">
+                            <i class="ion-plus-round"></i>
+                          </button>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let option of tempCard.actionable">
+                        <td>
+                          <select name="type" id="type" [(ngModel)]="option.type">
+                            <option value="">Choose One</option>
+                            <option value="BUTTON">Button</option>
+                            <option value="CHECKBOX">Checkbox</option>
+                            <option value="RADIO">Radio</option>
+                            <option value="FILE_UPLOAD">File Upload</option>
+                            <option value="AGENT_SWITCH">Agent Switch</option>
+                          </select>
+                        </td>
+                        <td>
+                          <table class="table table-striped">
+                            <thead>
+                              <tr>
+                                <th>Value</th>
+                                <th>Label</th>
+                                <th>URL</th>
+                                <th *ngIf="option.type == 'AGENT_SWITCH'">Agent ID</th>
+                                <th>
+                                  <button type="button" class="btn btn-primary" (click)="onAddCardActinableData(option)">
+                                    <i class="ion-plus-round"></i>
+                                  </button>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let row of option.data">
+                                <td>
+                                  <input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"
+                                  />
+                                </td>
+                                <td>
+                                  <input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"
+                                  />
+                                </td>
+                                <td>
+                                  <input type="text" class="form-control" placeholder="URL" [value]="row.url" (input)="row.url = $event.target.value">
+                                </td>
+                                <td *ngIf="option.type == 'AGENT_SWITCH'">
+                                  <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId" (input)="row.agentId = $event.target.value">
+                                </td>
+                                <td>
+                                  <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
+                                    <i class="ion-ios-trash"></i>
+                                  </button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                        <td>
+                          <button type="button" class="btn btn-danger" title="delete" (click)="delete(tempCard.actionable, option)">
+                            <i class="ion-ios-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+              </div>
+              <div *ngIf="tempCard.templateName == 'download'">
+                <div class="form-group">
+                  <label>Function Name</label>
+                  <input class="form-control" placeholder="Function Name" [(ngModel)]="tempCard.document.functionInstanceName" name="functionInstanceName"/>
+                </div>
+                <div class="form-group">
+                  <label>Entity Type</label>
+                  <input class="form-control" placeholder="Entity Type" [(ngModel)]="tempCard.document.entityType" name="entityType"/>
+                </div>
+                <div class="form-group">
+                  <label>Entity Reference</label>
+                  <input class="form-control" placeholder="Entity Reference" [(ngModel)]="tempCard.document.entityRef" name="entityRef"/>
+                </div>
+                <div class="form-group">
+                    <label>Version</label>
+                    <input class="form-control" placeholder="Version" [(ngModel)]="tempCard.document.version" name="version"/>
+                </div>
+                <div class="form-group">
+                    <label>File Name</label>
+                    <input class="form-control" placeholder="File Name" [(ngModel)]="tempCard.document.fileName" name="fileName"/>
+                </div>
+              </div>  
+            </form>
+        </div>
+  
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeCard()">Remove</button>
+          <button type="submit" class="btn btn-primary" (click)="addCard()">{{createMode ? 'Create' : 'Update'}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <!-- Warning Modal -->
 <div class="modal fade" id="domainUpdateModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">

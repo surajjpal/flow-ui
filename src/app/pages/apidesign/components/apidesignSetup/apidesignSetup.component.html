@@ -1,0 +1,26 @@
+<div class="widgets">
+    <div class="row">
+        <ba-card [cardTitle]="apiDesignCreateMode ? 'Design API' : 'Update API'" baCardClass="with-scroll" class="col-md-12">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="businessObjectTab" data-toggle="tab" href="#businessObjectContent" role="tab" aria-controls="businessObject"
+                    aria-expanded="true">Business Object</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="businessObjectTrainingTab" data-toggle="tab" href="#businessObjectTrainingContent" role="tab" aria-controls="businessObjectTraining">Business Object Training</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade show active" id="businessObjectContent" aria-labelledby="businessObjectTab">
+                    <div class="panel panel-default">
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="businessObjectTrainingContent" aria-labelledby="businessObjectTrainingTab">
+                    <div class="panel panel-default">
+                    </div>
+                </div>
+            </div>
+        </ba-card>
+    </div>
+</div>
+        

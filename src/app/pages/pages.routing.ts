@@ -29,6 +29,7 @@ export const routes: Routes = [
       { path: 'dmn', loadChildren: './domain/domain.module#DomainModule' },
       { path: 'stp', loadChildren: './master/master.module#MasterModule' },
       { path: 'stn', loadChildren: './settings/settings.module#SettingsModule' }
+      //{ path: 'apidgn', loadChildren: './apidesign/apidesign.module#ApiDesignModule'}
     ]
   }
 ];
