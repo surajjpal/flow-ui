@@ -1,4 +1,80 @@
-<api-daterangepicker (selectedRange)="fetchAutoStats($event)"></api-daterangepicker>
+<ba-card cardTitle="FILTER">
+    <api-daterangepicker (selectedRange)="selectDate($event)"></api-daterangepicker>
+        <div class="row">
+        <table class="table">
+            <thead>
+                <tr class="filters">
+                    <th>
+                        <label for="selectDomain">DOMAIN</label>
+                        <select  multiple class="form-control"  required id="selectDomain"  title="Choose Domain" [(ngModel)]="selectedDomains" [ngModelOptions]="{standalone: true}" >
+                            <option *ngFor="let domain of domainSource" [ngValue]="domain">{{domain.name}}</option>
+                        </select>
+                    </th>
+                    <th>
+                        <label for="selectDomain">AGENT</label>
+                        <select multiple class="form-control" required id="selectAgent"  title="Choose Agent" [(ngModel)]="selectedAgents" [ngModelOptions]="{standalone: true}" >
+                            <option *ngFor="let agent of agentSource" [ngValue]="agent">{{agent.name}}</option>
+                        </select>
+                    </th>
+                    <th>
+                        <label for="selectDomain">SOURCE</label>
+                        <select multiple  class="form-control" required id="selectSource"  title="Choose Source" [(ngModel)]="selectedSources" [ngModelOptions]="{standalone: true}" >
+                            <option *ngFor="let source of Sources" [ngValue]="source">{{source}}</option>
+                        </select>
+                    </th>
+                    <th>
+                            <label for="selectDomain">LANGUAGE</label>
+                        <select multiple class="form-control"  required id="selectLanguage"  title="Choose Language" [(ngModel)]="selectedLanguages" [ngModelOptions]="{standalone: true}" >
+                            <option *ngFor="let lang of Language" [ngValue]="lang">{{lang}}</option>
+                        </select>
+                    </th>
+                    <th>        
+                        <button type="button" class="btn btn-success" id="submit" style="display: block; text-align: center;width: 100px;margin-bottom: 25px;" (click)="submit()">SUBMIT</button> 
+                    </th>
+                </tr>
+            </thead>
+            </table>
+        </div>
+</ba-card>
+
+
+
+<!-- <div class="row">
+    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="FILTER">
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="selectDate" class="control-label col-sm-6">DATE</label>
+          <api-daterangepicker (selectedRange)="selectDate($event)"></api-daterangepicker>
+          </div>
+        <div class="form-group" >
+          <label for="selectDomain" class="control-label col-sm-6">DOMAIN:</label>
+          <select multiple class="selectpicker"  required id="selectDomain" style= "width: 400px; height:50px" title="Choose Domain" [(ngModel)]="selectedDomains" [ngModelOptions]="{standalone: true}" >
+            <option *ngFor="let domain of domainSource" [ngValue]="domain">{{domain.name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="selectAgent"  class="control-label col-sm-6">AGENT:</label>
+            <select class="selectpicker form-control" multiple="true"  required id="selectAgent" style= "width: 400px; height:50px" title="Choose Agent" [(ngModel)]="selectedAgents" [ngModelOptions]="{standalone: true}" >
+            <option *ngFor="let agent of agentSource" [ngValue]="agent">{{agent.name}}</option>
+            </select>
+        </div>
+    <div class="form-group">
+        <label for="selectSource"  class="control-label col-sm-6">SOURCE:</label>
+        <select class="selectpicker form-control" multiple="true"  required id="selectSource" style= "width: 400px; height:50px" title="Choose Source" [(ngModel)]="selectedSources" [ngModelOptions]="{standalone: true}" >
+        <option *ngFor="let source of Sources" [ngValue]="source">{{source}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="selectLanguage"  class="control-label col-sm-6">LANGUAGE:</label>
+        <select class="selectpicker form-control" multiple="true"  required id="selectLanguage" style= "width: 400px; height:50px" title="Choose Language" [(ngModel)]="selectedLanguages" [ngModelOptions]="{standalone: true}" >
+        <option *ngFor="let lang of Language" [ngValue]="lang">{{lang}}</option>
+        </select>
+    </div>
+        <button type="button" class="btn btn-success" id="submit" style="display: block; text-align: center;width: 100px" (click)="submit()">SUBMIT</button> 
+      </form>
+      
+    </ba-card>
+</div> -->
 
 <div class="row tile_count">
     <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
