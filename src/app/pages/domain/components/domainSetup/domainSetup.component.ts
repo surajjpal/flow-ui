@@ -22,6 +22,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   entityUploaderOptions: NgUploaderOptions;
 
   domainCreateMode: boolean;
+  isAddFileUploadResponse: boolean;
   modalHeader: string;
   createMode: boolean;
   languageSource: string[];
@@ -65,6 +66,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     private sharingService: DataSharingService,
     private slimLoadingBarService: SlimLoadingBarService
   ) {
+    this.isAddFileUploadResponse = false;
     this.domainCreateMode = true;
     this.modalHeader = '';
     this.createMode = false;
@@ -514,12 +516,19 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.createMode = false;
       this.selectedResponse = response;
       this.tempResponse = JSON.parse(JSON.stringify(this.selectedResponse));
+      if (this.tempResponse.uploadDocument) {
+        this.isAddFileUploadResponse = true;
+      }
     } else {
       this.modalHeader = 'Create Response';
       this.createMode = true;
       this.selectedResponse = null;
       this.tempResponse = new Response();
     }
+  }
+
+  onAddFileUploadResponse() {
+    this.isAddFileUploadResponse = true;
   }
 
   onCardSelect(card?: CardData) {
