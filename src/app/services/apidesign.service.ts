@@ -4,7 +4,7 @@ import { Observable } from "rxjs/Rx";
 
 import { Algorithm, BusinessObject } from '../models/businessobject.model'
 import { Subject } from "rxjs/Subject";
-import { environment } from "environments/environment.prod";
+import { environment } from '../../environments/environment';
 import { HttpClient } from "@angular/common/http";
 import { HttpResponse, HttpErrorResponse } from "@angular/common/http";
 import { UniversalUser } from './shared.service'
@@ -17,10 +17,12 @@ export class ApiDesignService {
     constructor(private httpClient: HttpClient, private univaersalUser: UniversalUser) { }
 
     getAlgorithms():Observable<Algorithm[]> {
+        console.log("env");
+        console.log(`${environment}`);
         const subject = new Subject<Algorithm[]>();
         const companyId = this.univaersalUser.getUser().companyId;
-        const headers = new HttpHeaders({'Content-Type' : 'application/json', 'x-customer-id' : companyId});
-        const url = `${environment.apiDesignUrl + environment.algorithmUrl}`;
+        const headers = new HttpHeaders({'Content-Type' : 'application/json', 'X-Consumer-Custom-Id' : companyId});
+        const url = `${environment.interfaceService + environment.algorithmUrl}`;
         console.log("companyID");
         console.log(companyId);
         //this.httpHeaders.append('Content-Type', 'application/json');
@@ -61,8 +63,8 @@ export class ApiDesignService {
     getBusinessObjects():Observable<BusinessObject[]> {
         const subject = new Subject<BusinessObject[]>();
         const companyId = this.univaersalUser.getUser().companyId;
-        const headers = new HttpHeaders({'Content-Type' : 'application/json', 'x-customer-id' : companyId});
-        const url = `${environment.apiDesignUrl + environment.businessObjectUrl}`;
+        const headers = new HttpHeaders({'Content-Type' : 'application/json', 'X-Consumer-Custom-Id' : companyId});
+        const url = `${environment.interfaceService + environment.businessObjectUrl}`;
         this.httpClient.get<BusinessObject[]>(
             url,
             {
@@ -88,8 +90,8 @@ export class ApiDesignService {
     createBusinessObject(businessObject: BusinessObject):Observable<BusinessObject> {
         const subject = new Subject<BusinessObject>();
         const companyId = this.univaersalUser.getUser().companyId;
-        const headers = new HttpHeaders({'Content-Type' : 'application/json', 'x-customer-id' : companyId});
-        const url = `${environment.apiDesignUrl + environment.businessObjectUrl}`;
+        const headers = new HttpHeaders({'Content-Type' : 'application/json', 'X-Consumer-Custom-Id' : companyId});
+        const url = `${environment.interfaceService + environment.businessObjectUrl}`;
         this.httpClient.post<BusinessObject>(
             url,
             businessObject,
@@ -118,8 +120,8 @@ export class ApiDesignService {
     updateBusinessObject(businessObject: BusinessObject):Observable<BusinessObject> {
         const subject = new Subject<BusinessObject>();
         const companyId = this.univaersalUser.getUser().companyId;
-        const headers = new HttpHeaders({'Content-Type' : 'application/json', 'x-customer-id' : companyId});
-        const url = `${environment.apiDesignUrl + environment.businessObjectUrl}` + "/" + businessObject._id;
+        const headers = new HttpHeaders({'Content-Type' : 'application/json', 'X-Consumer-Custom-Id' : companyId});
+        const url = `${environment.interfaceService + environment.businessObjectUrl}` + "/" + businessObject._id;
         this.httpClient.put<BusinessObject>(
             url,
             businessObject,
@@ -148,8 +150,8 @@ export class ApiDesignService {
     activateBusinessObjectTraining(businessObject: BusinessObject, version: string):Observable<BusinessObject> {
         const subject = new Subject<BusinessObject>();
         const companyId = this.univaersalUser.getUser().companyId;
-        const headers = new HttpHeaders({'Content-Type' : 'application/json', 'x-customer-id' : companyId});
-        const url = `${environment.apiDesignUrl + environment.businessObjectActivateTrainerUrl}` + "/" + businessObject.code + "/" + version;
+        const headers = new HttpHeaders({'Content-Type' : 'application/json', 'X-Consumer-Custom-Id' : companyId});
+        const url = `${environment.interfaceService + environment.businessObjectActivateTrainerUrl}` + "/" + businessObject.code + "/" + version;
         this.httpClient.post<BusinessObject>(
             url,
             businessObject,
@@ -179,8 +181,8 @@ export class ApiDesignService {
     trainBusinessObject(businessObject: BusinessObject, version: string): Observable<BusinessObject> {
         const subject = new Subject<BusinessObject>();
         const companyId = this.univaersalUser.getUser().companyId;
-        const headers = new HttpHeaders({'Content-Type' : 'application/json', 'x-customer-id' : companyId});
-        const url = `${environment.apiDesignUrl + environment.businessObjectTrainingUrl}` + "/" + businessObject.code + "/" + version;
+        const headers = new HttpHeaders({'Content-Type' : 'application/json', 'X-Consumer-Custom-Id' : companyId});
+        const url = `${environment.interfaceService + environment.businessObjectTrainingUrl}` + "/" + businessObject.code + "/" + version;
         this.httpClient.post<BusinessObject>(
             url,
             businessObject,

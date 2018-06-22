@@ -72,12 +72,15 @@ export class ApiDesignsComponent implements OnInit, OnDestroy {
   }
 
   getAlgorithmName(algorithm: BusinessObjectAlgorithm) {
-    for(let algo of this.definedAlgorithms) {
-      if (algo._id == algorithm.algorithmId) {
-        return algo.name;
+    if (this.definedAlgorithms) {
+      for(let algo of this.definedAlgorithms) {
+        if (algo._id == algorithm.algorithmId) {
+          return algo.name;
+        }
       }
+      return '';
     }
-    return '';
+    
   }
 
   onBusinessObjectSelect(businessObject: BusinessObject) {

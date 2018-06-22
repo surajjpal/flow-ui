@@ -38,6 +38,7 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
 
     businessObjectUpdateCreateMsg = '';
     algorithmsModalHeader = '';
+    functionInstanceName = "automatonsApi";
     
     supportedAlgorithmCategory = ["CLASSIFIER", "REGRESSION"];
 
@@ -268,15 +269,15 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     }
     else {
       fileData.append("entityType", "automatons");
-      fileData.append("functionInstanceName", "API");
+      fileData.append("functionInstanceName", this.functionInstanceName);
       fileData.append("entityRef", this.selectedBusinessObject.code);
       fileData.append("version", this.getActiveVersion());
       fileData.append("fileName", "trainingData.csv");
       console.log("fileData");
       console.log(fileData.get("entityType"));
       const companyId = this.universalUser.getUser().companyId;
-      const headers = new HttpHeaders({'x-customer-id' : companyId});
-      const trainingFileUploadUrl = `${environment.fileServer + environment.fileUploadUrl}`
+      const headers = new HttpHeaders({'X-Consumer-Custom-Id' : companyId});
+      const trainingFileUploadUrl = `${environment.interfaceService + environment.fileUploadUrl}`
       this.fileUploaderService.upload(fileData, trainingFileUploadUrl, headers)
         .subscribe(
           resposne => {

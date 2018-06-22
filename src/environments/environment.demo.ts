@@ -13,6 +13,7 @@ export const environment = {
     fetchaccountbyidurl: 'https://flow.automatapi.com/flow/account/',
   
     // Interfaces
+    interfaceService: 'https://flow.automatapi.com/flow/interfaces',
     updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',
     updateEntityTraining: 'https://flow.automatapi.com/flow/interfaces/entity_classification_training',
   
