@@ -7,14 +7,15 @@ import { Observable } from 'rxjs/Observable';
 export class FileUploaderService {
   constructor(private httpClient: HttpClient) { }
 
-  upload(file: FormData, url: string, headers: HttpHeaders): Observable<any> {
+  upload(fileData: FormData, url: string, headers: HttpHeaders): Observable<any> {
     const subject = new Subject<any>();
     console.log("upload file");
-    //console.log(file);
-    if (file) {
+    console.log(fileData.get("file"));
+
+    if (fileData) {
       this.httpClient.post<any>(
         url,
-        file,
+        fileData,
         {
           headers: headers,
           observe: 'response',

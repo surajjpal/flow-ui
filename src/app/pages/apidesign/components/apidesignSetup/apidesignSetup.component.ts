@@ -267,15 +267,23 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
       new showAlertModal('Error', "Activate atleast one version");
     }
     else {
+      fileData.append("entityType", "automatons");
+      fileData.append("functionInstanceName", "API");
+      fileData.append("entityRef", this.selectedBusinessObject.code);
+      fileData.append("version", this.getActiveVersion());
+      fileData.append("fileName", "trainingData.csv");
+      console.log("fileData");
+      console.log(fileData.get("entityType"));
       const companyId = this.universalUser.getUser().companyId;
-      const headers = new HttpHeaders({'Content-Type' : 'application/json', 'x-customer-id' : companyId});
-      const trainingFileUploadUrl = `${environment.apiDesignUrl + environment.businessObjectTrainingUrl}` + "/" + this.selectedBusinessObject.code + "/" + activeVersion
+      const headers = new HttpHeaders({'x-customer-id' : companyId});
+      const trainingFileUploadUrl = `${environment.fileServer + environment.fileUploadUrl}`
       this.fileUploaderService.upload(fileData, trainingFileUploadUrl, headers)
         .subscribe(
           resposne => {
             console.log("success response");
             console.log(resposne);
-            this.router.navigate(['/pg/apidgn/apidgn'], { relativeTo: this.route })
+            this.trainBusinessObject(this.getActiveVersion());
+            
           },
           error => {
             console.log("error");
@@ -287,7 +295,29 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     
   }
 
-  getActiveVersion() {
+  trainBusinessObject(version: string) {
+    console.log("train business object ...")
+    this.apiDesignService.trainBusinessObject(this.selectedBusinessObject, version)
+      .subscribe(
+        response => {
+          console.log("train successfully");
+          this.router.navigate(['/pg/apidgn/apidgn'], { relativeTo: this.route })
+        },
+        error => {
+          console.log("error in training");
+          console.log("Error", error);
+          new showAlertModal('Error', error);
+        }
+      )
+  }
+
+  getActiveVersion(version?: string) {
+    if (version) {
+      return version;
+    }
+    if (!this.selectedBusinessObject.training || this.selectedBusinessObject.training.length == 0){
+      return "v1";
+    }
     for (let train of this.selectedBusinessObject.training) {
       if (train.status == "ACTIVE") {
         return train.version;

@@ -176,4 +176,35 @@ export class ApiDesignService {
         return subject.asObservable();
     }
 
+    trainBusinessObject(businessObject: BusinessObject, version: string): Observable<BusinessObject> {
+        const subject = new Subject<BusinessObject>();
+        const companyId = this.univaersalUser.getUser().companyId;
+        const headers = new HttpHeaders({'Content-Type' : 'application/json', 'x-customer-id' : companyId});
+        const url = `${environment.apiDesignUrl + environment.businessObjectTrainingUrl}` + "/" + businessObject.code + "/" + version;
+        this.httpClient.post<BusinessObject>(
+            url,
+            businessObject,
+            {
+                headers: headers,
+                observe: 'response',
+                reportProgress: true,
+                withCredentials: true
+            }
+        )
+        .subscribe(
+            (response: HttpResponse<BusinessObject>) => {
+                if (response.body) {
+                    console.log("activate version success");
+                    console.log(response.body);
+                    subject.next(response.body);
+                }
+            },
+            (err: HttpErrorResponse) => {
+                console.log("active version error");
+                console.log(err);
+            }
+        );
+        return subject.asObservable();
+    }
+
 }

@@ -95,9 +95,14 @@ export const environment = {
     uploadentityexcelurl: 'uploadentity',
     modelkeyslookupurl: 'load/modelkeys',
     validationtypekeyslookupurl: 'load/validations',
+
+    // file upload download service
+    fileServer: 'http://localhost:5000',
+    fileUploadUrl: '/api/uploadData',
+    fileDownloadUrl: '/api/downloadData',
     
     // api design
-    apiDesignUrl: 'http://localhost:5000',
+    apiDesignUrl: 'http://localhost:5002',
     algorithmUrl: '/automatons/algorithm',
     businessObjectUrl: '/automatons/businessobject',
     businessObjectTrainingUrl: '/automatons/businessobject/training',
