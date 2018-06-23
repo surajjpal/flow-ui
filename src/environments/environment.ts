@@ -102,7 +102,7 @@ export const environment = {
   validationtypekeyslookupurl: 'load/validations',
 
   // file upload download service
-  fileServer: 'http://localhost:500',
+  fileServer: 'http://localhost:5000',
   fileUploadUrl: '/api/uploadData',
   fileDownloadUrl: '/api/downloadData',
 
@@ -111,5 +111,24 @@ export const environment = {
   algorithmUrl: '/automatons/algorithm',
   businessObjectUrl: '/automatons/businessobject',
   businessObjectTrainingUrl: '/automatons/businessobject/training',
-  businessObjectActivateTrainerUrl: '/automatons/businessobject/activate'
+  businessObjectActivateTrainerUrl: '/automatons/businessobject/activate',
+
+  //Dashboard
+  dashboardServer: 'http://108.168.190.82:8080/flow/dashboard/',
+  dashboardsummary:'auto/dashboard_summary',
+  episodetimeline:'auto/episode_timeline',
+  intentcount:'auto/intent_count',
+  entitycount:'auto/entity_count',
+  sentimentcount:'auto/sentiment_count',
+  goal_count:'auto/goal_count',
+  episodemessages:'auto/episode_message',
+  flowdashboardsummary:'flow/dashboard_summary',
+  flowtimeline:'flow/flow_timeline',
+  transactionvalues:'flow/transaction_values',
+  avgstatetime:'flow/avgstate_time',
+  resourcevalues:'flow/resources_values',
+  statetransactionvalue:'flow/state_transaction_value',
+
+  //Dashboard from interfaces
+  dashboardinterface: 'http://108.168.190.82:8080/flow/interfaces/dashboard'
 };

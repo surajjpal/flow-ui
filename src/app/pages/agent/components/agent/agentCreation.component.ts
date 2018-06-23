@@ -105,6 +105,12 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       if (!this.selectedAgent.defaultLanguage || this.selectedAgent.defaultLanguage === null) {
         this.selectedAgent.defaultLanguage = '';
       }
+      if (!this.selectedAgent.disabled || this.selectedAgent.disabled === null) {
+        this.selectedAgent.disabled = false;
+      }
+      if (!this.selectedAgent.debugMode || this.selectedAgent.debugMode === null) {
+        this.selectedAgent.debugMode = false;
+      }
       if (!this.selectedAgent.uiComponent.placeHolderText) {
         this.selectedAgent.uiComponent.placeHolderText = 'Type your query...';
       }

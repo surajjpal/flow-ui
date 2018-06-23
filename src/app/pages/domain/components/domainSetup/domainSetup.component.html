@@ -669,6 +669,11 @@
                                           />
                                         </div>
                                         <div class="form-group">
+                                          <label>Error Message On Validation Failed</label>
+                                          <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
+                                          />
+                                        </div>
+                                        <div class="form-group">
                                           <label>Placeholder</label>
                                           <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                         </div>
@@ -837,6 +842,11 @@
                                           <div class="form-group">
                                             <label>Validation Regular Expression</label>
                                             <input class="form-control" placeholder="Validation Regex" [(ngModel)]="gsResponse.settings.validationRegex" name="validationRegex"
+                                            />
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Error Message On Validation Failed</label>
+                                            <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
                                             />
                                           </div>
                                           <div class="form-group">
@@ -1044,6 +1054,11 @@
                                           />
                                         </div>
                                         <div class="form-group">
+                                          <label>Error Message On Validation Failed</label>
+                                          <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
+                                          />
+                                        </div>
+                                        <div class="form-group">
                                           <label>Placeholder</label>
                                           <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                         </div>
@@ -1212,6 +1227,11 @@
                                           <div class="form-group">
                                             <label>Validation Regular Expression</label>
                                             <input class="form-control" placeholder="Validation Regex" [(ngModel)]="gsResponse.settings.validationRegex" name="validationRegex"
+                                            />
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Error Message On Validation Failed</label>
+                                            <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
                                             />
                                           </div>
                                           <div class="form-group">
@@ -1516,6 +1536,11 @@
                                           />
                                         </div>
                                         <div class="form-group">
+                                          <label>Error Message On Validation Failed</label>
+                                          <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
+                                          />
+                                        </div>
+                                        <div class="form-group">
                                           <label>Placeholder</label>
                                           <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                         </div>
@@ -1684,6 +1709,11 @@
                                           <div class="form-group">
                                             <label>Validation Regular Expression</label>
                                             <input class="form-control" placeholder="Validation Regex" [(ngModel)]="gsResponse.settings.validationRegex" name="validationRegex"
+                                            />
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Error Message On Validation Failed</label>
+                                            <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
                                             />
                                           </div>
                                           <div class="form-group">
@@ -1891,6 +1921,11 @@
                                           />
                                         </div>
                                         <div class="form-group">
+                                          <label>Error Message On Validation Failed</label>
+                                          <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
+                                          />
+                                        </div>
+                                        <div class="form-group">
                                           <label>Placeholder</label>
                                           <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                         </div>
@@ -2059,6 +2094,11 @@
                                           <div class="form-group">
                                             <label>Validation Regular Expression</label>
                                             <input class="form-control" placeholder="Validation Regex" [(ngModel)]="gsResponse.settings.validationRegex" name="validationRegex"
+                                            />
+                                          </div>
+                                          <div class="form-group">
+                                            <label>Error Message On Validation Failed</label>
+                                            <input class="form-control" placeholder="Error Message" [(ngModel)]="gsResponse.settings.errorMessage" name="errorMessage"
                                             />
                                           </div>
                                           <div class="form-group">
@@ -2286,6 +2326,11 @@
             />
           </div>
           <div class="form-group">
+            <label>Error Message On Validation Failed</label>
+            <input class="form-control" placeholder="Error Message" [(ngModel)]="tempResponse.settings.errorMessage" name="errorMessage"
+            />
+          </div>
+          <div class="form-group">
             <label>Placeholder</label>
             <input class="form-control" placeholder="Placeholder" [(ngModel)]="tempResponse.settings.placeholder" name="placeholder"
             />
@@ -2297,7 +2342,34 @@
             <input class="form-control" placeholder="Response Selection Expression" [(ngModel)]="tempResponse.selectionExpression" name="selectionExpression"
             />
           </div>
-
+          <div class="form-group">
+            <label>File Upload</label>
+            <button type="button" class="btn btn-primary pull-right" (click)="onAddFileUploadResponse()">
+                <i class="ion-plus-round"></i>
+            </button>
+          </div>
+          <div *ngIf="isAddFileUploadResponse">
+              <div class="form-group">
+                <label>Function Name</label>
+                <input class="form-control" placeholder="Function Name" [(ngModel)]="tempResponse.uploadDocument.functionInstanceName" name="functionInstanceName"/>
+              </div>
+              <div class="form-group">
+                <label>Entity Type</label>
+                <input class="form-control" placeholder="Entity Type" [(ngModel)]="tempResponse.uploadDocument.entityType" name="entityType"/>
+              </div>
+              <div class="form-group">
+                <label>Entity Reference</label>
+                <input class="form-control" placeholder="Entity Reference" [(ngModel)]="tempResponse.uploadDocument.entityRef" name="entityRef"/>
+              </div>
+              <div class="form-group">
+                  <label>Version</label>
+                  <input class="form-control" placeholder="Version" [(ngModel)]="tempResponse.uploadDocument.version" name="version"/>
+              </div>
+              <div class="form-group">
+                  <label>File Name</label>
+                  <input class="form-control" placeholder="File Name" [(ngModel)]="tempResponse.uploadDocument.fileName" name="fileName"/>
+              </div>
+          </div>
           <div class="form-group">
             <label>Response options</label>
             <table class="table table-striped">
@@ -2472,7 +2544,7 @@
                 <label>Content</label>
                 <input class="form-control" placeholder="Content" [(ngModel)]="tempCard.content" name="content"/>
               </div>
-              <div class="form-group">
+              <div *ngIf="tempCard.templateName === 'default'" class="form-group">
                   <label>Response options</label>
                   <table class="table table-striped">
                     <thead>
@@ -2546,7 +2618,29 @@
                       </tr>
                     </tbody>
                   </table>
+              </div>
+              <div *ngIf="tempCard.templateName == 'download'">
+                <div class="form-group">
+                  <label>Function Name</label>
+                  <input class="form-control" placeholder="Function Name" [(ngModel)]="tempCard.document.functionInstanceName" name="functionInstanceName"/>
                 </div>
+                <div class="form-group">
+                  <label>Entity Type</label>
+                  <input class="form-control" placeholder="Entity Type" [(ngModel)]="tempCard.document.entityType" name="entityType"/>
+                </div>
+                <div class="form-group">
+                  <label>Entity Reference</label>
+                  <input class="form-control" placeholder="Entity Reference" [(ngModel)]="tempCard.document.entityRef" name="entityRef"/>
+                </div>
+                <div class="form-group">
+                    <label>Version</label>
+                    <input class="form-control" placeholder="Version" [(ngModel)]="tempCard.document.version" name="version"/>
+                </div>
+                <div class="form-group">
+                    <label>File Name</label>
+                    <input class="form-control" placeholder="File Name" [(ngModel)]="tempCard.document.fileName" name="fileName"/>
+                </div>
+              </div>  
             </form>
         </div>
   
