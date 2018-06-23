@@ -16,8 +16,8 @@ import { ApiDesignService } from '../../../../services/apidesign.service'
 export class ApiDesignsComponent implements OnInit, OnDestroy {
   
   private subscription: Subscription;
-  private businessObjects: BusinessObject[];
-  private definedAlgorithms: Algorithm[];
+  businessObjects: BusinessObject[];
+  definedAlgorithms: Algorithm[];
   selectedBusinessObject: BusinessObject;
   filterQuery: string;
   

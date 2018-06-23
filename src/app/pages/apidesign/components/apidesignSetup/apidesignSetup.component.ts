@@ -25,8 +25,8 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     apiDesignCreateMode: boolean;
     algorithmAddUpdateMode: boolean;
     private subscription: Subscription;
-    private definedAlgorithms: Algorithm[];
-    private selectedBusinessObject: BusinessObject;
+    definedAlgorithms: Algorithm[];
+    selectedBusinessObject: BusinessObject;
     selectedBusinessObjectAlgorithm: BusinessObjectAlgorithm;
     tempBusinessAlgorithm: BusinessObjectAlgorithm;
     selectedAlgorithmName: string;
