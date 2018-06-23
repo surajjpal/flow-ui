@@ -9,18 +9,229 @@
                 <li class="nav-item">
                     <a class="nav-link" id="businessObjectTrainingTab" data-toggle="tab" href="#businessObjectTrainingContent" role="tab" aria-controls="businessObjectTraining">Business Object Training</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="businessObjectApiTab" data-toggle="tab" href="#businessObjectApiContent" role="tab" aria-controls="businessObjectapi">Business Object API</a>
+                </li>
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane fade show active" id="businessObjectContent" aria-labelledby="businessObjectTab">
                     <div class="panel panel-default">
+                        <form>
+                            <div class="form-group">
+                                <label>Business Object Code</label>
+                                <input type="text" class="form-control" required placeholder="Business Object Code" [(ngModel)]="selectedBusinessObject.code" name="code"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Business Object Display Name</label>
+                                <input type="text" class="form-control" required placeholder="Business Object Display Name" [(ngModel)]="selectedBusinessObject.displayName" name="displayName"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <select class="selectpicker form-control" title="Select supported algorith category" [(ngModel)]="selectedBusinessObject.algorithmCategory"
+                                name="algorithmCategory">
+                                    <option *ngFor="let algorithmCategory of supportedAlgorithmCategory" [ngValue]="algorithmCategory">{{ algorithmCategory }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Algorithms </label>
+                                <button type="button" class="btn btn-primary pull-right" (click)="onAlgorithmAdd()" data-toggle="modal" data-target="#algorithmModal">
+                                    Add Algorithms <i class="ion-plus-round"></i>
+                                </button>
+                            </div>
+                            <div class="form-group">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Algorithm Name</th>
+                                            <th>Version</th>
+                                            <th>Score</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let algo of selectedBusinessObject.algorithms" (click) = "onAlgorithmAdd(algo)" data-toggle="modal" data-target="#algorithmModal">
+                                            <td>
+                                                {{ getAlgorithmName(algo.algorithmId) }}
+                                            </td>
+                                            <td>
+                                                {{ algo.version }}
+                                            </td>
+                                            <td *ngIf="selectedBusinessObject && algo.score" >
+                                                
+                                                <div *ngFor="let score of algo.score">
+                                                    <div *ngFor="let e of score | keys">
+                                                        {{ e.key }}
+                                                        <div *ngFor="let s of e.value | keys">
+                                                            {{ s.key }} : {{ s.value}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="businessObjectTrainingContent" aria-labelledby="businessObjectTrainingTab">
                     <div class="panel panel-default">
+                            <div class="form-group pull-right">
+                                <api-file-uploader [fileUploadUrl]="fileUploadUrl" [multiple]="false" (uploadEvent)="onTrainingFileUpload($event)"></api-file-uploader>
+                                <!-- <input class="form-control" [(ngModel)]="trainingFilterQuery" name="trainingFilterQuery" placeholder="Filter Training" /> -->
+                            </div>
+                        <br>
+                        
+                        <table class="table table-striped" [mfData]="selectedBusinessObject.training | universalDataFilter : trainingFilterQuery" #mfTrainingData="mfDataTable" [mfRowsOnPage]="10" mfSortBy="version">
+                            <thead>
+                                <tr>
+                                    <td><mfDefaultSorter by="name">Version</mfDefaultSorter></td>
+                                    <td><mfDefaultSorter by="algorithmCategory">Status</mfDefaultSorter></td>
+                                    <td><mfDefaultSorter by="createdTime">Inputs</mfDefaultSorter></td>
+                                    <td><mfDefaultSorter by="modifiedTime">Outputs</mfDefaultSorter></td>
+                                    <td>Activate</td>
+                                    <td>Download</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let trainer of selectedBusinessObject.training">
+                                    <td>{{ trainer.version }}</td>
+                                    <td>{{ trainer.status }}</td>
+                                    <td>{{ trainer.inputLabels }}</td>
+                                    <td>{{ trainer.outputLabels }}</td>
+                                    <td *ngIf="trainer.status != 'ACTIVE'">
+                                        <button type="submit" class="btn btn-primary" (click)="activateTriner(trainer)">Activate</button>
+                                    </td>
+                                    <td *ngIf="trainer.status == 'ACTIVE'">
+                                        <!-- <button type="submit" class="btn btn-danger" (click)="deactivateTriner(trainer)">Deactivate</button> -->
+                                    </td>
+                                    <td>
+                                        <i class="fa fa-download"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="100%">
+                                    <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="businessObjectApiContent" aria-labelledby="businessObjectApiTab">
+                    <div class="panel panel-default">
+                        <form>
+                            <div class="form-group">
+                                <label>API: </label>
+                                <span> {{ apiEndPoint }}</span>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
+
+            <form>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" (click)="createBusinessObject()" data-toggle="modal">
+                    {{apiDesignCreateMode ? 'Create Business Object' : 'Update Business Object'}}
+                </button>
+                </div>
+            </form>
         </ba-card>
     </div>
 </div>
+
+<!-- algorithm modal -->
+<div class="modal fade" id="algorithmModal" tabindex="-1" role="dialog" attr.aria-labelledby="algorithmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="agorithmModalLabel">
+            {{ algorithmsModalHeader }}
+          </h4>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+  
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <form>
+                <div class="form-group">
+                    <select class="selectpicker form-control" title="Select supported algorith category" [(ngModel)]="tempBusinessAlgorithm.algorithmId"
+                    name="selectedAlgorithmName" #algoId (change) = "onBusinessAlgorithmChange()">
+                        <option *ngFor="let algo of definedAlgorithms" [ngValue]="algo._id">{{ algo.name }}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" (click)="addConfigParameters(tempBusinessAlgorithm)">
+                        Add Config <i class="ion-plus-round"></i>
+                    </button>
+                </div>
+                <div class="form-group">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Config</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of tempBusinessAlgorithm.configList">
+                                <td>
+                                    <input type="text" class="form-control" placeholder="Config Param" [value]="row.param"
+                                        (input)="row.param = $event.target.value" />
+                                </td>
+                                <td>
+                                <input type="text" class="form-control" placeholder="Value" [value]="row.value"
+                                    (input)="row.value = $event.target.value" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+  
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button *ngIf="!algorithmAddUpdateMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeAlgorithm()">Remove</button>
+          <button type="submit" class="btn btn-primary" (click)="addAlgorithm()">{{algorithmAddUpdateMode ? 'Add' : 'Update'}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<!-- Warning Modal -->
+<div class="modal fade" id="businessObjectMsgModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h4 class="modal-title" id="warningLabel">
+            Business Object
+            </h4>
+        </div>
+    
+        <!-- Modal Body -->
+        <div class="modal-body" id="modal_body">
+            {{businessObjectUpdateCreateMsg}}
+        </div>
+    
+        <!-- Modal Footer -->
+        <div class="modal-footer" id="modal_footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+        </div>
+        </div>
+    </div>
+</div>
+      
         

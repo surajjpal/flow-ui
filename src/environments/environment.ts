@@ -18,6 +18,7 @@ export const environment = {
   fetchaccountbyidurl: 'http://108.168.190.82:8080/flow/services/fetchaccountbyid?query=',
 
   // Interfaces
+  interfaceService: 'http://108.168.190.82:8080/flow/interfaces',
   updateIntentTraining: 'http://108.168.190.82:8080/flow/interfaces/intent_classification_training',
   updateEntityTraining: 'http://108.168.190.82:8080/flow/interfaces/entity_classification_training',
 
@@ -100,6 +101,15 @@ export const environment = {
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
+  // file upload download service
+  fileUploadUrl: '/api/uploadData',
+  fileDownloadUrl: '/api/downloadData',
+
+  // api design
+  algorithmUrl: '/automatons/algorithm',
+  businessObjectUrl: '/automatons/businessobject',
+  businessObjectTrainingUrl: '/automatons/businessobject/training',
+  businessObjectActivateTrainerUrl: '/automatons/businessobject/activate',
 
   //Dashboard
   dashboardServer: 'http://108.168.190.82:8080/flow/dashboard/',
