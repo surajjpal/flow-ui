@@ -14,6 +14,7 @@ export const environment = {
 
   // Interfaces
   interfaceService: 'http://localhost:8080/flow/interfaces',
+  updateClassifierTraining : 'http://localhost:8080/flow/interfaces/auto_decorate_training',
   updateIntentTraining: 'http://localhost:8080/flow/interfaces/intent_classification_training',
   updateEntityTraining: 'http://localhost:8080/flow/interfaces/entity_classification_training',
   
