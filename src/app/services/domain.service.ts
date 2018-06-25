@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Rx';
 
 import { Domain } from '../models/domain.model';
 import { environment } from '../../environments/environment';
+import {CRUDOperationInput} from '../models/crudOperationInput.model';
 
 @Injectable()
 export class DomainService {
@@ -107,7 +108,38 @@ export class DomainService {
     const subject = new Subject<any>();
 
     const url = `${environment.autoServer + environment.savedomainurl}`;
-
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = domain;
+    crudInput.collection = "domain";
+    if (domain._id != null)
+      crudInput.operation = "UPDATE";
+    else
+      crudInput.operation = "CREATE";
+    console.log("CRUDInput");
+    console.log(crudInput);
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    console.log(crudUrl)
+    this.httpClient.post<any>(
+      crudUrl, 
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        console.log(response.status);
+        console.log(response.body)
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+        console.log(err);
+        subject.error(err);
+      }
+    )
     this.httpClient.post<any>(
       url,
       domain,

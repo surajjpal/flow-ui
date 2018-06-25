@@ -128,5 +128,8 @@ export const environment = {
   statetransactionvalue:'flow/state_transaction_value',
 
   //Dashboard from interfaces
-  dashboardinterface: 'http://108.168.190.82:8080/flow/interfaces/dashboard'
+  dashboardinterface: 'http://108.168.190.82:8080/flow/interfaces/dashboard',
+
+  //CRUD API path - To be used in conjunction with interfaceService property
+  crudFunction : '/crud'
 };
