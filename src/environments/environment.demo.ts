@@ -106,6 +106,8 @@ export const environment = {
     businessObjectUrl: '/automatons/businessobject',
     businessObjectTrainingUrl: '/automatons/businessobject/training',
     businessObjectActivateTrainerUrl: '/automatons/businessobject/activate',
+    businessObjectDectivateTrainerUrl: '/automatons/businessobject/deactivate',
+    
    //Dashboard
    dashboardServer: 'https://flow.automatapi.com/flow/dashboard/',
    dashboardsummary:'auto/dashboard_summary',

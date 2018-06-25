@@ -686,7 +686,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
               this.domainBody = `Something went wrong please try again!!`;
               this.domainSucess = true;
             }
-            // this.updateIntenTrainingData();
+            this.updateIntenTrainingData();
 
             // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
           },
@@ -712,7 +712,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.subscription = this.domainService.updateEntityTraining(this.selectedDomain)
       .subscribe(
         response => {
-          // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
+          this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
         }
       );
   }
