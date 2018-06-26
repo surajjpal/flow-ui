@@ -19,6 +19,7 @@ export const environment = {
 
   // Interfaces
   interfaceService: 'http://108.168.190.82:8080/flow/interfaces',
+  updateClassifierTraining : 'http://108.168.190.82:8080/flow/interfaces/auto_decorate_training',
   updateIntentTraining: 'http://108.168.190.82:8080/flow/interfaces/intent_classification_training',
   updateEntityTraining: 'http://108.168.190.82:8080/flow/interfaces/entity_classification_training',
 
@@ -110,6 +111,7 @@ export const environment = {
   businessObjectUrl: '/automatons/businessobject',
   businessObjectTrainingUrl: '/automatons/businessobject/training',
   businessObjectActivateTrainerUrl: '/automatons/businessobject/activate',
+  businessObjectDectivateTrainerUrl: '/automatons/businessobject/deactivate',
 
   //Dashboard
   dashboardServer: 'http://108.168.190.82:8080/flow/dashboard/',
