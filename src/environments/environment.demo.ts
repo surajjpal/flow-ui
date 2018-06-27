@@ -14,6 +14,7 @@ export const environment = {
   
     // Interfaces
     interfaceService: 'https://flow.automatapi.com/flow/interfaces',
+    updateClassifierTraining : 'https://flow.automatapi.com/flow/interfaces/auto_decorate_training',
     updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',
     updateEntityTraining: 'https://flow.automatapi.com/flow/interfaces/entity_classification_training',
   
@@ -106,6 +107,8 @@ export const environment = {
     businessObjectUrl: '/automatons/businessobject',
     businessObjectTrainingUrl: '/automatons/businessobject/training',
     businessObjectActivateTrainerUrl: '/automatons/businessobject/activate',
+    businessObjectDectivateTrainerUrl: '/automatons/businessobject/deactivate',
+    
    //Dashboard
    dashboardServer: 'https://flow.automatapi.com/flow/dashboard/',
    dashboardsummary:'auto/dashboard_summary',

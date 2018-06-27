@@ -233,6 +233,17 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
   deactivateTriner(trainer: Training) {
     console.log("desctiavte trainer");
     console.log(trainer);
+    this.subscription = this.apiDesignService.deactivateBusinessObjectTraining(this.selectedBusinessObject, trainer.version)
+      .subscribe(
+        response => {
+          console.log(response)
+          this.selectedBusinessObject = response;
+        },
+        error => {
+          console.log(error);
+          new showAlertModal('Error', error);
+        }
+      )
   }
 
   onBusinessAlgorithmChange() {
@@ -324,6 +335,12 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
         return train.version;
       }
     }
-    return null;
+    var versions = []
+    for (let train of this.selectedBusinessObject.training) {
+      versions.push(parseInt(train.version.split("v")[1]));
+    }
+    var maxVersion = Math.max.apply(Math, versions);
+    version = "v" + String(maxVersion + 1);
+    return version;
   }
 }
