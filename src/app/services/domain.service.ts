@@ -110,12 +110,13 @@ export class DomainService {
     const url = `${environment.autoServer + environment.savedomainurl}`;
     const crudInput = new CRUDOperationInput();
     crudInput.payload = domain;
-    crudInput.collection = "domain";
-    if (domain._id != null)
-      crudInput.operation = "UPDATE";
-    else
-      crudInput.operation = "CREATE";
-    console.log("CRUDInput");
+    crudInput.collection = 'domain';
+    if (domain._id !== null) {
+      crudInput.operation = 'UPDATE';
+    } else {
+      crudInput.operation = 'CREATE';
+    }
+    console.log('CRUDInput');
     console.log(crudInput);
     const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
     console.log(crudUrl)
@@ -132,6 +133,9 @@ export class DomainService {
       (response: HttpResponse<any>) => {
         console.log(response.status);
         console.log(response.body)
+        if (response.body) {
+          subject.next(response.body);
+        }
       },
       (err: HttpErrorResponse) => {
         // All errors are handled in ErrorInterceptor, no further handling required
@@ -139,7 +143,8 @@ export class DomainService {
         console.log(err);
         subject.error(err);
       }
-    )
+    );
+    /*
     this.httpClient.post<any>(
       url,
       domain,
@@ -161,7 +166,7 @@ export class DomainService {
 
         subject.error(err);
       }
-      );
+    );*/
 
     return subject.asObservable();
   }
