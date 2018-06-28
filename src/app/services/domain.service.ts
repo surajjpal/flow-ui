@@ -74,24 +74,24 @@ export class DomainService {
   domainLookup(query?: string): Observable<Domain[]> {
     const subject = new Subject<Domain[]>();
 
-    if (!query || query.length <= 0) {
-      query = 'ALL';
-    }
-
-    const url = `${environment.autoServer + environment.fetchdomainurl + query}`;
-
-    this.httpClient.get<Domain[]>(
-      url,
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = new Map<any, any>();
+    crudInput.collection = 'domain';
+    crudInput.operation = 'READ_ALL';
+    
+    this.httpClient.post<Map<string, Domain[]>>(
+      crudUrl, 
+      crudInput,
       {
+        headers: this.httpHeaders,
         observe: 'response',
         reportProgress: true,
         withCredentials: true
       }
     ).subscribe(
-      (response: HttpResponse<Domain[]>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
+      (response: HttpResponse<Map<string, Domain[]>>) => {
+        subject.next(response.body['data']);
       },
       (err: HttpErrorResponse) => {
         // All errors are handled in ErrorInterceptor, no further handling required
@@ -99,7 +99,7 @@ export class DomainService {
 
         subject.error(err);
       }
-      );
+    );
 
     return subject.asObservable();
   }
