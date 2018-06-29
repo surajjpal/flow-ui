@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Rx';
 
 import { Domain } from '../models/domain.model';
 import { environment } from '../../environments/environment';
-import {CRUDOperationInput} from '../models/crudOperationInput.model';
+import { CRUDOperationInput } from '../models/crudOperationInput.model';
 
 @Injectable()
 export class DomainService {
@@ -78,7 +78,7 @@ export class DomainService {
     const crudInput = new CRUDOperationInput();
     crudInput.payload = new Map<any, any>();
     crudInput.collection = 'domain';
-    crudInput.operation = 'READ_ALL';
+    crudInput.operation = "READ_ALL";
     
     this.httpClient.post<Map<string, Domain[]>>(
       crudUrl, 
@@ -107,19 +107,15 @@ export class DomainService {
   saveDomain(domain: Domain): Observable<any> {
     const subject = new Subject<any>();
 
-    const url = `${environment.autoServer + environment.savedomainurl}`;
     const crudInput = new CRUDOperationInput();
     crudInput.payload = domain;
     crudInput.collection = 'domain';
     if (domain._id !== null) {
-      crudInput.operation = 'UPDATE';
+      crudInput.operation = "UPDATE";
     } else {
-      crudInput.operation = 'CREATE';
+      crudInput.operation = "CREATE";
     }
-    console.log('CRUDInput');
-    console.log(crudInput);
     const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
-    console.log(crudUrl)
     this.httpClient.post<any>(
       crudUrl, 
       crudInput,
@@ -131,8 +127,6 @@ export class DomainService {
       }
     ).subscribe(
       (response: HttpResponse<any>) => {
-        console.log(response.status);
-        console.log(response.body)
         if (response.body) {
           subject.next(response.body);
         }
@@ -144,30 +138,6 @@ export class DomainService {
         subject.error(err);
       }
     );
-    /*
-    this.httpClient.post<any>(
-      url,
-      domain,
-      {
-        headers: this.httpHeaders,
-        observe: 'response',
-        reportProgress: true,
-        withCredentials: true
-      }
-    ).subscribe(
-      (response: HttpResponse<any>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
-
-        subject.error(err);
-      }
-    );*/
-
     return subject.asObservable();
   }
 
