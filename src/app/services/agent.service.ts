@@ -56,6 +56,12 @@ export class AgentService {
   saveAgent(agent: Agent): Observable<any> {
     const subject = new Subject<any>();
 
+    console.log(agent.agentDomain)
+
+    if (agent.agentDomain !== null) {
+      agent.agentDomain = null;
+    }
+
     const crudInput = new CRUDOperationInput();
     crudInput.payload = agent;
     crudInput.collection = 'agent';
