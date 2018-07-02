@@ -5,71 +5,42 @@ import { Observable } from 'rxjs/Rx';
 
 import { Domain } from '../models/domain.model';
 import { Agent } from '../models/agent.model';
-import { Dashboard } from '../models/dashboard.model';
-import { Account } from '../models/account.model';
 import { Episode, ChatMessage } from '../models/conversation.model';
 import { environment } from '../../environments/environment';
+import { DomainService } from './domain.service';
+import { CRUDOperationInput} from '../models/crudOperationInput.model';
 
 @Injectable()
 export class AgentService {
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private domainService: DomainService) { }
 
   domainLookup(query?: string): Observable<Domain[]> {
-    const subject = new Subject<Domain[]>();
-
-    if (!query || query.length <= 0) {
-      query = 'ALL';
-    }
-
-    const url = `${environment.autoServer + environment.fetchdomainurl + query}`;
-
-    this.httpClient.get<Domain[]>(
-      url,
-      {
-        observe: 'response',
-        reportProgress: true,
-        withCredentials: true
-      }
-    ).subscribe(
-      (response: HttpResponse<Domain[]>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
-
-        subject.error(err);
-      }
-      );
-
-    return subject.asObservable();
+    return this.domainService.domainLookup(query);
   }
 
   agentLookup(query?: string): Observable<Agent[]> {
     const subject = new Subject<Agent[]>();
 
-    if (!query || query.length <= 0) {
-      query = 'ALL';
-    }
-
-    const url = `${environment.autoServer + environment.fetchagenturl + query}`;
-
-    this.httpClient.get<Agent[]>(
-      url,
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = new Map<any, any>();
+    crudInput.collection = 'agent';
+    crudInput.operation = "READ_ALL";
+    
+    this.httpClient.post<Map<string, Agent[]>>(
+      crudUrl, 
+      crudInput,
       {
+        headers: this.httpHeaders,
         observe: 'response',
         reportProgress: true,
         withCredentials: true
       }
     ).subscribe(
-      (response: HttpResponse<Agent[]>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
+      (response: HttpResponse<Map<string, Agent[]>>) => {
+        subject.next(response.body['data']);
       },
       (err: HttpErrorResponse) => {
         // All errors are handled in ErrorInterceptor, no further handling required
@@ -77,19 +48,32 @@ export class AgentService {
 
         subject.error(err);
       }
-      );
-
+    );
+    
     return subject.asObservable();
   }
 
   saveAgent(agent: Agent): Observable<any> {
     const subject = new Subject<any>();
 
-    const url = `${environment.autoServer + environment.saveagenturl}`;
+    console.log(agent.agentDomain)
 
+    if (agent.agentDomain !== null) {
+      agent.agentDomain = null;
+    }
+
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = agent;
+    crudInput.collection = 'agent';
+    if (agent._id !== null) {
+      crudInput.operation = "UPDATE";
+    } else {
+      crudInput.operation = "CREATE";
+    }
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
     this.httpClient.post<any>(
-      url,
-      agent,
+      crudUrl, 
+      crudInput,
       {
         headers: this.httpHeaders,
         observe: 'response',
@@ -105,10 +89,10 @@ export class AgentService {
       (err: HttpErrorResponse) => {
         // All errors are handled in ErrorInterceptor, no further handling required
         // Unless any specific action is to be taken on some error
-
+        console.log(err);
         subject.error(err);
       }
-      );
+    );
 
     return subject.asObservable();
   }

@@ -88,10 +88,6 @@ export const environment = {
   updateentityurl: 'update/entityclassifier',
   deleteentityurl: 'delete/entityclassifier?query=',
 
-  savedomainurl: 'domain',
-  fetchdomainurl: 'fetchdomain?query=',
-  saveagenturl: 'agent',
-  fetchagenturl: 'fetchagent?query=',
   fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
   uploadintentexcelurl: 'uploadintents',
   uploadentityexcelurl: 'uploadentity',
@@ -126,5 +122,8 @@ export const environment = {
   statetransactionvalue:'flow/state_transaction_value',
 
   //Dashboard from interfaces
-  dashboardinterface: 'https://flow.automatapi.io/flow/interfaces/dashboard'
+  dashboardinterface: 'https://flow.automatapi.io/flow/interfaces/dashboard',
+
+  //CRUD API path - To be used in conjunction with interfaceService property
+  crudFunction : '/crud'
 };
