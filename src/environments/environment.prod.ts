@@ -3,23 +3,23 @@ export const environment = {
   name: 'production',
 
   // Root
-  root: 'https://compusoft-console.automatapi.xyz/flow/',
+  root: 'https://flow.automatapi.com/flow/',
     
   // API
-  authurl: 'https://compusoft-console.automatapi.xyz/flow/auth/',
+  authurl: 'https://flow.automatapi.com/flow/auth/',
 
   // Services
-  saveaccounturl: 'https://flow.automatapi.io/flow/account/create',
-  fetchaccountbyidurl: 'https://flow.automatapi.io/flow/account/',
+  saveaccounturl: 'https://flow.automatapi.com/flow/account/create',
+  fetchaccountbyidurl: 'https://flow.automatapi.com/flow/account/',
 
   // Interfaces
-  interfaceService: 'http://flow.automatapi.io/flow/interfaces',
-  updateClassifierTraining : 'http://flow.automatapi.io/flow/interfaces/auto_decorate_training',
-  updateIntentTraining: 'https://flow.automatapi.io/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'https://flow.automatapi.io/flow/interfaces/entity_classification_training',
+  interfaceService: 'http://flow.automatapi.com/flow/interfaces',
+  updateClassifierTraining : 'http://flow.automatapi.com/flow/interfaces/auto_decorate_training',
+  updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'https://flow.automatapi.com/flow/interfaces/entity_classification_training',
 
   // Flow
-  server: 'https://compusoft-console.automatapi.xyz/flow/console/',
+  server: 'https://flow.automatapi.com/flow/console/',
   autourl:'https://compusoft-agent.automatapi.xyz/?',
 
   stateinsight: 'state/insight/',
@@ -68,7 +68,7 @@ export const environment = {
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
   // auto
-  autoServer: 'https://compusoft-console.automatapi.xyz/flow/auto/',
+  autoServer: 'https://flow.automatapi.com/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',
@@ -106,7 +106,7 @@ export const environment = {
   businessObjectDectivateTrainerUrl: '/automatons/businessobject/deactivate',
   
   //Dashboard
-  dashboardServer: 'https://flow.automatapi.io/flow/dashboard/',
+  dashboardServer: 'https://flow.automatapi.com/flow/dashboard/',
   dashboardsummary:'auto/dashboard_summary',
   episodetimeline:'auto/episode_timeline',
   intentcount:'auto/intent_count',
@@ -122,7 +122,7 @@ export const environment = {
   statetransactionvalue:'flow/state_transaction_value',
 
   //Dashboard from interfaces
-  dashboardinterface: 'https://flow.automatapi.io/flow/interfaces/dashboard',
+  dashboardinterface: 'https://flow.automatapi.com/flow/interfaces/dashboard',
 
   //CRUD API path - To be used in conjunction with interfaceService property
   crudFunction : '/crud'
