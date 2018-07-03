@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Domain, Intent, Entity, Goal, GoalStep, Response, Stage, ResponseData, ResponseOption, Settings } from '../../../../models/domain.model';
+import { Domain, Intent, Entity, Goal, GoalStep, Response, Stage, ResponseData, ResponseOption, Settings, CardData } from '../../../../models/domain.model';
 
 import { DomainService } from '../../../../services/domain.service';
 import { AlertService, DataSharingService } from '../../../../services/shared.service';
@@ -22,17 +22,21 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   entityUploaderOptions: NgUploaderOptions;
 
   domainCreateMode: boolean;
+  isAddFileUploadResponse: boolean;
   modalHeader: string;
   createMode: boolean;
   languageSource: string[];
   modelKeysSource: string[];
   validationKeysSource: string[];
   stagesSource: Stage[];
+  templateNames: string[];
+  
 
   intentFilterQuery: string;
   entityFilterQuery: string;
   goalFilterQuery: string;
   responseFilterQuery: string;
+  cardsFilterQuery: string;
 
   selectedDomain: Domain;
   tempIntent: Intent;
@@ -43,6 +47,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   selectedGoal: Goal;
   tempResponse: Response;
   selectedResponse: Response;
+  selectedCard: CardData;
+  tempCard: CardData;
   domainUpdate: string;
   domainBody: string;
   domainSucess: boolean;
@@ -60,6 +66,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     private sharingService: DataSharingService,
     private slimLoadingBarService: SlimLoadingBarService
   ) {
+    this.isAddFileUploadResponse = false;
     this.domainCreateMode = true;
     this.modalHeader = '';
     this.createMode = false;
@@ -69,6 +76,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.domainUpdate = 'Domain';
     this.domainBody = 'Please wait updating domain........';
     this.domainSucess = false;
+    this.templateNames = ["default"]
     this.stagesSource = [];
     this.stagesSource.push(new Stage('Initialization', 'INIT'));
     this.stagesSource.push(new Stage('Context Setting', 'CONTEXT'));
@@ -80,6 +88,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.entityFilterQuery = '';
     this.goalFilterQuery = '';
     this.responseFilterQuery = '';
+    this.cardsFilterQuery = '';
 
     this.selectedDomain = new Domain();
     this.tempIntent = new Intent();
@@ -90,6 +99,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.selectedGoal = new Goal();
     this.tempResponse = new Response();
     this.selectedResponse = new Response();
+    this.selectedCard = new CardData();
+    this.tempCard = new CardData();
 
     const uploadIntentUrl = `${environment.autoServer}${environment.uploadintentexcelurl}`;
     this.intentUploaderOptions = {
@@ -304,6 +315,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.goalFilterQuery = this.goalFilterQuery.slice(1);
       }, 10);
     }
+    
   }
 
   checkStageCodeInGoalResponses(goalSteps: GoalStep[]) {
@@ -504,11 +516,33 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.createMode = false;
       this.selectedResponse = response;
       this.tempResponse = JSON.parse(JSON.stringify(this.selectedResponse));
+      if (this.tempResponse.uploadDocument) {
+        this.isAddFileUploadResponse = true;
+      }
     } else {
       this.modalHeader = 'Create Response';
       this.createMode = true;
       this.selectedResponse = null;
       this.tempResponse = new Response();
+    }
+  }
+
+  onAddFileUploadResponse() {
+    this.isAddFileUploadResponse = true;
+  }
+
+  onCardSelect(card?: CardData) {
+    if (card) {
+      this.modalHeader = 'Update Card';
+      this.createMode = false;
+      this.selectedCard = card;
+      this.tempCard = card;
+    }
+    else {
+      this.modalHeader = 'Create Response';
+      this.createMode = true;
+      this.selectedCard = null;
+      this.tempCard = new CardData();
     }
   }
 
@@ -547,6 +581,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         }, 10);
       }
     }
+    
   }
 
   removeResponse(response?: Response) {
@@ -561,6 +596,65 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.selectedDomain.domainResponse.splice(index, 1);
       }
     }
+  }
+
+  removeCard(card?: CardData) {
+    if (card) {
+      const index: number = this.selectedDomain.cards.indexOf(card);
+      if (index !== -1) {
+        this.selectedDomain.cards.splice(index, 1);
+      }
+    } else if (this.selectedResponse) {
+      const index: number = this.selectedDomain.cards.indexOf(this.selectedCard);
+      if (index !== -1) {
+        this.selectedDomain.cards.splice(index, 1);
+      }
+    }
+  }
+
+  addCard(card?: CardData) {
+    if(card) {
+      this.selectedDomain.cards.push(card);
+    }
+    else if(this.selectedCard) {
+      if(!this.tempCard.cardName || !this.tempCard.templateName) {
+        new showAlertModal('Error', 'card name can not be blank');
+      }
+      else {
+        const index: number = this.selectedDomain.cards.indexOf(this.selectedCard);
+        if (index !== -1) {
+          this.selectedDomain.cards[index] = this.tempCard;
+        }
+        new closeModal('cardModal');
+
+        // This is to forcefully call the digest cycle of angular so that,
+        // the filtered list would get updated with these chanegs made in master list
+        this.cardsFilterQuery = (` ${this.cardsFilterQuery}`);
+        setTimeout(() => {
+          this.cardsFilterQuery = this.cardsFilterQuery.slice(1);
+        }, 10);
+      }
+      
+    }
+    else {
+      if (!this.tempCard.cardName || this.tempCard.cardName.trim().length === 0) {
+        new showAlertModal('Error', 'card name can\'t be left empty.');
+      } else {
+        if(!this.selectedDomain.cards) {
+          this.selectedDomain.cards = [];
+        }
+        this.selectedDomain.cards.push(this.tempCard);
+        new closeModal('cardModal');
+
+        // This is to forcefully call the digest cycle of angular so that,
+        // the filtered list would get updated with these chanegs made in master list
+        this.cardsFilterQuery = (` ${this.cardsFilterQuery}`);
+        setTimeout(() => {
+          this.cardsFilterQuery = this.cardsFilterQuery.slice(1);
+        }, 10);
+      }
+    }
+    
   }
 
   createDomain() {
@@ -584,15 +678,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.subscription = this.domainService.saveDomain(this.selectedDomain)
         .subscribe(
           response => {
-            if (response) {
-              this.domainBody = `Domain updated successfully!!`;
-              this.domainSucess = true;
-              this.selectedDomain = response;
-            } else {
-              this.domainBody = `Something went wrong please try again!!`;
-              this.domainSucess = true;
-            }
-            // this.updateIntenTrainingData();
+            this.updateClassifierTraining();
+            
+            //this.updateIntenTrainingData();
 
             // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
           },
@@ -602,6 +690,24 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           }
         );
     }
+  }
+
+  updateClassifierTraining() {
+    this.subscription = this.domainService.updateDomainClassifierTraining(this.selectedDomain)
+    .subscribe(
+      response => {
+        if (response) {
+          this.domainBody = `Domain updated successfully!!`;
+          this.domainSucess = true;
+          this.selectedDomain = response;
+        } else {
+          this.domainBody = `Something went wrong please try again!!`;
+          this.domainSucess = true;
+        }
+        //this.updateEntityTrainingData();
+        //this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
+      }
+    )
   }
 
   updateIntenTrainingData() {
@@ -618,7 +724,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.subscription = this.domainService.updateEntityTraining(this.selectedDomain)
       .subscribe(
         response => {
-          // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
+          this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
         }
       );
   }
@@ -719,6 +825,30 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
   onAddData(option) {
     option.data.push(new ResponseOption());
+  }
+
+  onAddCardActinableData(option) {
+    option.data.push(new ResponseOption());
+  }
+
+  onAddCardData(option) {
+    option.cardData.push('');
+  }
+
+  onAddCardActionOption(cardData) {
+    if (!cardData.actionable) {
+      cardData.actionable = [];
+    }
+    cardData.actionable.push(new ResponseData())
+  }
+
+  
+
+  deleteCardData(cardData,row) {
+    const index: number = cardData.indexOf(row);
+    if (index !== -1) {
+      cardData.slice(index, 1);
+    }
   }
 
   delete(data, row) {

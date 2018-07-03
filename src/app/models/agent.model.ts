@@ -82,6 +82,8 @@ export class Agent {
   domainId: string;
   autodetectLanguage: boolean;
   defaultLanguage: string;
+  disabled: boolean;
+  debugMode: boolean;
 
   constructor() {
     this._id = null;
@@ -101,5 +103,7 @@ export class Agent {
     this.domainId = '';
     this.autodetectLanguage = false;
     this.defaultLanguage = '';
+    this.disabled = false;
+    this.debugMode = false;
   }
 }

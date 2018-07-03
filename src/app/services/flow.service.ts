@@ -50,6 +50,204 @@ export class FlowDashboardService {
 
     return subject.asObservable();
   }
+
+  dashboard_summary(body): Observable<Dashboard> {
+    const subject = new Subject<Dashboard>();
+    body['operation'] = "get_flow_dashboard_summary"
+    body['dashboard'] = "flow"
+   
+    const url = `${environment.dashboardinterface}`;
+
+    this.httpClient.post<Dashboard>(
+      url,
+      body,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Dashboard>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+  flow_timeline(body): Observable<Dashboard> {
+    const subject = new Subject<Dashboard>();
+    body['operation'] = "get_flow_timeline"
+    body['dashboard'] = "flow"
+    const url = `${environment.dashboardinterface}`;
+
+    this.httpClient.post<Dashboard>(
+      url,
+      body,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Dashboard>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+  transaction_range(body): Observable<Dashboard> {
+    const subject = new Subject<Dashboard>();
+    body['operation'] = "range_of_transaction";
+    body['dashboard'] = "flow";
+    const url = `${environment.dashboardinterface}`;
+    
+    this.httpClient.post<Dashboard>(
+      url,
+      body,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Dashboard>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+  consumption(body): Observable<Dashboard> {
+    const subject = new Subject<Dashboard>();
+
+    body['operation'] = "get_max_resources_values";
+    body['dashboard'] = "flow";
+    const url = `${environment.dashboardinterface}`;
+
+    this.httpClient.post<Dashboard>(
+      url,
+      body,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Dashboard>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+  avg_time_states(body): Observable<Dashboard> {
+    const subject = new Subject<Dashboard>();
+
+    body['operation'] = "avg_state_time";
+    body['dashboard'] = "flow";
+    const url = `${environment.dashboardinterface}`;
+
+
+    this.httpClient.post<Dashboard>(
+      url,
+      body,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Dashboard>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+  state_transactions(body): Observable<Dashboard> {
+    const subject = new Subject<Dashboard>();
+
+    body['operation'] = "transactionValue_each_state";
+    body['dashboard'] = "flow";
+    const url = `${environment.dashboardinterface}`;
+
+    this.httpClient.post<Dashboard>(
+      url,
+      body,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Dashboard>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
 }
 
 @Injectable()

@@ -9,12 +9,14 @@ export const environment = {
   authurl: 'https://compusoft-console.automatapi.xyz/flow/auth/',
 
   // Services
-  saveaccounturl: 'https://compusoft-console.automatapi.xyz/flow/services/saveaccount',
-  fetchaccountbyidurl: 'https://compusoft-console.automatapi.xyz/flow/services/fetchaccountbyid?query=',
+  saveaccounturl: 'https://flow.automatapi.io/flow/account/create',
+  fetchaccountbyidurl: 'https://flow.automatapi.io/flow/account/',
 
   // Interfaces
-  updateIntentTraining: 'https://compusoft-console.automatapi.xyz/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'https://compusoft-console.automatapi.xyz/flow/interfaces/entity_classification_training',
+  interfaceService: 'http://flow.automatapi.io/flow/interfaces',
+  updateClassifierTraining : 'http://flow.automatapi.io/flow/interfaces/auto_decorate_training',
+  updateIntentTraining: 'https://flow.automatapi.io/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'https://flow.automatapi.io/flow/interfaces/entity_classification_training',
 
   // Flow
   server: 'https://compusoft-console.automatapi.xyz/flow/console/',
@@ -86,13 +88,42 @@ export const environment = {
   updateentityurl: 'update/entityclassifier',
   deleteentityurl: 'delete/entityclassifier?query=',
 
-  savedomainurl: 'domain',
-  fetchdomainurl: 'fetchdomain?query=',
-  saveagenturl: 'agent',
-  fetchagenturl: 'fetchagent?query=',
   fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
   uploadintentexcelurl: 'uploadintents',
   uploadentityexcelurl: 'uploadentity',
   modelkeyslookupurl: 'load/modelkeys',
-  validationtypekeyslookupurl: 'load/validations'
+  validationtypekeyslookupurl: 'load/validations',
+
+  // file upload download service
+  fileUploadUrl: '/api/uploadData',
+  fileDownloadUrl: '/api/downloadData',
+
+  // api design
+  algorithmUrl: '/automatons/algorithm',
+  businessObjectUrl: '/automatons/businessobject',
+  businessObjectTrainingUrl: '/automatons/businessobject/training',
+  businessObjectActivateTrainerUrl: '/automatons/businessobject/activate',
+  businessObjectDectivateTrainerUrl: '/automatons/businessobject/deactivate',
+  
+  //Dashboard
+  dashboardServer: 'https://flow.automatapi.io/flow/dashboard/',
+  dashboardsummary:'auto/dashboard_summary',
+  episodetimeline:'auto/episode_timeline',
+  intentcount:'auto/intent_count',
+  entitycount:'auto/entity_count',
+  sentimentcount:'auto/sentiment_count',
+  goal_count:'auto/goal_count',
+  episodemessages:'auto/episode_message',
+  flowdashboardsummary:'flow/dashboard_summary',
+  flowtimeline:'flow/flow_timeline',
+  transactionvalues:'flow/transaction_values',
+  avgstatetime:'flow/avgstate_time',
+  resourcevalues:'flow/resources_values',
+  statetransactionvalue:'flow/state_transaction_value',
+
+  //Dashboard from interfaces
+  dashboardinterface: 'https://flow.automatapi.io/flow/interfaces/dashboard',
+
+  //CRUD API path - To be used in conjunction with interfaceService property
+  crudFunction : '/crud'
 };

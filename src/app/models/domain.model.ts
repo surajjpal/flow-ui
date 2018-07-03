@@ -122,15 +122,55 @@ export class ResponseOption {
   }
 }
 
+export class Document {
+  entityType: string;
+  functionInstanceName: string;
+  entityRef: string;
+  version: string;
+  fileName: string;
+  isPublic: boolean;
+
+  constructor(entityType?: string, functiofunctionInstanceName?: string, fileName?: string, entityRef?: string, isPublic?: boolean) {
+    this.entityType = entityType ? entityType : '';
+    this.functionInstanceName = functiofunctionInstanceName ? functiofunctionInstanceName : '';
+    this.entityRef = entityRef ? entityRef : ''
+    this.isPublic = isPublic ? isPublic : true;
+  }
+}
+
+export class CardData {
+  cardName: string;
+  templateName: string;
+  title: string;
+  subTitle: string;
+  avatarImageUrl: string;
+  imageUrl: string;
+  content: string;
+  actionable: ResponseData[];
+  
+  constructor(cardName?: string, templateName?: string, title?: string, subTitle?: string, avatarImageUrl?: string, imageUrl?: string, content?: string, actionable?: ResponseData[]) {
+    this.cardName = cardName ? cardName : '';
+    this.templateName = templateName ? templateName : '';
+    this.title = title ? title : '';
+    this.subTitle = subTitle ? subTitle : '';
+    this.avatarImageUrl = avatarImageUrl ? avatarImageUrl : '';
+    this.imageUrl = imageUrl ? imageUrl : '';
+    this.content = content ? content : '';
+    this.actionable = actionable ? actionable : [];
+  }
+}
+
 export class ResponseData {
   url: string;
   type: string;
   data: ResponseOption[];
+  cardData: string[];
 
-  constructor(url?: string, type?: string, data?: ResponseOption[]) {
+  constructor(url?: string, type?: string, data?: ResponseOption[], cardData?: string[]) {
     this.url = url ? url : '';
     this.type = type ? type : '';
     this.data = data ? data : [];
+    this.cardData = cardData ? cardData : [];
   }
 }
 
@@ -139,12 +179,14 @@ export class Settings {
   secured: boolean;
   validationRegex: string;
   placeholder: string;
+  errorMessage: string;
 
   constructor() {
     this.mask = '';
     this.secured = false;
     this.validationRegex = '';
     this.placeholder = '';
+    this.errorMessage = '';
   }
 }
 
@@ -160,6 +202,7 @@ export class Response {
   options: ResponseData[];
   settings: Settings;
   selectionExpression: string;
+  uploadDocument: {};
 
   constructor(expression?: string, lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
       options?: ResponseData[], settings?: Settings, selectionExpression?: string) {
@@ -175,6 +218,7 @@ export class Response {
     this.options = options ? options : [];
     this.settings = settings ? settings : new Settings();
     this.selectionExpression = selectionExpression ? selectionExpression : '';
+    this.uploadDocument = {};
   }
 }
 
@@ -190,6 +234,7 @@ export class Domain {
   domainEntities: Entity[];
   domainGoals: Goal[];
   domainResponse: Response[];
+  cards: CardData[];
 
   constructor() {
     this._id = null;
@@ -203,5 +248,6 @@ export class Domain {
     this.domainEntities = [];
     this.domainGoals = [];
     this.domainResponse = [];
+    this.cards = [];
   }
 }
