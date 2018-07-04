@@ -12,6 +12,7 @@ import { AgentService } from '../../../../services/agent.service';
 import { DomainService } from '../../../../services/domain.service';
 import { GraphService } from '../../../../services/flow.service';
 import { DataSharingService } from '../../../../services/shared.service';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'api-agent-agent',
@@ -21,12 +22,14 @@ import { DataSharingService } from '../../../../services/shared.service';
 export class AgentCreationComponent implements OnInit, OnDestroy {
 
   agentCreateMode: boolean;
+  isCreated: boolean;
   modalHeader: string;
   createMode: boolean;
-
+  autoUrl: string;
   selectedAgent: Agent;
   selectedDomain: Domain;
   domainSource: Domain[];
+  supportedLanguageSource: string[];
   selectedDomainList: Domain[];
   flowSource: GraphObject[];
 
@@ -87,7 +90,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.fetchLookups();
-
+    this.isCreated = false;
     const agent: Agent = this.sharingService.getSharedObject();
     if (agent) {
       this.selectedAgent = agent;
@@ -96,15 +99,26 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       if (!this.selectedAgent.uiComponent) {
         this.selectedAgent.uiComponent = new UIComponent();
       }
-
+      if (!this.selectedAgent.autodetectLanguage || this.selectedAgent.autodetectLanguage === null) {
+        this.selectedAgent.autodetectLanguage = false;
+      }
+      if (!this.selectedAgent.defaultLanguage || this.selectedAgent.defaultLanguage === null) {
+        this.selectedAgent.defaultLanguage = '';
+      }
+      if (!this.selectedAgent.disabled || this.selectedAgent.disabled === null) {
+        this.selectedAgent.disabled = false;
+      }
+      if (!this.selectedAgent.debugMode || this.selectedAgent.debugMode === null) {
+        this.selectedAgent.debugMode = false;
+      }
       if (!this.selectedAgent.uiComponent.placeHolderText) {
         this.selectedAgent.uiComponent.placeHolderText = 'Type your query...';
       }
       if (!this.selectedAgent.uiComponent.episodeIdleTimeout) {
         this.selectedAgent.uiComponent.episodeIdleTimeout = 240;
       }
-      if (!this.selectedAgent.episodeCloseTimeout) {
-        this.selectedAgent.episodeCloseTimeout = 2880;
+      if (!this.selectedAgent.uiComponent.episodeCloseTimeout) {
+        this.selectedAgent.uiComponent.episodeCloseTimeout = 2880;
       }
 
       if (this.selectedAgent.agentPlugins && this.selectedAgent.agentPlugins.length > 0) {
@@ -152,7 +166,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       this.agentCreateMode = true;
     }
   }
-  
+
   ngOnDestroy(): void {
     if (this.subscription && !this.subscription.closed) {
       this.subscription.unsubscribe();
@@ -168,24 +182,24 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
   fetchLookups() {
     this.subscriptionDomain = this.domainService.domainLookup()
       .subscribe(
-      domainList => {
-        if (domainList) {
-          this.domainSource = domainList;
+        domainList => {
+          if (domainList) {
+            this.domainSource = domainList;
 
-          if (!this.agentCreateMode) {
-            if (this.selectedAgent.domainNameList && this.selectedAgent.domainNameList.length > 0) {
-              for (const domainName of this.selectedAgent.domainNameList) {
-                for (const domain of this.domainSource) {
-                  if (domainName === domain.name) {
-                    this.addDomain(domain);
-                    break;
+            if (!this.agentCreateMode) {
+              if (this.selectedAgent.domainNameList && this.selectedAgent.domainNameList.length > 0) {
+                for (const domainName of this.selectedAgent.domainNameList) {
+                  for (const domain of this.domainSource) {
+                    if (domainName === domain.name) {
+                      this.addDomain(domain);
+                      break;
+                    }
                   }
                 }
               }
             }
           }
         }
-      }
       );
 
     this.subscriptionGraph = this.graphService.fetch('ACTIVE')
@@ -209,8 +223,8 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (this.selectedAgent.langSupported || this.selectedAgent.langSupported.length <= 0) {
-        this.selectedAgent.langSupported = ['ENG', 'HIN'];
+      if (!this.selectedAgent.langSupported || this.selectedAgent.langSupported === null) {
+        this.selectedAgent.langSupported = [];
       }
 
       if (this.isApiEnabled && this.apiClassifierValidator()) {
@@ -229,7 +243,8 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
         .subscribe(
           createdAgent => {
             this.isSuccess = true;
-
+            this.isCreated = true;
+            this.autoUrl = `${environment.autourl}param1=${createdAgent._id}&param2=welcomeTo&param3=agentName`;
             if (createdAgent) {
               if (createdAgent.agentPlugins && createdAgent.agentPlugins.length > 0) {
                 const facebookPlugin: Plugin = createdAgent.agentPlugins[0];
@@ -240,6 +255,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
                   new showModal('successModal');
                   return;
                 }
+
               }
 
               this.facebookIntegrated = false;
@@ -321,14 +337,18 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
 
   addDomain(domain?: Domain) {
     if (domain) {
+      this.selectedAgent.domainId = domain._id;
       if (!this.domainAddedToList(domain)) {
         this.selectedDomainList.push(domain);
       }
     } else {
+      this.selectedAgent.domainId = this.selectedDomain._id;
       if (!this.domainAddedToList()) {
         this.selectedDomainList.push(this.selectedDomain);
       }
     }
+
+    this.updateLanguageLookup();
   }
 
   removeDomain() {
@@ -336,8 +356,11 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       const index: number = this.selectedDomainList.indexOf(this.selectedDomain);
       if (index !== -1) {
         this.selectedDomainList.splice(index, 1);
+        this.selectedAgent.domainId = '';
       }
     }
+
+    this.updateLanguageLookup();
   }
 
   addAllDomain() {
@@ -348,6 +371,8 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
         }
       }
     }
+
+    this.updateLanguageLookup();
   }
 
   removeAllDomain() {
@@ -358,6 +383,31 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
           if (index !== -1) {
             this.selectedDomainList.splice(index, 1);
           }
+        }
+      }
+    }
+
+    this.updateLanguageLookup();
+  }
+
+  updateLanguageLookup() {
+    if (this.selectedDomainList) {
+      this.supportedLanguageSource = [];
+      for (const domain of this.selectedDomainList) {
+        if (domain && domain.langSupported && domain.langSupported) {
+          for (const lang of domain.langSupported) {
+            if (lang && !this.supportedLanguageSource.includes(lang)) {
+              this.supportedLanguageSource.push(lang);
+            }
+          }
+        }
+      }
+
+      if (!this.supportedLanguageSource.includes(this.selectedAgent.defaultLanguage)) {
+        if (this.supportedLanguageSource.length > 0) {
+          this.selectedAgent.defaultLanguage = this.supportedLanguageSource[0];
+        } else {
+          this.selectedAgent.defaultLanguage = '';
         }
       }
     }
@@ -384,7 +434,12 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
 
   goToAgentsListing() {
     if (this.isSuccess) {
-      this.router.navigate(['/pg/agnt/agsr'], { relativeTo: this.route });
+      this.router.navigate(['/pg/agnt/ags'], { relativeTo: this.route });
     }
   }
+
+  goBack() {
+    this.router.navigate(['/pg/agnt/agsr'], { relativeTo: this.route });
+  }
+
 }

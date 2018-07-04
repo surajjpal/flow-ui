@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+
 import { AlertComponent, ApiCheckboxComponent, NgbdDatepickerPopup } from './shared.component';
+import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 import { UniversalFilterPipe } from './universal-data-filter.pipe';
 import { KeysPipe } from './key-filter.pipe';
 
@@ -19,14 +21,17 @@ import { KeysPipe } from './key-filter.pipe';
     ApiCheckboxComponent,
     UniversalFilterPipe,
     KeysPipe,
-    NgbdDatepickerPopup
+    NgbdDatepickerPopup,
+    FileUploaderComponent
   ],
   exports: [
     AlertComponent,
     ApiCheckboxComponent,
     UniversalFilterPipe,
     KeysPipe,
-    NgbdDatepickerPopup
+    NgbdDatepickerPopup,
+    FileUploaderComponent
+
   ]
 })
 export class SharedModule { }

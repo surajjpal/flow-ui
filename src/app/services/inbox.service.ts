@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angul
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
-import { State,CommonInsightWrapper } from '../models/tasks.model';
+import { State,CommonInsightWrapper,StateReportModel } from '../models/tasks.model';
 import { GraphObject,StateInfoModel } from '../models/flow.model';
 
 import { environment } from '../../environments/environment';
@@ -318,16 +318,18 @@ export class StateService {
   }
 
 
-  saveFlaggedState(state: State): Observable<State> {
+  saveFlaggedState(state: State,inputMap:any): Observable<State> {
     const subject = new Subject<State>();
-
+    const map = {};
+    map['param'] = JSON.stringify(inputMap);
+    map['payload'] = '{}';
     console.log(state._id)
 
-    const url = `${environment.server + environment.saveflaggedstate}`;
+    const url = `${environment.server + environment.saveflaggedstate}/${state._id}/${state.flagReason}/`;
 
     this.httpClient.post<State>(
       url,
-      state,
+      map,
       {
         headers: this.httpHeaders,
         observe: 'response',
@@ -369,6 +371,108 @@ export class StateService {
       }
     ).subscribe(
       (response: HttpResponse<State>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+
+  getTatRecords(stateReportModel: StateReportModel): Observable<any> {
+    const subject = new Subject<any>();
+
+    
+
+    const url = `${environment.server + environment.gettatrecords}`;
+
+    this.httpClient.post<any>(
+      url,
+      stateReportModel,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+  
+  getOverallStats(stateReportModel: StateReportModel): Observable<any> {
+    const subject = new Subject<any>();
+
+    
+
+    const url = `${environment.server + environment.getallstats}`;
+
+    this.httpClient.post<any>(
+      url,
+      stateReportModel,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+
+  getPersonalStats(stateReportModel: StateReportModel): Observable<any> {
+    const subject = new Subject<any>();
+
+    
+
+    const url = `${environment.server + environment.getpersonalstats}`;
+
+    this.httpClient.post<any>(
+      url,
+      stateReportModel,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
         if (response.body) {
           subject.next(response.body);
         }

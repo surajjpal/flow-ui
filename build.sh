@@ -6,7 +6,7 @@ npm install
 echo "---------------------------------------------------------------"
 echo "--------- Trigering Build -------------------------------------"
 # AOT Compilation
-ng build --env=prod --aot --build-optimizer --base-href / --deploy-url /
+ng build --env=demo --aot --build-optimizer --base-href / --deploy-url /
 
 echo "---------------------------------------------------------------"
 echo "--------- Creating zip ----------------------------------------"

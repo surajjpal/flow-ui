@@ -9,6 +9,8 @@ export class UIComponent {
   placeHolderText: string;
   episodeIdleTimeout: number;
   delayInMessages: boolean;
+  episodeCloseTimeout: number;
+  cronEnabled: boolean;
 
   constructor() {
     this.colorCss = '';
@@ -19,6 +21,8 @@ export class UIComponent {
     this.placeHolderText = 'Type your query...';
     this.episodeIdleTimeout = 240;      // In minutes - default 4hrs - 240 mins
     this.delayInMessages = false;
+    this.episodeCloseTimeout = 2880;
+    this.cronEnabled = false;
   }
 }
 
@@ -75,7 +79,11 @@ export class Agent {
   agentClassifier: Classifier[];
   companyId: string;
   uiComponent: UIComponent;
-  episodeCloseTimeout: number;
+  domainId: string;
+  autodetectLanguage: boolean;
+  defaultLanguage: string;
+  disabled: boolean;
+  debugMode: boolean;
 
   constructor() {
     this._id = null;
@@ -92,6 +100,10 @@ export class Agent {
     this.agentClassifier = [];
     this.companyId = '';
     this.uiComponent = new UIComponent();
-    this.episodeCloseTimeout = 2880;      // In minutes - default 48hrs - 2880 mins
+    this.domainId = '';
+    this.autodetectLanguage = false;
+    this.defaultLanguage = '';
+    this.disabled = false;
+    this.debugMode = false;
   }
 }

@@ -6,41 +6,103 @@
   <thead>
     <tr>
       <th>
-        <mfDefaultSorter by=""><h6><b>Process</b></h6></mfDefaultSorter>
+        <mfDefaultSorter by="">
+          <h6>
+            <b>Business Key</b>
+          </h6>
+        </mfDefaultSorter>
       </th>
       <th>
-        <mfDefaultSorter by=""><h6><b>Task</b></h6></mfDefaultSorter>
+        <mfDefaultSorter by="">
+          <h6>
+            <b>Process</b>
+          </h6>
+        </mfDefaultSorter>
       </th>
       <th>
-        <mfDefaultSorter by=""><h6><b>Status</b></h6></mfDefaultSorter>
+        <mfDefaultSorter by="">
+          <h6>
+            <b>Task</b>
+          </h6>
+        </mfDefaultSorter>
       </th>
       <th>
-        <mfDefaultSorter by=""><h6><b>Start Time</b></h6></mfDefaultSorter>
+        <mfDefaultSorter by="">
+          <h6>
+            <b>Status</b>
+          </h6>
+        </mfDefaultSorter>
       </th>
       <th>
-        <mfDefaultSorter by=""><h6><b>Assigned Group</b></h6></mfDefaultSorter>
+        <mfDefaultSorter by="">
+          <h6>
+            <b>Start Time</b>
+          </h6>
+        </mfDefaultSorter>
       </th>
       <th>
-        <mfDefaultSorter by=""><h6><b>Flagged</b></h6></mfDefaultSorter>
+        <mfDefaultSorter by="">
+          <h6>
+            <b>Assigned Group</b>
+          </h6>
+        </mfDefaultSorter>
       </th>
       <th>
-        <mfDefaultSorter by=""><h6><b>Flag Level</b></h6></mfDefaultSorter>
+          <mfDefaultSorter by="">
+            <h6>
+              <b>Assigned To</b>
+            </h6>
+          </mfDefaultSorter>
+        </th>
+      <th>
+        <mfDefaultSorter by="">
+          <h6>
+            <b>Flagged</b>
+          </h6>
+        </mfDefaultSorter>
       </th>
       <th>
-        <mfDefaultSorter by=""><h6><b>Escalated</b></h6></mfDefaultSorter>
+        <mfDefaultSorter by="">
+          <h6>
+            <b>Flag Level</b>
+          </h6>
+        </mfDefaultSorter>
+      </th>
+      <th>
+        <mfDefaultSorter by="">
+          <h6>
+            <b>Escalated</b>
+          </h6>
+        </mfDefaultSorter>
+      </th>
+      <th>
+        <mfDefaultSorter by="">
+          <h6>
+            <b>Action</b>
+          </h6>
+        </mfDefaultSorter>
       </th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let s of mf.data" (click)="onSelect(s)">
+    <tr *ngFor="let s of mf.data">
+      <td>{{s.businessKey}}</td>
       <td>{{s.machineLabel}}</td>
       <td>{{s.stateCd}}</td>
       <td>{{s.statusCd}}</td>
       <td>{{s.startTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</td>
       <td>{{s.assignedUserGroupCd}}</td>
+      <td>{{s.assignedUserDisplayName}}</td>
       <td>{{s.flagged}}</td>
       <td>{{s.iterationLevel}}</td>
       <td>{{s.escalatedFlag}}</td>
+      <td>
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-primary" title="View" (click)="onSelect(s)">
+            <i class="ion-eye"></i>
+          </button>
+        </div>
+      </td>
     </tr>
     <tr *ngIf="mf.data.length === 0 && isLoading">
       <td colspan="100%">Loading...</td>
@@ -52,7 +114,7 @@
   <tfoot>
     <tr>
       <td colspan="5">
-        <mfBootstrapPaginator ></mfBootstrapPaginator>
+        <mfBootstrapPaginator></mfBootstrapPaginator>
       </td>
     </tr>
   </tfoot>

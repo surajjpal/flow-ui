@@ -26,8 +26,10 @@ import { DomainService } from './services/domain.service';
 import { FlowDashboardService, GraphService, CommunicationService } from './services/flow.service';
 import { DataCachingService, StateService } from './services/inbox.service';
 import { AccountService, ApiConfigService, RoutesService } from './services/setup.service';
+import { ApiDesignService } from './services/apidesign.service';
 import { AuthGuard, AntiAuthGuard, AlertService, DataSharingService, UniversalUser } from './services/shared.service';
 import { AnalyticsService } from './services/analytics.service';
+import { FileUploaderService } from './shared/services/file-uploader.service'
 
 import { SharedModule } from './shared/shared.module';
 
@@ -53,8 +55,9 @@ const APP_PROVIDERS = [
   FlowDashboardService, GraphService, CommunicationService,
   DataCachingService, StateService,
   AccountService, ApiConfigService, RoutesService,
-  AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService, UniversalUser,
-  AnalyticsService
+  ApiDesignService,
+  AnalyticsService,
+  AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService, UniversalUser, FileUploaderService
 ];
 
 export type StoreType = {

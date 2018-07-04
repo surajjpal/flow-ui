@@ -17,9 +17,15 @@ export const environment = {
   saveaccounturl: 'http://108.168.190.82:8080/flow/services/saveaccount',
   fetchaccountbyidurl: 'http://108.168.190.82:8080/flow/services/fetchaccountbyid?query=',
 
+  // Interfaces
+  interfaceService: 'http://108.168.190.82:8080/flow/interfaces',
+  updateClassifierTraining : 'http://108.168.190.82:8080/flow/interfaces/auto_decorate_training',
+  updateIntentTraining: 'http://108.168.190.82:8080/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'http://108.168.190.82:8080/flow/interfaces/entity_classification_training',
+
   // Flow
   server: 'http://108.168.190.82:8080/flow/console/',
-
+  autourl:'https://api.automatapi.com/?',
 
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
@@ -28,8 +34,9 @@ export const environment = {
   statebysubstatusandfolderurl:'state/pagebysubstatusandfolder/',
   saveflaggedstate:'state/saveFlaggedState',
   savearchivestate:'state/archive',
-
-
+  gettatrecords:'state/fetchtat',
+  getallstats:'state/fetchstatestatus',
+  getpersonalstats:'state/getstatestatusbyuser',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
@@ -85,10 +92,6 @@ export const environment = {
   updateentityurl: 'update/entityclassifier',
   deleteentityurl: 'delete/entityclassifier?query=',
 
-  savedomainurl: 'domain',
-  fetchdomainurl: 'fetchdomain?query=',
-  saveagenturl: 'agent',
-  fetchagenturl: 'fetchagent?query=',
   fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
   uploadintentexcelurl: 'uploadintents',
   uploadentityexcelurl: 'uploadentity',
@@ -96,5 +99,38 @@ export const environment = {
   validationtypekeyslookupurl: 'load/validations',
 
   // Analytics
-  sendReportUrl: 'analyticsreport'
+  sendReportUrl: 'analyticsreport',
+  
+  // file upload download service
+  fileUploadUrl: '/api/uploadData',
+  fileDownloadUrl: '/api/downloadData',
+
+  // api design
+  algorithmUrl: '/automatons/algorithm',
+  businessObjectUrl: '/automatons/businessobject',
+  businessObjectTrainingUrl: '/automatons/businessobject/training',
+  businessObjectActivateTrainerUrl: '/automatons/businessobject/activate',
+  businessObjectDectivateTrainerUrl: '/automatons/businessobject/deactivate',
+
+  //Dashboard
+  dashboardServer: 'http://108.168.190.82:8080/flow/dashboard/',
+  dashboardsummary:'auto/dashboard_summary',
+  episodetimeline:'auto/episode_timeline',
+  intentcount:'auto/intent_count',
+  entitycount:'auto/entity_count',
+  sentimentcount:'auto/sentiment_count',
+  goal_count:'auto/goal_count',
+  episodemessages:'auto/episode_message',
+  flowdashboardsummary:'flow/dashboard_summary',
+  flowtimeline:'flow/flow_timeline',
+  transactionvalues:'flow/transaction_values',
+  avgstatetime:'flow/avgstate_time',
+  resourcevalues:'flow/resources_values',
+  statetransactionvalue:'flow/state_transaction_value',
+
+  //Dashboard from interfaces
+  dashboardinterface: 'http://108.168.190.82:8080/flow/interfaces/dashboard',
+
+  //CRUD API path - To be used in conjunction with interfaceService property
+  crudFunction : '/crud'
 };

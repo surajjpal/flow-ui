@@ -29,8 +29,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   avgTimeInStatesOptions;
   avgTimeInStatesData;
 
-  statesConsumingMaxResTimeTransaction: StateConsumingMaxResTimeTransaction;
-  workflowSummary: WorkflowSummary;
+  statesConsumingMaxResTimeTransaction;
+  workflowSummary;
 
   private workflowSummarySubscription: Subscription;
   private statesConsumingMaxResTimeTransactionSubscription: Subscription;
@@ -74,20 +74,45 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   
   fetchFlowStats(dateRange: any) {
-    this.workflowSummarySubscription = this.dashboardService.fetch('WORKFLOW_SUMMARY', dateRange)
-      .subscribe(flowDashboard => { this.workflowSummary = flowDashboard.workflowSummary; })
-    this.flowTimelineSubscription = this.dashboardService.fetch('FLOW_TIMELINE', dateRange)
-      .subscribe(flowDashboard => { this.flowTimelineData = flowDashboard.nvd3ChartInputList[0]; })
-    this.rangeOfTransactionInStatesSubscription = this.dashboardService.fetch('RANGE_TRANSACTION_IN_STATES_COUNT', dateRange)
-      .subscribe(flowDashboard => { this.rangeOfTransactionInStatesData = flowDashboard.nvd3ChartInputList[0]; })
-    this.groupResourceAllocationInStatesSubscription = this.dashboardService.fetch('GROUP_RESOURCE_ALLOCATION_STATES_COUNT', dateRange)
-      .subscribe(flowDashboard => { this.groupResourceAllocationInStatesData = flowDashboard.nvd3ChartInputList[0]; })
-    this.transactionValueInStatesSubscription = this.dashboardService.fetch('TRANSACTION_IN_STATES_COUNT', dateRange)
-      .subscribe(flowDashboard => { this.transactionValueInStatesData = flowDashboard.nvd3ChartInputList[0]; })
-    this.avgTimeInStatesSubscription = this.dashboardService.fetch('AVERAGE_TIME_IN_STATES', dateRange)
-      .subscribe(flowDashboard => { this.avgTimeInStatesData = flowDashboard.nvd3ChartInputList[0]; })
-    this.statesConsumingMaxResTimeTransactionSubscription = this.dashboardService.fetch('STATES_CONSUME_MAX_BY_RESOURCEGROUP_TIME_TRANSACTIONVALUE', dateRange)
-      .subscribe(flowDashboard => { this.statesConsumingMaxResTimeTransaction = flowDashboard.stateConsumingMaxResTimeTransaction; })
+    let fromDate = dateRange.start.format('DD/MM/YYYY');
+    let toDate = dateRange.end.format('DD/MM/YYYY');
+    let body = {}
+    body['startDate'] = fromDate;
+    body['endDate'] = toDate;
+    
+    this.workflowSummarySubscription = this.dashboardService.dashboard_summary(body)
+      .subscribe(flowDashboard => { 
+        console.log(flowDashboard); 
+        this.workflowSummary = flowDashboard['result'];
+      })
+
+
+
+    this.flowTimelineSubscription = this.dashboardService.flow_timeline(body)
+      .subscribe(flowDashboard => { 
+        console.log(flowDashboard)
+        this.flowTimelineData = flowDashboard['result'] ;
+       
+      })
+
+
+    this.rangeOfTransactionInStatesSubscription = this.dashboardService.transaction_range(body)
+      .subscribe(flowDashboard => { this.rangeOfTransactionInStatesData = flowDashboard['result']; })
+
+
+    // this.groupResourceAllocationInStatesSubscription = this.dashboardService.fetch('GROUP_RESOURCE_ALLOCATION_STATES_COUNT', dateRange)
+    //   .subscribe(flowDashboard => { this.groupResourceAllocationInStatesData = flowDashboard.nvd3ChartInputList[0]; })
+    this.transactionValueInStatesSubscription = this.dashboardService.state_transactions(body)
+      .subscribe(flowDashboard => { this.transactionValueInStatesData = flowDashboard['result']; })
+
+
+    this.avgTimeInStatesSubscription = this.dashboardService.avg_time_states(body)
+      .subscribe(flowDashboard => { 
+        console.log(flowDashboard);
+        this.avgTimeInStatesData = flowDashboard['result']; })
+
+    this.statesConsumingMaxResTimeTransactionSubscription = this.dashboardService.consumption(body)
+      .subscribe(flowDashboard => { this.statesConsumingMaxResTimeTransaction = flowDashboard['result']; })
   }
 
   setupChartOptions() {

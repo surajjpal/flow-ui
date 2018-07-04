@@ -1,0 +1,208 @@
+
+  <div class="row">
+      <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="FILTER">
+        <form class="form-inline">
+          <div class="form-group">
+            <label for="selectDate" class="control-label col-sm-6">DATE</label>
+            <api-daterangepicker (selectedRange)="pesonalTat($event)"></api-daterangepicker>
+          </div>
+          <div class="form-group">
+            <label for="status" class="control-label col-sm-6">STATUS:</label>
+            <select class="selectpicker form-control" required id="selectStatus" title="Choose Status" [(ngModel)]="status" [ngModelOptions]="{standalone: true}">
+              <option *ngFor="let status of Statuses" [value]="status">{{status}}</option>
+              </select>
+          </div>
+          <div class="form-group" *ngIf="Users.length > 0">
+              <label for="selectUser"  class="control-label col-sm-6">AGENT:</label>
+              <select class="selectpicker form-control" multiple="true" required id="selectUser" style= "width: 400px; height:50px" title="Choose User" [(ngModel)]="tempUsers" [ngModelOptions]="{standalone: true}">
+              <option *ngFor="let user of Users" [ngValue]="user">{{user.userName}}</option>
+              </select>
+          </div>
+          <button type="button" class="btn btn-success" id="submit" style="display: block; text-align: center;width: 100px" (click)="submit()">SUBMIT</button> 
+        </form>
+        
+      </ba-card>
+  </div>
+
+      
+
+
+<div *ngIf="progressBarFlag">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;" aria-valuenow="99"
+            aria-valuemin="0" aria-valuemax="100">Loading...</div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <br/>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="buttonSelected">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="row tile_count">
+          <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i>Personal Pending</span>
+              <div class="count">{{personalStateReportModel.pendingStatusCount}}</div>
+          </div>
+          <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i>Personal Active</span>
+              <div class="count ">{{personalStateReportModel.activeStatusCount}}</div>
+          </div>
+          <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i>Personal Flagged</span>
+              <div class="count">{{personalStateReportModel.flaggedStatusCount}}</div>
+          </div>
+          <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+              <span class="count_top"><i class="fa fa-user"></i>Personal Archived</span>
+              <div class="count ">{{personalStateReportModel.archiveStatusCount}}</div>
+          </div>
+      </div>
+    </div>
+    <div class="col-sm-6" *ngIf="!personal"> 
+        <div class="row tile_count">
+            <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i>Team Pending</span>
+                <div class="count">{{overallStateReportModel.pendingStatusCount}}</div>
+            </div>
+            <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i>Team Active</span>
+                <div class="count ">{{overallStateReportModel.activeStatusCount}}</div>
+            </div>
+            <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i>Team Flagged</span>
+                <div class="count">{{overallStateReportModel.flaggedStatusCount}}</div>
+            </div>
+            <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
+                <span class="count_top"><i class="fa fa-user"></i>Team Archived</span>
+                <div class="count ">{{overallStateReportModel.archiveStatusCount}}</div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    
+  <div class="widgets">
+    <div class="row">
+      <ba-card baCardClass="with-scroll" class="data-table-container">
+        <div class="panel panel-default">
+          <!-- <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab" href="#tab_flagged" role="tab" aria-expanded="true">TAT</a>
+            </li>
+          </ul> -->
+          <!-- <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade show active" id="tab_flagged"> -->
+                <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
+                <br>
+                <table class="table table-striped" [mfData]="tatReports | universalDataFilter : filterQuery" #mf="mfDataTable" [(mfSortBy)]="sortBy" [mfRowsOnPage]="10"
+                  [(mfSortOrder)]="asc">
+                  <thead>
+                    <tr>
+                      <th>
+                        <mfDefaultSorter by="">
+                          <h6>
+                            <b>Chat Id</b>
+                          </h6>
+                        </mfDefaultSorter>
+                      </th>
+                      <th>
+                        <mfDefaultSorter by="">
+                          <h6>
+                            <b>Contact Number</b>
+                          </h6>
+                        </mfDefaultSorter>
+                      </th>
+                      <th>
+                        <mfDefaultSorter by="">
+                          <h6>
+                            <b>IMEI</b>
+                          </h6>
+                        </mfDefaultSorter>
+                      </th>
+                      <th>
+                        <mfDefaultSorter by="">
+                          <h6>
+                            <b>Assigned to</b>
+                          </h6>
+                        </mfDefaultSorter>
+                      </th>
+                      <th>
+                        <mfDefaultSorter by="">
+                          <h6>
+                            <b>Status</b>
+                          </h6>
+                        </mfDefaultSorter>
+                      </th>
+                      <th>
+                        <mfDefaultSorter by="">
+                          <h6>
+                            <b>SubStatus</b>
+                          </h6>
+                        </mfDefaultSorter>
+                      </th>
+                      <th>
+                        <mfDefaultSorter by="">
+                          <h6>
+                            <b>StartTime</b>
+                          </h6>
+                        </mfDefaultSorter>
+                      </th>
+                      <th>
+                        <mfDefaultSorter by="">
+                          <h6>
+                            <b>EndTime</b>
+                          </h6>
+                        </mfDefaultSorter>
+                      </th>
+                      <th>
+                        <mfDefaultSorter by="">
+                          <h6>
+                            <b>TAT(mins)</b>
+                          </h6>
+                        </mfDefaultSorter>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let s of  mf.data">
+                      <td>{{s.chatId}}</td>
+                      <td>{{s.bussinessKeyMobile}}</td>
+                      <td>{{s.businessKeyImeiEmail}}</td>
+                      <td>{{s.assignedUserName}}</td>
+                      <td>{{s.reportStatusCd}}</td>
+                      <td>{{s.reportSubStatusCd}}</td>
+                      <td>{{s.startTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</td>
+                      <td>{{s.endTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</td>
+                      <td>{{s.reportTatTime}}</td>
+                      
+                    </tr>
+                    <tr *ngIf="mf.data.length === 0 && isLoading">
+                      <td colspan="100%">Loading...</td>
+                    </tr>
+                    <tr *ngIf="mf.data.length === 0 && !isLoading">
+                      <td colspan="100%">No records to display</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="5">
+                        <mfBootstrapPaginator></mfBootstrapPaginator>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+                <!-- <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; width: 200px"
+                  *ngIf="tatReports.length > 10" (click)="loadMore('ACTIVE','Personal')">Load More</button> -->
+              <!-- </div>
+          </div> -->
+        </div>
+      </ba-card>
+    </div>
+  </div>
+</div>

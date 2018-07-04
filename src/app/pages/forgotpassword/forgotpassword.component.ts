@@ -72,11 +72,13 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     this.userSubscription = this.authService.forgotPassword(this.user)
       .subscribe(
         user => {
-          this.loading = false;
-          this.router.navigate([this.returnUrl]);
+            this.loading = false;
+            this.router.navigate([this.returnUrl]);
+            this.alertService.success('New password has been mailed to your registerd email id ', true, 10000);
         },
         error => {
           this.loading = false;
+          this.alertService.error(error, true, 10000);
         }
       );
   }

@@ -40,7 +40,7 @@
           <span class="sr-only">Close</span>
         </button>
       </div>
-
+    
       <!-- Modal Body -->
       <div class="modal-body" id="modal_body">
         <form>
@@ -63,18 +63,17 @@
               <option *ngFor="let allocationType of allocationTypes" [value]="allocationType">{{allocationType}}</option>
             </select>
           </div>
-          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'Group'">
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType !== 'Personal'">
             <label for="allocationGroup">Allocate to group</label>
             <input type="text" class="form-control" required id="allocationGroup" placeholder="Allocate to group" [(ngModel)]="tempState.allocationModel.allocationGroup"
               name="allocationGroup" />
           </div>
-
-          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && ( tempState.allocationModel.allocationType !== 'Group' || tempState.allocationModel.allocationType === 'Auto_Agent_Allocation' )">
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType !== 'Group'">
               <label for="allocationGroup">Allocate to default group</label>
               <input type="text" class="form-control" required id="allocationGroup" placeholder="Allocate to default group" [(ngModel)]="tempState.allocationModel.allocationGroup"
                 name="allocationGroup" />
           </div>
-          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && ( tempState.allocationModel.allocationType === 'Least_Allocated' || tempState.allocationModel.allocationType === 'Round_Robin'|| tempState.allocationModel.allocationType === 'Maximum_Efficiency' || tempState.allocationModel.allocationType === 'Seperation_Of_Duties' || tempState.allocationModel.allocationType === 'Random' || tempState.allocationModel.allocationType === 'Auto_Agent_Allocation')">
+          <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType !== 'Group'">
               <label for="groups">Allocate to groups</label>
               <tag-input [(ngModel)]="tempState.allocationModel.groups" name="groups" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
           </div>
@@ -676,14 +675,11 @@
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpDescription' + index" placeholder="Description"
                         [(ngModel)]="dataPoint.description" name="description" />
                     </div>
-                    <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpHeaderFlag' + index">
-                        Header
-                      </label>
-                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpHeaderFlag' + index" placeholder="Header"
-                        [(ngModel)]="dataPoint.headerFlag" name="headerFlag" />
+                    <div class="row">
+                      <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.headerFlag" [label]="'Header Flag'" (event)="dataPoint.headerFlag = $event.target.checked"></api-checkbox>
+                      <api-checkbox class="col-md-9 col-sm-9 col-xs-9" [checked]="dataPoint.businessKeyFlag" [label]="'Business Key Flag'" (event)="dataPoint.businessKeyFlag = $event.target.checked"></api-checkbox>
                     </div>
-                    <div class="form-group">
+                   <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputExpression' + index">
                         Expression
                       </label>
@@ -801,12 +797,9 @@
                       <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpDescription' + index" placeholder="Description"
                         [(ngModel)]="dataPoint.description" name="description" />
                     </div>
-                    <div class="form-group">
-                      <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'dpHeaderFlag' + index">
-                        Header
-                      </label>
-                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'dpHeaderFlag' + index" placeholder="Header"
-                        [(ngModel)]="dataPoint.headerFlag" name="headerFlag" />
+                    <div class="row">
+                      <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.headerFlag" [label]="'Header Flag'" (event)="dataPoint.headerFlag = $event.target.checked"></api-checkbox>
+                      <api-checkbox class="col-md-9 col-sm-9 col-xs-9" [checked]="dataPoint.businessKeyFlag" [label]="'Business Key Flag'" (event)="dataPoint.businessKeyFlag = $event.target.checked"></api-checkbox>
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputExpression' + index">

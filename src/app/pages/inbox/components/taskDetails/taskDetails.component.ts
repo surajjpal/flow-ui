@@ -36,6 +36,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   PRINT_PREVIEW = 'PRINT_PREVIEW';
   POSTER_PRINT = 'POSTER_PRINT';
 
+  isButtonEnabled: boolean = true;
+
   selectedState: State;
   dataPoints: DataPoint[];
   actionMap: any;
@@ -46,13 +48,14 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   selectedEpisode: Episode;
   chatMessageList: ChatMessage[];
   Users: UserHierarchy[] = [];
-  allocatedUserId:string;
+  allocatedUserId:string = "";
   userHierarchy:UserHierarchy = new UserHierarchy();
   commonInsightWrapper: CommonInsightWrapper;
   stateInfoModels:StateInfoModel[];
   orPayload:any; 
   selectedModel:StateInfoModel;
   iterationLevel:number;
+  tempUser:User;
   FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
   
   private subscription: Subscription;
@@ -60,7 +63,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   private subscriptionChatMessages: Subscription;
   private subscriptionUsers: Subscription;
   private subscriptionInsight: Subscription;
-  
+  private subscriptionXML: Subscription;
 
   constructor(
     private zone: NgZone,
@@ -79,6 +82,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     //document.getElementById('#alocateButton').style.visibility = 'hidden';
+    
     this.selectedState = this.dataCachingService.getSelectedState();
     if (!this.selectedState) {
       this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
@@ -147,6 +151,15 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     
     this.selectedModel = model;
   }
+  setFlagReason(){
+    this.selectedState.flagReason = this.FlagReasons[0];
+  }
+
+  flagClose(){
+    this.selectedState.flagReason = "";
+  }
+
+
 
   getUserList(){
     
@@ -155,7 +168,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
         if (userList && userList.length > 0) {
           //document.getElementById('#alocateButton').style.visibility = 'visible';
           this.Users = userList;
-
+          
              
         }
       });
@@ -179,15 +192,25 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
     allocate(){
       
-      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.allocatedUserId,this.selectedState._id,"Allocate")
+      this.isButtonEnabled = false;
+      console.log(this.allocatedUserId)
+      if(this.allocatedUserId.length > 0){
+        this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.allocatedUserId,this.selectedState._id,"Allocate")
       .subscribe(any => {
 
         this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
     });
+      }
+      else{
+        new closeModal('userModal');
+        new showModal('userNotSelected');
+        this.isButtonEnabled = true;
+      }
+      
     }
 
     escalate(){
-      
+      this.isButtonEnabled = false;
       this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userHierarchy.parentUserId,this.selectedState._id,"Escalate")
       .subscribe(any => {
         
@@ -198,6 +221,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     }
 
     reserve(){
+      this.isButtonEnabled = false;
       this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userId,this.selectedState._id,"Reserve")
       .subscribe(any => {
         
@@ -231,7 +255,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   }
 
   getChatMessages() {
-    this.subscriptionChatMessages = this.conversationService.getChat(this.selectedEpisode._id)
+    this.subscriptionChatMessages = this.conversationService.getChat(this.selectedState.entityId)
     .subscribe(chatMessages => {
       if (chatMessages) {
         this.chatMessageList = chatMessages;
@@ -317,7 +341,33 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     new graphTools(choice);
   }
 
+
+  getInputMap(){
+    this.isButtonEnabled = false;
+    
+    if (!this.actionMap) {
+      this.actionMap = {};
+    }
+
+    for (let index = 0; index < this.dataPoints.length; index++) {
+      if (index % 2 === 1) {
+        const dataPoint = this.dataPoints[index];
+        if (dataPoint.dataType === 'NUMBER' && (typeof dataPoint.value === 'string' || dataPoint.value instanceof String)) {
+          dataPoint.value = +dataPoint.value;
+        } else if (dataPoint.dataType === 'BOOLEAN' && (typeof dataPoint.value === 'string' || dataPoint.value instanceof String)) {
+          dataPoint.value = (dataPoint.value === 'true');
+        }
+        this.actionMap[dataPoint.dataPointName] = dataPoint.value;
+      }
+    }
+
+
+  }
+
   updateFlow() {
+
+    this.isButtonEnabled = false;
+    
     if (!this.actionMap) {
       this.actionMap = {};
     }
@@ -341,6 +391,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
         const state: State = response;
 
         if (state) {
+          this.isButtonEnabled = true;
           if (state.errorMessageMap) {
             for (const key in state.errorMessageMap) {
               if (key) {
@@ -370,17 +421,26 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   }
 
   confirm():void{
+    this.isButtonEnabled = false;
     this.selectedState.flagged = true;
     this.iterationLevel = this.selectedState.iterationLevel;
     this.iterationLevel = this.iterationLevel + 1;
     this.selectedState.iterationLevel = this.iterationLevel;
     this.selectedState.subStatus = "FLAGGED"
-    this.updateFlow();
-    
+
+    this.extractParams();
+    this.getInputMap();
+    this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedState,this.actionMap)
+    .subscribe(state => {
+     this.selectedState = state;
+     new closeModal('flagTaskModal');
+     new showModal('flagSuccessModal');
+     
+    });
   }
 
   archive():void{
-    
+    this.isButtonEnabled = false;
     this.subscription = this.stateService.saveArchivedState(this.selectedState)
     .subscribe(State => {
       new closeModal('flagTaskModal');
