@@ -234,6 +234,7 @@ closeModal = function (modalId) {
 }
 
 showModal = function (modalId) {
+  console.log('opening modal: ' + modalId);
   if (!$('#' + modalId).is(':visible')) {
     $('#' + modalId).modal();
   }
@@ -264,9 +265,10 @@ var settingsPopupBody;
 var horizontal = true;
 var sourceCell;   // Used as a parent cell while adding new cell in graph.
 var cellLabelChanged;
-var isReadOnly = false;;
+var isReadOnly = false;
 var newEdge;
 var existingEdgesBeforeUpdate;
+var duplicateEvent = false;
 
 designFlowEditor = function (serverXml, readOnly) {
   isReadOnly = readOnly;
@@ -658,7 +660,7 @@ designFlowEditor = function (serverXml, readOnly) {
       graph.scrollCellToVisible(v1, true);
     }
 
-    mxConnectionHandlerInsertEdge = mxConnectionHandler.prototype.insertEdge;
+    var mxConnectionHandlerInsertEdge = mxConnectionHandler.prototype.insertEdge;
     mxConnectionHandler.prototype.insertEdge = function (parent, id, value, source, target, style) {
       if (target && target.id == 'treeRoot') {
         window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
@@ -698,6 +700,11 @@ designFlowEditor = function (serverXml, readOnly) {
         }
 
         if (sourceEvents && sourceEvents.length > 0) {
+          if (duplicateEvent) {
+            console.log('got duplicate event');
+            return;
+          }
+
           newEdge = mxConnectionHandlerInsertEdge.apply(this, arguments);
           window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.addEdge(sourceEvents); });
           showModal("newEdgeModal");
@@ -1405,6 +1412,8 @@ styleInfo = function(orModels,type){
 
 
 updateNewEdge = function (event) {
+  duplicateEvent = false;
+  
   if (newEdge) {
     graph.getModel().beginUpdate();
     try {
@@ -1418,6 +1427,8 @@ updateNewEdge = function (event) {
 }
 
 deleteNewEdge = function () {
+  duplicateEvent = false;
+
   if (newEdge) {
     graph.getModel().beginUpdate();
     try {
