@@ -34,6 +34,41 @@ export class ApiConfig extends BaseModel {
   }
 }
 
+export class ConnectorInfo extends BaseModel {
+  type: string;
+  metaData: any;
+  
+  constructor() {
+    super();
+    this.type = '';
+    this.metaData = {};
+  }
+}
+
+export class ConnectorConfig extends BaseModel {
+  configName: string;
+  configType: string;
+  configMap:any;
+  requiredConfigMap:any;
+  templateUrl: string;
+  connectorConfigRef:string;
+  
+
+  constructor() {
+    super();
+    
+    this.configName = '';
+    this.configType = '';
+    this.templateUrl = '';
+    this.configMap = {};
+    this.requiredConfigMap = {};
+    this.connectorConfigRef = "";
+    
+  }
+}
+
+
+
 export class ApiResponse {
   responseCode: number;
   responseType: string;

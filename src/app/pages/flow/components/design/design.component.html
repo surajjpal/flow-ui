@@ -148,6 +148,13 @@
               <option *ngFor="let apiConfig of sourceApiConfigList" [ngValue]="apiConfig._id">{{apiConfig.name}}</option>
             </select>
           </div>
+          <div class="form-group" *ngIf="isStateConnectorCompatible()">
+            <label for="selectConConfig">Select Connector</label>
+            <select multiple="false" class="selectpicker form-control" required id="selectConConfig" title="Choose Connector" [(ngModel)]="tempState.connectorConfiguration"
+              name="conConfigurationList">
+              <option *ngFor="let conConfig of sourceConConfigList" [ngValue]="conConfig._id">{{conConfig.configName}}</option>
+            </select>
+          </div>
           <div class="form-group" *ngIf="tempState.costModel !== null">
             <label for="selectCostType">Cost Type</label>
             <select class="selectpicker form-control" required id="selectCostType" title="Choose Cost Type" [(ngModel)]="tempState.costModel.costType"

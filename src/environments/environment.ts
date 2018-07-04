@@ -70,6 +70,12 @@ export const environment = {
   apiconfigurl: 'apiConfig/',
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
+  connectorinfo:'connectors/',
+  getallconconfig:'connectors/getAll/',
+  deleteconconfig:'connectors/delete/',
+  saveconconfig:'connectors/save/',
+
+
   // auto
   autoServer: 'http://108.168.190.82:8080/flow/auto/',
   episodelisturl: 'load/episodes?query=',
@@ -129,4 +135,5 @@ export const environment = {
 
   //Dashboard from interfaces
   dashboardinterface: 'http://108.168.190.82:8080/flow/interfaces/dashboard'
+  
 };
