@@ -167,6 +167,10 @@ export class AgentService {
   saveAgent(agent: Agent): Observable<any> {
     const subject = new Subject<any>();
 
+    if (agent.agentDomain !== null) {
+      agent.agentDomain = null;
+    }
+
     const url = `${environment.autoServer + environment.saveagenturl}`;
 
     this.httpClient.post<any>(
