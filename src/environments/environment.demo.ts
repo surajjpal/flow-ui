@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    name: 'production',
+    name: 'demo',
   
     // Root
     root: 'https://flow.automatapi.com/flow/',
@@ -14,6 +14,7 @@ export const environment = {
   
     // Interfaces
     interfaceService: 'https://flow.automatapi.com/flow/interfaces',
+    updateClassifierTraining : 'https://flow.automatapi.com/flow/interfaces/auto_decorate_training',
     updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',
     updateEntityTraining: 'https://flow.automatapi.com/flow/interfaces/entity_classification_training',
   
@@ -92,10 +93,6 @@ export const environment = {
     updateentityurl: 'update/entityclassifier',
     deleteentityurl: 'delete/entityclassifier?query=',
   
-    savedomainurl: 'domain',
-    fetchdomainurl: 'fetchdomain?query=',
-    saveagenturl: 'agent',
-    fetchagenturl: 'fetchagent?query=',
     fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
     uploadintentexcelurl: 'uploadintents',
     uploadentityexcelurl: 'uploadentity',
@@ -111,6 +108,8 @@ export const environment = {
     businessObjectUrl: '/automatons/businessobject',
     businessObjectTrainingUrl: '/automatons/businessobject/training',
     businessObjectActivateTrainerUrl: '/automatons/businessobject/activate',
+    businessObjectDectivateTrainerUrl: '/automatons/businessobject/deactivate',
+    
    //Dashboard
    dashboardServer: 'https://flow.automatapi.com/flow/dashboard/',
    dashboardsummary:'auto/dashboard_summary',
@@ -128,6 +127,9 @@ export const environment = {
    statetransactionvalue:'flow/state_transaction_value',
 
    //Dashboard from interfaces
-   dashboardinterface: 'https://flow.automatapi.com/flow/interfaces/dashboard'
+   dashboardinterface: 'https://flow.automatapi.com/flow/interfaces/dashboard',
+
+   //CRUD API path - To be used in conjunction with interfaceService property
+   crudFunction : '/crud'
   };
   

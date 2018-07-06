@@ -78,6 +78,7 @@
                 <div role="tabpanel" class="tab-pane fade" id="businessObjectTrainingContent" aria-labelledby="businessObjectTrainingTab">
                     <div class="panel panel-default">
                             <div class="form-group pull-right">
+                                <label>Train active version: </label>
                                 <api-file-uploader [fileUploadUrl]="fileUploadUrl" [multiple]="false" (uploadEvent)="onTrainingFileUpload($event)"></api-file-uploader>
                                 <!-- <input class="form-control" [(ngModel)]="trainingFilterQuery" name="trainingFilterQuery" placeholder="Filter Training" /> -->
                             </div>
@@ -104,7 +105,7 @@
                                         <button type="submit" class="btn btn-primary" (click)="activateTriner(trainer)">Activate</button>
                                     </td>
                                     <td *ngIf="trainer.status == 'ACTIVE'">
-                                        <!-- <button type="submit" class="btn btn-danger" (click)="deactivateTriner(trainer)">Deactivate</button> -->
+                                        <button type="submit" class="btn btn-danger" (click)="deactivateTriner(trainer)">Deactivate</button>
                                     </td>
                                     <td>
                                         <i class="fa fa-download"></i>
