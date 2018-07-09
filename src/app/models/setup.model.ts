@@ -52,6 +52,7 @@ export class ConnectorConfig extends BaseModel {
   requiredConfigMap:any;
   templateUrl: string;
   connectorConfigRef:string;
+  responseList: ApiResponse[];
   
 
   constructor() {
@@ -63,6 +64,7 @@ export class ConnectorConfig extends BaseModel {
     this.configMap = {};
     this.requiredConfigMap = {};
     this.connectorConfigRef = "";
+    this.responseList = [];
     
   }
 }
