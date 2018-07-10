@@ -71,6 +71,7 @@ export class DomainService {
     return subject.asObservable();
   }
 
+  /*
   domainLookup(query?: string): Observable<Domain[]> {
     const subject = new Subject<Domain[]>();
 
@@ -102,8 +103,42 @@ export class DomainService {
     );
 
     return subject.asObservable();
+  }*/
+
+  domainLookup(query?: string): Observable<Domain[]> {
+    const subject = new Subject<Domain[]>();
+
+    if (!query || query.length <= 0) {
+      query = 'ALL';
+    }
+
+    const url = `${environment.autoServer + environment.fetchdomainurl + query}`;
+
+    this.httpClient.get<Domain[]>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Domain[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
   }
 
+  /*
   saveDomain(domain: Domain): Observable<any> {
     const subject = new Subject<any>();
 
@@ -138,6 +173,37 @@ export class DomainService {
         subject.error(err);
       }
     );
+    return subject.asObservable();
+  }*/
+
+  saveDomain(domain: Domain): Observable<any> {
+    const subject = new Subject<any>();
+
+    const url = `${environment.autoServer + environment.savedomainurl}`;
+
+    this.httpClient.post<any>(
+      url,
+      domain,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
     return subject.asObservable();
   }
 
