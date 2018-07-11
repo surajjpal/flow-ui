@@ -18,10 +18,10 @@ import { from } from 'rxjs/observable/from';
     templateUrl: './analyticsReportSetup.component.html'
 })
 export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
-    private analyticsReportSetup: AnalyticsReportSetup;
-    private analyticsReport: AnalyticsReport;
-    private scheduleTaskConfiguration: ScheduleTaskConfiguration;
-    private subscription: Subscription;
+    analyticsReportSetup: AnalyticsReportSetup;
+    analyticsReport: AnalyticsReport;
+    scheduleTaskConfiguration: ScheduleTaskConfiguration;
+    subscription: Subscription;
     reportTypes: string[] = ["INSTANT", "SCHEDULE"]
     subscriptions: string[] = ["TIMER", "DAILY", "WEEKLY", "MONTHLY", "YEARLY"]
     scheduleDayOfWeek: string[] = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]

@@ -100,6 +100,7 @@ export const environment = {
 
   // Analytics
   sendReportUrl: 'analyticsreport',
+  scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
   
   // file upload download service
   fileUploadUrl: '/api/uploadData',
