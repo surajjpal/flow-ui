@@ -180,6 +180,19 @@ export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
                     }
                 )
         }
+        else if (this.selectedAnalyticsReport.requestedReportType == "SCHEDULE") {
+            this.subscription = this.analyticsService.scheduleReport(this.selectedAnalyticsReport)
+                .subscribe (
+                    response => {
+                        console.log("success");
+                        console.log(response);
+                    },
+                    error => {
+                        console.log("error");
+                        console.log(error);
+                    }
+                )
+        }
 
         console.log("***********");
         console.log(this.selectedAnalyticsReport);

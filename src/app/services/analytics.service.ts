@@ -48,12 +48,39 @@ export class AnalyticsService {
         return subject.asObservable();
     }
 
-    scheduleReport(scheduleTaskConfiguration: ScheduleTaskConfiguration): Observable<any> {
+    scheduleReport(analyticsReport: AnalyticsReport): Observable<any> {
         const subject = new Subject<any>();
-        const analyticsReport = new AnalyticsReport();
         console.log("schedule report");
-        console.log(scheduleTaskConfiguration);
+        console.log(analyticsReport);
+        const url = "http://localhost:5001" + `${environment.scheduleAnalyticsReport}`;
+        const headers = new HttpHeaders({'x-consumer-custom-Id' : "77af86a164d44f57851d8ca272627d5d"});
+        this.httpClient.post<ScheduleTaskConfiguration>(
+            url,
+            analyticsReport,
+            {
+              headers: headers,
+              observe: 'response',
+              reportProgress: true,
+              withCredentials: true
+            }
+          ).subscribe(
+            (response: HttpResponse<ScheduleTaskConfiguration>) => {
+                console.log("response")
+                console.log(response.body)
+                if (response.body) {
+                    subject.next(response.body);
+                }
+            },
+            (err: HttpErrorResponse) => {
+              // All errors are handled in ErrorInterceptor, no further handling required
+              // Unless any specific action is to be taken on some error
+      
+              subject.error(err);
+            }
+            );
+        console.log(analyticsReport);
         return subject.asObservable();
+        
     }
 
     scheduleDailyReportForAgent(agent: Agent): Observable<any> {
