@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 declare let moment: any;
 
@@ -9,6 +9,8 @@ declare let moment: any;
 export class DateRangePickerComponent implements OnInit {
 
   rangePickerOptions: any = {};
+
+  @Input()
   dateRange: any = {};
 
   @Output()
@@ -20,9 +22,11 @@ export class DateRangePickerComponent implements OnInit {
     this.rangePickerOptions = {
       locale: { format: 'DD-MM-YYYY' },
       alwaysShowCalendars: false,
-      showCustomRangeLabel: false,
-      startDate: moment(),
-      endDate: moment(),
+      showCustomRangeLabel: true,
+      timePicker: true,
+      timePicker24Hour: true,
+      startDate: this.dateRange.start,
+      endDate: this.dateRange.end,
       autoApply: true,
       ranges: {
         'Today': [moment().startOf('day'), moment().endOf('day')],
@@ -37,8 +41,8 @@ export class DateRangePickerComponent implements OnInit {
       }
     };
     
-    this.dateRange.start = moment().startOf('day');
-    this.dateRange.end = moment().endOf('day');
+    //this.dateRange.start = moment().startOf('day');
+    //this.dateRange.end = moment().endOf('day');
 
     this.selectedRange.emit(this.dateRange);
   }

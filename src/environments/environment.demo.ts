@@ -99,7 +99,7 @@ export const environment = {
     validationtypekeyslookupurl: 'load/validations',
 
     // Analytics
-    sendReportUrl: 'analyticsreport',
+    sendReportUrl: '/reports/analyticsreport/sendreport',
     scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
 
     // file upload download service

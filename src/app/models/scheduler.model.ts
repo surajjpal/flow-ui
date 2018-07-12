@@ -1,4 +1,3 @@
-import { subscribeOn } from "rxjs/operator/subscribeOn";
 
 export class ScheduleTaskConfiguration {
     companyId: string;
@@ -12,23 +11,28 @@ export class ScheduleTaskConfiguration {
 	scheduleDayOfWeek: string;
 	scheduleMonth = null;
 	scheduleDayOfMonth: number;
-	repeateCount: number;
+    repeateCount: number;
+    runAtTime: string;
     status: string;
     
-    constructor() {
-        this.companyId = null;
-        this.cronExpression = null;
-        this.endTime = null;
-        this.subscription = null;
-        this.timeZone = null;
-        this.scheduleSecond = 0;
-        this.scheduleMinute = 0;
-        this.scheduleHour = 0;
-        this.scheduleDayOfWeek = null
-        this.scheduleMonth = null;
-        this.scheduleDayOfMonth = 0;
-        this.repeateCount = 0;
-        this.status = null;
+    constructor(companyId?: string, cronExpression?: string, endTime?: string, subscription?: string, timeZone?: string, scheduleSecond?: number,
+        scheduleMinute?: number, scheduleHour?: number, scheduleDayOfWeek?: string, scheduleMonth?: string, scheduleDayOfMonth?: number, repeateCount?: number, status?: string,
+        runAtTime?: string
+    ) {
+        this.companyId = companyId ? companyId : null;
+        this.cronExpression = cronExpression ? cronExpression : null;
+        this.endTime = endTime ? endTime : null;
+        this.subscription = subscription ? subscription : null;
+        this.timeZone = timeZone ? timeZone : null;
+        this.scheduleSecond = scheduleSecond ? scheduleSecond : 0;
+        this.scheduleMinute = scheduleMinute ? scheduleMinute : 0;
+        this.scheduleHour = scheduleHour ? scheduleHour : 0;
+        this.scheduleDayOfWeek = scheduleDayOfWeek ? scheduleDayOfWeek : null;
+        this.scheduleMonth = scheduleMonth ? scheduleMonth : null
+        this.scheduleDayOfMonth = scheduleDayOfMonth ? scheduleDayOfMonth : 0;
+        this.repeateCount = repeateCount ? repeateCount : 0;
+        this.status = status ? status : null;
+        this.runAtTime = runAtTime ? runAtTime : null;
     }
 
     setValues(companyId, cronExpression, endTime, subscription, timeZone, scheduleSecond, scheduleMinute, scheduleHour, scheduleDayOfWeek,

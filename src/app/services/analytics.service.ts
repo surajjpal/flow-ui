@@ -16,20 +16,21 @@ export class AnalyticsService {
 
     constructor(private httpClient: HttpClient) {}
 
-    sendReport(analyticsReport: AnalyticsReportSetup): Observable<any> {
+    sendReport(analyticsReport: AnalyticsReport): Observable<any> {
         const subject = new Subject<any>();
-        const url = `${environment.server + environment.sendReportUrl}`;
-        this.httpClient.post<AnalyticsReportSetup>(
+        const url = "http://localhost:5001" + `${environment.sendReportUrl}`;
+        const headers = new HttpHeaders({'x-consumer-custom-Id' : "77af86a164d44f57851d8ca272627d5d"});
+        this.httpClient.post<AnalyticsReport>(
             url,
             analyticsReport,
             {
-              headers: this.httpHeaders,
+              headers: headers,
               observe: 'response',
               reportProgress: true,
               withCredentials: true
             }
           ).subscribe(
-            (response: HttpResponse<AnalyticsReportSetup>) => {
+            (response: HttpResponse<AnalyticsReport>) => {
                 console.log("response")
                 console.log(response.body)
                 if (response.body) {

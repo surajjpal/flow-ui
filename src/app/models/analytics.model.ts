@@ -1,3 +1,5 @@
+import { ScheduleTaskConfiguration } from "app/models/scheduler.model";
+
 export class AnalyticsReportSetup {
     reportName: string;
     toEmailIds: string[];
@@ -39,28 +41,46 @@ export class AnalyticsReportSetup {
 }
 
 export class AnalyticsReport {
+
     reportName: string;
+    requestedReportType: string;
+    reportCategory: string;
     toEmailIds: string[];
     ccEmailIds: string[];
-    reportType: string;
-    startDate: string;
-    endDate: string;
+    untilPreviousDay: boolean;
+    zeppelinNotebookId: string;
+    reportFileType: string;
+    requestFilter = {}
+    agentId: string;
+    templateName: string;
+    scheduleTaskConfigurationId: string;
+    isInitAgentReport: boolean;
+    scheduleConfig: ScheduleTaskConfiguration;
     
-    constructor() {
-        this.reportName = null;
-        this.toEmailIds = [];
-        this.ccEmailIds = [];
-        this.reportType = null;
-        this.startDate = null;
-        this.endDate = null;
+    constructor(reportName?: string, requestedReportType?: string, toEmailIds?: string[], ccEmailIds?: string[], untilPreviousDay?: boolean,
+        zeppelinNotebookId?: string, reportFileType?: string, requestFilter?: {}, agentId?: string, templateName?: string, scheduleTaskConfigurationId?: string, isInitAgentReport?: boolean, scheduleConfig?: ScheduleTaskConfiguration
+    ) {
+        this.reportName = reportName ? reportName : null;
+        this.requestedReportType = requestedReportType ? requestedReportType : null;
+        this.toEmailIds = toEmailIds ? toEmailIds : [];
+        this.ccEmailIds = ccEmailIds ? ccEmailIds : [];
+        this.untilPreviousDay = untilPreviousDay ? untilPreviousDay : false;
+        this.zeppelinNotebookId = zeppelinNotebookId ? zeppelinNotebookId : null;
+        this.reportFileType = reportFileType ? reportFileType : null;
+        this.requestFilter = requestFilter ? requestFilter : {};
+        this.agentId = agentId? agentId : null;
+        this.templateName = templateName? templateName : null;
+        this.scheduleTaskConfigurationId = scheduleTaskConfigurationId ? scheduleTaskConfigurationId : null;
+        this.isInitAgentReport = isInitAgentReport ? isInitAgentReport : false;
+        this.scheduleConfig = scheduleConfig? scheduleConfig : new ScheduleTaskConfiguration();
     }
 
     setValues(reportName, toEmailIds, ccEmailIds, reportType, startDate, endDate) {
         this.reportName = reportName;
         this.toEmailIds = toEmailIds;
         this.ccEmailIds = ccEmailIds;
-        this.reportType = reportType;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        // this.reportType = reportType;
+        // this.startDate = startDate;
+        // this.endDate = endDate;
     }
 }
