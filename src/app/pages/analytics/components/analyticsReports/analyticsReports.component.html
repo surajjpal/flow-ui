@@ -1,0 +1,43 @@
+<div class="widgets">
+    <div class="row">
+        <ba-card [cardTitle]="'Analytics Reports'" baCardClass="with-scroll" class="col-md-12">
+            <form class="row form-inline">
+                <div class="form-group col-sm-10">
+                    <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Design" />
+                </div>
+            </form>
+            <br>
+            
+            <table class="table table-striped" [mfData]="analyticsReports | universalDataFilter : filterQuery" #mfAnalyticsReports="mfDataTable" [mfRowsOnPage]="10" mfSortBy="reportName">
+                <thead>
+                    <tr>
+                        <td><mfDefaultSorter by="reportName">Report Name</mfDefaultSorter></td>
+                        <td><mfDefaultSorter by="requestedReportType">Requested Report Type</mfDefaultSorter></td>
+                        <td><mfDefaultSorter by="reportCategory">Report Category</mfDefaultSorter></td>
+                        <td><mfDefaultSorter by="reportFileType">Report File Type</mfDefaultSorter></td>
+                        <td><mfDefaultSorter by="agentId">Agent Name</mfDefaultSorter></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let report of mfAnalyticsReports.data" (click)="onAnalyticsReportSelect(report)">
+                        <td>{{ report.reportName }}</td>
+                        <td>
+                            {{ report.requestedReportType }}
+                        </td>
+                        <td>{{ report.reportCategory }}</td>
+                        <td>{{ report.reportFileType }}</td>
+                        <td>{{ getAgentName(report.agentId) }}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="100%">
+                        <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            
+        </ba-card>
+    </div>
+</div>

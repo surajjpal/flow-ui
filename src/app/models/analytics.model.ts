@@ -42,6 +42,7 @@ export class AnalyticsReportSetup {
 
 export class AnalyticsReport {
 
+    _id: string;
     reportName: string;
     requestedReportType: string;
     reportCategory: string;
@@ -56,10 +57,12 @@ export class AnalyticsReport {
     scheduleTaskConfigurationId: string;
     isInitAgentReport: boolean;
     scheduleConfig: ScheduleTaskConfiguration;
+    companyId: string;
     
-    constructor(reportName?: string, requestedReportType?: string, toEmailIds?: string[], ccEmailIds?: string[], untilPreviousDay?: boolean,
-        zeppelinNotebookId?: string, reportFileType?: string, requestFilter?: {}, agentId?: string, templateName?: string, scheduleTaskConfigurationId?: string, isInitAgentReport?: boolean, scheduleConfig?: ScheduleTaskConfiguration
+    constructor(_id?: string, reportName?: string, requestedReportType?: string, toEmailIds?: string[], ccEmailIds?: string[], untilPreviousDay?: boolean,
+        zeppelinNotebookId?: string, reportFileType?: string, requestFilter?: {}, agentId?: string, templateName?: string, scheduleTaskConfigurationId?: string, isInitAgentReport?: boolean, scheduleConfig?: ScheduleTaskConfiguration, companyId?: string
     ) {
+        this._id = _id ? _id : null;
         this.reportName = reportName ? reportName : null;
         this.requestedReportType = requestedReportType ? requestedReportType : null;
         this.toEmailIds = toEmailIds ? toEmailIds : [];
@@ -73,6 +76,7 @@ export class AnalyticsReport {
         this.scheduleTaskConfigurationId = scheduleTaskConfigurationId ? scheduleTaskConfigurationId : null;
         this.isInitAgentReport = isInitAgentReport ? isInitAgentReport : false;
         this.scheduleConfig = scheduleConfig? scheduleConfig : new ScheduleTaskConfiguration();
+        this.companyId = companyId? companyId : null;
     }
 
     setValues(reportName, toEmailIds, ccEmailIds, reportType, startDate, endDate) {

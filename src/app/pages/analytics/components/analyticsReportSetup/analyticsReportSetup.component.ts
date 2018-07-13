@@ -9,6 +9,7 @@ import { AnalyticsReportSetup, AnalyticsReport } from '../../../../models/analyt
 import { ScheduleTaskConfiguration } from '../../../../models/scheduler.model'
 import { AnalyticsService } from '../../../../services/analytics.service';
 import { AgentService } from '../../../../services/agent.service'
+import { ScheduleTaskService } from '../../../../services/scheduletasks.service'
 import { AlertService, DataSharingService } from '../../../../services/shared.service';
 
 import { environment } from '../../../../../environments/environment';
@@ -53,6 +54,7 @@ export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
         private analyticsService: AnalyticsService,
         private sharingService: DataSharingService,
         private agentService: AgentService,
+        private scheduleTaskService: ScheduleTaskService,
         private slimLoadingBarService: SlimLoadingBarService) 
     {
         this.selectedAnalyticsReport = new AnalyticsReport();
@@ -81,28 +83,51 @@ export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
                 }
             )
         if (analyticsReport) {
+            console.log("analyticsReport");
+            console.log(analyticsReport);
             this.createUpdateModel = false;
             this.selectedAnalyticsReport = analyticsReport;
             this.analyticsReportModalHeader = "Update analytics report";
-            if (this.selectedAnalyticsReport.scheduleConfig.scheduleHour != 0 || this.selectedAnalyticsReport.scheduleConfig.scheduleMinute != 0 || this.selectedAnalyticsReport.scheduleConfig.scheduleSecond != 0) {
-                this.tempTime.hour = this.selectedAnalyticsReport.scheduleConfig.scheduleHour;
-                this.tempTime.minute = this.selectedAnalyticsReport.scheduleConfig.scheduleMinute;
-                this.tempTime.second = this.selectedAnalyticsReport.scheduleConfig.scheduleSecond;                
-            }
-            if (this.selectedAnalyticsReport.scheduleConfig.subscription == "INSTANT") {
+
+            if (this.selectedAnalyticsReport.requestedReportType == "INSTANT") {
                 if (this.selectedAnalyticsReport.requestFilter["startDate"] && this.selectedAnalyticsReport.requestFilter["endDate"]) {
                     this.tempDateRange.start = moment(new Date(this.selectedAnalyticsReport.requestFilter["startDate"]));
                     this.tempDateRange.end = moment(new Date(this.selectedAnalyticsReport.requestFilter["endDate"]));
                 }
                 
             }
-            if (this.selectedAnalyticsReport.scheduleConfig.subscription == "SCHEDULE") {
-                if (this.selectedAnalyticsReport.scheduleConfig.endTime) {
-                    const date = new Date(this.selectedAnalyticsReport.scheduleConfig.endTime);
-                    this.tempEndDate.year = date.getFullYear();
-                    this.tempEndDate.month = date.getMonth();
-                    this.tempEndDate.day = date.getDay();
+            if (this.selectedAnalyticsReport.requestedReportType == "SCHEDULE") {
+                if (this.selectedAnalyticsReport._id) {
+                console.log("********************");
+                this.selectedAnalyticsReport.scheduleConfig = new ScheduleTaskConfiguration();
+                this.scheduleTaskService.getScheduleTaskConfigurationById(this.selectedAnalyticsReport.scheduleTaskConfigurationId, this.selectedAnalyticsReport.companyId)
+                    .subscribe (
+                        response => {
+                            this.selectedAnalyticsReport.scheduleConfig = response;
+                            if ((this.selectedAnalyticsReport.scheduleConfig.scheduleHour != 0 || this.selectedAnalyticsReport.scheduleConfig.scheduleMinute != 0 || this.selectedAnalyticsReport.scheduleConfig.scheduleSecond != 0)) {
+                                this.tempTime.hour = this.selectedAnalyticsReport.scheduleConfig.scheduleHour;
+                                this.tempTime.minute = this.selectedAnalyticsReport.scheduleConfig.scheduleMinute;
+                                this.tempTime.second = this.selectedAnalyticsReport.scheduleConfig.scheduleSecond;                
+                            }
+                            
+                            if (this.selectedAnalyticsReport.scheduleConfig.endTime) {
+                                console.log("endTime");
+                                console.log(this.selectedAnalyticsReport.scheduleConfig.endTime);
+                                if (this.selectedAnalyticsReport.scheduleConfig.endTime.length >= 7) {
+                                    this.tempEndDate = {}
+                                    this.tempEndDate.year = this.selectedAnalyticsReport.scheduleConfig.endTime[0];
+                                    this.tempEndDate.month = this.selectedAnalyticsReport.scheduleConfig.endTime[1];
+                                    this.tempEndDate.day = this.selectedAnalyticsReport.scheduleConfig.endTime[2];
+                                }
+                                
+                            }
+                        },
+                        error => {
+                            console.log("schedule task configuration not found");
+                        }
+                    )
                 }
+                
             }
         }
         else {

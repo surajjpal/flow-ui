@@ -8,6 +8,7 @@ import { Daterangepicker } from 'ng2-daterangepicker';
 import * as moment from 'moment/moment';
 import { AnalyticsComponent } from './analytics.component';
 import { AnalyticsReportSetupComponent } from './components/analyticsReportSetup/analyticsReportSetup.component';
+import { AnalyticsReportsComponent } from './components/analyticsReports/analyticsReports.component';
 import { routing } from './analytics.routing';
 import { DateRangePickerComponent } from './components/analyticsReportSetup/daterangepicker/daterangepicker.component';
 import { NgaModule } from '../../theme/nga.module';
@@ -30,6 +31,7 @@ import { SharedModule } from 'app/shared/shared.module';
     declarations: [
         AnalyticsComponent,
         AnalyticsReportSetupComponent,
+        AnalyticsReportsComponent,
         DateRangePickerComponent
     ]
 })

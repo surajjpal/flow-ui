@@ -83,6 +83,36 @@ export class AnalyticsService {
         
     }
 
+    getAnalyticsReports(): Observable<any> {
+        const subject = new Subject<any>();
+        console.log("getAnalyticsReports");
+        const url = "http://localhost:5001" + `${environment.getAnalyticsReports}`;
+        const headers =  new HttpHeaders({'x-consumer-custom-Id' : "77af86a164d44f57851d8ca272627d5d"});
+        this.httpClient.get<AnalyticsReport[]>(
+                url,
+                {
+                    headers: headers,
+                    observe: 'response',
+                    reportProgress: true,
+                    withCredentials: true
+                }
+            )
+            .subscribe (
+                (response: HttpResponse<AnalyticsReport[]>) => {
+                    console.log("analytics reports");
+                    console.log(response.body);
+                    if (response.body) {
+                        subject.next(response.body);
+                    }
+                },
+                (err: HttpErrorResponse) => {
+                    subject.error(err);
+                }
+
+            )
+        return subject.asObservable();
+    }
+
     scheduleDailyReportForAgent(agent: Agent): Observable<any> {
         const subject = new Subject<any>();
         
