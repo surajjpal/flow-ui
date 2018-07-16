@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   selectedDomains:Domain[] = [];
   selectedSources:string[] = [];
   selectedLanguages:string[] = [];
-  Sources = ["website"];
+  Sources = ["WEB"];
   Language:string[]=[];
   domain:Domain;
 

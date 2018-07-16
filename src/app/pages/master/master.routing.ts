@@ -8,6 +8,8 @@ import { RoutelinkComponent } from './components/routelink/routelink.component';
 import { ApiConfigComponent } from './components/apiConfig/apiConfig.component';
 import { ApiConfigSetupComponent } from './components/apiConfigSetup/apiConfigSetup.component';
 import { UserHierarchyComponent } from './components/userHierarchy/userHierarchy.component';
+import { ConnectorConfigComponent } from './components/connectorConfig/connectorConfig.component';
+import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSetup.component';
 
 const routes: Routes = [
   {
@@ -22,7 +24,9 @@ const routes: Routes = [
       { path: 'stm', component: RoutelinkComponent },
       { path: 'sta', component: ApiConfigComponent },
       { path: 'stas', component: ApiConfigSetupComponent },
-      { path:'stuh', component: UserHierarchyComponent }
+      { path:'stuh', component: UserHierarchyComponent },
+      { path:'stcc', component: ConnectorConfigComponent },
+      { path:'stccs', component: ConConfigSetupComponent }
 
     ]
   }

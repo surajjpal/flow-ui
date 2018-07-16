@@ -70,6 +70,10 @@ export const environment = {
 
   supportedmethodsurl: 'apiConfig/supportedMethods',
   
+  connectorinfo:'connectors/',
+  getallconconfig:'connectors/getAll/',
+  deleteconconfig:'connectors/delete/',
+  saveconconfig:'connectors/save/',
 
 
   // Auto

@@ -67,6 +67,11 @@ export const environment = {
   apiconfigurl: 'apiConfig/',
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
+  connectorinfo:'connectors/',
+  getallconconfig:'connectors/getAll/',
+  deleteconconfig:'connectors/delete/',
+  saveconconfig:'connectors/save/',
+
   // auto
   autoServer: 'https://flow.automatapi.io/flow/auto/',
   episodelisturl: 'load/episodes?query=',

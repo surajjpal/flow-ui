@@ -19,14 +19,17 @@ import {
   GraphObject, DataPoint, Classifier, StateModel,
   EventModel, Expression, Transition, ManualAction, DataPointValidation,StateInfoModel
 } from '../../../../models/flow.model';
+import {ConnectorConfig} from '../../../../models/setup.model';
 import { ApiConfig, ApiKeyExpressionMap } from '../../../../models/setup.model';
 
 // Service Imports
 import { GraphService, CommunicationService } from '../../../../services/flow.service';
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
+import {ConnectorConfigService} from  '../../../../services/setup.service';
 @Component({
   selector: 'api-flow-design',
-  templateUrl: './design.component.html'
+  templateUrl: './design.component.html',
+  providers:[ConnectorConfigService]
 })
 
 export class DesignComponent implements OnInit, OnDestroy {
@@ -56,6 +59,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   sourceClassifiers: Classifier[] = [];
   sourceEntryActionList: string[] = [];
   sourceApiConfigList: ApiConfig[] = [];
+  sourceConConfigList:ConnectorConfig[]=[];
   sourceManualActionType: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT'];
   sourceEvents: EventModel[] = [];
   sourceDataTypes: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT', 'ARRAY', 'ANY'];
@@ -88,6 +92,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   private subscriptionApiConfig: Subscription;
   private subscriptionOrPayload: Subscription;
   private subscriptionTimerUnit: Subscription;
+  private subscriptionConConfig:Subscription;
 
   constructor(
     private router: Router,
@@ -95,7 +100,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private zone: NgZone,
     private stateService: StateService,
     private graphService: GraphService,
-    private communicationService: CommunicationService
+    private communicationService: CommunicationService,
+    private connectorConfigService:ConnectorConfigService
   ) {
     window['flowComponentRef'] = { component: this, zone: zone };
 
@@ -115,6 +121,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.tempEvent = new EventModel();
     this.sourceClassifiers = [new Classifier(), new Classifier()];
     this.sourceApiConfigList = [];
+    this.sourceConConfigList = [];
   }
 
   ngOnInit() {
@@ -143,6 +150,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.getSourceEntryActions();
     this.getTimerUnits();
     this.getApiConfigLookup();
+    this.getConList();
     
 
     if (!this.graphObject || this.graphObject === null) {
@@ -201,6 +209,15 @@ export class DesignComponent implements OnInit, OnDestroy {
         }
       });
   }
+
+  getConList(){
+    this.subscriptionConConfig = this.connectorConfigService.getAllCons()
+        .subscribe(conConfigList => {
+          if (conConfigList) {
+            this.sourceConConfigList = conConfigList;
+          }
+        });
+    }
 
   prepareDummyObject() {
     if (this.graphObject) {
@@ -378,6 +395,12 @@ export class DesignComponent implements OnInit, OnDestroy {
     // TODO: improve the mechanism to differentiate Rule State with other states
     return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
       && this.tempState.entryActionList.includes('RuleStateEntryAction');
+  }
+
+  isStateConnectorCompatible() {
+    // TODO: improve the mechanism to differentiate Rule State with other states
+    return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
+      && this.tempState.entryActionList.includes('EmailOutConnectorTask');
   }
 
   addRule() {

@@ -18,6 +18,9 @@ import { ApiConfigSetupComponent } from './components/apiConfigSetup/apiConfigSe
 
 import { SharedModule } from '../../shared/shared.module';
 import { UserHierarchyComponent } from 'app/pages/master/components/userHierarchy/userHierarchy.component';
+import { ConnectorConfigComponent } from './components/connectorConfig/connectorConfig.component';
+import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSetup.component';
+
 
 @NgModule({
   imports: [
@@ -28,6 +31,7 @@ import { UserHierarchyComponent } from 'app/pages/master/components/userHierarch
     routing,
     TagInputModule,
     SharedModule
+    
   ],
   declarations: [
     MasterComponent,
@@ -37,7 +41,9 @@ import { UserHierarchyComponent } from 'app/pages/master/components/userHierarch
     RoutelinkComponent,
     ApiConfigComponent,
     ApiConfigSetupComponent,
-    UserHierarchyComponent
+    UserHierarchyComponent,
+    ConnectorConfigComponent,
+    ConConfigSetupComponent
   ]
 })
 export class MasterModule { }
