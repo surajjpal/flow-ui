@@ -92,10 +92,6 @@ export const environment = {
   updateentityurl: 'update/entityclassifier',
   deleteentityurl: 'delete/entityclassifier?query=',
 
-  savedomainurl: 'domain',
-  fetchdomainurl: 'fetchdomain?query=',
-  saveagenturl: 'agent',
-  fetchagenturl: 'fetchagent?query=',
   fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
   uploadintentexcelurl: 'uploadintents',
   uploadentityexcelurl: 'uploadentity',

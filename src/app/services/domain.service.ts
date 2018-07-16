@@ -71,7 +71,6 @@ export class DomainService {
     return subject.asObservable();
   }
 
-  /*
   domainLookup(query?: string): Observable<Domain[]> {
     const subject = new Subject<Domain[]>();
 
@@ -103,8 +102,9 @@ export class DomainService {
     );
 
     return subject.asObservable();
-  }*/
+  }
 
+  /*
   domainLookup(query?: string): Observable<Domain[]> {
     const subject = new Subject<Domain[]>();
 
@@ -136,9 +136,8 @@ export class DomainService {
       );
 
     return subject.asObservable();
-  }
+  }*/
 
-  /*
   saveDomain(domain: Domain): Observable<any> {
     const subject = new Subject<any>();
 
@@ -174,8 +173,9 @@ export class DomainService {
       }
     );
     return subject.asObservable();
-  }*/
+  }
 
+  /*
   saveDomain(domain: Domain): Observable<any> {
     const subject = new Subject<any>();
 
@@ -205,7 +205,7 @@ export class DomainService {
       );
 
     return subject.asObservable();
-  }
+  }*/
 
   updateIntentTraining(domain: Domain): Observable<any> {
     const subject = new Subject<any>();
