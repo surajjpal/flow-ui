@@ -2359,6 +2359,9 @@
             <input class="form-control" placeholder="Placeholder" [(ngModel)]="tempResponse.settings.placeholder" name="placeholder"
             />
           </div>
+          <div class="form-group">
+            <api-checkbox [checked]="tempResponse.settings.enableDatePicker" [label]="'Enable Date Picker'" (event)="tempResponse.settings.enableDatePicker = $event.target.checked"></api-checkbox>
+          </div>
           <!--Response settings end-->
 
           <div class="form-group">
