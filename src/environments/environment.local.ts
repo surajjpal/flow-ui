@@ -11,7 +11,8 @@ export const environment = {
   // Services
   saveaccounturl: 'http://localhost:8080/flow/account/create',
   fetchaccountbyidurl: 'http://localhost:8080/flow/account/',
-
+  publishaccounturl:'http://localhost:8080/flow/account/publish/',
+  
   // Interfaces
   interfaceService: 'http://localhost:8080/flow/interfaces',
   updateClassifierTraining : 'http://localhost:8080/flow/interfaces/auto_decorate_training',

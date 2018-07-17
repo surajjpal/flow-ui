@@ -20,7 +20,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { UserHierarchyComponent } from 'app/pages/master/components/userHierarchy/userHierarchy.component';
 import { ConnectorConfigComponent } from './components/connectorConfig/connectorConfig.component';
 import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSetup.component';
-
+import { AccountViewComponent } from './components/accountView/accountView.component';
 
 @NgModule({
   imports: [
@@ -43,7 +43,8 @@ import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSe
     ApiConfigSetupComponent,
     UserHierarchyComponent,
     ConnectorConfigComponent,
-    ConConfigSetupComponent
+    ConConfigSetupComponent,
+    AccountViewComponent
   ]
 })
 export class MasterModule { }

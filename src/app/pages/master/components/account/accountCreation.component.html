@@ -32,7 +32,7 @@
               Reset
             </button>
             <button type="button" class="btn btn-primary" (click)="createAccount()">
-              Create
+              {{createMode === true ? 'Create' : 'Update'}}
             </button>
           </div>
         </form>

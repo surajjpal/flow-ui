@@ -11,7 +11,7 @@ export const environment = {
   // Services
   saveaccounturl: 'https://flow.automatapi.io/flow/account/create',
   fetchaccountbyidurl: 'https://flow.automatapi.io/flow/account/',
-
+  publishaccounturl:'https://flow.automatapi.io/flow/account/publish/',
   // Interfaces
   interfaceService: 'http://flow.automatapi.io/flow/interfaces',
   updateClassifierTraining : 'http://flow.automatapi.io/flow/interfaces/auto_decorate_training',
