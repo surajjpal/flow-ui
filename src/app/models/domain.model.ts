@@ -180,6 +180,7 @@ export class Settings {
   validationRegex: string;
   placeholder: string;
   errorMessage: string;
+  enableDatePicker: boolean;
 
   constructor() {
     this.mask = '';
@@ -187,6 +188,7 @@ export class Settings {
     this.validationRegex = '';
     this.placeholder = '';
     this.errorMessage = '';
+    this.enableDatePicker = false;
   }
 }
 
