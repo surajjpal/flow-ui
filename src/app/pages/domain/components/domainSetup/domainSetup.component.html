@@ -677,6 +677,9 @@
                                           <label>Placeholder</label>
                                           <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                         </div>
+                                        <div class="form-group">
+                                          <api-checkbox [checked]="gsResponse.settings.enableDatePicker" [label]="'Enable Date Picker'" (event)="gsResponse.settings.enableDatePicker = $event.target.checked"></api-checkbox>
+                                        </div>
                                         <!--Response settings end-->
 
                                         <div class="form-group">
@@ -852,6 +855,9 @@
                                           <div class="form-group">
                                             <label>Placeholder</label>
                                             <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
+                                          </div>
+                                          <div class="form-group">
+                                            <api-checkbox [checked]="gsResponse.settings.enableDatePicker" [label]="'Enable Date Picker'" (event)="gsResponse.settings.enableDatePicker = $event.target.checked"></api-checkbox>
                                           </div>
                                           <!--Response settings end-->
 
@@ -1062,6 +1068,9 @@
                                           <label>Placeholder</label>
                                           <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                         </div>
+                                        <div class="form-group">
+                                          <api-checkbox [checked]="gsResponse.settings.enableDatePicker" [label]="'Enable Date Picker'" (event)="gsResponse.settings.enableDatePicker = $event.target.checked"></api-checkbox>
+                                        </div>
                                         <!--Response settings end-->
 
                                         <div class="form-group">
@@ -1237,6 +1246,9 @@
                                           <div class="form-group">
                                             <label>Placeholder</label>
                                             <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
+                                          </div>
+                                          <div class="form-group">
+                                            <api-checkbox [checked]="gsResponse.settings.enableDatePicker" [label]="'Enable Date Picker'" (event)="gsResponse.settings.enableDatePicker = $event.target.checked"></api-checkbox>
                                           </div>
                                           <!--Response settings end-->
 
@@ -1544,6 +1556,9 @@
                                           <label>Placeholder</label>
                                           <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                         </div>
+                                        <div class="form-group">
+                                          <api-checkbox [checked]="gsResponse.settings.enableDatePicker" [label]="'Enable Date Picker'" (event)="gsResponse.settings.enableDatePicker = $event.target.checked"></api-checkbox>
+                                        </div>
                                         <!--Response settings end-->
 
                                         <div class="form-group">
@@ -1719,6 +1734,9 @@
                                           <div class="form-group">
                                             <label>Placeholder</label>
                                             <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
+                                          </div>
+                                          <div class="form-group">
+                                            <api-checkbox [checked]="gsResponse.settings.enableDatePicker" [label]="'Enable Date Picker'" (event)="gsResponse.settings.enableDatePicker = $event.target.checked"></api-checkbox>
                                           </div>
                                           <!--Response settings end-->
 
@@ -1929,6 +1947,9 @@
                                           <label>Placeholder</label>
                                           <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
                                         </div>
+                                        <div class="form-group">
+                                          <api-checkbox [checked]="gsResponse.settings.enableDatePicker" [label]="'Enable Date Picker'" (event)="gsResponse.settings.enableDatePicker = $event.target.checked"></api-checkbox>
+                                        </div>
                                         <!--Response settings end-->
 
                                         <div class="form-group">
@@ -2104,6 +2125,9 @@
                                           <div class="form-group">
                                             <label>Placeholder</label>
                                             <input class="form-control" placeholder="Placeholder" [(ngModel)]="gsResponse.settings.placeholder" name="placeholder" />
+                                          </div>
+                                          <div class="form-group">
+                                            <api-checkbox [checked]="gsResponse.settings.enableDatePicker" [label]="'Enable Date Picker'" (event)="gsResponse.settings.enableDatePicker = $event.target.checked"></api-checkbox>
                                           </div>
                                           <!--Response settings end-->
 
@@ -2472,7 +2496,7 @@
                           </tr>
                         </tbody>
                       </table>
-                      
+
                   </td>
                   <td>
                     <button type="button" class="btn btn-danger" title="delete" (click)="delete(tempResponse.options, option)">
