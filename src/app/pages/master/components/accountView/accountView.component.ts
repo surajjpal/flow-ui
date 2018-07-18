@@ -64,7 +64,18 @@ export class AccountViewComponent implements OnInit, OnDestroy {
       .subscribe(response => {
         if (response && response._id) {
          console.log("account published successfully")
+         this.ngOnInit()
           
+        }
+      });
+  }
+
+  unpublishAccount(account){
+    this.subscription = this.accountService.unpublishAccount(account)
+      .subscribe(response => {
+        if (response && response._id) {
+         console.log("account unpublished successfully")
+         this.ngOnInit()
         }
       });
   }

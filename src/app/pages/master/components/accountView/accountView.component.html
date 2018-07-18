@@ -41,6 +41,9 @@
                       <button type="button" class="btn btn-success" title="Publish"  (click)="publishAccount(company)">
                         <i class="fa fa-check-square-o"></i>
                       </button>
+                      <button type="button" *ngIf='company.trainingModeFl' class="btn btn-danger" title="Unpublish"  (click)="unpublishAccount(company)">
+                        <i class="fa fa-check-square-o"></i>
+                      </button>
                     </div>
                   </td>
               </tr>

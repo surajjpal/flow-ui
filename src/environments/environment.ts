@@ -17,7 +17,7 @@ export const environment = {
   saveaccounturl: 'http://108.168.190.82:8080/flow/services/saveaccount',
   fetchaccountbyidurl: 'http://108.168.190.82:8080/flow/services/fetchaccountbyid?query=',
   publishaccounturl:'http://108.168.190.82:8080/flow/services/publish/',
-
+  unpublishaccounturl:'http://108.168.190.82:8080/flow/services/unpublish/',
   // Interfaces
   interfaceService: 'http://108.168.190.82:8080/flow/interfaces',
   updateClassifierTraining : 'http://108.168.190.82:8080/flow/interfaces/auto_decorate_training',

@@ -708,9 +708,40 @@ export class AccountService {
 
     const url = `${environment.publishaccounturl + account._id}`;
 
-    this.httpClient.post<Account>(
+    this.httpClient.get<Account>(
       url,
-      account,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+      (response: HttpResponse<Account>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+
+  unpublishAccount(account: Account): Observable<Account> {
+    const subject = new Subject<Account>();
+
+    const url = `${environment.unpublishaccounturl + account._id}`;
+
+    this.httpClient.get<Account>(
+      url,
       {
         headers: this.httpHeaders,
         observe: 'response',
