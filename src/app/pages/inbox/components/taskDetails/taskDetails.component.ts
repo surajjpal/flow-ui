@@ -96,7 +96,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
     this.fetchInsight();
     //this.fetchStatesOrPayload();
-    this.getEpisode();
+    // this.getEpisode();
     this.extractParams();
     this.initUI();
    
