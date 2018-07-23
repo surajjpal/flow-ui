@@ -265,7 +265,7 @@
                   <th style="width: 50%"></th>
                 </thead>
                 <tbody *ngFor="let message of chatMessageList">
-                  <tr *ngIf="message.from === 'AUTO'">
+                  <tr *ngIf="message.messageFrom === 'auto'">
                     <td align="left" style="width: 50%">
                       <div class="talk-bubble tri-right round top-left" style="background-color: #E4E4E4">
                         <div class="talktext">
@@ -275,7 +275,7 @@
                     </td>
                     <td></td>
                   </tr>
-                  <tr *ngIf="message.from === null">
+                  <tr *ngIf="message.messageFrom === 'user'">
                     <td></td>
                     <td align="right" style="width: 50%">
                       <div class="talk-bubble tri-right round top-right" style="background-color: #B9F1FB">
