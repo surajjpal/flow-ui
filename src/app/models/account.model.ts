@@ -7,6 +7,7 @@ export class Account extends BaseModel {
   companyDesc: string;
   s3: boolean;
   apiKey: string;
+  trainingModeFl:boolean;
 
   constructor() {
     super();
@@ -17,5 +18,6 @@ export class Account extends BaseModel {
     this.companyDesc = '';
     this.s3 = false;
     this.apiKey = '';
+    this.trainingModeFl = false;
   }
 }

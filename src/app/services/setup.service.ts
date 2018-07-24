@@ -671,6 +671,101 @@ export class AccountService {
     return subject.asObservable();
   }
 
+  updateAccount(account: Account): Observable<Account> {
+    const subject = new Subject<Account>();
+
+    const url = `${environment.saveaccounturl}`;
+
+    this.httpClient.put<Account>(
+      url,
+      account,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+      (response: HttpResponse<Account>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+  publishAccount(account: Account): Observable<Account> {
+    const subject = new Subject<Account>();
+
+    const url = `${environment.publishaccounturl + account._id}`;
+
+    this.httpClient.get<Account>(
+      url,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+      (response: HttpResponse<Account>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+
+  unpublishAccount(account: Account): Observable<Account> {
+    const subject = new Subject<Account>();
+
+    const url = `${environment.unpublishaccounturl + account._id}`;
+
+    this.httpClient.get<Account>(
+      url,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+      (response: HttpResponse<Account>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
   getAccountById(companyId: string): Observable<Account> {
     const subject = new Subject<Account>();
 
@@ -698,6 +793,36 @@ export class AccountService {
           } else {
             subject.next(null);
           }
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+  getAllAccounts(): Observable<Account[]> {
+    const subject = new Subject<Account[]>();
+
+    const url = `${environment.fetchaccountbyidurl}`;
+
+    this.httpClient.get<Account[]>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+      (response: HttpResponse<Account[]>) => {
+        if (response.body) {
+          subject.next(response.body);
         }
       },
       (err: HttpErrorResponse) => {

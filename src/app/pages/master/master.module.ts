@@ -25,7 +25,7 @@ import { AnalyticsReportSetupComponent } from 'app/pages/analytics/components/an
 import { DateRangePickerComponent } from 'app/pages/analytics/components/analyticsReportSetup/daterangepicker/daterangepicker.component';
 import { ConnectorConfigComponent } from './components/connectorConfig/connectorConfig.component';
 import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSetup.component';
-
+import { AccountViewComponent } from './components/accountView/accountView.component';
 
 @NgModule({
   imports: [
@@ -55,7 +55,8 @@ import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSe
     AnalyticsReportSetupComponent,
     DateRangePickerComponent,
     ConnectorConfigComponent,
-    ConConfigSetupComponent
+    ConConfigSetupComponent,
+    AccountViewComponent
   ]
 })
 export class MasterModule { }

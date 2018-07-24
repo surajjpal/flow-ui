@@ -12,6 +12,8 @@ import { AnalyticsReportsComponent } from 'app/pages/analytics/components/analyt
 import { AnalyticsReportSetupComponent } from 'app/pages/analytics/components/analyticsReportSetup/analyticsReportSetup.component';
 import { ConnectorConfigComponent } from './components/connectorConfig/connectorConfig.component';
 import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSetup.component';
+import { AccountViewComponent } from './components/accountView/accountView.component';
+
 
 const routes: Routes = [
   {
@@ -19,7 +21,8 @@ const routes: Routes = [
     component: MasterComponent,
     children: [
       { path: '', redirectTo: 'stu', pathMatch: 'full' },
-      { path: 'stac', component: AccountCreationComponent },
+      { path: 'stac', component: AccountViewComponent },
+      { path: 'stacs', component: AccountCreationComponent },
       { path: 'stu', component: UserComponent },
       { path: 'stus', component: UpdateUserComponent },
       { path: 'stus/:prf', component: UpdateUserComponent },
