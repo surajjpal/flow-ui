@@ -13,7 +13,7 @@ export const environment = {
     fetchaccountbyidurl: 'https://flow.automatapi.com/flow/account/',
   
     // Interfaces
-    interfaceService: 'https://flow.automatapi.com/flow/interfaces',
+    interfaceService: 'http://flow.automatapi.com/flow/interfaces',
     updateClassifierTraining : 'https://flow.automatapi.com/flow/interfaces/auto_decorate_training',
     updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',
     updateEntityTraining: 'https://flow.automatapi.com/flow/interfaces/entity_classification_training',
@@ -98,6 +98,15 @@ export const environment = {
     uploadentityexcelurl: 'uploadentity',
     modelkeyslookupurl: 'load/modelkeys',
     validationtypekeyslookupurl: 'load/validations',
+
+    // Analytics
+    reportservice: 'https://flow.automatapi.com/flow/report',
+    sendReportUrl: '/reports/analyticsreport/sendreport',
+    scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
+    getAnalyticsReports: "/reports/analyticsreport",
+
+    // Schedule
+    scheduleTaskConfiguration: "api/schedule/",
 
     // file upload download service
     fileUploadUrl: '/api/uploadData',

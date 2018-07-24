@@ -104,6 +104,15 @@ export const environment = {
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
+  // Analytics
+  reportservice: 'http://localhost:8080/flow/report',
+  sendReportUrl: '/reports/analyticsreport/sendreport',
+  scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
+  getAnalyticsReports: "/reports/analyticsreport",
+
+  // Schedule
+  scheduleTaskConfiguration: "api/schedule/",
+  
   // file upload download service
   fileUploadUrl: '/api/uploadData',
   fileDownloadUrl: '/api/downloadData',

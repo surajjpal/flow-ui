@@ -12,7 +12,10 @@ import { AgentService } from '../../../../services/agent.service';
 import { DomainService } from '../../../../services/domain.service';
 import { GraphService } from '../../../../services/flow.service';
 import { DataSharingService } from '../../../../services/shared.service';
+import { AnalyticsService } from '../../../../services/analytics.service';
+
 import { environment } from 'environments/environment';
+
 
 @Component({
   selector: 'api-agent-agent',
@@ -56,7 +59,8 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
     private agentService: AgentService,
     private domainService: DomainService,
     private graphService: GraphService,
-    private sharingService: DataSharingService
+    private sharingService: DataSharingService,
+    private analyticsReportService: AnalyticsService,
   ) {
     this.modalHeader = '';
     this.createMode = true;
@@ -215,6 +219,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
   }
 
   createAgent() {
+    
     if (this.selectedAgent) {
       if (this.selectedDomainList) {
         this.selectedAgent.domainNameList = [];
@@ -245,7 +250,16 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
             this.isSuccess = true;
             this.isCreated = true;
             this.autoUrl = `${environment.autourl}param1=${createdAgent._id}&param2=welcomeTo&param3=agentName`;
-            if (createdAgent) {
+            if (this.selectedAgent._id == null && createdAgent) {
+              this.analyticsReportService.scheduleDailyReportForAgent(this.selectedAgent)
+              .subscribe(
+                response => {
+                  
+                },
+                error => {
+
+                }
+              )
               if (createdAgent.agentPlugins && createdAgent.agentPlugins.length > 0) {
                 const facebookPlugin: Plugin = createdAgent.agentPlugins[0];
 

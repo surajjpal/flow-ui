@@ -9,6 +9,8 @@ import { NgaModule } from '../../theme/nga.module';
 import { routing } from './master.routing';
 
 import { MasterComponent } from './master.component';
+import { Daterangepicker } from 'ng2-daterangepicker';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AccountCreationComponent } from './components/account/accountCreation.component';
 import { UserComponent } from './components/user/user.component';
 import { UpdateUserComponent } from './components/updateUser/updateUser.component';
@@ -18,18 +20,25 @@ import { ApiConfigSetupComponent } from './components/apiConfigSetup/apiConfigSe
 
 import { SharedModule } from '../../shared/shared.module';
 import { UserHierarchyComponent } from 'app/pages/master/components/userHierarchy/userHierarchy.component';
+import { AnalyticsReportsComponent } from 'app/pages/analytics/components/analyticsReports/analyticsReports.component';
+import { AnalyticsReportSetupComponent } from 'app/pages/analytics/components/analyticsReportSetup/analyticsReportSetup.component';
+import { DateRangePickerComponent } from 'app/pages/analytics/components/analyticsReportSetup/daterangepicker/daterangepicker.component';
 import { ConnectorConfigComponent } from './components/connectorConfig/connectorConfig.component';
 import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSetup.component';
 
 
 @NgModule({
   imports: [
+
     CommonModule,
     FormsModule,
     DataTableModule,
-    NgaModule,
+    NgaModule.forRoot(),
     routing,
     TagInputModule,
+    SharedModule,
+    Daterangepicker,
+    NgbModule,
     SharedModule
     
   ],
@@ -42,6 +51,9 @@ import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSe
     ApiConfigComponent,
     ApiConfigSetupComponent,
     UserHierarchyComponent,
+    AnalyticsReportsComponent,
+    AnalyticsReportSetupComponent,
+    DateRangePickerComponent,
     ConnectorConfigComponent,
     ConConfigSetupComponent
   ]

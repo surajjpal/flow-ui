@@ -99,6 +99,15 @@ export const environment = {
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
+  // Analytics
+  reportservice: 'https://flow.automatapi.io/flow/report',
+  sendReportUrl: '/reports/analyticsreport/sendreport',
+  scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
+  getAnalyticsReports: "/reports/analyticsreport",
+
+  // Schedule
+  scheduleTaskConfiguration: "api/schedule/",
+  
   // file upload download service
   fileUploadUrl: '/api/uploadData',
   fileDownloadUrl: '/api/downloadData',

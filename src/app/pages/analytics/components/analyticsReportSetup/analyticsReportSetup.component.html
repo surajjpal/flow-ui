@@ -1,0 +1,146 @@
+<div class="widget">
+        <div class="row">
+            <ba-card [cardTitle]="createUpdateModel ? 'Craeate Report' : 'Update Report'" baCardClass="with-scroll" class="col-md-12">
+                <div class="panel panel-default">
+                    <form>
+                        <div class="form-group">
+                            <label>Name </label>    
+                            <input type="text" class="form-control" required placeholder="Name" [(ngModel)]="selectedAnalyticsReport.reportName" name="reportName" />
+                        </div>
+                        <div class="form-group">
+                            <label>Select Agent</label>
+                            <select class="selectpicker form-control" required id="reportFileType" title="Choose Report Type" [(ngModel)]="selectedAnalyticsReport.agentId" name="agentId"
+                            >
+                                <option *ngFor="let agent of definedAgents" [value]="agent._id">{{agent.name}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>To email Ids</label>
+                            <tag-input [(ngModel)]="selectedAnalyticsReport.toEmailIds" name="toEmailIds" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
+                            
+                        </div>
+                        <div class="form-group">
+                            <label>CC email Ids</label>
+                            <tag-input [(ngModel)]="selectedAnalyticsReport.ccEmailIds" name="ccEmailIds" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
+                        </div>
+                        <div class="form-group">
+                            <label>Select report file type</label>
+                            <select class="selectpicker form-control" required id="reportFileType" title="Choose Report Type" [(ngModel)]="selectedAnalyticsReport.reportFileType" name="reportFileType"
+                            >
+                                <option *ngFor="let rft of reportFileTypes" [value]="rft">{{rft}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Select report file type</label>
+                            <select class="selectpicker form-control" required id="reportCategory" title="Choose Report Category" [(ngModel)]="selectedAnalyticsReport.reportCategory" name="reportCategory"
+                            >
+                                <option *ngFor="let repcat of reportCategories" [value]="repcat">{{repcat}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Select report type</label>
+                            <select class="selectpicker form-control" required id="selectreporttype" title="Choose Report Type" [(ngModel)]="selectedAnalyticsReport.requestedReportType" name="requestedReportType"
+                            >
+                            <option *ngFor="let reportType of reportTypes" [value]="reportType">{{reportType}}</option>
+                        </select>
+                        </div>
+                        <div  *ngIf="selectedAnalyticsReport.requestedReportType == 'INSTANT'">
+                            <div class="form-group">
+                                <label>Select date range</label>
+                                <api-daterangepicker [dateRange]="tempDateRange" (selectedRange)="setReportDateRange($event)"></api-daterangepicker>
+                            </div>
+                        </div>
+                        <ng-container *ngIf="selectedAnalyticsReport.requestedReportType == 'SCHEDULE'">
+                            <div class="form-group">
+                                <label >Select subscription</label>
+                                <select class="selectpicker form-control" required id="selectSubscription" title="Choose Subscription" [(ngModel)]="selectedAnalyticsReport.scheduleConfig.subscription" name="subscription"
+                                    >
+                                    <option *ngFor="let subscription of subscriptions" [value]="subscription">{{subscription}}</option>
+                                </select>
+                            </div>
+                            <div *ngIf= "selectedAnalyticsReport.scheduleConfig.subscription == 'TIMER'" class="form-group">
+                                <label>Select Time</label>
+                                <ngb-timepicker [(ngModel)]="tempTime" [seconds]="seconds" name="tempTime"></ngb-timepicker>
+                            </div>
+                            <div *ngIf= "selectedAnalyticsReport.scheduleConfig.subscription == 'DAILY'" class="form-group">
+                                <label>Select Time</label>
+                                <ngb-timepicker [(ngModel)]="tempTime" [seconds]="seconds" name="tempTime"></ngb-timepicker>
+                            </div>
+                            <div *ngIf="selectedAnalyticsReport.scheduleConfig.subscription == 'WEEKLY'" class="form-group">
+                                <ng-container class="col-md-12">
+                                    <ng-container class="col-md-6">
+                                        <label>Select Week day</label>
+                                        <select class="selectpicker form-control" required id="selectWeekDay" title="Choose week day" [(ngModel)]="selectedAnalyticsReport.scheduleConfig.scheduleDayOfWeek" name="scheduleDayOfWeek"
+                                            >
+                                            <option *ngFor="let day of scheduleDayOfWeek" [value]="day">{{day}}</option>
+                                        </select>
+                                    </ng-container>
+                                    <ng-container class="col-md-6">
+                                        <label>Select Time</label>
+                                        <ngb-timepicker [(ngModel)]="tempTime" [seconds]="seconds" name="tempTime"></ngb-timepicker>
+                                    </ng-container>
+                                    
+                                </ng-container>
+                                
+                            </div>
+                            <ng-container *ngIf="selectedAnalyticsReport.scheduleConfig.subscription == 'MONTHLY'" class="form-group">
+
+                                <ng-container class="col-md-12">
+                                    <ng-container class="col-md-6">
+                                        <label>Select Month day</label>
+                                        <select class="selectpicker form-control" required id="scheduleDayOfMonth" title="Choose month day" [(ngModel)]="selectedAnalyticsReport.scheduleConfig.scheduleDayOfMonth" name="scheduleDayOfMonth"
+                                            >
+                                            <option *ngFor="let day of monthDays" [value]="day">{{day}}</option>
+                                        </select>
+                                    </ng-container>
+                                    <ng-container class="col-md-6">
+                                        <label>Select Time</label>
+                                        <ngb-timepicker [(ngModel)]="selectedAnalyticsReport.scheduleConfig.scheduleTime" [seconds]="seconds" name="scheduleTime"></ngb-timepicker>
+                                    </ng-container>
+                                    
+                                </ng-container>
+
+                                <!-- <api-datepicker [(selectedDate)]="analyticsReportSetup.scheduleDate"></api-datepicker> -->
+                            </ng-container>
+                            <div *ngIf="selectedAnalyticsReport.scheduleConfig.subscription && selectedAnalyticsReport.scheduleConfig.subscription != 'TIMER'" class="form-group">
+                                <api-checkbox [checked]="selectedAnalyticsReport.untilPreviousDay" [label]="'Report until previous Day'" (event)="selectedAnalyticsReport.untilPreviousDay = $event.target.checked"></api-checkbox>
+                            </div>
+                            <div *ngIf="selectedAnalyticsReport.scheduleConfig.subscription && selectedAnalyticsReport.scheduleConfig.subscription != 'TIMER'" class="form-group">
+                                <label >Select Time zone</label>
+                                <select class="selectpicker form-control" required id="timeZone" title="Choose Timezone" [(ngModel)]="selectedAnalyticsReport.scheduleConfig.timeZone" name="timeZone"
+                                    >
+                                    <option *ngFor="let tz of timeZones" [value]="tz">{{tz}}</option>
+                                </select>
+                            </div>
+                            <ng-container class="col-md-6">
+                                <label>Select end date</label>
+                                <form class="form-inline">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="yyyy-mm-dd"
+                                                [(ngModel)]="tempEndDate" name="tempEndDate" ngbDatepicker #d="ngbDatepicker">
+                                            <div class="input-group-append">
+                                            <button class="btn btn-default" (click)="d.toggle()" type="button">
+                                                <i class="ion ion-calendar" style="width: 1.2rem; height: 1rem; cursor: pointer;"></i>
+                                                <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
+                                            </button>
+                                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </ng-container>
+                            
+                        </ng-container>
+                        
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" (click)="scheduleAnalyticsReport()">
+                                    {{createUpdateModel ? 'Add' : 'Update'}}
+                            </button>
+                        </div>
+                        
+                    </form>
+                </div>
+            </ba-card>
+        </div>
+</div>
