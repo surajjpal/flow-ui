@@ -85,6 +85,6 @@ export class AnalyticsReportsComponent implements OnInit, OnDestroy {
       
           this.sharingService.setSharedObject(this.selectedAnalyticsReport);
       
-          this.router.navigate(['/pg/anlt/anltst'], { relativeTo: this.route });
+          this.router.navigate(['/pg/stp/anltst'], { relativeTo: this.route });
     }
 }

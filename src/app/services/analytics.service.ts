@@ -18,8 +18,7 @@ export class AnalyticsService {
 
     sendReport(analyticsReport: AnalyticsReport): Observable<any> {
         const subject = new Subject<any>();
-        const url = `${environment.interfaceService + environment.sendReportUrl}`;
-        //const headers = new HttpHeaders({'x-consumer-custom-Id' : "77af86a164d44f57851d8ca272627d5d"});
+        const url = `${environment.reportservice + environment.sendReportUrl}`;
         this.httpClient.post<AnalyticsReport>(
             url,
             analyticsReport,
@@ -50,10 +49,9 @@ export class AnalyticsService {
 
     scheduleReport(analyticsReport: AnalyticsReport): Observable<any> {
         const subject = new Subject<any>();
-        console.log("schedule report");
-        console.log(analyticsReport);
-        const url = `${environment.interfaceService + environment.scheduleAnalyticsReport}`;
-        //const headers = new HttpHeaders({'x-consumer-custom-Id' : "77af86a164d44f57851d8ca272627d5d"});
+        // console.log("schedule report");
+        // console.log(analyticsReport);
+        const url = `${environment.reportservice + environment.scheduleAnalyticsReport}`;
         this.httpClient.post<ScheduleTaskConfiguration>(
             url,
             analyticsReport,
@@ -65,8 +63,8 @@ export class AnalyticsService {
             }
           ).subscribe(
             (response: HttpResponse<ScheduleTaskConfiguration>) => {
-                console.log("response")
-                console.log(response.body)
+                // console.log("response")
+                // console.log(response.body)
                 if (response.body) {
                     subject.next(response.body);
                 }
@@ -85,9 +83,7 @@ export class AnalyticsService {
 
     getAnalyticsReports(): Observable<any> {
         const subject = new Subject<any>();
-        console.log("getAnalyticsReports");
-        const url = `${environment.interfaceService + environment.getAnalyticsReports}`;
-        //const headers =  new HttpHeaders({'x-consumer-custom-Id' : "77af86a164d44f57851d8ca272627d5d"});
+        const url = `${environment.reportservice + environment.getAnalyticsReports}`;
         this.httpClient.get<AnalyticsReport[]>(
                 url,
                 {
@@ -99,8 +95,8 @@ export class AnalyticsService {
             )
             .subscribe (
                 (response: HttpResponse<AnalyticsReport[]>) => {
-                    console.log("analytics reports");
-                    console.log(response.body);
+                    // console.log("analytics reports");
+                    // console.log(response.body);
                     if (response.body) {
                         subject.next(response.body);
                     }
@@ -116,8 +112,7 @@ export class AnalyticsService {
     scheduleDailyReportForAgent(agent: Agent): Observable<any> {
         const subject = new Subject<any>();
         
-        const url = `${environment.interfaceService + environment.scheduleAnalyticsReport}`;
-        //const headers =  new HttpHeaders({'x-consumer-custom-Id' : "77af86a164d44f57851d8ca272627d5d"});
+        const url = `${environment.reportservice + environment.scheduleAnalyticsReport}`;
         const requestBody = {}
         const analyticsReport = new AnalyticsReport();
         analyticsReport.reportName = agent.name + " report";
@@ -155,8 +150,8 @@ export class AnalyticsService {
             }
           ).subscribe(
             (response: HttpResponse<AnalyticsReport>) => {
-                console.log("response")
-                console.log(response.body)
+                // console.log("response")
+                // console.log(response.body)
                 if (response.body) {
                     subject.next(response.body);
                 }
@@ -164,8 +159,8 @@ export class AnalyticsService {
             (err: HttpErrorResponse) => {
               // All errors are handled in ErrorInterceptor, no further handling required
               // Unless any specific action is to be taken on some error
-                console.log("error");
-                console.log(err);
+                // console.log("error");
+                // console.log(err);
                 subject.error(err);
             }
             );

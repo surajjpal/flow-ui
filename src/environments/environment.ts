@@ -103,6 +103,7 @@ export const environment = {
   validationtypekeyslookupurl: 'load/validations',
 
   // Analytics
+  reportservice: 'http://localhost:8080/flow/report',
   sendReportUrl: '/reports/analyticsreport/sendreport',
   scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
   getAnalyticsReports: "/reports/analyticsreport",

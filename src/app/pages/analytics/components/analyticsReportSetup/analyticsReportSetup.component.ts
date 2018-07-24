@@ -198,12 +198,16 @@ export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
                     response => {
                         console.log("success");
                         console.log(response);
+                        
+
                     },
                     error => {
                         console.log("error");
                         console.log(error);
+                        new showAlertModal("Error", error);
                     }
                 )
+            new showAlertModal("Success", "You will receive an email for requested report")
         }
         else if (this.selectedAnalyticsReport.requestedReportType == "SCHEDULE") {
             this.subscription = this.analyticsService.scheduleReport(this.selectedAnalyticsReport)
@@ -211,15 +215,17 @@ export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
                     response => {
                         console.log("success");
                         console.log(response);
+                        
                     },
                     error => {
                         console.log("error");
                         console.log(error);
+                        new showAlertModal("Error", error);
                     }
                 )
+            new showAlertModal("Success", "Report has been scheduled");
         }
 
-        console.log("***********");
         console.log(this.selectedAnalyticsReport);
         // this.subscription = this.analyticsService.sendReport(this.analyticsReportSetup)
         //     .subscribe (

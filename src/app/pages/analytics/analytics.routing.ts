@@ -5,14 +5,14 @@ import { AnalyticsReportsComponent } from  './components/analyticsReports/analyt
 import { RouterModule } from "@angular/router";
 
 const routes: Routes = [
-    {
-        path : '',
-        component : AnalyticsComponent,
-        children: [
-            { path: '', redirectTo: 'anlt', pathMatch: 'full' },
-            { path : 'anltst', component: AnalyticsReportSetupComponent },
-            { path: 'anlt', component: AnalyticsReportsComponent}
-        ]
-    }
+    // {
+    //     path : '',
+    //     component : AnalyticsComponent,
+    //     children: [
+    //         { path: '', redirectTo: 'anlt', pathMatch: 'full' },
+    //         { path : 'anltst', component: AnalyticsReportSetupComponent },
+    //         { path: 'anlt', component: AnalyticsReportsComponent}
+    //     ]
+    // }
 ];
 export const routing = RouterModule.forChild(routes);

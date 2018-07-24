@@ -99,6 +99,7 @@ export const environment = {
     validationtypekeyslookupurl: 'load/validations',
 
     // Analytics
+    reportservice: 'https://flow.automatapi.com/flow/report',
     sendReportUrl: '/reports/analyticsreport/sendreport',
     scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
     getAnalyticsReports: "/reports/analyticsreport",

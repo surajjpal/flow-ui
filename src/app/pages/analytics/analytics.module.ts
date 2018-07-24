@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableModule } from 'angular2-datatable';
 import { TagInputModule } from 'ngx-chips';
 import { Daterangepicker } from 'ng2-daterangepicker';
@@ -18,21 +18,11 @@ import { SharedModule } from 'app/shared/shared.module';
 
 @NgModule({
     imports : [
-        CommonModule,
-        FormsModule,
-        DataTableModule,
-        TagInputModule,
-        Daterangepicker,
-        routing,
-        NgbModule.forRoot(),
-        NgaModule,
-        SharedModule
+        
     ],
     declarations: [
-        AnalyticsComponent,
-        AnalyticsReportSetupComponent,
-        AnalyticsReportsComponent,
-        DateRangePickerComponent
+        //AnalyticsComponent
+        
     ]
 })
 export class AnalyticsModule {}
