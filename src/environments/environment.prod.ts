@@ -14,7 +14,7 @@ export const environment = {
 
   // Interfaces
   interfaceService: 'https://flow.automatapi.io/flow/interfaces',
-  updateClassifierTraining : 'http://flow.automatapi.io/flow/interfaces/auto_decorate_training',
+  updateClassifierTraining : 'https://flow.automatapi.io/flow/interfaces/auto_decorate_training',
   updateIntentTraining: 'https://flow.automatapi.io/flow/interfaces/intent_classification_training',
   updateEntityTraining: 'https://flow.automatapi.io/flow/interfaces/entity_classification_training',
 
@@ -67,6 +67,11 @@ export const environment = {
   apiconfigurl: 'apiConfig/',
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
+  connectorinfo:'connectors/',
+  getallconconfig:'connectors/getAll/',
+  deleteconconfig:'connectors/delete/',
+  saveconconfig:'connectors/save/',
+
   // auto
   autoServer: 'https://flow.automatapi.io/flow/auto/',
   episodelisturl: 'load/episodes?query=',
@@ -88,10 +93,6 @@ export const environment = {
   updateentityurl: 'update/entityclassifier',
   deleteentityurl: 'delete/entityclassifier?query=',
 
-  savedomainurl: 'domain',
-  fetchdomainurl: 'fetchdomain?query=',
-  saveagenturl: 'agent',
-  fetchagenturl: 'fetchagent?query=',
   fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
   uploadintentexcelurl: 'uploadintents',
   uploadentityexcelurl: 'uploadentity',

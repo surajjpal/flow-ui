@@ -16,7 +16,6 @@ export class AgentService {
 
   constructor(private httpClient: HttpClient, private domainService: DomainService) { }
 
-  /*
   domainLookup(query?: string): Observable<Domain[]> {
     return this.domainService.domainLookup(query);
   }
@@ -96,8 +95,9 @@ export class AgentService {
     );
 
     return subject.asObservable();
-  }*/
+  }
 
+  /*
   domainLookup(query?: string): Observable<Domain[]> {
     const subject = new Subject<Domain[]>();
 
@@ -197,7 +197,7 @@ export class AgentService {
       );
 
     return subject.asObservable();
-  }
+  }*/
 }
 
 //////////////////////////////////////////////////////////////////

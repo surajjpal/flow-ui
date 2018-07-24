@@ -155,6 +155,7 @@ export class StateModel {
   timerUnit: number;
   runAtDateExpression: string;
   runAtTimeExpression: string;
+  connectorConfiguration:string[];
  
 
   constructor() {
@@ -176,6 +177,7 @@ export class StateModel {
     this.timerUnit = 0;
     this.runAtDateExpression = '';
     this.runAtTimeExpression = '';
+    this.connectorConfiguration = [];
    
   }
 }

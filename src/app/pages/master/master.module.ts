@@ -23,6 +23,8 @@ import { UserHierarchyComponent } from 'app/pages/master/components/userHierarch
 import { AnalyticsReportsComponent } from 'app/pages/analytics/components/analyticsReports/analyticsReports.component';
 import { AnalyticsReportSetupComponent } from 'app/pages/analytics/components/analyticsReportSetup/analyticsReportSetup.component';
 import { DateRangePickerComponent } from 'app/pages/analytics/components/analyticsReportSetup/daterangepicker/daterangepicker.component';
+import { ConnectorConfigComponent } from './components/connectorConfig/connectorConfig.component';
+import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSetup.component';
 
 
 @NgModule({
@@ -36,7 +38,8 @@ import { DateRangePickerComponent } from 'app/pages/analytics/components/analyti
     TagInputModule,
     SharedModule,
     Daterangepicker,
-    NgbModule
+    NgbModule,
+    SharedModule
     
   ],
   declarations: [
@@ -50,7 +53,9 @@ import { DateRangePickerComponent } from 'app/pages/analytics/components/analyti
     UserHierarchyComponent,
     AnalyticsReportsComponent,
     AnalyticsReportSetupComponent,
-    DateRangePickerComponent
+    DateRangePickerComponent,
+    ConnectorConfigComponent,
+    ConConfigSetupComponent
   ]
 })
 export class MasterModule { }
