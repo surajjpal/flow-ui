@@ -492,6 +492,8 @@ export class ConnectorConfigService {
     return subject.asObservable();
   }
 
+  
+
   getAllCons(): Observable<ConnectorConfig[]> {
     const subject = new Subject<ConnectorConfig[]>();
 
@@ -522,14 +524,14 @@ export class ConnectorConfigService {
     return subject.asObservable();
   }
 
-  createConConfig(connectorConfig: ConnectorConfig): Observable<ApiConfig> {
-    const subject = new Subject<ApiConfig>();
+  createConConfig(connectorConfig: ConnectorConfig): Observable<ConnectorConfig> {
+    const subject = new Subject<ConnectorConfig>();
 
     if (connectorConfig) {
       connectorConfig._id = null;
       const url = `${environment.server + environment.saveconconfig}`;
 
-      this.httpClient.post<ApiConfig>(
+      this.httpClient.post<ConnectorConfig>(
         url,
         connectorConfig,
         {
@@ -540,7 +542,7 @@ export class ConnectorConfigService {
         }
       )
         .subscribe(
-        (response: HttpResponse<ApiConfig>) => {
+        (response: HttpResponse<ConnectorConfig>) => {
           if (response.body) {
             subject.next(response.body);
           }
@@ -559,13 +561,13 @@ export class ConnectorConfigService {
     return subject.asObservable();
   }
 
-  updateConConfig(connectorConfig: ConnectorConfig): Observable<ApiConfig> {
-    const subject = new Subject<ApiConfig>();
+  updateConConfig(connectorConfig: ConnectorConfig): Observable<ConnectorConfig> {
+    const subject = new Subject<ConnectorConfig>();
 
     if (connectorConfig) {
       const url = `${environment.server + environment.saveconconfig}`;
 
-      this.httpClient.put<ApiConfig>(
+      this.httpClient.put<ConnectorConfig>(
         url,
         connectorConfig,
         {
@@ -576,7 +578,7 @@ export class ConnectorConfigService {
         }
       )
         .subscribe(
-        (response: HttpResponse<ApiConfig>) => {
+        (response: HttpResponse<ConnectorConfig>) => {
           if (response.body) {
             subject.next(response.body);
           }
@@ -628,6 +630,67 @@ export class ConnectorConfigService {
     return subject.asObservable();
   }
 
+  getConnectorInfos(type:string): Observable<ConnectorInfo[]> {
+    const subject = new Subject<ConnectorInfo[]>();
+    
+    const url = `${environment.server + environment.getallconinfo + type}`;
+
+    this.httpClient.get<ConnectorInfo[]>(
+      url,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+      (response: HttpResponse<ConnectorInfo[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+  getConnectorConfigByRef(configRef:string): Observable<ConnectorInfo[]> {
+    const subject = new Subject<ConnectorInfo[]>();
+    
+    const url = `${environment.server + environment.getbyconfigref + configRef}`;
+
+    this.httpClient.get<ConnectorInfo[]>(
+      url,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+      (response: HttpResponse<ConnectorInfo[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
 
 
 }

@@ -76,7 +76,8 @@ export const environment = {
   getallconconfig:'connectors/getAll/',
   deleteconconfig:'connectors/delete/',
   saveconconfig:'connectors/save/',
-
+  getallconinfo:'connectors/getConInfo/',
+  getbyconfigref:'connectors/getByConfigRef/',
 
   // auto
   autoServer: 'http://108.168.190.82:8080/flow/auto/',

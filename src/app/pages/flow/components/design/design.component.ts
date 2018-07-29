@@ -19,8 +19,8 @@ import {
   GraphObject, DataPoint, Classifier, StateModel,
   EventModel, Expression, Transition, ManualAction, DataPointValidation,StateInfoModel
 } from '../../../../models/flow.model';
-import {ConnectorConfig} from '../../../../models/setup.model';
-import { ApiConfig, ApiKeyExpressionMap } from '../../../../models/setup.model';
+import {ConnectorConfig, ConnectorInfo, TaskObject} from '../../../../models/setup.model';
+import { ApiConfig, ApiKeyExpressionMap,ApiResponse } from '../../../../models/setup.model';
 
 // Service Imports
 import { GraphService, CommunicationService } from '../../../../services/flow.service';
@@ -84,9 +84,22 @@ export class DesignComponent implements OnInit, OnDestroy {
   // Warning Modal properties
   warningHeader: string;
   warningBody: string;
+  conInfoList:ConnectorInfo[] = [];
+  //connectors
+  configList:any = [];
+  payloadList:any = [];
+  apiConfig:ApiConfig;
+  conConfig:ConnectorConfig;
+  tempConConfig:ConnectorConfig;
+  selectedConInfo:ConnectorInfo;
+  selectedResponse:ApiResponse;
+  responseTypeSource: string[];
+  paramsToSelectSource: string[];
 
   progressBarFlag: boolean = false;
-  
+  selectedConfig: boolean = false;
+  specificConfigSelected: boolean = false;
+
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
   private subscriptionApiConfig: Subscription;
@@ -119,9 +132,14 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.tempState = new StateModel();
     this.tempParentState = new StateModel();
     this.tempEvent = new EventModel();
+    this.apiConfig = new ApiConfig();
+    this.tempConConfig = new ConnectorConfig();
+    this.conConfig = new ConnectorConfig();
     this.sourceClassifiers = [new Classifier(), new Classifier()];
     this.sourceApiConfigList = [];
     this.sourceConConfigList = [];
+    this.responseTypeSource = ['PAYLOAD', 'PARAM'];
+    this.paramsToSelectSource = ['SELECTIVE', 'ALL'];
   }
 
   ngOnInit() {
@@ -214,7 +232,10 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.subscriptionConConfig = this.connectorConfigService.getAllCons()
         .subscribe(conConfigList => {
           if (conConfigList) {
-            this.sourceConConfigList = conConfigList;
+            for (let con of conConfigList){
+              if(!con.taskConfig)
+              this.sourceConConfigList.push(con)
+            }
           }
         });
     }
@@ -233,6 +254,11 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   addState(sourceEvents: EventModel[]): void {
     this.stateCreateMode = true;
+    this.selectedConfig =false;
+    this.specificConfigSelected = false;
+    this.configList = [];
+    this.payloadList = [];
+    this.conConfig.taskObject = new TaskObject();
     
     this.sourceEvents = sourceEvents;
 
@@ -253,7 +279,21 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.stateCreateMode = false;
 
     this.tempState = JSON.parse(JSON.stringify(state));
+    if(this.tempState.connectorConfig.length > 0){
+      this.onConfigSelect(this.tempState.connectorConfig);
+    }
+    
   }
+ getConnectorConfigByRef(configRef){
+  this.subscriptionConConfig = this.connectorConfigService.getConnectorConfigByRef(configRef)
+  .subscribe(config => {
+    if (config) {
+      console.log(config)
+      return config;
+    }
+  });
+ }
+  
 
   addEdge(sourceEvents: EventModel[]) {
     if (sourceEvents && sourceEvents.length > 0) {
@@ -324,7 +364,23 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.tempState.events.push(this.tempEvent);
   }
 
+  saveConConfig():void{
+    if(this.specificConfigSelected){
+      this.savetaskConfig()
+    }
+    else{
+      this.saveState()
+    }
+  }
+
   saveState(): void {
+    // if(this.specificConfigSelected){
+    //   this.savetaskConfig()
+    // }
+
+    console.log("oooooooooooooooooo")
+    console.log(this.tempState)
+    
     this.tempState.endState = (this.tempState.events.length === 0);
     if (!this.isStateApiCompatible()) {
       this.tempState.apiConfigurationList = [];
@@ -400,7 +456,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   isStateConnectorCompatible() {
     // TODO: improve the mechanism to differentiate Rule State with other states
     return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
-      && this.tempState.entryActionList.includes('EmailOutConnectorTask');
+      && this.tempState.entryActionList.includes('ConnectorStateEntryAction');
   }
 
   addRule() {
@@ -529,4 +585,317 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.selectedEvent = null;
     this.bulkExpressions = '';
   }
+
+  onConfigSelect(event){
+    console.log("updating event.....................")
+    console.log(event)
+    this.specificConfigSelected = false;
+    this.configList = []
+    this.payloadList = []
+    this.tempConConfig = event[0]
+    
+    // else{
+    //   this.conConfig.taskObject = 
+    // }
+    
+    if(this.tempConConfig._id.length > 0){
+      this.subscriptionConConfig = this.connectorConfigService.getConnectorInfos(event[0].configType)
+    .subscribe(conInfoList => {
+      if (conInfoList) {
+        this.conInfoList = conInfoList;
+        console.log(conInfoList)
+        if(conInfoList.length == 1){
+          this.selectedConfig = false;
+          this.specificConfigSelected = true;
+          this.connectorSelected(conInfoList[0])
+        }
+        else{
+          this.selectedConfig = true;
+          if(!this.stateCreateMode){
+            for(let conInfo of conInfoList ){
+              if(conInfo.type == this.tempState.taskConfig[0].connectorInfoRef){
+                this.specificConfigSelected = true;
+                this.conConfig = this.tempState.taskConfig[0]
+                this.connectorSelected(conInfo)
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+    
+  }
+
+  connectorSelected(conInfo){
+    console.log("update.....................")
+    console.log(conInfo)
+    
+    this.specificConfigSelected = true;
+    this.selectedConInfo = conInfo;
+    this.configList = []
+    this.payloadList = []
+    this.populateSelectedResponse()
+    
+    // if(this.stateCreateMode){
+    //   this.populateSelectedResponse()
+    // }
+    // else{
+    //   if(this.tempState.taskConfig[0].configType == conInfo.type){
+    
+    //     this.conConfig.taskObject =  this.tempState.taskConfig[0].taskObject;
+    //   }
+    //   else{
+    //     this.conConfig.taskObject = new TaskObject()
+    //     this.conConfig.taskObject.responseList = [];
+    //     this.addResponse();
+    //     this.selectedResponse = this.conConfig.taskObject.responseList[0];
+    //   }
+    // }
+    if(this.isEmpty(conInfo.metaData) == false){
+      for (const property in conInfo.metaData)
+      {
+        const map = new Map();
+        map.set('key', property);
+        if(conInfo.metaData[property]["mandatory"] == true){
+          //entry.metaData['configMap'][property] = "";
+          //mandatoryList.push(property);
+        }
+        if(this.stateCreateMode){
+          map.set('value', "");
+        }
+        else{
+          let value = this.tempState.taskConfig[0].configMap[property];
+          if(this.tempState.taskConfig[0].configType == conInfo.type){
+            map.set('value', value);
+          }
+          else{
+            map.set('value', "");
+          }
+        }
+        this.configList.push(map);
+      }
+    }
+    else{
+      for (const property in this.tempConConfig.configMap)
+      {
+        const map = new Map();
+        map.set('key', property);
+        
+          map.set('value', this.tempConConfig.configMap[property] );
+          this.configList.push(map);
+      }
+    }
+
+    if(this.isEmpty(conInfo.payload) == false){
+      for (const property in conInfo.payload)
+      {
+        const map = new Map();
+        map.set('key', property);
+       
+        if(this.stateCreateMode){
+          map.set('value', "");
+        }
+        else{
+          let value = this.tempState.taskConfig[0].taskObject.body[property];
+          if(this.tempState.taskConfig[0].configType == conInfo.type){
+            map.set('value', value);
+          }
+          else{
+            map.set('value', "");
+          }
+
+        }
+        
+        this.payloadList.push(map);
+      }
+    }
+    
+  }
+
+  addConfigParam() {
+    const body = new Map();
+    body.set('key', '');
+    body.set('value', '');
+    this.configList.push(body);
+  }
+  removeConfigBody(body: any) {
+    if (body && this.configList && this.configList.includes(body)) {
+      const index = this.configList.indexOf(body);
+      this.configList.splice(index, 1);
+    }
+  }
+
+  addPayloadParam() {
+    const body = new Map();
+    body.set('key', '');
+    body.set('value', '');
+    this.payloadList.push(body);
+  }
+  removePayloadBody(body: any) {
+    if (body && this.payloadList && this.payloadList.includes(body)) {
+      const index = this.payloadList.indexOf(body);
+      this.payloadList.splice(index, 1);
+    }
+  }
+  
+
+  isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+  }
+
+  savetaskConfig(){
+    
+     //this.conConfig.configMap = {};
+      for (const con of this.configList) {
+        if (con.get('key') && con.get('key').trim().length > 0) {
+          this.conConfig.configMap[con.get('key')] = con.get('value');
+        }
+      }
+
+      for (const con of this.payloadList) {
+        if (con.get('key') && con.get('key').trim().length > 0) {
+          this.conConfig.taskObject.body[con.get('key')] = con.get('value');
+        }
+      }
+      this.conConfig.connectorConfigRef = this.tempConConfig.functionInstanceName;
+      this.conConfig.configName = this.tempState.stateCd;
+      this.conConfig.connectorInfoRef = this.selectedConInfo.type;
+      this.conConfig.configType = this.selectedConInfo.type;
+      this.conConfig.taskObject.responseList = this.conConfig.taskObject.responseList;
+      
+      
+      if(this.stateCreateMode){
+        this.conConfig.functionInstanceName = "";
+        this.createConConfig();
+      }
+     
+      else{
+        this.conConfig.functionInstanceName = this.tempState.taskConfig[0].functionInstanceName;
+        this.conConfig._id = this.tempState.taskConfig[0]._id;
+        this.updateConConfig()
+    }
+    
+
+
+      // this.checkValidation(this.conConfig.configMap,this.conConfig.configType)
+      // if(this.mandatorySatisfied){
+      //   if (this.conConfig._id && this.conConfig._id.length > 0) {
+      //     this.updateApiConfig();
+      //   } else {
+      //     this.createConConfig();
+      //   }
+      // }
+      // else{
+      //   showModal("validationModal");
+      // }
+      
+      
+    }
+
+    // checkValidation(configMap,configType){
+    //       this.notSatisfiedDataPoints = [];
+    //       if(this.conConfig.configName.length == 0){
+    //         this.notSatisfiedDataPoints.push("name");
+    //       }
+    //       for(let mandatory of this.mainMandatoryMap[configType]){
+    //         if(configMap[mandatory].length == 0){
+    //           this.notSatisfiedDataPoints.push(mandatory);
+    //         }
+    //       }
+    //       if(this.notSatisfiedDataPoints.length > 0){
+    //         this.mandatorySatisfied = false;
+    //       }
+    //       else{
+    //         this.mandatorySatisfied = true;
+    //       }
+    // }
+
+    createConConfig(){
+      this.subscription = this.connectorConfigService.createConConfig(this.conConfig)
+      .subscribe(
+        data => {
+          this.tempState.taskConfig = [data];
+          this.saveState()
+          // this.alertService.success('Connector Config created successfully', true);
+          // this.router.navigate(['/pg/stp/stcc'], { relativeTo: this.route });
+        });
+      }
+
+      updateConConfig(){
+        this.subscription = this.connectorConfigService.updateConConfig(this.conConfig)
+        .subscribe(
+          data => {
+            this.tempState.taskConfig = [data];
+            this.saveState()
+            //this.router.navigate(['/pg/stp/stcc'], { relativeTo: this.route });
+          });
+      }
+
+
+
+
+
+       removeResponse() {
+         console.log("]]]]]]]]]]]]]pppppppppppppppppp")
+         console.log(this.conConfig.taskObject.responseList)
+          if (this.selectedResponse && this.conConfig.taskObject.responseList
+            && this.conConfig.taskObject.responseList.includes(this.selectedResponse)) {
+            const index = this.conConfig.taskObject.responseList.indexOf(this.selectedResponse);
+            this.conConfig.taskObject.responseList.splice(index, 1);
+          }
+        }
+      
+        cloneResponse() {
+          if (this.selectedResponse) {
+            const clonedResponse = JSON.parse(JSON.stringify(this.selectedResponse));
+            this.addResponse(clonedResponse);
+          }
+        }
+
+      populateSelectedResponse() {
+          if (this.tempConConfig && this.tempConConfig._id && this.tempConConfig._id.length > 0
+            && this.conConfig.taskObject.responseList && this.conConfig.taskObject.responseList.length > 0) {
+            this.selectedResponse = this.conConfig.taskObject.responseList[0];
+          } else {
+            this.conConfig.taskObject.responseList = [];
+            this.addResponse();
+            this.selectedResponse = this.conConfig.taskObject.responseList[0];
+          }
+        }
+      
+        addResponse(response?: ApiResponse) {
+          let newResponse = null;
+          if (response) {
+            newResponse = response;
+          } else {
+            newResponse = new ApiResponse(this.responseTypeSource[0], this.paramsToSelectSource[0]);
+          }
+      
+          if (newResponse.keyExpressionList && newResponse.keyExpressionList.length  === 0) {
+            this.addResponseExpression(newResponse);
+          }
+          this.conConfig.taskObject.responseList.push(newResponse);
+        }
+
+
+        addResponseExpression(response?: ApiResponse) {
+          if (response) {
+            response.keyExpressionList.push(new ApiKeyExpressionMap());
+          } else if (this.selectedResponse) {
+            this.selectedResponse.keyExpressionList.push(new ApiKeyExpressionMap());
+          }
+        }
+      
+        removeExpression(expression: ApiKeyExpressionMap) {
+          if (expression && this.selectedResponse && this.selectedResponse.keyExpressionList
+            && this.selectedResponse.keyExpressionList.includes(expression)) {
+              const index = this.selectedResponse.keyExpressionList.indexOf(expression);
+              this.selectedResponse.keyExpressionList.splice(index, 1);
+          }
+        }
 }

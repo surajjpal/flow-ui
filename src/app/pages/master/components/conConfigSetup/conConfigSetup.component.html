@@ -9,8 +9,8 @@
           </div>
           <div class="form-group">
             <label>Type</label>
-            <select class="selectpicker form-control" required id="selectRootUser" ng-disabled="!createMode" title="Choose Connector" [(ngModel)]="conConfig.configType" name="connector" [ngModelOptions]="{standalone: true}" (ngModelChange)="onConfigSelect($event)">
-                <option *ngFor="let connector of Connectors" [ngValue]="connector">{{connector}}</option>
+            <select class="selectpicker form-control" required id="selectRootUser" ng-disabled="!createMode" title="Choose Connector" [(ngModel)]="conInfo.displayName" name="connector" [ngModelOptions]="{standalone: true}" (ngModelChange)="onConfigSelect($event)">
+                <option *ngFor="let connector of Connectors" [ngValue]="connector">{{connector.displayName}}</option>
               </select>
           </div>
           <div *ngIf="selected">
@@ -19,9 +19,9 @@
                     <li class="nav-item">
                       <a class="nav-link active" data-toggle="tab" href="#tab_config" role="tab" aria-expanded="true">Configuration</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                       <a class="nav-link" data-toggle="tab" href="#tab_response" role="tab">Response</a>
-                    </li>
+                    </li> -->
                   </ul>
                 <div class="tab-content">
                   <div role="tabpanel" class="tab-pane fade show active" id="tab_config">
@@ -57,7 +57,7 @@
                           </tr>
                         </tfoot>
                       </table>
-                      <table class="table" [mfData]="requiredConfigList" #mfRequired="mfDataTable" [mfRowsOnPage]="10">
+                      <!-- <table class="table" [mfData]="requiredConfigList" #mfRequired="mfDataTable" [mfRowsOnPage]="10">
                           <thead>
                             <tr>
                               <th>Action</th>
@@ -84,9 +84,9 @@
                               </td>
                             </tr>
                           </tfoot>
-                        </table>
+                        </table> -->
                       </div>
-                      <div role="tabpanel" class="tab-pane fade" id="tab_response">
+                      <!-- <div role="tabpanel" class="tab-pane fade" id="tab_response">
                           <div id="responseAccordion" role="tablist" aria-multiselectable="true" *ngIf="conConfig.responseList.length > 0">
                             <div *ngFor="let response of conConfig.responseList; let index=index" class="panel">
                               <div class="card">
@@ -257,7 +257,7 @@
                           <div class="row col-sm-12">
                             <button type="button" class="btn btn-primary" (click)="addResponse()">Add Response</button>
                           </div>
-                        </div>
+                        </div> -->
                   </div>
               </div>
           </div>
