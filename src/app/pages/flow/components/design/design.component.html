@@ -168,7 +168,7 @@
               <form class="row form-inline">
                 <div *ngFor="let conInfo of conInfoList">
                     <div  class="form-group col-sm-1">
-                        <button *ngIf="tempState.taskConfig[0].connectorInfoRef == conInfo.type " type="button" class="btn btn-success" (click)="connectorSelected(conInfo)">Configure {{conInfo.displayName}}</button>
+                        <button *ngIf="tempState.taskConfig[0].connectorInfoRef == conInfo.type " type="button" class="btn btn-success" (click)="connectorSelected(conInfo)">Configured {{conInfo.displayName}}</button>
                         <button *ngIf="tempState.taskConfig[0].connectorInfoRef !== conInfo.type " type="button" class="btn btn-primary" (click)="connectorSelected(conInfo)">Configure {{conInfo.displayName}}</button>
                       </div>
                 </div>

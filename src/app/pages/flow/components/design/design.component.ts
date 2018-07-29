@@ -612,18 +612,23 @@ export class DesignComponent implements OnInit, OnDestroy {
         else{
           this.selectedConfig = true;
           if(!this.stateCreateMode){
-            for(let conInfo of conInfoList ){
-              if(conInfo.type == this.tempState.taskConfig[0].connectorInfoRef){
-                this.specificConfigSelected = true;
-                this.conConfig = this.tempState.taskConfig[0]
-                this.connectorSelected(conInfo)
+              if(this.tempState.connectorConfig[0].configType!=this.tempConConfig.configType){
+                this.conConfig = new ConnectorConfig()
+              }
+              else{
+                for(let conInfo of conInfoList ){
+                  if(conInfo.type == this.tempState.taskConfig[0].connectorInfoRef){
+                    this.specificConfigSelected = true;
+                    this.conConfig = this.tempState.taskConfig[0]
+                    this.connectorSelected(conInfo)
+                  }
+                }
               }
             }
           }
         }
-      }
-    });
-  }
+      });
+    }
     
   }
 
@@ -636,22 +641,22 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.configList = []
     this.payloadList = []
     this.populateSelectedResponse()
-    
+
     // if(this.stateCreateMode){
     //   this.populateSelectedResponse()
     // }
-    // else{
-    //   if(this.tempState.taskConfig[0].configType == conInfo.type){
+    if(!this.stateCreateMode){
+      if(this.tempState.taskConfig[0].configType == conInfo.type){
     
-    //     this.conConfig.taskObject =  this.tempState.taskConfig[0].taskObject;
-    //   }
-    //   else{
-    //     this.conConfig.taskObject = new TaskObject()
-    //     this.conConfig.taskObject.responseList = [];
-    //     this.addResponse();
-    //     this.selectedResponse = this.conConfig.taskObject.responseList[0];
-    //   }
-    // }
+        this.conConfig.taskObject =  this.tempState.taskConfig[0].taskObject;
+      }
+      else{
+        this.conConfig.taskObject = new TaskObject()
+        this.conConfig.taskObject.responseList = [];
+        this.addResponse();
+        this.selectedResponse = this.conConfig.taskObject.responseList[0];
+      }
+    }
     if(this.isEmpty(conInfo.metaData) == false){
       for (const property in conInfo.metaData)
       {
