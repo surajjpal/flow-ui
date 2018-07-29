@@ -77,7 +77,7 @@ export const environment = {
   deleteconconfig:'connectors/delete/',
   saveconconfig:'connectors/save/',
   getallconinfo:'connectors/getConInfo/',
-  getbyconfigref:'connectors/getByConfigRef/',
+  getconinfobytype:'connectors/getConInfoByType/',
 
 
 

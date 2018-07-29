@@ -661,12 +661,12 @@ export class ConnectorConfigService {
     return subject.asObservable();
   }
 
-  getConnectorConfigByRef(configRef:string): Observable<ConnectorInfo[]> {
-    const subject = new Subject<ConnectorInfo[]>();
+  getConInfoByType(type:string): Observable<ConnectorInfo> {
+    const subject = new Subject<ConnectorInfo>();
     
-    const url = `${environment.server + environment.getbyconfigref + configRef}`;
+    const url = `${environment.server + environment.getconinfobytype + type}`;
 
-    this.httpClient.get<ConnectorInfo[]>(
+    this.httpClient.get<ConnectorInfo>(
       url,
       {
         headers: this.httpHeaders,
@@ -676,7 +676,7 @@ export class ConnectorConfigService {
       }
     )
       .subscribe(
-      (response: HttpResponse<ConnectorInfo[]>) => {
+      (response: HttpResponse<ConnectorInfo>) => {
         if (response.body) {
           subject.next(response.body);
         }

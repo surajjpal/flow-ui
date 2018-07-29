@@ -12,6 +12,7 @@ export const environment = {
     saveaccounturl: 'https://flow.automatapi.com/flow/account/create',
     fetchaccountbyidurl: 'https://flow.automatapi.com/flow/account/',
     publishaccounturl:'https://flow.automatapi.com/flow/account/publish/',
+    unpublishaccounturl:'https://flow.automatapi.com/flow/services/unpublish/',
 
     // Interfaces
     interfaceService: 'http://flow.automatapi.com/flow/interfaces',
@@ -73,7 +74,7 @@ export const environment = {
     deleteconconfig:'connectors/delete/',
     saveconconfig:'connectors/save/',
     getallconinfo:'connectors/getConInfo/',
-    getbyconfigref:'connectors/getByConfigRef/',
+    getconinfobytype:'connectors/getConInfoByType/',
     
     // auto
     autoServer: 'https://flow.automatapi.com/flow/auto/',

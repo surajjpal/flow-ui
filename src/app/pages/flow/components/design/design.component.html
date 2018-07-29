@@ -198,16 +198,26 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let config of mfConfigs.data">
+                        <tr *ngFor="let config of mfConfigs.data; let i = index" [attr.data-index]="i">
                           <td >
                             <button type="button" class="btn btn-danger" title="Delete" (click)="removeConfigBody(config)" ><i class="ion-close-round"></i></button>
                           </td>
-                          <td >
+                          <td>
                             <input type="text" class="form-control" placeholder="Key" [value]="config.get('key')" (input)="config.set('key', $event.target.value)"/>
                           </td>
-                          <td>
+                          <!-- <td *ngIf="typeConfigList[i].get('value') == 'file'">
+                          
+                          </td> -->
+                          <td *ngIf="typeConfigList[i].get('value') == 'string'">
                             <input type="text" class="form-control" placeholder="Value" [value]="config.get('value')"  (input)="config.set('value', $event.target.value)" />
                           </td >
+                          <td *ngIf="typeConfigList[i].get('value') == 'file'">
+                              <label for="file-upload" class="custom-file-upload">
+                                  <i class="fa fa-cloud-upload"></i> {{stateCreateMode ? 'Upload File ' : 'Upload New File'}}
+                                </label>
+                                <label>{{fileName}}</label>
+                                <input id="file-upload" type="file" (change)=fileEvent($event,config)/>
+                          </td>
                         </tr>
                       </tbody>
                       <tfoot>
@@ -1387,6 +1397,42 @@
   </div>
 </div>
 
+
+<div class="modal fade" id="fileUploadModel" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="warningLabel">
+            {{"Uploading File"}}
+          </h4>
+        </div>
+  
+        <!-- Modal Body -->
+        <div class="modal-body" id="modal_body">
+            <div *ngIf="progressBarFlag">
+                <div class="row">
+                  <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;" aria-valuenow="99"
+                        aria-valuemin="0" aria-valuemax="100">Uploading File...</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12 col-md-12 col-sm-12">
+                    <br/>
+                  </div>
+                </div>
+              </div>
+        </div>
+  
+        <!-- Modal Footer -->
+        <div class="modal-footer" id="modal_footer" *ngIf="fileUploaded">
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 

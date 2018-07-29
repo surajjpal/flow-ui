@@ -3,6 +3,7 @@ declare var saveStateObject: any;
 declare var updateStateObject: any;
 declare var designFlowEditor: any;
 declare var closeModal: any;
+declare var showModal: any;
 declare var exportGraphXml: any;
 declare var updateNewEdge: any;
 declare var deleteNewEdge: any;
@@ -25,11 +26,13 @@ import { ApiConfig, ApiKeyExpressionMap,ApiResponse } from '../../../../models/s
 // Service Imports
 import { GraphService, CommunicationService } from '../../../../services/flow.service';
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
-import {ConnectorConfigService} from  '../../../../services/setup.service';
+import {ConnectorConfigService,FileService} from  '../../../../services/setup.service';
+import { environment } from '../../../../../environments/environment';
 @Component({
   selector: 'api-flow-design',
   templateUrl: './design.component.html',
-  providers:[ConnectorConfigService]
+  styleUrls: ['./design.scss'],
+  providers:[ConnectorConfigService,FileService]
 })
 
 export class DesignComponent implements OnInit, OnDestroy {
@@ -87,6 +90,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   conInfoList:ConnectorInfo[] = [];
   //connectors
   configList:any = [];
+  typeConfigList:any = [];
   payloadList:any = [];
   apiConfig:ApiConfig;
   conConfig:ConnectorConfig;
@@ -95,6 +99,15 @@ export class DesignComponent implements OnInit, OnDestroy {
   selectedResponse:ApiResponse;
   responseTypeSource: string[];
   paramsToSelectSource: string[];
+  conInfoOfNoMetadata:ConnectorInfo;
+  gotConInfo:boolean = false;
+
+  //file
+  fileSelected:boolean;
+  selectedFile:FormData;
+  fileUploaded:boolean;
+  fileUploadedUrl:string;
+  fileName:string;
 
   progressBarFlag: boolean = false;
   selectedConfig: boolean = false;
@@ -114,7 +127,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private stateService: StateService,
     private graphService: GraphService,
     private communicationService: CommunicationService,
-    private connectorConfigService:ConnectorConfigService
+    private connectorConfigService:ConnectorConfigService,
+    private fileService:FileService
   ) {
     window['flowComponentRef'] = { component: this, zone: zone };
 
@@ -127,7 +141,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (this.graphObject) {
       this.communicationService.sendGraphObject(null);
     }
-
+    this.selectedFile = new FormData();
     this.tempGraphObject = new GraphObject();
     this.tempState = new StateModel();
     this.tempParentState = new StateModel();
@@ -135,6 +149,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.apiConfig = new ApiConfig();
     this.tempConConfig = new ConnectorConfig();
     this.conConfig = new ConnectorConfig();
+    this.conInfoOfNoMetadata = new ConnectorInfo();
     this.sourceClassifiers = [new Classifier(), new Classifier()];
     this.sourceApiConfigList = [];
     this.sourceConConfigList = [];
@@ -284,15 +299,6 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
     
   }
- getConnectorConfigByRef(configRef){
-  this.subscriptionConConfig = this.connectorConfigService.getConnectorConfigByRef(configRef)
-  .subscribe(config => {
-    if (config) {
-      console.log(config)
-      return config;
-    }
-  });
- }
   
 
   addEdge(sourceEvents: EventModel[]) {
@@ -374,12 +380,6 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   saveState(): void {
-    // if(this.specificConfigSelected){
-    //   this.savetaskConfig()
-    // }
-
-    console.log("oooooooooooooooooo")
-    console.log(this.tempState)
     
     this.tempState.endState = (this.tempState.events.length === 0);
     if (!this.isStateApiCompatible()) {
@@ -587,23 +587,23 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   onConfigSelect(event){
-    console.log("updating event.....................")
-    console.log(event)
+    
     this.specificConfigSelected = false;
-    this.configList = []
-    this.payloadList = []
+    this.selectedConfig = false;
+    this.gotConInfo = false;
+    //this.conInfoOfNoMetadata = new ConnectorInfo();
+    this.configList = [];
+    this.payloadList = [];
+    this.typeConfigList = [];
+    this.fileName = "please upload a file..."
     this.tempConConfig = event[0]
     
-    // else{
-    //   this.conConfig.taskObject = 
-    // }
     
     if(this.tempConConfig._id.length > 0){
       this.subscriptionConConfig = this.connectorConfigService.getConnectorInfos(event[0].configType)
     .subscribe(conInfoList => {
       if (conInfoList) {
         this.conInfoList = conInfoList;
-        console.log(conInfoList)
         if(conInfoList.length == 1){
           this.selectedConfig = false;
           this.specificConfigSelected = true;
@@ -632,63 +632,77 @@ export class DesignComponent implements OnInit, OnDestroy {
     
   }
 
+  getConInfoByType(type){
+    this.subscriptionConConfig = this.connectorConfigService.getConInfoByType(type)
+    .subscribe(conInfo => {
+      if (conInfo) {
+      console.log(conInfo)
+      this.conInfoOfNoMetadata = conInfo;
+      this.addConfigParamsForNoMetatData();
+    }
+  });
+  }
+
   connectorSelected(conInfo){
-    console.log("update.....................")
-    console.log(conInfo)
-    
+   
     this.specificConfigSelected = true;
     this.selectedConInfo = conInfo;
-    this.configList = []
-    this.payloadList = []
+    this.configList = [];
+    this.payloadList = [];
+    this.typeConfigList = [];
     this.populateSelectedResponse()
 
-    // if(this.stateCreateMode){
-    //   this.populateSelectedResponse()
-    // }
-    if(!this.stateCreateMode){
-      if(this.tempState.taskConfig[0].configType == conInfo.type){
-    
-        this.conConfig.taskObject =  this.tempState.taskConfig[0].taskObject;
-      }
-      else{
-        this.conConfig.taskObject = new TaskObject()
-        this.conConfig.taskObject.responseList = [];
-        this.addResponse();
-        this.selectedResponse = this.conConfig.taskObject.responseList[0];
-      }
-    }
     if(this.isEmpty(conInfo.metaData) == false){
       for (const property in conInfo.metaData)
       {
         const map = new Map();
+        const typeMap = new Map();
+
         map.set('key', property);
+        typeMap.set('key', property);
+        typeMap.set('value',conInfo.metaData[property]["type"])
         if(conInfo.metaData[property]["mandatory"] == true){
           //entry.metaData['configMap'][property] = "";
           //mandatoryList.push(property);
         }
         if(this.stateCreateMode){
           map.set('value', "");
+          if (conInfo.metaData[property]["type"] == 'file'){
+            this.fileName = "Please upload a file"
+          }
         }
         else{
           let value = this.tempState.taskConfig[0].configMap[property];
           if(this.tempState.taskConfig[0].configType == conInfo.type){
+            if (conInfo.metaData[property]["type"] == 'file'){
+              let urlArr = value.split("/")
+              this.fileName = urlArr[urlArr.length - 1]
+            }
             map.set('value', value);
           }
           else{
             map.set('value', "");
+            this.fileName = "Please upload a file"
           }
         }
         this.configList.push(map);
+        this.typeConfigList.push(typeMap);
+
       }
     }
     else{
-      for (const property in this.tempConConfig.configMap)
-      {
-        const map = new Map();
-        map.set('key', property);
+      if(this.conInfoOfNoMetadata._id != null ){
+        if(this.conInfoOfNoMetadata.type == this.tempConConfig.configType){
+          this.addConfigParamsForNoMetatData();
+        }
+        else{
+          this.getConInfoByType(this.tempConConfig.configType)
+        }
         
-          map.set('value', this.tempConConfig.configMap[property] );
-          this.configList.push(map);
+      }
+      else{
+        this.getConInfoByType(this.tempConConfig.configType);
+        
       }
     }
 
@@ -718,16 +732,38 @@ export class DesignComponent implements OnInit, OnDestroy {
     
   }
 
+  addConfigParamsForNoMetatData(){
+    for (const property in this.tempConConfig.configMap)
+      {
+          const map = new Map();
+          const typeMap = new Map();
+          typeMap.set('key', property);
+          typeMap.set('value',this.conInfoOfNoMetadata.metaData[property]["type"])
+          map.set('key', property);
+          map.set('value', this.tempConConfig.configMap[property] );
+          this.configList.push(map);
+          this.typeConfigList.push(typeMap);
+      }
+  }
+
   addConfigParam() {
     const body = new Map();
+    const typeBody = new Map();
     body.set('key', '');
     body.set('value', '');
+    typeBody.set('key', '');
+    typeBody.set('value', 'string');
     this.configList.push(body);
+    this.typeConfigList.push(typeBody)
   }
   removeConfigBody(body: any) {
     if (body && this.configList && this.configList.includes(body)) {
       const index = this.configList.indexOf(body);
       this.configList.splice(index, 1);
+    }
+    if (body && this.typeConfigList && this.typeConfigList.includes(body)) {
+      const index = this.typeConfigList.indexOf(body);
+      this.typeConfigList.splice(index, 1);
     }
   }
 
@@ -846,8 +882,6 @@ export class DesignComponent implements OnInit, OnDestroy {
 
 
        removeResponse() {
-         console.log("]]]]]]]]]]]]]pppppppppppppppppp")
-         console.log(this.conConfig.taskObject.responseList)
           if (this.selectedResponse && this.conConfig.taskObject.responseList
             && this.conConfig.taskObject.responseList.includes(this.selectedResponse)) {
             const index = this.conConfig.taskObject.responseList.indexOf(this.selectedResponse);
@@ -863,7 +897,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         }
 
       populateSelectedResponse() {
-          if (this.tempConConfig && this.tempConConfig._id && this.tempConConfig._id.length > 0
+          if (this.conConfig && this.conConfig._id && this.conConfig._id.length > 0
             && this.conConfig.taskObject.responseList && this.conConfig.taskObject.responseList.length > 0) {
             this.selectedResponse = this.conConfig.taskObject.responseList[0];
           } else {
@@ -903,4 +937,60 @@ export class DesignComponent implements OnInit, OnDestroy {
               this.selectedResponse.keyExpressionList.splice(index, 1);
           }
         }
+
+//********************** File uplodaing *******************
+
+    fileEvent(event,config){
+    console.log(config)
+    const input = new FormData();
+    const file: File = event.target.files[0];
+    input.append("file",event.target.files[0])
+    input.append("fileName",file.name)
+    this.fileSelected = true;
+    this.selectedFile = input;
+    this.fileName = file.name;
+    // for (let config of this.requiredConfigList){
+    //   if (config.get('key') == "file-upload"){
+    //     config.set('value',file.name);
+    //   }
+    // }
+    this.upload(config);
+    
+  }
+
+  upload(config){
+    if (this.selectedFile) {
+      this.progressBarFlag = true;
+      showModal("fileUploadModel");
+      this.selectedFile.append("functionInstanceName", "emailTemplate");
+      this.selectedFile.append("entityType","templateUplaod");
+      this.selectedFile.append("entityRef", "emailTemplate");
+      this.subscription =  this.fileService.upload(this.selectedFile)
+
+        .subscribe (
+          response => {
+            if (response && response["url"] && response["fileName"]) {
+              let url = `${environment.interfaceService}` +  response["url"]
+              this.fileUploaded = true;
+              this.fileUploadedUrl = url;
+              for (const con of this.configList) {
+                if (con.get('key') && con.get('key').trim().length > 0 && con.get('key') == config.get('key')) {
+                  if (con && this.configList && this.configList.includes(con)) {
+                    const index = this.configList.indexOf(con);
+                    this.configList.splice(index, 1);
+                  }
+                  const body = new Map()
+                  body.set('key', config.get('key'));
+                  body.set('value',url)
+                  this.configList.push(body);
+                }
+              }
+              this.progressBarFlag = false;
+              closeModal("fileUploadModel");
+            }
+          })
+    }
+  }
+
+
 }
