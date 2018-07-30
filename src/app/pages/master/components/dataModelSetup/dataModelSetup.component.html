@@ -1,0 +1,22 @@
+<div class="widgets">
+    <div class="row">
+        <ba-card [cardTitle]="createMode ? 'Create Data Model' : 'Update Data Model'" baCardClass="with-scroll" class="data-table-container">
+            <div class="panel panel-default">
+                <form>
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" required placeholder="Name" [(ngModel)]="dataModel.name" name="name" />
+                    </div>
+                    <div class="form-group">
+                        <label>Label</label>
+                        <input type="text" class="form-control" required placeholder="Label" [(ngModel)]="dataModel.label" name="label" />
+                    </div>
+                </form>
+                <div class="panel-footer">
+                    <button type="button" class="btn btn-success" (click)="saveDataModel()">Save Data Model</button>
+                    <button *ngIf="!createMode" type="button" class="btn btn-danger" (click)="deleteDataModel()">Delete Data Model</button>
+                </div>
+            </div>
+        </ba-card>
+    </div>
+</div>

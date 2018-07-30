@@ -38,6 +38,7 @@ import { ErrorInterceptor, UnauthenticateInterceptor } from './services/intercep
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
+import { DataModelService } from './services/dataModel.service';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -59,7 +60,8 @@ const APP_PROVIDERS = [
   ApiDesignService,
   AnalyticsService,
   ScheduleTaskService,
-  AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService, UniversalUser, FileUploaderService
+  AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService, UniversalUser, FileUploaderService,
+  DataModelService
 ];
 
 export type StoreType = {

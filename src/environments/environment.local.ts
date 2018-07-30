@@ -69,8 +69,8 @@ export const environment = {
   rolesurl: 'master/roles',
   routesurl: 'master/routes',
   apiconfigurl: 'apiConfig/',
-
   supportedmethodsurl: 'apiConfig/supportedMethods',
+  dataModelUrl: 'dataModel/',
   
   connectorinfo:'connectors/',
   getallconconfig:'connectors/getAll/',
