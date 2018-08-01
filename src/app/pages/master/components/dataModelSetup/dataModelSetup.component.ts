@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { environment } from '../../../../../environments/environment';
 import { DataModelService } from '../../../../services/dataModel.service';
 import { AlertService, DataSharingService } from '../../../../services/shared.service';
-import { DataModel } from '../../../../models/dataModel.model';
+import { DataModel, Field } from '../../../../models/dataModel.model';
 
 @Component({
     selector: 'con-dataModelSetup',
@@ -15,11 +15,18 @@ import { DataModel } from '../../../../models/dataModel.model';
 export class DataModelSetupComponent implements OnInit, OnDestroy {
 
     private subscription: Subscription;
+    private subscriptionFieldTypes: Subscription;
     private dataModel: DataModel;
     private createMode: boolean;
+    private fieldTypeSource: string[]
 
     ngOnInit(): void {
         //TODO fetch validators and extractor list from server to populate drop downs
+        this.subscriptionFieldTypes = this.dataModelService.getFieldTypes().subscribe(fieldTypeSource => {
+            if (fieldTypeSource && fieldTypeSource.length > 0) {
+                this.fieldTypeSource = fieldTypeSource;
+            }
+        });
         const dataModel: DataModel = this.sharingService.getSharedObject();
         if (dataModel) {
             this.createMode = false;
@@ -82,5 +89,18 @@ export class DataModelSetupComponent implements OnInit, OnDestroy {
         } else {
             this.createDataModel();
         }
+    }
+
+    addField() {
+        if (this.dataModel.fields == null) {
+            this.dataModel.fields = [];
+        }
+        const index = this.dataModel.fields.length + 1;
+        this.dataModel.fields.push(new Field('field' + index, "Field " + index, index));
+    }
+
+    deleteField(field: Field) {
+        const index = this.dataModel.fields.indexOf(field);
+        this.dataModel.fields.splice(index, 1);
     }
 }

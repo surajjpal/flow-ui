@@ -11,6 +11,63 @@
                         <label>Label</label>
                         <input type="text" class="form-control" required placeholder="Label" [(ngModel)]="dataModel.label" name="label" />
                     </div>
+                    <br>
+                    <button type="button" class="btn btn-success" (click)="addField()">Add field</button>
+                    <br>
+                    <div id="fieldsAccordion" role="tablist" aria-multiselectable="true">
+                        <div *ngFor="let field of dataModel.fields; let index=index" class="panel">
+                            <div class="card">
+                                <div [id]="'fieldTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                                    <h5 class="mb-0">
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#fieldsAccordion" [href]="'#fieldCollapse' + index" aria-expanded="true"
+                                            [attr.aria-controls]="'fieldCollapse' + index">
+                                            {{'Click to expand ' + field.label}}
+                                        </a>
+                                    </h5>
+                                </div>
+                                <div [id]="'fieldCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'fieldTabHeading' + index">
+                                    <div class="card-block">
+                                        <form>
+                                            <div class="form-group">
+                                                <label class="col-md-12 col-sm-12 col-xs-12" required for="'fieldName' + index">
+                                                    Name
+                                                </label>
+                                                <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'fieldName' + index" placeholder="Name" [(ngModel)]="field.name"
+                                                    name="name" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-12 col-sm-12 col-xs-12" required for="'fieldLabel' + index">
+                                                    Label
+                                                </label>
+                                                <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'fieldLabel' + index" placeholder="Name" [(ngModel)]="field.label"
+                                                    name="label" />
+                                            </div>
+                                            <div class="form-group">
+                                                <api-checkbox [checked]="field.list" [label]="'Is this field a list?'" (event)="field.list = $event.target.checked"></api-checkbox>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-12 col-sm-12 col-xs-12" required for="'fieldSortOrder' + index">
+                                                    Sort Order
+                                                </label>
+                                                <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'fieldSortOrder' + index" placeholder="Sort Order"
+                                                    [(ngModel)]="field.sortOrder" name="sortOrder" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'fieldType' + index">
+                                                    Field type
+                                                </label>
+                                                <select class="selectpicker form-control" multiple="false" title="Select field type" [(ngModel)]="field.type"
+                                                    name="fieldType">
+                                                    <option *ngFor="let fieldType of fieldTypeSource" [ngValue]="fieldType">{{fieldType}}</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                        <button type="button" class="btn btn-danger" (click)="deleteField(field)">Delete field</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
                 <div class="panel-footer">
                     <button type="button" class="btn btn-success" (click)="saveDataModel()">Save Data Model</button>

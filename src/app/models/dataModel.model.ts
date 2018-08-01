@@ -9,6 +9,13 @@ export class Field extends BaseModel {
     dataModelId: string;
     list: boolean;
     sortOrder: number;
+
+    constructor(name: string, label: string, sortOrder: number) {
+        super();
+        this.name = name;
+        this.label = label;
+        this.sortOrder = sortOrder;
+    }
 }
 
 export class DataModel extends BaseModel {

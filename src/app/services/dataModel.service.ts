@@ -133,4 +133,31 @@ export class DataModelService {
 
 		return subject.asObservable();
 	}
+
+	getFieldTypes(): Observable<string[]> {
+		const subject = new Subject<string[]>();
+
+		const url = `${environment.server + environment.fieldTypesUrl}`;
+
+		this.httpClient.get<string[]>(
+			url,
+			{
+				observe: 'response',
+				reportProgress: true,
+				withCredentials: true
+			}
+		)
+			.subscribe(
+				(response: HttpResponse<string[]>) => {
+					if (response.body) {
+						subject.next(response.body);
+					}
+				},
+				(err: HttpErrorResponse) => {
+					subject.error(err);
+				}
+			);
+
+		return subject.asObservable();
+	}
 }
