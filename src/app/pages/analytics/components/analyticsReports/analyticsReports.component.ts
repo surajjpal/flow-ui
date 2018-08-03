@@ -20,6 +20,8 @@ import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 })
 export class AnalyticsReportsComponent implements OnInit, OnDestroy {
 
+    filterQuery: string = '';
+
     analyticsReports: AnalyticsReport[];
     definedAgents: Agent[];
     selectedAnalyticsReport: AnalyticsReport;
@@ -76,7 +78,7 @@ export class AnalyticsReportsComponent implements OnInit, OnDestroy {
         return "";
     }
 
-    onAnalyticsReportSelect(analyticsReport: AnalyticsReport) {
+    onAnalyticsReportSelect(analyticsReport?: AnalyticsReport) {
         if (analyticsReport) {
             this.selectedAnalyticsReport = analyticsReport;
           } else {
