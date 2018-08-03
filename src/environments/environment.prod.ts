@@ -11,10 +11,11 @@ export const environment = {
   // Services
   saveaccounturl: 'https://flow.automatapi.io/flow/account/create',
   fetchaccountbyidurl: 'https://flow.automatapi.io/flow/account/',
-
+  publishaccounturl:'https://flow.automatapi.io/flow/account/publish/',
+  unpublishaccounturl:'https://flow.automatapi.io/flow/account/unpublish/',
   // Interfaces
-  interfaceService: 'http://flow.automatapi.io/flow/interfaces',
-  updateClassifierTraining : 'http://flow.automatapi.io/flow/interfaces/auto_decorate_training',
+  interfaceService: 'https://flow.automatapi.io/flow/interfaces',
+  updateClassifierTraining : 'https://flow.automatapi.io/flow/interfaces/auto_decorate_training',
   updateIntentTraining: 'https://flow.automatapi.io/flow/interfaces/intent_classification_training',
   updateEntityTraining: 'https://flow.automatapi.io/flow/interfaces/entity_classification_training',
 
@@ -99,6 +100,15 @@ export const environment = {
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
+  // Analytics
+  reportservice: 'https://flow.automatapi.io/flow/report',
+  sendReportUrl: '/reports/analyticsreport/sendreport',
+  scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
+  getAnalyticsReports: "/reports/analyticsreport",
+
+  // Schedule
+  scheduleTaskConfiguration: "api/schedule/",
+  
   // file upload download service
   fileUploadUrl: '/api/uploadData',
   fileDownloadUrl: '/api/downloadData',

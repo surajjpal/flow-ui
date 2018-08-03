@@ -11,6 +11,8 @@ export const environment = {
   // Services
   saveaccounturl: 'http://localhost:8080/flow/account/create',
   fetchaccountbyidurl: 'http://localhost:8080/flow/account/',
+  publishaccounturl:'http://localhost:8080/flow/account/publish/',
+  unpublishaccounturl:'http://localhost:8080/flow/account/unpublish/',
 
   // Interfaces
   interfaceService: 'http://localhost:8080/flow/interfaces',
@@ -103,6 +105,15 @@ export const environment = {
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
+  // Analytics
+  reportservice: 'http://localhost:8080/flow/report',
+  sendReportUrl: '/reports/analyticsreport/sendreport',
+  scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
+  getAnalyticsReports: "/reports/analyticsreport",
+
+  // Schedule
+  scheduleTaskConfiguration: "api/schedule/",
+  
   // file upload download service
   fileUploadUrl: '/api/uploadData',
   fileDownloadUrl: '/api/downloadData',

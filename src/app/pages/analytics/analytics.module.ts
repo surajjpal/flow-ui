@@ -1,0 +1,28 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DataTableModule } from 'angular2-datatable';
+import { TagInputModule } from 'ngx-chips';
+import { Daterangepicker } from 'ng2-daterangepicker';
+import * as moment from 'moment/moment';
+import { AnalyticsComponent } from './analytics.component';
+import { AnalyticsReportSetupComponent } from './components/analyticsReportSetup/analyticsReportSetup.component';
+import { AnalyticsReportsComponent } from './components/analyticsReports/analyticsReports.component';
+import { routing } from './analytics.routing';
+import { DateRangePickerComponent } from './components/analyticsReportSetup/daterangepicker/daterangepicker.component';
+import { NgaModule } from '../../theme/nga.module';
+import { SharedModule } from 'app/shared/shared.module';
+
+
+
+@NgModule({
+    imports : [
+        
+    ],
+    declarations: [
+        //AnalyticsComponent
+        
+    ]
+})
+export class AnalyticsModule {}

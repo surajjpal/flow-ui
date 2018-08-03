@@ -5,7 +5,7 @@ import { Account } from '../../../../models/account.model';
 import { User } from '../../../../models/user.model';
 import { AccountService } from '../../../../services/setup.service';
 import { AuthService } from '../../../../services/auth.service';
-import { AlertService } from '../../../../services/shared.service';
+import { AlertService,DataSharingService } from '../../../../services/shared.service';
 
 @Component({
   selector: 'api-agent-account',
@@ -14,19 +14,28 @@ import { AlertService } from '../../../../services/shared.service';
 export class AccountCreationComponent implements OnInit, OnDestroy {
 
   account: Account;
-
+  createMode: boolean;
+  
   private subscription: Subscription;
 
   constructor(
     private accountService: AccountService,
     private authService: AuthService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private sharingService: DataSharingService
   ) {
     this.account = new Account();
   }
 
   ngOnInit(): void {
-
+    const account: Account = this.sharingService.getSharedObject();
+    if (account) {
+      this.createMode = false;
+      this.account = account;  
+    } else {
+      this.createMode = true;
+      this.account = new Account();
+    }
   }
 
   ngOnDestroy(): void {
@@ -36,13 +45,29 @@ export class AccountCreationComponent implements OnInit, OnDestroy {
   }
 
   createAccount() {
+    if(this.createMode)
+    {
     this.subscription = this.accountService.saveAccount(this.account)
       .subscribe(response => {
         if (response && response._id) {
-          this.createUserForCompany(response);
+            this.createUserForCompany(response);
+          
         }
       });
+    }
+    else{
+      this.subscription = this.accountService.updateAccount(this.account)
+      .subscribe(response => {
+        if (response && response._id) {
+            this.createUserForCompany(response);
+          
+        }
+      });
+    }
   }
+
+  
+  
 
   createUserForCompany(account: Account) {
     const map = {};
