@@ -329,11 +329,18 @@
 
                     <div class="form-group col-md-3 col-sm-6" style="margin-bottom: 10px;" *ngFor="let dataPoint of dataPoints; let index = index">
                       <label *ngIf="index % 2 === 0 && dataPoint.dataType !== 'ANY'">{{dataPoint.dataPointLabel}} :</label>
-
+<!--
                       <input *ngIf="index % 2 === 1 && (dataPoint.dataType === '' || dataPoint.dataType === 'STRING')" type="text" class="form-control col-md-12 col-sm-12"
                         [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
                       />
+-->
 
+			<img *ngIf="index % 2 === 1 && (dataPoint.dataType === '' || dataPoint.dataType === 'STRING') && (dataPoint.dataPointLabel === 'Attachment 1' || dataPoint.dataPointLabel === 'Attachment 2')" class="form-control col-md-6 col-sm-6"
+                        [src]="dataPoint.value">
+
+                      <input *ngIf="index % 2 === 1 && (dataPoint.dataType === '' || dataPoint.dataType === 'STRING') && dataPoint.dataPointLabel !== 'Attachment 1' && dataPoint.dataPointLabel !== 'Attachment 2'" type="text" class="form-control col-md-12 col-sm-12"
+                        [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
+                      />
                       <input *ngIf="index % 2 === 1 && dataPoint.dataType === 'NUMBER'" type="number" class="form-control col-md-12 col-sm-12"
                         [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
                         onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
