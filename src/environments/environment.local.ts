@@ -11,6 +11,8 @@ export const environment = {
   // Services
   saveaccounturl: 'http://localhost:8080/flow/account/create',
   fetchaccountbyidurl: 'http://localhost:8080/flow/account/',
+  publishaccounturl:'http://localhost:8080/flow/account/publish/',
+  unpublishaccounturl:'http://localhost:8080/flow/account/unpublish/',
 
   // Interfaces
   interfaceService: 'http://localhost:8080/flow/interfaces',
@@ -70,6 +72,10 @@ export const environment = {
 
   supportedmethodsurl: 'apiConfig/supportedMethods',
   
+  connectorinfo:'connectors/',
+  getallconconfig:'connectors/getAll/',
+  deleteconconfig:'connectors/delete/',
+  saveconconfig:'connectors/save/',
 
 
   // Auto
@@ -93,16 +99,21 @@ export const environment = {
   updateentityurl: 'update/entityclassifier',
   deleteentityurl: 'delete/entityclassifier?query=',
 
-  savedomainurl: 'domain',
-  fetchdomainurl: 'fetchdomain?query=',
-  saveagenturl: 'agent',
-  fetchagenturl: 'fetchagent?query=',
   fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
   uploadintentexcelurl: 'uploadintents',
   uploadentityexcelurl: 'uploadentity',
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
+  // Analytics
+  reportservice: 'http://localhost:8080/flow/report',
+  sendReportUrl: '/reports/analyticsreport/sendreport',
+  scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
+  getAnalyticsReports: "/reports/analyticsreport",
+
+  // Schedule
+  scheduleTaskConfiguration: "api/schedule/",
+  
   // file upload download service
   fileUploadUrl: '/api/uploadData',
   fileDownloadUrl: '/api/downloadData',

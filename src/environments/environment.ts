@@ -16,7 +16,8 @@ export const environment = {
   // Services
   saveaccounturl: 'http://108.168.190.82:8080/flow/services/saveaccount',
   fetchaccountbyidurl: 'http://108.168.190.82:8080/flow/services/fetchaccountbyid?query=',
-
+  publishaccounturl:'http://108.168.190.82:8080/flow/services/publish/',
+  unpublishaccounturl:'http://108.168.190.82:8080/flow/services/unpublish/',
   // Interfaces
   interfaceService: 'http://108.168.190.82:8080/flow/interfaces',
   updateClassifierTraining : 'http://108.168.190.82:8080/flow/interfaces/auto_decorate_training',
@@ -71,6 +72,12 @@ export const environment = {
   apiconfigurl: 'apiConfig/',
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
+  connectorinfo:'connectors/',
+  getallconconfig:'connectors/getAll/',
+  deleteconconfig:'connectors/delete/',
+  saveconconfig:'connectors/save/',
+
+
   // auto
   autoServer: 'http://108.168.190.82:8080/flow/auto/',
   episodelisturl: 'load/episodes?query=',
@@ -92,16 +99,21 @@ export const environment = {
   updateentityurl: 'update/entityclassifier',
   deleteentityurl: 'delete/entityclassifier?query=',
 
-  savedomainurl: 'domain',
-  fetchdomainurl: 'fetchdomain?query=',
-  saveagenturl: 'agent',
-  fetchagenturl: 'fetchagent?query=',
   fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
   uploadintentexcelurl: 'uploadintents',
   uploadentityexcelurl: 'uploadentity',
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
+  // Analytics
+  reportservice: 'http://localhost:8080/flow/report',
+  sendReportUrl: '/reports/analyticsreport/sendreport',
+  scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
+  getAnalyticsReports: "/reports/analyticsreport",
+
+  // Schedule
+  scheduleTaskConfiguration: "api/schedule/",
+  
   // file upload download service
   fileUploadUrl: '/api/uploadData',
   fileDownloadUrl: '/api/downloadData',

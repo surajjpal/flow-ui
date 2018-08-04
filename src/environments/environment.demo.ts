@@ -11,7 +11,9 @@ export const environment = {
     // Services
     saveaccounturl: 'https://flow.automatapi.com/flow/account/create',
     fetchaccountbyidurl: 'https://flow.automatapi.com/flow/account/',
-  
+    publishaccounturl:'https://flow.automatapi.com/flow/account/publish/',
+    unpublishaccounturl:'https://flow.automatapi.com/flow/services/unpublish/',
+
     // Interfaces
     interfaceService: 'https://flow.automatapi.com/flow/interfaces',
     updateClassifierTraining : 'https://flow.automatapi.com/flow/interfaces/auto_decorate_training',
@@ -66,7 +68,12 @@ export const environment = {
     routesurl: 'master/routes',
     apiconfigurl: 'apiConfig/',
     supportedmethodsurl: 'apiConfig/supportedMethods',
-  
+
+    connectorinfo:'connectors/',
+    getallconconfig:'connectors/getAll/',
+    deleteconconfig:'connectors/delete/',
+    saveconconfig:'connectors/save/',
+    
     // auto
     autoServer: 'https://flow.automatapi.com/flow/auto/',
     episodelisturl: 'load/episodes?query=',
@@ -88,15 +95,20 @@ export const environment = {
     updateentityurl: 'update/entityclassifier',
     deleteentityurl: 'delete/entityclassifier?query=',
   
-    savedomainurl: 'domain',
-    fetchdomainurl: 'fetchdomain?query=',
-    saveagenturl: 'agent',
-    fetchagenturl: 'fetchagent?query=',
     fetchresponse: 'fetchresponse?', // fetchresponse?intentName=information&entityName=policy is actual url
     uploadintentexcelurl: 'uploadintents',
     uploadentityexcelurl: 'uploadentity',
     modelkeyslookupurl: 'load/modelkeys',
     validationtypekeyslookupurl: 'load/validations',
+
+    // Analytics
+    reportservice: 'https://flow.automatapi.com/flow/report',
+    sendReportUrl: '/reports/analyticsreport/sendreport',
+    scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
+    getAnalyticsReports: "/reports/analyticsreport",
+
+    // Schedule
+    scheduleTaskConfiguration: "api/schedule/",
 
     // file upload download service
     fileUploadUrl: '/api/uploadData',

@@ -1,0 +1,351 @@
+<div class="widgets">
+  <div class="row">
+    <ba-card [cardTitle]="createMode ? 'Create Connector Configuration' : 'Update Connector Configuration'" baCardClass="with-scroll" class="data-table-container">
+      <div class="panel panel-default">
+        <form>
+          <div class="form-group">
+            <label>Configuration Name</label>
+            <input type="text" class="form-control" required placeholder="name" [(ngModel)]="conConfig.configName" name="name" />
+          </div>
+          <div class="form-group">
+            <label>Type</label>
+            <select class="selectpicker form-control" required id="selectRootUser" ng-disabled="!createMode" title="Choose Connector" [(ngModel)]="conConfig.configType" name="connector" [ngModelOptions]="{standalone: true}" (ngModelChange)="onConfigSelect($event)">
+                <option *ngFor="let connector of Connectors" [ngValue]="connector">{{connector}}</option>
+              </select>
+          </div>
+          <div *ngIf="selected">
+              <div class="form-group">
+                  <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" data-toggle="tab" href="#tab_config" role="tab" aria-expanded="true">Configuration</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#tab_response" role="tab">Response</a>
+                    </li>
+                  </ul>
+                <div class="tab-content">
+                  <div role="tabpanel" class="tab-pane fade show active" id="tab_config">
+                    <table class="table" [mfData]="configList" #mfConfigs="mfDataTable" [mfRowsOnPage]="10">
+                        <thead>
+                          <tr>
+                            <th>Action</th>
+                            <th>Key</th>
+                            <th>Value</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let config of mfConfigs.data">
+                            <td >
+                              <button type="button" class="btn btn-danger" title="Delete" (click)="removeBody(config)" ><i class="ion-close-round"></i></button>
+                            </td>
+                            <td >
+                              <input type="text" class="form-control" placeholder="Key" [value]="config.get('key')" (input)="config.set('key', $event.target.value)"/>
+                            </td>
+                            <td>
+                              <input type="text" class="form-control" placeholder="Value" [value]="config.get('value')"  (input)="config.set('value', $event.target.value)" />
+                            </td >
+                          </tr>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <td colspan="2">
+                              <mfBootstrapPaginator ></mfBootstrapPaginator>
+                            </td>
+                            <td colspan="1" style="text-align: right;">
+                              <button type="button" class="btn btn-primary" (click)="addParam()">Add Param</button>
+                            </td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                      <table class="table" [mfData]="requiredConfigList" #mfRequired="mfDataTable" [mfRowsOnPage]="10">
+                          <thead>
+                            <tr>
+                              <th>Action</th>
+                              <th>Value</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let r of mfRequired.data">
+                              <td *ngIf="r.get('key')=='file-upload'">
+                                <label for="file-upload" class="custom-file-upload">
+                                  <i class="fa fa-cloud-upload"></i> Upload File
+                                </label>
+                                <input id="file-upload" type="file" (change)=fileEvent($event)/>
+                              </td>
+                              <td *ngIf="r.get('key')=='file-upload'">
+                                <input type="text" class="form-control" [disabled]='true' placeholder="please upload a file" [value]="r.get('value')" />
+                              </td>
+                            </tr>
+                          </tbody>
+                          <tfoot>
+                            <tr>
+                              <td colspan="2">
+                                <mfBootstrapPaginator></mfBootstrapPaginator>
+                              </td>
+                            </tr>
+                          </tfoot>
+                        </table>
+                      </div>
+                      <div role="tabpanel" class="tab-pane fade" id="tab_response">
+                          <div id="responseAccordion" role="tablist" aria-multiselectable="true" *ngIf="conConfig.responseList.length > 0">
+                            <div *ngFor="let response of conConfig.responseList; let index=index" class="panel">
+                              <div class="card">
+                                <div *ngIf="index == 0" [id]="'responseTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                                  <h5 class="mb-0">
+                                    <a data-toggle="collapse" data-parent="#responseAccordion" [href]="'#responseCollapse' + index" aria-expanded="true" [attr.aria-controls]="'responseCollapse' + index"
+                                      (click)="selectedResponse=response">
+                                      Response for status {{response.responseCode}}
+                                    </a>
+                                  </h5>
+                                </div>
+                                <div *ngIf="index != 0" [id]="'responseTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                                  <h5 class="mb-0">
+                                    <a class="collapsed" data-toggle="collapse" data-parent="#responseAccordion" [href]="'#responseCollapse' + index" aria-expanded="false"
+                                      [attr.aria-controls]="'responseCollapse' + index" (click)="selectedResponse=response">
+                                      Response for status {{response.responseCode}}
+                                    </a>
+                                  </h5>
+                                </div>
+                  
+                                <div *ngIf="index == 0" [id]="'responseCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'responseTabHeading' + index">
+                                  <div class="card-block">
+          
+                                    <form>
+                                      <div class="form-group">
+                                        <label>Status Code</label>
+                                        <input type="text" class="form-control" placeholder="Status Code" [(ngModel)]="response.responseCode" name="responseCode" />
+                                      </div>
+                                      <div class="form-group">
+                                        <label>Response Type</label>
+                                        <select class="selectpicker form-control" title="Select response type" [(ngModel)]="response.responseType" name="responseType">
+                                          <option *ngFor="let responseType of responseTypeSource" [value]="responseType">{{responseType}}</option>
+                                        </select>
+                                      </div>
+                                      <div class="form-group" *ngIf="response.responseType === 'PARAM'">
+                                        <label>Params to select</label>
+                                        <select (onchange)="onResponseTypeChange()" class="selectpicker form-control" title="Choose params to select" [(ngModel)]="response.paramsToSelect" name="paramsToSelect">
+                                          <option *ngFor="let paramsToSelect of paramsToSelectSource" [value]="paramsToSelect">{{paramsToSelect}}</option>
+                                        </select>
+                                      </div>
+                                      <div class="form-group" *ngIf="response.responseType === 'PAYLOAD'">
+                                        <label>Key to save payload</label>
+                                        <input type="text" class="form-control" placeholder="Key to save payload" [(ngModel)]="response.keyExpressionList[0].key" name="key" />
+                                      </div>
+                                      <div class="form-group">
+                                        <form class="row form-inline">
+                                          <div class="form-group col-sm-2">
+                                            <button type="button" class="btn btn-primary" (click)="cloneResponse()">Clone Response</button>
+                                          </div>
+                                          <div class="form-group col-sm-2 offset-sm-8">
+                                            <button type="button" class="btn btn-danger" (click)="removeResponse()">Remove Response</button>
+                                          </div>
+                                        </form>
+                                      </div>
+                                    </form>
+                                    <br>
+                                    
+                                    <table *ngIf="response.responseType === 'PARAM' && response.paramsToSelect === 'SELECTIVE'" class="table" [mfData]="response.keyExpressionList" [mfRowsOnPage]="5">
+                                      <thead>
+                                        <tr>
+                                          <th>Action</th>
+                                          <th>Key to save param</th>
+                                          <th>Expression</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr *ngFor="let expressionMap of response.keyExpressionList">
+                                          <td>
+                                            <button type="button" class="btn btn-danger" title="Delete" (click)="removeExpression(expressionMap)"><i class="ion-close-round"></i></button>
+                                          </td>
+                                          <td>
+                                            <input type="text" class="form-control" placeholder="Key" [value]="expressionMap.key" (input)="expressionMap.key = $event.target.value">
+                                          </td>
+                                          <td>
+                                            <input type="text" class="form-control" placeholder="Expression" [value]="expressionMap.expression" (input)="expressionMap.expression = $event.target.value"/>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                      <tfoot>
+                                        <tr>
+                                          <td colspan="2">
+                                            <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                                          </td>
+                                          <td colspan="1" style="text-align: right;">
+                                            <button type="button" class="btn btn-primary" (click)="addExpression()">Add Expression</button>
+                                          </td>
+                                        </tr>
+                                      </tfoot>
+                                    </table>
+          
+                                  </div>
+                                </div>
+                                <div *ngIf="index != 0" [id]="'responseCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'responseTabHeading' + index">
+                                  <div class="card-block">
+                                      
+                                    <form>
+                                      <div class="form-group">
+                                        <label>Status Code</label>
+                                        <input type="text" class="form-control" placeholder="Status Code" [(ngModel)]="response.responseCode" name="responseCode" />
+                                      </div>
+                                      <div class="form-group">
+                                        <label>Response Type</label>
+                                        <select class="selectpicker form-control" title="Select response type" [(ngModel)]="response.responseType" name="responseType">
+                                          <option *ngFor="let responseType of responseTypeSource" [value]="responseType">{{responseType}}</option>
+                                        </select>
+                                      </div>
+                                      <div class="form-group" *ngIf="response.responseType === 'PARAM'">
+                                        <label>Params to select</label>
+                                        <select (onchange)="onResponseTypeChange()" class="selectpicker form-control" title="Choose params to select" [(ngModel)]="response.paramsToSelect" name="paramsToSelect">
+                                          <option *ngFor="let paramsToSelect of paramsToSelectSource" [value]="paramsToSelect">{{paramsToSelect}}</option>
+                                        </select>
+                                      </div>
+                                      <div class="form-group" *ngIf="response.responseType === 'PAYLOAD'">
+                                        <label>Key to save payload</label>
+                                        <input type="text" class="form-control" placeholder="Key to save payload" [(ngModel)]="response.keyExpressionList[0].key" name="key" />
+                                      </div>
+                                      <div class="form-group">
+                                        <form class="row form-inline">
+                                          <div class="form-group col-sm-2">
+                                            <button type="button" class="btn btn-primary" (click)="cloneResponse()">Clone Response</button>
+                                          </div>
+                                          <div class="form-group col-sm-2 offset-sm-8">
+                                            <button type="button" class="btn btn-danger" (click)="removeResponse()">Remove Response</button>
+                                          </div>
+                                        </form>
+                                      </div>
+                                    </form>
+                                    <br>
+                                    
+                                    <table *ngIf="response.responseType === 'PARAM' && response.paramsToSelect === 'SELECTIVE'" class="table" [mfData]="response.keyExpressionList" [mfRowsOnPage]="5">
+                                      <thead>
+                                        <tr>
+                                          <th>Action</th>
+                                          <th>Key to save param</th>
+                                          <th>Expression</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr *ngFor="let expressionMap of response.keyExpressionList">
+                                          <td>
+                                            <button type="button" class="btn btn-danger" title="Delete" (click)="removeExpression(expressionMap)"><i class="ion-close-round"></i></button>
+                                          </td>
+                                          <td>
+                                            <input type="text" class="form-control" placeholder="Key" [value]="expressionMap.key" (input)="expressionMap.key = $event.target.value">
+                                          </td>
+                                          <td>
+                                            <input type="text" class="form-control" placeholder="Expression" [value]="expressionMap.expression" (input)="expressionMap.expression = $event.target.value"/>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                      <tfoot>
+                                        <tr>
+                                          <td colspan="2">
+                                            <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                                          </td>
+                                          <td colspan="1" style="text-align: right;">
+                                            <button type="button" class="btn btn-primary" (click)="addExpression()">Add Expression</button>
+                                          </td>
+                                        </tr>
+                                      </tfoot>
+                                    </table>
+          
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row col-sm-12">
+                            <button type="button" class="btn btn-primary" (click)="addResponse()">Add Response</button>
+                          </div>
+                        </div>
+                  </div>
+              </div>
+          </div>
+        </form>
+        <div class="panel-footer" *ngIf="selected">
+          <button type="button" class="btn btn-success" (click)="saveConnectorConfiguration()">Save Connector Configuration</button>
+          <button *ngIf="!createMode" type="button" class="btn btn-danger" (click)="deleteConnectorConfig()">Delete Connector Configuration</button>
+        </div>
+    </div>
+  </ba-card>
+ </div>
+</div>
+
+
+
+
+<!-- Warning Modal -->
+<div class="modal fade" id="fileUploadModel" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="warningLabel">
+          {{"File Upload"}}
+        </h4>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        {{'Uploading file please wait....'}}
+        
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer" *ngIf="uploadSucess">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="validationModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="warningLabel">
+          {{"Warning"}}
+        </h4>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        {{"Sorry cannot save configuration without: "}}
+        <br>
+        <br>
+        {{notSatisfiedDataPoints}}
+        
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="fileNotUploaded" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="warningLabel">
+          {{"Warning"}}
+        </h4>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        {{"Please upload a template file"}}
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+      </div>
+    </div>
+  </div>
+</div>

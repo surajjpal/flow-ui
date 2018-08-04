@@ -1,0 +1,8 @@
+<div class="btn-group flex-dropdown dropdown" daterangepicker [options]="rangePickerOptions" (selected)="onRangeSelect($event)">
+    <button class="btn btn-default" type="button" style="background: white">
+        {{ dateRange.start | date:'dd/MM/y HH:mm:ss' }} - {{ dateRange.end| date:'dd/MM/y HH:mm:ss' }}
+    </button>
+    <button class="btn btn-default" type="button" aria-expanded="false" style="background: white">
+        <i class="ion ion-android-calendar"></i>
+    </button>
+</div>
