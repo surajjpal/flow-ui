@@ -34,17 +34,27 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let config of mfConfigs.data">
-                            <td >
-                              <button type="button" class="btn btn-danger" title="Delete" (click)="removeBody(config)" ><i class="ion-close-round"></i></button>
-                            </td>
-                            <td >
-                              <input type="text" class="form-control" placeholder="Key" [value]="config.get('key')" (input)="config.set('key', $event.target.value)"/>
-                            </td>
-                            <td>
-                              <input type="text" class="form-control" placeholder="Value" [value]="config.get('value')"  (input)="config.set('value', $event.target.value)" />
-                            </td >
-                          </tr>
+                            <tr *ngFor="let config of mfConfigs.data; let i = index" [attr.data-index]="i">
+                                <td >
+                                  <button type="button" class="btn btn-danger" title="Delete" (click)="removeBody(config)" ><i class="ion-close-round"></i></button>
+                                </td>
+                                <td>
+                                  <input type="text" class="form-control" placeholder="Key" [value]="config.get('key')" (input)="config.set('key', $event.target.value)"/>
+                                </td>
+                                <!-- <td *ngIf="typeConfigList[i].get('value') == 'file'">
+                                
+                                </td> -->
+                                <td *ngIf="typeConfigList[i].get('value') == 'string'">
+                                  <input type="text" class="form-control" placeholder="Value" [value]="config.get('value')"  (input)="config.set('value', $event.target.value)" />
+                                </td >
+                                <td *ngIf="typeConfigList[i].get('value') == 'file'">
+                                    <label for="file-upload" class="custom-file-upload">
+                                        <i class="fa fa-cloud-upload"></i> {{createMode ? 'Upload File ' : 'Upload New File'}}
+                                      </label>
+                                      <label>{{fileName}}</label>
+                                      <input id="file-upload" type="file" (change)=fileEvent($event,config)/>
+                                </td>
+                              </tr>
                         </tbody>
                         <tfoot>
                           <tr>

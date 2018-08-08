@@ -19,6 +19,7 @@ import { ApiConfig,ConnectorInfo,ConnectorConfig, ApiResponse,ApiKeyExpressionMa
 
 export class ConConfigSetupComponent implements OnInit, OnDestroy {
   configList: any[];
+  typeConfigList:any[];
   requiredConfigList:any[];
   filterQuery: string;
   selectedApiConfig: ApiConfig;
@@ -43,7 +44,13 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
   selectedResponse:ApiResponse;
   responseTypeSource: string[];
   paramsToSelectSource: string[];
+  mainConfigTypeMap:any;
+  conInfoOfNoMetadata:ConnectorInfo;
+  fileName:string;
+
+
   private subscription: Subscription;
+  private subscriptionConConfig: Subscription;
   
 
   constructor(
@@ -57,9 +64,11 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
   ) {
     this.selectedFile = new FormData();
     this.configList = [];
+    this.typeConfigList = [];
     this.requiredConfigList = [];
     this.mainMandatoryMap = {};
     this.mainConfigMap = {};
+    this.mainConfigTypeMap = {};
     this.requiredMap = {};
     this.requiredList = {};
     this.requiredConfig = {};
@@ -81,7 +90,9 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
       this.conConfig = conConfig;  
       this.conInfo.displayName =conConfig.displayName;
       this.populateConnector(conConfig);
+      
     } else {
+      this.fileName = "Please upload a file"
       this.createMode = true;
       this.conConfig = new ConnectorConfig();
       this.getConnecterInfo();
@@ -101,13 +112,20 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
           this.connectorsInfo = connectorInfos;
           for (let entry of connectorInfos) {
             const configList = [];
-            const mandatoryList = []
+            const mandatoryList = [];
+            const typeConfigList = [];
             if (!entry.taskType){
               this.Connectors.push(entry);
             }
              // 1, "string", false
             for (const property in entry.metaData)
             {
+              const typeMap = new Map();
+
+       
+              typeMap.set('key', property);
+              typeMap.set('value',entry.metaData[property]["type"])
+              typeConfigList.push(typeMap);
               const map = new Map();
               map.set('key', property);
               if(entry.metaData[property]["mandatory"] == true){
@@ -119,9 +137,7 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
             }
             this.mainConfigMap[entry.type] = configList;
             this.mainMandatoryMap[entry.type] = mandatoryList;
-
-            
-            
+            this.mainConfigTypeMap[entry.type] = typeConfigList;       
         }
         
          }
@@ -208,13 +224,17 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
           }
         }
       });
-    for (const property in conConfig.configMap)
-    {
-      const map = new Map();
-      map.set('key', property);
-      map.set('value', conConfig.configMap[property]);
-      this.configList.push(map);
-    }
+    
+    this.getConInfoByType(conConfig)
+    // for (const property in conConfig.configMap)
+    // {
+    //   const map = new Map();
+    //   map.set('key', property);
+    //   map.set('value', conConfig.configMap[property]);
+    //   this.configList.push(map);
+      
+      
+    // }
     // for (const property in conConfig.requiredConfigMap)
     // {
     //   const newmap = new Map();
@@ -227,9 +247,41 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
 
   }
 
+  addConfigParamsForNoMetatData(conConfig){
+    for (const property in conConfig.configMap)
+      {
+          console.log(conConfig);
+          console.log(this.conInfoOfNoMetadata);
+          const map = new Map();
+          const typeMap = new Map();
+          typeMap.set('key', property);
+          typeMap.set('value',this.conInfoOfNoMetadata.metaData[property]["type"])
+          map.set('key', property);
+          map.set('value', conConfig.configMap[property] );
+          this.configList.push(map);
+          this.typeConfigList.push(typeMap);
+          if(this.conInfoOfNoMetadata.metaData[property]["type"] == "file"){
+            let urlArr = conConfig.configMap[property].split("/")
+            this.fileName = urlArr[urlArr.length - 1]
+          }
+      }
+  }
+
+  getConInfoByType(config){
+    this.subscriptionConConfig = this.connectorConfigService.getConInfoByType(config.configType)
+    .subscribe(conInfo => {
+      if (conInfo) {
+      console.log(conInfo)
+      this.conInfoOfNoMetadata = conInfo;
+      this.addConfigParamsForNoMetatData(config);
+    }
+  });
+  }
+
   onConfigSelect(con){
     this.conConfig.displayName = con.displayName;
-    this.configList = this.mainConfigMap[con.type]
+    this.configList = this.mainConfigMap[con.type];
+    this.typeConfigList = this.mainConfigTypeMap[con.type];
     // for (const property in this.requiredConfig[con]){
     //   const map = new Map();
     //   map.set('key', property);
