@@ -12,6 +12,7 @@
                 <li class="nav-item">
                     <a class="nav-link" id="businessObjectApiTab" data-toggle="tab" href="#businessObjectApiContent" role="tab" aria-controls="businessObjectapi">Business Object API</a>
                 </li>
+               
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane fade show active" id="businessObjectContent" aria-labelledby="businessObjectTab">
@@ -129,7 +130,19 @@
                                 <label>API: </label>
                                 <span> {{ apiEndPoint }}</span>
                             </div>
+                            <textarea style="width:100%; height:300px;" [(ngModel)]="testRequestData" name="testRequestData">{{ testRequestData }}</textarea>
+                            
                         </form>
+                        <div *ngIf="testRequestdataResult != null && testRequestdataResult">
+                            <label>Result: </label>
+                            <pre>{{ testRequestdataResult | json }} </pre>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-primary pull-right" (click)="testPredictRequestData()">
+                                Test
+                            </button>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
