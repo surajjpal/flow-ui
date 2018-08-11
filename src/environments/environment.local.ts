@@ -145,5 +145,8 @@ export const environment = {
   dashboardinterface: 'http://localhost:8080/flow/interfaces/dashboard',
 
   //CRUD API path - To be used in conjunction with interfaceService property
-  crudFunction : '/crud'
+  crudFunction : '/crud',
+
+  // activity monitor services
+  businessDataPointValues: 'businessactivitymanagement/datapointvalues'
 };
