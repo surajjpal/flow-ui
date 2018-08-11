@@ -64,7 +64,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   sourceEvents: EventModel[] = [];
   sourceDataTypes: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT', 'ARRAY', 'ANY'];
   sourceTimerUnitList: string[] = [];
-
+  graphtypList = [ null,"PIE_CHART", "BAR_GRAPH"];
+  
   // Models to bind with html
   bulkEdit: boolean = false;
   readOnly: boolean;
@@ -529,4 +530,17 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.selectedEvent = null;
     this.bulkExpressions = '';
   }
+
+  onAddChildDataPoint(dataPoint: DataPoint) {
+    dataPoint.childdataPoints.push(new DataPoint());
+  }
+
+  deleteChildDataPoint(data, childDataPoint) {
+    const index: number = data.indexOf(childDataPoint);
+    if (index !== -1) {
+      data.splice(index, 1);
+    }
+  }
+
+  
 }

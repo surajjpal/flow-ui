@@ -323,7 +323,7 @@
                       [innerHTML]="responseError"></div>
 
                     <div class="form-group col-md-3 col-sm-6" style="margin-bottom: 10px;" *ngFor="let dataPoint of dataPoints; let index = index">
-                      <label *ngIf="index % 2 === 0 && dataPoint.dataType !== 'ANY'">{{dataPoint.dataPointLabel}} :</label>
+                      <label *ngIf="index % 2 === 0 && dataPoint.dataType !== 'ARRAY' && dataPoint.dataType !== 'ANY' ">{{dataPoint.dataPointLabel}} :</label>
 
                       <input *ngIf="index % 2 === 1 && (dataPoint.dataType === '' || dataPoint.dataType === 'STRING')" type="text" class="form-control col-md-12 col-sm-12"
                         [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
@@ -350,13 +350,32 @@
                         <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
                       </select>
 
-                      <tag-input *ngIf="index % 2 === 1 && dataPoint.dataType === 'ARRAY'" class="custom-input-tag-border form-control col-md-12 col-sm-12"
+                      <tag-input *ngIf="index % 2 === 1 && dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && isString(dataPoint.value[0])" class="custom-input-tag-border form-control col-md-12 col-sm-12"
                         [title]="dataPoint.description" [(ngModel)]="dataPoint.value" name="value" [modelAsStrings]="true"
                         [editable]="true" [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
                         [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'" theme="minimal">
                       </tag-input>
                     </div>
+                    
                   </form>
+                  <div *ngFor="let dataPoint of getUniqueDataPoints()">
+                    <ng-container class="form-group col-md-12" *ngIf="dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && !isString(dataPoint.value[0])">
+                      <label *ngIf="dataPoint.dataType === 'ARRAY'">{{ dataPoint.dataPointLabel }}</label>
+                      <table class="table" *ngIf="dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && !isString(dataPoint.value[0])">
+                        <thead>
+                          <tr>
+                            <th *ngFor="let key of getKeysForArrayDataType(dataPoint.value, dataPoint.dataPointName)">{{ key }}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let value of getValueForArraydatatype(dataPoint.value, dataPoint.dataPointName)">
+                            <td *ngFor="let v of value">{{ v }}</td>
+                          </tr>
+                        </tbody>
+                      </table>                      
+                    </ng-container>
+                    
+                  </div>
                 </div>
               </div>
             </div>

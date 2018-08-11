@@ -29,6 +29,10 @@ export class DataPoint {
   value: any;
   headerFlag: boolean;
   businessKeyFlag: boolean;
+  businessMonitorKey: boolean;
+  percentageChange: boolean;
+  graphType: string;
+  childdataPoints: DataPoint[];
 
   constructor() {
     this.sequence = 0;
@@ -43,6 +47,10 @@ export class DataPoint {
     this.value = null;
     this.headerFlag = false;
     this.businessKeyFlag = false;
+    this.graphType = null;
+    this.businessKeyFlag = false;
+    this.percentageChange = false;
+    this.childdataPoints = [];
   }
 }
 
