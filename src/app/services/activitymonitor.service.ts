@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Rx';
 
 import { BusinessProcessMonitorRequest } from '../models/businessprocessmonitor.model'
 import { environment } from "../../environments/environment";
+import { DataPoint } from "app/models/flow.model";
 
 
 
@@ -41,5 +42,30 @@ export class ActivityMonitorService {
       );
 
     return subject.asObservable();
+  }
+
+  getDataPoints(machineType: string): Observable<DataPoint[]> {
+    const subject = new Subject<DataPoint[]>();
+    const url = `${environment.server + environment.businessDataPoints + "/" + machineType}`;
+
+    this.httpClient.get(
+      url,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<DataPoint[]>) => {
+        subject.next(response.body);
+      },
+      (err: HttpErrorResponse) => {
+        subject.error(err);
+      }
+    )
+
+    return subject.asObservable();
+
   }
 }

@@ -7,7 +7,7 @@ import { ActivityMonitorService } from '../../../../services/activitymonitor.ser
 import { GraphService } from  '../../../../services/flow.service'
 
 import { Subscription } from "rxjs/Subscription";
-import { GraphObject } from "app/models/flow.model";
+import { GraphObject, DataPoint } from "app/models/flow.model";
 
 declare let moment: any;
 
@@ -20,8 +20,16 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
 
     graphObjects: GraphObject[]
     businessProcessMonitorRequest: BusinessProcessMonitorRequest;
+    businessDataPoints: DataPoint[];
+    tempBusinessDataPoints: DataPoint[];
+    tempBusinessDataPointsSplice = [];
     flowstatuses = ["ACTIVE", "CLOSED"];
     tempDateRange: any = {}
+    businessDataPointsValues = {}
+    noOfHorizontalDiv = 0;
+    divArray = []
+    startIndex = 0;
+    endIndex= 3;
 
     private subscription: Subscription;
 
@@ -32,6 +40,9 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
 
     ) {
         this.businessProcessMonitorRequest = new BusinessProcessMonitorRequest();
+        this.businessDataPoints = [];
+        this.tempBusinessDataPoints = [];
+        this.businessDataPointsValues = {};
     }
 
     ngOnInit() {
@@ -46,18 +57,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                                     if (response.length>0) {
                                         this.graphObjects = response;
                                         const machineType = response[1].machineType;
-                                        this.businessProcessMonitorRequest.machineType = machineType;
-                                        this.activityMonitorService.getDataPointValues(this.businessProcessMonitorRequest)
-                                        .subscribe(
-                                            response => {
-                                                console.log("success response");
-                                                console.log(response);
-                                            },
-                                            error => {
-                                                console.log("error");
-                                                console.log(error);
-                                            }
-                                        )
+                                        this.getBusinessDataPoints(machineType);
                                     }
                                 },
                                 error => {
@@ -70,5 +70,85 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
       
     ngOnDestroy(): void {
         console.log("ngdestroy");
+    }
+
+    getBusinessDataPoints(machinetype: string) {
+        this.activityMonitorService.getDataPoints(machinetype)
+            .subscribe(
+                response => {
+                    console.log("success response");
+                    console.log(response);
+                    this.businessProcessMonitorRequest.machineType = machinetype;
+                    this.businessDataPoints = response;
+                    this.tempBusinessDataPoints = JSON.parse(JSON.stringify(response));
+                    this.noOfHorizontalDiv = this.businessDataPoints.length / 3;
+                    this.noOfHorizontalDiv = Math.floor(this.noOfHorizontalDiv);
+                    if (this.businessDataPoints.length % 3 >0) {
+                        this.noOfHorizontalDiv = this.noOfHorizontalDiv + 1;
+                    }
+                    for (let i=0; i< this.noOfHorizontalDiv; i++) {
+                        this.divArray.push(i);
+                    }
+                    console.log("no of business data points");
+                    console.log(this.businessDataPoints.length);
+                    console.log("not of divs");
+                    console.log(this.noOfHorizontalDiv);
+                    this.setTempBusinessDataPoints();
+                    for (let dataPoint of this.businessDataPoints) {
+                        this.businessProcessMonitorRequest.dataPoints[dataPoint.dataPointName] = null;
+                    }
+                    this.setBusinessDataPonitValues();
+                },
+                error => {
+                    console.log("error");
+                    console.log(error);
+                }
+            )
+    }
+
+    setTempBusinessDataPoints() {
+        for(let i=0; i<this.divArray.length; i++) {
+            if (this.businessDataPoints.length - 1 < this.endIndex) {
+                this.endIndex = this.businessDataPoints.length - 1;
+            }
+            console.log("start index " + this.startIndex.toString() + " end index " + this.endIndex.toString());
+            this.tempBusinessDataPointsSplice.push(this.tempBusinessDataPoints.splice(this.startIndex, this.endIndex));
+            // this.startIndex = this.startIndex + 3;
+            // this.endIndex = this.endIndex + 3
+        }
+    }
+
+    getBusinessDataPoint(outIndex) {
+        return this.tempBusinessDataPointsSplice[outIndex];
+    }
+
+    
+    getBusinessDataPonitValuesFromDataPointKey(dataPonitKey: string) {
+        for(let dp in this.businessDataPointsValues) {
+            if (dp == dataPonitKey) {
+                return this.businessDataPointsValues[dp];
+            }
+        }
+        return [];
+    }
+
+    setBusinessDataPonitValues() {
+        this.activityMonitorService.getDataPointValues(this.businessProcessMonitorRequest)
+                .subscribe(
+                    response => {
+                        console.log("success response");
+                        console.log(response);
+                        this.businessDataPointsValues = response;
+                    },
+                    error => {
+                        console.log("error");
+                        console.log(error);
+                    }
+                )
+    }
+
+    submitfilter() {
+        console.log("submit filter");
+        console.log(this.businessProcessMonitorRequest);
     }
 }

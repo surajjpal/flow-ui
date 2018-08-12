@@ -143,5 +143,6 @@ export const environment = {
   crudFunction : '/crud',
 
   // activity monitor services
-  businessDataPointValues: 'businessactivitymanagement/datapointvalues'
+  businessDataPointValues: 'businessactivitymanagement/datapointvalues',
+  businessDataPoints: 'businessactivitymanagement/datapoints'
 };
