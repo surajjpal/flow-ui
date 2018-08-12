@@ -68,4 +68,62 @@ export class ActivityMonitorService {
     return subject.asObservable();
 
   }
+
+  getCountwithPercentageChange(businessProcessMonitorRequest: BusinessProcessMonitorRequest): Observable<any> {
+    const subject = new Subject<any>();
+    const url = `${environment.server + environment.businessDataPonitsPercentageCount}`;
+
+    this.httpClient.post<any>(
+        url, 
+        businessProcessMonitorRequest,
+        {
+          headers: this.httpHeaders,
+          observe: 'response',
+          reportProgress: true,
+          withCredentials: true
+        }
+      ).subscribe(
+        (response: HttpResponse<any>) => {
+          console.log("success")
+          subject.next(response.body);
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
+  
+          subject.error(err);
+        }
+      );
+
+    return subject.asObservable();
+  }
+
+  getGraphData(businessProcessMonitorRequest: BusinessProcessMonitorRequest): Observable<any> {
+    const subject = new Subject<any>();
+    const url = `${environment.server + environment.businessDataPonitsGraphData}`;
+
+    this.httpClient.post<any>(
+        url, 
+        businessProcessMonitorRequest,
+        {
+          headers: this.httpHeaders,
+          observe: 'response',
+          reportProgress: true,
+          withCredentials: true
+        }
+      ).subscribe(
+        (response: HttpResponse<any>) => {
+          console.log("success")
+          subject.next(response.body);
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
+  
+          subject.error(err);
+        }
+      );
+
+    return subject.asObservable();
+  }
 }

@@ -145,6 +145,8 @@ export const environment = {
 
    // activity monitor services
    businessDataPointValues: 'businessactivitymanagement/datapointvalues',
-   businessDataPoints: 'businessactivitymanagement/datapoints'
+   businessDataPoints: 'businessactivitymanagement/datapoints',
+   businessDataPonitsPercentageCount: 'businessactivitymanagement/percentagecount',
+   businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
   };
   

@@ -1,7 +1,7 @@
 import { OnInit, OnDestroy } from "@angular/core/src/metadata/lifecycle_hooks";
 import { Component } from "@angular/core";
 
-import { BusinessProcessMonitorRequest } from '../../../../models/businessprocessmonitor.model'
+import { BusinessProcessMonitorRequest, BusinessProcessMonitorCountPercentageChange } from '../../../../models/businessprocessmonitor.model'
 
 import { ActivityMonitorService } from '../../../../services/activitymonitor.service'
 import { GraphService } from  '../../../../services/flow.service'
@@ -26,8 +26,13 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
     flowstatuses = ["ACTIVE", "CLOSED"];
     tempDateRange: any = {}
     businessDataPointsValues = {}
+    businessProcessMonitorCountPercentageChange: BusinessProcessMonitorCountPercentageChange[];
+    tempBusinessProcessMonitorCountPercentageChange: BusinessProcessMonitorCountPercentageChange[];
+    tempBusinessProcessMonitorCountPercentageChangeSplice = [];
     noOfHorizontalDiv = 0;
     divArray = []
+    noOfPercentagediv = 0;
+    noOfPercentagedivArray = [];
     startIndex = 0;
     endIndex= 3;
 
@@ -43,6 +48,8 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         this.businessDataPoints = [];
         this.tempBusinessDataPoints = [];
         this.businessDataPointsValues = {};
+        this.businessProcessMonitorCountPercentageChange = [];
+        this.tempBusinessProcessMonitorCountPercentageChangeSplice = [];
     }
 
     ngOnInit() {
@@ -98,6 +105,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                         this.businessProcessMonitorRequest.dataPoints[dataPoint.dataPointName] = null;
                     }
                     this.setBusinessDataPonitValues();
+                    this.submitfilter();
                 },
                 error => {
                     console.log("error");
@@ -116,6 +124,20 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
             // this.startIndex = this.startIndex + 3;
             // this.endIndex = this.endIndex + 3
         }
+    }
+
+    setNoOfPercentageDiv() {
+        let endIndex = 6
+        for (let i=0; i<this.noOfPercentagedivArray.length; i++) {
+            if (this.businessProcessMonitorCountPercentageChange.length < endIndex) {
+                endIndex = this.businessProcessMonitorCountPercentageChange.length - 1;
+            }
+            this.tempBusinessProcessMonitorCountPercentageChangeSplice.push(this.tempBusinessProcessMonitorCountPercentageChange.splice(0, endIndex));
+        }
+    }
+
+    getBusinessProcessPercentageChange(outIndex) {
+        return this.tempBusinessProcessMonitorCountPercentageChangeSplice[outIndex];
     }
 
     getBusinessDataPoint(outIndex) {
@@ -150,5 +172,46 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
     submitfilter() {
         console.log("submit filter");
         console.log(this.businessProcessMonitorRequest);
+        this.getCountWithPercentage();
+        this.getGraphData();
+    }
+
+    getCountWithPercentage() {
+        this.activityMonitorService.getCountwithPercentageChange(this.businessProcessMonitorRequest)
+                    .subscribe(
+                        response => {
+                            console.log("get count with percentage success");
+                            console.log(response)
+                            this.businessProcessMonitorCountPercentageChange = response;
+                            this.tempBusinessProcessMonitorCountPercentageChange = JSON.parse(JSON.stringify(response));
+                            this.noOfPercentagediv = this.businessProcessMonitorCountPercentageChange.length / 6;
+                            this.noOfPercentagediv = Math.floor(this.noOfPercentagediv);
+                            if (this.businessProcessMonitorCountPercentageChange.length % 6 >0) {
+                                this.noOfPercentagediv = this.noOfPercentagediv + 1;
+                            }
+                            for (let i=0; i<this.noOfPercentagediv; i++) {
+                                this.noOfPercentagedivArray.push(i);
+                            }
+                            this.setNoOfPercentageDiv();
+                        },
+                        error => {
+                            console.log("get count with percentage error");
+                            console.log(error);
+                        }
+                    )
+    }
+
+    getGraphData() {
+        this.activityMonitorService.getGraphData(this.businessProcessMonitorRequest)
+                    .subscribe(
+                        response => {
+                            console.log("get graph data success");
+                            console.log(response);
+                        },
+                        error => {
+                            console.log("get graph data error");
+                            console.log(error);
+                        }
+                    )
     }
 }

@@ -37,3 +37,13 @@
     </div>
     
 </ba-card>
+
+<div class="row tile_count" *ngFor="let outIndex of noOfPercentagedivArray" >
+    <div *ngFor="let data of getBusinessProcessPercentageChange(outIndex)" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-user"></i> {{  data.dataPointLabel }}</span>
+        <div class="count">{{  data.count }}</div>
+        <span *ngIf="data.percentageChange >= 0" class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>{{ data.percentageChange }}% </i> from last week</span>
+        <span *ngIf="data.percentageChange < 0" class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>{{ data.percentageChange }}% </i> from last week</span>
+    </div>
+</div>
+    

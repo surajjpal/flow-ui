@@ -13,3 +13,18 @@ export class BusinessProcessMonitorRequest {
         this.endTime = endTime ? endTime : null;
     }
 }
+
+export class BusinessProcessMonitorCountPercentageChange {
+    dataPointName: string;
+    dataPointLabel: string;
+    count: number;
+    percentageChange: number;
+
+    constructor(dataPointName?: string, dataPointLabel?: string, count?: number, percentageChange?: number) {
+        this.dataPointName = dataPointLabel ? dataPointName : '';
+        this.dataPointLabel = dataPointLabel ? dataPointLabel : '';
+        this.count = count ? count: 0;
+        this.percentageChange = percentageChange ? percentageChange : 0;
+
+    }
+}
