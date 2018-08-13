@@ -487,11 +487,19 @@ export class ConversationService {
   getChat(episodeId: string): Observable<ChatMessage[]> {
     const subject = new Subject<ChatMessage[]>();
 
-    const url = `${environment.autoServer + environment.messagelisturl + episodeId}`;
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = {
+      'episodeId': episodeId
+    };
+    crudInput.collection = 'message';
+    crudInput.operation = "READ_ALL";
 
-    this.httpClient.get<ChatMessage[]>(
-      url,
+    this.httpClient.post<ChatMessage[]>(
+      crudUrl,
+      crudInput,
       {
+        headers: this.httpHeaders,
         observe: 'response',
         reportProgress: true,
         withCredentials: true
@@ -499,7 +507,21 @@ export class ConversationService {
     ).subscribe(
       (response: HttpResponse<ChatMessage[]>) => {
         if (response.body) {
-          subject.next(response.body);
+          let messageList: ChatMessage[] = response.body['data'];
+
+          if (messageList && messageList.length > 1) {
+            messageList = messageList.sort((msg1, msg2) => {
+              if (msg1.messageTime > msg2.messageTime) {
+                return 1;
+              } else if (msg1.messageTime < msg2.messageTime) {
+                return -1;
+              } else {
+                return 0;
+              }
+            });
+          }
+
+          subject.next(messageList);
         }
       },
       (err: HttpErrorResponse) => {
@@ -516,11 +538,19 @@ export class ConversationService {
   getEpisode(episodeId: string): Observable<Episode> {
     const subject = new Subject<Episode>();
 
-    const url = `${environment.autoServer + environment.episodebyidurl + episodeId}`;
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = {
+      '_id': episodeId
+    };
+    crudInput.collection = 'episode';
+    crudInput.operation = "READ";
 
-    this.httpClient.get<Episode>(
-      url,
+    this.httpClient.post<Episode>(
+      crudUrl,
+      crudInput,
       {
+        headers: this.httpHeaders,
         observe: 'response',
         reportProgress: true,
         withCredentials: true

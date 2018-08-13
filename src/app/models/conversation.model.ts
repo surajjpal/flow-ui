@@ -1,67 +1,134 @@
-export class ConversationIntent {
-  status: string;
-  episodeId: string;
-  intentTime: Date;
-  intentName: string;
-  goals: any[];                                    // -------------- TODO: confirm datatype associated -------------- //
-  messageId: string;
+export class EpisodeGoalStep {
+  statusCd: string;
+  goalExpression: string;
+  sequence: number;
+  goalResponse: any;
+  lang: any;
+  api: string;
+  apiResponseKey: string;
+  apiResponseValue: any;
+  key: string;
+  value: any;
+  authRequired: boolean;
+  mandatory: boolean;
+  ignoreIntent: boolean;
+  goalValidationTypes: string[];
+  dependencyExpression: string;
+  dependencyResult: any;
+  responseExpression: string;
+  actionHtml: string;
+  isUniquePerGoal: boolean;
+  startTriggerMessageId: string;
+  endTriggerMessageId: string;
+  startTriggerTime: Date;
+  endTriggerTime: Date;
+  hybridResponseExpression: string;
+  pickFromNoun: boolean;
+  skipped: boolean;
 }
 
-export class EpisodeBody {
-  status: string;
-  intents: ConversationIntent[];
-  name: string;
-  userHash: string;
-  conversationId: string;
-  entities: string[];                              // -------------- TODO: confirm datatype associated -------------- //
-  mode: string;
-  startTime: Date;
-  endTime: Date;
-  lastEpisodeStatus: string;
-  goalStatus: string;
-  goals: any[];                                    // -------------- TODO: confirm datatype associated -------------- //
+export class EpisodeGoal {
+  _id: string;
+  companyId: string;
+  statusCd: string;
+  episodeId: string;
+  expression: string;
+  goalName: string;
+  domainGoalSteps: EpisodeGoalStep[];
+  model: any;
+  api: string;
+  apiResponseKey: string;
+  apiResponseValue: any;
+  flowResponseValue: any;
+  responseExpression: string;
+  responseChangeExpression: string;
+  validationCheck: any;
+  flowFlag: boolean;
+  htmlFlag: boolean;
+  responseChange: boolean;
+  responseDependent: boolean;
+  valueExpression: string;
+  tagExpression: string;
+  startTriggerMessageId: string;
+  endTriggerMessageId: string;
+  startTriggerTime: Date;
+  endTriggerTime: Date;
+  isClosureGoal: boolean;
+}
+
+export class EpisodeContext {
+  model: any;
+  goalStack: EpisodeGoal[];
+  lastUserMessageId: string;
+  lastAutoMessageId: string;
+  userMessageCount: number;
+  autoMessageCount: number;
 }
 
 export class Episode {
-  _score: number;
-  _type: string;
   _id: string;
-  _source: EpisodeBody;
-  _index: string;
-}
-
-export class Sentiment {
-  emotion: string;
-  classifier_reference: string;
-  probability: number;
-}
-
-export class Context {
+  companyId: string;
+  statusCd: string;
+  source: string;
+  agentId: string;
+  campaignCd: string;
+  userId: string;
+  conversationId: string;
+  langDetected: string[];
+  langSelected: string;
+  lastMessageId: string;
+  mode: string;
+  intents: string[];
   entities: string[];
-  sentiment__: string;
-  intent: ConversationIntent;
-  level: number;
+  sentiments: string[];
+  goals: EpisodeGoal[];
+  stages: string[];
+  lastStage: string;
+  transactionValue: number;
+  startTime: Date;
+  endTime: Date;
+  modifiedTime: Date;
+  currentGoal: EpisodeGoal;
+  currentGoalStep: EpisodeGoalStep;
+  episodeContext: EpisodeContext;
+  flowTriggered: boolean;
+}
+
+export class Phrase {
+  phraseText: string;
+  intentResult: any;
+  entityResult: any;
+  sentimentResult: any;
+  intents: string;
+  entities: string;
+  sentiments: string;
+  expression: string;
+  language: string;
+  nouns: string;
+  result: string;
+  retryDetected: string;  
+  pos: any;
 }
 
 export class ChatMessage {
-  from: string;
-  messageFrom: string;
-  sentiment: Sentiment;
-  messageTime: Date;
+  agentId: string;
+  messageText: string;
+  displayText: string;
+  episodeStatus: string;
   episodeId: string;
-  context: Context;
-  userHash: string;
-  inputText: string;
-}
-
-export class EntityDataBody {
-  name: string;
-  parent: string;
-  tags: string[];
-
-  constructor() {
-    this.name = '';
-    this.parent = '';
-    this.tags = [];
-  }
+  conversationId: string;
+  from: string;
+  options: any[];
+  settings: any;
+  language: string;
+  newLanguage: string;
+  to: string;
+  messageTime: Date;
+  contextMessageId: string;
+  messageType: string;
+  phrases: Phrase[];
+  onlyEntityFound: string[];
+  onlyIntentFound: string[];
+  disableUserInput: boolean;
+  debugData: any;
 }
