@@ -15,7 +15,7 @@
             </div>
             <div class="col-md-4">
                 <label for="selectdaterange">Select date range</label>
-                <api-daterangepicker id="selectdaterange" [dateRange]="tempDateRange" (selectedRange)="setReportDateRange($event)"></api-daterangepicker>
+                <api-daterangepicker id="selectdaterange" [dateRange]="tempDateRange" (selectedRange)="setTimeRange($event)"></api-daterangepicker>
             </div>
             
         </div>
@@ -47,3 +47,14 @@
     </div>
 </div>
     
+<div class="row">
+    <ba-card class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" *ngFor="let gdata of businessProcessMonitorGraphData" [cardTitle]="gdata.dataPointLabel">
+        <nvd3 [options]="gdata.options" [data]="gdata.result"></nvd3>
+    </ba-card>
+</div>
+
+<!-- <div class="row col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngFor="let outIndex of noOfGraphDataDivArray">
+    <ba-card class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6" *ngFor="let gdata of getBusinessGraphDataDiv(outIndex)" [cardTitle]="gdata.dataPointLabel">
+        <nvd3 [options]="gdata.options" [data]="gdata.result"></nvd3>
+    </ba-card>
+</div> -->

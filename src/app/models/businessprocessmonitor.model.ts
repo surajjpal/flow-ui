@@ -28,3 +28,16 @@ export class BusinessProcessMonitorCountPercentageChange {
 
     }
 }
+
+export class BusinessProcessMonitorGraphData {
+    result = [];
+    dataPointName: string;
+    dataPointLabel: string;
+    options: any;
+
+    constructor(dataPointName?: string, dataPointLabel?: string) {
+        this.dataPointName = dataPointName ? dataPointName : '';
+        this.dataPointLabel = dataPointLabel ? dataPointLabel : '';
+        this.options = null;
+    }
+}

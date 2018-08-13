@@ -57,6 +57,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   iterationLevel:number;
   tempUser:User;
   FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
+  arrayTableHeaders = {};
   
   private subscription: Subscription;
   private subscriptionEpisode: Subscription;
@@ -446,5 +447,30 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       new closeModal('flagTaskModal');
       this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
     });
+  }
+
+  isString(value) {
+    return typeof value === 'string';
+  }
+
+  getKeysForArrayDataType(data, dataPointName) {
+    this.arrayTableHeaders[dataPointName] = [];
+    for(let key in data[0]) {
+      this.arrayTableHeaders[dataPointName].push(key);
+    }
+    return this.arrayTableHeaders[dataPointName];
+    
+  }
+
+  getValueForArraydatatype(data, dataPointName) {
+    let values = []
+    for(let d of data) {
+      let headerValue = []
+      for (let key of this.arrayTableHeaders[dataPointName]) {
+        headerValue.push(d[key]);
+      }
+      values.push(headerValue);
+    }
+    return values;
   }
 }

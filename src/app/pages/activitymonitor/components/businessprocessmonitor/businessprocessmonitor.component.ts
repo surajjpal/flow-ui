@@ -1,7 +1,7 @@
 import { OnInit, OnDestroy } from "@angular/core/src/metadata/lifecycle_hooks";
 import { Component } from "@angular/core";
 
-import { BusinessProcessMonitorRequest, BusinessProcessMonitorCountPercentageChange } from '../../../../models/businessprocessmonitor.model'
+import { BusinessProcessMonitorRequest, BusinessProcessMonitorCountPercentageChange, BusinessProcessMonitorGraphData } from '../../../../models/businessprocessmonitor.model'
 
 import { ActivityMonitorService } from '../../../../services/activitymonitor.service'
 import { GraphService } from  '../../../../services/flow.service'
@@ -24,11 +24,19 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
     tempBusinessDataPoints: DataPoint[];
     tempBusinessDataPointsSplice = [];
     flowstatuses = ["ACTIVE", "CLOSED"];
+    GRAPH_TYPE_PIE_CHART = "PIE_CHART";
+    GRAPH_TYPE_BAR_GRAPH = "BAR_GRAPH";
+    GRAPH_TYPE_MULTI_BAR_GRAPH = "MULTI_BAR_GRAPH";
     tempDateRange: any = {}
     businessDataPointsValues = {}
     businessProcessMonitorCountPercentageChange: BusinessProcessMonitorCountPercentageChange[];
     tempBusinessProcessMonitorCountPercentageChange: BusinessProcessMonitorCountPercentageChange[];
     tempBusinessProcessMonitorCountPercentageChangeSplice = [];
+    businessProcessMonitorGraphData: BusinessProcessMonitorGraphData[];
+    tempBusinessProcessMonitorGraphData: BusinessProcessMonitorGraphData[];
+    tempBusinessProcessMonitorGraphDataSplice = [];
+    noOfGraphDataDiv = 0
+    noOfGraphDataDivArray = [];
     noOfHorizontalDiv = 0;
     divArray = []
     noOfPercentagediv = 0;
@@ -79,6 +87,16 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         console.log("ngdestroy");
     }
 
+    setTimeRange(dateTimeRange) {
+        console.log("datetimeRange");
+        console.log(dateTimeRange);
+        if (dateTimeRange != null) {
+            this.businessProcessMonitorRequest.startTime = dateTimeRange.start;
+            this.businessProcessMonitorRequest.endTime = dateTimeRange.end;
+        }
+        
+    }
+
     getBusinessDataPoints(machinetype: string) {
         this.activityMonitorService.getDataPoints(machinetype)
             .subscribe(
@@ -105,7 +123,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                         this.businessProcessMonitorRequest.dataPoints[dataPoint.dataPointName] = null;
                     }
                     this.setBusinessDataPonitValues();
-                    this.submitfilter();
+                    this.submitfilter(true);
                 },
                 error => {
                     console.log("error");
@@ -116,8 +134,8 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
 
     setTempBusinessDataPoints() {
         for(let i=0; i<this.divArray.length; i++) {
-            if (this.businessDataPoints.length - 1 < this.endIndex) {
-                this.endIndex = this.businessDataPoints.length - 1;
+            if (this.businessDataPoints.length < this.endIndex) {
+                this.endIndex = this.businessDataPoints.length;
             }
             console.log("start index " + this.startIndex.toString() + " end index " + this.endIndex.toString());
             this.tempBusinessDataPointsSplice.push(this.tempBusinessDataPoints.splice(this.startIndex, this.endIndex));
@@ -127,13 +145,32 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
     }
 
     setNoOfPercentageDiv() {
-        let endIndex = 6
+        let endIndex = 6;
         for (let i=0; i<this.noOfPercentagedivArray.length; i++) {
             if (this.businessProcessMonitorCountPercentageChange.length < endIndex) {
-                endIndex = this.businessProcessMonitorCountPercentageChange.length - 1;
+                endIndex = this.businessProcessMonitorCountPercentageChange.length;
             }
             this.tempBusinessProcessMonitorCountPercentageChangeSplice.push(this.tempBusinessProcessMonitorCountPercentageChange.splice(0, endIndex));
         }
+        console.log("tempBusinessProcessMonitorCountPercentageChangeSplice");
+        console.log(this.tempBusinessProcessMonitorCountPercentageChangeSplice);
+    }
+
+    setUpGraphDataDiv() {
+        let endIndex = 2;
+        for(let i=0; i<this.noOfGraphDataDivArray.length; i++) {
+            if (this.businessProcessMonitorGraphData.length < endIndex) {
+                endIndex = this.businessProcessMonitorGraphData.length;
+            }
+            this.tempBusinessProcessMonitorGraphDataSplice.push(this.tempBusinessProcessMonitorGraphData.splice(0, endIndex));
+            
+        }
+        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&");
+        console.log(this.tempBusinessProcessMonitorGraphDataSplice);
+    }
+
+    getBusinessGraphDataDiv(outIndex) {
+        return this.tempBusinessProcessMonitorGraphDataSplice[outIndex];
     }
 
     getBusinessProcessPercentageChange(outIndex) {
@@ -169,9 +206,19 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                 )
     }
 
-    submitfilter() {
+    submitfilter(initiate?: boolean) {
         console.log("submit filter");
         console.log(this.businessProcessMonitorRequest);
+        if (!initiate) {
+            this.businessProcessMonitorCountPercentageChange = [];
+            this.tempBusinessProcessMonitorCountPercentageChange = [];
+            this.tempBusinessProcessMonitorCountPercentageChangeSplice = [];
+            this.businessProcessMonitorGraphData = [];
+            this.noOfPercentagediv = 0;
+            this.noOfPercentagedivArray = [];
+        }
+        //this.businessProcessMonitorRequest.startTime = null;
+        //this.businessProcessMonitorRequest.endTime = null;
         this.getCountWithPercentage();
         this.getGraphData();
     }
@@ -186,9 +233,11 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                             this.tempBusinessProcessMonitorCountPercentageChange = JSON.parse(JSON.stringify(response));
                             this.noOfPercentagediv = this.businessProcessMonitorCountPercentageChange.length / 6;
                             this.noOfPercentagediv = Math.floor(this.noOfPercentagediv);
-                            if (this.businessProcessMonitorCountPercentageChange.length % 6 >0) {
+                            if (this.businessProcessMonitorCountPercentageChange.length % 6 >=0) {
                                 this.noOfPercentagediv = this.noOfPercentagediv + 1;
                             }
+                            console.log("noOfPercentageDiv");
+                            console.log(this.noOfPercentagediv);
                             for (let i=0; i<this.noOfPercentagediv; i++) {
                                 this.noOfPercentagedivArray.push(i);
                             }
@@ -207,6 +256,25 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                         response => {
                             console.log("get graph data success");
                             console.log(response);
+                            this.businessProcessMonitorGraphData = response;
+                            for (let gdata of this.businessProcessMonitorGraphData) {
+                                for (let dataPoints of this.businessDataPoints) {
+                                    if (dataPoints.dataPointName == gdata.dataPointName) {
+                                        if(dataPoints.graphType == this.GRAPH_TYPE_BAR_GRAPH) {
+                                            
+                                            gdata.options = this.singleBarBarChartOptions(gdata.dataPointLabel, 'value');
+                                            console.log("bar graph");
+                                            console.log(gdata);
+                                        }
+                                        else {
+                                            gdata.options = this.donutChartOptions();
+                                        }
+                                    }
+                                    
+                                }
+                                
+                            }
+                            
                         },
                         error => {
                             console.log("get graph data error");
@@ -214,4 +282,86 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                         }
                     )
     }
+
+
+    // ************************ graph **************************
+    donutChartOptions() {
+        return {
+          chart: {
+            type: 'pieChart',
+            height: 450,
+            donut: true,
+            x: function(d){return d.label;},
+            y: function(d){return d.value;},
+            showLabels: false,
+            pie: {
+              dispatch: {
+                elementClick: function(e) {
+                 // console.log('Element Click');
+                 // console.log(e);
+                }            
+              }
+            },
+            duration: 500,
+            legend: {
+              margin: {
+                top: 5,
+                right: 5,
+                bottom: 5,
+                left: 5
+              }
+            }
+          }
+        };
+    }
+
+    singleBarBarChartOptions(xAxisLabel?: string, yAxisLabel?: string) {
+        if (xAxisLabel == null) {
+            xAxisLabel = 'X'
+        }
+        if (yAxisLabel == null) {
+            yAxisLabel = 'Y'
+        }
+        return {
+          chart: {
+            type: 'multiBarChart',
+            staggerLabels: true,
+            height: 450,
+            margin : {
+              top: 35,
+              right: 20,
+              bottom: 50,
+              left: 60
+            },
+            clipEdge: true,
+            duration: 500,
+            stacked: true,
+            showControls: false,
+            forceY: [0, 100],
+            reduceXTicks: false,
+            xAxis: {
+              axisLabel: xAxisLabel,
+              showMaxMin: true,
+              tickFormat: function(d){
+                return d;
+              }
+            },
+            yAxis: {
+              axisLabel: yAxisLabel,
+              tickFormat: function(d){
+                return d3.format('d')(d);
+              }
+            },
+            multibar: {
+              dispatch: {
+                elementClick: function (e) {
+                //  console.log('click');
+                //  console.log(e);
+                }
+              }
+            }
+          }
+        }
+      }
+    
 }
