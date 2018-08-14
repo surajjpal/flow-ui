@@ -277,6 +277,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       }
 
       if (this.selectedState.parameters && this.graphObject.dataPointConfigurationList) {
+        console.log("dataconfigList");
+        console.log(this.graphObject.dataPointConfigurationList);
         for (const dataPoint of this.graphObject.dataPointConfigurationList) {
           const paramValue: any = this.selectedState.parameters[dataPoint.dataPointName];
 
@@ -324,12 +326,22 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
            * while updating info on server only odd indices objects are selected
            **/
           this.dataPoints.push(dataPoint);
-          this.dataPoints.push(dataPoint);
+          if(dataPoint.dataType == 'ARRAY' && dataPoint.value.length>0 && !this.isString(dataPoint.value[0])) {
+            this.dataPoints.push(dataPoint);
+          }
+          else {
+            this.dataPoints.push(dataPoint);
+          }
 
           this.fieldKeyMap[dataPoint.dataPointName] = dataPoint.dataPointLabel;
+          
         }
       }
     }
+  }
+
+  getUniqueDataPoints() {
+    return Array.from(new Set(this.dataPoints ));
   }
 
   initUI() {

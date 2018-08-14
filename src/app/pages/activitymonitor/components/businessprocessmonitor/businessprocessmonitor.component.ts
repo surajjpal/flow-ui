@@ -27,6 +27,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
     GRAPH_TYPE_PIE_CHART = "PIE_CHART";
     GRAPH_TYPE_BAR_GRAPH = "BAR_GRAPH";
     GRAPH_TYPE_MULTI_BAR_GRAPH = "MULTI_BAR_GRAPH";
+    HTML_COMMOM_COLORS = ["red", "green", "#FF0000", "#008000"];
     tempDateRange: any = {}
     businessDataPointsValues = {}
     businessProcessMonitorCountPercentageChange: BusinessProcessMonitorCountPercentageChange[];
@@ -43,6 +44,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
     noOfPercentagedivArray = [];
     startIndex = 0;
     endIndex= 3;
+
 
     private subscription: Subscription;
 
@@ -61,35 +63,31 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        console.log("ngoninit");
         this.tempDateRange.start = moment().startOf('day');
         this.tempDateRange.end = moment().endOf('day');
         this.subscription = this.graphService.fetch('ACTIVE')
                             .subscribe(
                                 response => {
-                                    console.log("graph object");
-                                    console.log(response);
                                     if (response.length>0) {
                                         this.graphObjects = response;
-                                        const machineType = response[1].machineType;
+                                        const machineType = response[0].machineType;
                                         this.getBusinessDataPoints(machineType);
                                     }
                                 },
                                 error => {
-                                    console.log("graph object error");
-                                    console.log(error);
+                                    
                                 }
                             )
 
     }
       
     ngOnDestroy(): void {
-        console.log("ngdestroy");
+        if (this.subscription && !this.subscription.closed) {
+            this.subscription.unsubscribe();
+        }
     }
 
     setTimeRange(dateTimeRange) {
-        console.log("datetimeRange");
-        console.log(dateTimeRange);
         if (dateTimeRange != null) {
             this.businessProcessMonitorRequest.startTime = dateTimeRange.start;
             this.businessProcessMonitorRequest.endTime = dateTimeRange.end;
@@ -101,8 +99,6 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         this.activityMonitorService.getDataPoints(machinetype)
             .subscribe(
                 response => {
-                    console.log("success response");
-                    console.log(response);
                     this.businessProcessMonitorRequest.machineType = machinetype;
                     this.businessDataPoints = response;
                     this.tempBusinessDataPoints = JSON.parse(JSON.stringify(response));
@@ -114,10 +110,6 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                     for (let i=0; i< this.noOfHorizontalDiv; i++) {
                         this.divArray.push(i);
                     }
-                    console.log("no of business data points");
-                    console.log(this.businessDataPoints.length);
-                    console.log("not of divs");
-                    console.log(this.noOfHorizontalDiv);
                     this.setTempBusinessDataPoints();
                     for (let dataPoint of this.businessDataPoints) {
                         this.businessProcessMonitorRequest.dataPoints[dataPoint.dataPointName] = null;
@@ -126,8 +118,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                     this.submitfilter(true);
                 },
                 error => {
-                    console.log("error");
-                    console.log(error);
+                    
                 }
             )
     }
@@ -137,7 +128,6 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
             if (this.businessDataPoints.length < this.endIndex) {
                 this.endIndex = this.businessDataPoints.length;
             }
-            console.log("start index " + this.startIndex.toString() + " end index " + this.endIndex.toString());
             this.tempBusinessDataPointsSplice.push(this.tempBusinessDataPoints.splice(this.startIndex, this.endIndex));
             // this.startIndex = this.startIndex + 3;
             // this.endIndex = this.endIndex + 3
@@ -152,8 +142,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
             }
             this.tempBusinessProcessMonitorCountPercentageChangeSplice.push(this.tempBusinessProcessMonitorCountPercentageChange.splice(0, endIndex));
         }
-        console.log("tempBusinessProcessMonitorCountPercentageChangeSplice");
-        console.log(this.tempBusinessProcessMonitorCountPercentageChangeSplice);
+        
     }
 
     setUpGraphDataDiv() {
@@ -165,8 +154,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
             this.tempBusinessProcessMonitorGraphDataSplice.push(this.tempBusinessProcessMonitorGraphData.splice(0, endIndex));
             
         }
-        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&");
-        console.log(this.tempBusinessProcessMonitorGraphDataSplice);
+        
     }
 
     getBusinessGraphDataDiv(outIndex) {
@@ -195,20 +183,15 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         this.activityMonitorService.getDataPointValues(this.businessProcessMonitorRequest)
                 .subscribe(
                     response => {
-                        console.log("success response");
-                        console.log(response);
                         this.businessDataPointsValues = response;
                     },
                     error => {
-                        console.log("error");
-                        console.log(error);
+                        
                     }
                 )
     }
 
     submitfilter(initiate?: boolean) {
-        console.log("submit filter");
-        console.log(this.businessProcessMonitorRequest);
         if (!initiate) {
             this.businessProcessMonitorCountPercentageChange = [];
             this.tempBusinessProcessMonitorCountPercentageChange = [];
@@ -227,8 +210,6 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         this.activityMonitorService.getCountwithPercentageChange(this.businessProcessMonitorRequest)
                     .subscribe(
                         response => {
-                            console.log("get count with percentage success");
-                            console.log(response)
                             this.businessProcessMonitorCountPercentageChange = response;
                             this.tempBusinessProcessMonitorCountPercentageChange = JSON.parse(JSON.stringify(response));
                             this.noOfPercentagediv = this.businessProcessMonitorCountPercentageChange.length / 6;
@@ -236,16 +217,13 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                             if (this.businessProcessMonitorCountPercentageChange.length % 6 >=0) {
                                 this.noOfPercentagediv = this.noOfPercentagediv + 1;
                             }
-                            console.log("noOfPercentageDiv");
-                            console.log(this.noOfPercentagediv);
                             for (let i=0; i<this.noOfPercentagediv; i++) {
                                 this.noOfPercentagedivArray.push(i);
                             }
                             this.setNoOfPercentageDiv();
                         },
                         error => {
-                            console.log("get count with percentage error");
-                            console.log(error);
+                            
                         }
                     )
     }
@@ -254,8 +232,6 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         this.activityMonitorService.getGraphData(this.businessProcessMonitorRequest)
                     .subscribe(
                         response => {
-                            console.log("get graph data success");
-                            console.log(response);
                             this.businessProcessMonitorGraphData = response;
                             for (let gdata of this.businessProcessMonitorGraphData) {
                                 for (let dataPoints of this.businessDataPoints) {
@@ -263,10 +239,23 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                                         if(dataPoints.graphType == this.GRAPH_TYPE_BAR_GRAPH) {
                                             
                                             gdata.options = this.singleBarBarChartOptions(gdata.dataPointLabel, 'value');
-                                            console.log("bar graph");
-                                            console.log(gdata);
+                                            
                                         }
                                         else {
+                                            const colors = []
+                                            for (let donutData of gdata.result) {
+                                                if ( donutData != null && donutData['label'] != null && typeof donutData['label'] === 'string' && this.HTML_COMMOM_COLORS.indexOf(donutData['label'].toLowerCase()) != -1) {
+                                                    donutData['color'] = donutData['label'];
+                                                }
+                                                else {
+                                                    donutData['color'] = '#' + Math.floor(Math.random()*16777215).toString(16);
+                                                    while (this.HTML_COMMOM_COLORS.indexOf(donutData['color'].toLowerCase()) != -1) {
+                                                        donutData['color'] = '#' + Math.floor(Math.random()*16777215).toString(16);
+                                                    }
+                                                    
+                                                }
+                                                colors.push(donutData["label"]);
+                                            }
                                             gdata.options = this.donutChartOptions();
                                         }
                                     }
@@ -277,8 +266,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                             
                         },
                         error => {
-                            console.log("get graph data error");
-                            console.log(error);
+                            
                         }
                     )
     }
@@ -292,8 +280,8 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
             height: 450,
             donut: true,
             x: function(d){return d.label;},
-            y: function(d){return d.value;},
-            showLabels: false,
+            y: function(d){return parseFloat(d.value).toFixed(2);},
+            showLabels: true,
             pie: {
               dispatch: {
                 elementClick: function(e) {
@@ -302,6 +290,11 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                 }            
               }
             },
+            color: function(d,i){
+                return (d.color) || '#' + Math.floor(Math.random()*16777215).toString(16)
+            },
+            pieLabelsOutside: false,
+            labelType: 'percent',
             duration: 500,
             legend: {
               margin: {

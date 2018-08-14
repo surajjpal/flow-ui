@@ -47,7 +47,7 @@ export class DataPoint {
     this.value = null;
     this.headerFlag = false;
     this.businessKeyFlag = false;
-    this.graphType = 'PIE_CHART';
+    this.graphType = null;
     this.businessKeyFlag = false;
     this.percentageChange = false;
     this.childdataPoints = [];
