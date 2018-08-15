@@ -87,6 +87,15 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         }
     }
 
+    onMachineTypeSelect() {
+        this.businessDataPoints = [];
+        this.tempBusinessDataPoints = [];
+        this.noOfHorizontalDiv = 0;
+        this.divArray = [];
+        this.getBusinessDataPoints(this.businessProcessMonitorRequest.machineType);
+        
+    }
+
     setTimeRange(dateTimeRange) {
         if (dateTimeRange != null) {
             this.businessProcessMonitorRequest.startTime = dateTimeRange.start;
