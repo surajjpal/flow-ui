@@ -684,7 +684,19 @@
                     </div>
                     <div class="row">
                       <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.headerFlag" [label]="'Header Flag'" (event)="dataPoint.headerFlag = $event.target.checked"></api-checkbox>
-                      <api-checkbox class="col-md-9 col-sm-9 col-xs-9" [checked]="dataPoint.businessKeyFlag" [label]="'Business Key Flag'" (event)="dataPoint.businessKeyFlag = $event.target.checked"></api-checkbox>
+                      <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.businessKeyFlag" [label]="'Business Key Flag'" (event)="dataPoint.businessKeyFlag = $event.target.checked"></api-checkbox>
+                      <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.businessMonitorKey" [label]="'Business Monitor Flag'" (event)="dataPoint.businessMonitorKey = $event.target.checked"></api-checkbox>
+                      <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.percentageChange" [label]="'Percentage Change'" (event)="dataPoint.percentageChange = $event.target.checked"></api-checkbox>
+                      
+                    </div>
+                    <div class="form-group" *ngIf="dataPoint.businessMonitorKey">
+                      <label class="col-md-12 col-sm-12 col-xs-12" [for]="'graphType' + index">
+                        Graph Type
+                      </label>
+                      <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'graphType' + index" title="Select graph type"
+                        [(ngModel)]="dataPoint.graphType" name="graphType">
+                        <option *ngFor="let gtype of graphtypList" [ngValue]="gtype">{{gtype}}</option>
+                      </select>
                     </div>
                    <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputExpression' + index">
@@ -701,6 +713,37 @@
                         [(ngModel)]="dataPoint.dataType" name="dataType">
                         <option *ngFor="let dataType of sourceDataTypes" [ngValue]="dataType">{{dataType}}</option>
                       </select>
+                    </div>
+                    <div class="form-group" *ngIf="dataPoint.dataType == 'ARRAY'">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>key</th>
+                            <th>Value</th>
+                            <th>
+                              <button type="button" class="btn btn-primary" (click)="onAddChildDataPoint(dataPoint)">
+                                <i class="ion-plus-round"></i>
+                              </button>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let childDataPoint of dataPoint.childdataPoints">
+                            <td>
+                                <input type="text" class="form-control" placeholder="Name" [value]="childDataPoint.dataPointName" (input)="childDataPoint.dataPointName = $event.target.value">
+                              </td>
+                              <td>
+                                <input type="text" class="form-control" placeholder="Label" [value]="childDataPoint.dataPointLabel" (input)="childDataPoint.dataPointLabel = $event.target.value">
+                              </td>
+                              <td>
+                                <button type="button" class="btn btn-danger" (click)="deleteChildDataPoint(dataPoint.childdataPoints,childDataPoint)">
+                                  <i class="ion-ios-trash"></i>
+                                </button>
+                              </td>
+                          </tr>
+                        </tbody>
+
+                      </table>
                     </div>
                     <div class="form-group" *ngIf="dataPoint.dataType === 'SINGLE_SELECT' || dataPoint.dataType === 'MULTI_SELECT'">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputSource' + index">
@@ -806,7 +849,19 @@
                     </div>
                     <div class="row">
                       <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.headerFlag" [label]="'Header Flag'" (event)="dataPoint.headerFlag = $event.target.checked"></api-checkbox>
-                      <api-checkbox class="col-md-9 col-sm-9 col-xs-9" [checked]="dataPoint.businessKeyFlag" [label]="'Business Key Flag'" (event)="dataPoint.businessKeyFlag = $event.target.checked"></api-checkbox>
+                      <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.businessKeyFlag" [label]="'Business Key Flag'" (event)="dataPoint.businessKeyFlag = $event.target.checked"></api-checkbox>
+                      <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.businessMonitorKey" [label]="'Business Monitor Flag'" (event)="dataPoint.businessMonitorKey = $event.target.checked"></api-checkbox>
+                      <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.percentageChange" [label]="'Percentage Change'" (event)="dataPoint.percentageChange = $event.target.checked"></api-checkbox>
+                      
+                    </div>
+                    <div class="form-group" *ngIf="dataPoint.businessMonitorKey">
+                        <label class="col-md-12 col-sm-12 col-xs-12" [for]="'graphType' + index">
+                          Graph Type
+                        </label>
+                        <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required [id]="'graphType' + index" title="Select graph type"
+                          [(ngModel)]="dataPoint.graphType" name="graphType">
+                          <option *ngFor="let gtype of graphtypList" [ngValue]="gtype">{{gtype}}</option>
+                        </select>
                     </div>
                     <div class="form-group">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputExpression' + index">
@@ -823,6 +878,37 @@
                         [(ngModel)]="dataPoint.dataType" name="dataType">
                         <option *ngFor="let dataType of sourceDataTypes" [ngValue]="dataType">{{dataType}}</option>
                       </select>
+                    </div>
+                    <div class="form-group" *ngIf="dataPoint.dataType == 'ARRAY'">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>key</th>
+                            <th>Value</th>
+                            <th>
+                              <button type="button" class="btn btn-primary" (click)="onAddChildDataPoint(dataPoint)">
+                                <i class="ion-plus-round"></i>
+                              </button>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let childDataPoint of dataPoint.childdataPoints">
+                            <td>
+                                <input type="text" class="form-control" placeholder="Name" [value]="childDataPoint.dataPointName" (input)="childDataPoint.dataPointName = $event.target.value">
+                              </td>
+                              <td>
+                                <input type="text" class="form-control" placeholder="Label" [value]="childDataPoint.dataPointLabel" (input)="childDataPoint.dataPointLabel = $event.target.value">
+                              </td>
+                              <td>
+                                <button type="button" class="btn btn-danger" (click)="deleteChildDataPoint(dataPoint.childdataPoints,childDataPoint)">
+                                  <i class="ion-ios-trash"></i>
+                                </button>
+                              </td>
+                          </tr>
+                        </tbody>
+
+                      </table>
                     </div>
                     <div class="form-group" *ngIf="dataPoint.dataType === 'SINGLE_SELECT' || dataPoint.dataType === 'MULTI_SELECT'">
                       <label class="col-md-12 col-sm-12 col-xs-12" [for]="'dpInputSource' + index">
