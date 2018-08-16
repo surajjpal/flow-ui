@@ -54,6 +54,11 @@
                                       <label>{{fileName}}</label>
                                       <input id="file-upload" type="file" (change)=fileEvent($event,config)/>
                                 </td>
+                                <td *ngIf="typeConfigList[i].get('value') == 'list'">
+                                 <select class="selectpicker form-control" required id="selectUser"  title="Choose Value"  name="value"  [(ngModel)]="temp" (ngModelChange)="onValueSelect($event,config)">
+                                    <option *ngFor="let value of config.get('values')" [ngValue]="value">{{value}}</option>
+                                 </select>
+                                </td>
                               </tr>
                         </tbody>
                         <tfoot>

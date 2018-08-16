@@ -44,9 +44,11 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
   selectedResponse:ApiResponse;
   responseTypeSource: string[];
   paramsToSelectSource: string[];
+  valueSelectedConfigs:any[];
   mainConfigTypeMap:any;
   conInfoOfNoMetadata:ConnectorInfo;
   fileName:string;
+  temp:string;
 
 
   private subscription: Subscription;
@@ -73,6 +75,7 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
     this.requiredList = {};
     this.requiredConfig = {};
     this.filterQuery = '';
+    this.valueSelectedConfigs = [];
     this.mandatorySatisfied = true;
     this.selectedApiConfig = new ApiConfig();
     this.conConfig = new ConnectorConfig();
@@ -104,7 +107,6 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
     
   }
   getConnecterInfo(){
-    console.log("calllinggggggg")
     this.subscription = this.connectorConfigService.getConnecterInfo()
       .subscribe(connectorInfos => {
         console.log(connectorInfos)
@@ -133,6 +135,9 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
                 mandatoryList.push(property);
               }
               map.set('value', "");
+              if(entry.metaData[property]["type"] == "list"){
+                map.set('values',entry.metaData[property]["valueList"] );
+              }
               configList.push(map);
             }
             this.mainConfigMap[entry.type] = configList;
@@ -226,24 +231,6 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
       });
     
     this.getConInfoByType(conConfig)
-    // for (const property in conConfig.configMap)
-    // {
-    //   const map = new Map();
-    //   map.set('key', property);
-    //   map.set('value', conConfig.configMap[property]);
-    //   this.configList.push(map);
-      
-      
-    // }
-    // for (const property in conConfig.requiredConfigMap)
-    // {
-    //   const newmap = new Map();
-    //   newmap.set('key', property);
-    //   newmap.set('value', conConfig.requiredConfigMap[property]);
-    //   this.requiredConfigList.push(newmap);
-    // }
-
-    
 
   }
 
@@ -258,6 +245,9 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
           typeMap.set('value',this.conInfoOfNoMetadata.metaData[property]["type"])
           map.set('key', property);
           map.set('value', conConfig.configMap[property] );
+          if(this.conInfoOfNoMetadata.metaData[property]["type"] == "list"){
+            map.set('values',this.conInfoOfNoMetadata.metaData[property]["valueList"] );
+          }
           this.configList.push(map);
           this.typeConfigList.push(typeMap);
           if(this.conInfoOfNoMetadata.metaData[property]["type"] == "file"){
@@ -301,6 +291,18 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
       for (const con of this.configList) {
         if (con.get('key') && con.get('key').trim().length > 0) {
           this.conConfig.configMap[con.get('key')] = con.get('value');
+        }
+      }
+
+      if(this.valueSelectedConfigs.length > 0){
+        for (let value of this.valueSelectedConfigs){
+          value.forEach((value: any, key: any) => {
+            console.log(key, value);
+            if(this.conConfig.configMap.includes[key]){
+              this.conConfig.configMap[key] = value;
+            }
+        });
+          
         }
       }
 
@@ -470,5 +472,25 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
       this.configList.splice(index, 1);
     }
   }
+
+  onValueSelect(event,config){
+    for (const con of this.configList) {
+      if (con.get('key') && con.get('key').trim().length > 0 && con.get('key') == config.get('key')) {
+        if (con && this.configList && this.configList.includes(con)) {
+          const index = this.configList.indexOf(con);
+          const body = new Map()
+          body.set('key', config.get('key'));
+          body.set('value',event)
+          body.set('values',config.get('values'));
+          this.temp = event;
+          this.configList.splice(index, 1,body);
+        }
+        
+        //this.configList.push(body);
+      }
+    }
+  }
+
+  
 
 }
