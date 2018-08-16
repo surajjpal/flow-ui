@@ -964,7 +964,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       showModal("fileUploadModel");
       this.selectedFile.append("functionInstanceName", "emailTemplate");
       this.selectedFile.append("entityType","templateUplaod");
-      this.selectedFile.append("entityRef", "emailTemplate");
+      this.selectedFile.append("entityRef",this.uuid() );
       this.subscription =  this.fileService.upload(this.selectedFile)
 
         .subscribe (
@@ -991,6 +991,11 @@ export class DesignComponent implements OnInit, OnDestroy {
           })
     }
   }
-
-
+  uuid(): string {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char) => {
+      let random = Math.random() * 16 | 0; 
+      let value = char === "x" ? random : (random % 4 + 8); 
+      return value.toString(16);
+    });
+  }
 }
