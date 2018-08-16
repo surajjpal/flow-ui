@@ -3,13 +3,13 @@
         <div class="col-md-12" style="display: inline-flex;">
             <div class="col-md-4">
                 <label for="selectmachinetype">Process</label>
-                <select  class="form-control"  required id="selectmachinetype"  title="Choose Process" [(ngModel)]="businessProcessMonitorRequest.machineType" name="machineType">
+                <select (change)="onMachineTypeSelect()"  class="form-control"  required id="selectmachinetype"  title="Choose Process" [(ngModel)]="businessProcessMonitorRequest.machineType" name="machineType" >
                     <option *ngFor="let graphObj of graphObjects" [ngValue]="graphObj.machineType">{{ graphObj.machineLabel }}</option>
                 </select>
             </div>
             <div class="col-md-4">
                 <label for="selectflowstatus">Process Status</label>
-                <select  class="form-control"  required id="selectflowstatus"  title="Choose Status" [(ngModel)]="businessProcessMonitorRequest.flowStatus" name="flowStatus">
+                <select class="form-control"  required id="selectflowstatus"  title="Choose Status" [(ngModel)]="businessProcessMonitorRequest.flowStatus" name="flowStatus">
                     <option *ngFor="let status of flowstatuses" [ngValue]="status">{{ status }}</option>
                 </select>
             </div>

@@ -30,7 +30,6 @@ export class ActivityMonitorService {
         }
       ).subscribe(
         (response: HttpResponse<any>) => {
-          console.log("success")
           subject.next(response.body);
         },
         (err: HttpErrorResponse) => {
@@ -84,7 +83,6 @@ export class ActivityMonitorService {
         }
       ).subscribe(
         (response: HttpResponse<any>) => {
-          console.log("success")
           subject.next(response.body);
         },
         (err: HttpErrorResponse) => {
@@ -113,7 +111,6 @@ export class ActivityMonitorService {
         }
       ).subscribe(
         (response: HttpResponse<any>) => {
-          console.log("success")
           subject.next(response.body);
         },
         (err: HttpErrorResponse) => {

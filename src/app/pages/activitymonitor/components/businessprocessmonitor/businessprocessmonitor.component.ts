@@ -87,6 +87,15 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         }
     }
 
+    onMachineTypeSelect() {
+        this.businessDataPoints = [];
+        this.tempBusinessDataPoints = [];
+        this.noOfHorizontalDiv = 0;
+        this.divArray = [];
+        this.getBusinessDataPoints(this.businessProcessMonitorRequest.machineType);
+        
+    }
+
     setTimeRange(dateTimeRange) {
         if (dateTimeRange != null) {
             this.businessProcessMonitorRequest.startTime = dateTimeRange.start;
@@ -281,7 +290,8 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
             donut: true,
             x: function(d){return d.label;},
             y: function(d){return parseFloat(d.value).toFixed(2);},
-            showLabels: true,
+            showLabels: false,
+            showTooltipPercent: true,
             pie: {
               dispatch: {
                 elementClick: function(e) {
@@ -294,7 +304,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                 return (d.color) || '#' + Math.floor(Math.random()*16777215).toString(16)
             },
             pieLabelsOutside: false,
-            labelType: 'percent',
+            //labelType: 'percent',
             duration: 500,
             legend: {
               margin: {
