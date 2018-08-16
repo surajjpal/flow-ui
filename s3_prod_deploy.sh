@@ -1,5 +1,5 @@
 echo "------------------ Building angular application -------------------"
-ng build --env=prod --aot --build-optimizer --no-sourcemap --base-href / --deploy-url /
+ng build --env=prod --aot --build-optimizer --base-href / --deploy-url /
 echo "-------------------------------------------------------------------"
 
 echo ""
@@ -7,8 +7,8 @@ echo ""
 echo ""
 
 echo "------------------------- Deleting old build from s3 -------------------------"
-aws s3 rm s3://console-ui-prod --recursive
+aws s3 rm s3://console-ui-compusoft --recursive
 echo "------------------------------------------------------------------------------"
 echo "------------------------- Uploading new build on s3 -------------------------"
-aws s3 cp ./dist/ s3://console-ui-prod/ --recursive
+aws s3 cp ./dist/ s3://console-ui-compusoft/ --recursive
 echo "-----------------------------------------------------------------------------"
