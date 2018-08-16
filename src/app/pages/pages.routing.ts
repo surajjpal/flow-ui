@@ -28,9 +28,9 @@ export const routes: Routes = [
       { path: 'agnt', loadChildren: './agent/agent.module#AgentModule' },
       { path: 'dmn', loadChildren: './domain/domain.module#DomainModule' },
       { path: 'stp', loadChildren: './master/master.module#MasterModule' },
-      { path: 'anlt', loadChildren: './analytics/analytics.module#AnalyticsModule'},
       { path: 'stn', loadChildren: './settings/settings.module#SettingsModule' },
-      { path: 'apidgn', loadChildren: './apidesign/apidesign.module#ApiDesignModule'}
+      { path: 'apidgn', loadChildren: './apidesign/apidesign.module#ApiDesignModule'},
+      { path: 'bam', loadChildren: './activitymonitor/activitymonitor.module#ActivityMonitorModule' }
     ]
   }
 ];

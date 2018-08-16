@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'api-analytics',
+  selector: 'api-activitymonitor',
   template: `<router-outlet></router-outlet>`
 })
-export class AnalyticsComponent {
-    constructor() {}
+export class ActivityMonitorComponent {
+  constructor() {}
 }

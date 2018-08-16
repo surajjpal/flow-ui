@@ -15,7 +15,7 @@ export const environment = {
     unpublishaccounturl:'https://flow.automatapi.com/flow/services/unpublish/',
 
     // Interfaces
-    interfaceService: 'http://flow.automatapi.com/flow/interfaces',
+    interfaceService: 'https://flow.automatapi.com/flow/interfaces',
     updateClassifierTraining : 'https://flow.automatapi.com/flow/interfaces/auto_decorate_training',
     updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',
     updateEntityTraining: 'https://flow.automatapi.com/flow/interfaces/entity_classification_training',
@@ -143,6 +143,12 @@ export const environment = {
    dashboardinterface: 'https://flow.automatapi.com/flow/interfaces/dashboard',
 
    //CRUD API path - To be used in conjunction with interfaceService property
-   crudFunction : '/crud'
+   crudFunction : '/crud',
+
+   // activity monitor services
+   businessDataPointValues: 'businessactivitymanagement/datapointvalues',
+   businessDataPoints: 'businessactivitymanagement/datapoints',
+   businessDataPonitsPercentageCount: 'businessactivitymanagement/percentagecount',
+   businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
   };
   
