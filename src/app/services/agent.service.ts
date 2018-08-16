@@ -558,7 +558,7 @@ export class ConversationService {
     ).subscribe(
       (response: HttpResponse<Episode>) => {
         if (response.body) {
-          subject.next(response.body);
+          subject.next(response.body['data']);
         }
       },
       (err: HttpErrorResponse) => {
