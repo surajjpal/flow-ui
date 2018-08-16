@@ -391,6 +391,11 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.tempState.ruleList = [];
     }
 
+    if(!this.isStateConnectorCompatible()){
+      this.tempState.connectorConfig = [];
+      this.tempState.taskConfig = [];
+    }
+
     if (this.tempState.stateId && this.tempState.stateId.toString().trim().length > 0) {
       const customObject: Object = JSON.parse(JSON.stringify(this.tempState));  // Very important line of code, don't remove
       new updateStateObject(customObject);
