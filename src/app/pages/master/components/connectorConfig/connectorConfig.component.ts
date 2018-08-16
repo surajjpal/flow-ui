@@ -27,7 +27,8 @@ export class ConnectorConfigComponent implements OnInit, OnDestroy {
     private apiConfigService: ApiConfigService,
     private sharingService: DataSharingService,
     private connectorConfigService:ConnectorConfigService,
-    private alertService:AlertService
+    private alertService:AlertService,
+    
   ) {
     this.conConfigList = [];
     this.filterQuery = '';
@@ -67,7 +68,11 @@ export class ConnectorConfigComponent implements OnInit, OnDestroy {
   this.subscription = this.connectorConfigService.getAllCons()
       .subscribe(conConfigList => {
         if (conConfigList) {
-          this.conConfigList = conConfigList;
+          for(let con of conConfigList){
+            if(!con.taskConfig){
+              this.conConfigList.push(con)
+            }
+          }
         }
       });
   }

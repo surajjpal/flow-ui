@@ -72,6 +72,9 @@ export const environment = {
   getallconconfig:'connectors/getAll/',
   deleteconconfig:'connectors/delete/',
   saveconconfig:'connectors/save/',
+  getallconinfo:'connectors/getConInfo/',
+  getconinfobytype:'connectors/getConInfoByType/',
+
 
   // auto
   autoServer: 'https://flow.automatapi.io/flow/auto/',
