@@ -27,7 +27,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
     GRAPH_TYPE_PIE_CHART = "PIE_CHART";
     GRAPH_TYPE_BAR_GRAPH = "BAR_GRAPH";
     GRAPH_TYPE_MULTI_BAR_GRAPH = "MULTI_BAR_GRAPH";
-    HTML_COMMOM_COLORS = ["red", "green", "#FF0000", "#008000"];
+    HTML_COMMOM_COLORS = { "red" : "red", "green" : "green", "amber" : "#FFA500", "red_partial" : "#F73232", "amber_partial" :  "#FB9D17" };
     tempDateRange: any = {}
     businessDataPointsValues = {}
     businessProcessMonitorCountPercentageChange: BusinessProcessMonitorCountPercentageChange[];
@@ -253,14 +253,14 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                                         else {
                                             const colors = []
                                             for (let donutData of gdata.result) {
-                                                if ( donutData != null && donutData['label'] != null && typeof donutData['label'] === 'string' && this.HTML_COMMOM_COLORS.indexOf(donutData['label'].toLowerCase()) != -1) {
-                                                    donutData['color'] = donutData['label'];
+                                                if ( donutData != null && donutData['label'] != null && typeof donutData['label'] === 'string' && this.HTML_COMMOM_COLORS[donutData['label']] != null) {
+                                                    donutData['color'] = this.HTML_COMMOM_COLORS[donutData['label']]
                                                 }
                                                 else {
                                                     donutData['color'] = '#' + Math.floor(Math.random()*16777215).toString(16);
-                                                    while (this.HTML_COMMOM_COLORS.indexOf(donutData['color'].toLowerCase()) != -1) {
-                                                        donutData['color'] = '#' + Math.floor(Math.random()*16777215).toString(16);
-                                                    }
+                                                    // while (this.HTML_COMMOM_COLORS.indexOf(donutData['color'].toLowerCase()) != -1) {
+                                                    //     donutData['color'] = '#' + Math.floor(Math.random()*16777215).toString(16);
+                                                    // }
                                                     
                                                 }
                                                 colors.push(donutData["label"]);
