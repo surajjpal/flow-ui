@@ -654,7 +654,6 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   connectorSelected(conInfo){
-   
     this.specificConfigSelected = true;
     this.selectedConInfo = conInfo;
     this.configList = [];
@@ -717,6 +716,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
 
     if(this.isEmpty(conInfo.payload) == false){
+      
       for (const property in conInfo.payload)
       {
         const map = new Map();
@@ -733,9 +733,22 @@ export class DesignComponent implements OnInit, OnDestroy {
           else{
             map.set('value', "");
           }
-
         }
-        
+        this.payloadList.push(map);
+      }
+   }
+    else{
+      const map = new Map();
+     
+      if(!this.stateCreateMode){
+        if(this.tempState.taskConfig){
+          if(this.tempState.taskConfig.length > 0){
+            for(let property in this.tempState.taskConfig[0].taskObject.body){
+              map.set('key', property);
+              map.set('value',this.tempState.taskConfig[0].taskObject.body[property])
+            }
+          }
+        }
         this.payloadList.push(map);
       }
     }
