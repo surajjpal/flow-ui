@@ -293,12 +293,16 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   updateState(state: StateModel): void {
     this.stateCreateMode = false;
+    this.specificConfigSelected = false;
+    this.selectedConfig = false;
+    this.gotConInfo = false;
 
     this.tempState = JSON.parse(JSON.stringify(state));
-    if(this.tempState.connectorConfig.length > 0){
-      this.onConfigSelect(this.tempState.connectorConfig);
+    if(this.tempState.connectorConfig){
+      if(this.tempState.connectorConfig.length > 0){
+        this.onConfigSelect(this.tempState.connectorConfig);
+      }
     }
-    
   }
   
 
@@ -983,12 +987,11 @@ export class DesignComponent implements OnInit, OnDestroy {
                 if (con.get('key') && con.get('key').trim().length > 0 && con.get('key') == config.get('key')) {
                   if (con && this.configList && this.configList.includes(con)) {
                     const index = this.configList.indexOf(con);
-                    this.configList.splice(index, 1);
+                    const body = new Map()
+                    body.set('key', config.get('key'));
+                    body.set('value',url)
+                    this.configList.splice(index, 1,body);
                   }
-                  const body = new Map()
-                  body.set('key', config.get('key'));
-                  body.set('value',url)
-                  this.configList.push(body);
                 }
               }
               this.progressBarFlag = false;
