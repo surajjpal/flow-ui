@@ -485,8 +485,6 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
           this.temp = event;
           this.configList.splice(index, 1,body);
         }
-        
-        //this.configList.push(body);
       }
     }
   }
