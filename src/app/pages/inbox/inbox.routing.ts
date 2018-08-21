@@ -6,6 +6,7 @@ import { InboxComponent } from './inbox.component';
 import { ActiveComponent } from './components/active/active.component';
 import { ArchivedComponent } from './components/archived/archived.component';
 import { TaskDetailsComponent } from './components/taskDetails/taskDetails.component';
+import { ArchiveMasterComponent } from 'app/pages/inbox/components/archivedmaster/archivedmaster.component';
 
 const routes: Routes = [
   {
@@ -18,7 +19,8 @@ const routes: Routes = [
       { path: 'trch', component: ArchivedComponent },
       { path: 'tdts', component: TaskDetailsComponent },
       { path: 'tmvi', component: TeamViewComponent},
-      { path: 'pervi', component: PersonalComponent}
+      { path: 'pervi', component: PersonalComponent},
+      { path: 'trchtst', component: ArchiveMasterComponent }
     ]
   }
 ];
