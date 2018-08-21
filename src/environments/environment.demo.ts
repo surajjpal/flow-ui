@@ -108,6 +108,8 @@ export const environment = {
     sendReportUrl: '/reports/analyticsreport/sendreport',
     scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
     getAnalyticsReports: "/reports/analyticsreport",
+    getanalyticsReportTemplates: "/reports/analyticsreport/template",
+    getanalyticsReportEmailTemplates: "/reports/analyticsreport/emailtemplate",
 
     // Schedule
     scheduleTaskConfiguration: "api/schedule/",

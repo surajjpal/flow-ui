@@ -9,7 +9,7 @@
                         </div>
                         <div class="form-group">
                             <label>Select Agent</label>
-                            <select class="selectpicker form-control" required id="reportFileType" title="Choose Report Type" [(ngModel)]="selectedAnalyticsReport.agentId" name="agentId"
+                            <select (change) = "onAgentSelect()" class="selectpicker form-control" required id="reportFileType" title="Choose Report Type" [(ngModel)]="selectedAnalyticsReport.agentId" name="agentId"
                             >
                                 <option *ngFor="let agent of definedAgents" [value]="agent._id">{{agent.name}}</option>
                             </select>
@@ -31,10 +31,24 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Select report file type</label>
-                            <select class="selectpicker form-control" required id="reportCategory" title="Choose Report Category" [(ngModel)]="selectedAnalyticsReport.reportCategory" name="reportCategory"
+                            <label>Select Report Category</label>
+                            <select (change) = "onCustomReportCategorySelect()" class="selectpicker form-control" required id="reportCategory" title="Choose Report Category" [(ngModel)]="selectedAnalyticsReport.reportCategory" name="reportCategory"
                             >
                                 <option *ngFor="let repcat of reportCategories" [value]="repcat">{{repcat}}</option>
+                            </select>
+                        </div>
+                        <div *ngIf="selectedAnalyticsReport.reportCategory === 'CUSTOM'" class="form-group">
+                            <label>Select Template</label>
+                            <select class="selectpicker form-control" required id="templateName" title="Choose Template" [(ngModel)]="selectedAnalyticsReport.templateName" name="templateName"
+                            >
+                                <option *ngFor="let temp of analyticsReportTemplates" [value]="temp.templateName">{{ temp.templateLabel }}</option>
+                            </select>
+                        </div>
+                        <div *ngIf="selectedAnalyticsReport.reportCategory === 'CUSTOM'" class="form-group">
+                            <label>Select Email Template</label>
+                            <select class="selectpicker form-control" required id="emailTemplateName" title="Choose Email Template" [(ngModel)]="selectedAnalyticsReport.emailTemplateName" name="emailTemplateName"
+                            >
+                                <option *ngFor="let temp of analyticsReportEmailTemplates" [value]="temp.templateName">{{ temp.templateLabel }}</option>
                             </select>
                         </div>
                         <div class="form-group">
