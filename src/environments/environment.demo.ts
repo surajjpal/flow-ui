@@ -42,6 +42,7 @@ export const environment = {
     stateflowimageurl: 'statemachine/stateflow/',
     updatestatemachineurl: 'statemachine/updateflow/withState',
     alocateuserurl:'statemachine/allocateto',
+    graphobjectbyflowinstanceid: 'statemachine/graphobject',
     autosummary: 'dashboard/CONVERSATION_SUMMARY',
     graphurl: 'graph/',
     usergraphurl: 'usergraph/saveUserGraph/',

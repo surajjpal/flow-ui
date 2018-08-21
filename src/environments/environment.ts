@@ -46,6 +46,7 @@ export const environment = {
   stateflowimageurl: 'statemachine/stateflow/',
   updatestatemachineurl: 'statemachine/updateflow/withState',
   alocateuserurl:'statemachine/allocateto',
+  graphobjectbyflowinstanceid: 'statemachine/graphobject',
   autosummary: 'dashboard/CONVERSATION_SUMMARY',
   graphurl: 'graph/',
   usergraphurl: 'usergraph/saveUserGraph/',
@@ -55,6 +56,7 @@ export const environment = {
   timeruniturl: 'graph/timerunit',
   autodashboardurl: 'dashboard',
   userurl: 'user/',
+  
 
   registerurl: 'user/createUser',
   forgotpassword:'user/forgotPassword',

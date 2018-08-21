@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { State } from '../../../../models/tasks.model';
 import { StateService } from '../../../../services/inbox.service';
 import { ActivityMonitorService } from 'app/services/activitymonitor.service';
-import { DataPoint } from 'app/models/flow.model';
+import { DataPoint, GraphObject } from 'app/models/flow.model';
 
 
 @Component({
@@ -26,6 +26,8 @@ export class ArchiveMasterComponent implements OnInit, OnDestroy {
   personalStatesTabClass: string[];
   personalTaskDetail: State;
   businessDataPoints: DataPoint[];
+  graphObjects = new Map();
+  graphObject: GraphObject;
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
 
@@ -40,6 +42,7 @@ export class ArchiveMasterComponent implements OnInit, OnDestroy {
     this.personalStates = [];
     this.personalStatesTabClass = [];
     this.personalTaskDetail = new State();
+    this.graphObject = new GraphObject();
   }
 
   ngOnInit(): void {
@@ -73,17 +76,35 @@ export class ArchiveMasterComponent implements OnInit, OnDestroy {
     this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('CLOSED', 'Personal',pageNumber,fetchRecords)
     .subscribe(states => {
       this.loadingPersonal = false;
+      this.setFirstElementValues(states);
       this.personalStates = states;
-      if (this.personalStates != null && this.personalStates.length > 0) {
-          this.personalTaskDetail = this.personalStates[0];
-          this.personalStatesTabClass.push("tablinks active");
-          for(let i=1; i<this.personalStates.length; i++) {
-              this.personalStatesTabClass[i] = "tablinks";
-          }
-      }
+      
     }, error => {
       this.loadingPersonal = false;
     });
+  }
+
+  setFirstElementValues(states) {
+    if (states != null && states.length > 0) {
+        this.personalTaskDetail = states[0];
+        this.personalStatesTabClass.push("tablinks active");
+        this.stateService.getDataPointconfigurationFromFlowInstanceId(this.personalTaskDetail.stateMachineInstanceModelId)
+                .subscribe(
+                    response => {
+                        this.graphObjects.set(this.personalTaskDetail.stateMachineInstanceModelId, response);
+                        this.graphObject = response;
+                        for(let i=1; i<states.length; i++) {
+                            this.personalStatesTabClass[i] = "tablinks";
+                            this.setGraphObjects(states[i]);
+                        }
+                    },
+                    error => {
+                        console.log("graph object not found");
+                    }
+                )
+
+    }
+    
   }
 
   loadMore(status,type):void{
@@ -117,6 +138,7 @@ export class ArchiveMasterComponent implements OnInit, OnDestroy {
             if (this.personalStates[i]._id == stateId) {
                 this.personalTaskDetail = this.personalStates[i];
                 this.personalStatesTabClass[i] = "tablinks active";
+                this.graphObject = this.graphObjects.get(this.personalStates[i].stateMachineInstanceModelId);
             }
             else {
                 this.personalStatesTabClass[i] = "tablinks";
@@ -125,20 +147,36 @@ export class ArchiveMasterComponent implements OnInit, OnDestroy {
         
     }
 
-    getBusinessKey(parameters) {
-        return "Contract No";
+    getBusinessKey(stateMachineInstanceModelId: string) {
+        if (this.graphObjects.get(stateMachineInstanceModelId) != null) {
+            const dataPoints = this.graphObjects.get(stateMachineInstanceModelId).dataPointConfigurationList;
+            for(let data of dataPoints) {
+                if (data.businessKeyFlag) {
+                    return data.dataPointLabel;
+                }
+            }
+        }
+        return "Business key";
     }
 
-    getBusinessDataPoints(machinetype: string) {
-        this.activityMonitorService.getDataPoints(machinetype)
+    setGraphObjects(state: State) {
+        if (this.graphObjects.get(state.stateMachineInstanceModelId) == null) {
+            this.stateService.getDataPointconfigurationFromFlowInstanceId(state.stateMachineInstanceModelId)
             .subscribe(
                 response => {
-                    this.businessDataPoints = response;
+                    this.graphObjects.set(state.stateMachineInstanceModelId, response);
                     
                 },
                 error => {
                     
                 }
             )
+        }
+        else {
+            this.graphObjects.set(state.stateMachineInstanceModelId, new GraphObject);
+        }
+        
     }
+
+
 }  

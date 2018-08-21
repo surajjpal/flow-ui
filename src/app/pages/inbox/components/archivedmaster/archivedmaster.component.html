@@ -30,13 +30,35 @@
                   <div class="row">
                       <div class="tab">
                         <button *ngFor="let perState of personalStates; let index=index;" [class]="personalStatesTabClass[index]" (click)="onPersonalSubjectSelect(perState._id)" id="defaultOpen">
-                          <span>{{ getBusinessKey(perState.parameters) }}:</span><br><br><span class="businesskey">{{ perState.businessKey }}</span> <br><br>
+                          <span>{{ getBusinessKey(perState.stateMachineInstanceModelId) }}:</span><br><br><span class="businesskey">{{ perState.businessKey }}</span> <br><br>
                           <span>Process: </span><br><br>{{ perState.machineLabel }}
                         </button>
                         
                       </div>
                       <div class="tabcontent">
-                        <h3 style="margin-top:10px;">{{ personalTaskDetail.businessKey }}</h3>
+                        <div class="row">
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                <h3>{{ personalTaskDetail.businessKey }}</h3>
+                            </div>
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                <button type="button" class="btn btn-primary pull-right" title="View" (click)="onSelect(s)">
+                                  <i class="ion-eye"></i>
+                                </button>
+                                
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="row">
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Process: </b></label>
+                              <span>{{ personalTaskDetail.machineLabel }}</span>
+                            </div>
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Version: </b></label>
+                              <span>{{ graphObject.version }}</span>
+                            </div>
+                        </div>
                         
                       </div>
                       
