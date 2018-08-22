@@ -1,0 +1,155 @@
+<div *ngIf="progressBarFlag">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;" aria-valuenow="99"
+            aria-valuemin="0" aria-valuemax="100">Loading...</div>
+        </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+        <br/>
+        </div>
+    </div>
+</div>
+
+<div class="widgets">
+    <div class="row">
+        <ba-card baCardClass="with-scroll" class="data-table-container" style="width: 100%">
+            <div class="panel panel-default">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#tab_assigned" role="tab" aria-expanded="true">Assigned</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tab_unassigned" role="tab">Unassigned</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tab_flagged" role="tab">Flagged</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade show active" id="tab_assigned">
+                        <div class="row">
+                            <div class="tab">
+                                <button *ngFor="let asgnState of assignedStates; let index=index;" [class]="assignedStateTabclass[index]" (click)="onPersonalAssignedSubjectSelect(asgnState._id)" id="defaultOpen">
+                                    <span>{{ getBusinessKey(asgnState.stateMachineInstanceModelId) }}:</span><br><br><span class="businesskey">{{ asgnState.businessKey }}</span> <br><br>
+                                    <span>Process: </span><br><br>{{ asgnState.machineLabel }}
+                                </button>
+                                <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
+                                    *ngIf="assignedStates.length != 0" (click)="loadMore('ACTIVE','Personal')">Load More
+                                </button>
+                            </div>
+                            <div class="tabcontent">
+                                <div class="row">
+                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                        <h3>{{ assignedTaskDdetails.businessKey }}</h3>
+                                    </div>
+                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                        <button type="button" class="btn btn-primary pull-right" title="Show Details" (click)="onSelect(s)">
+                                            <i class="ion-eye"></i>
+                                        </button>
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                        <label><b>Process: </b></label>
+                                        <span>{{ assignedTaskDdetails.machineLabel }}</span>
+                                    </div>
+                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                        <label><b>Version: </b></label>
+                                        <span>{{ assignedStategraphObject.version }}</span>
+                                    </div>
+                                </div>
+        
+                                <div class="row">
+                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                        <label><b>Task: </b></label>
+                                        <span>{{ assignedTaskDdetails.stateCd }}</span>
+                                    </div>
+                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                        <label><b>Status: </b></label>
+                                        <span>{{ assignedTaskDdetails.statusCd }}</span>
+                                    </div>
+                                </div>
+        
+                                <div class="row">
+                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                        <label><b>Start Time: </b></label>
+                                        <span>{{ assignedTaskDdetails.startTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A' }}</span>
+                                    </div>
+                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                        <label><b>End Time: </b></label>
+                                        <span>{{ assignedTaskDdetails.endTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A' }}</span>
+                                    </div>
+                                </div>
+        
+                                <div class="row">
+                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                        <label><b>Assigned Group: </b></label>
+                                        <span>{{ assignedTaskDdetails.assignedUserGroupCd }}</span>
+                                    </div>
+                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                        <label><b>Assigned To: </b></label>
+                                        <span>{{ assignedTaskDdetails.assignedUserDisplayName }}</span>
+                                    </div>
+                                </div>
+        
+                                <div class="row">
+                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                        <label><b>Flagged: </b></label>
+                                        <span>{{ assignedTaskDdetails.flagged }}</span>
+                                    </div>
+                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                        <label><b>Flag Level: </b></label>
+                                        <span>{{ assignedTaskDdetails.iterationLevel }}</span>
+                                    </div>
+                                </div>
+        
+                                <div class="row">
+                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(assignedTaskDdetails)">
+                                        <label><b>{{ dataPoint.dataPointLabel }}: </b></label>
+                                        <span>{{ assignedTaskDdetails['parameters'][dataPoint.dataPointName] }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(assignedTaskDdetails)">
+                                        <label><b>{{ dataPoint.dataPointLabel }}: </b></label>
+                                        <div class="row">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                    <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, assignedTaskDdetails)">{{ dp.dataPointLabel }}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let value of getValueForArraydatatype(dataPoint, assignedTaskDdetails)">
+                                                        <td *ngFor="let v of value">{{ v }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                
+                            </div>
+                                
+                        </div>
+                        
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="tab_unassigned">
+                        
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="tab_flagged">
+                    
+                    </div>
+                </div>
+                      
+            </div>
+        </ba-card>
+    </div>
+</div>

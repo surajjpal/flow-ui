@@ -41,14 +41,12 @@
                                 <h3>{{ personalTaskDetail.businessKey }}</h3>
                             </div>
                             <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                <button type="button" class="btn btn-primary pull-right" title="View" (click)="onSelect(s)">
+                                <button type="button" class="btn btn-primary pull-right" title="Show Details" (click)="onSelect(s)">
                                   <i class="ion-eye"></i>
                                 </button>
                                 
                             </div>
                         </div>
-                        
-                        
                         <div class="row">
                             <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
                               <label><b>Process: </b></label>
@@ -59,12 +57,64 @@
                               <span>{{ graphObject.version }}</span>
                             </div>
                         </div>
-                        
+
+                        <div class="row">
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Task: </b></label>
+                              <span>{{ personalTaskDetail.stateCd }}</span>
+                            </div>
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Status: </b></label>
+                              <span>{{ personalTaskDetail.statusCd }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Start Time: </b></label>
+                              <span>{{ personalTaskDetail.startTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A' }}</span>
+                            </div>
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>End Time: </b></label>
+                              <span>{{ personalTaskDetail.endTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A' }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Assigned Group: </b></label>
+                              <span>{{ personalTaskDetail.assignedUserGroupCd }}</span>
+                            </div>
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Assigned To: </b></label>
+                              <span>{{ personalTaskDetail.assignedUserDisplayName }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Flagged: </b></label>
+                              <span>{{ personalTaskDetail.flagged }}</span>
+                            </div>
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Flag Level: </b></label>
+                              <span>{{ personalTaskDetail.iterationLevel }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;" *ngFor="let dataPoint of getHeaderFlags()">
+                            <label><b>{{ dataPoint.dataPointLabel }}: </b></label>
+                            <span>{{ personalTaskDetail['parameters'][dataPoint.dataPointName] }}</span>
+                          </div>
+                        </div>
+
                       </div>
                       
                   </div>
-                            
+                  
               </div>
+              <button type="button" class="btn btn-success" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top:20px; width: 200px" *ngIf="personalStates.length !== 0" (click)="loadMore('CLOSED','Personal')" >Load More</button>
               <div role="tabpanel" class="tab-pane fade" id="tab_group">
                 
               </div>

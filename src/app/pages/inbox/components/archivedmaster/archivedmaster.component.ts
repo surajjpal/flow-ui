@@ -47,7 +47,7 @@ export class ArchiveMasterComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.pageNumber= 0;
-    this.fetchRecords = 10;
+    this.fetchRecords = 1;
     this.fetchData(this.pageNumber,this.fetchRecords);
   }
 
@@ -118,7 +118,16 @@ export class ArchiveMasterComponent implements OnInit, OnDestroy {
         this.groupStates = this.groupStates.concat(states)
       }
       else if(type=='Personal'){
+        for(let i=this.personalStates.length; i<this.personalStates.length + states.length; i++) {
+            console.log(i);
+            if (i != 0) {
+                this.personalStatesTabClass[i] = "tablinks";
+                this.setGraphObjects(states[this.personalStates.length - i]);
+            }
+            
+        }
         this.personalStates = this.personalStates.concat(states)
+        
       }
       
      
@@ -176,6 +185,17 @@ export class ArchiveMasterComponent implements OnInit, OnDestroy {
             this.graphObjects.set(state.stateMachineInstanceModelId, new GraphObject);
         }
         
+    }
+
+    getHeaderFlags() {
+        let headerFlags: DataPoint[];
+        headerFlags = [];
+        for (let dataPoint of this.graphObject.dataPointConfigurationList) {
+            if (dataPoint.headerFlag) {
+                headerFlags.push(dataPoint);
+            }
+        }
+        return headerFlags;
     }
 
 
