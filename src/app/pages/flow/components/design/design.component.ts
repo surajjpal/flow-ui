@@ -607,7 +607,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.typeConfigList = [];
     this.fileName = "please upload a file..."
     this.tempConConfig = event[0]
-    
+   
     
     if(this.tempConConfig._id.length > 0){
       this.subscriptionConConfig = this.connectorConfigService.getConnectorInfos(event[0].configType)
@@ -617,7 +617,29 @@ export class DesignComponent implements OnInit, OnDestroy {
         if(conInfoList.length == 1){
           this.selectedConfig = false;
           this.specificConfigSelected = true;
-          this.connectorSelected(conInfoList[0])
+          //
+          if(!this.stateCreateMode){
+            if(this.tempState.connectorConfig[0].configType!=this.tempConConfig.configType){
+              this.conConfig = new ConnectorConfig()
+              this.connectorSelected(conInfoList[0])
+            }
+            else{
+              for(let conInfo of conInfoList ){
+                if(conInfo.type == this.tempState.taskConfig[0].connectorInfoRef){
+                  this.conConfig = this.tempState.taskConfig[0]
+                  this.connectorSelected(conInfo)
+                }
+                else{
+                  this.conConfig = new ConnectorConfig()
+                  this.connectorSelected(conInfoList[0])
+                }
+              }
+            }
+          }
+          else{
+            this.conConfig = new ConnectorConfig()
+            this.connectorSelected(conInfoList[0])
+          }
         }
         else{
           this.selectedConfig = true;
@@ -738,18 +760,22 @@ export class DesignComponent implements OnInit, OnDestroy {
       }
    }
     else{
-      const map = new Map();
+      
      
       if(!this.stateCreateMode){
         if(this.tempState.taskConfig){
           if(this.tempState.taskConfig.length > 0){
+            if(this.tempState.taskConfig[0].configType == conInfo.type){
             for(let property in this.tempState.taskConfig[0].taskObject.body){
+              const map = new Map();
               map.set('key', property);
               map.set('value',this.tempState.taskConfig[0].taskObject.body[property])
+              this.payloadList.push(map);
+            }
             }
           }
         }
-        this.payloadList.push(map);
+        
       }
     }
     
