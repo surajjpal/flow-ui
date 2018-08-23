@@ -34,8 +34,8 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   @Output()
   selectedData: EventEmitter<any> = new EventEmitter<any>();
   
-  TABLINKS_ACTIVE = "tablinks active";
-  TABLINKS = "tablinks"
+  TABLINKS_ACTIVE = "block active";
+  TABLINKS = "block"
 
   selectedStateForFlag: State;
   selectedState: State;
@@ -248,10 +248,10 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
         else if(type=='Personal'){
           for(let state of states) {
             if (this.assignedStates.length == 0) {
-              this.assignedStateTabclass[state._id] = "tablinks active";
+              this.assignedStateTabclass[state._id] = "block active";
             }
             else {
-              this.assignedStateTabclass[state._id] = "tablinks";
+              this.assignedStateTabclass[state._id] = "block";
             }
             
             this.assignedTaskActionButtonEnabled[state._id] = true;
@@ -458,7 +458,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
   setFirstAssignedTaskValues(states) {
     if (states != null && states.length > 0) {
-        this.assignedStateTabclass[states[0]._id] = "tablinks active";
+        this.assignedStateTabclass[states[0]._id] = "block active";
         this.stateService.getDataPointconfigurationFromFlowInstanceId(states[0].stateMachineInstanceModelId)
                 .subscribe(
                     response => {
@@ -470,7 +470,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
                         this.assignedStategraphObject = response;
                         for(let state of states) {
                             if(this.assignedTaskDdetails != state) {
-                              this.assignedStateTabclass[state._id] = "tablinks";
+                              this.assignedStateTabclass[state._id] = "block";
                               this.setGraphObjects(states);
                               this.assignedTaskActionButtonEnabled[state._id] =true;
                             }

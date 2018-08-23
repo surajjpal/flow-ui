@@ -46,3 +46,22 @@
     border-left: none;
     
 }
+
+.block {
+    display: block;
+    width: 100%;
+    border: none;
+    padding: 14px 28px;
+    background-color: white;
+    font-size: 16px;
+    text-align: center;
+    outline: none
+}
+
+.block.active {
+    background-color: #ccc;
+}
+
+.block:hover {
+    background-color: #df1111ef;
+}
