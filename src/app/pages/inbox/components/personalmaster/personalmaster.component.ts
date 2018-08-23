@@ -8,13 +8,15 @@ import { State } from '../../../../models/tasks.model';
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
 import {BaThemeSpinner } from '../../../../theme/services';
 import { UserHierarchy } from '../../../../models/user.model';
-import { FetchUserService } from '../../../../services/userhierarchy.service';
+import { FetchUserService, AllocateTaskToUser } from '../../../../services/userhierarchy.service';
 import { GraphObject, DataPoint, StateModel, ManualAction,StateInfoModel } from '../../../../models/flow.model';
+import { UniversalUser } from 'app/services/shared.service';
 
 @Component({
   selector: 'api-inbox-personal-master',
   templateUrl: './personalmaster.component.html',
-  styleUrls: ['./personalmaster.scss']
+  styleUrls: ['./personalmaster.scss'],
+  providers: [FetchUserService,AllocateTaskToUser]
 })
 
 export class PersonalMasterComponent implements OnInit, OnDestroy {
@@ -31,7 +33,9 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   @Output()
   selectedData: EventEmitter<any> = new EventEmitter<any>();
   
-  
+  TABLINKS_ACTIVE = "tablinks active";
+  TABLINKS = "tablinks"
+
   selectedStateForFlag: State;
   selectedState: State;
   selectedStateCd: string;
@@ -40,7 +44,8 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   fieldKeyMap:any;
   assignedStates: State[];
   assignedTaskDdetails: State;
-  assignedStateTabclass: string[];
+  assignedStateTabclass = {};
+  assignedTaskActionButtonEnabled = {};
   flaggedStates:State[];
   loadingUnassigned: boolean = false;
   loadingAssigned: boolean = false;
@@ -60,20 +65,38 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   assignedStategraphObject: GraphObject;
   arrayTableHeaders = {};
 
+  // users
+  userId: string
+  users: UserHierarchy[] = [];
+  userHierarchy:UserHierarchy = new UserHierarchy();
+  allocatedAssignedTaskToUserId: string;
+
+  
   private subscription: Subscription;
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
   private subscriptionXML: Subscription;
 
-  constructor(private stateService: StateService, private baThemeSpinner: BaThemeSpinner,private dataCachingService: DataCachingService,private router: Router,private route: ActivatedRoute) {
+  constructor(
+    private stateService: StateService, 
+    private baThemeSpinner: BaThemeSpinner,
+    private dataCachingService: DataCachingService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private fetchUserService:FetchUserService,
+    private universalUser: UniversalUser,
+    private allocateTaskToUser: AllocateTaskToUser
+  ) {
     this.unassignedStates = [];
     this.assignedStates = [];
     this.unassignedHeaderParamList = [];
     this.assignedHeaderParamList = [];
     this.flaggedStates = [];
-    this.assignedStateTabclass = [];
+    this.assignedStateTabclass = {};
     this.assignedTaskDdetails = new State();
+    this.assignedTaskActionButtonEnabled = {};
     this.assignedStategraphObject = new GraphObject();
+    this.allocatedAssignedTaskToUserId = null;
     //this.selectedStateForFlag = State;
   }
 
@@ -88,6 +111,37 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     if (!this.graphObject) {
       this.graphObject = new GraphObject();
     }
+    this.userId = this.universalUser.getUser()._id
+    this.getUserList();
+    this.getParentUser();
+  }
+
+  getUserList(){
+    
+    this.subscription = this.fetchUserService.fetchChildUsers(this.userId)
+      .subscribe(userList => {
+        if (userList && userList.length > 0) {
+          //document.getElementById('#alocateButton').style.visibility = 'visible';
+          this.users = userList;
+          
+             
+        }
+      });
+    }
+
+  getParentUser(){
+    this.subscription = this.fetchUserService.getUserHierarchy(this.userId)
+    .subscribe(userHierarchyObject => {
+      
+      if (userHierarchyObject) {
+        //document.getElementById('#alocateButton').style.visibility = 'visible';
+        this.userHierarchy = userHierarchyObject;
+
+           
+      }
+      
+    });
+
   }
 
   refresh(){
@@ -191,13 +245,16 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
           this.loadingUnassigned = false;
         }
         else if(type=='Personal'){
-          for(let i=this.assignedStates.length; i<this.assignedStates.length + states.length; i++) {
-            console.log(i);
-            if (i != 0) {
-                this.assignedStateTabclass[i] = "tablinks";
-                this.setGraphObjects(states[this.assignedStates.length - i]);
+          for(let state of states) {
+            if (this.assignedStates.length == 0) {
+              this.assignedStateTabclass[state._id] = "tablinks active";
+            }
+            else {
+              this.assignedStateTabclass[state._id] = "tablinks";
             }
             
+            this.assignedTaskActionButtonEnabled[state._id] = true;
+            this.setGraphObjects(state);
           }
           this.assignedStates = this.assignedStates.concat(states)
           this.loadingAssigned = false;
@@ -400,7 +457,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
   setFirstAssignedTaskValues(states) {
     if (states != null && states.length > 0) {
-        this.assignedStateTabclass.push("tablinks active");
+        this.assignedStateTabclass[states[0]._id] = "tablinks active";
         this.stateService.getDataPointconfigurationFromFlowInstanceId(states[0].stateMachineInstanceModelId)
                 .subscribe(
                     response => {
@@ -408,10 +465,14 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
                         console.log("setFirstAssignedTaskValues");
                         console.log(this.graphObjects);
                         this.assignedTaskDdetails = states[0];
+                        this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
                         this.assignedStategraphObject = response;
-                        for(let i=1; i<states.length; i++) {
-                            this.assignedStateTabclass[i] = "tablinks";
-                            this.setGraphObjects(states[i]);
+                        for(let state of states) {
+                            if(this.assignedTaskDdetails != state) {
+                              this.assignedStateTabclass[state._id] = "tablinks";
+                              this.setGraphObjects(states);
+                              this.assignedTaskActionButtonEnabled[state._id] =true;
+                            }
                         }
                     },
                     error => {
@@ -422,19 +483,14 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     
   }
 
-  onPersonalAssignedSubjectSelect(stateId) {
-    for (let i=0; i<this.assignedStates.length; i++) {
-        if (this.assignedStates[i]._id == stateId) {
-            this.assignedTaskDdetails = this.assignedStates[i];
-            this.assignedStateTabclass[i] = "tablinks active";
-            this.assignedStategraphObject = this.graphObjects.get(this.assignedStates[i].stateMachineInstanceModelId);
-        }
-        else {
-            this.assignedStateTabclass[i] = "tablinks";
-        }
+  onPersonalAssignedSubjectSelect(state: State) {
+    this.assignedTaskDdetails = state;
+    for (let asgnState of this.assignedStates) {
+      this.assignedStateTabclass[asgnState._id] = this.TABLINKS;
     }
-    
-}
+    this.assignedStateTabclass[state._id] = this.TABLINKS_ACTIVE;
+    this.assignedStategraphObject = this.graphObjects.get(state.stateMachineInstanceModelId);
+  }
 
   setGraphObjects(state: State) {
     if (this.graphObjects.get(state.stateMachineInstanceModelId) == null) {
@@ -531,6 +587,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
         }
       }
     }
+    //console.log(headers)
     return headers;
     
   }
@@ -539,6 +596,8 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     let values = []
     if (state['parameters'][dataPoint.dataPointName] != null) {
       for(let d of state['parameters'][dataPoint.dataPointName]) {
+        // console.log("d");
+        // console.log(d);
         let headerValue = []
         for(let dp of this.getHeaderDataPointsForArrayDataType(dataPoint, state)) {
           headerValue.push(d[dp.dataPointName])
@@ -547,6 +606,85 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
       }
     }
     return values;
+  }
+
+  updateProcessFlow(state: State, type: string) {
+
+    if (type == "ASSIGNED") {
+      this.assignedTaskActionButtonEnabled[state._id] = false;
+    }
+    this.subscription = this.stateService.update(state.machineType, state.entityId, state['parameters'])
+      .subscribe(
+        response => {
+        if (type == "ASSIGNED") {
+          this.assignedTaskActionButtonEnabled[state._id] = true;
+        }
+        if (response) {
+          const errorState: State = response;
+          let erresponseError = "";
+          for (const key in errorState.errorMessageMap) {
+            if (key) {
+              const errorList: string[] = errorState.errorMessageMap[key];
+
+              erresponseError += `${this.fieldKeyMap[key]}<br>`;
+              for (const error of errorList) {
+                erresponseError += `  - ${error}<br>`;
+              }
+              new showModal(erresponseError);
+            }
+          }
+        }
+        else{
+          if (type == "ASSIGNED") {
+            this.assignedTaskActionButtonEnabled[state._id] = true;
+            let index = this.assignedStates.indexOf(state);
+            console.log("index");
+            console.log(index);
+            if (index != -1) {
+              this.assignedStates.splice(index, 1);
+              if (this.assignedStates.length > 0 ) {
+                console.log("***********");
+                if (state._id == this.assignedTaskDdetails._id) {
+                  console.log(state);
+                  const displayState = this.assignedStates[index];
+                  this.assignedStateTabclass[displayState._id] = this.TABLINKS_ACTIVE;
+                  this.assignedTaskDdetails = displayState;
+                  
+                }
+              }
+            }
+          }
+          new showModal('successModal');
+        }
+      },
+      error => {
+        new showModal('Error in updating process');
+      }
+    );
+  }
+
+  onUserSelectAssignedTask(user){
+      
+    this.allocatedAssignedTaskToUserId = user.userId;
+    
+  }
+
+  allocateAssignedTask(){
+    this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = false
+    console.log(this.allocatedAssignedTaskToUserId)
+    if(this.allocatedAssignedTaskToUserId != null && this.allocatedAssignedTaskToUserId.length > 0){
+      this.subscription = this.allocateTaskToUser.allocateTask(this.allocatedAssignedTaskToUserId,this.assignedTaskDdetails._id,"Allocate")
+    .subscribe(any => {
+
+      this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
+  }), error => {};
+    }
+    else{
+      new closeModal('userModal');
+      new showModal('userNotSelected');
+      this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
+    }
+    
   }
 
 }
