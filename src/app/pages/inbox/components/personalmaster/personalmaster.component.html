@@ -31,7 +31,7 @@
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade show active" id="tab_assigned">
-                        <div class="row">
+                        <div class="row" *ngIf="assignedTaskDdetails != null">
                             <div class="tab">
                                 <button *ngFor="let asgnState of assignedStates; let index=index;" [class]="assignedStateTabclass[asgnState._id]" (click)="onPersonalAssignedSubjectSelect(asgnState)" id="defaultOpen">
                                     <span>{{ getBusinessKey(asgnState.stateMachineInstanceModelId) }}:</span><br><br><span class="businesskey">{{ asgnState.businessKey }}</span> <br><br>
@@ -67,7 +67,7 @@
                                             (click)="escalate()" class="btn btn-warning btn-with-icon">
                                             <i class="ion-alert-circled"></i>Escalate Task</button>
                                         <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" type="button" class="btn btn-warning btn-with-icon" title="Flag" *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd == 'Personal' && assignedTaskDdetails.subStatus !== 'FLAGGED'"
-                                            data-toggle="modal" data-target="#flagTaskModal" data-backdrop="static" data-keyboard="false" (click)="setFlagReason()">
+                                            data-toggle="modal" data-target="#assignedTaskflagModal" data-backdrop="static" data-keyboard="false" (click)="setFlagReason()">
                                             <i class="ion-flag"></i>Flag Task</button>
                                         <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" type="button" class="btn btn-danger btn-with-icon" title="Archive" *ngIf="assignedTaskDdetails.statusCd ==='ACTIVE' && assignedTaskDdetails.assignedUserGroupCd == 'Personal' "
                                             data-toggle="modal" data-target="#archiveTaskWarningModal" >
@@ -82,7 +82,7 @@
                                     </div>
                                     <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
                                         <label><b>Version: </b></label>
-                                        <span>{{ assignedStategraphObject.version }}</span>
+                                        <span>{{ getGraphObject(assignedTaskDdetails.stateMachineInstanceModelId).version }}</span>
                                     </div>
                                 </div>
         
@@ -161,7 +161,9 @@
                             </div>
                                 
                         </div>
-                        
+                        <div *ngIf="assignedTaskDdetails === null" style="text-align: center;">
+                            <div><b>No records found</b></div>
+                        </div>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="tab_unassigned">
                         
@@ -208,7 +210,7 @@
     </div>
   </div>
 
-  <div class="modal fade" id="userModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel" aria-hidden="true">
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -237,4 +239,104 @@
         </div>
       </div>
     </div>
+</div>
+
+
+<div class="modal fade" id="assignedTaskflagModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagmodalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="userModalLabel">
+            Flag Reason
+          </h4>
+          <button type="button" class="close" data-dismiss="modal" (click)="flagClose()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+        <div class="modal-body" id="modal_body">
+          <form>
+            <div class="form-group" *ngIf="assignedTaskDdetails">
+              <label for="selectReason">Select Reason</label>
+              <select class="selectpicker form-control" required id="selectReason" title="Choose Flag Reason" [(ngModel)]="assignedTaskDdetails.flagReason"
+                [ngModelOptions]="{standalone: true}" (ngModelChange)="onReasonSelectAssignedTask($event)">
+                <option *ngFor="let flagReason of FlagReasons" [value]="flagReason">{{flagReason}}</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer" id="modal_footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" (click)="assignedTaskFlagClose()">Close</button>
+          <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="assignedTaskConfirmFlag()">Confirm</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="assignedTaskflagSuccessModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagSuccessModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="flagSuccessModal">
+            Success
+          </h4>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+        <div class="modal-body" id="modal_body">
+          Task Flagged successfully.
+        </div>
+        <div class="modal-footer" id="modal_footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" (click)="onBack()">Ok</button>
+        </div>
+      </div>
+    </div>
+</div>
+  
+<div class="modal fade" id="archiveTaskWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="archiveWarningLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="finalWarningLabel">
+          Warning
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modal_body">
+        The Task will be archived and the associated process will be closed.
+      </div>
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-danger" data-dismiss="modal" (click)="archiveAssignedTask()">Archive</button>
+      </div>
+    </div>
   </div>
+</div>
+
+<div class="modal fade" id="assignedTaskArchiveSuccessModal" tabindex="-1" role="dialog" attr.aria-labelledby="assignedTaskArchiveSuccessLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="flagSuccessModal">
+            Success
+          </h4>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+        <div class="modal-body" id="modal_body">
+          Task Archived successfully.
+        </div>
+        <div class="modal-footer" id="modal_footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" (click)="onBack()">Ok</button>
+        </div>
+      </div>
+    </div>
+</div>

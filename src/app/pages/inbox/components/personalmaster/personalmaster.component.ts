@@ -1,5 +1,6 @@
 declare var closeModal: any;
 declare var showModal: any;
+declare var showAlertModal: any;
 
 import { Component, OnInit, OnDestroy,Input, Output,NgZone,EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
@@ -93,7 +94,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     this.assignedHeaderParamList = [];
     this.flaggedStates = [];
     this.assignedStateTabclass = {};
-    this.assignedTaskDdetails = new State();
+    this.assignedTaskDdetails = null;
     this.assignedTaskActionButtonEnabled = {};
     this.assignedStategraphObject = new GraphObject();
     this.allocatedAssignedTaskToUserId = null;
@@ -312,8 +313,8 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     this.selectedStateForFlag.flagReason = "";
   }
 
-  onReasonSelect(reason):void{
-    this.selectedStateForFlag.flagReason = reason;
+  onReasonSelectAssignedTask(reason) {
+    this.assignedTaskDdetails.flagReason = reason;
   }
 
 
@@ -511,6 +512,10 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     
   }
 
+  getGraphObject(stateMachineInstanceModelId: string) {
+    return this.graphObjects.get(stateMachineInstanceModelId);
+  }
+
   getBusinessKey(stateMachineInstanceModelId: string) {
     if (this.graphObjects.get(stateMachineInstanceModelId) != null) {
         const dataPoints = this.graphObjects.get(stateMachineInstanceModelId).dataPointConfigurationList;
@@ -637,22 +642,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
         else{
           if (type == "ASSIGNED") {
             this.assignedTaskActionButtonEnabled[state._id] = true;
-            let index = this.assignedStates.indexOf(state);
-            console.log("index");
-            console.log(index);
-            if (index != -1) {
-              this.assignedStates.splice(index, 1);
-              if (this.assignedStates.length > 0 ) {
-                console.log("***********");
-                if (state._id == this.assignedTaskDdetails._id) {
-                  console.log(state);
-                  const displayState = this.assignedStates[index];
-                  this.assignedStateTabclass[displayState._id] = this.TABLINKS_ACTIVE;
-                  this.assignedTaskDdetails = displayState;
-                  
-                }
-              }
-            }
+            this.removedAssignedTask(state);
           }
           new showModal('successModal');
         }
@@ -674,17 +664,92 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     console.log(this.allocatedAssignedTaskToUserId)
     if(this.allocatedAssignedTaskToUserId != null && this.allocatedAssignedTaskToUserId.length > 0){
       this.subscription = this.allocateTaskToUser.allocateTask(this.allocatedAssignedTaskToUserId,this.assignedTaskDdetails._id,"Allocate")
-    .subscribe(any => {
-
-      this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
-  }), error => {};
+              .subscribe(any => {
+                    this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
+                    this.removedAssignedTask(this.assignedTaskDdetails);
+                  },
+                  error => {
+                    new closeModal('assginedUserModal');
+                    new showModal('error in allocate to team ');
+                  }
+                )
     }
     else{
-      new closeModal('userModal');
+      new closeModal('assginedUserModal');
       new showModal('userNotSelected');
       this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
     }
     
+  }
+
+  removedAssignedTask(state: State) {
+    let index = this.assignedStates.indexOf(state);
+    console.log("index");
+    console.log(index);
+    if (index != -1) {
+      this.assignedStates.splice(index, 1);
+      console.log(this.assignedTaskDdetails);
+      if (this.assignedStates.length > 0 ) {
+        console.log(this.assignedTaskDdetails);
+        if (index != this.assignedStates.length) {
+          const displayState = this.assignedStates[index];
+          this.assignedStateTabclass[displayState._id] = this.TABLINKS_ACTIVE;
+          this.assignedTaskDdetails = displayState;
+        }
+        else {
+          const displayState = this.assignedStates[index - 1];
+          this.assignedStateTabclass[displayState._id] = this.TABLINKS_ACTIVE;
+          this.assignedTaskDdetails = displayState;
+        }
+      }
+      else {
+        this.assignedTaskDdetails = null;
+      }
+    }
+    
+  }
+
+  assignedTaskFlagClose(){
+    this.assignedTaskDdetails.flagReason = null;
+  }
+
+  assignedTaskConfirmFlag() {
+    console.log("flag reason");
+    console.log(this.assignedTaskDdetails.flagReason);
+    this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = false;
+    this.assignedTaskDdetails.flagged = true;
+    this.assignedTaskDdetails.iterationLevel = this.assignedTaskDdetails.iterationLevel + 1;
+    this.assignedTaskDdetails.subStatus = "FLAGGED"
+
+    this.subscriptionXML = this.stateService.saveFlaggedState(this.assignedTaskDdetails, this.assignedTaskDdetails.parameters)
+                              .subscribe(state => {
+                                this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
+                                this.removedAssignedTask(this.assignedTaskDdetails);
+                                new closeModal('assignedTaskflagModal');
+                                new showModal('assignedTaskflagSuccessModal');
+                              },
+                              error => {
+                                this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
+                                new showAlertModal('Error', "error to add flag for task");
+                              }
+                            );
+  }
+
+  archiveAssignedTask() {
+    this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = false;
+    this.subscription = this.stateService.saveArchivedState(this.assignedTaskDdetails)
+    .subscribe(State => {
+          this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
+          this.removedAssignedTask(this.assignedTaskDdetails);
+          new closeModal('archiveTaskWarningModal');
+          new showModal('assignedTaskArchiveSuccessModal');
+          //this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
+        },
+        error => {
+          this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
+          new showAlertModal('Error', "error to add flag for task");
+        }
+    );    
   }
 
 }
