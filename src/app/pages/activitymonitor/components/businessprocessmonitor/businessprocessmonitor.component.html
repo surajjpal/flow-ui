@@ -1,4 +1,10 @@
-<ba-card cardTitle="apply filter">
+<ba-card cardTitle="Apply Filter">
+        <div class="row">
+                
+                <div *ngIf="loading"  class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;" aria-valuenow="99"
+          aria-valuemin="0" aria-valuemax="100">Loading...</div>
+              
+        </div>    
     <div class="row">
         <div class="col-md-12" style="display: inline-flex;">
             <div class="col-md-4">
@@ -19,20 +25,21 @@
             </div>
             
         </div>
-        <div *ngFor="let outindex of divArray" class="col-md-12" style="display: inline-flex; margin-top: 20px;">
+        <!-- <div *ngFor="let outindex of divArray" class="col-md-12" style="display: inline-flex; margin-top: 20px;">
             <div *ngFor="let dataPoint of getBusinessDataPoint(outindex)" class="col-md-4">
                 <label>{{ dataPoint.dataPointLabel }}</label>
                 <select  class="form-control"  required id="selectflowstatus"  title="Choose Status" [(ngModel)]="businessProcessMonitorRequest.dataPoints[dataPoint.dataPointName]" name="dataPoints[dataPoint.dataPointName]">
                     <option *ngFor="let value of getBusinessDataPonitValuesFromDataPointKey(dataPoint.dataPointName)" [ngValue]="value">{{ value }}</option>
                 </select>
             </div>
-        </div>
+        </div> -->
         
     </div>
+    
     <div class="form-group pull-right">
-        <button type="button" class="btn btn-primary pull-right" (click)="submitfilter()">
-                Submit
-        </button>
+            <button [disabled]="loading" type="button" class="btn btn-primary pull-right" (click)="submitfilter()">
+                    Submit
+            </button>
         
     </div>
     
