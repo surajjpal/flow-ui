@@ -7,8 +7,8 @@ echo ""
 echo ""
 
 echo "------------------------- Deleting old build from s3 -------------------------"
-aws s3 rm s3://console-ui-demo --recursive
+aws s3 rm s3://console-ui-compusoft --recursive
 echo "------------------------------------------------------------------------------"
 echo "------------------------- Uploading new build on s3 -------------------------"
-aws s3 cp ./dist/ s3://console-ui-demo/ --recursive
+aws s3 cp ./dist/ s3://console-ui-compusoft/ --recursive
 echo "-----------------------------------------------------------------------------"
