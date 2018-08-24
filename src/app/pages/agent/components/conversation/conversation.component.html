@@ -21,33 +21,29 @@
             </tr>
             <tr>
               <th>
-                  <mfDefaultSorter by="_source.mode">Mode</mfDefaultSorter>
+                  <mfDefaultSorter by="mode">Mode</mfDefaultSorter>
               </th>
               <th>
-                  <mfDefaultSorter by="_source.entities">Entities</mfDefaultSorter>
+                  <mfDefaultSorter by="entities">Entities</mfDefaultSorter>
               </th>
               <th>
-                <mfDefaultSorter by="_source.startTime">Start Time</mfDefaultSorter>
+                <mfDefaultSorter by="startTime">Start Time</mfDefaultSorter>
               </th>
               <th>
-                <mfDefaultSorter by="_source.endTime">End Time</mfDefaultSorter>
+                <mfDefaultSorter by="endTime">End Time</mfDefaultSorter>
               </th>
               <th>
-                <mfDefaultSorter by="_source.status">Status</mfDefaultSorter>
-              </th>
-              <th>
-                <mfDefaultSorter by="_source.goalStatus">Goal Status</mfDefaultSorter>
+                <mfDefaultSorter by="statusCd">Status</mfDefaultSorter>
               </th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let episode of mf.data" (click)="onSelect(episode)" data-toggle="modal" data-target="#detailsModal">
-              <td>{{episode._source.mode}}</td>
-              <td>{{arrayToString(episode._source.entities)}}</td>
-              <td>{{episode._source.startTime | date:'dd/MM/y, hh:mm a'}}</td>
-              <td>{{episode._source.endTime | date:'dd/MM/y, hh:mm a'}}</td>
-              <td>{{episode._source.status}}</td>
-              <td>{{episode._source.goalStatus}}</td>
+              <td>{{episode.mode}}</td>
+              <td>{{arrayToString(episode.entities)}}</td>
+              <td>{{episode.startTime | date:'dd/MM/y, hh:mm a'}}</td>
+              <td>{{episode.endTime | date:'dd/MM/y, hh:mm a'}}</td>
+              <td>{{episode.statusCd}}</td>
             </tr>
           </tbody>
           <tfoot>
@@ -83,70 +79,52 @@
         <div class="row">
           <ba-card class="col-md-6 col-sm-12" cardTitle="Episode Details">
             <form style="max-height: 400px; overflow:scroll">
-              <div *ngIf="selectedEpisode && selectedEpisode._score" class="form-group">
-                <label>Score</label>
-                <input class="form-control" placeholder="Score" disabled="disabled" value="{{selectedEpisode._score}}" />
-              </div>
               <div *ngIf="selectedEpisode && selectedEpisode._id" class="form-group">
                 <label>Id</label>
                 <input class="form-control" placeholder="Id" disabled="disabled" value="{{selectedEpisode._id}}" />
               </div>
-              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.status" class="form-group">
+              <div *ngIf="selectedEpisode && selectedEpisode.statusCd" class="form-group">
                 <label>Status</label>
-                <input class="form-control" placeholder="Status" disabled="disabled" value="{{selectedEpisode._source.status}}" />
+                <input class="form-control" placeholder="Status" disabled="disabled" value="{{selectedEpisode.statusCd}}" />
               </div>
-              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.intents && selectedEpisode._source.intents.length > 0"
+              <div *ngIf="selectedEpisode && selectedEpisode.intents && selectedEpisode.intents.length > 0"
                 class="form-group">
                 <label>Intents</label>
                 <select multiple class="form-control" disabled="disabled">
-                    <option *ngFor="let intent of selectedEpisode._source.intents">{{intent.intentName}}</option>
+                    <option *ngFor="let intent of selectedEpisode.intents">{{intent}}</option>
                   </select>
               </div>
-              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.name" class="form-group">
-                <label>Name</label>
-                <input class="form-control" placeholder="Name" disabled="disabled" value="{{selectedEpisode._source.name}}" />
-              </div>
-              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.conversationId" class="form-group">
+              <div *ngIf="selectedEpisode && selectedEpisode.conversationId" class="form-group">
                 <label>Conversation Id</label>
-                <input class="form-control" placeholder="Conversation Id" disabled="disabled" value="{{selectedEpisode._source.conversationId}}"
+                <input class="form-control" placeholder="Conversation Id" disabled="disabled" value="{{selectedEpisode.conversationId}}"
                 />
               </div>
-              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.entities && selectedEpisode._source.entities.length > 0"
+              <div *ngIf="selectedEpisode && selectedEpisode.entities && selectedEpisode.entities.length > 0"
                 class="form-group">
                 <label>Entities</label>
                 <select multiple class="form-control" disabled="disabled">
-                      <option *ngFor="let entity of selectedEpisode._source.entities">{{entity}}</option>
+                      <option *ngFor="let entity of selectedEpisode.entities">{{entity}}</option>
                     </select>
               </div>
-              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.mode" class="form-group">
+              <div *ngIf="selectedEpisode && selectedEpisode.mode" class="form-group">
                 <label>Mode</label>
-                <input class="form-control" placeholder="Mode" disabled="disabled" value="{{selectedEpisode._source.mode}}" />
+                <input class="form-control" placeholder="Mode" disabled="disabled" value="{{selectedEpisode.mode}}" />
               </div>
-              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.lastEpisodeStatus" class="form-group">
-                <label>Last Episode Status</label>
-                <input class="form-control" placeholder="Last Episode Status" disabled="disabled" value="{{selectedEpisode._source.lastEpisodeStatus}}"
-                />
-              </div>
-              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.startTime" class="form-group">
+              <div *ngIf="selectedEpisode && selectedEpisode.startTime" class="form-group">
                 <label>Start Time</label>
-                <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode._source.startTime | date: 'dd/MM/y, h:mm:ss a'}}"
+                <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode.startTime | date: 'dd/MM/y, h:mm:ss a'}}"
                 />
               </div>
-              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.endTime" class="form-group">
+              <div *ngIf="selectedEpisode && selectedEpisode.endTime" class="form-group">
                 <label>End Time</label>
-                <input class="form-control" placeholder="End Time" disabled="disabled" value="{{selectedEpisode._source.endTime | date: 'dd/MM/y, h:mm:ss a'}}"
+                <input class="form-control" placeholder="End Time" disabled="disabled" value="{{selectedEpisode.endTime | date: 'dd/MM/y, h:mm:ss a'}}"
                 />
               </div>
-              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.goalStatus" class="form-group">
-                <label>Goal Status</label>
-                <input class="form-control" placeholder="Goal Status" disabled="disabled" value="{{selectedEpisode._source.goalStatus}}"
-                />
-              </div>
-              <div *ngIf="selectedEpisode && selectedEpisode._source && selectedEpisode._source.goals && selectedEpisode._source.goals.length > 0"
+              <div *ngIf="selectedEpisode && selectedEpisode.goals && selectedEpisode.goals.length > 0"
                 class="form-group">
                 <label>Goals</label>
                 <select  multiple class="form-control" disabled="disabled">
-                      <option *ngFor="let goal of selectedEpisode._source.goals">{{goal.goalName}}</option>
+                      <option *ngFor="let goal of selectedEpisode.goals">{{goal.goalName}}</option>
                 </select>
               </div>
             </form>

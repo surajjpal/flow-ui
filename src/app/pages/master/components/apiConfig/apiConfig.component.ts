@@ -35,7 +35,11 @@ export class ApiConfigComponent implements OnInit, OnDestroy {
     this.subscription = this.apiConfigService.getAllApi()
       .subscribe(apiConfigList => {
         if (apiConfigList) {
-          this.apiConfigList = apiConfigList;
+          for(let api of apiConfigList){
+            if(!api.taskConConfigApi){
+              this.apiConfigList.push(api)
+            }
+          }
         }
       });
   }

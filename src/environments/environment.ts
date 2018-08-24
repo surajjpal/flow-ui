@@ -76,7 +76,8 @@ export const environment = {
   getallconconfig:'connectors/getAll/',
   deleteconconfig:'connectors/delete/',
   saveconconfig:'connectors/save/',
-
+  getallconinfo:'connectors/getConInfo/',
+  getconinfobytype:'connectors/getConInfoByType/',
 
   // auto
   autoServer: 'http://108.168.190.82:8080/flow/auto/',
@@ -145,5 +146,11 @@ export const environment = {
   dashboardinterface: 'http://108.168.190.82:8080/flow/interfaces/dashboard',
 
   //CRUD API path - To be used in conjunction with interfaceService property
-  crudFunction : '/crud'
+  crudFunction : '/crud',
+
+  // activity monitor services
+  businessDataPointValues: 'businessactivitymanagement/datapointvalues',
+  businessDataPoints: 'businessactivitymanagement/datapoints',
+  businessDataPonitsPercentageCount: 'businessactivitymanagement/percentagecount',
+  businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
 };

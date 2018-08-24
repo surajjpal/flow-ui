@@ -1,5 +1,5 @@
 import { BaseModel } from './base.model';
-import { ApiConfig, ApiKeyExpressionMap } from './setup.model';
+import { ApiConfig, ApiKeyExpressionMap, ConnectorConfig } from './setup.model';
 import { values } from 'd3';
 
 export class DataPointValidation {
@@ -29,6 +29,10 @@ export class DataPoint {
   value: any;
   headerFlag: boolean;
   businessKeyFlag: boolean;
+  businessMonitorKey: boolean;
+  percentageChange: boolean;
+  graphType: string;
+  childdataPoints: DataPoint[];
 
   constructor() {
     this.sequence = 0;
@@ -43,6 +47,10 @@ export class DataPoint {
     this.value = null;
     this.headerFlag = false;
     this.businessKeyFlag = false;
+    this.graphType = null;
+    this.businessKeyFlag = false;
+    this.percentageChange = false;
+    this.childdataPoints = [];
   }
 }
 
@@ -155,7 +163,8 @@ export class StateModel {
   timerUnit: number;
   runAtDateExpression: string;
   runAtTimeExpression: string;
-  connectorConfiguration:string[];
+  taskConfig:ConnectorConfig[];
+  connectorConfig:ConnectorConfig[];
  
 
   constructor() {
@@ -177,7 +186,8 @@ export class StateModel {
     this.timerUnit = 0;
     this.runAtDateExpression = '';
     this.runAtTimeExpression = '';
-    this.connectorConfiguration = [];
+    this.taskConfig = [];
+    this.connectorConfig = [];
    
   }
 }

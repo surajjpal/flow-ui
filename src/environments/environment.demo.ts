@@ -73,6 +73,8 @@ export const environment = {
     getallconconfig:'connectors/getAll/',
     deleteconconfig:'connectors/delete/',
     saveconconfig:'connectors/save/',
+    getallconinfo:'connectors/getConInfo/',
+    getconinfobytype:'connectors/getConInfoByType/',
     
     // auto
     autoServer: 'https://flow.automatapi.com/flow/auto/',
@@ -141,6 +143,12 @@ export const environment = {
    dashboardinterface: 'https://flow.automatapi.com/flow/interfaces/dashboard',
 
    //CRUD API path - To be used in conjunction with interfaceService property
-   crudFunction : '/crud'
+   crudFunction : '/crud',
+
+   // activity monitor services
+   businessDataPointValues: 'businessactivitymanagement/datapointvalues',
+   businessDataPoints: 'businessactivitymanagement/datapoints',
+   businessDataPonitsPercentageCount: 'businessactivitymanagement/percentagecount',
+   businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
   };
   

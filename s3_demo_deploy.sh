@@ -1,5 +1,5 @@
 echo "------------------ Building angular application -------------------"
-ng build --env=demo --aot --build-optimizer --no-sourcemap --base-href / --deploy-url /
+ng build --env=demo --aot --build-optimizer --base-href / --deploy-url /
 echo "-------------------------------------------------------------------"
 
 echo ""
