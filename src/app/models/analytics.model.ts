@@ -54,13 +54,14 @@ export class AnalyticsReport {
     requestFilter = {}
     agentId: string;
     templateName: string;
+    emailTemplateName: string;
     scheduleTaskConfigurationId: string;
     isInitAgentReport: boolean;
     scheduleConfig: ScheduleTaskConfiguration;
     companyId: string;
     
     constructor(_id?: string, reportName?: string, requestedReportType?: string, toEmailIds?: string[], ccEmailIds?: string[], untilPreviousDay?: boolean,
-        zeppelinNotebookId?: string, reportFileType?: string, requestFilter?: {}, agentId?: string, templateName?: string, scheduleTaskConfigurationId?: string, isInitAgentReport?: boolean, scheduleConfig?: ScheduleTaskConfiguration, companyId?: string
+        zeppelinNotebookId?: string, reportFileType?: string, requestFilter?: {}, agentId?: string, templateName?: string, scheduleTaskConfigurationId?: string, isInitAgentReport?: boolean, scheduleConfig?: ScheduleTaskConfiguration, companyId?: string, emailTemplateName?: string
     ) {
         this._id = _id ? _id : null;
         this.reportName = reportName ? reportName : null;
@@ -73,6 +74,7 @@ export class AnalyticsReport {
         this.requestFilter = requestFilter ? requestFilter : {};
         this.agentId = agentId? agentId : null;
         this.templateName = templateName? templateName : null;
+        this.emailTemplateName = emailTemplateName? emailTemplateName : null;
         this.scheduleTaskConfigurationId = scheduleTaskConfigurationId ? scheduleTaskConfigurationId : null;
         this.isInitAgentReport = isInitAgentReport ? isInitAgentReport : false;
         this.scheduleConfig = scheduleConfig? scheduleConfig : new ScheduleTaskConfiguration();
@@ -88,3 +90,23 @@ export class AnalyticsReport {
         // this.endDate = endDate;
     }
 }
+
+
+export class Template {
+
+    templateLabel: string;
+    templateName: string;
+    type: string;
+    zeppelinNotebookId: string;
+    agentId: string;
+
+    constructor(templateLabel?: string, templateName?: string, type?: string, zeppelinNotebookId?: string, agentId?: string) {
+        this.templateLabel = templateLabel ? templateLabel : null;
+        this.templateName = templateName ? templateName : null;
+        this.type = type ? type : null;
+        this.zeppelinNotebookId = zeppelinNotebookId ? zeppelinNotebookId : null;
+        this.agentId = agentId ? agentId : null;
+    }
+}
+
+

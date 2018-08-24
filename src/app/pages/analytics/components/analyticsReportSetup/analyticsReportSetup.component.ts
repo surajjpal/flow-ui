@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
 import { Subscription } from 'rxjs/Subscription'
-import { AnalyticsReportSetup, AnalyticsReport } from '../../../../models/analytics.model';
+import { AnalyticsReportSetup, AnalyticsReport, Template } from '../../../../models/analytics.model';
 import { ScheduleTaskConfiguration } from '../../../../models/scheduler.model'
 import { AnalyticsService } from '../../../../services/analytics.service';
 import { AgentService } from '../../../../services/agent.service'
@@ -46,6 +46,8 @@ export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
     timeZones = ["Asia/Kolkata"];
     reportFileTypes = ["pdf", "csv", "html"];
     reportCategories = ["STANDARD", "CUSTOM"];
+    analyticsReportTemplates: Template[];
+    analyticsReportEmailTemplates: Template[];
 
     
     constructor(private router: Router,
@@ -63,6 +65,8 @@ export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
         this.analyticsReport = new AnalyticsReport();
         this.scheduleTaskConfiguration = new ScheduleTaskConfiguration();
         this.definedAgents = [];
+        this.analyticsReportTemplates = [];
+        this.analyticsReportEmailTemplates = [];
         //this.scheduleHours = this.range(1,24);
     }
     
@@ -95,6 +99,10 @@ export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
                     this.tempDateRange.end = moment(new Date(this.selectedAnalyticsReport.requestFilter["endDate"]));
                 }
                 
+            }
+            if (this.selectedAnalyticsReport.reportCategory == "CUSTOM") {
+                this.setAnalyticsAutoReportTemplates();
+                this.setanalyticsReportEmailTemplates();
             }
             if (this.selectedAnalyticsReport.requestedReportType == "SCHEDULE") {
                 if (this.selectedAnalyticsReport._id) {
@@ -136,12 +144,54 @@ export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
             this.analyticsReportModalHeader = "Create analytics report";
             
         }
+        
     }
 
     ngOnDestroy(): void {
         if (this.subscription && !this.subscription.closed) {
             this.subscription.unsubscribe();
         }
+    }
+
+    onAgentSelect() {
+        if (this.selectedAnalyticsReport.reportCategory == "CUSTOM") {
+            this.setAnalyticsAutoReportTemplates();
+            this.setanalyticsReportEmailTemplates();
+        }
+        
+    }
+
+    onCustomReportCategorySelect() {
+        if (this.selectedAnalyticsReport.reportCategory == "CUSTOM") {
+            this.setAnalyticsAutoReportTemplates();
+            this.setanalyticsReportEmailTemplates();
+        }
+        
+        
+    }
+
+    setAnalyticsAutoReportTemplates() {
+        this.subscription = this.analyticsService.getTemplatesForReport(this.selectedAnalyticsReport.agentId)
+                                .subscribe(
+                                    response => {
+                                        this.analyticsReportTemplates = response;
+                                    },
+                                    error => {
+                                        new showAlertModal("Error", "Do not have any custom templates");
+                                    }
+                                )
+    }
+
+    setanalyticsReportEmailTemplates() { 
+        this.subscription = this.analyticsService.getEmailTemplatesForReport(this.selectedAnalyticsReport.agentId)
+                                .subscribe(
+                                    response => {
+                                        this.analyticsReportEmailTemplates = response;
+                                    },
+                                    error => {
+                                        new showAlertModal("Error", "Do not have any custom email templates");
+                                    }
+                                )
     }
 
     onSubscriptionChange(newValue) {
@@ -165,6 +215,10 @@ export class AnalyticsReportSetupComponent implements OnInit, OnDestroy {
     scheduleAnalyticsReport() {
         console.log("temptime");
         console.log(this.tempTime);
+        if (this.selectedAnalyticsReport.reportCategory != "CUSTOM") {
+            this.selectedAnalyticsReport.templateName = null;
+            this.selectedAnalyticsReport.emailTemplateName = null;
+        }
         if (this.selectedAnalyticsReport.requestedReportType == "INSTANT") {
             if (this.tempDateRange) {
                 var date = new Date(this.tempDateRange.start.toDate().getTime() - this.tempDateRange.start.toDate().getTimezoneOffset() * 60000);

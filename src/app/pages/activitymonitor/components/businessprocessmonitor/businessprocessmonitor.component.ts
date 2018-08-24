@@ -268,7 +268,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                                     if (dataPoints.dataPointName == gdata.dataPointName) {
                                         if(dataPoints.graphType == this.GRAPH_TYPE_BAR_GRAPH) {
                                             
-                                            gdata.options = this.singleBarBarChartOptions(gdata.dataPointLabel, 'value');
+                                            gdata.options = this.singleDiscreteChartOptions(dataPoints.dataPointLabel, "Value");
                                             
                                         }
                                         else {
@@ -339,7 +339,37 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         };
     }
 
-    singleBarBarChartOptions(xAxisLabel?: string, yAxisLabel?: string) {
+    singleDiscreteChartOptions(xAxisLabel, yAxisLabel) {
+        return  {
+            chart: {
+                type: 'discreteBarChart',
+                height: 450,
+                margin : {
+                    top: 35,
+                    right: 20,
+                    bottom: 70,
+                    left: 60
+                },
+                staggerLabels: true,
+                x: function(d){return d.label;},
+                y: function(d){return d.value + (1e-10);},
+                showValues: true,
+                valueFormat: function(d){
+                    return d3.format(',.2f')(d);
+                },
+                duration: 500,
+                xAxis: {
+                    axisLabel: xAxisLabel
+                },
+                yAxis: {
+                    axisLabel: xAxisLabel,
+                    axisLabelDistance: -10
+                }
+            }
+        };
+    }
+
+    multiBarBarChartOptions(xAxisLabel?: string, yAxisLabel?: string) {
         if (xAxisLabel == null) {
             xAxisLabel = 'X'
         }
@@ -348,7 +378,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         }
         return {
           chart: {
-            type: 'multiBarChart',
+            type: 'discreteBarChart',
             staggerLabels: true,
             height: 450,
             margin : {

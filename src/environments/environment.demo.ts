@@ -42,6 +42,7 @@ export const environment = {
     stateflowimageurl: 'statemachine/stateflow/',
     updatestatemachineurl: 'statemachine/updateflow/withState',
     alocateuserurl:'statemachine/allocateto',
+    graphobjectbyflowinstanceid: 'statemachine/graphobject',
     autosummary: 'dashboard/CONVERSATION_SUMMARY',
     graphurl: 'graph/',
     usergraphurl: 'usergraph/saveUserGraph/',
@@ -108,6 +109,8 @@ export const environment = {
     sendReportUrl: '/reports/analyticsreport/sendreport',
     scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
     getAnalyticsReports: "/reports/analyticsreport",
+    getanalyticsReportTemplates: "/reports/analyticsreport/template",
+    getanalyticsReportEmailTemplates: "/reports/analyticsreport/emailtemplate",
 
     // Schedule
     scheduleTaskConfiguration: "api/schedule/",
