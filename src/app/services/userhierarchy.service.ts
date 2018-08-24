@@ -4,7 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 import { User, UserHierarchy,UserGraphObject } from '../models/user.model'
 import { environment } from '../../environments/environment';
-import { State } from 'ngx-chips/dist/modules/core';
+import { State } from 'app/models/tasks.model';
 
 
 

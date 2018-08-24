@@ -20,9 +20,9 @@ const routes: Routes = [
       { path: 'trch', component: ArchivedComponent },
       { path: 'tdts', component: TaskDetailsComponent },
       { path: 'tmvi', component: TeamViewComponent},
-      { path: 'pervi', component: PersonalComponent},
+      { path: 'pervi', component: PersonalMasterComponent},
       { path: 'trchtst', component: ArchiveMasterComponent },
-      { path: 'pervitst', component: PersonalMasterComponent }
+      { path: 'pervitst', component: PersonalComponent }
     ]
   }
 ];
