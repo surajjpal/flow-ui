@@ -32,7 +32,7 @@
                       <div class="tab">
                         <button *ngFor="let perState of personalStates; let index=index;" [class]="personalStatesTabClass[index]" (click)="onPersonalSubjectSelect(perState._id)" id="defaultOpen">
                           <span>{{ getBusinessKey(perState.stateMachineInstanceModelId) }}:</span><br><br>
-                          <!-- <span>{{ perState.businessKey }}</span> <br><br> -->
+                          <span>{{ perState.businessKey }}</span> <br><br>
                           <span>Process: </span><br><br>{{ perState.machineLabel }}
                         </button>
                         
