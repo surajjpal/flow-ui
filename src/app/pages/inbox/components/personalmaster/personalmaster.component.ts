@@ -8,7 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { State } from '../../../../models/tasks.model';
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
 import {BaThemeSpinner } from '../../../../theme/services';
-import { UserHierarchy } from '../../../../models/user.model';
+import { UserHierarchy, User } from '../../../../models/user.model';
 import { FetchUserService, AllocateTaskToUser } from '../../../../services/userhierarchy.service';
 import { GraphObject, DataPoint, StateModel, ManualAction,StateInfoModel } from '../../../../models/flow.model';
 import { UniversalUser } from 'app/services/shared.service';
@@ -87,6 +87,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   userHierarchy:UserHierarchy = new UserHierarchy();
   allocatedAssignedTaskToUserId: string;
   allocatedUnAssignedTaskToUserId: string;
+  tempUser:User;
 
   
   private subscription: Subscription;
@@ -831,7 +832,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
   allocateAssignedTask(){
     this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = false
-    //console.log(this.allocatedAssignedTaskToUserId)
+    // console.log(this.allocatedAssignedTaskToUserId)
     if(this.allocatedAssignedTaskToUserId != null && this.allocatedAssignedTaskToUserId.length > 0){
       this.subscription = this.allocateTaskToUser.allocateTask(this.allocatedAssignedTaskToUserId,this.assignedTaskDdetails._id,"Allocate")
               .subscribe(any => {

@@ -30,7 +30,8 @@
                   <div class="row">
                       <div class="tab">
                         <button *ngFor="let perState of personalStates; let index=index;" [class]="personalStatesTabClass[index]" (click)="onPersonalSubjectSelect(perState._id)" id="defaultOpen">
-                          <span>{{ getBusinessKey(perState.stateMachineInstanceModelId) }}:</span><br><br><span class="businesskey">{{ perState.businessKey }}</span> <br><br>
+                          <span>{{ getBusinessKey(perState.stateMachineInstanceModelId) }}:</span><br><br>
+                          <!-- <span>{{ perState.businessKey }}</span> <br><br> -->
                           <span>Process: </span><br><br>{{ perState.machineLabel }}
                         </button>
                         
@@ -41,7 +42,7 @@
                                 <h3>{{ personalTaskDetail.businessKey }}</h3>
                             </div>
                             <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                <button type="button" class="btn btn-primary pull-right" title="Show Details" (click)="onSelect(s)">
+                                <button type="button" class="btn btn-primary pull-right" title="Show Details" (click)="onSelect(personalTaskDetail)">
                                   <i class="ion-eye"></i>
                                 </button>
                                 
@@ -72,11 +73,11 @@
                         <div class="row">
                             <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
                               <label><b>Start Time: </b></label>
-                              <span>{{ personalTaskDetail.startTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A' }}</span>
+                              <span>{{ personalTaskDetail.startTime | amDateFormat: 'DD/MM/YYYY hh:mm A' }}</span>
                             </div>
                             <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
                               <label><b>End Time: </b></label>
-                              <span>{{ personalTaskDetail.endTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A' }}</span>
+                              <span>{{ personalTaskDetail.endTime | amDateFormat: 'DD/MM/YYYY hh:mm A' }}</span>
                             </div>
                         </div>
 
