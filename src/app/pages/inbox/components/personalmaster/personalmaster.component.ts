@@ -2,22 +2,22 @@ declare var closeModal: any;
 declare var showModal: any;
 declare var showAlertModal: any;
 
-import { Component, OnInit, OnDestroy,Input, Output,NgZone,EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, NgZone, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute } from '@angular/router';
 import { State } from '../../../../models/tasks.model';
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
-import {BaThemeSpinner } from '../../../../theme/services';
+import { BaThemeSpinner } from '../../../../theme/services';
 import { UserHierarchy, User } from '../../../../models/user.model';
 import { FetchUserService, AllocateTaskToUser } from '../../../../services/userhierarchy.service';
-import { GraphObject, DataPoint, StateModel, ManualAction,StateInfoModel } from '../../../../models/flow.model';
+import { GraphObject, DataPoint, StateModel, ManualAction, StateInfoModel } from '../../../../models/flow.model';
 import { UniversalUser } from 'app/services/shared.service';
 
 @Component({
   selector: 'api-inbox-personal-master',
   templateUrl: './personalmaster.component.html',
   styleUrls: ['./personalmaster.scss'],
-  providers: [FetchUserService,AllocateTaskToUser]
+  providers: [FetchUserService, AllocateTaskToUser]
 })
 
 export class PersonalMasterComponent implements OnInit, OnDestroy {
@@ -33,7 +33,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
   @Output()
   selectedData: EventEmitter<any> = new EventEmitter<any>();
-  
+
   TABLINKS_ACTIVE = "block active";
   TABLINKS = "block"
 
@@ -41,7 +41,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   selectedState: State;
   selectedStateCd: string;
   actionMap: any;
-  fieldKeyMap:any;
+  fieldKeyMap: any;
   assignedStates: State[];
   tempAssignedStates: State[];
   assignedTaskDdetails: State;
@@ -58,24 +58,24 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   tmpflaggedStates: State[];
   flaggedTaskDdetails: State;
   flaggedStateTabclass = {};
-  
-  
+
+
   loadingUnassigned: boolean = false;
   loadingAssigned: boolean = false;
-  loadingFlagged:boolean = false;
+  loadingFlagged: boolean = false;
   unassignedHeaderParamList: string[];
   assignedHeaderParamList: string[];
-  flaggedHeaderParamList:string[]=[];
+  flaggedHeaderParamList: string[] = [];
   dataPoints: DataPoint[];
   progressBarFlag: boolean = false;
-  pageNumber:any;
+  pageNumber: any;
   assignedTaskPageNumber: number;
   unassignedTaskPageNumber: number;
   flaggedTaskPageNumber: number;
-  fetchRecords:any;
-  iterationLevel:number;
+  fetchRecords: any;
+  iterationLevel: number;
   responseError: string;
-  FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
+  FlagReasons: string[] = ['Customer did not answer', 'Customer not reachable', 'Customer rescheduled'];
   graphObject: GraphObject;
   graphObjects = new Map();
   assignedStategraphObject: GraphObject;
@@ -84,24 +84,24 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   // users
   userId: string
   users: UserHierarchy[] = [];
-  userHierarchy:UserHierarchy = new UserHierarchy();
+  userHierarchy: UserHierarchy = new UserHierarchy();
   allocatedAssignedTaskToUserId: string;
   allocatedUnAssignedTaskToUserId: string;
-  tempUser:User;
+  tempUser: User;
 
-  
+
   private subscription: Subscription;
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
   private subscriptionXML: Subscription;
 
   constructor(
-    private stateService: StateService, 
+    private stateService: StateService,
     private baThemeSpinner: BaThemeSpinner,
     private dataCachingService: DataCachingService,
     private router: Router,
     private route: ActivatedRoute,
-    private fetchUserService:FetchUserService,
+    private fetchUserService: FetchUserService,
     private universalUser: UniversalUser,
     private allocateTaskToUser: AllocateTaskToUser
   ) {
@@ -130,7 +130,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     this.unassignedTaskPageNumber = 0;
     this.flaggedTaskPageNumber = 0;
     this.fetchRecords = 10
-    this.fetchData(this.pageNumber,this.fetchRecords);
+    this.fetchData(this.pageNumber, this.fetchRecords);
     this.graphObject = this.dataCachingService.getGraphObject();
     if (!this.graphObject) {
       this.graphObject = new GraphObject();
@@ -140,39 +140,39 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     this.getParentUser();
   }
 
-  getUserList(){
-    
+  getUserList() {
+
     this.subscription = this.fetchUserService.fetchChildUsers(this.userId)
       .subscribe(userList => {
         if (userList && userList.length > 0) {
           //document.getElementById('#alocateButton').style.visibility = 'visible';
           this.users = userList;
-          
-             
+
+
         }
       });
-    }
+  }
 
-  getParentUser(){
+  getParentUser() {
     this.subscription = this.fetchUserService.getUserHierarchy(this.userId)
-    .subscribe(userHierarchyObject => {
-      
-      if (userHierarchyObject) {
-        //document.getElementById('#alocateButton').style.visibility = 'visible';
-        this.userHierarchy = userHierarchyObject;
+      .subscribe(userHierarchyObject => {
 
-           
-      }
-      
-    });
+        if (userHierarchyObject) {
+          //document.getElementById('#alocateButton').style.visibility = 'visible';
+          this.userHierarchy = userHierarchyObject;
+
+
+        }
+
+      });
 
   }
 
-  refresh(){
+  refresh() {
     this.progressBarFlag = true;
     this.pageNumber = 0
     this.fetchRecords = 10
-    this.fetchData(this.pageNumber,this.fetchRecords);
+    this.fetchData(this.pageNumber, this.fetchRecords);
   }
 
   ngOnDestroy(): void {
@@ -184,15 +184,16 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     }
   }
 
-  fetchData(pageNumber,fetchRecords): void {
+  fetchData(pageNumber, fetchRecords): void {
     this.loadingAssigned = true;
     this.loadingUnassigned = true;
     this.loadingFlagged = true
-    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Group',this.assignedTaskPageNumber,fetchRecords)
+
+    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Group', this.assignedTaskPageNumber, fetchRecords)
       .subscribe(states => {
         this.setFirstUnAssignedTaskValues(states);
         this.unassignedStates = states;
-        
+
       }, error => {
         this.loadingUnassigned = false;
         if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
@@ -201,12 +202,12 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Personal',this.unassignedTaskPageNumber,fetchRecords)
+    this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Personal', this.unassignedTaskPageNumber, fetchRecords)
       .subscribe(states => {
         this.setFirstAssignedTaskValues(states);
         this.assignedStates = states;
         this.tempAssignedStates = JSON.parse(JSON.stringify(states));
-        
+
       }, error => {
         this.loadingAssigned = false;
         if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
@@ -214,14 +215,14 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
           // this.baThemeSpinner.hide();
         }
       });
-     
 
-      this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED','CLOSED',this.flaggedTaskPageNumber,this.fetchRecords,'PERSONAL')
+
+    this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED', 'CLOSED', this.flaggedTaskPageNumber, this.fetchRecords, 'PERSONAL')
       .subscribe(states => {
         this.loadingFlagged = false;
         this.setFirstFlaggedTaskValues(states);
         this.flaggedStates = states;
-        
+
       }, error => {
         this.loadingUnassigned = false;
         if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
@@ -232,105 +233,109 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
   }
 
-  
-  loadMore(status,type):void{
+  tabclicked(tabname): void {
+
+  }
+
+
+  loadMore(status, type): void {
     this.loadingAssigned = true;
     this.loadingUnassigned = true;
-    this.pageNumber = this.pageNumber + 1; 
-    if (status!="FLAGGED"){
+    this.pageNumber = this.pageNumber + 1;
+    if (status != "FLAGGED") {
       if (type == "Personal") {
         this.assignedTaskPageNumber = this.assignedTaskPageNumber + 1;
-        this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder(status,type,this.assignedTaskPageNumber,this.fetchRecords)
-        .subscribe(states => {
-          if (states != null && states.length == 0) {
-            new showAlertModal("No more data available");
-          }
-          if(type=='Personal'){
-            if (this.assignedStates.length == 0) {
-              this.setFirstAssignedTaskValues(states);
-              this.assignedStates = states;
-              
+        this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder(status, type, this.assignedTaskPageNumber, this.fetchRecords)
+          .subscribe(states => {
+            if (states != null && states.length == 0) {
+              new showAlertModal("No more data available");
             }
-            else{
-              for(let state of states) {
+            if (type == 'Personal') {
+              if (this.assignedStates.length == 0) {
+                this.setFirstAssignedTaskValues(states);
+                this.assignedStates = states;
+
+              }
+              else {
+                for (let state of states) {
                   this.assignedStateTabclass[state._id] = "block";
                   this.assignedTaskActionButtonEnabled[state._id] = true;
                   this.setGraphObjects(state);
+                }
+                this.assignedStates = this.assignedStates.concat(states)
+                this.tempAssignedStates = this.tempAssignedStates.concat(JSON.parse(JSON.stringify(states)));
               }
-              this.assignedStates = this.assignedStates.concat(states)
-              this.tempAssignedStates = this.tempAssignedStates.concat(JSON.parse(JSON.stringify(states)));
-            }
-            
-            this.loadingAssigned = false;
-          }
-          if(!this.loadingUnassigned && !this.loadingAssigned){
-            this.baThemeSpinner.hide();
-          }
 
-        }, error => {
-          this.loadingUnassigned = false;
-          if(!this.loadingUnassigned && !this.loadingAssigned){
-            this.baThemeSpinner.hide();
-          }
-        });
+              this.loadingAssigned = false;
+            }
+            if (!this.loadingUnassigned && !this.loadingAssigned) {
+              this.baThemeSpinner.hide();
+            }
+
+          }, error => {
+            this.loadingUnassigned = false;
+            if (!this.loadingUnassigned && !this.loadingAssigned) {
+              this.baThemeSpinner.hide();
+            }
+          });
       }
       else {
         this.unassignedTaskPageNumber = this.unassignedTaskPageNumber + 1;
-        this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder(status,type,this.unassignedTaskPageNumber,this.fetchRecords)
+        this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder(status, type, this.unassignedTaskPageNumber, this.fetchRecords)
+          .subscribe(states => {
+            if (states != null && states.length == 0) {
+              new showAlertModal("No more data available");
+            }
+            if (type == 'Group') {
+              if (this.unassignedStates.length == 0) {
+                this.setFirstUnAssignedTaskValues(states);
+                this.unassignedStates = states;
+              }
+              else {
+                for (let state of states) {
+                  this.unassignedStateTabclass[state._id] = "block";
+                  this.unassignedTaskActionButtonEnabled[state._id] = true;
+                  this.setGraphObjects(state);
+                }
+                this.unassignedStates = this.unassignedStates.concat(states)
+              }
+
+              this.loadingUnassigned = false;
+            }
+
+            if (!this.loadingUnassigned && !this.loadingAssigned) {
+              this.baThemeSpinner.hide();
+            }
+
+          }, error => {
+            this.loadingUnassigned = false;
+            if (!this.loadingUnassigned && !this.loadingAssigned) {
+              this.baThemeSpinner.hide();
+            }
+          });
+      }
+
+    }
+    else {
+      this.flaggedTaskPageNumber = this.flaggedTaskPageNumber + 1;
+      this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED', 'CLOSED', this.flaggedTaskPageNumber, this.fetchRecords, 'PERSONAL')
         .subscribe(states => {
           if (states != null && states.length == 0) {
             new showAlertModal("No more data available");
           }
-          if(type=='Group'){
-            if(this.unassignedStates.length == 0) {
-              this.setFirstUnAssignedTaskValues(states);
-              this.unassignedStates = states;
-            }
-            else {
-              for(let state of states) {
-                this.unassignedStateTabclass[state._id] = "block";
-                this.unassignedTaskActionButtonEnabled[state._id] = true;
-                this.setGraphObjects(state);
-              }
-              this.unassignedStates = this.unassignedStates.concat(states)
-            }
-            
-            this.loadingUnassigned = false;
+          if (this.flaggedStates.length == 0) {
+            this.setFirstFlaggedTaskValues(states);
+            this.flaggedStates = states;
           }
-          
-          if(!this.loadingUnassigned && !this.loadingAssigned){
-            this.baThemeSpinner.hide();
+          else {
+            for (let state of states) {
+              this.flaggedStateTabclass[state._id] = "block";
+              this.setGraphObjects(state);
+            }
+            this.flaggedStates = this.flaggedStates.concat(states)
           }
 
-        }, error => {
-          this.loadingUnassigned = false;
-          if(!this.loadingUnassigned && !this.loadingAssigned){
-            this.baThemeSpinner.hide();
-          }
         });
-      }
-      
-    }
-    else{
-      this.flaggedTaskPageNumber = this.flaggedTaskPageNumber + 1;
-      this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED','CLOSED',this.flaggedTaskPageNumber,this.fetchRecords,'PERSONAL')
-            .subscribe(states => {
-              if (states != null && states.length == 0) {
-                new showAlertModal("No more data available");
-              }
-              if (this.flaggedStates.length == 0) {
-                this.setFirstFlaggedTaskValues(states);
-                this.flaggedStates = states;
-              }
-              else{
-                for(let state of states) {
-                    this.flaggedStateTabclass[state._id] = "block";
-                    this.setGraphObjects(state);
-                }
-                this.flaggedStates = this.flaggedStates.concat(states) 
-              }
-              
-      });
 
     }
   }
@@ -352,19 +357,19 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   }
 
 
-  selectedForFlag(state):void{
-    
+  selectedForFlag(state): void {
+
     this.selectedStateForFlag = state;
     this.selectedStateForFlag.flagReason = this.FlagReasons[0];
     this.subscriptionXML = this.stateService.getXMLforActiveState(state.stateMachineInstanceModelId)
-    .subscribe(graphObject => {
-      this.dataCachingService.setSharedObject(graphObject, state);
-      this.graphObject = graphObject
-      
-    });
+      .subscribe(graphObject => {
+        this.dataCachingService.setSharedObject(graphObject, state);
+        this.graphObject = graphObject
+
+      });
   }
 
-  close(){
+  close() {
     this.selectedStateForFlag.flagReason = "";
   }
 
@@ -399,22 +404,22 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
             if (paramValue && !(paramValue instanceof Array) && !dataPoint.inputSource.includes(paramValue)) {
               dataPoint.inputSource.push(paramValue);
             }
-            
+
             dataPoint.value = paramValue;
           } else if (dataPoint.dataType === 'MULTI_SELECT') {
             const uniqueValues: string[] = [];
-            
+
             if (paramValue && paramValue instanceof Array && paramValue.length > 0) {
               for (const value of paramValue) {
                 if (!dataPoint.inputSource.includes(value)) {
                   uniqueValues.push(value);
                 }
-                
+
               }
-              
+
               dataPoint.inputSource = dataPoint.inputSource.concat(uniqueValues);
             }
-            
+
             dataPoint.value = paramValue;
           } else if (dataPoint.dataType === 'ARRAY') {
             dataPoint.value = (paramValue && paramValue instanceof Array) ? paramValue : [];
@@ -424,7 +429,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
             dataPoint.dataType = 'STRING';
             dataPoint.value = '';
           }
-          
+
           /** ---------------------- IMPORTANT ----------------------
            * This is done on purpose, please don't remove.
            * Required for UI -> Inline form -> Label & Value
@@ -443,57 +448,57 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
   updateFlow() {
     if (!this.actionMap) {
-          this.actionMap = {};
+      this.actionMap = {};
+    }
+
+    for (let index = 0; index < this.dataPoints.length; index++) {
+      if (index % 2 === 1) {
+        const dataPoint = this.dataPoints[index];
+        if (dataPoint.dataType === 'NUMBER' && (typeof dataPoint.value === 'string' || dataPoint.value instanceof String)) {
+          dataPoint.value = +dataPoint.value;
+        } else if (dataPoint.dataType === 'BOOLEAN' && (typeof dataPoint.value === 'string' || dataPoint.value instanceof String)) {
+          dataPoint.value = (dataPoint.value === 'true');
         }
-    
-        for (let index = 0; index < this.dataPoints.length; index++) {
-          if (index % 2 === 1) {
-            const dataPoint = this.dataPoints[index];
-            if (dataPoint.dataType === 'NUMBER' && (typeof dataPoint.value === 'string' || dataPoint.value instanceof String)) {
-              dataPoint.value = +dataPoint.value;
-            } else if (dataPoint.dataType === 'BOOLEAN' && (typeof dataPoint.value === 'string' || dataPoint.value instanceof String)) {
-              dataPoint.value = (dataPoint.value === 'true');
-            }
-            this.actionMap[dataPoint.dataPointName] = dataPoint.value;
-          }
-        }
-        
-        // this.subscription = this.stateService.update(this.selectedStateForFlag.machineType, this.selectedStateForFlag.entityId, this.actionMap)
-        //   .subscribe(response => {
-        //     this.responseError = '';
-    
-        //     const state: State = response;
-    
-        //     if (state) {
-        //       if (state.errorMessageMap) {
-        //         for (const key in state.errorMessageMap) {
-        //           if (key) {
-        //             const errorList: string[] = state.errorMessageMap[key];
-    
-        //             this.responseError += `${this.fieldKeyMap[key]}<br>`;
-        //             for (const error of errorList) {
-        //               this.responseError += `  - ${error}<br>`;
-        //             }
-        //           }
-        //         }
-    
-        //         if (!this.responseError || this.responseError.length <= 0) {
-        //           new showModal('successModalPersonal');
-        //         }
-        //       } else {
-        //         new showModal('successModalPersonal');
-        //       }
-        //     } else {
-        //       new showModal('successModalPersonal');
-        //     }
-        //   });
+        this.actionMap[dataPoint.dataPointName] = dataPoint.value;
       }
-  
-  onBack() {
-   
+    }
+
+    // this.subscription = this.stateService.update(this.selectedStateForFlag.machineType, this.selectedStateForFlag.entityId, this.actionMap)
+    //   .subscribe(response => {
+    //     this.responseError = '';
+
+    //     const state: State = response;
+
+    //     if (state) {
+    //       if (state.errorMessageMap) {
+    //         for (const key in state.errorMessageMap) {
+    //           if (key) {
+    //             const errorList: string[] = state.errorMessageMap[key];
+
+    //             this.responseError += `${this.fieldKeyMap[key]}<br>`;
+    //             for (const error of errorList) {
+    //               this.responseError += `  - ${error}<br>`;
+    //             }
+    //           }
+    //         }
+
+    //         if (!this.responseError || this.responseError.length <= 0) {
+    //           new showModal('successModalPersonal');
+    //         }
+    //       } else {
+    //         new showModal('successModalPersonal');
+    //       }
+    //     } else {
+    //       new showModal('successModalPersonal');
+    //     }
+    //   });
   }
 
-  confirm():void{
+  onBack() {
+
+  }
+
+  confirm(): void {
     this.selectedStateForFlag.flagged = true;
     this.iterationLevel = this.selectedStateForFlag.iterationLevel;
     this.iterationLevel = this.iterationLevel + 1;
@@ -501,108 +506,108 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     this.selectedStateForFlag.subStatus = "FLAGGED"
     this.extractParams();
     this.updateFlow();
-    this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedStateForFlag,this.actionMap)
-    .subscribe(state => {
-      
-      //console.log(state)
-     // this.selectedStateForFlag = state;
-      new closeModal('flagModal');
-      new showModal('successModalPersonal');
-    });
+    this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedStateForFlag, this.actionMap)
+      .subscribe(state => {
+
+        //console.log(state)
+        // this.selectedStateForFlag = state;
+        new closeModal('flagModal');
+        new showModal('successModalPersonal');
+      });
   }
 
   setFirstAssignedTaskValues(states) {
     if (states != null && states.length > 0) {
-        this.assignedStateTabclass[states[0]._id] = "block active";
-        this.stateService.getDataPointconfigurationFromFlowInstanceId(states[0].stateMachineInstanceModelId)
-                .subscribe(
-                    response => {
-                        this.graphObjects.set(states[0].stateMachineInstanceModelId, this.getSortedDatPointGraphObject(response));
-                        // console.log("setFirstAssignedTaskValues");
-                        // console.log(this.graphObjects);
-                        this.assignedTaskDdetails = states[0];
-                        this.loadingAssigned = false;
-                        if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged)  {
-                          this.progressBarFlag = false;
-                          // this.baThemeSpinner.hide();
-                        }
-                        this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
-                        this.assignedStategraphObject = response;
-                        for(let state of states) {
-                            if(this.assignedTaskDdetails != state) {
-                              this.assignedStateTabclass[state._id] = "block";
-                              this.setGraphObjects(state);
-                              this.assignedTaskActionButtonEnabled[state._id] =true;
-                            }
-                        }
-                    },
-                    error => {
-                        console.log("graph object not found");
-                    }
-                )
+      this.assignedStateTabclass[states[0]._id] = "block active";
+      this.stateService.getDataPointconfigurationFromFlowInstanceId(states[0].stateMachineInstanceModelId)
+        .subscribe(
+          response => {
+            this.graphObjects.set(states[0].stateMachineInstanceModelId, this.getSortedDatPointGraphObject(response));
+            // console.log("setFirstAssignedTaskValues");
+            // console.log(this.graphObjects);
+            this.assignedTaskDdetails = states[0];
+            this.loadingAssigned = false;
+            if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
+              this.progressBarFlag = false;
+              // this.baThemeSpinner.hide();
+            }
+            this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
+            this.assignedStategraphObject = response;
+            for (let state of states) {
+              if (this.assignedTaskDdetails != state) {
+                this.assignedStateTabclass[state._id] = "block";
+                this.setGraphObjects(state);
+                this.assignedTaskActionButtonEnabled[state._id] = true;
+              }
+            }
+          },
+          error => {
+            console.log("graph object not found");
+          }
+        )
     }
 
   }
 
   setFirstFlaggedTaskValues(states) {
     if (states != null && states.length > 0) {
-        this.flaggedStateTabclass[states[0]._id] = "block active";
-        this.stateService.getDataPointconfigurationFromFlowInstanceId(states[0].stateMachineInstanceModelId)
-                .subscribe(
-                    response => {
-                        this.graphObjects.set(states[0].stateMachineInstanceModelId, this.getSortedDatPointGraphObject(response));
-                        // console.log("setFirstFlaggedTaskValues");
-                        // console.log(this.graphObjects);
-                        this.flaggedTaskDdetails = states[0];
-                        this.loadingFlagged = false;
-                        if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged)  {
-                          this.progressBarFlag = false;
-                          // this.baThemeSpinner.hide();
-                        }
-                        for(let state of states) {
-                            if(this.flaggedTaskDdetails != state) {
-                              this.flaggedStateTabclass[state._id] = "block";
-                              this.setGraphObjects(state);
-                              
-                            }
-                        }
-                    },
-                    error => {
-                        console.log("graph object not found");
-                    }
-                )
+      this.flaggedStateTabclass[states[0]._id] = "block active";
+      this.stateService.getDataPointconfigurationFromFlowInstanceId(states[0].stateMachineInstanceModelId)
+        .subscribe(
+          response => {
+            this.graphObjects.set(states[0].stateMachineInstanceModelId, this.getSortedDatPointGraphObject(response));
+            // console.log("setFirstFlaggedTaskValues");
+            // console.log(this.graphObjects);
+            this.flaggedTaskDdetails = states[0];
+            this.loadingFlagged = false;
+            if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
+              this.progressBarFlag = false;
+              // this.baThemeSpinner.hide();
+            }
+            for (let state of states) {
+              if (this.flaggedTaskDdetails != state) {
+                this.flaggedStateTabclass[state._id] = "block";
+                this.setGraphObjects(state);
+
+              }
+            }
+          },
+          error => {
+            console.log("graph object not found");
+          }
+        )
     }
 
   }
 
   setFirstUnAssignedTaskValues(states) {
     if (states != null && states.length > 0) {
-        this.unassignedStateTabclass[states[0]._id] = "block active";
-        this.stateService.getDataPointconfigurationFromFlowInstanceId(states[0].stateMachineInstanceModelId)
-                .subscribe(
-                    response => {
-                        this.graphObjects.set(states[0].stateMachineInstanceModelId, this.getSortedDatPointGraphObject(response));
-                        // console.log("setFirstUnAssignedTaskValues");
-                        // console.log(this.graphObjects);
-                        this.unassignedTaskDdetails = states[0];
-                        this.loadingUnassigned = false;
-                        if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged)  {
-                          this.progressBarFlag = false;
-                          // this.baThemeSpinner.hide();
-                        }
-                        this.unassignedTaskActionButtonEnabled[this.unassignedTaskDdetails._id] = true;
-                        for(let state of states) {
-                            if(this.unassignedTaskDdetails != state) {
-                              this.unassignedStateTabclass[state._id] = "block";
-                              this.setGraphObjects(state);
-                              this.unassignedTaskActionButtonEnabled[state._id] =true;
-                            }
-                        }
-                    },
-                    error => {
-                        console.log("graph object not found");
-                    }
-                )
+      this.unassignedStateTabclass[states[0]._id] = "block active";
+      this.stateService.getDataPointconfigurationFromFlowInstanceId(states[0].stateMachineInstanceModelId)
+        .subscribe(
+          response => {
+            this.graphObjects.set(states[0].stateMachineInstanceModelId, this.getSortedDatPointGraphObject(response));
+            // console.log("setFirstUnAssignedTaskValues");
+            // console.log(this.graphObjects);
+            this.unassignedTaskDdetails = states[0];
+            this.loadingUnassigned = false;
+            if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
+              this.progressBarFlag = false;
+              // this.baThemeSpinner.hide();
+            }
+            this.unassignedTaskActionButtonEnabled[this.unassignedTaskDdetails._id] = true;
+            for (let state of states) {
+              if (this.unassignedTaskDdetails != state) {
+                this.unassignedStateTabclass[state._id] = "block";
+                this.setGraphObjects(state);
+                this.unassignedTaskActionButtonEnabled[state._id] = true;
+              }
+            }
+          },
+          error => {
+            console.log("graph object not found");
+          }
+        )
     }
   }
 
@@ -621,7 +626,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
       this.unassignedStateTabclass[unasgnState._id] = this.TABLINKS;
     }
     this.unassignedStateTabclass[state._id] = this.TABLINKS_ACTIVE;
-    
+
   }
 
   onFlaggedSubjectSelect(state: State) {
@@ -633,13 +638,13 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   }
 
   getSortedDatPointGraphObject(graphObject: GraphObject) {
-    if (graphObject != null && graphObject.dataPointConfigurationList != null && graphObject.dataPointConfigurationList.length>0) {
+    if (graphObject != null && graphObject.dataPointConfigurationList != null && graphObject.dataPointConfigurationList.length > 0) {
       const dataPointsConfig = JSON.parse(JSON.stringify(graphObject.dataPointConfigurationList));
-      dataPointsConfig.sort(function(a: DataPoint, b: DataPoint) {
+      dataPointsConfig.sort(function (a: DataPoint, b: DataPoint) {
         return a.sequence > b.sequence ? 1 : a.sequence ? -1 : 0
       });
       graphObject.dataPointConfigurationList = dataPointsConfig;
-      
+
     }
     return graphObject;
   }
@@ -647,22 +652,22 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   setGraphObjects(state: State) {
     // console.log("setgraphobjects");
     // console.log(this.graphObjects.get(state.stateMachineInstanceModelId));
-    if (!this.graphObjects.get(state.stateMachineInstanceModelId)  || this.graphObjects.get(state.stateMachineInstanceModelId) != null) {
-        this.stateService.getDataPointconfigurationFromFlowInstanceId(state.stateMachineInstanceModelId)
+    if (!this.graphObjects.get(state.stateMachineInstanceModelId) || this.graphObjects.get(state.stateMachineInstanceModelId) != null) {
+      this.stateService.getDataPointconfigurationFromFlowInstanceId(state.stateMachineInstanceModelId)
         .subscribe(
-            response => {
-              this.graphObjects.set(state.stateMachineInstanceModelId, this.getSortedDatPointGraphObject(response));
-              
-            },
-            error => {
-                
-            }
+          response => {
+            this.graphObjects.set(state.stateMachineInstanceModelId, this.getSortedDatPointGraphObject(response));
+
+          },
+          error => {
+
+          }
         )
     }
     else {
-        this.graphObjects.set(state.stateMachineInstanceModelId, null);
+      this.graphObjects.set(state.stateMachineInstanceModelId, null);
     }
-    
+
   }
 
   getGraphObject(stateMachineInstanceModelId: string) {
@@ -671,12 +676,12 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
   getBusinessKey(stateMachineInstanceModelId: string) {
     if (this.graphObjects.get(stateMachineInstanceModelId) != null) {
-        const dataPoints = this.graphObjects.get(stateMachineInstanceModelId).dataPointConfigurationList;
-        for(let data of dataPoints) {
-            if (data.businessKeyFlag) {
-                return data.dataPointLabel;
-            }
+      const dataPoints = this.graphObjects.get(stateMachineInstanceModelId).dataPointConfigurationList;
+      for (let data of dataPoints) {
+        if (data.businessKeyFlag) {
+          return data.dataPointLabel;
         }
+      }
     }
     return "Business key";
   }
@@ -684,20 +689,20 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   getBusinessKeysWithoutTable(selectedTask: State) {
     let dataPoints: DataPoint[];
     dataPoints = [];
-    if (this.graphObjects.get(selectedTask.stateMachineInstanceModelId) != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList.length>0) {
+    if (this.graphObjects.get(selectedTask.stateMachineInstanceModelId) != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList.length > 0) {
       const dataPointsConfig = this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList;
       // console.log("dataPoints");
       // console.log(orderedDataPoints);
-      for(let data of dataPointsConfig) {
-          if (!data.businessKeyFlag) {
-              if (data.dataType == "ARRAY" && data.childdataPoints != null && data.childdataPoints.length>0 ) {
-                
-              }
-              else {
-                dataPoints.push(data);
-              }
-              
+      for (let data of dataPointsConfig) {
+        if (!data.businessKeyFlag) {
+          if (data.dataType == "ARRAY" && data.childdataPoints != null && data.childdataPoints.length > 0) {
+
           }
+          else {
+            dataPoints.push(data);
+          }
+
+        }
       }
     }
     return dataPoints;
@@ -709,16 +714,16 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     arrayDataPoints = [];
     if (this.graphObjects.get(selectedTask.stateMachineInstanceModelId) != null) {
       const dataPointsConfig = this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList;
-      for(let data of dataPointsConfig) {
-          if (!data.businessKeyFlag) {
-              if (data.dataType == "ARRAY" && selectedTask['parameters'] != null && selectedTask['parameters'][data.dataPointName].length>0 && typeof selectedTask['parameters'][data.dataPointName] != "string" ) {
-                arrayDataPoints.push(data)                
-              }
-              else {
-                
-              }
-              
+      for (let data of dataPointsConfig) {
+        if (!data.businessKeyFlag) {
+          if (data.dataType == "ARRAY" && selectedTask['parameters'] != null && selectedTask['parameters'][data.dataPointName].length > 0 && typeof selectedTask['parameters'][data.dataPointName] != "string") {
+            arrayDataPoints.push(data)
           }
+          else {
+
+          }
+
+        }
       }
     }
     //console.log("getBusinessKeysWithTable");
@@ -729,14 +734,14 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   getHeaderDataPointsForArrayDataType(dataPoint: DataPoint, state: State) {
     this.arrayTableHeaders = {};
     let headers = [];
-    if (dataPoint.childdataPoints != null && dataPoint.childdataPoints.length>0) {
+    if (dataPoint.childdataPoints != null && dataPoint.childdataPoints.length > 0) {
       for (let childdata of dataPoint.childdataPoints) {
         this.arrayTableHeaders[childdata.dataPointName] = [];
         headers.push(childdata);
       }
     }
     else {
-      if (state['parameters'] != null && state['parameters'][dataPoint.dataPointName] != null && state['parameters'][dataPoint.dataPointName].length>0) {
+      if (state['parameters'] != null && state['parameters'][dataPoint.dataPointName] != null && state['parameters'][dataPoint.dataPointName].length > 0) {
         for (let key of state['parameters'][dataPoint.dataPointName]) {
           //console.log(key);
           this.arrayTableHeaders[key] = [];
@@ -749,17 +754,17 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     }
     //console.log(headers)
     return headers;
-    
+
   }
 
   getValueForArraydatatype(dataPoint: DataPoint, state: State) {
     let values = []
     if (state['parameters'][dataPoint.dataPointName] != null) {
-      for(let d of state['parameters'][dataPoint.dataPointName]) {
+      for (let d of state['parameters'][dataPoint.dataPointName]) {
         // console.log("d");
         // console.log(d);
         let headerValue = []
-        for(let dp of this.getHeaderDataPointsForArrayDataType(dataPoint, state)) {
+        for (let dp of this.getHeaderDataPointsForArrayDataType(dataPoint, state)) {
           headerValue.push(d[dp.dataPointName])
         }
         values.push(headerValue);
@@ -775,120 +780,120 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     this.subscription = this.stateService.update(state.machineType, state.entityId, state['parameters'])
       .subscribe(
         response => {
-        if (type == "ASSIGNED") {
-          this.assignedTaskActionButtonEnabled[state._id] = true;
-        }
-        if (response) {
-          const errorState: State = response;
-          let erresponseError = "";
-          for (const key in errorState.errorMessageMap) {
-            if (key) {
-              const errorList: string[] = errorState.errorMessageMap[key];
-
-              erresponseError += `${this.fieldKeyMap[key]}<br>`;
-              for (const error of errorList) {
-                erresponseError += `  - ${error}<br>`;
-              }
-              new showModal(erresponseError);
-            }
-          }
-        }
-        else{
           if (type == "ASSIGNED") {
             this.assignedTaskActionButtonEnabled[state._id] = true;
-            this.removedAssignedTask(state);
           }
-          new showModal('successModal');
+          if (response) {
+            const errorState: State = response;
+            let erresponseError = "";
+            for (const key in errorState.errorMessageMap) {
+              if (key) {
+                const errorList: string[] = errorState.errorMessageMap[key];
+
+                erresponseError += `${this.fieldKeyMap[key]}<br>`;
+                for (const error of errorList) {
+                  erresponseError += `  - ${error}<br>`;
+                }
+                new showModal(erresponseError);
+              }
+            }
+          }
+          else {
+            if (type == "ASSIGNED") {
+              this.assignedTaskActionButtonEnabled[state._id] = true;
+              this.removedAssignedTask(state);
+            }
+            new showModal('successModal');
+          }
+        },
+        error => {
+          new showModal('Error in updating process');
         }
-      },
-      error => {
-        new showModal('Error in updating process');
-      }
-    );
+      );
   }
 
-  reserveUnassignedTask(state: State){
+  reserveUnassignedTask(state: State) {
     this.unassignedTaskActionButtonEnabled[state._id] = false;
-    this.subscription = this.allocateTaskToUser.allocateTask(this.userId,state._id,"Reserve")
-    .subscribe(updatedState => {
-      this.unassignedTaskActionButtonEnabled[state._id] = false;
-      this.removedUnAssignedTask(state);
-      if (this.assignedStates.length == 0) {
-        this.assignedStateTabclass[state._id] = "block active";
-      }
-      else {
-        this.assignedStateTabclass[updatedState._id] = "block";
-      }
-      this.assignedTaskActionButtonEnabled[updatedState._id] = true;
-      this.setGraphObjects(updatedState);
-      this.assignedStates.push(updatedState);
-      this.tempAssignedStates.push(JSON.parse(JSON.stringify(updatedState)));
-    },
-    error => {
-      this.unassignedTaskActionButtonEnabled[state._id] = false;
-      new showAlertModal("Error", "error to reserve task")
-    }
-    );
+    this.subscription = this.allocateTaskToUser.allocateTask(this.userId, state._id, "Reserve")
+      .subscribe(updatedState => {
+        this.unassignedTaskActionButtonEnabled[state._id] = false;
+        this.removedUnAssignedTask(state);
+        if (this.assignedStates.length == 0) {
+          this.assignedStateTabclass[state._id] = "block active";
+        }
+        else {
+          this.assignedStateTabclass[updatedState._id] = "block";
+        }
+        this.assignedTaskActionButtonEnabled[updatedState._id] = true;
+        this.setGraphObjects(updatedState);
+        this.assignedStates.push(updatedState);
+        this.tempAssignedStates.push(JSON.parse(JSON.stringify(updatedState)));
+      },
+        error => {
+          this.unassignedTaskActionButtonEnabled[state._id] = false;
+          new showAlertModal("Error", "error to reserve task")
+        }
+      );
 
   }
 
-  onUserSelectAssignedTask(user){
-      
+  onUserSelectAssignedTask(user) {
+
     this.allocatedAssignedTaskToUserId = user.userId;
-    
+
   }
 
-  onUserSelectUnAssignedTask(user){
-      
+  onUserSelectUnAssignedTask(user) {
+
     this.allocatedUnAssignedTaskToUserId = user.userId;
-    
+
   }
 
-  allocateAssignedTask(){
+  allocateAssignedTask() {
     this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = false
     // console.log(this.allocatedAssignedTaskToUserId)
-    if(this.allocatedAssignedTaskToUserId != null && this.allocatedAssignedTaskToUserId.length > 0){
-      this.subscription = this.allocateTaskToUser.allocateTask(this.allocatedAssignedTaskToUserId,this.assignedTaskDdetails._id,"Allocate")
-              .subscribe(any => {
-                    this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
-                    this.removedAssignedTask(this.assignedTaskDdetails);
-                  },
-                  error => {
-                    new closeModal('assginedUserModal');
-                    new showModal('error in allocate to team ');
-                  }
-                )
+    if (this.allocatedAssignedTaskToUserId != null && this.allocatedAssignedTaskToUserId.length > 0) {
+      this.subscription = this.allocateTaskToUser.allocateTask(this.allocatedAssignedTaskToUserId, this.assignedTaskDdetails._id, "Allocate")
+        .subscribe(any => {
+          this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
+          this.removedAssignedTask(this.assignedTaskDdetails);
+        },
+          error => {
+            new closeModal('assginedUserModal');
+            new showModal('error in allocate to team ');
+          }
+        )
     }
-    else{
+    else {
       new closeModal('assginedUserModal');
       new showModal('userNotSelected');
       this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
     }
-    
+
   }
 
-  allocateUnAssignedTask(){
+  allocateUnAssignedTask() {
     this.unassignedTaskActionButtonEnabled[this.unassignedTaskDdetails._id] = false
     // console.log(this.allocatedUnAssignedTaskToUserId)
-    if(this.allocatedUnAssignedTaskToUserId != null && this.allocatedUnAssignedTaskToUserId.length > 0){
-      this.subscription = this.allocateTaskToUser.allocateTask(this.allocatedUnAssignedTaskToUserId,this.unassignedTaskDdetails._id,"Allocate")
-              .subscribe(any => {
-                    this.unassignedTaskActionButtonEnabled[this.unassignedTaskDdetails._id] = true;
-                    this.removedUnAssignedTask(this.unassignedTaskDdetails);
-                  },
-                  error => {
-                    new closeModal('unassginedUserModal');
-                    new showModal('error in allocate to team ');
-                  }
-                )
+    if (this.allocatedUnAssignedTaskToUserId != null && this.allocatedUnAssignedTaskToUserId.length > 0) {
+      this.subscription = this.allocateTaskToUser.allocateTask(this.allocatedUnAssignedTaskToUserId, this.unassignedTaskDdetails._id, "Allocate")
+        .subscribe(any => {
+          this.unassignedTaskActionButtonEnabled[this.unassignedTaskDdetails._id] = true;
+          this.removedUnAssignedTask(this.unassignedTaskDdetails);
+        },
+          error => {
+            new closeModal('unassginedUserModal');
+            new showModal('error in allocate to team ');
+          }
+        )
       this.removedUnAssignedTask(this.unassignedTaskDdetails);
     }
-    else{
+    else {
       new closeModal('unassginedUserModal');
       new showModal('userNotSelected');
       this.unassignedTaskActionButtonEnabled[this.unassignedTaskDdetails._id] = true;
     }
-    
+
   }
 
   removedAssignedTask(state: State) {
@@ -898,7 +903,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     if (index != -1) {
       this.assignedStates.splice(index, 1);
       //console.log(this.assignedTaskDdetails);
-      if (this.assignedStates.length > 0 ) {
+      if (this.assignedStates.length > 0) {
         // console.log(this.assignedTaskDdetails);
         if (index != this.assignedStates.length) {
           const displayState = this.assignedStates[index];
@@ -915,7 +920,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
         this.assignedTaskDdetails = null;
       }
     }
-    
+
   }
 
   removedUnAssignedTask(state: State) {
@@ -925,7 +930,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     if (index != -1) {
       this.unassignedStates.splice(index, 1);
       // console.log(this.unassignedTaskDdetails);
-      if (this.unassignedStates.length > 0 ) {
+      if (this.unassignedStates.length > 0) {
         // console.log(this.unassignedTaskDdetails);
         if (index != this.unassignedStates.length) {
           const displayState = this.unassignedStates[index];
@@ -940,14 +945,14 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
       }
       else {
         this.unassignedTaskDdetails = null;
-        this.loadMore('ACTIVE','Group')
+        this.loadMore('ACTIVE', 'Group')
       }
-      
+
     }
-    
+
   }
 
-  assignedTaskFlagClose(){
+  assignedTaskFlagClose() {
     this.assignedTaskDdetails.flagReason = null;
   }
 
@@ -960,56 +965,56 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     this.assignedTaskDdetails.subStatus = "FLAGGED"
 
     this.subscriptionXML = this.stateService.saveFlaggedState(this.assignedTaskDdetails, this.assignedTaskDdetails.parameters)
-                              .subscribe(state => {
-                                this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
-                                this.removedAssignedTask(this.assignedTaskDdetails);
-                                if (this.flaggedStates.length == 0) {
-                                  this.flaggedStateTabclass[state._id] = "block active";
-                                }
-                                else {
-                                  this.flaggedStateTabclass[state._id] = "block";
-                                }
-                                this.setGraphObjects(state);
-                                this.flaggedStates.push(state);
-                                new closeModal('assignedTaskflagModal');
-                                new showModal('assignedTaskflagSuccessModal');
+      .subscribe(state => {
+        this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
+        this.removedAssignedTask(this.assignedTaskDdetails);
+        if (this.flaggedStates.length == 0) {
+          this.flaggedStateTabclass[state._id] = "block active";
+        }
+        else {
+          this.flaggedStateTabclass[state._id] = "block";
+        }
+        this.setGraphObjects(state);
+        this.flaggedStates.push(state);
+        new closeModal('assignedTaskflagModal');
+        new showModal('assignedTaskflagSuccessModal');
 
-                              },
-                              error => {
-                                this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
-                                new showAlertModal('Error', "error to add flag for task");
-                              }
-                            );
+      },
+        error => {
+          this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
+          new showAlertModal('Error', "error to add flag for task");
+        }
+      );
   }
 
   archiveAssignedTask() {
     this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = false;
     let archivedState: State = null;
-    for(let state of this.tempAssignedStates) {
+    for (let state of this.tempAssignedStates) {
       if (state._id == this.assignedTaskDdetails._id) {
         archivedState = state
       }
     }
     if (archivedState != null) {
       this.subscription = this.stateService.saveArchivedState(archivedState)
-          .subscribe(State => {
-                this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
-                this.removedAssignedTask(this.assignedTaskDdetails);
-                new closeModal('archiveTaskWarningModal');
-                new showModal('assignedTaskArchiveSuccessModal');
-                //this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
-              },
-              error => {
-                this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
-                new showAlertModal('Error', "error to archived selected task");
-              }
-          );  
+        .subscribe(State => {
+          this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
+          this.removedAssignedTask(this.assignedTaskDdetails);
+          new closeModal('archiveTaskWarningModal');
+          new showModal('assignedTaskArchiveSuccessModal');
+          //this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
+        },
+          error => {
+            this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
+            new showAlertModal('Error', "error to archived selected task");
+          }
+        );
     }
     else {
       new showAlertModal("Error", "unable to archived selected task")
     }
-      
+
   }
 
-  
+
 }
