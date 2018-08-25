@@ -47,8 +47,9 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
   valueSelectedConfigs:any[];
   mainConfigTypeMap:any;
   conInfoOfNoMetadata:ConnectorInfo;
+  selectedConnector:ConnectorConfig;
   fileName:string;
-  temp:string;
+  temp:any;
 
 
   private subscription: Subscription;
@@ -75,6 +76,7 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
     this.requiredList = {};
     this.requiredConfig = {};
     this.filterQuery = '';
+    this.temp = {};
     this.valueSelectedConfigs = [];
     this.mandatorySatisfied = true;
     this.selectedApiConfig = new ApiConfig();
@@ -210,6 +212,7 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
   
   populateConnector(conConfig){
     this.Connectors.push(conConfig)
+    this.selectedConnector = conConfig;
     this.conInfo.displayName = conConfig.displayName;
     this.subscription = this.connectorConfigService.getConnecterInfo()
       .subscribe(connectorInfos => {
@@ -237,8 +240,9 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
   addConfigParamsForNoMetatData(conConfig){
     for (const property in conConfig.configMap)
       {
-          console.log(conConfig);
-          console.log(this.conInfoOfNoMetadata);
+          //console.log(conConfig);
+          //console.log(this.conInfoOfNoMetadata);
+          
           const map = new Map();
           const typeMap = new Map();
           typeMap.set('key', property);
@@ -246,6 +250,7 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
           map.set('key', property);
           map.set('value', conConfig.configMap[property] );
           if(this.conInfoOfNoMetadata.metaData[property]["type"] == "list"){
+            this.temp[property] = conConfig.configMap[property]
             map.set('values',this.conInfoOfNoMetadata.metaData[property]["valueList"] );
           }
           this.configList.push(map);
@@ -254,6 +259,7 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
             let urlArr = conConfig.configMap[property].split("/")
             this.fileName = urlArr[urlArr.length - 1]
           }
+          
       }
   }
 
@@ -462,14 +468,22 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
 
   addParam() {
     const body = new Map();
+    const typeBody = new Map();
     body.set('key', '');
     body.set('value', '');
+    typeBody.set('key', '');
+    typeBody.set('value', 'string');
     this.configList.push(body);
+    this.typeConfigList.push(typeBody)
   }
   removeBody(body: any) {
     if (body && this.configList && this.configList.includes(body)) {
       const index = this.configList.indexOf(body);
       this.configList.splice(index, 1);
+    }
+    if (body && this.typeConfigList && this.typeConfigList.includes(body)) {
+      const index = this.typeConfigList.indexOf(body);
+      this.typeConfigList.splice(index, 1);
     }
   }
 
@@ -482,7 +496,10 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
           body.set('key', config.get('key'));
           body.set('value',event)
           body.set('values',config.get('values'));
-          this.temp = event;
+          if(event in this.temp  == false){
+            this.temp[config.get('key')] = event
+          }
+          console.log(this.temp)
           this.configList.splice(index, 1,body);
         }
       }

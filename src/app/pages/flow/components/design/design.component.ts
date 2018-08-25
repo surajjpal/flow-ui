@@ -102,6 +102,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   paramsToSelectSource: string[];
   conInfoOfNoMetadata:ConnectorInfo;
   gotConInfo:boolean = false;
+  loadingConfigMap:boolean = false;
 
   //file
   fileSelected:boolean;
@@ -239,7 +240,11 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.subscriptionApiConfig = this.graphService.apiConfigLookup()
       .subscribe(apiConfigList => {
         if (apiConfigList && apiConfigList.length > 0) {
-          this.sourceApiConfigList = apiConfigList;
+          for (let api of apiConfigList){
+            if(!api.taskConConfigApi)
+            this.sourceApiConfigList.push(api);
+          }
+          
         }
       });
   }
@@ -607,12 +612,14 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.typeConfigList = [];
     this.fileName = "please upload a file..."
     this.tempConConfig = event[0]
-   
+    this.loadingConfigMap = true;
     
     if(this.tempConConfig._id.length > 0){
       this.subscriptionConConfig = this.connectorConfigService.getConnectorInfos(event[0].configType)
     .subscribe(conInfoList => {
+      this.loadingConfigMap = false;
       if (conInfoList) {
+
         this.conInfoList = conInfoList;
         if(conInfoList.length == 1){
           this.selectedConfig = false;
