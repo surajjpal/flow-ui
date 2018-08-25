@@ -239,6 +239,8 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
 
   loadMore(status, type): void {
+
+    this.progressBarFlag = true;
     this.loadingAssigned = true;
     this.loadingUnassigned = true;
     this.pageNumber = this.pageNumber + 1;
@@ -269,13 +271,16 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
               this.loadingAssigned = false;
             }
             if (!this.loadingUnassigned && !this.loadingAssigned) {
-              this.baThemeSpinner.hide();
-            }
 
+              //this.baThemeSpinner.hide();
+            }
+            this.progressBarFlag = false;
           }, error => {
             this.loadingUnassigned = false;
+            this.progressBarFlag = false;
             if (!this.loadingUnassigned && !this.loadingAssigned) {
-              this.baThemeSpinner.hide();
+
+              //this.baThemeSpinner.hide();
             }
           });
       }
@@ -304,14 +309,17 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
             }
 
             if (!this.loadingUnassigned && !this.loadingAssigned) {
-              this.baThemeSpinner.hide();
+              this.progressBarFlag = false;
+              //this.baThemeSpinner.hide();
             }
-
+            this.progressBarFlag = false;
           }, error => {
             this.loadingUnassigned = false;
             if (!this.loadingUnassigned && !this.loadingAssigned) {
-              this.baThemeSpinner.hide();
+              this.progressBarFlag = false;
+              //this.baThemeSpinner.hide();
             }
+            this.progressBarFlag = false;
           });
       }
 
@@ -334,7 +342,9 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
             }
             this.flaggedStates = this.flaggedStates.concat(states)
           }
-
+          this.progressBarFlag = false;
+        }, error => {
+          this.progressBarFlag = false;
         });
 
     }
@@ -774,6 +784,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   }
 
   updateProcessFlow(state: State, type: string) {
+    this.progressBarFlag = true;
     if (type == "ASSIGNED") {
       this.assignedTaskActionButtonEnabled[state._id] = false;
     }
@@ -800,13 +811,15 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
           }
           else {
             if (type == "ASSIGNED") {
+              this.progressBarFlag = false;
+              new showModal('successModal');
               this.assignedTaskActionButtonEnabled[state._id] = true;
               this.removedAssignedTask(state);
             }
-            new showModal('successModal');
           }
         },
         error => {
+          this.progressBarFlag = false;
           new showModal('Error in updating process');
         }
       );

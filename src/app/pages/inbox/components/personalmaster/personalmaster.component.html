@@ -569,6 +569,27 @@
     </div>
 </div>
 
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" attr.aria-labelledby="successModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="successModal">
+                    Success
+                </h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal_body">
+                Task completed successfully.
+            </div>
+            <div class="modal-footer" id="modal_footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" (click)="onBack()">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="assginedUserModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
