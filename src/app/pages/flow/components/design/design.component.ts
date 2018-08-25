@@ -293,12 +293,16 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   updateState(state: StateModel): void {
     this.stateCreateMode = false;
+    this.specificConfigSelected = false;
+    this.selectedConfig = false;
+    this.gotConInfo = false;
 
     this.tempState = JSON.parse(JSON.stringify(state));
-    if(this.tempState.connectorConfig.length > 0){
-      this.onConfigSelect(this.tempState.connectorConfig);
+    if(this.tempState.connectorConfig){
+      if(this.tempState.connectorConfig.length > 0){
+        this.onConfigSelect(this.tempState.connectorConfig);
+      }
     }
-    
   }
   
 
@@ -603,7 +607,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.typeConfigList = [];
     this.fileName = "please upload a file..."
     this.tempConConfig = event[0]
-    
+   
     
     if(this.tempConConfig._id.length > 0){
       this.subscriptionConConfig = this.connectorConfigService.getConnectorInfos(event[0].configType)
@@ -613,7 +617,29 @@ export class DesignComponent implements OnInit, OnDestroy {
         if(conInfoList.length == 1){
           this.selectedConfig = false;
           this.specificConfigSelected = true;
-          this.connectorSelected(conInfoList[0])
+          //
+          if(!this.stateCreateMode){
+            if(this.tempState.connectorConfig[0].configType!=this.tempConConfig.configType){
+              this.conConfig = new ConnectorConfig()
+              this.connectorSelected(conInfoList[0])
+            }
+            else{
+              for(let conInfo of conInfoList ){
+                if(conInfo.type == this.tempState.taskConfig[0].connectorInfoRef){
+                  this.conConfig = this.tempState.taskConfig[0]
+                  this.connectorSelected(conInfo)
+                }
+                else{
+                  this.conConfig = new ConnectorConfig()
+                  this.connectorSelected(conInfoList[0])
+                }
+              }
+            }
+          }
+          else{
+            this.conConfig = new ConnectorConfig()
+            this.connectorSelected(conInfoList[0])
+          }
         }
         else{
           this.selectedConfig = true;
@@ -650,7 +676,6 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   connectorSelected(conInfo){
-   
     this.specificConfigSelected = true;
     this.selectedConInfo = conInfo;
     this.configList = [];
@@ -713,6 +738,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
 
     if(this.isEmpty(conInfo.payload) == false){
+      
       for (const property in conInfo.payload)
       {
         const map = new Map();
@@ -729,10 +755,27 @@ export class DesignComponent implements OnInit, OnDestroy {
           else{
             map.set('value', "");
           }
-
+        }
+        this.payloadList.push(map);
+      }
+   }
+    else{
+      
+     
+      if(!this.stateCreateMode){
+        if(this.tempState.taskConfig){
+          if(this.tempState.taskConfig.length > 0){
+            if(this.tempState.taskConfig[0].configType == conInfo.type){
+            for(let property in this.tempState.taskConfig[0].taskObject.body){
+              const map = new Map();
+              map.set('key', property);
+              map.set('value',this.tempState.taskConfig[0].taskObject.body[property])
+              this.payloadList.push(map);
+            }
+            }
+          }
         }
         
-        this.payloadList.push(map);
       }
     }
     
@@ -983,12 +1026,11 @@ export class DesignComponent implements OnInit, OnDestroy {
                 if (con.get('key') && con.get('key').trim().length > 0 && con.get('key') == config.get('key')) {
                   if (con && this.configList && this.configList.includes(con)) {
                     const index = this.configList.indexOf(con);
-                    this.configList.splice(index, 1);
+                    const body = new Map()
+                    body.set('key', config.get('key'));
+                    body.set('value',url)
+                    this.configList.splice(index, 1,body);
                   }
-                  const body = new Map()
-                  body.set('key', config.get('key'));
-                  body.set('value',url)
-                  this.configList.push(body);
                 }
               }
               this.progressBarFlag = false;

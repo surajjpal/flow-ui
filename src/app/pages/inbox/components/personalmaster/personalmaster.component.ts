@@ -190,18 +190,9 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     this.loadingFlagged = true
     this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Group',this.assignedTaskPageNumber,fetchRecords)
       .subscribe(states => {
-        this.loadingUnassigned = false;
         this.setFirstUnAssignedTaskValues(states);
         this.unassignedStates = states;
-        if (this.unassignedStates != null && this.unassignedStates.length > 0 && this.unassignedStates[0].headerParamList != null) {
-          this.unassignedHeaderParamList = this.unassignedStates[0].headerParamList;
-        }
-
-        if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
-          this.progressBarFlag = false;
-          // this.baThemeSpinner.hide();
-        }
-
+        
       }, error => {
         this.loadingUnassigned = false;
         if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
@@ -212,18 +203,10 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
     this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Personal',this.unassignedTaskPageNumber,fetchRecords)
       .subscribe(states => {
-        this.loadingAssigned = false;
         this.setFirstAssignedTaskValues(states);
         this.assignedStates = states;
         this.tempAssignedStates = JSON.parse(JSON.stringify(states));
-        if (this.assignedStates != null && this.assignedStates.length > 0 && this.assignedStates[0].headerParamList != null) {
-          this.assignedHeaderParamList = this.assignedStates[0].headerParamList;
-        }
-
-        if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged)  {
-          this.progressBarFlag = false;
-          // this.baThemeSpinner.hide();
-        }
+        
       }, error => {
         this.loadingAssigned = false;
         if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
@@ -238,15 +221,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
         this.loadingFlagged = false;
         this.setFirstFlaggedTaskValues(states);
         this.flaggedStates = states;
-        if (this.flaggedStates != null && this.flaggedStates.length > 0 && this.flaggedStates[0].headerParamList != null) {
-          this.flaggedHeaderParamList = this.flaggedStates[0].headerParamList;
-        }
-
-        if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
-          this.progressBarFlag = false;
-          // this.baThemeSpinner.hide();
-        }
-
+        
       }, error => {
         this.loadingUnassigned = false;
         if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
@@ -267,21 +242,25 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
         this.assignedTaskPageNumber = this.assignedTaskPageNumber + 1;
         this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder(status,type,this.assignedTaskPageNumber,this.fetchRecords)
         .subscribe(states => {
-          
+          if (states != null && states.length == 0) {
+            new showAlertModal("No more data available");
+          }
           if(type=='Personal'){
-            for(let state of states) {
-              if (this.assignedStates.length == 0) {
-                this.assignedStateTabclass[state._id] = "block active";
-              }
-              else {
-                this.assignedStateTabclass[state._id] = "block";
-              }
+            if (this.assignedStates.length == 0) {
+              this.setFirstAssignedTaskValues(states);
+              this.assignedStates = states;
               
-              this.assignedTaskActionButtonEnabled[state._id] = true;
-              this.setGraphObjects(state);
             }
-            this.assignedStates = this.assignedStates.concat(states)
-            this.tempAssignedStates = this.tempAssignedStates.concat(JSON.parse(JSON.stringify(states)));
+            else{
+              for(let state of states) {
+                  this.assignedStateTabclass[state._id] = "block";
+                  this.assignedTaskActionButtonEnabled[state._id] = true;
+                  this.setGraphObjects(state);
+              }
+              this.assignedStates = this.assignedStates.concat(states)
+              this.tempAssignedStates = this.tempAssignedStates.concat(JSON.parse(JSON.stringify(states)));
+            }
+            
             this.loadingAssigned = false;
           }
           if(!this.loadingUnassigned && !this.loadingAssigned){
@@ -299,7 +278,9 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
         this.unassignedTaskPageNumber = this.unassignedTaskPageNumber + 1;
         this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder(status,type,this.unassignedTaskPageNumber,this.fetchRecords)
         .subscribe(states => {
-          
+          if (states != null && states.length == 0) {
+            new showAlertModal("No more data available");
+          }
           if(type=='Group'){
             if(this.unassignedStates.length == 0) {
               this.setFirstUnAssignedTaskValues(states);
@@ -334,17 +315,21 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
       this.flaggedTaskPageNumber = this.flaggedTaskPageNumber + 1;
       this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED','CLOSED',this.flaggedTaskPageNumber,this.fetchRecords,'PERSONAL')
             .subscribe(states => {
-              for(let state of states) {
-                if (this.flaggedStates.length == 0) {
-                  this.flaggedStateTabclass[state._id] = "block active";
-                }
-                else {
-                  this.flaggedStateTabclass[state._id] = "block";
-                }
-                
-                this.setGraphObjects(state);
+              if (states != null && states.length == 0) {
+                new showAlertModal("No more data available");
               }
-              this.flaggedStates = this.flaggedStates.concat(states) 
+              if (this.flaggedStates.length == 0) {
+                this.setFirstFlaggedTaskValues(states);
+                this.flaggedStates = states;
+              }
+              else{
+                for(let state of states) {
+                    this.flaggedStateTabclass[state._id] = "block";
+                    this.setGraphObjects(state);
+                }
+                this.flaggedStates = this.flaggedStates.concat(states) 
+              }
+              
       });
 
     }
@@ -532,10 +517,15 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
         this.stateService.getDataPointconfigurationFromFlowInstanceId(states[0].stateMachineInstanceModelId)
                 .subscribe(
                     response => {
-                        this.graphObjects.set(states[0].stateMachineInstanceModelId, response);
+                        this.graphObjects.set(states[0].stateMachineInstanceModelId, this.getSortedDatPointGraphObject(response));
                         // console.log("setFirstAssignedTaskValues");
                         // console.log(this.graphObjects);
                         this.assignedTaskDdetails = states[0];
+                        this.loadingAssigned = false;
+                        if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged)  {
+                          this.progressBarFlag = false;
+                          // this.baThemeSpinner.hide();
+                        }
                         this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
                         this.assignedStategraphObject = response;
                         for(let state of states) {
@@ -560,10 +550,15 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
         this.stateService.getDataPointconfigurationFromFlowInstanceId(states[0].stateMachineInstanceModelId)
                 .subscribe(
                     response => {
-                        this.graphObjects.set(states[0].stateMachineInstanceModelId, response);
+                        this.graphObjects.set(states[0].stateMachineInstanceModelId, this.getSortedDatPointGraphObject(response));
                         // console.log("setFirstFlaggedTaskValues");
                         // console.log(this.graphObjects);
                         this.flaggedTaskDdetails = states[0];
+                        this.loadingFlagged = false;
+                        if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged)  {
+                          this.progressBarFlag = false;
+                          // this.baThemeSpinner.hide();
+                        }
                         for(let state of states) {
                             if(this.flaggedTaskDdetails != state) {
                               this.flaggedStateTabclass[state._id] = "block";
@@ -586,10 +581,15 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
         this.stateService.getDataPointconfigurationFromFlowInstanceId(states[0].stateMachineInstanceModelId)
                 .subscribe(
                     response => {
-                        this.graphObjects.set(states[0].stateMachineInstanceModelId, response);
+                        this.graphObjects.set(states[0].stateMachineInstanceModelId, this.getSortedDatPointGraphObject(response));
                         // console.log("setFirstUnAssignedTaskValues");
                         // console.log(this.graphObjects);
                         this.unassignedTaskDdetails = states[0];
+                        this.loadingUnassigned = false;
+                        if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged)  {
+                          this.progressBarFlag = false;
+                          // this.baThemeSpinner.hide();
+                        }
                         this.unassignedTaskActionButtonEnabled[this.unassignedTaskDdetails._id] = true;
                         for(let state of states) {
                             if(this.unassignedTaskDdetails != state) {
@@ -632,6 +632,18 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     this.flaggedStateTabclass[state._id] = this.TABLINKS_ACTIVE;
   }
 
+  getSortedDatPointGraphObject(graphObject: GraphObject) {
+    if (graphObject != null && graphObject.dataPointConfigurationList != null && graphObject.dataPointConfigurationList.length>0) {
+      const dataPointsConfig = JSON.parse(JSON.stringify(graphObject.dataPointConfigurationList));
+      dataPointsConfig.sort(function(a: DataPoint, b: DataPoint) {
+        return a.sequence > b.sequence ? 1 : a.sequence ? -1 : 0
+      });
+      graphObject.dataPointConfigurationList = dataPointsConfig;
+      
+    }
+    return graphObject;
+  }
+
   setGraphObjects(state: State) {
     // console.log("setgraphobjects");
     // console.log(this.graphObjects.get(state.stateMachineInstanceModelId));
@@ -639,8 +651,8 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
         this.stateService.getDataPointconfigurationFromFlowInstanceId(state.stateMachineInstanceModelId)
         .subscribe(
             response => {
-                this.graphObjects.set(state.stateMachineInstanceModelId, response);
-                
+              this.graphObjects.set(state.stateMachineInstanceModelId, this.getSortedDatPointGraphObject(response));
+              
             },
             error => {
                 
@@ -672,11 +684,13 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   getBusinessKeysWithoutTable(selectedTask: State) {
     let dataPoints: DataPoint[];
     dataPoints = [];
-    if (this.graphObjects.get(selectedTask.stateMachineInstanceModelId) != null) {
+    if (this.graphObjects.get(selectedTask.stateMachineInstanceModelId) != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList.length>0) {
       const dataPointsConfig = this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList;
+      // console.log("dataPoints");
+      // console.log(orderedDataPoints);
       for(let data of dataPointsConfig) {
           if (!data.businessKeyFlag) {
-              if (data.dataType == "ARRAY" && selectedTask['parameters'] != null && selectedTask['parameters'][data.dataPointName].length>0 && typeof selectedTask['parameters'][data.dataPointName] != "string" ) {
+              if (data.dataType == "ARRAY" && data.childdataPoints != null && data.childdataPoints.length>0 ) {
                 
               }
               else {
