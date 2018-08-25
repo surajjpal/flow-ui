@@ -31,15 +31,35 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade show active" id="tab_assigned">
                         <div class="row" *ngIf="assignedTaskDdetails != null" style="width: 100%;">
+
                             <div class="col col-lg-3 col-md-3 col-sm-3">
-                                <div [class]="assignedStateTabclass[asgnState._id]" *ngFor="let asgnState of assignedStates; let index=index;" (click)="onPersonalAssignedSubjectSelect(asgnState)"
-                                    id="defaultOpen">
-                                    <label><b>{{ getBusinessKey(asgnState.stateMachineInstanceModelId) }}:</b></label>
-                                    <label>{{ asgnState.businessKey}}</label>
-                                    <br/>
-                                    <label><b>Process:</b></label>
-                                    <label>{{asgnState.machineLabel}}</label>
+                                <div class="card card-default with-scroll">
+                                    <div class="card-header">
+                                        <b>Tasks</b>
+                                    </div>
+                                    <div class="card-block">
+                                        <div [class]="assignedStateTabclass[asgnState._id]" *ngFor="let asgnState of assignedStates; let index=index;" (click)="onPersonalAssignedSubjectSelect(asgnState)"
+                                            id="defaultOpen">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label>{{asgnState.machineLabel}}</label>
+                                                </div>
+                                                <div class="col">
+                                                    {{ asgnState.startTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A' }}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label>{{ asgnState.businessKey}}</label>
+                                                </div>
+                                                <div class="col">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
                                 <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
                                     *ngIf="assignedStates.length != 0" (click)="loadMore('ACTIVE','Personal')">Load
                                     More
