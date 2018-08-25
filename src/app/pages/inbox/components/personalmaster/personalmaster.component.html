@@ -188,7 +188,7 @@
                             </split>
                                 
                         </div>
-                        <div *ngIf="assignedTaskDdetails === null" style="text-align: center;">
+                        <div *ngIf="assignedTaskDdetails === null && !loadingAssigned && !progressBarFlag" style="text-align: center;">
                             <div><b>No records found</b></div>
                         </div>
                     </div>

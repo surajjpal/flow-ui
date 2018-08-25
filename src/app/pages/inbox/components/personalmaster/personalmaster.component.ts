@@ -190,18 +190,9 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     this.loadingFlagged = true
     this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Group',this.assignedTaskPageNumber,fetchRecords)
       .subscribe(states => {
-        this.loadingUnassigned = false;
         this.setFirstUnAssignedTaskValues(states);
         this.unassignedStates = states;
-        if (this.unassignedStates != null && this.unassignedStates.length > 0 && this.unassignedStates[0].headerParamList != null) {
-          this.unassignedHeaderParamList = this.unassignedStates[0].headerParamList;
-        }
-
-        if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
-          this.progressBarFlag = false;
-          // this.baThemeSpinner.hide();
-        }
-
+        
       }, error => {
         this.loadingUnassigned = false;
         if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
@@ -212,18 +203,10 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
     this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Personal',this.unassignedTaskPageNumber,fetchRecords)
       .subscribe(states => {
-        this.loadingAssigned = false;
         this.setFirstAssignedTaskValues(states);
         this.assignedStates = states;
         this.tempAssignedStates = JSON.parse(JSON.stringify(states));
-        if (this.assignedStates != null && this.assignedStates.length > 0 && this.assignedStates[0].headerParamList != null) {
-          this.assignedHeaderParamList = this.assignedStates[0].headerParamList;
-        }
-
-        if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged)  {
-          this.progressBarFlag = false;
-          // this.baThemeSpinner.hide();
-        }
+        
       }, error => {
         this.loadingAssigned = false;
         if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
@@ -238,15 +221,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
         this.loadingFlagged = false;
         this.setFirstFlaggedTaskValues(states);
         this.flaggedStates = states;
-        if (this.flaggedStates != null && this.flaggedStates.length > 0 && this.flaggedStates[0].headerParamList != null) {
-          this.flaggedHeaderParamList = this.flaggedStates[0].headerParamList;
-        }
-
-        if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
-          this.progressBarFlag = false;
-          // this.baThemeSpinner.hide();
-        }
-
+        
       }, error => {
         this.loadingUnassigned = false;
         if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
@@ -536,6 +511,11 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
                         // console.log("setFirstAssignedTaskValues");
                         // console.log(this.graphObjects);
                         this.assignedTaskDdetails = states[0];
+                        this.loadingAssigned = false;
+                        if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged)  {
+                          this.progressBarFlag = false;
+                          // this.baThemeSpinner.hide();
+                        }
                         this.assignedTaskActionButtonEnabled[this.assignedTaskDdetails._id] = true;
                         this.assignedStategraphObject = response;
                         for(let state of states) {
@@ -564,6 +544,11 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
                         // console.log("setFirstFlaggedTaskValues");
                         // console.log(this.graphObjects);
                         this.flaggedTaskDdetails = states[0];
+                        this.loadingFlagged = false;
+                        if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged)  {
+                          this.progressBarFlag = false;
+                          // this.baThemeSpinner.hide();
+                        }
                         for(let state of states) {
                             if(this.flaggedTaskDdetails != state) {
                               this.flaggedStateTabclass[state._id] = "block";
@@ -590,6 +575,11 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
                         // console.log("setFirstUnAssignedTaskValues");
                         // console.log(this.graphObjects);
                         this.unassignedTaskDdetails = states[0];
+                        this.loadingUnassigned = false;
+                        if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged)  {
+                          this.progressBarFlag = false;
+                          // this.baThemeSpinner.hide();
+                        }
                         this.unassignedTaskActionButtonEnabled[this.unassignedTaskDdetails._id] = true;
                         for(let state of states) {
                             if(this.unassignedTaskDdetails != state) {
@@ -672,11 +662,16 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   getBusinessKeysWithoutTable(selectedTask: State) {
     let dataPoints: DataPoint[];
     dataPoints = [];
-    if (this.graphObjects.get(selectedTask.stateMachineInstanceModelId) != null) {
-      const dataPointsConfig = this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList;
+    if (this.graphObjects.get(selectedTask.stateMachineInstanceModelId) != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList.length>0) {
+      const dataPointsConfig = JSON.parse(JSON.stringify(this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList));
+      dataPointsConfig.sort(function(a: DataPoint, b: DataPoint) {
+        return a.sequence > b.sequence ? 1 : a.sequence ? -1 : 0
+      });
+      // console.log("dataPoints");
+      // console.log(orderedDataPoints);
       for(let data of dataPointsConfig) {
           if (!data.businessKeyFlag) {
-              if (data.dataType == "ARRAY" && selectedTask['parameters'] != null && selectedTask['parameters'][data.dataPointName].length>0 && typeof selectedTask['parameters'][data.dataPointName] != "string" ) {
+              if (data.dataType == "ARRAY" && data.childdataPoints != null && data.childdataPoints.length>0 ) {
                 
               }
               else {
