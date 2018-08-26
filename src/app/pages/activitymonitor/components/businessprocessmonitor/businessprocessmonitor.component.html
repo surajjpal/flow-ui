@@ -35,6 +35,14 @@
             <br/>
             <api-daterangepicker id="selectdaterange" [dateRange]="tempDateRange" (selectedRange)="setTimeRange($event)"></api-daterangepicker>
         </div>
+        <!-- <div *ngFor="let outindex of divArray" class="col-lg-12 col-md-12 col-sm-12" style="display: inline-flex; margin-top: 20px;">
+            <div *ngFor="let dataPoint of getBusinessDataPoint(outindex)" class="col-lg-4 col-md-4 col-sm-12">
+                <label>{{ dataPoint.dataPointLabel }}</label>
+                <select  class="form-control"  required id="selectflowstatus"  title="Choose Status" [(ngModel)]="businessProcessMonitorRequest.dataPoints[dataPoint.dataPointName]" name="dataPoints[dataPoint.dataPointName]">
+                    <option *ngFor="let value of getBusinessDataPonitValuesFromDataPointKey(dataPoint.dataPointName)" [ngValue]="value">{{ value }}</option>
+                </select>
+            </div>
+        </div> -->
 
     </div>
     <div class="row">
