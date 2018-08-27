@@ -9,8 +9,11 @@ import { NgaModule } from '../../theme/nga.module';
 import { routing } from './inbox.routing';
 import { InboxComponent } from './inbox.component';
 import { Daterangepicker } from 'ng2-daterangepicker';
+import { AngularSplitModule } from 'angular-split';
 import { ActiveComponent } from './components/active/active.component';
 import { ArchivedComponent } from './components/archived/archived.component';
+import { ArchiveMasterComponent } from './components/archivedmaster/archivedmaster.component'
+import { PersonalMasterComponent } from './components/personalmaster/personalmaster.component'
 import { TaskDetailsComponent } from './components/taskDetails/taskDetails.component';
 import { TeamViewComponent} from './components/teamView/teamView.component';
 import { PersonalComponent} from './components/personal/personal.component';
@@ -33,12 +36,15 @@ import * as moment from 'moment/moment';
     DataTableModule,
     SharedModule,
     MomentModule,
-    Daterangepicker
+    Daterangepicker,
+    AngularSplitModule
   ],
   declarations: [
     InboxComponent,
     ActiveComponent,
     ArchivedComponent,
+    ArchiveMasterComponent,
+    PersonalMasterComponent,
     TaskDetailsComponent,
     TeamViewComponent,
     PersonalComponent,

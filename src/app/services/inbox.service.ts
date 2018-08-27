@@ -4,7 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
 import { State,CommonInsightWrapper,StateReportModel } from '../models/tasks.model';
-import { GraphObject,StateInfoModel } from '../models/flow.model';
+import { GraphObject,StateInfoModel, DataPoint } from '../models/flow.model';
 
 import { environment } from '../../environments/environment';
 
@@ -486,6 +486,35 @@ export class StateService {
       );
 
     return subject.asObservable();
+  }
+
+  getDataPointconfigurationFromFlowInstanceId(flowInstanceId: string): Observable<GraphObject> {
+
+    const subject = new Subject<GraphObject>();
+    const url = `${environment.server + environment.graphobjectbyflowinstanceid + "/" + flowInstanceId}`;
+    this.httpClient.get<GraphObject>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<GraphObject>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+    
+    return subject.asObservable();
+
   }
 
 }

@@ -21,6 +21,7 @@ export class ApiConfig extends BaseModel {
   headers: any;
   body: any;
   responseList: ApiResponse[];
+  taskConConfigApi:boolean;
 
   constructor() {
     super();
@@ -31,8 +32,67 @@ export class ApiConfig extends BaseModel {
     this.headers = {};
     this.body = {};
     this.responseList = [];
+    this.taskConConfigApi = false;
   }
 }
+
+export class ConnectorInfo extends BaseModel {
+  type: string;
+  metaData: any;
+  displayName: string;
+  taskType:String;
+  referenceType:string;
+  payload:any;
+
+  
+  constructor() {
+    super();
+    this.type = '';
+    this.metaData = {};
+    this.displayName = "";
+    this.taskType = "";
+    this.referenceType = "";
+    this.payload = {};
+  }
+}
+
+export class TaskObject{
+  responseList:ApiResponse[];
+  body:any;
+
+  constructor(){
+    this.responseList = [];
+    this.body = {};
+  }
+}
+
+export class ConnectorConfig extends BaseModel {
+  configName: string;
+  configType: string;
+  connectorInfoRef:string;
+  configMap:any;
+  connectorConfigRef:string;
+  displayName:string;
+  functionInstanceName:string;
+  taskObject:TaskObject;
+  taskConfig:boolean;
+
+  constructor() {
+    super();
+    
+    this.configName = '';
+    this.configType = '';
+    this.configMap = {};
+    this.connectorConfigRef = "";
+    this.displayName = "";
+    this.functionInstanceName = "";
+    this.taskObject = new TaskObject();
+    this.taskConfig = false;
+    
+  }
+}
+
+
 
 export class ApiResponse {
   responseCode: number;

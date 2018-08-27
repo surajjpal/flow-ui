@@ -1,0 +1,129 @@
+<div *ngIf="progressBarFlag">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;" aria-valuenow="99"
+          aria-valuemin="0" aria-valuemax="100">Loading...</div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <br/>
+    </div>
+  </div>
+</div>
+<div class="widgets">
+  <div class="row">
+    <ba-card baCardClass="with-scroll" class="data-table-container" style="width: 100%">
+        <div class="panel panel-default">
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#tab_personal" role="tab" aria-expanded="true">Assigned</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#tab_group" role="tab">Unassigned</a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane fade show active" id="tab_personal">
+                
+                  <!-- <div class="row">
+                      <div class="tab">
+                        <button *ngFor="let perState of personalStates; let index=index;" [class]="personalStatesTabClass[index]" (click)="onPersonalSubjectSelect(perState._id)" id="defaultOpen">
+                          <span>{{ getBusinessKey(perState.stateMachineInstanceModelId) }}:</span><br><br>
+                          <span>{{ perState.businessKey }}</span> <br><br>
+                          <span>Process: </span><br><br>{{ perState.machineLabel }}
+                        </button>
+                        
+                      </div>
+                      <div class="tabcontent">
+                        <div class="row">
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                <h3>{{ personalTaskDetail.businessKey }}</h3>
+                            </div>
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                <button type="button" class="btn btn-primary pull-right" title="Show Details" (click)="onSelect(personalTaskDetail)">
+                                  <i class="ion-eye"></i>
+                                </button>
+                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Process: </b></label>
+                              <span>{{ personalTaskDetail.machineLabel }}</span>
+                            </div>
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Version: </b></label>
+                              <span>{{ graphObject.version }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Task: </b></label>
+                              <span>{{ personalTaskDetail.stateCd }}</span>
+                            </div>
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Status: </b></label>
+                              <span>{{ personalTaskDetail.statusCd }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Start Time: </b></label>
+                              <span>{{ personalTaskDetail.startTime | amDateFormat: 'DD/MM/YYYY hh:mm A' }}</span>
+                            </div>
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>End Time: </b></label>
+                              <span>{{ personalTaskDetail.endTime | amDateFormat: 'DD/MM/YYYY hh:mm A' }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Assigned Group: </b></label>
+                              <span>{{ personalTaskDetail.assignedUserGroupCd }}</span>
+                            </div>
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Assigned To: </b></label>
+                              <span>{{ personalTaskDetail.assignedUserDisplayName }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Flagged: </b></label>
+                              <span>{{ personalTaskDetail.flagged }}</span>
+                            </div>
+                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                              <label><b>Flag Level: </b></label>
+                              <span>{{ personalTaskDetail.iterationLevel }}</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;" *ngFor="let dataPoint of getHeaderFlags()">
+                            <label><b>{{ dataPoint.dataPointLabel }}: </b></label>
+                            <span>{{ personalTaskDetail['parameters'][dataPoint.dataPointName] }}</span>
+                          </div>
+                        </div>
+
+                      </div>
+                      
+                  </div>
+                   -->
+              </div>
+              <button type="button" class="btn btn-success" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top:20px; width: 200px" *ngIf="personalStates.length !== 0" (click)="loadMore('CLOSED','Personal')" >Load More</button>
+              <div role="tabpanel" class="tab-pane fade" id="tab_group">
+                
+              </div>
+            </div>
+            
+            
+        </div>
+    </ba-card>
+  </div>
+</div>

@@ -96,6 +96,108 @@ export class AgentService {
 
     return subject.asObservable();
   }
+
+  /*
+  domainLookup(query?: string): Observable<Domain[]> {
+    const subject = new Subject<Domain[]>();
+
+    if (!query || query.length <= 0) {
+      query = 'ALL';
+    }
+
+    const url = `${environment.autoServer + environment.fetchdomainurl + query}`;
+
+    this.httpClient.get<Domain[]>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Domain[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+  agentLookup(query?: string): Observable<Agent[]> {
+    const subject = new Subject<Agent[]>();
+
+    if (!query || query.length <= 0) {
+      query = 'ALL';
+    }
+
+    const url = `${environment.autoServer + environment.fetchagenturl + query}`;
+
+    this.httpClient.get<Agent[]>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Agent[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+  saveAgent(agent: Agent): Observable<any> {
+    const subject = new Subject<any>();
+
+    if (agent.agentDomain !== null) {
+      agent.agentDomain = null;
+    }
+
+    const url = `${environment.autoServer + environment.saveagenturl}`;
+
+    this.httpClient.post<any>(
+      url,
+      agent,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }*/
 }
 
 //////////////////////////////////////////////////////////////////
@@ -385,11 +487,19 @@ export class ConversationService {
   getChat(episodeId: string): Observable<ChatMessage[]> {
     const subject = new Subject<ChatMessage[]>();
 
-    const url = `${environment.autoServer + environment.messagelisturl + episodeId}`;
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = {
+      'episodeId': episodeId
+    };
+    crudInput.collection = 'message';
+    crudInput.operation = "READ_ALL";
 
-    this.httpClient.get<ChatMessage[]>(
-      url,
+    this.httpClient.post<ChatMessage[]>(
+      crudUrl,
+      crudInput,
       {
+        headers: this.httpHeaders,
         observe: 'response',
         reportProgress: true,
         withCredentials: true
@@ -397,7 +507,21 @@ export class ConversationService {
     ).subscribe(
       (response: HttpResponse<ChatMessage[]>) => {
         if (response.body) {
-          subject.next(response.body);
+          let messageList: ChatMessage[] = response.body['data'];
+
+          if (messageList && messageList.length > 1) {
+            messageList = messageList.sort((msg1, msg2) => {
+              if (msg1.messageTime > msg2.messageTime) {
+                return 1;
+              } else if (msg1.messageTime < msg2.messageTime) {
+                return -1;
+              } else {
+                return 0;
+              }
+            });
+          }
+
+          subject.next(messageList);
         }
       },
       (err: HttpErrorResponse) => {
@@ -414,11 +538,19 @@ export class ConversationService {
   getEpisode(episodeId: string): Observable<Episode> {
     const subject = new Subject<Episode>();
 
-    const url = `${environment.autoServer + environment.episodebyidurl + episodeId}`;
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = {
+      '_id': episodeId
+    };
+    crudInput.collection = 'episode';
+    crudInput.operation = "READ";
 
-    this.httpClient.get<Episode>(
-      url,
+    this.httpClient.post<Episode>(
+      crudUrl,
+      crudInput,
       {
+        headers: this.httpHeaders,
         observe: 'response',
         reportProgress: true,
         withCredentials: true
@@ -426,7 +558,7 @@ export class ConversationService {
     ).subscribe(
       (response: HttpResponse<Episode>) => {
         if (response.body) {
-          subject.next(response.body);
+          subject.next(response.body['data']);
         }
       },
       (err: HttpErrorResponse) => {

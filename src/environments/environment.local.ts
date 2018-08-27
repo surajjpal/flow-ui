@@ -11,6 +11,8 @@ export const environment = {
   // Services
   saveaccounturl: 'http://localhost:8080/flow/account/create',
   fetchaccountbyidurl: 'http://localhost:8080/flow/account/',
+  publishaccounturl:'http://localhost:8080/flow/account/publish/',
+  unpublishaccounturl:'http://localhost:8080/flow/account/unpublish/',
 
   // Interfaces
   interfaceService: 'http://localhost:8080/flow/interfaces',
@@ -41,6 +43,7 @@ export const environment = {
   updatestatemachineurl: 'statemachine/updateflow/withState',
 
   alocateuserurl:'statemachine/allocateto',
+  graphobjectbyflowinstanceid: 'statemachine/graphobject',
   autosummary: 'dashboard/CONVERSATION_SUMMARY',
   graphurl: 'graph/',
   usergraphurl: 'usergraph/saveUserGraph/',
@@ -70,6 +73,13 @@ export const environment = {
 
   supportedmethodsurl: 'apiConfig/supportedMethods',
   
+  connectorinfo:'connectors/',
+  getallconconfig:'connectors/getAll/',
+  deleteconconfig:'connectors/delete/',
+  saveconconfig:'connectors/save/',
+  getallconinfo:'connectors/getConInfo/',
+  getconinfobytype:'connectors/getConInfoByType/',
+
 
 
   // Auto
@@ -99,6 +109,17 @@ export const environment = {
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
+  // Analytics
+  reportservice: 'http://localhost:8080/flow/report',
+  sendReportUrl: '/reports/analyticsreport/sendreport',
+  scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
+  getAnalyticsReports: "/reports/analyticsreport",
+  getanalyticsReportTemplates: "/reports/analyticsreport/template",
+  getanalyticsReportEmailTemplates: "/reports/analyticsreport/emailtemplate",
+
+  // Schedule
+  scheduleTaskConfiguration: "api/schedule/",
+  
   // file upload download service
   fileUploadUrl: '/api/uploadData',
   fileDownloadUrl: '/api/downloadData',
@@ -130,5 +151,11 @@ export const environment = {
   dashboardinterface: 'http://localhost:8080/flow/interfaces/dashboard',
 
   //CRUD API path - To be used in conjunction with interfaceService property
-  crudFunction : '/crud'
+  crudFunction : '/crud',
+
+  // activity monitor services
+  businessDataPointValues: 'businessactivitymanagement/datapointvalues',
+  businessDataPoints: 'businessactivitymanagement/datapoints',
+  businessDataPonitsPercentageCount: 'businessactivitymanagement/percentagecount',
+  businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
 };

@@ -28,6 +28,9 @@ import { DataCachingService, StateService } from './services/inbox.service';
 import { AccountService, ApiConfigService, RoutesService } from './services/setup.service';
 import { ApiDesignService } from './services/apidesign.service';
 import { AuthGuard, AntiAuthGuard, AlertService, DataSharingService, UniversalUser } from './services/shared.service';
+import { AnalyticsService } from './services/analytics.service';
+import { ScheduleTaskService } from './services/scheduletasks.service';
+import { ActivityMonitorService } from  './services/activitymonitor.service'
 import { FileUploaderService } from './shared/services/file-uploader.service'
 
 import { SharedModule } from './shared/shared.module';
@@ -55,6 +58,9 @@ const APP_PROVIDERS = [
   DataCachingService, StateService,
   AccountService, ApiConfigService, RoutesService,
   ApiDesignService,
+  AnalyticsService,
+  ScheduleTaskService,
+  ActivityMonitorService,
   AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService, UniversalUser, FileUploaderService
 ];
 

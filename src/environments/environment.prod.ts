@@ -11,10 +11,11 @@ export const environment = {
   // Services
   saveaccounturl: 'https://flow.automatapi.io/flow/account/create',
   fetchaccountbyidurl: 'https://flow.automatapi.io/flow/account/',
-
+  publishaccounturl:'https://flow.automatapi.io/flow/account/publish/',
+  unpublishaccounturl:'https://flow.automatapi.io/flow/account/unpublish/',
   // Interfaces
-  interfaceService: 'http://flow.automatapi.io/flow/interfaces',
-  updateClassifierTraining : 'http://flow.automatapi.io/flow/interfaces/auto_decorate_training',
+  interfaceService: 'https://flow.automatapi.io/flow/interfaces',
+  updateClassifierTraining : 'https://flow.automatapi.io/flow/interfaces/auto_decorate_training',
   updateIntentTraining: 'https://flow.automatapi.io/flow/interfaces/intent_classification_training',
   updateEntityTraining: 'https://flow.automatapi.io/flow/interfaces/entity_classification_training',
 
@@ -40,6 +41,7 @@ export const environment = {
   stateflowimageurl: 'statemachine/stateflow/',
   updatestatemachineurl: 'statemachine/updateflow/withState',
   alocateuserurl:'statemachine/allocateto',
+  graphobjectbyflowinstanceid: 'statemachine/graphobject',
   autosummary: 'dashboard/CONVERSATION_SUMMARY',
   graphurl: 'graph/',
   usergraphurl: 'usergraph/saveUserGraph/',
@@ -66,6 +68,14 @@ export const environment = {
   routesurl: 'master/routes',
   apiconfigurl: 'apiConfig/',
   supportedmethodsurl: 'apiConfig/supportedMethods',
+
+  connectorinfo:'connectors/',
+  getallconconfig:'connectors/getAll/',
+  deleteconconfig:'connectors/delete/',
+  saveconconfig:'connectors/save/',
+  getallconinfo:'connectors/getConInfo/',
+  getconinfobytype:'connectors/getConInfoByType/',
+
 
   // auto
   autoServer: 'https://flow.automatapi.io/flow/auto/',
@@ -94,6 +104,17 @@ export const environment = {
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
+  // Analytics
+  reportservice: 'https://flow.automatapi.io/flow/report',
+  sendReportUrl: '/reports/analyticsreport/sendreport',
+  scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
+  getAnalyticsReports: "/reports/analyticsreport",
+  getanalyticsReportTemplates: "/reports/analyticsreport/template",
+  getanalyticsReportEmailTemplates: "/reports/analyticsreport/emailtemplate",
+
+  // Schedule
+  scheduleTaskConfiguration: "api/schedule/",
+  
   // file upload download service
   fileUploadUrl: '/api/uploadData',
   fileDownloadUrl: '/api/downloadData',
@@ -125,5 +146,11 @@ export const environment = {
   dashboardinterface: 'https://flow.automatapi.io/flow/interfaces/dashboard',
 
   //CRUD API path - To be used in conjunction with interfaceService property
-  crudFunction : '/crud'
+  crudFunction : '/crud',
+
+  // activity monitor services
+  businessDataPointValues: 'businessactivitymanagement/datapointvalues',
+  businessDataPoints: 'businessactivitymanagement/datapoints',
+  businessDataPonitsPercentageCount: 'businessactivitymanagement/percentagecount',
+  businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
 };

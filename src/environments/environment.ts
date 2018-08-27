@@ -16,7 +16,8 @@ export const environment = {
   // Services
   saveaccounturl: 'http://108.168.190.82:8080/flow/services/saveaccount',
   fetchaccountbyidurl: 'http://108.168.190.82:8080/flow/services/fetchaccountbyid?query=',
-
+  publishaccounturl:'http://108.168.190.82:8080/flow/services/publish/',
+  unpublishaccounturl:'http://108.168.190.82:8080/flow/services/unpublish/',
   // Interfaces
   interfaceService: 'http://108.168.190.82:8080/flow/interfaces',
   updateClassifierTraining : 'http://108.168.190.82:8080/flow/interfaces/auto_decorate_training',
@@ -45,6 +46,7 @@ export const environment = {
   stateflowimageurl: 'statemachine/stateflow/',
   updatestatemachineurl: 'statemachine/updateflow/withState',
   alocateuserurl:'statemachine/allocateto',
+  graphobjectbyflowinstanceid: 'statemachine/graphobject',
   autosummary: 'dashboard/CONVERSATION_SUMMARY',
   graphurl: 'graph/',
   usergraphurl: 'usergraph/saveUserGraph/',
@@ -54,6 +56,7 @@ export const environment = {
   timeruniturl: 'graph/timerunit',
   autodashboardurl: 'dashboard',
   userurl: 'user/',
+  
 
   registerurl: 'user/createUser',
   forgotpassword:'user/forgotPassword',
@@ -70,6 +73,13 @@ export const environment = {
   routesurl: 'master/routes',
   apiconfigurl: 'apiConfig/',
   supportedmethodsurl: 'apiConfig/supportedMethods',
+
+  connectorinfo:'connectors/',
+  getallconconfig:'connectors/getAll/',
+  deleteconconfig:'connectors/delete/',
+  saveconconfig:'connectors/save/',
+  getallconinfo:'connectors/getConInfo/',
+  getconinfobytype:'connectors/getConInfoByType/',
 
   // auto
   autoServer: 'http://108.168.190.82:8080/flow/auto/',
@@ -98,6 +108,16 @@ export const environment = {
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
+  // Analytics
+  reportservice: 'http://localhost:8080/flow/report',
+  sendReportUrl: '/reports/analyticsreport/sendreport',
+  scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
+  getAnalyticsReports: "/reports/analyticsreport",
+  getanalyticsReportTemplates: "/reports/analyticsreport/template",
+  getanalyticsReportEmailTemplates: "/reports/analyticsreport/emailtemplate",
+  // Schedule
+  scheduleTaskConfiguration: "api/schedule/",
+  
   // file upload download service
   fileUploadUrl: '/api/uploadData',
   fileDownloadUrl: '/api/downloadData',
@@ -129,5 +149,11 @@ export const environment = {
   dashboardinterface: 'http://108.168.190.82:8080/flow/interfaces/dashboard',
 
   //CRUD API path - To be used in conjunction with interfaceService property
-  crudFunction : '/crud'
+  crudFunction : '/crud',
+
+  // activity monitor services
+  businessDataPointValues: 'businessactivitymanagement/datapointvalues',
+  businessDataPoints: 'businessactivitymanagement/datapoints',
+  businessDataPonitsPercentageCount: 'businessactivitymanagement/percentagecount',
+  businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
 };

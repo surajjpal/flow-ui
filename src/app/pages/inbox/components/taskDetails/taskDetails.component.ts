@@ -57,6 +57,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   iterationLevel:number;
   tempUser:User;
   FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
+  arrayTableHeaders = {};
   
   private subscription: Subscription;
   private subscriptionEpisode: Subscription;
@@ -276,6 +277,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       }
 
       if (this.selectedState.parameters && this.graphObject.dataPointConfigurationList) {
+        console.log("dataconfigList");
+        console.log(this.graphObject.dataPointConfigurationList);
         for (const dataPoint of this.graphObject.dataPointConfigurationList) {
           const paramValue: any = this.selectedState.parameters[dataPoint.dataPointName];
 
@@ -323,12 +326,22 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
            * while updating info on server only odd indices objects are selected
            **/
           this.dataPoints.push(dataPoint);
-          this.dataPoints.push(dataPoint);
+          if(dataPoint.dataType == 'ARRAY' && dataPoint.value.length>0 && !this.isString(dataPoint.value[0])) {
+            this.dataPoints.push(dataPoint);
+          }
+          else {
+            this.dataPoints.push(dataPoint);
+          }
 
           this.fieldKeyMap[dataPoint.dataPointName] = dataPoint.dataPointLabel;
+          
         }
       }
     }
+  }
+
+  getUniqueDataPoints() {
+    return Array.from(new Set(this.dataPoints ));
   }
 
   initUI() {
@@ -446,5 +459,30 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       new closeModal('flagTaskModal');
       this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
     });
+  }
+
+  isString(value) {
+    return typeof value === 'string';
+  }
+
+  getKeysForArrayDataType(data, dataPointName) {
+    this.arrayTableHeaders[dataPointName] = [];
+    for(let key in data[0]) {
+      this.arrayTableHeaders[dataPointName].push(key);
+    }
+    return this.arrayTableHeaders[dataPointName];
+    
+  }
+
+  getValueForArraydatatype(data, dataPointName) {
+    let values = []
+    for(let d of data) {
+      let headerValue = []
+      for (let key of this.arrayTableHeaders[dataPointName]) {
+        headerValue.push(d[key]);
+      }
+      values.push(headerValue);
+    }
+    return values;
   }
 }

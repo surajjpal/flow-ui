@@ -117,7 +117,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.fetchModelKeys();
     this.fetchValidationKeys();
 
     const domain: Domain = this.sharingService.getSharedObject();
@@ -145,26 +144,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   intentUploaderOptions: NgUploaderOptions;
-  fetchModelKeys() {
-    this.subscriptionModelKeys = this.domainService.modelKeysLookup()
-      .subscribe(
-        modelKeys => {
-          if (modelKeys) {
-            this.modelKeysSource = modelKeys;
-          }
-        }
-      );
-  }
 
   fetchValidationKeys() {
-    this.subscriptionValidationKeys = this.domainService.validationKeysLookup()
-      .subscribe(
-        validationKeys => {
-          if (validationKeys) {
-            this.validationKeysSource = validationKeys;
-          }
-        }
-      );
+    this.validationKeysSource = ['dobdate','phonenumber','email','otp','incidentdate','incidentdescreption','pincode','imeiemail','incidenttime','imei','emailmobile'];
   }
 
   resetFields() {
