@@ -38,25 +38,37 @@
                                         <b>Tasks</b>
                                     </div>
                                     <div class="card-block">
-                                        <div [class]="assignedStateTabclass[asgnState._id]" *ngFor="let asgnState of assignedStates; let index=index;" (click)="onPersonalAssignedSubjectSelect(asgnState)"
-                                            id="defaultOpen">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label>{{asgnState.machineLabel}}</label>
+                                        <table [mfData]="assignedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords"  >
+                                            <tr  *ngFor="let asgnState of mf.data; let index=index;" (click)="onPersonalAssignedSubjectSelect(asgnState)">
+                                                <div [class]="assignedStateTabclass[asgnState._id]"
+                                                    id="defaultOpen">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label>{{asgnState.machineLabel}}</label>
+                                                        </div>
+                                                        <div class="col">
+                                                            {{ asgnState.startTimeLong | amDateFormat: 'DD/MM hh:mm A' }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label>{{ asgnState.businessKey}}</label>
+                                                        </div>
+                                                        <div class="col">
+        
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col">
-                                                    {{ asgnState.startTimeLong | amDateFormat: 'DD/MM hh:mm A' }}
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label>{{ asgnState.businessKey}}</label>
-                                                </div>
-                                                <div class="col">
-
-                                                </div>
-                                            </div>
-                                        </div>
+                                            </tr>
+                                            <tfoot >
+                                                <tr>
+                                                    <td colspan="5">
+                                                    <mfBootstrapPaginator></mfBootstrapPaginator>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                        
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-outline-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
@@ -243,26 +255,37 @@
                                         <b>Tasks</b>
                                     </div>
                                     <div class="card-block">
-                                        <div [class]="unassignedStateTabclass[unasgnState._id]" *ngFor="let unasgnState of unassignedStates; let index=index;" (click)="onPersonalUnAssignedSubjectSelect(unasgnState)"
-                                            id="defaultOpen">
-
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label>{{unasgnState.machineLabel}}</label>
+                                        <table [mfData]="unassignedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords"  >
+                                            <tr *ngFor="let unasgnState of mf.data; let index=index;" (click)="onPersonalUnAssignedSubjectSelect(unasgnState)">
+                                                <div [class]="unassignedStateTabclass[unasgnState._id]"
+                                                    id="defaultOpen">
+        
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label>{{unasgnState.machineLabel}}</label>
+                                                        </div>
+                                                        <div class="col">
+                                                            {{ unasgnState.startTimeLong | amDateFormat: 'DD/MM hh:mm A' }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label>{{ unasgnState.businessKey}}</label>
+                                                        </div>
+                                                        <div class="col">
+        
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col">
-                                                    {{ unasgnState.startTimeLong | amDateFormat: 'DD/MM hh:mm A' }}
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label>{{ unasgnState.businessKey}}</label>
-                                                </div>
-                                                <div class="col">
-
-                                                </div>
-                                            </div>
-                                        </div>
+                                            </tr>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="5">
+                                                    <mfBootstrapPaginator></mfBootstrapPaginator>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-outline-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
@@ -414,25 +437,35 @@
                                         <b>Tasks</b>
                                     </div>
                                     <div class="card-block">
-                                        <div [class]="flaggedStateTabclass[flgState._id]" *ngFor="let flgState of flaggedStates; let index=index;" (click)="onFlaggedSubjectSelect(flgState)"
-                                            id="defaultOpen">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label>{{flgState.machineLabel}}</label>
+                                        <table [mfData]="flaggedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords">
+                                            <tr *ngFor="let flgState of mf.data; let index=index;" (click)="onFlaggedSubjectSelect(flgState)">
+                                                <div [class]="flaggedStateTabclass[flgState._id]">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label>{{flgState.machineLabel}}</label>
+                                                        </div>
+                                                        <div class="col">
+                                                            {{ flgState.startTimeLong | amDateFormat: 'DD/MM hh:mm A' }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label>{{ flgState.businessKey}}</label>
+                                                        </div>
+                                                        <div class="col">
+        
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col">
-                                                    {{ flgState.startTimeLong | amDateFormat: 'DD/MM hh:mm A' }}
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label>{{ flgState.businessKey}}</label>
-                                                </div>
-                                                <div class="col">
-
-                                                </div>
-                                            </div>
-                                        </div>
+                                            </tr>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="5">
+                                                    <mfBootstrapPaginator></mfBootstrapPaginator>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-outline-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
