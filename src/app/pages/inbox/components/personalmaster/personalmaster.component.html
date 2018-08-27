@@ -38,10 +38,9 @@
                                         <b>Tasks</b>
                                     </div>
                                     <div class="card-block">
-                                        <table [mfData]="assignedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords"  >
-                                            <tr  *ngFor="let asgnState of mf.data; let index=index;" (click)="onPersonalAssignedSubjectSelect(asgnState)">
-                                                <div [class]="assignedStateTabclass[asgnState._id]"
-                                                    id="defaultOpen">
+                                        <table class="table table-striped" [mfData]="assignedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords">
+                                            <tr *ngFor="let asgnState of mf.data; let index=index;" (click)="onPersonalAssignedSubjectSelect(asgnState)">
+                                                <div [class]="assignedStateTabclass[asgnState._id]" id="defaultOpen">
                                                     <div class="row">
                                                         <div class="col">
                                                             <label>{{asgnState.machineLabel}}</label>
@@ -55,20 +54,20 @@
                                                             <label>{{ asgnState.businessKey}}</label>
                                                         </div>
                                                         <div class="col">
-        
+
                                                         </div>
                                                     </div>
                                                 </div>
                                             </tr>
-                                            <tfoot >
+                                            <tfoot>
                                                 <tr>
                                                     <td colspan="5">
-                                                    <mfBootstrapPaginator></mfBootstrapPaginator>
+                                                        <mfBootstrapPaginator></mfBootstrapPaginator>
                                                     </td>
                                                 </tr>
                                             </tfoot>
                                         </table>
-                                        
+
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-outline-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
@@ -255,11 +254,10 @@
                                         <b>Tasks</b>
                                     </div>
                                     <div class="card-block">
-                                        <table [mfData]="unassignedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords"  >
+                                        <table [mfData]="unassignedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords">
                                             <tr *ngFor="let unasgnState of mf.data; let index=index;" (click)="onPersonalUnAssignedSubjectSelect(unasgnState)">
-                                                <div [class]="unassignedStateTabclass[unasgnState._id]"
-                                                    id="defaultOpen">
-        
+                                                <div [class]="unassignedStateTabclass[unasgnState._id]" id="defaultOpen">
+
                                                     <div class="row">
                                                         <div class="col">
                                                             <label>{{unasgnState.machineLabel}}</label>
@@ -273,7 +271,7 @@
                                                             <label>{{ unasgnState.businessKey}}</label>
                                                         </div>
                                                         <div class="col">
-        
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -281,7 +279,7 @@
                                             <tfoot>
                                                 <tr>
                                                     <td colspan="5">
-                                                    <mfBootstrapPaginator></mfBootstrapPaginator>
+                                                        <mfBootstrapPaginator></mfBootstrapPaginator>
                                                     </td>
                                                 </tr>
                                             </tfoot>
@@ -453,7 +451,7 @@
                                                             <label>{{ flgState.businessKey}}</label>
                                                         </div>
                                                         <div class="col">
-        
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -461,7 +459,7 @@
                                             <tfoot>
                                                 <tr>
                                                     <td colspan="5">
-                                                    <mfBootstrapPaginator></mfBootstrapPaginator>
+                                                        <mfBootstrapPaginator></mfBootstrapPaginator>
                                                     </td>
                                                 </tr>
                                             </tfoot>
