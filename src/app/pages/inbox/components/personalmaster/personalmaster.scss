@@ -51,7 +51,7 @@
     display: block;
     width: 100%;
     border: none;
-    padding: 14px 28px;
+    padding: 10px 10px;
     background-color: white;
     font-size: 14px;
     text-align: left;
@@ -65,3 +65,12 @@
 .block:hover {
     background-color: #C8E1F7;
 }
+
+:host /deep/ .widgets {
+    .data-table-container {
+        width: 100%;
+        .panel-heading {
+            margin-top: 25px;
+        }
+    }
+  }
