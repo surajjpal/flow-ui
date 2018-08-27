@@ -114,6 +114,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     this.assignedStateTabclass = {};
     this.assignedTaskDdetails = null;
     this.unassignedTaskDdetails = null;
+    this.flaggedTaskDdetails = null;
     this.assignedTaskActionButtonEnabled = {};
     this.assignedStategraphObject = new GraphObject();
     this.allocatedAssignedTaskToUserId = null;
@@ -191,8 +192,18 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
     this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Group', this.assignedTaskPageNumber, fetchRecords)
       .subscribe(states => {
-        this.setFirstUnAssignedTaskValues(states);
-        this.unassignedStates = states;
+        if (states != null && states.length>0) {
+          this.setFirstUnAssignedTaskValues(states);
+          this.unassignedStates = states;
+        }
+        else {
+          this.loadingAssigned = false;
+          if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
+            this.progressBarFlag = false;
+            // this.baThemeSpinner.hide();
+          }
+        }
+        
 
       }, error => {
         this.loadingUnassigned = false;
@@ -204,10 +215,20 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
     this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Personal', this.unassignedTaskPageNumber, fetchRecords)
       .subscribe(states => {
-        this.setFirstAssignedTaskValues(states);
-        this.assignedStates = states;
-        this.tempAssignedStates = JSON.parse(JSON.stringify(states));
-
+        if (states != null && states.length > 0) {
+          this.setFirstAssignedTaskValues(states);
+          this.assignedStates = states;
+          this.tempAssignedStates = JSON.parse(JSON.stringify(states));
+        }
+        else {
+          this.loadingAssigned = false;
+          if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
+            this.progressBarFlag = false;
+            // this.baThemeSpinner.hide();
+          }
+        }
+        
+        
       }, error => {
         this.loadingAssigned = false;
         if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
@@ -219,18 +240,28 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
     this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED', 'CLOSED', this.flaggedTaskPageNumber, this.fetchRecords, 'PERSONAL')
       .subscribe(states => {
-        this.loadingFlagged = false;
-        this.setFirstFlaggedTaskValues(states);
-        this.flaggedStates = states;
-
+        if (states != null && states.length>0 ){
+          this.setFirstFlaggedTaskValues(states);
+          this.flaggedStates = states;  
+        }
+        else {
+          this.loadingFlagged = false;
+          if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
+            this.progressBarFlag = false;
+            // this.baThemeSpinner.hide();
+          }
+          
+        }
+        
+        
       }, error => {
-        this.loadingUnassigned = false;
+        this.loadingFlagged = false;
         if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
           this.progressBarFlag = false;
           // this.baThemeSpinner.hide();
         }
       });
-
+      
   }
 
   tabclicked(tabname): void {
@@ -552,6 +583,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
             }
           },
           error => {
+            this.loadingAssigned = false;
             console.log("graph object not found");
           }
         )
@@ -581,8 +613,10 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
               }
             }
+            
           },
           error => {
+            this.loadingFlagged = false;
             console.log("graph object not found");
           }
         )
@@ -615,6 +649,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
             }
           },
           error => {
+            this.loadingUnassigned =false;
             console.log("graph object not found");
           }
         )
