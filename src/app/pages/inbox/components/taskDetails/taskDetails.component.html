@@ -36,22 +36,23 @@
           <div class="row">
             <form>
               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd === 'Personal'" type="button" class="btn btn-primary btn-with-icon" (click)="updateFlow()">
+                <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd === 'Personal'"
+                  type="button" class="btn btn-primary btn-with-icon" (click)="updateFlow()">
                   <i class="ion-checkmark"></i>Update Process</button>
-                <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && Users.length > 0" type="button" data-toggle="modal"
-                  data-target="#userModal" class="btn btn-info btn-with-icon">
+                <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && Users.length > 0" type="button"
+                  data-toggle="modal" data-target="#userModal" class="btn btn-info btn-with-icon">
                   <i class="ion-person-add"></i>Allocate Team</button>
-                <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd !== 'Personal' " type="button"
-                  (click)="reserve()" class="btn btn-info btn-with-icon">
+                <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd !== 'Personal' "
+                  type="button" (click)="reserve()" class="btn btn-info btn-with-icon">
                   <i class="ion-archive"></i>Reserve Task</button>
-                <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd === 'Personal' && userHierarchy.parentUserId.length > 0" type="button"
-                  (click)="escalate()" class="btn btn-warning btn-with-icon">
+                <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd === 'Personal' && userHierarchy.parentUserId.length > 0"
+                  type="button" (click)="escalate()" class="btn btn-warning btn-with-icon">
                   <i class="ion-alert-circled"></i>Escalate Task</button>
                 <button [disabled]="!isButtonEnabled" type="button" class="btn btn-warning btn-with-icon" title="Flag" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd == 'Personal' && selectedState.subStatus !== 'FLAGGED'"
                   data-toggle="modal" data-target="#flagTaskModal" data-backdrop="static" data-keyboard="false" (click)="setFlagReason()">
                   <i class="ion-flag"></i>Flag Task</button>
                 <button [disabled]="!isButtonEnabled" type="button" class="btn btn-danger btn-with-icon" title="Archive" *ngIf="selectedState.statusCd ==='ACTIVE' && selectedState.assignedUserGroupCd == 'Personal' "
-                  data-toggle="modal" data-target="#archiveTaskWarningModal" >
+                  data-toggle="modal" data-target="#archiveTaskWarningModal">
                   <i class="ion-ios-trash"></i>Archive Task</button>
               </div>
             </form>
@@ -69,7 +70,9 @@
                       [innerHTML]="responseError"></div>
 
                     <div class="form-group col-md-3 col-sm-6" style="margin-bottom: 10px;" *ngFor="let dataPoint of dataPoints; let index = index">
-                      <label *ngIf="index % 2 === 0 && dataPoint.dataType !== 'ARRAY' && dataPoint.dataType !== 'ANY' ">{{dataPoint.dataPointLabel}} :</label>
+                      <label *ngIf="index % 2 === 0 && dataPoint.dataType !== 'ARRAY' && dataPoint.dataType !== 'ANY' ">{{dataPoint.dataPointLabel}}
+                        :
+                      </label>
 
                       <input *ngIf="index % 2 === 1 && (dataPoint.dataType === '' || dataPoint.dataType === 'STRING')" type="text" class="form-control col-md-12 col-sm-12"
                         [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
@@ -96,13 +99,13 @@
                         <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
                       </select>
 
-                      <tag-input *ngIf="index % 2 === 1 && dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && isString(dataPoint.value[0])" class="custom-input-tag-border form-control col-md-12 col-sm-12"
-                        [title]="dataPoint.description" [(ngModel)]="dataPoint.value" name="value" [modelAsStrings]="true"
-                        [editable]="true" [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
+                      <tag-input *ngIf="index % 2 === 1 && dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && isString(dataPoint.value[0])"
+                        class="custom-input-tag-border form-control col-md-12 col-sm-12" [title]="dataPoint.description" [(ngModel)]="dataPoint.value"
+                        name="value" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
                         [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'" theme="minimal">
                       </tag-input>
                     </div>
-                    
+
                   </form>
                   <div *ngFor="let dataPoint of getUniqueDataPoints()">
                     <ng-container class="form-group col-md-12" *ngIf="dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && !isString(dataPoint.value[0])">
@@ -110,7 +113,8 @@
                       <table class="table" *ngIf="dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && !isString(dataPoint.value[0])">
                         <thead>
                           <tr>
-                            <th *ngFor="let key of getKeysForArrayDataType(dataPoint.value, dataPoint.dataPointName)">{{ key }}</th>
+                            <th *ngFor="let key of getKeysForArrayDataType(dataPoint.value, dataPoint.dataPointName)">{{
+                              key }}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -118,30 +122,105 @@
                             <td *ngFor="let v of value">{{ v }}</td>
                           </tr>
                         </tbody>
-                      </table>                      
+                      </table>
                     </ng-container>
-                    
+
                   </div>
                 </div>
               </div>
             </div>
             <!-- <div *ngIf="selectedState.predictedParameters" class="col-md-4 col-sm-12">
-              <div class="card card-default">
-                <div class="card-header">
-                  <b>Predicted Parameters</b>
-                </div>
-                <div class="card-block">
-                  <div class="row" *ngFor="let e of selectedState.predictedParameters | keys">
-                    <div class="col-md-6 col-sm-12">
-                      <label>{{e.key}}</label> :
+                  <div class="card card-default">
+                    <div class="card-header">
+                      <b>Predicted Parameters</b>
                     </div>
-                    <div class="col-md-6 col-sm-12">
-                      <label>{{e.value}}</label>
+                    <div class="card-block">
+                      <div class="row" *ngFor="let e of selectedState.predictedParameters | keys">
+                        <div class="col-md-6 col-sm-12">
+                          <label>{{e.key}}</label> :
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <label>{{e.value}}</label>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                </div> -->
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="tabConversation" aria-labelledby="conversation-tab">
+          <div class="row">
+            <ba-card class="col-md-6 col-sm-12" cardTitle="Episode Details">
+              <form style="max-height: 400px; overflow:scroll">
+                <div *ngIf="selectedEpisode && selectedEpisode.statusCd" class="form-group">
+                  <label>Status</label>
+                  <input class="form-control" placeholder="Status" disabled="disabled" value="{{selectedEpisode.statusCd}}" />
                 </div>
-              </div>
-            </div> -->
+                <div *ngIf="selectedEpisode && selectedEpisode.intents && selectedEpisode.intents.length > 0" class="form-group">
+                  <label>Intents</label>
+                  <select multiple class="form-control" disabled="disabled">
+                    <option *ngFor="let intent of selectedEpisode.intents">{{intent}}</option>
+                  </select>
+                </div>
+                <div *ngIf="selectedEpisode && selectedEpisode.entities && selectedEpisode.entities.length > 0" class="form-group">
+                  <label>Entities</label>
+                  <select multiple class="form-control" disabled="disabled">
+                    <option *ngFor="let entity of selectedEpisode.entities">{{entity}}</option>
+                  </select>
+                </div>
+                <div *ngIf="selectedEpisode && selectedEpisode.mode" class="form-group">
+                  <label>Mode</label>
+                  <input class="form-control" placeholder="Mode" disabled="disabled" value="{{selectedEpisode.mode}}" />
+                </div>
+                <div *ngIf="selectedEpisode && selectedEpisode.startTime" class="form-group">
+                  <label>Start Time</label>
+                  <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode.startTime | date: 'dd/MM/y, h:mm:ss a'}}"
+                  />
+                </div>
+                <div *ngIf="selectedEpisode && selectedEpisode.endTime" class="form-group">
+                  <label>End Time</label>
+                  <input class="form-control" placeholder="End Time" disabled="disabled" value="{{selectedEpisode.endTime | date: 'dd/MM/y, h:mm:ss a'}}"
+                  />
+                </div>
+                <div *ngIf="selectedEpisode && selectedEpisode.goals && selectedEpisode.goals.length > 0" class="form-group">
+                  <label>Goals</label>
+                  <select multiple class="form-control" disabled="disabled">
+                    <option *ngFor="let goal of selectedEpisode.goals">{{goal.goalName}}</option>
+                  </select>
+                </div>
+              </form>
+            </ba-card>
+            <ba-card baCardClass="with-scroll" class="data-table-container col-md-6 col-sm-12" cardTitle="Conversation">
+              <form style="max-height: 400px; overflow:scroll">
+                <thead>
+                  <th style="width: 50%"></th>
+                  <th style="width: 50%"></th>
+                </thead>
+                <tbody *ngFor="let message of chatMessageList">
+                  <tr *ngIf="message.from === 'AUTO'">
+                    <td align="left" style="width: 50%">
+                      <div class="talk-bubble tri-right round top-left" style="background-color: #E4E4E4">
+                        <div class="talktext">
+                          <div [innerHTML]="message.messageText"></div>
+                        </div>
+                      </div>
+                    </td>
+                    <td></td>
+                  </tr>
+                  <tr *ngIf="message.from !== 'AUTO'">
+                    <td></td>
+                    <td align="right" style="width: 50%">
+                      <div class="talk-bubble tri-right round top-right" style="background-color: #B9F1FB">
+                        <div class="talktext">
+                          <p *ngIf="message.displayText && message.displayText.trim().length > 0">{{message.displayText}}</p>
+                          <p *ngIf="!message.displayText || message.displayText.trim().length === 0">{{message.messageText}}</p>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </form>
+            </ba-card>
           </div>
         </div>
         <div role="tabpanel" class="tab-pane fade" id="tabConversation" aria-labelledby="conversation-tab">
@@ -368,8 +447,7 @@
   </div>
 </div>
 
-<div class="modal fade" id="userNotSelected" tabindex="-1" role="dialog" attr.aria-labelledby="archiveWarningLabel"
-  aria-hidden="true">
+<div class="modal fade" id="userNotSelected" tabindex="-1" role="dialog" attr.aria-labelledby="archiveWarningLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
