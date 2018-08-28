@@ -151,7 +151,7 @@
           <div class="form-group" *ngIf="isStateConnectorCompatible()">
             <label for="selectConConfig">Select Connector</label>
             <select multiple="false" class="selectpicker form-control" required id="selectConConfig" title="Choose Connector" [(ngModel)]="tempState.connectorConfig"
-              name="conConfigurationList" (ngModelChange)="onConfigSelect($event)">
+              name="conConfigurationList"  [ngModelOptions]="{standalone: true}" (ngModelChange)="onConfigSelect($event)">
               <option *ngFor="let conConfig of sourceConConfigList" [ngValue]="conConfig">{{conConfig.configName}}</option>
             </select>
           </div>
@@ -173,6 +173,21 @@
                       </div>
                 </div>
               </form>
+          </div>
+          <div *ngIf="loadingConfigMap">
+            <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;" aria-valuenow="99"
+                    aria-valuemin="0" aria-valuemax="100">Loading.....</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <br/>
+              </div>
+            </div>
           </div>
           <div *ngIf="specificConfigSelected">
             <div class="form-group">
@@ -247,7 +262,7 @@
                                 <button type="button" class="btn btn-danger" title="Delete" (click)="removePayloadBody(payloadConfig)" ><i class="ion-close-round"></i></button>
                               </td>
                               <td >
-                                <input type="text" class="form-control" placeholder="Key" [value]="payloadConfig.get('key')" (input)="payloadConfig.set('key', $event.target.value)"/>
+                                <input type="text" class="form-control"  placeholder="Key" [value]="payloadConfig.get('key')" (input)="payloadConfig.set('key', $event.target.value)"/>
                               </td>
                               <td>
                                 <input type="text" class="form-control" placeholder="Value" [value]="payloadConfig.get('value')"  (input)="payloadConfig.set('value', $event.target.value)" />

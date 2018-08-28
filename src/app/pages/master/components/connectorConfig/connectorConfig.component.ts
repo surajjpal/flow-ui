@@ -69,7 +69,7 @@ export class ConnectorConfigComponent implements OnInit, OnDestroy {
       .subscribe(conConfigList => {
         if (conConfigList) {
           for(let con of conConfigList){
-            if(!con.taskConfig){
+            if(!con.taskConfig && con.configType!=null){
               this.conConfigList.push(con)
             }
           }
