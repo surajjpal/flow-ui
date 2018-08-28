@@ -103,6 +103,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   conInfoOfNoMetadata:ConnectorInfo;
   gotConInfo:boolean = false;
   loadingConfigMap:boolean = false;
+  temp:any;
 
   //file
   fileSelected:boolean;
@@ -155,6 +156,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.sourceClassifiers = [new Classifier(), new Classifier()];
     this.sourceApiConfigList = [];
     this.sourceConConfigList = [];
+    this.temp = {};
     this.responseTypeSource = ['PAYLOAD', 'PARAM'];
     this.paramsToSelectSource = ['SELECTIVE', 'ALL'];
   }
@@ -708,6 +710,12 @@ export class DesignComponent implements OnInit, OnDestroy {
           if (conInfo.metaData[property]["type"] == 'file'){
             this.fileName = "Please upload a file"
           }
+          
+          if (conInfo.metaData[property]["type"] == 'list'){
+
+            map.set('values',conInfo.metaData[property]["valueList"] )
+          }
+          
         }
         else{
           let value = this.tempState.taskConfig[0].configMap[property];
@@ -715,6 +723,16 @@ export class DesignComponent implements OnInit, OnDestroy {
             if (conInfo.metaData[property]["type"] == 'file'){
               let urlArr = value.split("/")
               this.fileName = urlArr[urlArr.length - 1]
+            }
+            if (conInfo.metaData[property]["type"] == 'list'){
+              if(value == 1){
+                value =true
+              }
+              else if(value == 0){
+                value =false
+              }
+              this.temp[property] = value;
+              map.set('values',conInfo.metaData[property]["valueList"] )
             }
             map.set('value', value);
           }
@@ -797,6 +815,17 @@ export class DesignComponent implements OnInit, OnDestroy {
           typeMap.set('value',this.conInfoOfNoMetadata.metaData[property]["type"])
           map.set('key', property);
           map.set('value', this.tempConConfig.configMap[property] );
+          if(this.conInfoOfNoMetadata.metaData[property]["type"] == "list"){
+            let value  = this.tempConConfig.configMap[property];
+            if(value == 1){
+              value =true
+            }
+            else if(value == 0){
+              value =false
+            }
+            this.temp[property] = value;
+            map.set('values',this.conInfoOfNoMetadata.metaData[property]["valueList"] );
+          }
           this.configList.push(map);
           this.typeConfigList.push(typeMap);
       }
@@ -997,7 +1026,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 //********************** File uplodaing *******************
 
     fileEvent(event,config){
-    console.log(config)
+     
     const input = new FormData();
     const file: File = event.target.files[0];
     input.append("file",event.target.files[0])
@@ -1010,17 +1039,18 @@ export class DesignComponent implements OnInit, OnDestroy {
     //     config.set('value',file.name);
     //   }
     // }
-    this.upload(config);
+    this.upload(config,file.name);
     
   }
 
-  upload(config){
+  upload(config,filename){
     if (this.selectedFile) {
       this.progressBarFlag = true;
       showModal("fileUploadModel");
       this.selectedFile.append("functionInstanceName", "emailTemplate");
       this.selectedFile.append("entityType","templateUplaod");
-      this.selectedFile.append("entityRef",this.uuid() );
+    
+      this.selectedFile.append("entityRef",filename);
       this.subscription =  this.fileService.upload(this.selectedFile)
 
         .subscribe (
@@ -1061,6 +1091,24 @@ export class DesignComponent implements OnInit, OnDestroy {
     const index: number = data.indexOf(childDataPoint);
     if (index !== -1) {
       data.splice(index, 1);
+    }
+  }
+
+  onValueSelect(event,config){
+    for (const con of this.configList) {
+      if (con.get('key') && con.get('key').trim().length > 0 && con.get('key') == config.get('key')) {
+        if (con && this.configList && this.configList.includes(con)) {
+          const index = this.configList.indexOf(con);
+          const body = new Map()
+          body.set('key', config.get('key'));
+          body.set('value',event)
+          body.set('values',config.get('values'));
+          if(event in this.temp  == false){
+            this.temp[config.get('key')] = event
+          }
+          this.configList.splice(index, 1,body);
+        }
+      }
     }
   }
 
