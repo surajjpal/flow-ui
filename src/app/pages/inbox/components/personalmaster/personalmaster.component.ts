@@ -3,6 +3,7 @@ declare var showModal: any;
 declare var showAlertModal: any;
 
 import { Component, OnInit, OnDestroy, Input, Output, NgZone, EventEmitter } from '@angular/core';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Subscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute } from '@angular/router';
 import { State } from '../../../../models/tasks.model';
@@ -17,13 +18,25 @@ import { UniversalUser } from 'app/services/shared.service';
   selector: 'api-inbox-personal-master',
   templateUrl: './personalmaster.component.html',
   styleUrls: ['./personalmaster.scss'],
-  providers: [FetchUserService, AllocateTaskToUser]
+  providers: [FetchUserService, AllocateTaskToUser],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({ transform: 'translateX(-100%)' }),
+        animate('200ms ease-in', style({ transform: 'translateX(0%)' }))
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ transform: 'translateX(100%)' }))
+      ])
+    ])
+  ]
 })
 
 export class PersonalMasterComponent implements OnInit, OnDestroy {
   sortBy = '';
   sortOrder = 'asc';
   filterQuery = '';
+  visible = true;
 
   @Input()
   rawDataArray: Map<string, string>[];
@@ -141,6 +154,8 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     this.getParentUser();
   }
 
+
+
   getUserList() {
 
     this.subscription = this.fetchUserService.fetchChildUsers(this.userId)
@@ -192,7 +207,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
     this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('ACTIVE', 'Group', this.assignedTaskPageNumber, fetchRecords)
       .subscribe(states => {
-        if (states != null && states.length>0) {
+        if (states != null && states.length > 0) {
           this.setFirstUnAssignedTaskValues(states);
           this.unassignedStates = states;
         }
@@ -203,7 +218,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
             // this.baThemeSpinner.hide();
           }
         }
-        
+
 
       }, error => {
         this.loadingUnassigned = false;
@@ -227,8 +242,8 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
             // this.baThemeSpinner.hide();
           }
         }
-        
-        
+
+
       }, error => {
         this.loadingAssigned = false;
         if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
@@ -240,9 +255,9 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
     this.subscriptionGroup = this.stateService.getStatesBySubStatusAndFolder('FLAGGED', 'CLOSED', this.flaggedTaskPageNumber, this.fetchRecords, 'PERSONAL')
       .subscribe(states => {
-        if (states != null && states.length>0 ){
+        if (states != null && states.length > 0) {
           this.setFirstFlaggedTaskValues(states);
-          this.flaggedStates = states;  
+          this.flaggedStates = states;
         }
         else {
           this.loadingFlagged = false;
@@ -250,10 +265,10 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
             this.progressBarFlag = false;
             // this.baThemeSpinner.hide();
           }
-          
+
         }
-        
-        
+
+
       }, error => {
         this.loadingFlagged = false;
         if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
@@ -261,7 +276,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
           // this.baThemeSpinner.hide();
         }
       });
-      
+
   }
 
   tabclicked(tabname): void {
@@ -613,7 +628,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
 
               }
             }
-            
+
           },
           error => {
             this.loadingFlagged = false;
@@ -649,7 +664,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
             }
           },
           error => {
-            this.loadingUnassigned =false;
+            this.loadingUnassigned = false;
             console.log("graph object not found");
           }
         )
@@ -819,7 +834,10 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   }
 
   updateProcessFlow(state: State, type: string) {
+
+    this.visible = false;
     this.progressBarFlag = true;
+
     if (type == "ASSIGNED") {
       this.assignedTaskActionButtonEnabled[state._id] = false;
     }
@@ -852,10 +870,12 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
               this.removedAssignedTask(state);
             }
           }
+          this.visible = true;
         },
         error => {
           this.progressBarFlag = false;
-          new showModal('Error in updating process');
+          this.visible = true;
+          //new showModal('Error in updating process');
         }
       );
   }
@@ -1063,6 +1083,8 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
     }
 
   }
+
+
 
 
 }
