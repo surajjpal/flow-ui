@@ -4,7 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 import * as moment from 'moment/moment';
 
-import { AnalyticsReportSetup, AnalyticsReport } from '../models/analytics.model';
+import { AnalyticsReportSetup, AnalyticsReport, Template } from '../models/analytics.model';
 import { ScheduleTaskConfiguration } from '../models/scheduler.model'
 import { environment } from '../../environments/environment';
 import { from } from 'rxjs/observable/from';
@@ -164,6 +164,62 @@ export class AnalyticsService {
                 subject.error(err);
             }
             );
+        return subject.asObservable();
+    }
+
+    getTemplatesForReport(agentId?: string): Observable<Template[]> {
+        const subject = new Subject<Template[]>();
+        const url = `${environment.reportservice + environment.getanalyticsReportTemplates + "/" + agentId}`
+        this.httpClient.get<Template[]>(
+            url,
+            {
+                //headers: headers,
+                observe: 'response',
+                reportProgress: true,
+                withCredentials: true
+            }
+        )
+        .subscribe (
+            (response: HttpResponse<Template[]>) => {
+                // console.log("analytics reports");
+                // console.log(response.body);
+                if (response.body) {
+                    subject.next(response.body);
+                }
+            },
+            (err: HttpErrorResponse) => {
+                subject.error(err);
+            }
+
+        )
+        return subject.asObservable();
+    }
+
+    getEmailTemplatesForReport(agentId?: string): Observable<Template[]> {
+        const subject = new Subject<Template[]>();
+        const url = `${environment.reportservice + environment.getanalyticsReportEmailTemplates + "/" + agentId}`
+        this.httpClient.get<Template[]>(
+            url,
+            {
+                //headers: headers,
+                observe: 'response',
+                reportProgress: true,
+                withCredentials: true
+            }
+        )
+        .subscribe (
+            (response: HttpResponse<Template[]>) => {
+                // console.log("analytics reports");
+                // console.log(response.body);
+                if (response.body) {
+                    subject.next(response.body);
+                }
+            },
+            (err: HttpErrorResponse) => {
+                subject.error(err);
+            }
+
+        )
         return subject.asObservable();
     }
 }
