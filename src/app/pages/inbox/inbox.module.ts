@@ -15,15 +15,16 @@ import { ArchivedComponent } from './components/archived/archived.component';
 import { ArchiveMasterComponent } from './components/archivedmaster/archivedmaster.component'
 import { PersonalMasterComponent } from './components/personalmaster/personalmaster.component'
 import { TaskDetailsComponent } from './components/taskDetails/taskDetails.component';
-import { TeamViewComponent} from './components/teamView/teamView.component';
-import { PersonalComponent} from './components/personal/personal.component';
-import { DashboardComponent} from './components/dashboard/dashboard.component';
+import { TeamViewComponent } from './components/teamView/teamView.component';
+import { PersonalComponent } from './components/personal/personal.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ApiTableModule } from './components/api_table/apitable.module';
 import { DateRangePickerComponent } from './components/dashboard/daterangepicker/daterangepicker.component';
 import { SharedModule } from '../../shared/shared.module';
 
 import { MomentModule } from 'angular2-moment';
 import * as moment from 'moment/moment';
+import { SpinnerModule } from 'angular2-spinner';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import * as moment from 'moment/moment';
     SharedModule,
     MomentModule,
     Daterangepicker,
-    AngularSplitModule
+    AngularSplitModule,
+    SpinnerModule
   ],
   declarations: [
     InboxComponent,
@@ -50,7 +52,7 @@ import * as moment from 'moment/moment';
     PersonalComponent,
     DateRangePickerComponent,
     DashboardComponent
-    
+
   ]
 })
 export class InboxModule { }

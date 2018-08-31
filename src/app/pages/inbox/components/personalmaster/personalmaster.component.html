@@ -13,7 +13,6 @@
         </div>
     </div>
 </div>
-
 <div class="widgets">
     <div class="row">
         <ba-card baCardClass="with-scroll" class="data-table-container" style="width: 100%">
@@ -76,8 +75,8 @@
                                 </button>
                             </div>
                             <div class="col col-lg-9 col-md-9 col-sm-9">
-                                <div *ngIf="visible" [@slideInOut]>
-                                    <div class="card card-default with-scroll">
+                                <div class="card card-default with-scroll">
+                                    <div *ngIf="visible" [@slideInOut]>
                                         <div class="card-header bg-gray">
                                             <b> Viewing details for-{{ assignedTaskDdetails.businessKey}}</b>
                                         </div>
@@ -95,9 +94,6 @@
                                                                 type="button" data-toggle="modal" data-target="#assginedUserModal"
                                                                 class="btn btn-outline-info btn-with-icon">
                                                                 <i class="ion-person-add"></i>Allocate Team</button>
-                                                            <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd !== 'Personal' "
-                                                                type="button" (click)="reserve()" class="btn btn-outline-info btn-with-icon">
-                                                                <i class="ion-archive"></i>Reserve Task</button>
                                                             <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd === 'Personal' && userHierarchy.parentUserId.length > 0"
                                                                 type="button" (click)="escalate()" class="btn btn-outline-warning btn-with-icon">
                                                                 <i class="ion-alert-circled"></i>Escalate Task</button>
@@ -239,6 +235,19 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div *ngIf="spinner" class="center">
+                                    <div class="row center">
+                                        <div class="col-5">
+
+                                        </div>
+                                        <div class="col-2">
+                                            <spinner [size]="200" [tickness]="5"></spinner>
+                                        </div>
+                                    </div>
+                                    <div class="col-5">
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div *ngIf="assignedTaskDdetails === null && !loadingAssigned && !progressBarFlag" style="text-align: center;">
@@ -252,12 +261,13 @@
                         <div class="row" *ngIf="unassignedTaskDdetails != null" style="width: 100%;">
                             <div class="col col-lg-3 col-md-3 col-sm-3">
                                 <div class="card card-default with-scroll">
+
                                     <div class="card-header">
                                         <b>Tasks</b>
                                     </div>
                                     <div class="card-block">
-                                        <table [mfData]="unassignedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords">
-                                            <tr *ngFor="let unasgnState of mf.data; let index=index;" (click)="onPersonalUnAssignedSubjectSelect(unasgnState)">
+                                        <table class="table table-striped" [mfData]="unassignedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords">
+                                            <tr class="bottomborder" *ngFor="let unasgnState of mf.data; let index=index;" (click)="onPersonalUnAssignedSubjectSelect(unasgnState)">
                                                 <div [class]="unassignedStateTabclass[unasgnState._id]" id="defaultOpen">
                                                     <div class="row">
                                                         <div class="col">
@@ -292,130 +302,145 @@
                                 </button>
                             </div>
                             <div class="col col-lg-9 col-md-9 col-sm-9">
-                                <div class="card card-default">
-                                    <div class="card-header bg-gray">
-                                        <b> Viewing details for-{{ unassignedTaskDdetails.businessKey}}</b>
-                                    </div>
-                                    <div class="card-block">
-                                        <div class="card card-default">
-                                            <div class="card-block">
-                                                <div class="row">
-                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                        <button [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]" *ngIf="unassignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && users.length > 0"
-                                                            type="button" data-toggle="modal" data-target="#unassginedUserModal"
-                                                            class="btn btn-outline-info btn-with-icon">
-                                                            <i class="ion-person-add"></i>Allocate Team</button>
-                                                        <button [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]" *ngIf="unassignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && unassignedTaskDdetails.assignedUserGroupCd !== 'Personal' "
-                                                            type="button" (click)="reserveUnassignedTask(unassignedTaskDdetails)"
-                                                            class="btn btn-outline-info btn-with-icon">
-                                                            <i class="ion-archive"></i>Reserve Task</button>
-                                                        <button type="button" class="btn btn-outline-primary pull-right" title="Show Details" (click)="onSelect(unassignedTaskDdetails)">
-                                                            <i class="ion-eye"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                <div *ngIf="visibleUnassigned" [@slideInOut]>
+                                    <div class="card card-default">
+                                        <div class="card-header bg-gray">
+                                            <b> Viewing details for-{{ unassignedTaskDdetails.businessKey}}</b>
                                         </div>
-                                        <div class="card card-default">
-                                            <div class="card-header bg-gray">
-                                                <b>Task Header</b>
-                                            </div>
-                                            <div class="card-block">
-                                                <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Process: </b></label>
-                                                        <span>{{ unassignedTaskDdetails.machineLabel }}</span>
-                                                    </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Version: </b></label>
-                                                        <span>{{ getGraphObject(unassignedTaskDdetails.stateMachineInstanceModelId).version
-                                                            }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Task: </b></label>
-                                                        <span>{{ unassignedTaskDdetails.stateCd }}</span>
-                                                    </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Status: </b></label>
-                                                        <span>{{ unassignedTaskDdetails.statusCd }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Start Time: </b></label>
-                                                        <span>{{ unassignedTaskDdetails.startTimeLong | amDateFormat: 'DD/MM/YYYY
-                                                            hh:mm A' }}
-                                                        </span>
-                                                    </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>End Time: </b></label>
-                                                        <span>{{ unassignedTaskDdetails.endTimeLong | amDateFormat: 'DD/MM/YYYY
-                                                            hh:mm A' }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Assigned Group: </b></label>
-                                                        <span>{{ unassignedTaskDdetails.assignedUserGroupCd }}</span>
-                                                    </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Assigned To: </b></label>
-                                                        <span>{{ unassignedTaskDdetails.assignedUserDisplayName }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Flagged: </b></label>
-                                                        <span>{{ unassignedTaskDdetails.flagged }}</span>
-                                                    </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Flag Level: </b></label>
-                                                        <span>{{ unassignedTaskDdetails.iterationLevel }}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card card-default">
-                                            <div class="card-header bg-gray">
-                                                <b>Task Details</b>
-                                            </div>
-                                            <div class="card-block">
-                                                <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(unassignedTaskDdetails)">
-                                                        <label><b>{{ dataPoint.dataPointLabel }}: </b></label>
-                                                        <span>{{ unassignedTaskDdetails['parameters'][dataPoint.dataPointName]
-                                                            }}
-                                                        </span>
-
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(unassignedTaskDdetails)">
-                                                        <label><b>{{ dataPoint.dataPointLabel }}: </b></label>
-                                                        <div class="row">
-                                                            <table class="table table-striped">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, unassignedTaskDdetails)">{{
-                                                                            dp.dataPointLabel }}</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr *ngFor="let value of getValueForArraydatatype(dataPoint, unassignedTaskDdetails)">
-                                                                        <td *ngFor="let v of value">{{ v }}</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
+                                        <div class="form-group col-md-12 alert-danger" style="margin-bottom: 10px;" *ngIf="responseErrorUnAssigned && responseErrorUnAssigned.length > 0"
+                                            [innerHTML]="responseErrorUnAssigned"></div>
+                                        <div class="card-block">
+                                            <div class="card card-default">
+                                                <div class="card-block">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <button [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]" *ngIf="unassignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && users.length > 0"
+                                                                type="button" data-toggle="modal" data-target="#unassginedUserModal"
+                                                                class="btn btn-outline-info btn-with-icon">
+                                                                <i class="ion-person-add"></i>Allocate Team</button>
+                                                            <button [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]" *ngIf="unassignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && unassignedTaskDdetails.assignedUserGroupCd !== 'Personal' "
+                                                                type="button" (click)="reserveUnassignedTask(unassignedTaskDdetails)"
+                                                                class="btn btn-outline-info btn-with-icon">
+                                                                <i class="ion-archive"></i>Reserve Task</button>
+                                                            <button type="button" class="btn btn-outline-primary pull-right" title="Show Details" (click)="onSelect(unassignedTaskDdetails)">
+                                                                <i class="ion-eye"></i>
+                                                            </button>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card card-default">
+                                                <div class="card-header bg-gray">
+                                                    <b>Task Header</b>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div class="row">
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Process: </b></label>
+                                                            <span>{{ unassignedTaskDdetails.machineLabel }}</span>
+                                                        </div>
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Version: </b></label>
+                                                            <span>{{ getGraphObject(unassignedTaskDdetails.stateMachineInstanceModelId).version
+                                                                }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Task: </b></label>
+                                                            <span>{{ unassignedTaskDdetails.stateCd }}</span>
+                                                        </div>
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Status: </b></label>
+                                                            <span>{{ unassignedTaskDdetails.statusCd }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Start Time: </b></label>
+                                                            <span>{{ unassignedTaskDdetails.startTimeLong | amDateFormat:
+                                                                'DD/MM/YYYY hh:mm A' }}
+                                                            </span>
+                                                        </div>
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>End Time: </b></label>
+                                                            <span>{{ unassignedTaskDdetails.endTimeLong | amDateFormat: 'DD/MM/YYYY
+                                                                hh:mm A' }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Assigned Group: </b></label>
+                                                            <span>{{ unassignedTaskDdetails.assignedUserGroupCd }}</span>
+                                                        </div>
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Assigned To: </b></label>
+                                                            <span>{{ unassignedTaskDdetails.assignedUserDisplayName }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Flagged: </b></label>
+                                                            <span>{{ unassignedTaskDdetails.flagged }}</span>
+                                                        </div>
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Flag Level: </b></label>
+                                                            <span>{{ unassignedTaskDdetails.iterationLevel }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card card-default">
+                                                <div class="card-header bg-gray">
+                                                    <b>Task Details</b>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div class="row">
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(unassignedTaskDdetails)">
+                                                            <label><b>{{ dataPoint.dataPointLabel }}: </b></label>
+                                                            <span>{{ unassignedTaskDdetails['parameters'][dataPoint.dataPointName]
+                                                                }}
+                                                            </span>
 
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(unassignedTaskDdetails)">
+                                                            <label><b>{{ dataPoint.dataPointLabel }}: </b></label>
+                                                            <div class="row">
+                                                                <table class="table table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, unassignedTaskDdetails)">{{
+                                                                                dp.dataPointLabel }}</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let value of getValueForArraydatatype(dataPoint, unassignedTaskDdetails)">
+                                                                            <td *ngFor="let v of value">{{ v }}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="spinnerUnassigned" class="center">
+                                    <div class="row center">
+                                        <div class="col-5">
+                                        </div>
+                                        <div class="col-2">
+                                            <spinner [size]="200" [tickness]="5"></spinner>
+                                        </div>
+                                    </div>
+                                    <div class="col-5">
                                     </div>
                                 </div>
                             </div>
@@ -435,8 +460,8 @@
                                         <b>Tasks</b>
                                     </div>
                                     <div class="card-block">
-                                        <table [mfData]="flaggedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords">
-                                            <tr *ngFor="let flgState of mf.data; let index=index;" (click)="onFlaggedSubjectSelect(flgState)">
+                                        <table class="table table-striped" [mfData]="flaggedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords">
+                                            <tr class="bottomborder" *ngFor="let flgState of mf.data; let index=index;" (click)="onFlaggedSubjectSelect(flgState)">
                                                 <div [class]="flaggedStateTabclass[flgState._id]">
                                                     <div class="row">
                                                         <div class="col">
@@ -473,118 +498,133 @@
                             </div>
                             <div class="col col-lg-9 col-md-9 col-sm-9">
                                 <div class="card card-default">
-                                    <div class="card-header bg-gray">
-                                        <b> Viewing details for-{{ flaggedTaskDdetails.businessKey}}</b>
-                                    </div>
-                                    <div class="card-block">
-                                        <div class="card card-default">
-                                            <div class="card-block">
-                                                <div class="row">
-                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                        <button type="button" class="btn btn-outline-primary pull-right" title="Show Details" (click)="onSelect(flaggedTaskDdetails)">
-                                                            <i class="ion-eye"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <div *ngIf="visibleFlagged" [@slideInOut]>
+                                        <div class="card-header bg-gray">
+                                            <b> Viewing details for-{{ flaggedTaskDdetails.businessKey}}</b>
                                         </div>
-                                        <div class="card card-default">
-                                            <div class="card-header bg-gray">
-                                                <b>Task Header</b>
-                                            </div>
-                                            <div class="card-block">
-                                                <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Process: </b></label>
-                                                        <span>{{ flaggedTaskDdetails.machineLabel }}</span>
-                                                    </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Version: </b></label>
-                                                        <span>{{ getGraphObject(flaggedTaskDdetails.stateMachineInstanceModelId).version
-                                                            }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Task: </b></label>
-                                                        <span>{{ flaggedTaskDdetails.stateCd }}</span>
-                                                    </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Status: </b></label>
-                                                        <span>{{ flaggedTaskDdetails.statusCd }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Start Time: </b></label>
-                                                        <span>{{ flaggedTaskDdetails.startTimeLong | amDateFormat: 'DD/MM/YYYY
-                                                            hh:mm A' }}</span>
-                                                    </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>End Time: </b></label>
-                                                        <span>{{ flaggedTaskDdetails.endTimeLong | amDateFormat: 'DD/MM/YYYY
-                                                            hh:mm A' }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Assigned Group: </b></label>
-                                                        <span>{{ flaggedTaskDdetails.assignedUserGroupCd }}</span>
-                                                    </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Assigned To: </b></label>
-                                                        <span>{{ flaggedTaskDdetails.assignedUserDisplayName }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Flagged: </b></label>
-                                                        <span>{{ flaggedTaskDdetails.flagged }}</span>
-                                                    </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
-                                                        <label><b>Flag Level: </b></label>
-                                                        <span>{{ flaggedTaskDdetails.iterationLevel }}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card card-default">
-                                            <div class="card-header bg-gray">
-                                                <b>Task Details</b>
-                                            </div>
-                                            <div class="card-block">
-                                                <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(flaggedTaskDdetails)">
-                                                        <label><b>{{ dataPoint.dataPointLabel }}: </b></label>
-                                                        <span>{{ flaggedTaskDdetails['parameters'][dataPoint.dataPointName]
-                                                            }}
-                                                        </span>
-
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(flaggedTaskDdetails)">
-                                                        <label><b>{{ dataPoint.dataPointLabel }}: </b></label>
-                                                        <div class="row">
-                                                            <table class="table table-striped">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, flaggedTaskDdetails)">{{
-                                                                            dp.dataPointLabel }}</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr *ngFor="let value of getValueForArraydatatype(dataPoint, flaggedTaskDdetails)">
-                                                                        <td *ngFor="let v of value">{{ v }}</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
+                                        <div class="card-block">
+                                            <div class="card card-default">
+                                                <div class="card-block">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <button type="button" class="btn btn-outline-primary pull-right" title="Show Details" (click)="onSelect(flaggedTaskDdetails)">
+                                                                <i class="ion-eye"></i>
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="card card-default">
+                                                <div class="card-header bg-gray">
+                                                    <b>Task Header</b>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div class="row">
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Process: </b></label>
+                                                            <span>{{ flaggedTaskDdetails.machineLabel }}</span>
+                                                        </div>
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Version: </b></label>
+                                                            <span>{{ getGraphObject(flaggedTaskDdetails.stateMachineInstanceModelId).version
+                                                                }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Task: </b></label>
+                                                            <span>{{ flaggedTaskDdetails.stateCd }}</span>
+                                                        </div>
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Status: </b></label>
+                                                            <span>{{ flaggedTaskDdetails.statusCd }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Start Time: </b></label>
+                                                            <span>{{ flaggedTaskDdetails.startTimeLong | amDateFormat: 'DD/MM/YYYY
+                                                                hh:mm A' }}</span>
+                                                        </div>
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>End Time: </b></label>
+                                                            <span>{{ flaggedTaskDdetails.endTimeLong | amDateFormat: 'DD/MM/YYYY
+                                                                hh:mm A' }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Assigned Group: </b></label>
+                                                            <span>{{ flaggedTaskDdetails.assignedUserGroupCd }}</span>
+                                                        </div>
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Assigned To: </b></label>
+                                                            <span>{{ flaggedTaskDdetails.assignedUserDisplayName }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Flagged: </b></label>
+                                                            <span>{{ flaggedTaskDdetails.flagged }}</span>
+                                                        </div>
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                            <label><b>Flag Level: </b></label>
+                                                            <span>{{ flaggedTaskDdetails.iterationLevel }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card card-default">
+                                                <div class="card-header bg-gray">
+                                                    <b>Task Details</b>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div class="row">
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(flaggedTaskDdetails)">
+                                                            <label><b>{{ dataPoint.dataPointLabel }}: </b></label>
+                                                            <span>{{ flaggedTaskDdetails['parameters'][dataPoint.dataPointName]
+                                                                }}
+                                                            </span>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(flaggedTaskDdetails)">
+                                                            <label><b>{{ dataPoint.dataPointLabel }}: </b></label>
+                                                            <div class="row">
+                                                                <table class="table table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, flaggedTaskDdetails)">{{
+                                                                                dp.dataPointLabel }}</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let value of getValueForArraydatatype(dataPoint, flaggedTaskDdetails)">
+                                                                            <td *ngFor="let v of value">{{ v }}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="spinnerFlagged" class="center">
+                                        <div class="row center">
+                                            <div class="col-5">
+
+                                            </div>
+                                            <div class="col-2">
+                                                <spinner [size]="200" [tickness]="5"></spinner>
+                                            </div>
+                                        </div>
+                                        <div class="col-5">
+
                                         </div>
                                     </div>
                                 </div>

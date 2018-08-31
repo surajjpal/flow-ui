@@ -73,6 +73,12 @@
     background-color: #C8E1F7;
 }
 
+.center {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 :host /deep/ .widgets {
     .data-table-container {
         width: 100%;
@@ -81,3 +87,4 @@
         }
     }
   }
+  
