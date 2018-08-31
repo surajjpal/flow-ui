@@ -13,6 +13,8 @@ import { UserHierarchy, User } from '../../../../models/user.model';
 import { FetchUserService, AllocateTaskToUser } from '../../../../services/userhierarchy.service';
 import { GraphObject, DataPoint, StateModel, ManualAction, StateInfoModel } from '../../../../models/flow.model';
 import { UniversalUser } from 'app/services/shared.service';
+import { Observable } from 'rxjs/Rx';
+
 
 @Component({
   selector: 'api-inbox-personal-master',
@@ -22,11 +24,10 @@ import { UniversalUser } from 'app/services/shared.service';
   animations: [
     trigger('slideInOut', [
       transition(':enter', [
-        style({ transform: 'translateX(-100%)' }),
-        animate('200ms ease-in', style({ transform: 'translateX(0%)' }))
+        animate('0ms ease-in', style({ transform: 'translateX(100%)' }))
       ]),
       transition(':leave', [
-        animate('200ms ease-in', style({ transform: 'translateX(100%)' }))
+        animate('500ms ease-in', style({ transform: 'translateX(100%)' }))
       ])
     ])
   ]
@@ -672,29 +673,42 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
   }
 
   onPersonalAssignedSubjectSelect(state: State) {
+    this.visible = false;
     this.assignedTaskDdetails = state;
     for (let asgnState of this.assignedStates) {
       this.assignedStateTabclass[asgnState._id] = this.TABLINKS;
     }
     this.assignedStateTabclass[state._id] = this.TABLINKS_ACTIVE;
     this.assignedStategraphObject = this.graphObjects.get(state.stateMachineInstanceModelId);
+
+    setTimeout(() => {
+      this.visible = true;
+    }, 500);
+
   }
 
   onPersonalUnAssignedSubjectSelect(state: State) {
+    this.visible = false;
     this.unassignedTaskDdetails = state;
     for (let unasgnState of this.unassignedStates) {
       this.unassignedStateTabclass[unasgnState._id] = this.TABLINKS;
     }
     this.unassignedStateTabclass[state._id] = this.TABLINKS_ACTIVE;
-
+    setTimeout(() => {
+      this.visible = true;
+    }, 500);
   }
 
   onFlaggedSubjectSelect(state: State) {
+    this.visible = false;
     this.flaggedTaskDdetails = state;
     for (let flgState of this.flaggedStates) {
       this.flaggedStateTabclass[flgState._id] = this.TABLINKS;
     }
     this.flaggedStateTabclass[state._id] = this.TABLINKS_ACTIVE;
+    setTimeout(() => {
+      this.visible = true;
+    }, 500);
   }
 
   getSortedDatPointGraphObject(graphObject: GraphObject) {
@@ -858,7 +872,6 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
                 for (const error of errorList) {
                   erresponseError += `  - ${error}<br>`;
                 }
-                new showModal(erresponseError);
               }
             }
           }
@@ -875,7 +888,7 @@ export class PersonalMasterComponent implements OnInit, OnDestroy {
         error => {
           this.progressBarFlag = false;
           this.visible = true;
-          //new showModal('Error in updating process');
+          new showModal('Error in updating process');
         }
       );
   }

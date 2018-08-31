@@ -55,7 +55,14 @@
     background-color: white;
     font-size: 14px;
     text-align: left;
-    outline: none
+    // outline: none
+    border-bottom: 1px solid;
+    margin-bottom: -1px;
+}
+
+.bottomborder{
+    border-bottom: 1px solid;
+    border-bottom-color: #cccccc;
 }
 
 .block.active {
