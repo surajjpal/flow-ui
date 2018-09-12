@@ -24,7 +24,7 @@ import { SharedModule } from '../../shared/shared.module';
 
 import { MomentModule } from 'angular2-moment';
 import * as moment from 'moment/moment';
-import { SpinnerModule } from 'angular2-spinner';
+import { SpinnerModule } from 'angular2-spinner/dist';
 
 @NgModule({
   imports: [
@@ -45,6 +45,7 @@ import { SpinnerModule } from 'angular2-spinner';
     InboxComponent,
     ActiveComponent,
     ArchivedComponent,
+    
     ArchiveMasterComponent,
     PersonalMasterComponent,
     TaskDetailsComponent,
