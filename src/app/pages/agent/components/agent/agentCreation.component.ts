@@ -249,7 +249,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
           createdAgent => {
             this.isSuccess = true;
             this.isCreated = true;
-            this.autoUrl = `${environment.autourl}param1=${createdAgent._id}&param2=welcomeTo&param3=agentName`;
+            this.autoUrl = `${environment.autourl}${createdAgent._id}`;
             if (this.selectedAgent._id == null && createdAgent) {
               this.analyticsReportService.scheduleDailyReportForAgent(this.selectedAgent)
               .subscribe(

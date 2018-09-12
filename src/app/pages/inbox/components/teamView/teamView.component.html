@@ -19,13 +19,15 @@
       <div class="panel panel-default">
         <ul class="nav nav-tabs" role="tablist">
           <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#tab_assigned" role="tab" aria-expanded="true">Assigned</a>
+            <a class="nav-link active" (click)="fetchRecordsFor(TAB_ASSIGNED, assignedStates)" data-toggle="tab" href="#tab_assigned"
+              role="tab" aria-expanded="true">Assigned</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#tab_unassigned" role="tab">Unassigned</a>
+            <a class="nav-link" (click)="fetchRecordsFor(TAB_UNASSIGNED, unassignedStates)" data-toggle="tab" href="#tab_unassigned"
+              role="tab">Unassigned</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#tab_flagged" role="tab">Flagged</a>
+            <a class="nav-link" (click)="fetchRecordsFor(TAB_FLAGGED, flaggedStates)" data-toggle="tab" href="#tab_flagged" role="tab">Flagged</a>
           </li>
         </ul>
         <div class="tab-content">
@@ -47,11 +49,11 @@
               <thead>
                 <tr>
                   <th>
-                      <mfDefaultSorter by="">
-                        <h6>
-                          <b>Business Key</b>
-                        </h6>
-                      </mfDefaultSorter>
+                    <mfDefaultSorter by="">
+                      <h6>
+                        <b>Business Key</b>
+                      </h6>
+                    </mfDefaultSorter>
                   </th>
                   <th>
                     <mfDefaultSorter by="">
