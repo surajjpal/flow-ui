@@ -18,6 +18,6 @@ export class Account extends BaseModel {
     this.companyDesc = '';
     this.s3 = false;
     this.apiKey = '';
-    this.trainingModeFl = false;
+    this.trainingModeFl = true;
   }
 }
