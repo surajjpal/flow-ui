@@ -107,12 +107,12 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
       this.tempBusinessAlgorithm = JSON.parse(JSON.stringify(businessAlgorithm));
       this.algorithmAddUpdateMode = false;
       console.log("onAlgorithmAdd");
-      console.log(businessAlgorithm.configParametrs);
-      if(businessAlgorithm.configParametrs) {
+      console.log(businessAlgorithm.configParameters);
+      if(businessAlgorithm.configParameters) {
         if(this.tempBusinessAlgorithm.configList.length == 0) {
-          for(let key in businessAlgorithm.configParametrs) {
-            this.tempBusinessAlgorithm.configList.push(new ConfigParams(key, businessAlgorithm.configParametrs[key]));
-            this.selectedConfigList.push(new ConfigParams(key, businessAlgorithm.configParametrs[key]));
+          for(let key in businessAlgorithm.configParameters) {
+            this.tempBusinessAlgorithm.configList.push(new ConfigParams(key, businessAlgorithm.configParameters[key]));
+            this.selectedConfigList.push(new ConfigParams(key, businessAlgorithm.configParameters[key]));
           }
         }
         // businessAlgorithm.configParametrs.forEach((value, key) => {
@@ -140,10 +140,10 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
   }
 
   addAlgorithm() {
-    this.tempBusinessAlgorithm.configParametrs = new Map<string, any>();
+    this.tempBusinessAlgorithm.configParameters = new Map<string, any>();
     if(this.tempBusinessAlgorithm.configList.length > 0) {
       for (let configParam of this.tempBusinessAlgorithm.configList) {
-        this.tempBusinessAlgorithm.configParametrs[configParam.param] = configParam.value;
+        this.tempBusinessAlgorithm.configParameters[configParam.param] = configParam.value;
       }
     }
     this.tempBusinessAlgorithm.configList = [];
@@ -159,7 +159,7 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
       }
     }
     console.log("addAlgorithm");
-    console.log(this.tempBusinessAlgorithm.configParametrs);
+    console.log(this.tempBusinessAlgorithm.configParameters);
     new closeModal('algorithmModal');
   }
 
