@@ -288,13 +288,14 @@
   </div>
 </div>
 
-<div class="card" style="width: 100rem;" *ngIf="isCreated">
-  <div class="card-body">
-    <h5 class="card-title">Agent Url to use</h5>
-    <p class="card-text">
-      <b>{{autoUrl}}</b>
-    </p>
-    <button type="button" class="btn btn-success" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
-      (click)="goBack();">Got It</button>
+<div class="widgets" *ngIf="isCreated">
+  <div class="row">
+    <ba-card cardTitle="Agent URL to use" baCardClass="with-scroll" class="col-md-12">
+        <p class="card-text">
+          <b><a [href]="autoUrl" target="_blank">{{autoUrl}}</a></b>
+        </p>
+        <button type="button" class="btn btn-success" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
+          (click)="goBack();">Got It</button>
+    </ba-card>
   </div>
 </div>

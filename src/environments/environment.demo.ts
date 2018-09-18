@@ -22,7 +22,7 @@ export const environment = {
   
     // Flow
     server: 'https://flow.automatapi.com/flow/console/',
-    autourl:'https://api.automatapi.com/?',
+    autourl:'https://virtualagent.automatapi.xyz/#/pg/ch/cnv/',
   
     stateinsight: 'state/insight/',
     orPayload: 'state/orPayload/',

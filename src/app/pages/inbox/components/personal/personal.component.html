@@ -1,258 +1,856 @@
 <div *ngIf="progressBarFlag">
-  <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12">
-      <div class="progress">
-        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;" aria-valuenow="99"
-          aria-valuemin="0" aria-valuemax="100">Loading...</div>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12">
-      <br/>
-    </div>
-  </div>
-</div>
-<div class="widgets">
-  <div class="row">
-    <ba-card baCardClass="with-scroll" class="data-table-container" style="width: 100rem;">
-      <div class="panel panel-default">
-        <ul class="nav nav-tabs" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#tab_assigned" role="tab" aria-expanded="true">Assigned</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#tab_unassigned" role="tab">Unassigned</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#tab_flagged" role="tab">Flagged</a>
-          </li>
-        </ul>
-        <div class="tab-content">
-          <div role="tabpanel" class="tab-pane fade show active" id="tab_assigned">
-            <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
-            <br>
-            <table class="table table-striped" [mfData]="assignedStates | universalDataFilter : filterQuery" #mf="mfDataTable" [(mfSortBy)]="sortBy"
-              [(mfSortOrder)]="sortOrder">
-              <thead>
-                <tr>
-                  <th>
-                    <mfDefaultSorter by="">
-                      <h6>
-                        <b>Business Key</b>
-                      </h6>
-                    </mfDefaultSorter>
-                  </th>
-                  <th>
-                    <mfDefaultSorter by="">
-                      <h6>
-                        <b>Process</b>
-                      </h6>
-                    </mfDefaultSorter>
-                  </th>
-                  <th>
-                    <mfDefaultSorter by="">
-                      <h6>
-                        <b>Task</b>
-                      </h6>
-                    </mfDefaultSorter>
-                  </th>
-                  <th>
-                    <mfDefaultSorter by="">
-                      <h6>
-                        <b>Status</b>
-                      </h6>
-                    </mfDefaultSorter>
-                  </th>
-                  <th>
-                    <mfDefaultSorter by="">
-                      <h6>
-                        <b>Start Time</b>
-                      </h6>
-                    </mfDefaultSorter>
-                  </th>
-                  <th>
-                      <mfDefaultSorter by="">
-                        <h6>
-                          <b>Assigned To</b>
-                        </h6>
-                      </mfDefaultSorter>
-                    </th>
-                  <th>
-                    <mfDefaultSorter by="">
-                      <h6>
-                        <b>Flag Level</b>
-                      </h6>
-                    </mfDefaultSorter>
-                  </th>
-                  <th>
-                    <mfDefaultSorter by="">
-                      <h6>
-                        <b>Escalated</b>
-                      </h6>
-                    </mfDefaultSorter>
-                  </th>
-                  <th>
-                      <mfDefaultSorter by="">
-                        <h6>
-                          <b>Flagged</b>
-                        </h6>
-                      </mfDefaultSorter>
-                    </th>
-                  <th>
-                    <mfDefaultSorter by="">
-                      <h6>
-                        <b>Flag Reason</b>
-                      </h6>
-                    </mfDefaultSorter>
-                  </th>
-                  <th>
-                    <mfDefaultSorter by="">
-                      <h6>
-                        <b>Action</b>
-                      </h6>
-                    </mfDefaultSorter>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let s of  mf.data">
-                  <td>{{s.businessKey}}</td>
-                  <td>{{s.machineLabel}}</td>
-                  <td>{{s.stateCd}}</td>
-                  <td>{{s.statusCd}}</td>
-                  <td>{{s.startTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</td>
-                  <td>{{s.assignedUserDisplayName}}
-                  <td>{{s.iterationLevel}}</td>
-                  <td>{{s.escalatedFlag}}</td>
-                  <td>{{s.flagged}}</td>
-                  <td>{{s.flagReason}}</td>
-
-                  <td>
-                    <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-primary" title="View" (click)="onSelect(s)">
-                        <i class="ion-eye"></i>
-                      </button>
-                      <button type="button" class="btn btn-danger" title="Flag"  data-toggle="modal" data-target="#flagModal"
-                        (click)="selectedForFlag(s)" data-backdrop="static" data-keyboard="false">
-                        <i class="ion-flag"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr *ngIf="assignedStates.length === 0 && isLoading">
-                  <td colspan="100%">Loading...</td>
-                </tr>
-                <tr *ngIf="assignedStates.length === 0 && !isLoading">
-                  <td colspan="100%">No records to display</td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="5">
-                    <mfBootstrapPaginator></mfBootstrapPaginator>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-            <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; width: 200px"
-              *ngIf="assignedStates.length == 10" (click)="loadMore('ACTIVE','Personal')">Load More</button>
-          </div>
-          <div role="tabpanel" class="tab-pane fade" id="tab_unassigned">
-            <apitable *ngIf="unassignedStates" [rawDataArray]="unassignedStates" [isLoading]="loadingUnassigned" (selectedData)="onSelect($event)"></apitable>
-            <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
-              *ngIf="unassignedStates.length == 10" (click)="loadMore('ACTIVE','Group')">Load More</button>
-          </div>
-          <div role="tabpanel" class="tab-pane fade" id="tab_flagged">
-            <apitable *ngIf="flaggedStates" [rawDataArray]="flaggedStates" [isLoading]="loadingFlagged" (selectedData)="onSelect($event)"></apitable>
-            <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
-              *ngIf="flaggedStates.length == 10" (click)="loadMore('FLAGGED','Personal')">Load More</button>
-          </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;" aria-valuenow="99"
+                    aria-valuemin="0" aria-valuemax="100">Loading...</div>
+            </div>
         </div>
-      </div>
-    </ba-card>
-    
-  </div>
-</div>
-<div class="modal fade" id="flagModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagmodalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title" id="userModalLabel">
-          Flag Reason
-        </h4>
-        <button type="button" class="close" data-dismiss="modal" (click)="close()">
-          <span aria-hidden="true">&times;</span>
-          <span class="sr-only">Close</span>
-        </button>
-      </div>
-
-      <!-- Modal Body -->
-      <div class="modal-body" id="modal_body">
-        <form>
-          <div class="form-group" *ngIf="selectedStateForFlag">
-            <label for="selectReason">Select Reason</label>
-            <select class="selectpicker form-control" required id="selectReason" title="Choose Flag Reason" [ngModel]="selectedStateForFlag.flagReason"
-              [ngModelOptions]="{standalone: true}" (ngModelChange)="onReasonSelect($event)">
-              <option *ngFor="let flagReason of FlagReasons" [value]="flagReason">{{flagReason}}</option>
-            </select>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer" id="modal_footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="close()">Close</button>
-        <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="confirm()">Confirm</button>
-      </div>
     </div>
-  </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <br/>
+        </div>
+    </div>
 </div>
 
-<div class="modal fade" id="flagPersonalWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagWarningLabel"
-  aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title" id="finalWarningLabel">
-          Warning
-        </h4>
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span>
-          <span class="sr-only">Close</span>
-        </button>
-      </div>
+<div class="widgets">
+    <div class="row">
+        <ba-card baCardClass="with-scroll" class="data-table-container" style="width: 100%">
+            <div class="panel panel-default">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#tab_assigned" role="tab" aria-expanded="true" (click)="fetchRecordsFor(TAB_ASSIGNED, assignedStates)">Assigned</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tab_unassigned" role="tab" (click)="fetchRecordsFor(TAB_UNASSIGNED, unassignedStates)">Unassigned</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#tab_flagged" role="tab" (click)="fetchRecordsFor(TAB_FLAGGED, flaggedStates)">Flagged</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade show active" id="tab_assigned">
+                        <div class="row" *ngIf="assignedTaskDdetails != null" style="width: 100%;">
+                            <div class="col col-lg-3 col-md-3 col-sm-3">
+                                <div class="card card-default with-scroll">
+                                    <div class="card-header">
+                                        <b>Tasks</b>
+                                    </div>
+                                    <div class="card-block">
+                                        <table class="table table-striped" [mfData]="assignedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords">
+                                            <tr *ngFor="let asgnState of mf.data; let index=index;" (click)="onPersonalAssignedSubjectSelect(asgnState)">
+                                                <div [class]="assignedStateTabclass[asgnState._id]" id="defaultOpen">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label>{{asgnState.machineLabel}}</label>
+                                                        </div>
+                                                        <div class="col">
+                                                            {{ asgnState.startTimeLong | amDateFormat: 'DD/MM hh:mm A' }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label>{{ asgnState.businessKey}}</label>
+                                                        </div>
+                                                        <div class="col">
 
-      <!-- Modal Body -->
-      <div class="modal-body" id="modal_body">
-        The Task is already flagged three times, appropriate action will be taken by the team lead!!!
-      </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </tr>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <mfBootstrapPaginator></mfBootstrapPaginator>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
 
-      <!-- Modal Footer -->
-      <div class="modal-footer" id="modal_footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="refresh()">Close</button>
-      </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-outline-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
+                                    *ngIf="assignedStates.length != 0" (click)="loadMore('ACTIVE','Personal')">Load More
+                                </button>
+                            </div>
+                            <div class="col col-lg-9 col-md-9 col-sm-9">
+                                <div class="card card-default with-scroll">
+                                    <div class="card-header bg-gray">
+                                        <b> Viewing details for-{{ assignedTaskDdetails.businessKey}}</b>
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="card card-default">
+                                            <div class="card-block">
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd === 'Personal'"
+                                                            type="button" class="btn btn-outline-primary btn-with-icon" (click)="updateProcessFlow(assignedTaskDdetails, 'ASSIGNED')">
+                                                            <i class="ion-checkmark"></i>Update Process</button>
+                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && users.length > 0"
+                                                            type="button" data-toggle="modal" data-target="#assginedUserModal"
+                                                            class="btn btn-outline-info btn-with-icon">
+                                                            <i class="ion-person-add"></i>Allocate Team</button>
+                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd !== 'Personal' "
+                                                            type="button" (click)="reserve()" class="btn btn-outline-info btn-with-icon">
+                                                            <i class="ion-archive"></i>Reserve Task</button>
+                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd === 'Personal' && userHierarchy.parentUserId.length > 0"
+                                                            type="button" (click)="escalate()" class="btn btn-outline-warning btn-with-icon">
+                                                            <i class="ion-alert-circled"></i>Escalate Task</button>
+                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" type="button" class="btn btn-outline-warning btn-with-icon"
+                                                            title="Flag" *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd == 'Personal' && assignedTaskDdetails.subStatus !== 'FLAGGED'"
+                                                            data-toggle="modal" data-target="#assignedTaskflagModal" data-backdrop="static"
+                                                            data-keyboard="false">
+                                                            <i class="ion-flag"></i>Flag Task</button>
+                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" type="button" class="btn btn-outline-danger btn-with-icon"
+                                                            title="Archive" *ngIf="assignedTaskDdetails.statusCd ==='ACTIVE' && assignedTaskDdetails.assignedUserGroupCd == 'Personal' "
+                                                            data-toggle="modal" data-target="#archiveTaskWarningModal">
+                                                            <i class="ion-ios-trash"></i>Archive Task</button>
+                                                        <button type="button" class="btn btn-outline-primary pull-right" title="Show Details" (click)="onSelect(assignedTaskDdetails)">
+                                                            <i class="ion-eye"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card card-default">
+                                            <div class="card-header bg-gray">
+                                                <b>Task Header</b>
+                                            </div>
+                                            <div class="card-block">
+                                                <div class="row">
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Process: </b>
+                                                        </label>
+                                                        <span>{{ assignedTaskDdetails.machineLabel }} v{{ getGraphObject(assignedTaskDdetails.stateMachineInstanceModelId).version}}</span>
+                                                    </div>
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Task: </b>
+                                                        </label>
+                                                        <span>{{ assignedTaskDdetails.stateCd }}</span>
+                                                    </div>
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Status: </b>
+                                                        </label>
+                                                        <span>{{ assignedTaskDdetails.statusCd }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Start Time: </b>
+                                                        </label>
+                                                        <span>{{ assignedTaskDdetails.startTimeLong | amDateFormat: 'DD/MM/YYYY
+                                                            hh:mm A' }}</span>
+                                                    </div>
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>End Time: </b>
+                                                        </label>
+                                                        <span>{{ assignedTaskDdetails.endTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm
+                                                            A' }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Assigned Group: </b>
+                                                        </label>
+                                                        <span>{{ assignedTaskDdetails.assignedUserGroupCd }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Assigned To: </b>
+                                                        </label>
+                                                        <span>{{ assignedTaskDdetails.assignedUserDisplayName }}</span>
+                                                    </div>
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Flagged: </b>
+                                                        </label>
+                                                        <span>{{ assignedTaskDdetails.flagged }}</span>
+                                                    </div>
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Flag Level: </b>
+                                                        </label>
+                                                        <span>{{ assignedTaskDdetails.iterationLevel }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card card-default">
+                                            <div class="card-header bg-gray">
+                                                <b>Task Details</b>
+                                            </div>
+                                            <div class="card-block">
+                                                <div>
+                                                    <div class="row">
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(assignedTaskDdetails)">
+                                                            <label>
+                                                                <b>{{ dataPoint.dataPointLabel }}: </b>
+                                                            </label>
+                                                            <input *ngIf="dataPoint.dataType === 'NUMBER'" type="number" class="form-control col-md-12 col-sm-12" [title]="dataPoint.description"
+                                                                [placeholder]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                name="parameters[dataPoint.dataPointName]" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                                                            />
+                                                            <input *ngIf="dataPoint.dataType === 'STRING'" type="text" class="form-control" required [placeholder]="dataPoint.description"
+                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                name="parameters[dataPoint.dataPointName]" />
+                                                            <select *ngIf="dataPoint.dataType === 'BOOLEAN'" class="selectpicker form-control col-md-12 col-sm-12" [title]="dataPoint.description"
+                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                name="parameters[dataPoint.dataPointName]">
+                                                                <option [ngValue]="true">True</option>
+                                                                <option [ngValue]="false">False</option>
+                                                            </select>
+                                                            <select *ngIf="dataPoint.dataType === 'SINGLE_SELECT'" class="selectpicker form-control col-md-12 col-sm-12" [title]="dataPoint.description"
+                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                name="parameters[dataPoint.dataPointName]">
+                                                                <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
+                                                            </select>
+                                                            <select *ngIf="dataPoint.dataType === 'MULTI_SELECT'" multiple="true" class="selectpicker form-control col-md-12 col-sm-12"
+                                                                [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                name="parameters[dataPoint.dataPointName]">
+                                                                <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
+                                                            </select>
+                                                            <tag-input *ngIf="dataPoint.dataType === 'ARRAY'" class="custom-input-tag-border form-control col-md-12 col-sm-12" [title]="dataPoint.description"
+                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                name="parameters[dataPoint.dataPointName]" [modelAsStrings]="true"
+                                                                [editable]="true" [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
+                                                                [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'"
+                                                                theme="minimal">
+                                                            </tag-input>
+                                                        </div>
+                                                    </div>
+                                                    <hr/>
+                                                    <div class="row">
+                                                        <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(assignedTaskDdetails)">
+                                                            <label>
+                                                                <b>{{ dataPoint.dataPointLabel }}: </b>
+                                                            </label>
+                                                            <div class="row">
+                                                                <table class="table table-striped">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, assignedTaskDdetails)">{{ dp.dataPointLabel }}</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let value of getValueForArraydatatype(dataPoint, assignedTaskDdetails)">
+                                                                            <td *ngFor="let v of value">{{ v }}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div *ngIf="assignedTaskDdetails === null" style="text-align: center;">
+                            <div>
+                                <b>No records found</b>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div role="tabpanel" class="tab-pane fade" id="tab_unassigned">
+                        <div class="row" *ngIf="unassignedTaskDdetails != null" style="width: 100%;">
+                            <div class="col col-lg-3 col-md-3 col-sm-3">
+                                <div class="card card-default with-scroll">
+                                    <div class="card-header">
+                                        <b>Tasks</b>
+                                    </div>
+                                    <div class="card-block">
+                                        <table [mfData]="unassignedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords">
+                                            <tr *ngFor="let unasgnState of mf.data; let index=index;" (click)="onPersonalUnAssignedSubjectSelect(unasgnState)">
+                                                <div [class]="unassignedStateTabclass[unasgnState._id]" id="defaultOpen">
+
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label>{{unasgnState.machineLabel}}</label>
+                                                        </div>
+                                                        <div class="col">
+                                                            {{ unasgnState.startTimeLong | amDateFormat: 'DD/MM hh:mm A' }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label>{{ unasgnState.businessKey}}</label>
+                                                        </div>
+                                                        <div class="col">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </tr>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <mfBootstrapPaginator></mfBootstrapPaginator>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-outline-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
+                                    *ngIf="unassignedStates.length != 0" (click)="loadMore('ACTIVE','Group')">Load More
+                                </button>
+                            </div>
+                            <div class="col col-lg-9 col-md-9 col-sm-9">
+                                <div class="card card-default">
+                                    <div class="card-header bg-gray">
+                                        <b> Viewing details for-{{ unassignedTaskDdetails.businessKey}}</b>
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="card card-default">
+                                            <div class="card-block">
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <button [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]" *ngIf="unassignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && users.length > 0"
+                                                            type="button" data-toggle="modal" data-target="#unassginedUserModal"
+                                                            class="btn btn-outline-info btn-with-icon">
+                                                            <i class="ion-person-add"></i>Allocate Team</button>
+                                                        <button [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]" *ngIf="unassignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && unassignedTaskDdetails.assignedUserGroupCd !== 'Personal' "
+                                                            type="button" (click)="reserveUnassignedTask(unassignedTaskDdetails)"
+                                                            class="btn btn-outline-info btn-with-icon">
+                                                            <i class="ion-archive"></i>Reserve Task</button>
+                                                        <button type="button" class="btn btn-outline-primary pull-right" title="Show Details" (click)="onSelect(unassignedTaskDdetails)">
+                                                            <i class="ion-eye"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card card-default">
+                                            <div class="card-header bg-gray">
+                                                <b>Task Header</b>
+                                            </div>
+                                            <div class="card-block">
+                                                <div class="row">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Process: </b>
+                                                        </label>
+                                                        <span>{{ unassignedTaskDdetails.machineLabel }}</span>
+                                                    </div>
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Version: </b>
+                                                        </label>
+                                                        <span>{{ getGraphObject(unassignedTaskDdetails.stateMachineInstanceModelId).version
+                                                            }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Task: </b>
+                                                        </label>
+                                                        <span>{{ unassignedTaskDdetails.stateCd }}</span>
+                                                    </div>
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Status: </b>
+                                                        </label>
+                                                        <span>{{ unassignedTaskDdetails.statusCd }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Start Time: </b>
+                                                        </label>
+                                                        <span>{{ unassignedTaskDdetails.startTimeLong | amDateFormat: 'DD/MM/YYYY
+                                                            hh:mm A' }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>End Time: </b>
+                                                        </label>
+                                                        <span>{{ unassignedTaskDdetails.endTimeLong | amDateFormat: 'DD/MM/YYYY
+                                                            hh:mm A' }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Assigned Group: </b>
+                                                        </label>
+                                                        <span>{{ unassignedTaskDdetails.assignedUserGroupCd }}</span>
+                                                    </div>
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Assigned To: </b>
+                                                        </label>
+                                                        <span>{{ unassignedTaskDdetails.assignedUserDisplayName }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Flagged: </b>
+                                                        </label>
+                                                        <span>{{ unassignedTaskDdetails.flagged }}</span>
+                                                    </div>
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Flag Level: </b>
+                                                        </label>
+                                                        <span>{{ unassignedTaskDdetails.iterationLevel }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card card-default">
+                                            <div class="card-header bg-gray">
+                                                <b>Task Details</b>
+                                            </div>
+                                            <div class="card-block">
+                                                <div class="row">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(unassignedTaskDdetails)">
+                                                        <label>
+                                                            <b>{{ dataPoint.dataPointLabel }}: </b>
+                                                        </label>
+                                                        <span>{{ unassignedTaskDdetails['parameters'][dataPoint.dataPointName]
+                                                            }}
+                                                        </span>
+
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(unassignedTaskDdetails)">
+                                                        <label>
+                                                            <b>{{ dataPoint.dataPointLabel }}: </b>
+                                                        </label>
+                                                        <div class="row">
+                                                            <table class="table table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, unassignedTaskDdetails)">{{ dp.dataPointLabel }}</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let value of getValueForArraydatatype(dataPoint, unassignedTaskDdetails)">
+                                                                        <td *ngFor="let v of value">{{ v }}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="unassignedTaskDdetails === null" style="text-align: center;">
+                            <div>
+                                <b>No records found</b>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div role="tabpanel" class="tab-pane fade" id="tab_flagged">
+                        <div class="row" *ngIf="flaggedTaskDdetails != null" style="width: 100%;">
+                            <div class="col col-lg-3 col-md-3 col-sm-3">
+                                <div class="card card-default with-scroll">
+                                    <div class="card-header">
+                                        <b>Tasks</b>
+                                    </div>
+                                    <div class="card-block">
+                                        <table [mfData]="flaggedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords">
+                                            <tr *ngFor="let flgState of mf.data; let index=index;" (click)="onFlaggedSubjectSelect(flgState)">
+                                                <div [class]="flaggedStateTabclass[flgState._id]">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label>{{flgState.machineLabel}}</label>
+                                                        </div>
+                                                        <div class="col">
+                                                            {{ flgState.startTimeLong | amDateFormat: 'DD/MM hh:mm A' }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label>{{ flgState.businessKey}}</label>
+                                                        </div>
+                                                        <div class="col">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </tr>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <mfBootstrapPaginator></mfBootstrapPaginator>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-outline-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
+                                    *ngIf="flaggedStates.length != 0" (click)="loadMore('FLAGGED','Personal')">Load More
+                                </button>
+                            </div>
+                            <div class="col col-lg-9 col-md-9 col-sm-9">
+                                <div class="card card-default">
+                                    <div class="card-header bg-gray">
+                                        <b> Viewing details for-{{ flaggedTaskDdetails.businessKey}}</b>
+                                    </div>
+                                    <div class="card-block">
+                                        <div class="card card-default">
+                                            <div class="card-block">
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <button type="button" class="btn btn-outline-primary pull-right" title="Show Details" (click)="onSelect(flaggedTaskDdetails)">
+                                                            <i class="ion-eye"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card card-default">
+                                            <div class="card-header bg-gray">
+                                                <b>Task Header</b>
+                                            </div>
+                                            <div class="card-block">
+                                                <div class="row">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Process: </b>
+                                                        </label>
+                                                        <span>{{ flaggedTaskDdetails.machineLabel }}</span>
+                                                    </div>
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Version: </b>
+                                                        </label>
+                                                        <span>{{ getGraphObject(flaggedTaskDdetails.stateMachineInstanceModelId).version
+                                                            }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Task: </b>
+                                                        </label>
+                                                        <span>{{ flaggedTaskDdetails.stateCd }}</span>
+                                                    </div>
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Status: </b>
+                                                        </label>
+                                                        <span>{{ flaggedTaskDdetails.statusCd }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Start Time: </b>
+                                                        </label>
+                                                        <span>{{ flaggedTaskDdetails.startTimeLong | amDateFormat: 'DD/MM/YYYY
+                                                            hh:mm A' }}</span>
+                                                    </div>
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>End Time: </b>
+                                                        </label>
+                                                        <span>{{ flaggedTaskDdetails.endTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm
+                                                            A' }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Assigned Group: </b>
+                                                        </label>
+                                                        <span>{{ flaggedTaskDdetails.assignedUserGroupCd }}</span>
+                                                    </div>
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Assigned To: </b>
+                                                        </label>
+                                                        <span>{{ flaggedTaskDdetails.assignedUserDisplayName }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Flagged: </b>
+                                                        </label>
+                                                        <span>{{ flaggedTaskDdetails.flagged }}</span>
+                                                    </div>
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                        <label>
+                                                            <b>Flag Level: </b>
+                                                        </label>
+                                                        <span>{{ flaggedTaskDdetails.iterationLevel }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card card-default">
+                                            <div class="card-header bg-gray">
+                                                <b>Task Details</b>
+                                            </div>
+                                            <div class="card-block">
+                                                <div class="row">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(flaggedTaskDdetails)">
+                                                        <label>
+                                                            <b>{{ dataPoint.dataPointLabel }}: </b>
+                                                        </label>
+                                                        <span>{{ flaggedTaskDdetails['parameters'][dataPoint.dataPointName] }}
+                                                        </span>
+
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(flaggedTaskDdetails)">
+                                                        <label>
+                                                            <b>{{ dataPoint.dataPointLabel }}: </b>
+                                                        </label>
+                                                        <div class="row">
+                                                            <table class="table table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, flaggedTaskDdetails)">{{ dp.dataPointLabel }}</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let value of getValueForArraydatatype(dataPoint, flaggedTaskDdetails)">
+                                                                        <td *ngFor="let v of value">{{ v }}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="flaggedTaskDdetails === null" style="text-align: center;">
+                            <div>
+                                <b>No records found</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ba-card>
     </div>
-  </div>
 </div>
-<div class="modal fade" id="successModalPersonal" tabindex="-1" role="dialog" attr.aria-labelledby="successModalPersonal" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="successModalPersonal">
-          Success
-        </h4>
-        <button type="button" class="close" data-dismiss="modal" (click)="refresh()">
-          <span aria-hidden="true">&times;</span>
-          <span class="sr-only">Close</span>
-        </button>
-      </div>
-      <div class="modal-body" id="modal_body">
-        Task Flagged successfully.
-      </div>
-      <div class="modal-footer" id="modal_footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="refresh()">Ok</button>
-      </div>
+
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" attr.aria-labelledby="successModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="successModal">
+                    Success
+                </h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal_body">
+                Task completed successfully.
+            </div>
+            <div class="modal-footer" id="modal_footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" (click)="onBack()">Ok</button>
+            </div>
+        </div>
     </div>
-  </div>
+</div>
+
+<div class="modal fade" id="assginedUserModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="userModalLabel">
+                    Allocate Task
+                </h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal_body">
+                <form>
+                    <div class="form-group">
+                        <label for="selectUser">Select team member</label>
+                        <select class="selectpicker form-control" required id="selectUser" title="Choose User" [ngModel]="tempUser" [ngModelOptions]="{standalone: true}"
+                            (ngModelChange)="onUserSelectAssignedTask($event)">
+                            <option *ngFor="let user of users" [ngValue]="user">{{user.userName}}</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="modal_footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="allocateAssignedTask()">Allocate</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="unassginedUserModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="userModalLabel">
+                    Allocate Task
+                </h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal_body">
+                <form>
+                    <div class="form-group">
+                        <label for="selectUser">Select team member</label>
+                        <select class="selectpicker form-control" required id="selectUser" title="Choose User" [ngModel]="tempUser" [ngModelOptions]="{standalone: true}"
+                            (ngModelChange)="onUserSelectUnAssignedTask($event)">
+                            <option *ngFor="let user of users" [ngValue]="user">{{user.userName}}</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="modal_footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="allocateUnAssignedTask()">Allocate</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="assignedTaskflagModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagmodalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="userModalLabel">
+                    Flag Reason
+                </h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal_body">
+                <form>
+                    <div class="form-group" *ngIf="assignedTaskDdetails">
+                        <label for="selectReason">Select Reason</label>
+                        <select class="selectpicker form-control" required id="selectReason" title="Choose Flag Reason" [(ngModel)]="assignedTaskDdetails.flagReason"
+                            [ngModelOptions]="{standalone: true}" (ngModelChange)="onReasonSelectAssignedTask($event)">
+                            <option *ngFor="let flagReason of FlagReasons" [value]="flagReason">{{flagReason}}</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="modal_footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" (click)="assignedTaskFlagClose()">Close</button>
+                <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="assignedTaskConfirmFlag()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="assignedTaskflagSuccessModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagSuccessModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="flagSuccessModal">
+                    Success
+                </h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal_body">
+                Task Flagged successfully.
+            </div>
+            <div class="modal-footer" id="modal_footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" (click)="onBack()">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="archiveTaskWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="archiveWarningLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="finalWarningLabel">
+                    Warning
+                </h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal_body">
+                Your changes won't apply. The Task will be archived and the associated process will be closed.
+            </div>
+            <div class="modal-footer" id="modal_footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger" data-dismiss="modal" (click)="archiveAssignedTask()">Archive</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="assignedTaskArchiveSuccessModal" tabindex="-1" role="dialog" attr.aria-labelledby="assignedTaskArchiveSuccessLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="flagSuccessModal">
+                    Success
+                </h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal_body">
+                Task Archived successfully.
+            </div>
+            <div class="modal-footer" id="modal_footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" (click)="onBack()">Ok</button>
+            </div>
+        </div>
+    </div>
 </div>

@@ -23,7 +23,7 @@ export const environment = {
 
   // Flow
   server: 'http://localhost:8080/flow/console/',
-  autourl:'http://localhost:5002/?',
+  autourl:'http://localhost:4200/#/pg/ch/cnv/',
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
   orPayloadMachineType:'state/saveOrPayload/machineType/',

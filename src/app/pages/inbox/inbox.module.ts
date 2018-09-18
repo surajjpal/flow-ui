@@ -13,10 +13,9 @@ import { AngularSplitModule } from 'angular-split';
 import { ActiveComponent } from './components/active/active.component';
 import { ArchivedComponent } from './components/archived/archived.component';
 import { ArchiveMasterComponent } from './components/archivedmaster/archivedmaster.component'
-import { PersonalMasterComponent } from './components/personalmaster/personalmaster.component'
+import { PersonalComponent } from './components/personal/personal.component'
 import { TaskDetailsComponent } from './components/taskDetails/taskDetails.component';
 import { TeamViewComponent} from './components/teamView/teamView.component';
-import { PersonalComponent} from './components/personal/personal.component';
 import { DashboardComponent} from './components/dashboard/dashboard.component';
 import { ApiTableModule } from './components/api_table/apitable.module';
 import { DateRangePickerComponent } from './components/dashboard/daterangepicker/daterangepicker.component';
@@ -44,10 +43,9 @@ import * as moment from 'moment/moment';
     ActiveComponent,
     ArchivedComponent,
     ArchiveMasterComponent,
-    PersonalMasterComponent,
+    PersonalComponent,
     TaskDetailsComponent,
     TeamViewComponent,
-    PersonalComponent,
     DateRangePickerComponent,
     DashboardComponent
     
