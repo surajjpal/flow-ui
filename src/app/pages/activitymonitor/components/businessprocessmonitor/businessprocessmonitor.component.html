@@ -19,7 +19,7 @@
             <label for="selectmachinetype">Process</label>
             <select (change)="onMachineTypeSelect()" class="form-control" required id="selectmachinetype" title="Choose Process" [(ngModel)]="businessProcessMonitorRequest.machineType"
                 name="machineType">
-                <option *ngFor="let graphObj of graphObjects" [ngValue]="graphObj.machineType">{{ graphObj.machineLabel}}
+                <option *ngFor="let graphObj of graphObjectFilterByMachineTypes" [ngValue]="graphObj.machineType">{{ graphObj.machineLabel}}
                 </option>
             </select>
         </div>
@@ -52,8 +52,8 @@
     </div>
 </ba-card>
 <ba-card cardTitle="Summary">
-    <div class="row tile_count" *ngFor="let outIndex of noOfPercentagedivArray">
-        <div *ngFor="let data of getBusinessProcessPercentageChange(outIndex)" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
+    <div class="row tile_count">
+        <div *ngFor="let data of businessProcessMonitorCountPercentageChange" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-user"></i> {{ data.dataPointLabel }}</span>
             <div class="count">{{ data.count }}</div>
             <span *ngIf="data.percentageChange >= 0" class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>{{
