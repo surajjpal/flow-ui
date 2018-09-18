@@ -205,9 +205,10 @@ export class Response {
   settings: Settings;
   selectionExpression: string;
   uploadDocument: {};
+  contextExpression: string;
 
   constructor(expression?: string, lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
-      options?: ResponseData[], settings?: Settings, selectionExpression?: string) {
+      options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string) {
     this.level = 1;
 
     this.expression = expression ? expression : '';
@@ -221,6 +222,7 @@ export class Response {
     this.settings = settings ? settings : new Settings();
     this.selectionExpression = selectionExpression ? selectionExpression : '';
     this.uploadDocument = {};
+    this.contextExpression = contextExpression ? contextExpression : '';
   }
 }
 
