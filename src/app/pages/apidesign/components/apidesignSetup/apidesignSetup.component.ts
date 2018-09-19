@@ -86,14 +86,17 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     if (businessObject) {
       this.selectedBusinessObject = businessObject;
       this.apiDesignCreateMode = false;
-      this.apiEndPoint = "/automatons/businessobject/predict/" + this.selectedBusinessObject.code
+      this.apiEndPoint = `${environment.interfaceService + "/automatons/businessobject/predict/" + this.selectedBusinessObject.code}`;
       if (this.selectedBusinessObject.training) {
         const requestData = {};
         for(let train of this.selectedBusinessObject.training) {
           if (train.status == "ACTIVE") {
-            requestData["testData"] = {};
+            requestData["payload"] = [];
+            let data = {}
             for (let inputLabel of  train.inputLabels) {
-              requestData["testData"][inputLabel] = [ "<" + inputLabel +"_value>1", "<" + inputLabel +"_value>2" ]
+              data[inputLabel] = "<" + inputLabel +"_value>";
+            requestData["payload"] = requestData["payload"].concat(data);
+              //requestData["testData"][inputLabel] = [ "<" + inputLabel +"_value>1", "<" + inputLabel +"_value>2" ]
             }
             
           }
@@ -366,7 +369,7 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
       const requestData = JSON.parse(this.testRequestData);
       console.log("requesteddata");
       console.log(requestData);
-      if (requestData["testData"]) {
+      if (requestData["payload"]) {
         this.apiDesignService.predictRequestData(this.selectedBusinessObject, requestData)
           .subscribe(
             response => {
