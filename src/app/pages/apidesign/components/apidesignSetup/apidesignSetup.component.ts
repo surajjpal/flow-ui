@@ -42,6 +42,9 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     
     supportedAlgorithmCategory = ["CLASSIFIER", "REGRESSION"];
 
+    testRequestData: string = "";
+    testRequestdataResult = null;
+
     constructor(
           private apiDesignService: ApiDesignService,
           private router: Router,
@@ -83,7 +86,23 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     if (businessObject) {
       this.selectedBusinessObject = businessObject;
       this.apiDesignCreateMode = false;
-      this.apiEndPoint = "/automatons/businessobject/predict/" + this.selectedBusinessObject.code
+      this.apiEndPoint = `${environment.interfaceService + "/automatons/businessobject/predict/" + this.selectedBusinessObject.code}`;
+      if (this.selectedBusinessObject.training) {
+        const requestData = {};
+        for(let train of this.selectedBusinessObject.training) {
+          if (train.status == "ACTIVE") {
+            requestData["payload"] = [];
+            let data = {}
+            for (let inputLabel of  train.inputLabels) {
+              data[inputLabel] = "<" + inputLabel +"_value>";
+            requestData["payload"] = requestData["payload"].concat(data);
+              //requestData["testData"][inputLabel] = [ "<" + inputLabel +"_value>1", "<" + inputLabel +"_value>2" ]
+            }
+            
+          }
+        }
+        this.testRequestData = JSON.stringify(requestData, undefined, 4);
+      }
     }
     else {
       this.selectedBusinessObject = new BusinessObject();
@@ -121,6 +140,7 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
         //   }
         // })
       }
+      
     }
     else{
       this.algorithmsModalHeader = 'Add Algorithm';
@@ -342,5 +362,26 @@ export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     var maxVersion = Math.max.apply(Math, versions);
     version = "v" + String(maxVersion + 1);
     return version;
+  }
+
+  testPredictRequestData() {
+    if (this.testRequestData) {
+      const requestData = JSON.parse(this.testRequestData);
+      console.log("requesteddata");
+      console.log(requestData);
+      if (requestData["payload"]) {
+        this.apiDesignService.predictRequestData(this.selectedBusinessObject, requestData)
+          .subscribe(
+            response => {
+              console.log(response);
+              this.testRequestdataResult = response;
+            },
+            error => {
+              console.log(error);
+              new showAlertModal("Error", error["error"]["message"]);
+            }
+          )
+      }
+    }
   }
 }
