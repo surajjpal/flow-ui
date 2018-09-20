@@ -406,6 +406,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
               if (!response.options || response.options === null) {
                 response.options = [];
               }
+              
+              if (!response.contextExpression || response.contextExpression === null) {
+                response.contextExpression = '';
+              }
 
               for (const option of response.options) {
                 if (!option.type || option.type === null) {
