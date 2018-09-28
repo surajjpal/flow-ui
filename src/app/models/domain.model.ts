@@ -63,7 +63,7 @@ export class GoalStep {
 }
 
 export class Goal {
-  expression: string;
+  expression: any;
   goalName: string;
   domainGoalSteps: GoalStep[];
   model: any;
@@ -79,7 +79,7 @@ export class Goal {
   dependentGoalExpression: string;
 
   constructor() {
-    this.expression = '';
+    this.expression = [];
     this.goalName = '';
     this.domainGoalSteps = [];
     this.model = {};
@@ -147,6 +147,7 @@ export class CardData {
   imageUrl: string;
   content: string;
   actionable: ResponseData[];
+  document: {};
   
   constructor(cardName?: string, templateName?: string, title?: string, subTitle?: string, avatarImageUrl?: string, imageUrl?: string, content?: string, actionable?: ResponseData[]) {
     this.cardName = cardName ? cardName : '';
@@ -157,6 +158,7 @@ export class CardData {
     this.imageUrl = imageUrl ? imageUrl : '';
     this.content = content ? content : '';
     this.actionable = actionable ? actionable : [];
+    this.document = {};
   }
 }
 
@@ -196,7 +198,7 @@ export class Response {
   sequence: number;
   level: number;
   actionHTML: string;
-  expression: string;
+  expression: any;
   lang: string;
   response: string;
   stage: string;
@@ -207,11 +209,11 @@ export class Response {
   uploadDocument: {};
   contextExpression: string;
 
-  constructor(expression?: string, lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
+  constructor(expression?: string[], lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
       options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string) {
     this.level = 1;
 
-    this.expression = expression ? expression : '';
+    this.expression = expression ? expression : [];
     this.lang = lang ? lang : '';
     this.response = response ? response : '';
     this.actionHTML = actionHTML ? actionHTML : '';

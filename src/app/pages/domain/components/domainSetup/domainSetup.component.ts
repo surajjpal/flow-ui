@@ -53,6 +53,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   domainBody: string;
   domainSucess: boolean;
   operandSource: string[];
+  bulkExpressions: string;
 
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
@@ -241,15 +242,19 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.createMode = false;
       this.selectedGoal = goal;
       this.tempGoal = JSON.parse(JSON.stringify(this.selectedGoal));
+      this.populateBulkExpressions(this.tempGoal.expression);
     } else {
       this.modalHeader = 'Create Goal';
       this.createMode = true;
       this.selectedGoal = null;
       this.tempGoal = new Goal();
+      this.populateBulkExpressions(this.tempGoal.expression);
     }
   }
 
   addGoal() {
+    this.tempGoal.expression = this.readBulkExpressions();
+
     let error = this.isInvalidGoalSteps(this.tempGoal.domainGoalSteps);
     if (error) {
       new showAlertModal('Error', error);
@@ -271,7 +276,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
           if (goalStep.responses) {
             for (const goalStepResponse of goalStep.responses) {
-              goalStepResponse.expression = goalStep.goalExpression;
+              goalStepResponse.expression = [goalStep.goalExpression];
             }
           }
         }
@@ -308,7 +313,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           for (const response of goalStep.responses) {
             if (response) {
               if (!response.stage || response.stage.trim().length === 0) {
-                errorExpressionList.push(response.expression);
+                errorExpressionList.push(response.expression != null && response.expression.length > 0 ? response.expression[0] : response.response);
               }
             }
           }
@@ -372,6 +377,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         const responsesToBeRemoved: Response[] = [];
 
         for (const goal of this.selectedDomain.domainGoals) {
+          if (goal.expression && (typeof goal.expression === 'string' || goal.expression instanceof String)) {
+            goal.expression = [goal.expression];
+          }
+
           goal.domainGoalSteps = goal.domainGoalSteps.sort((gs1, gs2) => {
             if (gs1.sequence > gs2.sequence) {
               return 1;
@@ -411,6 +420,14 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
                 response.contextExpression = '';
               }
 
+              if (response.expression && (typeof response.expression === 'string' || response.expression instanceof String)) {
+                response.expression = [response.expression];
+              }
+
+              if (!response.uploadDocument || response.uploadDocument === null) {
+                response.uploadDocument = {};
+              }
+
               for (const option of response.options) {
                 if (!option.type || option.type === null) {
                   option.type = '';
@@ -441,7 +458,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
                 }
               }
 
-              if (response.expression === goalStep.goalExpression) {
+              if (response.expression && response.expression.length === 1 && response.expression[0] && goalStep.goalExpression && response.expression[0].trim().toLowerCase() === goalStep.goalExpression.trim().toLowerCase()) {
                 responsesToBeRemoved.push(response);
                 goalStep.responses.push(response);
               }
@@ -505,11 +522,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       if (this.tempResponse.uploadDocument) {
         this.isAddFileUploadResponse = true;
       }
+      this.populateBulkExpressions(this.tempResponse.expression);
     } else {
       this.modalHeader = 'Create Response';
       this.createMode = true;
       this.selectedResponse = null;
       this.tempResponse = new Response();
+      this.populateBulkExpressions(this.tempResponse.expression);
     }
   }
 
@@ -536,6 +555,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     if (response) {
       this.selectedDomain.domainResponse.push(response);
     } else if (this.selectedResponse) {
+      this.tempResponse.expression = this.readBulkExpressions();
+
       if (!this.tempResponse.stage || this.tempResponse.stage.trim().length === 0) {
         new showAlertModal('Error', 'Stage can\'t be left empty.');
       } else {
@@ -854,5 +875,29 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   // Being used by for loop in html to keep track of a string in array of strings
   customTrackBy(index: number, obj: any): any {
     return index;
+  }
+
+  populateBulkExpressions(expressions) {
+    this.bulkExpressions = '';
+    if (expressions) {
+      for (const exp of expressions) {
+        if (exp) {
+          if (this.bulkExpressions.length > 0) {
+            this.bulkExpressions = this.bulkExpressions + '\n' + exp;
+          } else {
+            this.bulkExpressions = exp;
+          }
+        }
+      }
+    }
+  }
+
+  readBulkExpressions() {
+    let expressions = [];
+    if (this.bulkExpressions && this.bulkExpressions.trim().length > 0) {
+      expressions = this.bulkExpressions.split("\n");
+    }
+    this.bulkExpressions = '';
+    return expressions;
   }
 }
