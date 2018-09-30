@@ -8,6 +8,12 @@ echo "--------- Trigering Build -------------------------------------"
 # AOT Compilation
 ng build --env=demo --aot --build-optimizer --base-href / --deploy-url /
 
+echo "-------Compressing ---------"
+./compress.sh
+echo "---------------------------------------------------------------"
+echo ""
+
+
 echo "---------------------------------------------------------------"
 echo "--------- Creating zip ----------------------------------------"
 
