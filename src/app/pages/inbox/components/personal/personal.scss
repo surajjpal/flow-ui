@@ -47,6 +47,7 @@
     
 }
 
+/* Style for master detail list card start */
 .block {
     display: block;
     width: 100%;
@@ -65,6 +66,7 @@
 .block:hover {
     background-color: #C8E1F7;
 }
+/* Style for master detail list card end */
 
 :host /deep/ .widgets {
     .data-table-container {

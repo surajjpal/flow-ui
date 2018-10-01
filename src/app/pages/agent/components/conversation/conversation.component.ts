@@ -23,7 +23,6 @@ export class ConversationComponent implements OnInit, OnDestroy {
   constructor(
     private conversationService: ConversationService
   ) {
-    this.filterQuery = '';
     this.searchQuery = '';
     this.loading = false;
     this.episodeList = [];
@@ -32,7 +31,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
   
   ngOnInit() {
-    this.onTextChange(this.searchQuery);
+    
   }
   
   ngOnDestroy(): void {
@@ -41,30 +40,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
     }
   }
 
-  filterQuery: string;
-  onTextChange(searchQuery: string) {
-    if (!searchQuery && searchQuery.length <= 0) {
-      return;
-    }
-    
-    this.searchQuery = searchQuery;
-    this.loading = true;
-
-    this.subscription = this.conversationService.search(searchQuery)
-      .subscribe(
-        episodeList => {
-          this.loading = false;
-          if (episodeList) {
-            this.episodeList = episodeList;
-          }
-        },
-        error => {
-          this.loading = false;
-        }
-      );
-  }
-
-  onSelect(selectedEpisode: Episode): void {
+  onEpisodeSelect(selectedEpisode: Episode): void {
     this.selectedEpisode = selectedEpisode;
     this.chatMessageList = [];
 
@@ -77,6 +53,14 @@ export class ConversationComponent implements OnInit, OnDestroy {
           }
         }
       );
+  }
+
+  loadMore() {
+
+  }
+
+  getClassIfEpisodeSelected(episode: Episode) {
+    return episode && this.selectedEpisode && episode === this.selectedEpisode ? "active" : "";
   }
 
   arrayToString(array: string[]) {

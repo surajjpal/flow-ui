@@ -455,35 +455,6 @@ export class ConversationService {
 
   constructor(private httpClient: HttpClient) { }
 
-  search(searchQuery: string): Observable<Episode[]> {
-    const subject = new Subject<Episode[]>();
-
-    const url = `${environment.autoServer + environment.episodelisturl + searchQuery}`;
-
-    this.httpClient.get<Episode[]>(
-      url,
-      {
-        observe: 'response',
-        reportProgress: true,
-        withCredentials: true
-      }
-    ).subscribe(
-      (response: HttpResponse<Episode[]>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
-
-        subject.error(err);
-      }
-      );
-
-    return subject.asObservable();
-  }
-
   getChat(episodeId: string): Observable<ChatMessage[]> {
     const subject = new Subject<ChatMessage[]>();
 
@@ -557,6 +528,57 @@ export class ConversationService {
       }
     ).subscribe(
       (response: HttpResponse<Episode>) => {
+        if (response.body) {
+          subject.next(response.body['data']);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+  getAllEpisode(statusCd?: string): Observable<Episode> {
+    const subject = new Subject<Episode>();
+
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+    
+    if (statusCd && statusCd != null && statusCd.trim().length > 0) {
+      crudInput.payload = {
+        'statusCd': statusCd,
+        'episodeContext': {
+          'missedExpressionCount': { '$gte': 2 }
+        }
+      };
+    } else {
+      crudInput.payload = {};
+    }
+
+    crudInput.fields = {
+      '_id': 1,
+      'episodeContext.missedExpressionCount': 1,
+      'modifiedTime': 1
+    };
+    crudInput.collection = 'episode';
+    crudInput.operation = "READ_ALL";
+
+    this.httpClient.post<Episode[]>(
+      crudUrl,
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
         if (response.body) {
           subject.next(response.body['data']);
         }
