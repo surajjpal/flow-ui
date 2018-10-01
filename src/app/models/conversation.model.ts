@@ -63,6 +63,7 @@ export class EpisodeContext {
   lastAutoMessageId: string;
   userMessageCount: number;
   autoMessageCount: number;
+  missedExpressionCount: number;
 }
 
 export class Episode {
@@ -92,6 +93,8 @@ export class Episode {
   currentGoalStep: EpisodeGoalStep;
   episodeContext: EpisodeContext;
   flowTriggered: boolean;
+  alreadyBargedIn: boolean;
+  bargedInAgentId: string;
 }
 
 export class Phrase {
