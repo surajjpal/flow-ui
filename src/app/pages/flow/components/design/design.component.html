@@ -56,6 +56,10 @@
               <option *ngFor="let stateType of sourceStateTypes" [value]="stateType">{{stateType}}</option>
             </select>
           </div>
+          <div class="form-group">
+            <label for="reportFlag">Reporting State</label>
+            <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="tempState.reportFlag" [label]="'Report Flag'" (event)="tempState.reportFlag = $event.target.checked"></api-checkbox>
+          </div>
           <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'">
             <label for="selectAllocationType">Allocation Type</label>
             <select class="selectpicker form-control" required id="selectAllocationType" title="Choose Allocation Type" [(ngModel)]="tempState.allocationModel.allocationType"
@@ -991,6 +995,7 @@
                       <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.headerFlag" [label]="'Header Flag'" (event)="dataPoint.headerFlag = $event.target.checked"></api-checkbox>
                       <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.businessKeyFlag" [label]="'Business Key Flag'" (event)="dataPoint.businessKeyFlag = $event.target.checked"></api-checkbox>
                       <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.businessMonitorKey" [label]="'Business Monitor Flag'" (event)="dataPoint.businessMonitorKey = $event.target.checked"></api-checkbox>
+                      <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.reportDataKey" [label]="'Report Flag'" (event)="dataPoint.reportDataKey = $event.target.checked"></api-checkbox>
                       <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.percentageChange" [label]="'Percentage Change'" (event)="dataPoint.percentageChange = $event.target.checked"></api-checkbox>
                       
                     </div>
@@ -1157,6 +1162,7 @@
                       <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.businessKeyFlag" [label]="'Business Key Flag'" (event)="dataPoint.businessKeyFlag = $event.target.checked"></api-checkbox>
                       <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.businessMonitorKey" [label]="'Business Monitor Flag'" (event)="dataPoint.businessMonitorKey = $event.target.checked"></api-checkbox>
                       <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.percentageChange" [label]="'Percentage Change'" (event)="dataPoint.percentageChange = $event.target.checked"></api-checkbox>
+                      <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="dataPoint.reportDataKey" [label]="'Report Flag'" (event)="dataPoint.reportDataKey = $event.target.checked"></api-checkbox>
                       
                     </div>
                     <div class="form-group" *ngIf="dataPoint.businessMonitorKey">
