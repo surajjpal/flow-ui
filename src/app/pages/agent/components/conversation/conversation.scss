@@ -6,24 +6,3 @@
       }
   }
 }
-
-/* Style for master detail list card start */
-.block {
-    display: block;
-    width: 100%;
-    border: none;
-    padding: 10px 10px;
-    background-color: white;
-    font-size: 14px;
-    text-align: left;
-    outline: none
-}
-
-.block.active {
-    background-color: #cccccc;
-}
-
-.block:hover {
-    background-color: #C8E1F7;
-}
-/* Style for master detail list card end */

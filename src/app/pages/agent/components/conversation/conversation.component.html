@@ -7,65 +7,83 @@
 </div> -->
 
 <div class="row">
-    <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Episode Timeline">
-        <nvd3 [options]="episodeCountOptions" [data]="episodeCountData"></nvd3>
-    </ba-card>
+  <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Episode Timeline">
+    <nvd3 [options]="episodeCountOptions" [data]="episodeCountData"></nvd3>
+  </ba-card>
 </div>
 
-<div class="widgets">
-  <div class="row">
-    <ba-card baCardClass="with-scroll" class="data-table-container">
-      <div class="panel panel-default">
-        <div class="row" *ngIf="episodeList != null" style="width: 100%;">
-          <div class="col col-lg-3 col-md-3 col-sm-3">
-            <div class="card card-default with-scroll">
-              <div class="card-header">
-                <b>Active conversations</b>
-              </div>
-              <div class="card-block">
-                <table class="table table-striped" [mfData]="episodeList" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords">
-                  <tr *ngFor="let episode of mf.data; let index=index;" (click)="onEpisodeSelect(episode)">
-                    <div [class]="getClassIfEpisodeSelected(episode)">
-                      <div class="row">
-                        <div class="col">
-                          <label>{{episode._id}}</label>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col">
-                          {{ episode.modifiedTime | amDateFormat: 'DD/MM hh:mm A' }}
-                        </div>
-                      </div>
-                    </div>
-                  </tr>
-                  <tfoot>
-                    <tr>
-                      <td colspan="5">
-                        <mfBootstrapPaginator></mfBootstrapPaginator>
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
-            </div>
-            <button type="button" class="btn btn-outline-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
-              *ngIf="episodeList.length != 0" (click)="loadMore()">Load More
-            </button>
-          </div>
-          <div class="col col-lg-9 col-md-9 col-sm-9">
-            <div class="card card-default with-scroll">
-              
-            </div>
-          </div>
-
-
-        </div>
-        <div *ngIf="assignedTaskDdetails === null" style="text-align: center;">
-          <div>
-            <b>No records found</b>
-          </div>
-        </div>
+<div class="row">
+  <ba-card class="col-md-6 col-sm-12" cardTitle="Episode Details">
+    <button *ngIf="selectedEpisode" type="button" class="btn btn-primary" [disabled]="hasUserAlreadyBargedIn()" (click)="bargeIn()">Manual Override</button>
+    <button *ngIf="selectedEpisode" type="button" class="btn btn-primary" [disabled]="hasUserAlreadyBargedIn()" (click)="bargeIn()">Disengage</button>
+    <form style="max-height: 400px; overflow:scroll">
+      <div *ngIf="selectedEpisode && selectedEpisode.statusCd" class="form-group">
+        <label>Status</label>
+        <input class="form-control" placeholder="Status" disabled="disabled" value="{{selectedEpisode.statusCd}}" />
       </div>
-    </ba-card>
-  </div>
+      <div *ngIf="selectedEpisode && selectedEpisode.intents && selectedEpisode.intents.length > 0" class="form-group">
+        <label>Intents</label>
+        <select multiple class="form-control" disabled="disabled">
+          <option *ngFor="let intent of selectedEpisode.intents">{{intent}}</option>
+        </select>
+      </div>
+      <div *ngIf="selectedEpisode && selectedEpisode.entities && selectedEpisode.entities.length > 0" class="form-group">
+        <label>Entities</label>
+        <select multiple class="form-control" disabled="disabled">
+          <option *ngFor="let entity of selectedEpisode.entities">{{entity}}</option>
+        </select>
+      </div>
+      <div *ngIf="selectedEpisode && selectedEpisode.mode" class="form-group">
+        <label>Mode</label>
+        <input class="form-control" placeholder="Mode" disabled="disabled" value="{{selectedEpisode.mode}}" />
+      </div>
+      <div *ngIf="selectedEpisode && selectedEpisode.startTime" class="form-group">
+        <label>Start Time</label>
+        <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode.startTime | date: 'dd/MM/y, h:mm:ss a'}}"
+        />
+      </div>
+      <div *ngIf="selectedEpisode && selectedEpisode.endTime" class="form-group">
+        <label>End Time</label>
+        <input class="form-control" placeholder="End Time" disabled="disabled" value="{{selectedEpisode.endTime | date: 'dd/MM/y, h:mm:ss a'}}"
+        />
+      </div>
+      <div *ngIf="selectedEpisode && selectedEpisode.goals && selectedEpisode.goals.length > 0" class="form-group">
+        <label>Goals</label>
+        <select multiple class="form-control" disabled="disabled">
+          <option *ngFor="let goal of selectedEpisode.goals">{{goal.goalName}}</option>
+        </select>
+      </div>
+    </form>
+  </ba-card>
+  <ba-card baCardClass="with-scroll" class="data-table-container col-md-6 col-sm-12" cardTitle="Conversation">
+    <form style="max-height: 400px; overflow:scroll">
+      <thead>
+        <th style="width: 50%"></th>
+        <th style="width: 50%"></th>
+      </thead>
+      <tbody *ngFor="let message of chatMessageList">
+        <tr *ngIf="message.from === 'AUTO'">
+          <td align="right" style="width: 50%">
+            <div class="talk-bubble tri-right round top-left" style="background-color: #E4E4E4">
+              <div class="talktext">
+                <div [innerHTML]="getSafeHTML(message.messageText)"></div>
+              </div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr *ngIf="message.from !== 'AUTO'">
+          <td></td>
+          <td align="left" style="width: 50%">
+            <div class="talk-bubble tri-right round top-right" style="background-color: #B9F1FB">
+              <div class="talktext">
+                <p *ngIf="message.displayText && message.displayText.trim().length > 0">{{message.displayText}}</p>
+                <p *ngIf="!message.displayText || message.displayText.trim().length === 0">{{message.messageText}}</p>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </form>
+  </ba-card>
 </div>

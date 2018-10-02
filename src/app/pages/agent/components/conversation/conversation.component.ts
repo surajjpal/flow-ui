@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { ConversationService } from '../../../../services/agent.service';
 import { Episode, ChatMessage, EpisodeContext } from '../../../../models/conversation.model';
 import { UniversalUser } from '../../../../services/shared.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 declare let d3: any;
 declare let moment: any;
@@ -25,11 +26,13 @@ export class ConversationComponent implements OnInit, OnDestroy {
   episodeCountData;
 
   private subscriptionBargeIn: Subscription;
-  private subscription: Subscription;
+  private subscriptionChatMessages: Subscription;
+  private subscriptionEpisodeDetails: Subscription;
 
   constructor(
     private conversationService: ConversationService,
-    private universalUser: UniversalUser
+    private universalUser: UniversalUser,
+    private sanitizer: DomSanitizer
   ) {
     this.searchQuery = '';
     this.loading = false;
@@ -47,48 +50,15 @@ export class ConversationComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.fetchBargeInEpisode = false;
 
-    if (this.subscription && !this.subscription.closed) {
-      this.subscription.unsubscribe();
+    if (this.subscriptionChatMessages && !this.subscriptionChatMessages.closed) {
+      this.subscriptionChatMessages.unsubscribe();
+    }
+    if (this.subscriptionEpisodeDetails && !this.subscriptionEpisodeDetails.closed) {
+      this.subscriptionEpisodeDetails.unsubscribe();
     }
     if (this.subscriptionBargeIn && !this.subscriptionBargeIn.closed) {
       this.subscriptionBargeIn.unsubscribe();
     }
-  }
-
-  onEpisodeSelect(selectedEpisode: Episode): void {
-    this.selectedEpisode = selectedEpisode;
-    this.chatMessageList = [];
-
-    this.subscription = this.conversationService.getChat(selectedEpisode._id)
-      .subscribe(
-        chatMessageList => {
-          if (chatMessageList) {
-            chatMessageList.reverse();    // To get latest message at bottom of screen
-            this.chatMessageList = chatMessageList;
-          }
-        }
-      );
-  }
-
-  loadMore() {
-
-  }
-
-  getClassIfEpisodeSelected(episode: Episode) {
-    return episode && this.selectedEpisode && episode === this.selectedEpisode ? "active" : "";
-  }
-
-  arrayToString(array: string[]) {
-    let arrayString: string = '';
-    for (let i = 0, len = array.length; i < len; i++) {
-      arrayString += array[i];
-
-      if (i < (len - 1)) {
-        arrayString += ', ';
-      }
-    }
-
-    return arrayString;
   }
 
   getEpisodesApplicableForBargeIn() {
@@ -100,7 +70,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
       this.subscriptionBargeIn.unsubscribe();
     }
 
-    this.subscriptionBargeIn = this.conversationService.getEpisodesForBargeIn(2)
+    this.subscriptionBargeIn = this.conversationService.getEpisodesForBargeIn(1)
       .subscribe(
         episodeList => {
           if (episodeList) {
@@ -123,21 +93,27 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   transformEpisodeIntoGraph() {
-    this.episodeCountData = [];
     const label = 'Episodes needs to be barged in';
     const data = [];
     if (this.episodeList) {
+      let index = 1;
       for (const episode of this.episodeList) {
         const temp = {
           'label': episode._id,
           'value': episode.episodeContext.missedExpressionCount,
-          'episodeId': episode._id
+          'episodeId': episode._id,
+          'index': index
         };
 
         data.push(temp);
+        index++;
 
         if (episode.alreadyBargedIn && episode.bargedInAgentId && episode.alreadyBargedIn === true && episode.bargedInAgentId === this.universalUser.getUser()._id) {
-          this.selectedEpisode = episode;
+          if (!this.selectedEpisode || this.selectedEpisode === null) {
+            this.selectedEpisode = episode;
+            this.showEpisodeDetails(episode._id);
+            this.getChatMessages();
+          }
         }
       }
     }
@@ -154,11 +130,65 @@ export class ConversationComponent implements OnInit, OnDestroy {
     this.episodeCountOptions = {
       chart: {
         type: 'discreteBarChart',
-        height: 450,
+        height: 200,
         margin: {
           top: 20,
           right: 20,
           bottom: 50,
+          left: 55
+        },
+        x: function (d) { return d.index; },
+        y: function (d) { return d.value; },
+        showValues: true,
+        valueFormat: function (d) {
+          return d3.format(',.4f')(d);
+        },
+        color: ((d) => {
+          if (this.selectedEpisode && this.selectedEpisode !== null && d.episodeId === this.selectedEpisode._id) {
+            return 'blue';
+          } else if (d.value > 2) {
+            return 'red';
+          } else if (d.value > 0 && d.value <= 2) {
+            return 'yellow';
+          } else {
+            return 'green';
+          }
+        }),
+        discretebar: {
+          dispatch: {
+            elementClick: ((e) => {
+              console.log("! element Click !");
+              console.log(e);
+              if (!this.selectedEpisode || this.selectedEpisode === null || this.selectedEpisode._id || this.selectedEpisode._id === null || this.selectedEpisode._id !== e.data.episodeId) {
+                this.selectedEpisode = new Episode();
+                this.selectedEpisode._id = e.data.episodeId;
+                this.transformEpisodeIntoGraph();
+                this.showEpisodeDetails(e.data.episodeId);
+                this.getChatMessages();
+              }
+            })
+          }
+        },
+        duration: 500,
+        xAxis: {
+          axisLabel: 'Episode Timeline (Latest to Oldest Episode)',
+        },
+        yAxis: {
+          axisLabel: 'Missed Expession Count',
+          axisLabelDistance: -10
+        }
+      }
+    };
+
+    /*
+    dummy_graph_options = {
+      chart: {
+        type: 'discreteBarChart',
+        height: 600,
+        margin: {
+          top: 20,
+          right: 20,
+          bottom: 200,
           left: 55
         },
         x: function (d) { return d.label; },
@@ -180,15 +210,23 @@ export class ConversationComponent implements OnInit, OnDestroy {
         }),
         discretebar: {
           dispatch: {
-            elementClick: function (e) {
+            elementClick: ((e) => {
               console.log("! element Click !");
-              console.log(e.data);
-            }
+              console.log(e);
+              if (!this.selectedEpisode || this.selectedEpisode === null || this.selectedEpisode._id || this.selectedEpisode._id === null || this.selectedEpisode._id !== e.data.episodeId) {
+                this.selectedEpisode = new Episode();
+                this.selectedEpisode._id = e.data.episodeId;
+                this.transformEpisodeIntoGraph();
+                this.showEpisodeDetails(e.data.episodeId);
+                this.getChatMessages();
+              }
+            })
           }
         },
         duration: 500,
         xAxis: {
-          axisLabel: 'Episode Timeline (Latest to Oldest Episode)'
+          axisLabel: 'Episode Timeline (Latest to Oldest Episode)',
+          rotateLabels: -90
         },
         yAxis: {
           axisLabel: 'Missed Expession Count',
@@ -196,8 +234,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
         }
       }
     };
-
-    /*dummy_graph_data = [
+    dummy_graph_data = [
       {
         key: "Cumulative Return",
         values: [
@@ -235,6 +272,41 @@ export class ConversationComponent implements OnInit, OnDestroy {
           }
         ]
       }
-    ];*/
+    ];
+    */
+  }
+
+  showEpisodeDetails(episodeId: string) {
+    this.subscriptionEpisodeDetails = this.conversationService.getEpisode(episodeId)
+    .subscribe(episode => {
+      if (episode) {
+        this.selectedEpisode = episode;
+        this.getChatMessages();
+      }
+    });
+  }
+
+  getChatMessages() {
+    this.subscriptionChatMessages = this.conversationService.getChat(this.selectedEpisode._id)
+    .subscribe(chatMessages => {
+      if (chatMessages) {
+        this.chatMessageList = chatMessages;
+      }
+    });
+  }
+
+  getSafeHTML(inlineHtml: string) {
+    if (inlineHtml) {
+      return this.sanitizer.bypassSecurityTrustHtml(inlineHtml);
+    }
+    return '';
+  }
+
+  hasUserAlreadyBargedIn() {
+    return false;
+  }
+
+  bargeIn() {
+    
   }
 }
