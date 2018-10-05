@@ -12,7 +12,7 @@ export class BusinessProcessMonitorRequest {
     startTime: Date;
     endTime: Date;
 
-    constructor(machineType?: string, flowStatus?: string, selectedDataPointConfiguration?: DataPoint, dataPointConfigurations?: DataPoint[], machineIds?: string[], startTime?: Date, endTime?: Date) {
+    constructor(machineType?: string, flowStatus?: string,selectedDataPointConfiguration?: DataPoint, dataPointConfigurations?: DataPoint[], machineIds?: string[], startTime?: Date, endTime?: Date) {
         this.machineType = machineType ? machineType : null;
         this.flowStatus = flowStatus ? flowStatus : null;
         this.selectedDataPointConfiguration = selectedDataPointConfiguration ? selectedDataPointConfiguration : null;
@@ -21,6 +21,22 @@ export class BusinessProcessMonitorRequest {
         this.dataPoints = {}
         this.startTime = startTime ? startTime : null;
         this.endTime = endTime ? endTime : null;
+    }
+}
+
+export class OnDemandReportRequest {
+
+    companyId: string;
+    machineType: string;
+    toAddress:string;
+    startDate: Date;
+    endDate: Date;
+
+    constructor(machineType?: string,  toAddress?: string,startDate?: Date, endDate?: Date) {
+        this.machineType = machineType ? machineType : null;
+        this.toAddress = toAddress ? toAddress : "";
+        this.startDate = startDate ? startDate : null;
+        this.endDate = endDate ? endDate : null;
     }
 }
 

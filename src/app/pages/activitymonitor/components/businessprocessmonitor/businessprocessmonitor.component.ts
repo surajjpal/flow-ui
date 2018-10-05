@@ -1,7 +1,7 @@
 import { OnInit, OnDestroy } from "@angular/core/src/metadata/lifecycle_hooks";
 import { Component } from "@angular/core";
 
-import { BusinessProcessMonitorRequest, BusinessProcessMonitorCountPercentageChange, BusinessProcessMonitorGraphData } from '../../../../models/businessprocessmonitor.model'
+import { BusinessProcessMonitorRequest, BusinessProcessMonitorCountPercentageChange, BusinessProcessMonitorGraphData, OnDemandReportRequest } from '../../../../models/businessprocessmonitor.model'
 
 import { ActivityMonitorService } from '../../../../services/activitymonitor.service'
 import { GraphService } from  '../../../../services/flow.service'
@@ -21,6 +21,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
     graphObjects: GraphObject[]
     graphObjectFilterByMachineTypes: GraphObject[];
     businessProcessMonitorRequest: BusinessProcessMonitorRequest;
+    onDemandReportRequest:OnDemandReportRequest;
     businessDataPointConfiguationsForGraph: DataPoint[];
     businessDataPoints: DataPoint[];
     tempBusinessDataPoints: DataPoint[];
@@ -58,6 +59,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
 
     ) {
         this.businessProcessMonitorRequest = new BusinessProcessMonitorRequest();
+        this.onDemandReportRequest = new OnDemandReportRequest();
         this.businessDataPoints = [];
         this.tempBusinessDataPoints = [];
         this.businessDataPointsValues = {};
@@ -136,6 +138,13 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
             this.businessProcessMonitorRequest.endTime = dateTimeRange.end;
         }
         
+    }
+
+    setTimeRangeReport(dateTimeRange) {
+        if (dateTimeRange != null) {
+            this.onDemandReportRequest.startDate = dateTimeRange.start.format('YYYY-MM-DD');
+            this.onDemandReportRequest.endDate = dateTimeRange.end.format('YYYY-MM-DD');
+        }
     }
 
     getBusinessDataPoints(machinetype: string, getResult?: boolean) {
@@ -290,14 +299,20 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         console.log(this.businessProcessMonitorRequest);
         for (let graphDataPoint of this.businessDataPointConfiguationsForGraph) {
             this.businessProcessMonitorRequest.selectedDataPointConfiguration = JSON.parse(JSON.stringify(graphDataPoint));
-            this.getFilterGraphData(graphDataPoint);
+            //this.getFilterGraphData(graphDataPoint);
             
         }
         for (let summaryDataConfig of businessDataPointConfiguationsForSummary) {
             this.businessProcessMonitorRequest.selectedDataPointConfiguration = JSON.parse(JSON.stringify(summaryDataConfig));
-            this.getCountWithPercentage(summaryDataConfig);
+            //this.getCountWithPercentage(summaryDataConfig);
         }
         
+    }
+
+    sendEmail(initiate?: boolean) {
+        console.log("send email filter");
+        console.log(this.onDemandReportRequest);
+        this.sendEmailCSV();
     }
 
     getResult() {
@@ -378,6 +393,23 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                           this.loading=false;  
                         }
                     )
+    }
+
+    sendEmailCSV() {
+        this.activityMonitorService.sendReportCSV(this.onDemandReportRequest)
+                    .subscribe(
+                        response => {
+                            let gdata = response;
+                            if (gdata != null) {
+
+                            }
+                            
+                            this.loading=false; 
+                        },
+                        error => {
+                          this.loading=false;  
+                        }
+                    )   
     }
 
     getFilterGraphData(dataPoint: DataPoint) {
