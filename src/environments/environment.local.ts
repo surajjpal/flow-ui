@@ -151,8 +151,9 @@ export const environment = {
   //Dashboard from interfaces
   dashboardinterface: 'http://localhost:8080/flow/interfaces/dashboard',
 
-  //CRUD API path - To be used in conjunction with interfaceService property
-  crudFunction : '/crud',
+  //Following APIs path - To be used in conjunction with interfaceService property
+  crudFunction: '/crud',
+  sendAgentMessage: '/sendMessage',
 
   // activity monitor services
   businessDataPointValues: 'businessactivitymanagement/datapointvalues',

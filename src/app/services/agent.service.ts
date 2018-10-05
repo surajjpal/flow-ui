@@ -57,8 +57,6 @@ export class AgentService {
   saveAgent(agent: Agent): Observable<any> {
     const subject = new Subject<any>();
 
-    console.log(agent.agentDomain)
-
     if (agent.agentDomain !== null) {
       agent.agentDomain = null;
     }
@@ -90,7 +88,6 @@ export class AgentService {
       (err: HttpErrorResponse) => {
         // All errors are handled in ErrorInterceptor, no further handling required
         // Unless any specific action is to be taken on some error
-        console.log(err);
         subject.error(err);
       }
     );
@@ -548,7 +545,6 @@ export class ConversationService {
   }
 
   getEpisodesForBargeIn(missedExpressionTheshold: number): Observable<Episode[]> {
-    console.log('Episode Barge In Called');
     const subject = new Subject<Episode[]>();
 
     const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
@@ -597,7 +593,9 @@ export class ConversationService {
     crudInput.fields = {
       '_id': 1,
       'episodeContext.missedExpressionCount': 1,
-      'modifiedTime': 1
+      'modifiedTime': 1,
+      'alreadyBargedIn': 1,
+      'bargedInAgentId': 1
     };
     crudInput.collection = 'episode';
     crudInput.operation = "READ_ALL";
@@ -625,6 +623,66 @@ export class ConversationService {
       }
     );
 
+    return subject.asObservable();
+  }
+
+  saveEpisode(episode: Episode): Observable<any> {
+    const subject = new Subject<any>();
+
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = episode;
+    crudInput.collection = 'episode';
+    crudInput.operation = "UPDATE";
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    this.httpClient.post<any>(
+      crudUrl, 
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+        subject.error(err);
+      }
+    );
+    return subject.asObservable();
+  }
+
+  sendAgentMessage(messagePayload: any): Observable<any> {
+    const subject = new Subject<any>();
+
+    const url = `${environment.interfaceService + environment.sendAgentMessage}`;
+    this.httpClient.post<any>(
+      url, 
+      messagePayload,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+        subject.error(err);
+      }
+    );
     return subject.asObservable();
   }
 }

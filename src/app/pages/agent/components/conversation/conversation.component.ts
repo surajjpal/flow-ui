@@ -16,11 +16,14 @@ declare let moment: any;
 })
 export class ConversationComponent implements OnInit, OnDestroy {
   searchQuery: string;
+  agentMessage: string;
   episodeList: Episode[];
   selectedEpisode: Episode;
   chatMessageList: ChatMessage[];
   loading;
   fetchBargeInEpisode: boolean = true;
+  fetchingEpisodeDetails: boolean = false;
+  fetchingEpisodeChat: boolean = false;
 
   episodeCountOptions;
   episodeCountData;
@@ -28,6 +31,8 @@ export class ConversationComponent implements OnInit, OnDestroy {
   private subscriptionBargeIn: Subscription;
   private subscriptionChatMessages: Subscription;
   private subscriptionEpisodeDetails: Subscription;
+  private subscriptionSaveEpisode: Subscription;
+  private subscriptionSendAgentMessage: Subscription;
 
   constructor(
     private conversationService: ConversationService,
@@ -35,9 +40,10 @@ export class ConversationComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer
   ) {
     this.searchQuery = '';
+    this.agentMessage = '';
     this.loading = false;
     this.episodeList = [];
-    this.selectedEpisode = new Episode();
+    this.selectedEpisode = null;
     this.chatMessageList = [];
   }
 
@@ -58,6 +64,12 @@ export class ConversationComponent implements OnInit, OnDestroy {
     }
     if (this.subscriptionBargeIn && !this.subscriptionBargeIn.closed) {
       this.subscriptionBargeIn.unsubscribe();
+    }
+    if (this.subscriptionSaveEpisode && !this.subscriptionSaveEpisode.closed) {
+      this.subscriptionSaveEpisode.unsubscribe();
+    }
+    if (this.subscriptionSendAgentMessage && !this.subscriptionSendAgentMessage.closed) {
+      this.subscriptionSendAgentMessage.unsubscribe();
     }
   }
 
@@ -114,6 +126,11 @@ export class ConversationComponent implements OnInit, OnDestroy {
             this.showEpisodeDetails(episode._id);
             this.getChatMessages();
           }
+        } else {
+          if (this.selectedEpisode && this.selectedEpisode._id && episode && episode._id && this.selectedEpisode._id === episode._id && this.selectedEpisode.alreadyBargedIn && this.selectedEpisode.bargedInAgentId === this.universalUser.getUser()._id) {
+            episode.alreadyBargedIn = this.selectedEpisode.alreadyBargedIn;
+            episode.bargedInAgentId = this.selectedEpisode.bargedInAgentId;
+          }
         }
       }
     }
@@ -160,7 +177,9 @@ export class ConversationComponent implements OnInit, OnDestroy {
               console.log("! element Click !");
               console.log(e);
               if (!this.selectedEpisode || this.selectedEpisode === null || this.selectedEpisode._id || this.selectedEpisode._id === null || this.selectedEpisode._id !== e.data.episodeId) {
-                this.selectedEpisode = new Episode();
+                if (!this.selectedEpisode || this.selectedEpisode === null) {
+                  this.selectedEpisode = new Episode();
+                }
                 this.selectedEpisode._id = e.data.episodeId;
                 this.transformEpisodeIntoGraph();
                 this.showEpisodeDetails(e.data.episodeId);
@@ -277,22 +296,38 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   showEpisodeDetails(episodeId: string) {
+    this.fetchingEpisodeDetails = true;
     this.subscriptionEpisodeDetails = this.conversationService.getEpisode(episodeId)
-    .subscribe(episode => {
-      if (episode) {
-        this.selectedEpisode = episode;
-        this.getChatMessages();
-      }
-    });
+      .subscribe(
+        episode => {
+          if (episode) {
+            this.selectedEpisode = episode;
+          }
+          this.fetchingEpisodeDetails = false;
+        },
+        error => {
+          // Do something with it
+          this.fetchingEpisodeDetails = false;
+        }
+      );
   }
 
   getChatMessages() {
+    this.fetchingEpisodeChat = true;
+
     this.subscriptionChatMessages = this.conversationService.getChat(this.selectedEpisode._id)
-    .subscribe(chatMessages => {
-      if (chatMessages) {
-        this.chatMessageList = chatMessages;
-      }
-    });
+      .subscribe(
+        chatMessages => {
+          if (chatMessages) {
+            this.chatMessageList = chatMessages;
+          }
+          this.fetchingEpisodeChat = false;
+        },
+        error => {
+          // Do something with it
+          this.fetchingEpisodeChat = false;
+        }
+      );
   }
 
   getSafeHTML(inlineHtml: string) {
@@ -302,11 +337,119 @@ export class ConversationComponent implements OnInit, OnDestroy {
     return '';
   }
 
+  requestFocus(divId: string) {
+    if (divId) {
+      setTimeout(() => {
+        const htmlElement = document.getElementById(divId);
+        if (htmlElement) {
+          htmlElement.focus();
+        }
+      }, 10);
+    }
+  }
+
   hasUserAlreadyBargedIn() {
-    return false;
+    let alreadyBargedIn = false;
+
+    for (let episode of this.episodeList) {
+      if (episode && episode._id && episode.alreadyBargedIn) {
+        alreadyBargedIn = true;
+        break;
+      }
+    }
+    return alreadyBargedIn;
+  }
+
+  bargedIntoSelectedEpisode() {
+    return this.hasUserAlreadyBargedIn() && this.selectedEpisode && this.selectedEpisode.bargedInAgentId && this.selectedEpisode.bargedInAgentId === this.universalUser.getUser()._id;
   }
 
   bargeIn() {
-    
+    if (this.selectedEpisode && this.selectedEpisode._id) {
+      const tempEpisode = JSON.parse(JSON.stringify(this.selectedEpisode));
+
+      for (let episode of this.episodeList) {
+        if (episode && episode._id && this.selectedEpisode._id === episode._id) {
+          episode.alreadyBargedIn = true;
+          episode.bargedInAgentId = this.universalUser.getUser()._id;
+          tempEpisode.alreadyBargedIn = true;
+          tempEpisode.bargedInAgentId = this.universalUser.getUser()._id;
+          break;
+        }
+      }
+
+      this.saveEpisode(tempEpisode);
+    }
+  }
+
+  bargeOut() {
+    if (this.selectedEpisode && this.selectedEpisode._id) {
+      const tempEpisode = JSON.parse(JSON.stringify(this.selectedEpisode));
+
+      for (let episode of this.episodeList) {
+        if (episode && episode._id && this.selectedEpisode._id === episode._id) {
+          episode.alreadyBargedIn = false;
+          episode.bargedInAgentId = null;
+          tempEpisode.alreadyBargedIn = false;
+          tempEpisode.bargedInAgentId = null;
+          break;
+        }
+      }
+
+      this.saveEpisode(tempEpisode);
+    }
+  }
+
+  saveEpisode(episode: Episode) {
+    this.fetchBargeInEpisode = false;
+    this.fetchingEpisodeDetails = true;
+    this.fetchingEpisodeChat = true;
+
+    this.subscriptionSaveEpisode = this.conversationService.saveEpisode(episode)
+      .subscribe(
+        episode => {
+          if (episode && episode._id) {
+            this.selectedEpisode = episode;
+          }
+
+          this.fetchBargeInEpisode = true;
+          this.fetchingEpisodeDetails = false;
+          this.fetchingEpisodeChat = false;
+          this.getEpisodesApplicableForBargeIn();
+        },
+        error => {
+          // Do something with it
+          this.fetchBargeInEpisode = true;
+          this.fetchingEpisodeDetails = false;
+          this.fetchingEpisodeChat = false;
+          this.getEpisodesApplicableForBargeIn();
+        }
+      );
+  }
+
+  sendAgentMessage() {
+    if (this.bargedIntoSelectedEpisode()) {
+      const messagePayload = {
+        "agentId": this.selectedEpisode.agentId,
+        "episodeId": this.selectedEpisode._id,
+        "messageText": this.agentMessage,
+        "conversationId": this.selectedEpisode.conversationId,
+        "from_user": this.universalUser.getUser()._id
+      };
+      
+      console.log(messagePayload);
+      this.subscriptionSendAgentMessage = this.conversationService.sendAgentMessage(messagePayload)
+        .subscribe(
+          response => {
+            console.log(response);
+            this.getChatMessages();
+          },
+          error => {
+            // Do something with it
+          }
+        );
+    }
+    this.agentMessage = '';
+    this.requestFocus('agentInput');
   }
 }
