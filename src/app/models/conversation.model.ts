@@ -93,7 +93,7 @@ export class Episode {
   currentGoalStep: EpisodeGoalStep;
   episodeContext: EpisodeContext;
   flowTriggered: boolean;
-  alreadyBargedIn: boolean;
+  bargedIn: boolean;
   bargedInAgentId: string;
 }
 

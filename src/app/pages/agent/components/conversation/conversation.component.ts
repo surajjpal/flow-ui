@@ -125,15 +125,15 @@ export class ConversationComponent implements OnInit, OnDestroy {
         data.push(temp);
         index++;
 
-        if (episode.alreadyBargedIn && episode.bargedInAgentId && episode.alreadyBargedIn === true && episode.bargedInAgentId === this.universalUser.getUser()._id) {
+        if (episode.bargedIn && episode.bargedInAgentId && episode.bargedIn === true && episode.bargedInAgentId === this.universalUser.getUser()._id) {
           if (!this.selectedEpisode || this.selectedEpisode === null) {
             this.selectedEpisode = episode;
             this.showEpisodeDetails(episode._id);
             this.getChatMessages(true);
           }
         } else {
-          if (this.selectedEpisode && this.selectedEpisode._id && episode && episode._id && this.selectedEpisode._id === episode._id && this.selectedEpisode.alreadyBargedIn && this.selectedEpisode.bargedInAgentId === this.universalUser.getUser()._id) {
-            episode.alreadyBargedIn = this.selectedEpisode.alreadyBargedIn;
+          if (this.selectedEpisode && this.selectedEpisode._id && episode && episode._id && this.selectedEpisode._id === episode._id && this.selectedEpisode.bargedIn && this.selectedEpisode.bargedInAgentId === this.universalUser.getUser()._id) {
+            episode.bargedIn = this.selectedEpisode.bargedIn;
             episode.bargedInAgentId = this.selectedEpisode.bargedInAgentId;
           }
         }
@@ -386,15 +386,15 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   hasUserAlreadyBargedIn() {
-    let alreadyBargedIn = false;
+    let bargedIn = false;
 
     for (let episode of this.episodeList) {
-      if (episode && episode._id && episode.alreadyBargedIn) {
-        alreadyBargedIn = true;
+      if (episode && episode._id && episode.bargedIn) {
+        bargedIn = true;
         break;
       }
     }
-    return alreadyBargedIn;
+    return bargedIn;
   }
 
   bargedIntoSelectedEpisode() {
@@ -407,9 +407,9 @@ export class ConversationComponent implements OnInit, OnDestroy {
 
       for (let episode of this.episodeList) {
         if (episode && episode._id && this.selectedEpisode._id === episode._id) {
-          episode.alreadyBargedIn = true;
+          episode.bargedIn = true;
           episode.bargedInAgentId = this.universalUser.getUser()._id;
-          tempEpisode.alreadyBargedIn = true;
+          tempEpisode.bargedIn = true;
           tempEpisode.bargedInAgentId = this.universalUser.getUser()._id;
           break;
         }
@@ -425,9 +425,9 @@ export class ConversationComponent implements OnInit, OnDestroy {
 
       for (let episode of this.episodeList) {
         if (episode && episode._id && this.selectedEpisode._id === episode._id) {
-          episode.alreadyBargedIn = false;
+          episode.bargedIn = false;
           episode.bargedInAgentId = null;
-          tempEpisode.alreadyBargedIn = false;
+          tempEpisode.bargedIn = false;
           tempEpisode.bargedInAgentId = null;
           break;
         }

@@ -566,9 +566,9 @@ export class ConversationService {
               '$and': [
                 {
                   '$or': [
-                    { 'alreadyBargedIn': { '$exists': false } },
-                    { 'alreadyBargedIn': null },
-                    { 'alreadyBargedIn': false }
+                    { 'bargedIn': { '$exists': false } },
+                    { 'bargedIn': null },
+                    { 'bargedIn': false }
                   ]
                 },
                 {
@@ -582,9 +582,9 @@ export class ConversationService {
             },
             {
               '$and': [
-                { 'alreadyBargedIn': { '$exists': true } },
+                { 'bargedIn': { '$exists': true } },
                 { 'bargedInAgentId': { '$exists': true } },
-                { 'alreadyBargedIn': true },
+                { 'bargedIn': true },
                 { 'bargedInAgentId': this.universalUser.getUser()._id },
               ]
             }
@@ -597,7 +597,7 @@ export class ConversationService {
       '_id': 1,
       'episodeContext.missedExpressionCount': 1,
       'modifiedTime': 1,
-      'alreadyBargedIn': 1,
+      'bargedIn': 1,
       'bargedInAgentId': 1
     };
     crudInput.collection = 'episode';
