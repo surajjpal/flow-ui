@@ -483,9 +483,12 @@ export class ConversationService {
 
           if (messageList && messageList.length > 1) {
             messageList = messageList.sort((msg1, msg2) => {
-              if (msg1.messageTime > msg2.messageTime) {
+              const date1 = new Date(msg1.messageTime);
+              const date2 = new Date(msg2.messageTime);
+
+              if (date1 > date2) {
                 return 1;
-              } else if (msg1.messageTime < msg2.messageTime) {
+              } else if (date1 < date2) {
                 return -1;
               } else {
                 return 0;

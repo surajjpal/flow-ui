@@ -61,14 +61,14 @@
       </div>
     </form>
   </ba-card>
-  <ba-card *ngIf="selectedEpisode" baCardClass="with-scroll" class="data-table-container col-md-6 col-sm-12" cardTitle="Conversation">
+  <ba-card id="episodeDetailsCard" *ngIf="selectedEpisode" baCardClass="with-scroll" class="data-table-container col-md-6 col-sm-12" cardTitle="Conversation">
     <form [attr.disabled]="fetchingEpisodeChat" style="height: 395px; overflow:scroll">
       <thead>
         <th style="width: 50%"></th>
         <th style="width: 50%"></th>
       </thead>
       <tbody *ngFor="let message of chatMessageList">
-        <tr *ngIf="message.from === 'AUTO'">
+        <tr *ngIf="message.to !== 'AUTO'">
           <td></td>
           <td align="right" style="width: 50%">
             <div class="talk-bubble tri-right round top-right" style="background-color: #E4E4E4">
@@ -78,7 +78,7 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="message.from !== 'AUTO'">
+        <tr *ngIf="message.to === 'AUTO'">
           <td align="left" style="width: 50%">
             <div class="talk-bubble tri-right round top-left" style="background-color: #B9F1FB">
               <div class="talktext">
@@ -90,6 +90,7 @@
           <td></td>
         </tr>
       </tbody>
+      <div id="chatWindowBottomDiv" style="width:0; height:0; opacity:0;"></div>
     </form>
     
     <form *ngIf="bargedIntoSelectedEpisode()" class="row form-inline">

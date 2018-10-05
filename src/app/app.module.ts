@@ -27,7 +27,7 @@ import { FlowDashboardService, GraphService, CommunicationService } from './serv
 import { DataCachingService, StateService } from './services/inbox.service';
 import { AccountService, ApiConfigService, RoutesService } from './services/setup.service';
 import { ApiDesignService } from './services/apidesign.service';
-import { AuthGuard, AntiAuthGuard, AlertService, DataSharingService, UniversalUser } from './services/shared.service';
+import { AuthGuard, AntiAuthGuard, AlertService, DataSharingService, UniversalUser, ScrollService } from './services/shared.service';
 import { AnalyticsService } from './services/analytics.service';
 import { ScheduleTaskService } from './services/scheduletasks.service';
 import { ActivityMonitorService } from  './services/activitymonitor.service'
@@ -39,6 +39,7 @@ import { ErrorInterceptor, UnauthenticateInterceptor } from './services/intercep
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
+import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -61,7 +62,7 @@ const APP_PROVIDERS = [
   AnalyticsService,
   ScheduleTaskService,
   ActivityMonitorService,
-  AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService, UniversalUser, FileUploaderService
+  AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService, UniversalUser, FileUploaderService, ScrollService
 ];
 
 export type StoreType = {
@@ -92,7 +93,8 @@ export type StoreType = {
     routing,
     SlimLoadingBarModule.forRoot(),
     AngularFontAwesomeModule,
-    SharedModule
+    SharedModule,
+    ScrollToModule.forRoot()
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     APP_PROVIDERS

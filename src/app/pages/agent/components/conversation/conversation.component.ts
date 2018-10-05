@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { ConversationService } from '../../../../services/agent.service';
 import { Episode, ChatMessage, EpisodeContext } from '../../../../models/conversation.model';
-import { UniversalUser } from '../../../../services/shared.service';
+import { UniversalUser, ScrollService } from '../../../../services/shared.service';
 import { DomSanitizer } from '@angular/platform-browser';
 
 declare let d3: any;
@@ -21,7 +21,10 @@ export class ConversationComponent implements OnInit, OnDestroy {
   selectedEpisode: Episode;
   chatMessageList: ChatMessage[];
   loading;
-  fetchBargeInEpisode: boolean = true;
+  pollBargeInEpisode: boolean = true;
+  pollEpisodeChat: boolean = true;
+  episodePollingFrequency = 20000;
+  chatPollingFrequency = 3000;
   fetchingEpisodeDetails: boolean = false;
   fetchingEpisodeChat: boolean = false;
 
@@ -37,7 +40,8 @@ export class ConversationComponent implements OnInit, OnDestroy {
   constructor(
     private conversationService: ConversationService,
     private universalUser: UniversalUser,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private scrollService: ScrollService
   ) {
     this.searchQuery = '';
     this.agentMessage = '';
@@ -54,7 +58,8 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.fetchBargeInEpisode = false;
+    this.pollBargeInEpisode = false;
+    this.pollEpisodeChat = false;
 
     if (this.subscriptionChatMessages && !this.subscriptionChatMessages.closed) {
       this.subscriptionChatMessages.unsubscribe();
@@ -74,7 +79,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   getEpisodesApplicableForBargeIn() {
-    if (!this.fetchBargeInEpisode) {
+    if (!this.pollBargeInEpisode) {
       return;
     }
 
@@ -92,14 +97,14 @@ export class ConversationComponent implements OnInit, OnDestroy {
 
           setTimeout(() => {
             this.getEpisodesApplicableForBargeIn();
-          }, 20000);
+          }, this.episodePollingFrequency);
         },
         error => {
           // Do something with it
 
           setTimeout(() => {
             this.getEpisodesApplicableForBargeIn();
-          }, 20000);
+          }, this.episodePollingFrequency);
         }
       );
   }
@@ -124,7 +129,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
           if (!this.selectedEpisode || this.selectedEpisode === null) {
             this.selectedEpisode = episode;
             this.showEpisodeDetails(episode._id);
-            this.getChatMessages();
+            this.getChatMessages(true);
           }
         } else {
           if (this.selectedEpisode && this.selectedEpisode._id && episode && episode._id && this.selectedEpisode._id === episode._id && this.selectedEpisode.alreadyBargedIn && this.selectedEpisode.bargedInAgentId === this.universalUser.getUser()._id) {
@@ -174,8 +179,6 @@ export class ConversationComponent implements OnInit, OnDestroy {
         discretebar: {
           dispatch: {
             elementClick: ((e) => {
-              console.log("! element Click !");
-              console.log(e);
               if (!this.selectedEpisode || this.selectedEpisode === null || this.selectedEpisode._id || this.selectedEpisode._id === null || this.selectedEpisode._id !== e.data.episodeId) {
                 if (!this.selectedEpisode || this.selectedEpisode === null) {
                   this.selectedEpisode = new Episode();
@@ -183,7 +186,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
                 this.selectedEpisode._id = e.data.episodeId;
                 this.transformEpisodeIntoGraph();
                 this.showEpisodeDetails(e.data.episodeId);
-                this.getChatMessages();
+                this.getChatMessages(true);
               }
             })
           }
@@ -230,14 +233,12 @@ export class ConversationComponent implements OnInit, OnDestroy {
         discretebar: {
           dispatch: {
             elementClick: ((e) => {
-              console.log("! element Click !");
-              console.log(e);
               if (!this.selectedEpisode || this.selectedEpisode === null || this.selectedEpisode._id || this.selectedEpisode._id === null || this.selectedEpisode._id !== e.data.episodeId) {
                 this.selectedEpisode = new Episode();
                 this.selectedEpisode._id = e.data.episodeId;
                 this.transformEpisodeIntoGraph();
                 this.showEpisodeDetails(e.data.episodeId);
-                this.getChatMessages();
+                this.getChatMessages(true);
               }
             })
           }
@@ -302,7 +303,16 @@ export class ConversationComponent implements OnInit, OnDestroy {
         episode => {
           if (episode) {
             this.selectedEpisode = episode;
+
+            if (this.bargedIntoSelectedEpisode()) {
+              this.pollEpisodeChat = true;
+              this.getChatMessages();
+            } else {
+              this.pollEpisodeChat = false;
+            }
           }
+
+          this.scrollToView('episodeDetailsCard');
           this.fetchingEpisodeDetails = false;
         },
         error => {
@@ -312,8 +322,14 @@ export class ConversationComponent implements OnInit, OnDestroy {
       );
   }
 
-  getChatMessages() {
-    this.fetchingEpisodeChat = true;
+  getChatMessages(disableAgentInput?: boolean) {
+    if (this.subscriptionChatMessages && !this.subscriptionChatMessages.closed) {
+      this.subscriptionChatMessages.unsubscribe();
+    }
+
+    if (disableAgentInput) {
+      this.fetchingEpisodeChat = true;
+    }
 
     this.subscriptionChatMessages = this.conversationService.getChat(this.selectedEpisode._id)
       .subscribe(
@@ -321,10 +337,25 @@ export class ConversationComponent implements OnInit, OnDestroy {
           if (chatMessages) {
             this.chatMessageList = chatMessages;
           }
+
+          if (this.pollEpisodeChat) {
+            setTimeout(() => {
+              this.getChatMessages();
+            }, this.chatPollingFrequency);
+          }
+
+          this.scrollToView('chatWindowBottomDiv');
           this.fetchingEpisodeChat = false;
         },
         error => {
           // Do something with it
+          
+          if (this.pollEpisodeChat) {
+            setTimeout(() => {
+              this.getChatMessages();
+            }, this.chatPollingFrequency);
+          }
+
           this.fetchingEpisodeChat = false;
         }
       );
@@ -346,6 +377,12 @@ export class ConversationComponent implements OnInit, OnDestroy {
         }
       }, 10);
     }
+  }
+
+  scrollToView(elementId: string) {
+    setTimeout(() => {
+      this.scrollService.triggerScrollTo(elementId);
+    }, 10);
   }
 
   hasUserAlreadyBargedIn() {
@@ -401,7 +438,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   saveEpisode(episode: Episode) {
-    this.fetchBargeInEpisode = false;
+    this.pollBargeInEpisode = false;
     this.fetchingEpisodeDetails = true;
     this.fetchingEpisodeChat = true;
 
@@ -412,14 +449,20 @@ export class ConversationComponent implements OnInit, OnDestroy {
             this.selectedEpisode = episode;
           }
 
-          this.fetchBargeInEpisode = true;
+          if (this.bargedIntoSelectedEpisode()) {
+            this.pollEpisodeChat = true;
+            this.getChatMessages();
+          } else {
+            this.pollEpisodeChat = false;
+          }
+          this.pollBargeInEpisode = true;
           this.fetchingEpisodeDetails = false;
           this.fetchingEpisodeChat = false;
           this.getEpisodesApplicableForBargeIn();
         },
         error => {
           // Do something with it
-          this.fetchBargeInEpisode = true;
+          this.pollBargeInEpisode = true;
           this.fetchingEpisodeDetails = false;
           this.fetchingEpisodeChat = false;
           this.getEpisodesApplicableForBargeIn();
@@ -437,12 +480,21 @@ export class ConversationComponent implements OnInit, OnDestroy {
         "from_user": this.universalUser.getUser()._id
       };
       
-      console.log(messagePayload);
+      const newMessage = new ChatMessage();
+      newMessage.agentId = this.selectedEpisode.agentId;
+      newMessage.episodeId = this.selectedEpisode._id;
+      newMessage.messageText = messagePayload.messageText;
+      newMessage.conversationId = this.selectedEpisode.conversationId;
+      newMessage.from = "AUTO";
+      newMessage.messageTime = new Date();
+
+      this.chatMessageList.push(newMessage);
+      this.scrollToView('chatWindowBottomDiv');
+
       this.subscriptionSendAgentMessage = this.conversationService.sendAgentMessage(messagePayload)
         .subscribe(
           response => {
-            console.log(response);
-            this.getChatMessages();
+            // Do something with it, if needed
           },
           error => {
             // Do something with it
