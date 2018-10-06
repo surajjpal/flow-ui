@@ -114,7 +114,13 @@ export class ConversationComponent implements OnInit, OnDestroy {
     const data = [];
     if (this.episodeList) {
       let index = 1;
+      let selectedEpisodePresentInList = false;
+
       for (const episode of this.episodeList) {
+        if (!selectedEpisodePresentInList) {
+          selectedEpisodePresentInList = this.selectedEpisode && this.selectedEpisode._id && episode && episode._id && this.selectedEpisode._id === episode._id;
+        }
+        
         const temp = {
           'label': episode._id,
           'value': episode.episodeContext.missedExpressionCount,
@@ -137,6 +143,11 @@ export class ConversationComponent implements OnInit, OnDestroy {
             episode.bargedInAgentId = this.selectedEpisode.bargedInAgentId;
           }
         }
+      }
+
+      if (!selectedEpisodePresentInList) {
+        this.selectedEpisode = null;
+        this.chatMessageList = [];
       }
     }
 
@@ -163,7 +174,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
         y: function (d) { return d.value; },
         showValues: true,
         valueFormat: function (d) {
-          return d3.format(',.4f')(d);
+          return d;
         },
         color: ((d) => {
           if (this.selectedEpisode && this.selectedEpisode !== null && d.episodeId === this.selectedEpisode._id) {

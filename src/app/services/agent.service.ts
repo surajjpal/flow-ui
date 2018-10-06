@@ -585,7 +585,7 @@ export class ConversationService {
                 { 'bargedIn': { '$exists': true } },
                 { 'bargedInAgentId': { '$exists': true } },
                 { 'bargedIn': true },
-                { 'bargedInAgentId': this.universalUser.getUser()._id },
+                { 'bargedInAgentId': this.universalUser.getUser()._id }
               ]
             }
           ]
@@ -615,7 +615,24 @@ export class ConversationService {
     ).subscribe(
       (response: HttpResponse<any>) => {
         if (response.body) {
-          subject.next(response.body['data']);
+          let episodeList: Episode[] = response.body['data'];
+
+          if (episodeList && episodeList.length > 1) {
+            episodeList = episodeList.sort((ep1, ep2) => {
+              const date1 = new Date(ep1.modifiedTime);
+              const date2 = new Date(ep2.modifiedTime);
+
+              if (date1 < date2) {
+                return 1;
+              } else if (date1 > date2) {
+                return -1;
+              } else {
+                return 0;
+              }
+            });
+          }
+
+          subject.next(episodeList);
         }
       },
       (err: HttpErrorResponse) => {
