@@ -30,7 +30,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   validationKeysSource: string[];
   stagesSource: Stage[];
   templateNames: string[];
-  
+
 
   intentFilterQuery: string;
   entityFilterQuery: string;
@@ -147,7 +147,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   intentUploaderOptions: NgUploaderOptions;
 
   fetchValidationKeys() {
-    this.validationKeysSource = ['dobdate','phonenumber','email','otp','incidentdate','incidentdescreption','pincode','imeiemail','incidenttime','imei','emailmobile'];
+    this.validationKeysSource = ['dobdate', 'phonenumber', 'email', 'otp', 'incidentdate', 'incidentdescreption', 'pincode', 'imeiemail', 'incidenttime', 'imei', 'emailmobile'];
   }
 
   resetFields() {
@@ -192,6 +192,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       if (index !== -1) {
         this.selectedDomain.domainIntents.splice(index, 1);
       }
+
+      // This is to forcefully call the digest cycle of angular so that,
+      // the filtered list would get updated with these chanegs made in master list
+      this.intentFilterQuery = (` ${this.intentFilterQuery}`);
+      setTimeout(() => {
+        this.intentFilterQuery = this.intentFilterQuery.slice(1);
+      }, 10);
     }
   }
 
@@ -233,6 +240,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       if (index !== -1) {
         this.selectedDomain.domainEntities.splice(index, 1);
       }
+
+      // This is to forcefully call the digest cycle of angular so that,
+      // the filtered list would get updated with these chanegs made in master list
+      this.entityFilterQuery = (` ${this.entityFilterQuery}`);
+      setTimeout(() => {
+        this.entityFilterQuery = this.entityFilterQuery.slice(1);
+      }, 10);
     }
   }
 
@@ -302,7 +316,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.goalFilterQuery = this.goalFilterQuery.slice(1);
       }, 10);
     }
-    
+
   }
 
   checkStageCodeInGoalResponses(goalSteps: GoalStep[]) {
@@ -335,6 +349,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.selectedDomain.domainGoals.splice(index, 1);
       }
     }
+
+    // This is to forcefully call the digest cycle of angular so that,
+    // the filtered list would get updated with these chanegs made in master list
+    this.goalFilterQuery = (` ${this.goalFilterQuery}`);
+    setTimeout(() => {
+      this.goalFilterQuery = this.goalFilterQuery.slice(1);
+    }, 10);
   }
 
   addNewGoalStep() {
@@ -415,7 +436,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
               if (!response.options || response.options === null) {
                 response.options = [];
               }
-              
+
               if (!response.contextExpression || response.contextExpression === null) {
                 response.contextExpression = '';
               }
@@ -577,6 +598,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       if (!this.tempResponse.stage || this.tempResponse.stage.trim().length === 0) {
         new showAlertModal('Error', 'Stage can\'t be left empty.');
       } else {
+        this.tempResponse.expression = this.readBulkExpressions();
+
         this.selectedDomain.domainResponse.push(this.tempResponse);
         new closeModal('responseModal');
 
@@ -588,7 +611,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         }, 10);
       }
     }
-    
+
   }
 
   removeResponse(response?: Response) {
@@ -603,6 +626,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.selectedDomain.domainResponse.splice(index, 1);
       }
     }
+
+    // This is to forcefully call the digest cycle of angular so that,
+    // the filtered list would get updated with these chanegs made in master list
+    this.responseFilterQuery = (` ${this.responseFilterQuery}`);
+    setTimeout(() => {
+      this.responseFilterQuery = this.responseFilterQuery.slice(1);
+    }, 10);
   }
 
   removeCard(card?: CardData) {
@@ -617,14 +647,21 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.selectedDomain.cards.splice(index, 1);
       }
     }
+
+    // This is to forcefully call the digest cycle of angular so that,
+    // the filtered list would get updated with these chanegs made in master list
+    this.cardsFilterQuery = (` ${this.cardsFilterQuery}`);
+    setTimeout(() => {
+      this.cardsFilterQuery = this.cardsFilterQuery.slice(1);
+    }, 10);
   }
 
   addCard(card?: CardData) {
-    if(card) {
+    if (card) {
       this.selectedDomain.cards.push(card);
     }
-    else if(this.selectedCard) {
-      if(!this.tempCard.cardName || !this.tempCard.templateName) {
+    else if (this.selectedCard) {
+      if (!this.tempCard.cardName || !this.tempCard.templateName) {
         new showAlertModal('Error', 'card name can not be blank');
       }
       else {
@@ -641,13 +678,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           this.cardsFilterQuery = this.cardsFilterQuery.slice(1);
         }, 10);
       }
-      
+
     }
     else {
       if (!this.tempCard.cardName || this.tempCard.cardName.trim().length === 0) {
         new showAlertModal('Error', 'card name can\'t be left empty.');
       } else {
-        if(!this.selectedDomain.cards) {
+        if (!this.selectedDomain.cards) {
           this.selectedDomain.cards = [];
         }
         this.selectedDomain.cards.push(this.tempCard);
@@ -661,7 +698,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         }, 10);
       }
     }
-    
+
   }
 
   createDomain() {
@@ -686,7 +723,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         .subscribe(
           response => {
             this.updateClassifierTraining();
-            
+
             //this.updateIntenTrainingData();
 
             // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
@@ -701,20 +738,20 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
   updateClassifierTraining() {
     this.subscription = this.domainService.updateDomainClassifierTraining(this.selectedDomain)
-    .subscribe(
-      response => {
-        if (response) {
-          this.domainBody = `Domain updated successfully!!`;
-          this.domainSucess = true;
-          this.selectedDomain = response;
-        } else {
-          this.domainBody = `Something went wrong please try again!!`;
-          this.domainSucess = true;
+      .subscribe(
+        response => {
+          if (response) {
+            this.domainBody = `Domain updated successfully!!`;
+            this.domainSucess = true;
+            this.selectedDomain = response;
+          } else {
+            this.domainBody = `Something went wrong please try again!!`;
+            this.domainSucess = true;
+          }
+          //this.updateEntityTrainingData();
+          //this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
         }
-        //this.updateEntityTrainingData();
-        //this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
-      }
-    )
+      )
   }
 
   updateIntenTrainingData() {
@@ -849,9 +886,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     cardData.actionable.push(new ResponseData())
   }
 
-  
 
-  deleteCardData(cardData,row) {
+
+  deleteCardData(cardData, row) {
     const index: number = cardData.indexOf(row);
     if (index !== -1) {
       cardData.slice(index, 1);
