@@ -241,6 +241,7 @@ export class Transition {
 }
 
 export class GraphObject extends BaseModel {
+  _id:string;
   machineLabel: string;
   machineType: string;
   version: number;
@@ -256,6 +257,7 @@ export class GraphObject extends BaseModel {
   constructor() {
     super();
 
+    this._id = ""
     this.machineLabel = '';
     this.machineType = '';
     this.processOwner = '';

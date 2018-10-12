@@ -350,6 +350,36 @@ export class GraphService {
     return subject.asObservable();
   }
 
+  getById(id: String): Observable<GraphObject> {
+    const subject = new Subject<GraphObject>();
+
+    let url;
+    
+    url = `${environment.server + environment.graphurl + id}`;
+    this.httpClient.get<GraphObject>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<GraphObject>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
   deactivate(_id: string): Observable<GraphObject> {
     const subject = new Subject<GraphObject>();
 
