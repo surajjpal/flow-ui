@@ -11,6 +11,7 @@ export class UIComponent {
   delayInMessages: boolean;
   episodeCloseTimeout: number;
   cronEnabled: boolean;
+  isBargeable: boolean;
 
   constructor() {
     this.colorCss = '';
@@ -23,6 +24,7 @@ export class UIComponent {
     this.delayInMessages = false;
     this.episodeCloseTimeout = 2880;
     this.cronEnabled = false;
+    this.isBargeable = false;
   }
 }
 

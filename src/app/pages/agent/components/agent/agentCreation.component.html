@@ -88,6 +88,9 @@
               <div class="checkbox">
                 <ba-checkbox [(ngModel)]="selectedAgent.debugMode" [label]="'Enable Debug Mode'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
               </div>
+              <div class="checkbox">
+                <ba-checkbox [(ngModel)]="selectedAgent.uiComponent.isBargeable" [label]="'Is Agent Bargeable'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+              </div>
             </form>
           </div>
         </div>

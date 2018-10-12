@@ -124,6 +124,9 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       if (!this.selectedAgent.uiComponent.episodeCloseTimeout) {
         this.selectedAgent.uiComponent.episodeCloseTimeout = 2880;
       }
+      if (!this.selectedAgent.uiComponent.isBargeable || this.selectedAgent.uiComponent.isBargeable === null) {
+        this.selectedAgent.uiComponent.isBargeable = false;
+      }
 
       if (this.selectedAgent.agentPlugins && this.selectedAgent.agentPlugins.length > 0) {
         const pluginsToBeRemoved: Plugin[] = [];
