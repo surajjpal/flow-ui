@@ -270,7 +270,7 @@ var existingEdgesBeforeUpdate;
 
 designFlowEditor = function (serverXml, readOnly) {
   isReadOnly = readOnly;
-
+ 
   // Checks if browser is supported
   if (!mxClient.isBrowserSupported()) {
     // Displays an error message if the browser is
@@ -1397,6 +1397,96 @@ styleStates = function (activeStateIdList, closedStateIdList) {
   addTaskIconOverlays(graph);
 }
 
+
+styleProcessAuditStates = function (activeStateIdList, closedStateIdList) {
+  
+  if (activeStateIdList != null && closedStateIdList != null) {
+    graph.getModel().beginUpdate();
+    try {
+      var vertices = graph.getChildVertices(graph.getDefaultParent());
+      for (var vertex of vertices) {
+        if (vertex != null && vertex.id != null) {
+          if (activeStateIdList.indexOf(vertex.id) >= 0) {
+            console.log("oiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/warning.gif', 18, 18), 'Active');
+            overlay.align = mxConstants.ALIGN_RIGHT;
+            overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
+            graph.addCellOverlay(vertex, overlay);
+          }if (activeStateIdList.indexOf(vertex.id) >= 0) {
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/info.png', 18, 18), 'Information');
+            overlay.align = mxConstants.ALIGN_LEFT;
+            overlay.verticalAlign = mxConstants.ALIGN_TOP;
+            
+            overlay.cursor = 'hand';
+            overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
+              var cell = evt.getProperty('cell')
+              try {
+                window['processAuditRef'].zone.run(() => { window['processAuditRef'].component.showStateInfo(cell.value); })
+                
+              }
+              catch (exception) {
+                // console.log(exception);
+              }
+          
+            }));
+            
+            graph.addCellOverlay(vertex, overlay);
+
+  
+          }if (closedStateIdList.indexOf(vertex.id) >= 0) {
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/info.png', 18, 18), 'Information');
+            overlay.align = mxConstants.ALIGN_LEFT;
+            overlay.verticalAlign = mxConstants.ALIGN_TOP;
+            
+            overlay.cursor = 'hand';
+            overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
+              var cell = evt.getProperty('cell')
+              try {
+                window['processAuditRef'].zone.run(() => { window['processAuditRef'].component.showStateInfo(cell.value); })
+                
+              }
+              catch (exception) {
+                // console.log(exception);
+              }
+          
+            }));
+            
+            graph.addCellOverlay(vertex, overlay);
+
+  
+          }
+           else if (closedStateIdList.indexOf(vertex.id) >= 0) {
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 18, 18), 'Closed');
+            overlay.align = mxConstants.ALIGN_RIGHT;
+            overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
+            graph.addCellOverlay(vertex, overlay);
+          } 
+          else if (vertex != null && vertex.id == 'treeRoot') {
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 18, 18), 'Closed');
+            overlay.align = mxConstants.ALIGN_RIGHT;
+            overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
+            graph.addCellOverlay(vertex, overlay);
+          }
+         
+        }
+      }
+    } finally {
+      graph.getModel().endUpdate();
+    }
+  }
+  addTaskIconOverlays(graph);
+}
+
 styleInfo = function(orModels,type){
   
   addInfoOverlays(graph,orModels,type);
@@ -2008,6 +2098,12 @@ function addOverlaysUser(hierarchygraph, cell, addDeleteIcon) {
   }
 };
 
+
+function getStateInfo(cell)
+{
+  window['processAuditRef'].zone.run(() => { window['processAuditRef'].component.showStateInfo(cell); })
+  
+}
 
 function addUser(hierarchygraph, cell) {
   try {

@@ -21,6 +21,9 @@ export const environment = {
   updateEntityTraining: 'http://localhost:8080/flow/interfaces/entity_classification_training',
   
 
+  //
+  processauditurl:"http://localhost:5000/api/universalsearch/search/flow",
+
   // Flow
   server: 'http://localhost:8080/flow/console/',
   autourl:'http://localhost:4200/#/pg/ch/cnv/',
@@ -34,6 +37,7 @@ export const environment = {
   gettatrecords:'state/fetchtat',
   getallstats:'state/fetchstatestatus',
   getpersonalstats:'state/getstatestatusbyuser',
+  getstateinstance:'state/fetchstateinstance',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',

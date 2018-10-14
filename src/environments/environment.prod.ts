@@ -13,6 +13,9 @@ export const environment = {
   fetchaccountbyidurl: 'https://flow.automatapi.io/flow/account/',
   publishaccounturl:'https://flow.automatapi.io/flow/account/publish/',
   unpublishaccounturl:'https://flow.automatapi.io/flow/account/unpublish/',
+
+
+  processauditurl:"http://localhost:5000/api/universalsearch/search/flow",
   // Interfaces
   interfaceService: 'https://flow.automatapi.io/flow/interfaces',
   updateClassifierTraining : 'https://flow.automatapi.io/flow/interfaces/auto_decorate_training',
@@ -33,6 +36,7 @@ export const environment = {
   gettatrecords:'state/fetchtat',
   getallstats:'state/fetchstatestatus',
   getpersonalstats:'state/getstatestatusbyuser',
+  getstateinstance:'state/fetchstateinstance',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
