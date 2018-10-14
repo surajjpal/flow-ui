@@ -58,6 +58,8 @@
                                  <select class="selectpicker form-control" required id="selectUser"  title="Choose Value"  name="value"  [(ngModel)]="temp[config.get('key')]" [ngModelOptions]="{standalone: true}" (ngModelChange)="onValueSelect($event,config)">
                                     <option *ngFor="let value of config.get('values')" [ngValue]="value">{{value}}</option>
                                  </select>
+                                 <td *ngIf="typeConfigList[i].get('value') == 'boolean'">
+                                  <api-checkbox [checked]="config.get('value')" [label]="config.get('value')" (event)="config.set('value', $event.target.checked)"></api-checkbox>
                                 </td>
                               </tr>
                         </tbody>
