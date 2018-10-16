@@ -14,6 +14,8 @@ export const environment = {
     publishaccounturl:'https://flow.automatapi.com/flow/account/publish/',
     unpublishaccounturl:'https://flow.automatapi.com/flow/services/unpublish/',
 
+    
+
     // Interfaces
     interfaceService: 'https://flow.automatapi.com/flow/interfaces',
     updateClassifierTraining : 'https://flow.automatapi.com/flow/interfaces/auto_decorate_training',
@@ -34,6 +36,7 @@ export const environment = {
     gettatrecords:'state/fetchtat',
     getallstats:'state/fetchstatestatus',
     getpersonalstats:'state/getstatestatusbyuser',
+    getstateinstance:'state/fetchstateinstance',
     menutreeurl: 'menu/tree',
     menuurl: 'menu/',
     menurouteurl: 'menu/route',
@@ -103,6 +106,9 @@ export const environment = {
     uploadentityexcelurl: 'uploadentity',
     modelkeyslookupurl: 'load/modelkeys',
     validationtypekeyslookupurl: 'load/validations',
+
+    flowsearch:'/api/flow/search',
+
 
     // Analytics
     reportservice: 'https://flow.automatapi.com/flow/report',

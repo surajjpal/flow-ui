@@ -1,0 +1,212 @@
+
+<div class="loadWrapper" *ngIf="progressBarFlag">  
+    <div class="sk-circle">
+        <div class="sk-circle1 sk-child"></div>
+        <div class="sk-circle2 sk-child"></div>
+        <div class="sk-circle3 sk-child"></div>
+        <div class="sk-circle4 sk-child"></div>
+        <div class="sk-circle5 sk-child"></div>
+        <div class="sk-circle6 sk-child"></div>
+        <div class="sk-circle7 sk-child"></div>
+        <div class="sk-circle8 sk-child"></div>
+        <div class="sk-circle9 sk-child"></div>
+        <div class="sk-circle10 sk-child"></div>
+        <div class="sk-circle11 sk-child"></div>
+        <div class="sk-circle12 sk-child"></div>
+    </div>
+</div>
+<ba-card cardTitle="FILTER">
+    <form class="row form-inline">
+        <div class="form-group col-sm-8">
+          <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Query" />
+        </div>
+        <div class="form-group col-sm-2">
+            <api-daterangepicker (selectedRange)="onDateRangeSelect($event)"></api-daterangepicker>
+        </div>
+        <div class="form-group col-sm-2">
+          <button type="button" class="btn btn-primary" (click)="onSubmit()">
+            Submit
+          </button>
+        </div>
+   </form>
+</ba-card>
+
+<div class="widgets" *ngIf="submitted">
+    <div class="row">
+      <ba-card baCardClass="with-scroll" class="data-table-container">
+        <div class="panel panel-default">
+          <br>
+         
+  
+          <ul class="nav nav-tabs" role="tablist">
+            <!-- <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab" href="#tab_active" role="tab" aria-expanded="true">Flows</a>
+            </li> -->
+          </ul>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade show active" id="tab_active">
+              
+              <table class="table table-striped" [mfData]="processList" #mfActive="mfDataTable"
+                [mfRowsOnPage]="rowsOnPage" [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder" >
+                <thead>
+                  <tr>
+                    <th>
+                      <mfDefaultSorter by="machineLabel">Machine Name</mfDefaultSorter>
+                    </th>
+                    <!-- <th>
+                      <mfDefaultSorter by="machineType">Machine Type</mfDefaultSorter>
+                    </th> -->
+                    <th>
+                      <mfDefaultSorter [by]="toInt">Process Owner</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="statusCd">Status</mfDefaultSorter>
+                    </th>
+                    <th>
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let flow of mfActive.data" data-toggle="modal">
+                    <td>{{flow.processType}}</td>
+                    <!-- <td>{{graph.machineType}}</td> -->
+                    <td>{{flow.processOwner}}</td>
+                    <td>{{flow.status}}</td>
+                    <td>
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary" title="View" (click)="onSelect(flow)">
+                            <i class="ion-eye"></i>
+                        </button>
+                       
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="5">
+                      <mfBootstrapPaginator [rowsOnPageSet]="[10,25,50,100]"></mfBootstrapPaginator>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="tab_archived">
+              <table class="table table-striped" [mfData]="closedGraphObjectList | universalDataFilter : filterQuery" #mfClosed="mfDataTable"
+                [mfRowsOnPage]="rowsOnPage" [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
+                <thead>
+                  <tr>
+                    <th colspan="5">
+                      <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      <mfDefaultSorter by="machineLabel">Machine Name</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="machineType">Machine Type</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter [by]="toInt">Version</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="statusCd">Status</mfDefaultSorter>
+                    </th>
+                    <th>
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let graph of mfClosed.data">
+                    <td>{{graph.machineLabel}}</td>
+                    <td>{{graph.machineType}}</td>
+                    <td>{{graph.version}}</td>
+                    <td>{{graph.statusCd}}</td>
+                    <td *ngIf="graph.statusCd === DRAFT">
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary" title="Edit" (click)="onSelect(graph, OPEN_IN_EDIT_MODE)">
+                          <i class="ion-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary" title="Publish" (click)="onSelect(graph)" data-toggle="modal" data-target="#finalWarningModal">
+                          <i class="fa fa-check-square-o"></i>
+                        </button>
+                      </div>
+                    </td>
+                    <td *ngIf="graph.statusCd === CLOSED">
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary" title="View" (click)="onSelect(graph, OPEN_IN_READONLY_MODE)">
+                          <i class="ion-eye"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary" title="Activate" (click)="activateFlow(graph)">
+                          <i class="ion-power"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary" title="Clone" (click)="onSelect(graph, CLONE_AND_EDIT_MODE)">
+                          <i class="fa fa-clone"></i>
+                        </button>
+                      </div>
+                    </td>
+                    <td *ngIf="graph.statusCd === ACTIVE">
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary" title="View" (click)="onSelect(graph, OPEN_IN_READONLY_MODE)">
+                          <i class="ion-eye"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary" title="Deactivate" (click)="deactivateFlow(graph)">
+                          <i class="ion-close-round"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary" title="Clone" (click)="onSelect(graph, CLONE_AND_EDIT_MODE)">
+                          <i class="fa fa-clone"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="5">
+                      <mfBootstrapPaginator [rowsOnPageSet]="[10,25,50,100]"></mfBootstrapPaginator>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+  
+        </div>
+  
+  
+      </ba-card>
+    </div>
+  </div>
+  
+  
+  <div class="modal fade" id="finalWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="finalWarningLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="finalWarningLabel">
+            Warning
+          </h4>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+  
+        <!-- Modal Body -->
+        <div class="modal-body" id="modal_body">
+          Once it is finalised it can no longer be edited and you have to clone it and create a new copy of it to make any further
+          changes. This will create a new version of the flow. Are you sure you want to finalise the flow?
+        </div>
+  
+        <!-- Modal Footer -->
+        <div class="modal-footer" id="modal_footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="activateFlow(selectedGraphObject, 'finalWarningModal')">Finalise</button>
+        </div>
+      </div>
+    </div>
+  </div>

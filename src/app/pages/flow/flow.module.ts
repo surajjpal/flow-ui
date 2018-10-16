@@ -16,6 +16,8 @@ import { FlowComponent } from './flow.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { DateRangePickerComponent } from './components/dashboard/daterangepicker/daterangepicker.component';
 import { SearchComponent } from './components/search/search.component';
+import { SearchProcessComponent } from './components/searchprocess/searchprocess.component';
+import { ProcessAuditComponent } from './components/processaudit/processaudit.component';
 import { DesignComponent } from './components/design/design.component';
 
 import 'd3';
@@ -42,7 +44,9 @@ import { SharedModule } from '../../shared/shared.module';
     DashboardComponent,
     DateRangePickerComponent,
     SearchComponent,
-    DesignComponent
+    DesignComponent,
+    SearchProcessComponent,
+    ProcessAuditComponent
   ]
 })
 export class FlowModule { }

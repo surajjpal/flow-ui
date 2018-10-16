@@ -240,6 +240,29 @@ export class Transition {
   }
 }
 
+
+export class ProcessModel extends BaseModel{
+  status:string;
+	endTime :any;
+	startTimeLong:any;
+	operationType:any;
+	processOwner:string;
+	endState:any;
+	businessValue:any;
+  subStatus: string;
+	resourceCost :any;
+	flowId:string;
+	businessCost:any;
+	startTime :any;
+	flowVersion: string;
+	entityId:string;
+	processType:string;
+	endTimeLong:any;
+  statusCd:string;
+  parameters:any;
+  states:any;
+}
+
 export class GraphObject extends BaseModel {
   machineLabel: string;
   machineType: string;
