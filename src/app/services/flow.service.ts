@@ -316,19 +316,61 @@ export class GraphService {
     return subject.asObservable();
   }
 
-  fetch(status?: string): Observable<GraphObject[]> {
+  getGraphObject(id?:any){
+    const subject = new Subject<GraphObject>();
+
+    let url;
+    // if (status) {
+    //   url = `${environment.server + environment.graphbystatusurl + status}`;
+    // } else {
+    //   url = `${environment.server + environment.graphurl}`;
+    // }
+
+    url = `${environment.server + environment.graphurl + id}`;
+    
+    this.httpClient.get<GraphObject>(
+      url,
+      
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<GraphObject>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+  fetch(searchParams?: any): Observable<GraphObject[]> {
     const subject = new Subject<GraphObject[]>();
 
     let url;
-    if (status) {
-      url = `${environment.server + environment.graphbystatusurl + status}`;
-    } else {
-      url = `${environment.server + environment.graphurl}`;
-    }
+    // if (status) {
+    //   url = `${environment.server + environment.graphbystatusurl + status}`;
+    // } else {
+    //   url = `${environment.server + environment.graphurl}`;
+    // }
+
+    url = `${environment.server + environment.graphbystatusurl}`;
     
-    this.httpClient.get<GraphObject[]>(
+    this.httpClient.post<GraphObject[]>(
       url,
+      searchParams,
       {
+        headers: this.httpHeaders,
         observe: 'response',
         reportProgress: true,
         withCredentials: true

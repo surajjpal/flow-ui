@@ -76,12 +76,21 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   fetchGraphs(): void {
-    this.subscriptionActive = this.graphService.fetch('ACTIVE')
+    let body = {}
+    body["searchParams"] = [{"statusCd":"ACTIVE"},{"statusCd":"DRAFT"}];
+    body["returnFields"] = ["machineLabel","version","statusCd"];
+    this.subscriptionActive = this.graphService.fetch(body)
       .subscribe(graphObjects => this.activeGraphObjectList = graphObjects);
-    this.subscriptionActive = this.graphService.fetch('CLOSED')
+
+    body = {}
+    body["searchParams"] = [{"statusCd":"CLOSED"}];
+    body["returnFields"] = ["machineLabel","version","statusCd","machineType"];
+    this.subscriptionActive = this.graphService.fetch(body)
       .subscribe(graphObjects => this.closedGraphObjectList = graphObjects);
-    this.subscriptionActive = this.graphService.fetch('TEMPLATE')
-      .subscribe(graphObjects => this.dictionaryGraphObjectList = graphObjects);
+    
+    
+    // this.subscriptionActive = this.graphService.fetch('TEMPLATE')
+    //   .subscribe(graphObjects => this.dictionaryGraphObjectList = graphObjects);
   }
 
   toInt(num: string) {
@@ -93,20 +102,26 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   onSelect(graphObject: GraphObject, task?: number): void {
-    this.selectedGraphObject = graphObject;
-
-    if (task) {
-      if (task === this.OPEN_IN_READONLY_MODE) {
-        this.openInDesigner(this.selectedGraphObject, true);
-      } else if (task === this.OPEN_IN_EDIT_MODE) {
-        this.openInDesigner(this.selectedGraphObject);
-      } else if (task === this.CLONE_AND_EDIT_MODE) {
-        this.selectedGraphObject._id = null;
-        this.selectedGraphObject.statusCd = this.DRAFT;
-
-        this.openInDesigner(this.selectedGraphObject);
-      }
-    }
+    this.subscription = this.graphService.getGraphObject(graphObject._id)
+    .subscribe(
+      graph => {
+        if(graph!=null && graph._id.length > 0)
+        {
+          this.selectedGraphObject = graph;
+          if (task) {
+            if (task === this.OPEN_IN_READONLY_MODE) {
+              this.openInDesigner(this.selectedGraphObject, true);
+            } else if (task === this.OPEN_IN_EDIT_MODE) {
+              this.openInDesigner(this.selectedGraphObject);
+            } else if (task === this.CLONE_AND_EDIT_MODE) {
+              this.selectedGraphObject._id = null;
+              this.selectedGraphObject.statusCd = this.DRAFT;
+      
+              this.openInDesigner(this.selectedGraphObject);
+            }
+          }
+        }
+      });
   }
 
   openInDesigner(graph: GraphObject, readOnly?: boolean) {
