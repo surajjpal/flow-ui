@@ -264,13 +264,14 @@ export class ProcessService{
 
     let url;
     
-      url = `${environment.processauditurl}`;
+      url = `${environment.interfaceService + environment.flowsearch}`;
     
     
     this.httpClient.post<ProcessModel[]>(
       url,
       body,
       {
+        headers:this.httpHeaders,
         observe: 'response',
         reportProgress: true,
         withCredentials: true

@@ -14,7 +14,7 @@ export const environment = {
     publishaccounturl:'https://flow.automatapi.com/flow/account/publish/',
     unpublishaccounturl:'https://flow.automatapi.com/flow/services/unpublish/',
 
-    processauditurl:"http://localhost:5000/api/universalsearch/search/flow",
+    
 
     // Interfaces
     interfaceService: 'https://flow.automatapi.com/flow/interfaces',
@@ -106,6 +106,9 @@ export const environment = {
     uploadentityexcelurl: 'uploadentity',
     modelkeyslookupurl: 'load/modelkeys',
     validationtypekeyslookupurl: 'load/validations',
+
+    flowsearch:'/api/flow/search',
+
 
     // Analytics
     reportservice: 'https://flow.automatapi.com/flow/report',
