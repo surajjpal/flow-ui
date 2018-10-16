@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 // import 'rxjs/add/operator/switchMap';
 
 // Model Imports
-import { GraphObject } from '../../../../models/flow.model';
+import { GraphObject,CommonSearchModel } from '../../../../models/flow.model';
 
 // Service Imports
 import { GraphService, CommunicationService } from '../../../../services/flow.service';
@@ -76,16 +76,16 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   fetchGraphs(): void {
-    let body = {}
-    body["searchParams"] = [{"statusCd":"ACTIVE"},{"statusCd":"DRAFT"}];
-    body["returnFields"] = ["machineLabel","version","statusCd"];
-    this.subscriptionActive = this.graphService.fetch(body)
+    let commonsearchModel = new CommonSearchModel();
+    commonsearchModel.searchParams = [{"statusCd":"ACTIVE"},{"statusCd":"DRAFT"}];
+    commonsearchModel.returnFields = ["machineLabel","version","statusCd"];
+    this.subscriptionActive = this.graphService.fetch(commonsearchModel)
       .subscribe(graphObjects => this.activeGraphObjectList = graphObjects);
 
-    body = {}
-    body["searchParams"] = [{"statusCd":"CLOSED"}];
-    body["returnFields"] = ["machineLabel","version","statusCd","machineType"];
-    this.subscriptionActive = this.graphService.fetch(body)
+    commonsearchModel = new CommonSearchModel();
+    commonsearchModel.searchParams = [{"statusCd":"CLOSED"}];
+    commonsearchModel.returnFields = ["machineLabel","version","statusCd","machineType"];
+    this.subscriptionActive = this.graphService.fetch(commonsearchModel)
       .subscribe(graphObjects => this.closedGraphObjectList = graphObjects);
     
     
@@ -102,11 +102,13 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   onSelect(graphObject: GraphObject, task?: number): void {
+    this.progressBarFlag = true;
     this.subscription = this.graphService.getGraphObject(graphObject._id)
     .subscribe(
       graph => {
         if(graph!=null && graph._id.length > 0)
         {
+          this.progressBarFlag = false;
           this.selectedGraphObject = graph;
           if (task) {
             if (task === this.OPEN_IN_READONLY_MODE) {
@@ -120,6 +122,9 @@ export class SearchComponent implements OnInit, OnDestroy {
               this.openInDesigner(this.selectedGraphObject);
             }
           }
+        }
+        else{
+          this.progressBarFlag = false
         }
       });
   }
