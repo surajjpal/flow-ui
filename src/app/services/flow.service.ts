@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angul
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 import { State,CommonInsightWrapper } from '../models/tasks.model';
-import { GraphObject,ProcessModel } from '../models/flow.model';
+import { GraphObject,ProcessModel,CommonSearchModel } from '../models/flow.model';
 import { Dashboard } from '../models/dashboard.model';
 import { ApiConfig } from '../models/setup.model';
 
@@ -394,19 +394,55 @@ export class GraphService {
     return subject.asObservable();
   }
 
-  fetch(status?: string): Observable<GraphObject[]> {
+  getGraphObject(id?:any){
+    const subject = new Subject<GraphObject>();
+
+    let url;
+    // if (status) {
+    //   url = `${environment.server + environment.graphbystatusurl + status}`;
+    // } else {
+    //   url = `${environment.server + environment.graphurl}`;
+    // }
+
+    url = `${environment.server + environment.graphurl + id}`;
+    
+    this.httpClient.get<GraphObject>(
+      url,
+      
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<GraphObject>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+  fetch(commonSearchModel?: CommonSearchModel): Observable<GraphObject[]> {
     const subject = new Subject<GraphObject[]>();
 
     let url;
-    if (status) {
-      url = `${environment.server + environment.graphbystatusurl + status}`;
-    } else {
-      url = `${environment.server + environment.graphurl}`;
-    }
+    url = `${environment.server + environment.graphbystatusurl}`;
     
-    this.httpClient.get<GraphObject[]>(
+    this.httpClient.post<GraphObject[]>(
       url,
+      commonSearchModel,
       {
+        headers: this.httpHeaders,
         observe: 'response',
         reportProgress: true,
         withCredentials: true

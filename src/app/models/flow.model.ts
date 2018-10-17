@@ -292,3 +292,16 @@ export class GraphObject extends BaseModel {
     this.closedStateIdList = [];
   }
 }
+
+  
+export class CommonSearchModel {
+  searchParams:any;
+  returnFields:any;
+
+  constructor() {
+    this.searchParams = [];
+    this.returnFields = [];
+  
+  }
+
+}

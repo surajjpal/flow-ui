@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { Agent, Plugin, Classifier, UIComponent } from '../../../../models/agent.model';
 import { Domain, Goal } from '../../../../models/domain.model';
-import { GraphObject } from '../../../../models/flow.model';
+import { GraphObject,CommonSearchModel } from '../../../../models/flow.model';
 
 import { AgentService } from '../../../../services/agent.service';
 import { DomainService } from '../../../../services/domain.service';
@@ -208,8 +208,10 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
           }
         }
       );
-
-    this.subscriptionGraph = this.graphService.fetch('ACTIVE')
+    let commonsearchModel = new CommonSearchModel();
+    commonsearchModel.searchParams = [{"statusCd":"ACTIVE"}];
+    commonsearchModel.returnFields = ["version","machineType"]
+    this.subscriptionGraph = this.graphService.fetch(commonsearchModel)
       .subscribe(flowSource => {
         if (flowSource) {
           this.flowSource = flowSource;
