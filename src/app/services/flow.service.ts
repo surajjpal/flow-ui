@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
-
-import { GraphObject } from '../models/flow.model';
+import { State,CommonInsightWrapper } from '../models/tasks.model';
+import { GraphObject,ProcessModel } from '../models/flow.model';
 import { Dashboard } from '../models/dashboard.model';
 import { ApiConfig } from '../models/setup.model';
 
 import { environment } from '../../environments/environment';
+import { AsyncAction } from 'rxjs/scheduler/AsyncAction';
 
 @Injectable()
 export class FlowDashboardService {
@@ -247,6 +248,83 @@ export class FlowDashboardService {
 
     return subject.asObservable();
   }
+
+}
+
+
+@Injectable()
+
+export class ProcessService{
+  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+  
+  constructor(private httpClient: HttpClient) { }
+
+  getAll(body:any): Observable<ProcessModel[]> {
+    const subject = new Subject<ProcessModel[]>();
+
+    let url;
+    
+      url = `${environment.interfaceService + environment.flowsearch}`;
+    
+    
+    this.httpClient.post<ProcessModel[]>(
+      url,
+      body,
+      {
+        headers:this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<ProcessModel[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+  getSelectedState(body:any): Observable<State> {
+    const subject = new Subject<State>();
+
+    let url;
+    
+      url = `${environment.server + environment.getstateinstance}`;
+    
+    
+    this.httpClient.post<State>(
+      url,
+      body,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<State>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
 
 }
 
