@@ -15,7 +15,6 @@ import { DataTableModule } from 'angular2-datatable';
 import { FlowComponent } from './flow.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { DateRangePickerComponent } from './components/dashboard/daterangepicker/daterangepicker.component';
-import { DateRangePickerComponentSearch } from './components/searchprocess/daterangepicker/daterangepickersearch.component';
 
 import { SearchComponent } from './components/search/search.component';
 import { SearchProcessComponent } from './components/searchprocess/searchprocess.component';
@@ -45,7 +44,6 @@ import { SharedModule } from '../../shared/shared.module';
     FlowComponent,
     DashboardComponent,
     DateRangePickerComponent,
-    DateRangePickerComponentSearch,
     SearchComponent,
     DesignComponent,
     SearchProcessComponent,
