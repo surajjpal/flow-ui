@@ -35,8 +35,6 @@ export class ErrorInterceptor implements HttpInterceptor {
         req = req.clone({
           body: parsedBody
         });
-
-        console.log("Parsed interceptor request :: ", req);
       }
     }
 
@@ -63,7 +61,6 @@ export class ErrorInterceptor implements HttpInterceptor {
                 body: parsedResponseBody
               });
 
-              console.log("Parsed interceptor response :: ", parsedResponse);
               return parsedResponse;
             }
           }
