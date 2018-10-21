@@ -123,4 +123,32 @@ export class ActivityMonitorService {
 
     return subject.asObservable();
   }
+
+  getGraphDataForDataPoint(businessProcessMonitorRequest: BusinessProcessMonitorRequest): Observable<any> {
+    const subject = new Subject<any>();
+    const url = `${environment.server + environment.businessFilterDataPonitsGraphData}`;
+
+    this.httpClient.post<any>(
+        url, 
+        businessProcessMonitorRequest,
+        {
+          headers: this.httpHeaders,
+          observe: 'response',
+          reportProgress: true,
+          withCredentials: true
+        }
+      ).subscribe(
+        (response: HttpResponse<any>) => {
+          subject.next(response.body);
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
+  
+          subject.error(err);
+        }
+      );
+
+    return subject.asObservable();
+  }
 }

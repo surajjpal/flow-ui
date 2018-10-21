@@ -32,6 +32,7 @@ export class DataPoint {
   businessMonitorKey: boolean;
   percentageChange: boolean;
   graphType: string;
+  reportDataKey: boolean;
   childdataPoints: DataPoint[];
 
   constructor() {
@@ -50,6 +51,7 @@ export class DataPoint {
     this.graphType = null;
     this.businessKeyFlag = false;
     this.percentageChange = false;
+    this.reportDataKey=false;
     this.childdataPoints = [];
   }
 }
@@ -165,7 +167,7 @@ export class StateModel {
   runAtTimeExpression: string;
   taskConfig:ConnectorConfig[];
   connectorConfig:ConnectorConfig[];
- 
+  reportFlag: boolean;
 
   constructor() {
     this.stateId = '';
@@ -188,7 +190,7 @@ export class StateModel {
     this.runAtTimeExpression = '';
     this.taskConfig = [];
     this.connectorConfig = [];
-   
+    this.reportFlag = false;
   }
 }
 

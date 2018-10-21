@@ -19,7 +19,9 @@ declare let moment: any;
 export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
 
     graphObjects: GraphObject[]
+    graphObjectFilterByMachineTypes: GraphObject[];
     businessProcessMonitorRequest: BusinessProcessMonitorRequest;
+    businessDataPointConfiguationsForGraph: DataPoint[];
     businessDataPoints: DataPoint[];
     tempBusinessDataPoints: DataPoint[];
     tempBusinessDataPointsSplice = [];
@@ -67,13 +69,14 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         this.loading=true;
         this.tempDateRange.start = moment().startOf('day');
         this.tempDateRange.end = moment().endOf('day');
-        this.subscription = this.graphService.fetch('ACTIVE')
+        this.subscription = this.graphService.fetch()
                             .subscribe(
                                 response => {
                                     if (response.length>0) {
                                         this.graphObjects = response;
+                                        this.setFilterMachineTypes();
                                         const machineType = response[0].machineType;
-                                        this.getBusinessDataPoints(machineType, true);
+                                        //this.getBusinessDataPoints(machineType, true);
                                     }
                                     this.loading=false;
                                 },
@@ -88,6 +91,26 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         if (this.subscription && !this.subscription.closed) {
             this.subscription.unsubscribe();
         }
+    }
+
+    setFilterMachineTypes() {
+        this.graphObjectFilterByMachineTypes = [];
+        if (this.graphObjects && this.graphObjects.length > 0) {
+
+            for (let gf of this.graphObjects) {
+                let found = false
+                for (let fgf of this.graphObjectFilterByMachineTypes) {
+                    if (fgf.machineType == gf.machineType) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    this.graphObjectFilterByMachineTypes = this.graphObjectFilterByMachineTypes.concat(gf);
+                }
+            }
+        }
+        return this.graphObjectFilterByMachineTypes;
     }
 
     onMachineTypeSelect() {
@@ -137,7 +160,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                     for (let dataPoint of this.businessDataPoints) {
                         this.businessProcessMonitorRequest.dataPoints[dataPoint.dataPointName] = null;
                     }
-                    this.setBusinessDataPonitValues();
+                    //this.setBusinessDataPonitValues();
                     if(getResult) {
                         this.getResult();
                     }
@@ -231,9 +254,50 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         }
         //this.businessProcessMonitorRequest.startTime = null;
         //this.businessProcessMonitorRequest.endTime = null;
-        this.getBusinessDataPoints(this.businessProcessMonitorRequest.machineType, true);
+        //this.getBusinessDataPoints(this.businessProcessMonitorRequest.machineType, true);
+        this.businessDataPointConfiguationsForGraph = []
+        let businessDataPointConfiguationsForSummary = []
+        for (let graphData of this.graphObjects) {
+            if (!this.businessProcessMonitorRequest.companyId) {
+                this.businessProcessMonitorRequest.companyId = graphData.companyId;
+            }
+            if (graphData.machineType == this.businessProcessMonitorRequest.machineType) {
+                if (this.businessProcessMonitorRequest.machineIds.indexOf(graphData._id) == -1) {
+                    this.businessProcessMonitorRequest.machineIds = this.businessProcessMonitorRequest.machineIds.concat(graphData._id);
+                }
+                for (let dataPointconfig of graphData.dataPointConfigurationList) {
+                    let found = false;
+                    if (graphData.statusCd == 'ACTIVE' && dataPointconfig.businessMonitorKey && dataPointconfig.graphType != null) {
+                        this.businessDataPointConfiguationsForGraph = this.businessDataPointConfiguationsForGraph.concat(dataPointconfig);
+                    }
+                    else if (graphData.statusCd == 'ACTIVE' && dataPointconfig.businessMonitorKey && (dataPointconfig.percentageChange || dataPointconfig.businessKeyFlag )) {
+                        businessDataPointConfiguationsForSummary = businessDataPointConfiguationsForSummary.concat(dataPointconfig);
+                    }
+                    for (let businessDataPointConfig of this.businessProcessMonitorRequest.dataPointConfigurations) {
+                        if (businessDataPointConfig.dataPointName == dataPointconfig.dataPointName) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        this.businessProcessMonitorRequest.dataPointConfigurations = this.businessProcessMonitorRequest.dataPointConfigurations.concat(dataPointconfig);
+                    }
+                }
+            }
+        }
         
-       
+        console.log("submit filter");
+        console.log(this.businessProcessMonitorRequest);
+        for (let graphDataPoint of this.businessDataPointConfiguationsForGraph) {
+            this.businessProcessMonitorRequest.selectedDataPointConfiguration = JSON.parse(JSON.stringify(graphDataPoint));
+            this.getFilterGraphData(graphDataPoint);
+            
+        }
+        for (let summaryDataConfig of businessDataPointConfiguationsForSummary) {
+            this.businessProcessMonitorRequest.selectedDataPointConfiguration = JSON.parse(JSON.stringify(summaryDataConfig));
+            this.getCountWithPercentage(summaryDataConfig);
+        }
+        
     }
 
     getResult() {
@@ -243,27 +307,28 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         this.businessProcessMonitorGraphData = [];
         this.noOfPercentagediv = 0;
         this.noOfPercentagedivArray = [];
-        this.getCountWithPercentage();
         this.getGraphData();
     }
 
-    getCountWithPercentage() {
+    getCountWithPercentage(dataPoint: DataPoint) {
         this.loading=true;
         this.activityMonitorService.getCountwithPercentageChange(this.businessProcessMonitorRequest)
                     .subscribe(
                         response => {
-                            this.businessProcessMonitorCountPercentageChange = response;
-                            this.tempBusinessProcessMonitorCountPercentageChange = JSON.parse(JSON.stringify(response));
-                            this.noOfPercentagediv = this.businessProcessMonitorCountPercentageChange.length / 6;
-                            this.noOfPercentagediv = Math.floor(this.noOfPercentagediv);
-                            if (this.businessProcessMonitorCountPercentageChange.length % 6 >=0) {
-                                this.noOfPercentagediv = this.noOfPercentagediv + 1;
+                            if (dataPoint.businessKeyFlag) {
+                                response.sequence = 0;
                             }
-                            for (let i=0; i<this.noOfPercentagediv; i++) {
-                                this.noOfPercentagedivArray.push(i);
+                            else {
+                                response.sequence = dataPoint.sequence;
                             }
-                            this.setNoOfPercentageDiv();
+                            this.businessProcessMonitorCountPercentageChange = this.businessProcessMonitorCountPercentageChange.concat(response);
+                            
                             this.loading=false;
+                            this.businessProcessMonitorCountPercentageChange.sort((a , b) => {
+                                if (a.sequence < b.sequence) return -1;
+                                else if (a.sequence > b.sequence) return 1;
+                                else return 0;
+                              });
                         },
                         error => {
                             this.loading=false;
@@ -313,6 +378,53 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                           this.loading=false;  
                         }
                     )
+    }
+
+    getFilterGraphData(dataPoint: DataPoint) {
+        this.activityMonitorService.getGraphDataForDataPoint(this.businessProcessMonitorRequest)
+                    .subscribe(
+                        response => {
+                            let gdata = response;
+                            if (gdata != null && dataPoint.graphType != null) {
+                                if (dataPoint.dataPointName == gdata.dataPointName) {
+                                    if (dataPoint.graphType == this.GRAPH_TYPE_BAR_GRAPH) {
+                                        gdata.options = this.singleDiscreteChartOptions(dataPoint.dataPointLabel, "Value");
+                                        gdata.sequence = dataPoint.sequence
+                                        this.businessProcessMonitorGraphData = this.businessProcessMonitorGraphData.concat(gdata);
+                                    }
+                                    else if (dataPoint.graphType == this.GRAPH_TYPE_PIE_CHART && gdata.result) {
+                                        const colors = []
+                                        for (let donutData of gdata.result) {
+                                            if ( donutData != null && donutData['label'] != null && typeof donutData['label'] === 'string' && this.HTML_COMMOM_COLORS[donutData['label']] != null) {
+                                                donutData['color'] = this.HTML_COMMOM_COLORS[donutData['label']]
+                                            }
+                                            else {
+                                                donutData['color'] = '#' + Math.floor(Math.random()*16777215).toString(16);
+                                                // while (this.HTML_COMMOM_COLORS.indexOf(donutData['color'].toLowerCase()) != -1) {
+                                                //     donutData['color'] = '#' + Math.floor(Math.random()*16777215).toString(16);
+                                                // }
+                                                
+                                            }
+                                            colors.push(donutData["label"]);
+                                        }
+                                        gdata.options = this.donutChartOptions();
+                                        gdata.sequence = dataPoint.sequence;
+                                        this.businessProcessMonitorGraphData = this.businessProcessMonitorGraphData.concat(gdata);
+                                    }
+                                }
+                                this.businessProcessMonitorGraphData.sort((a , b) => {
+                                    if (a.sequence < b.sequence) return -1;
+                                    else if (a.sequence > b.sequence) return 1;
+                                    else return 0;
+                                  });
+                            }
+                            
+                            this.loading=false; 
+                        },
+                        error => {
+                          this.loading=false;  
+                        }
+                    )   
     }
 
 

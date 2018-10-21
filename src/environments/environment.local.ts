@@ -23,7 +23,7 @@ export const environment = {
 
   // Flow
   server: 'http://localhost:8080/flow/console/',
-  autourl:'http://localhost:5002/?',
+  autourl:'http://localhost:4200/#/pg/ch/cnv/',
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
   orPayloadMachineType:'state/saveOrPayload/machineType/',
@@ -130,6 +130,7 @@ export const environment = {
   businessObjectTrainingUrl: '/automatons/businessobject/training',
   businessObjectActivateTrainerUrl: '/automatons/businessobject/activate',
   businessObjectDectivateTrainerUrl: '/automatons/businessobject/deactivate',
+  businessObjectPredictUrl: '/automatons/businessobject/predict',
   
   //Dashboard
   dashboardServer: 'http://localhost:8080/flow/dashboard/',
@@ -156,6 +157,7 @@ export const environment = {
   // activity monitor services
   businessDataPointValues: 'businessactivitymanagement/datapointvalues',
   businessDataPoints: 'businessactivitymanagement/datapoints',
-  businessDataPonitsPercentageCount: 'businessactivitymanagement/percentagecount',
+  businessDataPonitsPercentageCount: 'businessactivitymanagement/datapoint/percentagecount',
   businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
+  businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
 };

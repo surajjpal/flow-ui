@@ -26,7 +26,7 @@ export const environment = {
 
   // Flow
   server: 'http://108.168.190.82:8080/flow/console/',
-  autourl:'https://api.automatapi.com/?',
+  autourl:'https://virtualagent.automatapi.xyz/#/pg/ch/cnv/',
 
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
@@ -128,6 +128,7 @@ export const environment = {
   businessObjectTrainingUrl: '/automatons/businessobject/training',
   businessObjectActivateTrainerUrl: '/automatons/businessobject/activate',
   businessObjectDectivateTrainerUrl: '/automatons/businessobject/deactivate',
+  businessObjectPredictUrl: '/automatons/businessobject/predict',
 
   //Dashboard
   dashboardServer: 'http://108.168.190.82:8080/flow/dashboard/',
@@ -154,6 +155,7 @@ export const environment = {
   // activity monitor services
   businessDataPointValues: 'businessactivitymanagement/datapointvalues',
   businessDataPoints: 'businessactivitymanagement/datapoints',
-  businessDataPonitsPercentageCount: 'businessactivitymanagement/percentagecount',
+  businessDataPonitsPercentageCount: 'businessactivitymanagement/datapoint/percentagecount',
   businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
+  businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
 };
