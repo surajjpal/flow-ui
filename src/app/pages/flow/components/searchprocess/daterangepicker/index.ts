@@ -1,1 +1,1 @@
-export * from './daterangepicker.component';
+export * from './daterangepickersearch.component';
