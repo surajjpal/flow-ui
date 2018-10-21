@@ -11,6 +11,7 @@ import { ProcessModel } from '../../../../models/flow.model';
 // Service Imports
 import { CommunicationService,ProcessService } from '../../../../services/flow.service';
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
+import { DateRangePickerComponentSearch } from './daterangepicker/daterangepickersearch.component'
 
 @Component({
   selector: 'api-flow-searchprocess',

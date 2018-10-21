@@ -3,10 +3,10 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 declare let moment: any;
 
 @Component({
-  selector: 'api-daterangepicker',
-  templateUrl: './daterangepicker.component.html'
+  selector: 'api-daterangepickersearch',
+  templateUrl: './daterangepickersearch.component.html'
 })
-export class DateRangePickerComponent implements OnInit {
+export class DateRangePickerComponentSearch implements OnInit {
 
   rangePickerOptions: any = {};
   dateRange: any = {};
