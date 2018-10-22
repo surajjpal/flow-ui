@@ -71,7 +71,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.domainCreateMode = true;
     this.modalHeader = '';
     this.createMode = false;
-    this.languageSource = ['ENG', 'HIN', 'MAR', 'ID', 'ML'];
+    this.languageSource = ['ENG', 'HIN', 'MAR', 'ID', 'ML', 'ARA'];
     this.operandSource = ['AND', 'OR'];
     this.modelKeysSource = [];
     this.domainUpdate = 'Domain';
