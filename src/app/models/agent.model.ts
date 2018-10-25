@@ -12,6 +12,7 @@ export class UIComponent {
   episodeCloseTimeout: number;
   cronEnabled: boolean;
   isBargeable: boolean;
+  conversationWindowTitlePrefix: string;
 
   constructor() {
     this.colorCss = '';
@@ -25,6 +26,7 @@ export class UIComponent {
     this.episodeCloseTimeout = 2880;
     this.cronEnabled = false;
     this.isBargeable = false;
+    this.conversationWindowTitlePrefix = 'Chatting with';
   }
 }
 

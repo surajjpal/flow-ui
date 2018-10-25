@@ -76,6 +76,11 @@
                   name="episodeCloseTimeout" min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
                 />
               </div>
+              <div class="form-group">
+                <label>Conversation window title</label>
+                <input type="text" class="form-control" required placeholder="Chatting with" [(ngModel)]="selectedAgent.uiComponent.conversationWindowTitlePrefix"
+                  name="conversationWindowTitlePrefix"/>
+              </div>
               <div class="checkbox">
                 <ba-checkbox [(ngModel)]="selectedAgent.uiComponent.delayInMessages" [label]="'Delay in messages'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
               </div>
