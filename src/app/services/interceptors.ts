@@ -17,7 +17,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   dateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/;
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.method && req.body && (req.method === 'POST' || req.method === 'PUT')) {
+    if (req.url && req.url.includes("crud") &&req.method && req.body && (req.method === 'POST' || req.method === 'PUT')) {
       const parsedBody = JSON.parse(JSON.stringify(req.body), (key, value) => {
         if (value && typeof value === "string" && this.dateFormat.test(value)) {
           const tempDate = new Date(value);
