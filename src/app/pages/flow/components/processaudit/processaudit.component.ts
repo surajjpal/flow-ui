@@ -103,7 +103,8 @@ export class ProcessAuditComponent implements OnInit, OnDestroy {
   }
 
   showStateInfo(state){
-      console.log(state)
+     
+      this.close();
       let body = {};
       body["machineId"] = this.selectedProcess.flowId;
       body["stateCd"] = state.stateCd;
@@ -124,6 +125,7 @@ export class ProcessAuditComponent implements OnInit, OnDestroy {
 
   close(){
     this.visible = false;
+    this.dataPoints = [];
   }
 
   ngOnDestroy() {
