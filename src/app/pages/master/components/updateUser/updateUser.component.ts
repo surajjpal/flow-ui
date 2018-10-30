@@ -22,6 +22,9 @@ export class UpdateUserComponent implements OnInit, OnDestroy {
   formHeader: string;
   buttonName: string;
 
+  slaUnitType: string[] = ['MINUTE', 'HOUR', 'WEEK', 'MONTH', 'YEAR'];
+
+
   updateMode: boolean;
   profileEditMode: boolean = false;
 
@@ -106,23 +109,23 @@ export class UpdateUserComponent implements OnInit, OnDestroy {
       if (this.updateMode || this.profileEditMode) {
         this.userSubscription = this.authService.update(this.selectedUser)
           .subscribe(
-          data => {
-            // set success message and pass true paramater to persist the message after redirecting to the login page
-            if (data && data.username === this.universalUser.getUser().username) {
-              // this is just update operation thus sending false to prevent storage event broadcast
-              this.universalUser.setUser(data, false);
-            }
-            this.alertService.success('User updated successfully', true, 5000);
-            this.location.back();
-          });
+            data => {
+              // set success message and pass true paramater to persist the message after redirecting to the login page
+              if (data && data.username === this.universalUser.getUser().username) {
+                // this is just update operation thus sending false to prevent storage event broadcast
+                this.universalUser.setUser(data, false);
+              }
+              this.alertService.success('User updated successfully', true, 5000);
+              this.location.back();
+            });
       } else {
         this.userSubscription = this.authService.register(this.selectedUser)
           .subscribe(
-          data => {
-            // set success message and pass true paramater to persist the message after redirecting to the login page
-            this.alertService.success('User created successfully', true, 5000);
-            this.location.back();
-          });
+            data => {
+              // set success message and pass true paramater to persist the message after redirecting to the login page
+              this.alertService.success('User created successfully', true, 5000);
+              this.location.back();
+            });
       }
     }
   }
@@ -131,11 +134,11 @@ export class UpdateUserComponent implements OnInit, OnDestroy {
     if (this.selectedUser && this.selectedUser._id && this.selectedUser._id.length > 0) {
       this.userSubscription = this.authService.delete(this.selectedUser._id)
         .subscribe(
-        data => {
-          // set success message and pass true paramater to persist the message after redirecting to the login page
-          this.alertService.success('User deleted successfully', true, 5000);
-          this.location.back();
-        });
+          data => {
+            // set success message and pass true paramater to persist the message after redirecting to the login page
+            this.alertService.success('User deleted successfully', true, 5000);
+            this.location.back();
+          });
     }
   }
 
