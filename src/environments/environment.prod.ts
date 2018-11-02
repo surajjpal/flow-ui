@@ -17,7 +17,7 @@ export const environment = {
 
   processauditurl:"http://localhost:5000/api/universalsearch/search/flow",
   // Interfaces
-  interfaceService: 'https://flow.automatapi.io/flow/interfaces',
+  interfaceService: '',
   updateClassifierTraining : 'https://flow.automatapi.io/flow/interfaces/auto_decorate_training',
   updateIntentTraining: 'https://flow.automatapi.io/flow/interfaces/intent_classification_training',
   updateEntityTraining: 'https://flow.automatapi.io/flow/interfaces/entity_classification_training',
@@ -153,7 +153,7 @@ export const environment = {
   dashboardinterface: 'https://flow.automatapi.io/flow/interfaces/dashboard',
 
   //Following APIs path - To be used in conjunction with interfaceService property
-  crudFunction: '/crud',
+  crudFunction: 'http://localhost:5100/api/crud',
   sendAgentMessage: '/sendMessage',
 
   // activity monitor services

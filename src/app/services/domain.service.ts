@@ -43,14 +43,15 @@ export class DomainService {
   }
 
 
-  domainLookup(query?: string): Observable<Domain[]> {
+  domainLookup(payload?: any): Observable<Domain[]> {
     const subject = new Subject<Domain[]>();
 
     const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
     const crudInput = new CRUDOperationInput();
-    crudInput.payload = new Map<any, any>();
+    crudInput.payload = payload;
     crudInput.collection = 'domain';
     crudInput.operation = "READ_ALL";
+    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     
     this.httpClient.post<Map<string, Domain[]>>(
       crudUrl, 
@@ -116,6 +117,7 @@ export class DomainService {
     const crudInput = new CRUDOperationInput();
     crudInput.payload = domain;
     crudInput.collection = 'domain';
+    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     if (domain._id !== null) {
       crudInput.operation = "UPDATE";
     } else {

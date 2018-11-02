@@ -719,14 +719,27 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           }
         }
       }
+      
+      if(!this.selectedDomain.statusCd){
+        this.selectedDomain.statusCd = "ACTIVE"
+        this.selectedDomain.version = 1
+       
+      }
+      if(this.selectedDomain.statusCd == "DRAFT"){
+        this.selectedDomain.version = this.selectedDomain.version + 1
+      }
+      if(this.selectedDomain.statusCd == "CLONED"){
+        this.selectedDomain.version = 1
+      }
       this.subscription = this.domainService.saveDomain(this.selectedDomain)
         .subscribe(
           response => {
-            this.updateClassifierTraining();
+            this.selectedDomain = response;
+            //this.updateClassifierTraining();
 
             //this.updateIntenTrainingData();
 
-            // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
+           this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
           },
           error => {
             this.domainBody = `Something went wrong please try again!!`;

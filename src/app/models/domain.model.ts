@@ -230,6 +230,9 @@ export class Response {
 
 export class Domain {
   _id: string;
+  previousDomainId:string;
+  statusCd:string;
+  version:number;
   name: string;
   createdDt: Date;
   desc: string;
@@ -244,6 +247,9 @@ export class Domain {
 
   constructor() {
     this._id = null;
+    this.previousDomainId = '';
+    this.statusCd = '';
+    this.version = 0;
     this.name = '';
     this.createdDt = new Date();
     this.desc = '';

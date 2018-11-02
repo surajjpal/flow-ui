@@ -30,23 +30,80 @@
                   <th>
                     <mfDefaultSorter by="name">Name</mfDefaultSorter>
                   </th>
-                  <th>
-                    <mfDefaultSorter by="desc">Description</mfDefaultSorter>
-                  </th>
+                  
                   <th>
                     <mfDefaultSorter by="langSupported">Languages Supported</mfDefaultSorter>
                   </th>
                   <th>
-                    <mfDefaultSorter by="domainGoals">Goals</mfDefaultSorter>
+                    <mfDefaultSorter by="status">Status</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="version">Version</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="domainGoals">Action</mfDefaultSorter>
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let domain of mf.data" (click)="onDomainSelect(domain)">
+                <tr *ngFor="let domain of mf.data">
                   <td>{{domain.name}}</td>
-                  <td>{{domain.desc}}</td>
                   <td>{{arrayToString(domain.langSupported)}}</td>
-                  <td>{{domainGoalsToString(domain.domainGoals)}}</td>
+                  <td>{{domain.statusCd}}</td>
+                  <td >{{domain.version}}</td>
+                  <td *ngIf="domain.statusCd && domain.statusCd === DRAFT">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_EDIT_MODE)">
+                        <i class="ion-edit"></i>
+                      </button>
+                      <button type="button" class="btn btn-primary" title="Publish" (click)="onDomainSelect(domain)" data-toggle="modal" data-target="#finalWarningModal">
+                        <i class="fa fa-check-square-o"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td *ngIf="domain.statusCd && domain.statusCd === CLONED">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_EDIT_MODE)">
+                        <i class="ion-edit"></i>
+                      </button>
+                      <button type="button" class="btn btn-primary" title="Publish" (click)="onDomainSelect(domain)" data-toggle="modal" data-target="#finalWarningModal">
+                        <i class="fa fa-check-square-o"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td *ngIf="domain.statusCd && domain.statusCd === CLOSED">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-primary" title="View" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
+                        <i class="ion-eye"></i>
+                      </button>
+                      <button type="button" class="btn btn-primary" title="Activate" (click)="activateDomain(domain)">
+                        <i class="ion-power"></i>
+                      </button>
+                      <button type="button" class="btn btn-primary" title="Clone" (click)="onDomainSelect(domain, CLONE_AND_EDIT_MODE)">
+                        <i class="fa fa-clone"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td *ngIf="domain.statusCd && domain.statusCd === ACTIVE">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-primary" title="View" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
+                        <i class="ion-edit"></i>
+                      </button>
+                      <button type="button" class="btn btn-primary" title="Deactivate" (click)="deactivateDomain(domain)">
+                        <i class="ion-close-round"></i>
+                      </button>
+                      <button type="button" class="btn btn-primary" title="Clone" (click)="onDomainSelect(domain, CLONE_AND_EDIT_MODE)">
+                        <i class="fa fa-clone"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td *ngIf="!domain.statusCd">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-primary" title="View" (click)="onDomainSelect(domain)">
+                        <i class="ion-edit"></i>
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
               <tfoot>
@@ -60,9 +117,100 @@
           </div>
         </div>
         <div role="tabpanel" class="tab-pane fade" id="tab_archived">
-          
+            <!-- <table class="table table-striped" [mfData]="domainSourceClosed | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="name">
+                <thead>
+                  <tr>
+                    <th>
+                      <mfDefaultSorter by="name">Name</mfDefaultSorter>
+                    </th>
+                    
+                    <th>
+                      <mfDefaultSorter by="langSupported">Languages Supported</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="status">Status</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="version">Version</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="domainGoals">Action</mfDefaultSorter>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let domain of mf.data">
+                    <td>{{domain.name}}</td>
+                    <td>{{arrayToString(domain.langSupported)}}</td>
+                    <td>{{domain.statusCd}}</td>
+                    <td >{{domain.version}}</td>
+                    <td *ngIf="domain.statusCd && domain.statusCd === DRAFT">
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_EDIT_MODE)">
+                          <i class="ion-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary" title="Publish" (click)="onDomainSelect(domain)" data-toggle="modal" data-target="#finalWarningModal">
+                          <i class="fa fa-check-square-o"></i>
+                        </button>
+                      </div>
+                    </td>
+                    <td *ngIf="domain.statusCd && domain.statusCd === CLONED">
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_EDIT_MODE)">
+                          <i class="ion-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary" title="Publish" (click)="onDomainSelect(domain)" data-toggle="modal" data-target="#finalWarningModal">
+                          <i class="fa fa-check-square-o"></i>
+                        </button>
+                      </div>
+                    </td>
+                    <td *ngIf="domain.statusCd && domain.statusCd === CLOSED">
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary" title="View" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
+                          <i class="ion-eye"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary" title="Activate" (click)="activateDomain(domain)">
+                          <i class="ion-power"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary" title="Clone" (click)="onDomainSelect(domain, CLONE_AND_EDIT_MODE)">
+                          <i class="fa fa-clone"></i>
+                        </button>
+                      </div>
+                    </td>
+                    <td *ngIf="domain.statusCd && domain.statusCd === ACTIVE">
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary" title="View" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
+                          <i class="ion-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary" title="Deactivate" (click)="deactivateDomain(domain)">
+                          <i class="ion-close-round"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary" title="Clone" (click)="onDomainSelect(domain, CLONE_AND_EDIT_MODE)">
+                          <i class="fa fa-clone"></i>
+                        </button>
+                      </div>
+                    </td>
+                    <td *ngIf="!domain.statusCd">
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary" title="View" (click)="onDomainSelect(domain)">
+                          <i class="ion-edit"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="100%">
+                      <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                    </td>
+                  </tr>
+                </tfoot>
+            </table> -->
         </div>
       </div>
     </ba-card>
   </div>
 </div>
+
+

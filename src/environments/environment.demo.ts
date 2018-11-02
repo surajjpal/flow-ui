@@ -17,7 +17,7 @@ export const environment = {
     
 
     // Interfaces
-    interfaceService: 'https://flow.automatapi.com/flow/interfaces',
+    interfaceService: '',
     updateClassifierTraining : 'https://flow.automatapi.com/flow/interfaces/auto_decorate_training',
     updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',
     updateEntityTraining: 'https://flow.automatapi.com/flow/interfaces/entity_classification_training',
@@ -153,7 +153,7 @@ export const environment = {
    dashboardinterface: 'https://flow.automatapi.com/flow/interfaces/dashboard',
 
    //Following APIs path - To be used in conjunction with interfaceService property
-   crudFunction: '/crud',
+   crudFunction: 'http://localhost:5100/api/crud',
    sendAgentMessage: '/sendMessage',
 
    // activity monitor services

@@ -13,8 +13,15 @@ import { DataSharingService } from '../../../../services/shared.service';
 })
 export class DomainsComponent implements OnInit, OnDestroy {
   domainSource: Domain[];
+  domainSourceClosed: Domain[];
   selectedDomain: Domain;
-
+  private readonly OPEN_IN_READONLY_MODE = 1;
+  private readonly OPEN_IN_EDIT_MODE = 2;
+  private readonly CLONE_AND_EDIT_MODE = 3;
+  private readonly ACTIVE = 'ACTIVE';
+  private readonly CLOSED = 'CLOSED';
+  private readonly DRAFT = 'DRAFT';
+  private readonly CLONED = 'CLONED';
   private subscription: Subscription;
   
   constructor(
@@ -28,7 +35,8 @@ export class DomainsComponent implements OnInit, OnDestroy {
   }
   
   ngOnInit() {
-    this.fetchDomains();
+    this.fetchActiveDomains();
+    this.fetchClosedDomains();
   }
   
   ngOnDestroy(): void {
@@ -43,22 +51,102 @@ export class DomainsComponent implements OnInit, OnDestroy {
       .subscribe(
         domains => {
           if (domains) {
+            console.log(domains)
             this.domainSource = domains;
           }
         }
       );
   }
 
-  onDomainSelect(domain?: Domain) {
-    if (domain) {
-      this.selectedDomain = domain;
-    } else {
-      this.selectedDomain = null;
-    }
+  fetchActiveDomains() {
+    let payload = {"statusCd":{ "$in": ["ACTIVE","DRAFT"]}}
+    this.subscription = this.domainService.domainLookup(payload)
+      .subscribe(
+        domains => {
+          if (domains) {
+            console.log(domains)
+            this.domainSource = domains;
+          }
+        }
+      );
+  }
 
-    this.sharingService.setSharedObject(this.selectedDomain);
+  fetchClosedDomains() {
+    let payload = {"statusCd":"CLOSED"}
+    this.subscription = this.domainService.domainLookup(payload)
+      .subscribe(
+        domains => {
+          if (domains) {
+            console.log(domains)
+            this.domainSourceClosed = domains;
+          }
+        }
+      );
+  }
 
-    this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
+
+
+  // onDomainSelect(domain?: Domain) {
+  //   if (domain) {
+  //     this.selectedDomain = domain;
+  //   } else {
+  //     this.selectedDomain = null;
+  //   }
+
+  //   this.sharingService.setSharedObject(this.selectedDomain);
+
+  //   this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
+  // }
+
+  
+  onDomainSelect(domain?: Domain, task?: number): void {
+   // this.progressBarFlag = true;
+      console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
+      console.log(domain.statusCd)
+      if(domain.statusCd!=null){
+        if(domain!=null && domain._id.length > 0)
+        {
+         // this.progressBarFlag = false;
+          this.selectedDomain = domain;
+          if (task) {
+            if (task === this.OPEN_IN_READONLY_MODE) {
+              console.log("===================EDIT MODE====================")
+              this.selectedDomain.statusCd = this.DRAFT;
+              this.selectedDomain.previousDomainId = this.selectedDomain._id;
+              this.selectedDomain._id = null;
+              this.sharingService.setSharedObject(this.selectedDomain);
+              this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
+
+            } else if (task === this.OPEN_IN_EDIT_MODE) {
+              
+              this.sharingService.setSharedObject(this.selectedDomain);
+              this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
+              
+
+
+            } else if (task === this.CLONE_AND_EDIT_MODE) {
+              this.selectedDomain._id = null;
+              this.selectedDomain.statusCd = this.CLONED;
+              this.sharingService.setSharedObject(this.selectedDomain);
+              this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
+              
+            }
+          }
+        }
+        else{
+          this.selectedDomain = null;
+        }
+      }
+      else{
+        if (domain) {
+          this.selectedDomain = domain;
+        } else {
+          this.selectedDomain = null;
+        }
+        this.sharingService.setSharedObject(this.selectedDomain);
+        this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
+      }
+    
   }
 
   domainGoalsToString(goals: Goal[]) {
