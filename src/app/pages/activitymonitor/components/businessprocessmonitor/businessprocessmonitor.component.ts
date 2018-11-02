@@ -7,7 +7,7 @@ import { ActivityMonitorService } from '../../../../services/activitymonitor.ser
 import { GraphService } from  '../../../../services/flow.service'
 
 import { Subscription } from "rxjs/Subscription";
-import { GraphObject, DataPoint } from "app/models/flow.model";
+import { GraphObject, DataPoint,CommonSearchModel } from "app/models/flow.model";
 
 declare let moment: any;
 
@@ -69,7 +69,10 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         this.loading=true;
         this.tempDateRange.start = moment().startOf('day');
         this.tempDateRange.end = moment().endOf('day');
-        this.subscription = this.graphService.fetch()
+        let commonsearchModel = new CommonSearchModel();
+        commonsearchModel.searchParams = [{"statusCd":"ACTIVE"},{"statusCd":"DRAFT"},{"statusCd":"CLOSED"}];
+        commonsearchModel.returnFields = ["machineLabel","version","statusCd","machineType"];
+        this.subscription = this.graphService.fetch(commonsearchModel)
                             .subscribe(
                                 response => {
                                     if (response.length>0) {
