@@ -1,39 +1,47 @@
+// The file contents for the current environment will overwrite these during build.
+// The build system defaults to the dev environment which uses `environment.ts`, but if you do
+// `ng build --env=prod` then `environment.prod.ts` will be used instead.
+// The list of which env maps to which file can be found in `.angular-cli.json`.
+
 export const environment = {
   production: false,
-  name: 'local',
+  name: 'development',
 
   // Root
-  root: 'http://localhost:8080/flow/',
-  
-    // API
-  authurl: 'http://localhost:8080/flow/auth/',
+  root: 'http://108.168.190.82:8080/flow/',
 
+  // API
+  authurl: 'http://108.168.190.82:8080/flow/auth/',
+  
   // Services
-  saveaccounturl: 'http://localhost:8080/flow/account/create',
-  fetchaccountbyidurl: 'http://localhost:8080/flow/account/',
-  publishaccounturl:'http://localhost:8080/flow/account/publish/',
-  unpublishaccounturl:'http://localhost:8080/flow/account/unpublish/',
+  saveaccounturl: 'http://108.168.190.82:8080/flow/services/saveaccount',
+  fetchaccountbyidurl: 'http://108.168.190.82:8080/flow/services/fetchaccountbyid?query=',
+  publishaccounturl:'http://108.168.190.82:8080/flow/services/publish/',
+  unpublishaccounturl:'http://108.168.190.82:8080/flow/services/unpublish/',
 
-  // Interfaces
-  interfaceService: 'http://localhost:8080/flow/interfaces',
-  updateClassifierTraining : 'http://localhost:8080/flow/interfaces/auto_decorate_training',
-  updateIntentTraining: 'http://localhost:8080/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'http://localhost:8080/flow/interfaces/entity_classification_training',
+  processauditurl:"http://localhost:5000/api/universalsearch/search/flow",
   
+  // Interfaces
+  interfaceService: 'http://108.168.190.82:8080/flow/interfaces',
+  updateClassifierTraining : 'http://108.168.190.82:8080/flow/interfaces/auto_decorate_training',
+  updateIntentTraining: 'http://108.168.190.82:8080/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'http://108.168.190.82:8080/flow/interfaces/entity_classification_training',
 
   // Flow
-  server: 'http://localhost:8080/flow/console/',
-  autourl:'http://localhost:5002/?',
+  server: 'http://108.168.190.82:8080/flow/console/',
+  autourl:'https://virtualagent.automatapi.xyz/#/pg/ch/cnv/',
+
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
   orPayloadMachineType:'state/saveOrPayload/machineType/',
-  statebystatusandfolderurl: 'state/pagebystatusandfolder/',// status: CLOSED, ACTIVE; folder: Group, Personal
+  statebystatusandfolderurl: 'state/pagebystatusandfolder/,', // status: CLOSED, ACTIVE; folder: Group, Personal
   statebysubstatusandfolderurl:'state/pagebysubstatusandfolder/',
   saveflaggedstate:'state/saveFlaggedState',
   savearchivestate:'state/archive',
   gettatrecords:'state/fetchtat',
   getallstats:'state/fetchstatestatus',
   getpersonalstats:'state/getstatestatusbyuser',
+  getstateinstance:'state/fetchstateinstance',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
@@ -41,7 +49,6 @@ export const environment = {
   messageurl: 'data/message/byuser/Admin',
   stateflowimageurl: 'statemachine/stateflow/',
   updatestatemachineurl: 'statemachine/updateflow/withState',
-
   alocateuserurl:'statemachine/allocateto',
   graphobjectbyflowinstanceid: 'statemachine/graphobject',
   autosummary: 'dashboard/CONVERSATION_SUMMARY',
@@ -56,12 +63,10 @@ export const environment = {
   
 
   registerurl: 'user/createUser',
-
   forgotpassword:'user/forgotPassword',
   savehierarchy:'user/hierarchy',
   getuserhierarchy:'user/getUserHierarchy/',
   userchildren:'user/userChildren',
-
 
   createcompanyadminurl: 'user/createcompanyadmin',
   updateuserurl: 'user/update',
@@ -71,9 +76,8 @@ export const environment = {
   rolesurl: 'master/roles',
   routesurl: 'master/routes',
   apiconfigurl: 'apiConfig/',
-
   supportedmethodsurl: 'apiConfig/supportedMethods',
-  
+
   connectorinfo:'connectors/',
   getallconconfig:'connectors/getAll/',
   deleteconconfig:'connectors/delete/',
@@ -81,8 +85,8 @@ export const environment = {
   getallconinfo:'connectors/getConInfo/',
   getconinfobytype:'connectors/getConInfoByType/',
 
-  // Auto
-  autoServer: 'http://localhost:8080/flow/auto/',
+  // auto
+  autoServer: 'http://108.168.190.82:8080/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',
@@ -108,6 +112,9 @@ export const environment = {
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
+
+  flowsearch:'/api/flow/search',
+
   // Analytics
   reportservice: 'http://localhost:8080/flow/report',
   sendReportUrl: '/reports/analyticsreport/sendreport',
@@ -131,7 +138,7 @@ export const environment = {
   businessObjectPredictUrl: '/automatons/businessobject/predict',
 
   //Dashboard
-  dashboardServer: 'http://localhost:8080/flow/dashboard/',
+  dashboardServer: 'http://108.168.190.82:8080/flow/dashboard/',
   dashboardsummary:'auto/dashboard_summary',
   episodetimeline:'auto/episode_timeline',
   intentcount:'auto/intent_count',
@@ -147,10 +154,11 @@ export const environment = {
   statetransactionvalue:'flow/state_transaction_value',
 
   //Dashboard from interfaces
-  dashboardinterface: 'http://localhost:8080/flow/interfaces/dashboard',
+  dashboardinterface: 'http://108.168.190.82:8080/flow/interfaces/dashboard',
 
-  //CRUD API path - To be used in conjunction with interfaceService property
-  crudFunction : '/crud',
+  //Following APIs path - To be used in conjunction with interfaceService property
+  crudFunction: '/crud',
+  sendAgentMessage: '/sendMessage',
 
   // activity monitor services
   businessDataPointValues: 'businessactivitymanagement/datapointvalues',
@@ -158,9 +166,7 @@ export const environment = {
   businessDataPonitsPercentageCount: 'businessactivitymanagement/datapoint/percentagecount',
   businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
   businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
-  
-  //python project in api-utils ondemandreport project
-  //sendReportCSV: 'http://127.0.0.1:5000/generatereport',
+
   sendReportCSV: 'http://127.0.0.1:5000/generatereport',
   funnelReport: 'state/fetchfunneldata',
 };
