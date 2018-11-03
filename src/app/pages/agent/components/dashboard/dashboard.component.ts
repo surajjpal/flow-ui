@@ -239,8 +239,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.MESSAGES_IN_EPISODE_FLAG = true;
         this.updateProgressBar();
         this.messagesInEpisodeData = autoDashboard['result'];
-        console.log("*****");
-        console.log(this.messagesInEpisodeData);
+        
       }, err => {
         this.MESSAGES_IN_EPISODE_FLAG = true;
         this.updateProgressBar();
@@ -270,8 +269,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   parseGoalsCountAndEfficiency(autoDashboard: any) {
     this.goalsCountData = autoDashboard[0].values;
     this.goalsEfficiencyData = autoDashboard[1];
-    console.log("goal efficiency");
-    console.log(this.goalsEfficiencyData);
     
   }
 
