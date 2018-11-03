@@ -166,4 +166,7 @@ export const environment = {
   businessDataPonitsPercentageCount: 'businessactivitymanagement/datapoint/percentagecount',
   businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
   businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
+
+  sendReportCSV: 'http://127.0.0.1:5000/generatereport',
+  funnelReport: 'state/fetchfunneldata',
 };
