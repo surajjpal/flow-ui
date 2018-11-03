@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angul
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
-import { BusinessProcessMonitorRequest } from '../models/businessprocessmonitor.model'
+import { BusinessProcessMonitorRequest, OnDemandReportRequest } from '../models/businessprocessmonitor.model'
 import { environment } from "../../environments/environment";
 import { DataPoint } from "app/models/flow.model";
 
@@ -11,7 +11,7 @@ import { DataPoint } from "app/models/flow.model";
 
 @Injectable()
 export class ActivityMonitorService {
-  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json'});
 
   constructor(private httpClient: HttpClient) { }
 
@@ -136,6 +136,32 @@ export class ActivityMonitorService {
           observe: 'response',
           reportProgress: true,
           withCredentials: true
+        }
+      ).subscribe(
+        (response: HttpResponse<any>) => {
+          subject.next(response.body);
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
+  
+          subject.error(err);
+        }
+      );
+
+    return subject.asObservable();
+  }
+
+  sendReportCSV(onDemandReportRequest: OnDemandReportRequest): Observable<any> {
+    const subject = new Subject<any>();
+    const url = `${environment.sendReportCSV}`;
+    
+    this.httpClient.post<any>(
+        url, 
+        onDemandReportRequest,
+        {
+          headers: this.httpHeaders,
+          reportProgress: true
         }
       ).subscribe(
         (response: HttpResponse<any>) => {

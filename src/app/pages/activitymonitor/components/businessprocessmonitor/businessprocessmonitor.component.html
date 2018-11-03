@@ -13,6 +13,42 @@
         </div>
     </div>
 </div>
+<ba-card cardTitle="Send CSV Report">
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <label for="selectmachinetype">Process</label>
+            <select (change)="onMachineTypeSelect()" class="form-control" required id="selectmachinetype" title="Choose Process" [(ngModel)]="onDemandReportRequest.machineType"
+                name="machineType">
+                <option *ngFor="let graphObj of graphObjectFilterByMachineTypes" [ngValue]="graphObj.machineType">{{ graphObj.machineLabel}}
+                </option>
+            </select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <label for="toAddress">To Email</label>
+            <input type="text" class="form-control" required placeholder="To Email" [(ngModel)]="onDemandReportRequest.toAddress" name="toAddress" />
+            
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <label for="selectdaterange">Select date range</label>
+            <br/>
+            <api-daterangepicker id="selectdaterange" [dateRange]="tempDateRange" (selectedRange)="setTimeRangeReport($event)"></api-daterangepicker>
+        </div>
+        <!-- <div *ngFor="let outindex of divArray" class="col-lg-12 col-md-12 col-sm-12" style="display: inline-flex; margin-top: 20px;">
+            <div *ngFor="let dataPoint of getBusinessDataPoint(outindex)" class="col-lg-4 col-md-4 col-sm-12">
+                <label>{{ dataPoint.dataPointLabel }}</label>
+                <select  class="form-control"  required id="selectflowstatus"  title="Choose Status" [(ngModel)]="businessProcessMonitorRequest.dataPoints[dataPoint.dataPointName]" name="dataPoints[dataPoint.dataPointName]">
+                    <option *ngFor="let value of getBusinessDataPonitValuesFromDataPointKey(dataPoint.dataPointName)" [ngValue]="value">{{ value }}</option>
+                </select>
+            </div>
+        </div> -->
+
+    </div>
+    <div class="row">
+        <div class="col-lg-offset-10 col-md-offset-10 col-sm-12">
+            <button [disabled]="loading" type="button" class="btn btn-outline-primary pull-right" (click)="sendEmail()">Send Email</button>
+        </div>
+    </div>
+</ba-card>
 <ba-card cardTitle="Filter">
     <div class="row">
         <div class="col-lg-4 col-md-4 col-sm-12">
