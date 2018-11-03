@@ -6,21 +6,20 @@
             <label for="selectDate" class="control-label col-sm-6">DATE</label>
             <api-daterangepicker (selectedRange)="pesonalTat($event)"></api-daterangepicker>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="status" class="control-label col-sm-6">STATUS:</label>
             <select class="selectpicker form-control" required id="selectStatus" title="Choose Status" [(ngModel)]="status" [ngModelOptions]="{standalone: true}">
               <option *ngFor="let status of Statuses" [value]="status">{{status}}</option>
               </select>
-          </div>
+          </div> -->
           <div class="form-group" *ngIf="Users.length > 0">
               <label for="selectUser"  class="control-label col-sm-6">AGENT:</label>
               <select class="selectpicker form-control" multiple="true" required id="selectUser" style= "width: 400px; height:50px" title="Choose User" [(ngModel)]="tempUsers" [ngModelOptions]="{standalone: true}">
               <option *ngFor="let user of Users" [ngValue]="user">{{user.userName}}</option>
               </select>
           </div>
-          <button type="button" class="btn btn-success" id="submit" style="display: block; text-align: center;width: 100px" (click)="submit()">SUBMIT</button> 
+          <button type="button"  class="btn btn-success" style="margin-top: 10px" id="submit" (click)="submit()">SUBMIT</button> 
         </form>
-        
       </ba-card>
   </div>
 
@@ -67,19 +66,19 @@
     <div class="col-sm-6" *ngIf="!personal"> 
         <div class="row tile_count">
             <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
-                <span class="count_top"><i class="fa fa-user"></i>Team Pending</span>
+                <span class="count_top"><i class="fa fa-user"></i>Agent Pending</span>
                 <div class="count">{{overallStateReportModel.pendingStatusCount}}</div>
             </div>
             <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
-                <span class="count_top"><i class="fa fa-user"></i>Team Active</span>
+                <span class="count_top"><i class="fa fa-user"></i>Agent Active</span>
                 <div class="count ">{{overallStateReportModel.activeStatusCount}}</div>
             </div>
             <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
-                <span class="count_top"><i class="fa fa-user"></i>Team Flagged</span>
+                <span class="count_top"><i class="fa fa-user"></i>Agent Flagged</span>
                 <div class="count">{{overallStateReportModel.flaggedStatusCount}}</div>
             </div>
             <div class="col-md-3 col-sm-4 col-xs-6 tile_stats_count">
-                <span class="count_top"><i class="fa fa-user"></i>Team Archived</span>
+                <span class="count_top"><i class="fa fa-user"></i>Agent Archived</span>
                 <div class="count ">{{overallStateReportModel.archiveStatusCount}}</div>
             </div>
         </div>
@@ -107,28 +106,14 @@
                       <th>
                         <mfDefaultSorter by="">
                           <h6>
-                            <b>Chat Id</b>
+                            <b>Business Key</b>
                           </h6>
                         </mfDefaultSorter>
                       </th>
                       <th>
                         <mfDefaultSorter by="">
                           <h6>
-                            <b>Contact Number</b>
-                          </h6>
-                        </mfDefaultSorter>
-                      </th>
-                      <th>
-                        <mfDefaultSorter by="">
-                          <h6>
-                            <b>IMEI</b>
-                          </h6>
-                        </mfDefaultSorter>
-                      </th>
-                      <th>
-                        <mfDefaultSorter by="">
-                          <h6>
-                            <b>Assigned to</b>
+                            <b>Process</b>
                           </h6>
                         </mfDefaultSorter>
                       </th>
@@ -146,17 +131,32 @@
                           </h6>
                         </mfDefaultSorter>
                       </th>
+                      
                       <th>
                         <mfDefaultSorter by="">
                           <h6>
-                            <b>StartTime</b>
+                            <b>Flag Level</b>
+                          </h6>
+                        </mfDefaultSorter>
+                      </th>
+                      <th>
+                          <mfDefaultSorter by="">
+                            <h6>
+                              <b>Assigned To</b>
+                            </h6>
+                          </mfDefaultSorter>
+                        </th>
+                      <th>
+                        <mfDefaultSorter by="">
+                          <h6>
+                            <b>Start Time</b>
                           </h6>
                         </mfDefaultSorter>
                       </th>
                       <th>
                         <mfDefaultSorter by="">
                           <h6>
-                            <b>EndTime</b>
+                            <b>End Time</b>
                           </h6>
                         </mfDefaultSorter>
                       </th>
@@ -167,20 +167,33 @@
                           </h6>
                         </mfDefaultSorter>
                       </th>
+                      <th>
+                        <mfDefaultSorter by="">
+                          <h6>
+                            <b>Action</b>
+                          </h6>
+                        </mfDefaultSorter>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let s of  mf.data">
-                      <td>{{s.chatId}}</td>
-                      <td>{{s.bussinessKeyMobile}}</td>
-                      <td>{{s.businessKeyImeiEmail}}</td>
-                      <td>{{s.assignedUserName}}</td>
-                      <td>{{s.reportStatusCd}}</td>
-                      <td>{{s.reportSubStatusCd}}</td>
+                    <tr *ngFor="let s of mf.data">
+                      <td>{{s.businessKey}}</td>
+                      <td>{{s.machineLabel}}</td>
+                      <td>{{s.statusCd}}</td>
+                      <td>{{s.subStatus}}</td>
+                      <td>{{s.iterationLevel}}</td>
+                       <td>{{s.assignedUserName}}</td>
                       <td>{{s.startTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</td>
                       <td>{{s.endTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</td>
                       <td>{{s.reportTatTime}}</td>
-                      
+                      <td>
+                        <div class="btn-group" role="group">
+                          <button type="button" class="btn btn-primary" title="View" (click)="onSelect(s)">
+                            <i class="ion-eye"></i>
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                     <tr *ngIf="mf.data.length === 0 && isLoading">
                       <td colspan="100%">Loading...</td>
