@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { FlowDashboardService } from '../../../../services/flow.service';
 import { ConversationSummary, Dashboard, WorkflowSummary, StateConsumingMaxResTimeTransaction } from '../../../../models/dashboard.model';
 import { DateRangePickerComponent } from './daterangepicker/daterangepicker.component';
+// import { APISpinnerComponent } from '../../../../shared/components/api-spinner/api-spinner.component'
 
 declare let d3: any;
 declare let moment: any;
@@ -200,6 +201,53 @@ export class DashboardComponent implements OnInit, OnDestroy {
     };
   }
 
+  lineChartOptionsTimeVsValueTest(xAxisLabel, yAxisLabel) {
+    return {
+      chart: {
+        type: 'lineWithFocusChart',
+        height: 450,
+        margin: {
+          top: 35,
+          right: 35,
+          bottom: 35,
+          left: 50
+        },
+        duration: 500,
+        useInteractiveGuideline: true,
+        forceY: [0],
+        xAxis: {
+          axisLabel: "Timeline",
+          axisLabelDistance: 5,
+          tickFormat: function (d) {
+            return d; //d3.time.format('%x')(new Date(d));
+          }
+        },
+        x2Axis: {
+          tickFormat: function (d) {
+            return d; //d3.time.format('%x')(new Date(d));
+          },
+          showMaxMin: false
+        },
+        yAxis: {
+          axisLabel: "State Count",
+          axisLabelDistance: -15,
+          tickFormat: function (d) {
+            return d;//d3.format('d')(d)
+          }
+        },
+        lines: {
+          dispatch: {
+            elementClick: function (e) {
+              //  console.log('click');
+              //  console.log(e);
+            }
+          }
+        }
+      }
+    };
+  }
+
+  
   singleBarChartOptionsStringVsValue(xAxisLabel, yAxisLabel) {
     return {
       chart: {

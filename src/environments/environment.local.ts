@@ -114,7 +114,7 @@ export const environment = {
   validationtypekeyslookupurl: 'load/validations',
 
 
-  flowsearch:'/api/flow/search',
+  flowsearch:'/api/search/flow',
 
   // Analytics
   reportservice: 'http://localhost:8080/flow/report',

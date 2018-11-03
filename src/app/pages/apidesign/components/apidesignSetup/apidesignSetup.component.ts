@@ -19,7 +19,8 @@ import { Algorithm, BusinessObject, BusinessObjectAlgorithm, ConfigParams, Train
 
 @Component({
   selector: 'api-apidesign-setup',
-  templateUrl: './apidesignSetup.component.html'
+  templateUrl: './apidesignSetup.component.html',
+  styleUrls: ['./apidesignSetup.scss']
 })
 export class ApiDesignSetupComponent implements OnInit, OnDestroy {
     apiDesignCreateMode: boolean;

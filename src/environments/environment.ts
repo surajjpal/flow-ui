@@ -113,7 +113,7 @@ export const environment = {
   validationtypekeyslookupurl: 'load/validations',
 
 
-  flowsearch:'/api/flow/search',
+  flowsearch:'/api/search/flow',
 
   // Analytics
   reportservice: 'http://localhost:8080/flow/report',
@@ -167,6 +167,6 @@ export const environment = {
   businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
   businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
 
-  sendReportCSV: 'http://127.0.0.1:5000/generatereport',
+  sendReportCSV: 'http://localhost:8080/flow/report/generatereport',
   funnelReport: 'state/fetchfunneldata',
 };
