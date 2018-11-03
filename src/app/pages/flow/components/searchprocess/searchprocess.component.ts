@@ -76,9 +76,19 @@ export class SearchProcessComponent implements OnInit, OnDestroy {
     let body = {};
     //body["companyContext"] = {"companyId":"e95764c923e74e308d0019516b17cabd"};
     //body["startTime"] = 1539386552250;
-    body["startTime"] = this.startTime;
-    body["endTime"] = this.endTime;
-    body["searchText"] = this.filterQuery;
+    if (this.startTime) {
+      body["startTime"] = parseFloat(this.startTime);
+    }
+    else {
+      body["startTime"] = this.startTime;
+    }
+    if (this.endTime) {
+      body["endTime"] = parseFloat(this.endTime);
+    }
+    else {
+      body["endTime"] = this.endTime;
+    }
+    body["textSearch"] = this.filterQuery;
     if(this.filterQuery!=null && this.filterQuery.length > 0){
       this.subscription = this.processService.getAll(body)
       .subscribe(processObjects => {

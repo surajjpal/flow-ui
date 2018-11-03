@@ -108,7 +108,7 @@ export const environment = {
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
-  flowsearch:'/api/flow/search',
+  flowsearch:'/api/search/flow',
 
   // Analytics
   reportservice: 'https://flow.automatapi.io/flow/report',
