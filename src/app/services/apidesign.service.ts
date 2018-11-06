@@ -271,4 +271,35 @@ export class ApiDesignService {
         return subject.asObservable();
     }
 
+    predictRequestImageData(businessobject: BusinessObject, testRequestData) {
+        const subject = new Subject<BusinessObject>();
+        const companyId = this.univaersalUser.getUser().companyId;
+        const headers = new HttpHeaders({'X-Consumer-Custom-Id' : companyId});
+        const url = `${environment.interfaceService + environment.businessObjectPredictUrl}` + "/" + businessobject.code;
+        this.httpClient.post<any>(
+            url,
+            testRequestData,
+            {
+                headers: headers,
+                observe: 'response',
+                reportProgress: true,
+                withCredentials: true
+            }
+        )
+        .subscribe(
+            (response: HttpResponse<any>) => {
+                if (response.body) {
+                    console.log("predict result");
+                    console.log(response.body);
+                    subject.next(response.body);
+                }
+            },
+            (err: HttpErrorResponse) => {
+                console.log("active version error");
+                console.log(err);
+            }
+        );
+        return subject.asObservable();
+    }
+
 }
