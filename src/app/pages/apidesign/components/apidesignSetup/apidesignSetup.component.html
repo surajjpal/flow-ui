@@ -134,11 +134,45 @@
                                 <textarea style="width:100%; height:300px;" [(ngModel)]="testRequestData" name="testRequestData">{{ testRequestData }}</textarea>
                             </div>
                             <div *ngIf="selectedBusinessObject.entityType == 'IMAGE'">
-                                <label for="file-upload" class="custom-file-upload">
-                                    <i class="fa fa-cloud-upload"></i> Upload File
-                                </label>
-                                <label>{{fileName}}</label>
-                                <input id="file-upload" type="file" (change)=fileEvent($event,config)/>
+                                    <api-checkbox [checked]="testByUrl" [label]="'Test Images by URL'" (event)="testByUrl = $event.target.checked"></api-checkbox>
+                                    <tag-input *ngIf="testByUrl" [(ngModel)]="testImageFileUrls" name="testImageFileUrls" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[64]" placeholder="+Tags (Enter separated)"
+                                    secondaryPlaceholder="Enter a new tag (Enter separated)" theme="minimal" class="custom-input-tag-border"></tag-input>
+                                
+                                    <div *ngIf="!testByUrl" class="form-group">
+                                        <button type="button" class="btn btn-primary pull-right" (click)="addTestImages()">
+                                            Add Image <i class="ion-plus-round"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <table *ngIf="!testByUrl" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Remove File</th>
+                                                <th>File Name</th>
+                                                <th>Upload File</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let row of testImages;let index=index">
+                                                <td>
+                                                    <button type="button" class="btn btn-danger" title="Delete" (click)="removeTestImage(row)"><i class="ion-close-round"></i></button>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" placeholder="File Name" [value]="row.fileName"
+                                                        (input)="row.fileName = $event.target.value" />
+                                                </td>
+                                                <td>
+                                                    <label [for]="'file-upload' + index" class="custom-file-upload">
+                                                            <i class="fa fa-cloud-upload"></i> Upload File
+                                                    </label>
+                                                    <label *ngIf="row.file != null && row.file.name != null">{{ row.file.name }}</label>
+                                                    <input [id]="'file-upload' + index" type="file" (change)="row.file = $event.target.files[0]"/>
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                
                             </div>
                             
                         </form>
