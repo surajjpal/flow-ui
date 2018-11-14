@@ -73,7 +73,7 @@
                   </td>
                   <td *ngIf="domain.statusCd && domain.statusCd === CLOSED">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-primary" title="View" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
+                      <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
                         <i class="ion-eye"></i>
                       </button>
                       <button type="button" class="btn btn-primary" title="Activate" (click)="activateDomain(domain)">
@@ -86,7 +86,7 @@
                   </td>
                   <td *ngIf="domain.statusCd && domain.statusCd === ACTIVE">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-primary" title="View" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
+                      <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
                         <i class="ion-edit"></i>
                       </button>
                       <button type="button" class="btn btn-primary" title="Deactivate" (click)="deactivateDomain(domain)">
@@ -99,7 +99,7 @@
                   </td>
                   <td *ngIf="!domain.statusCd">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-primary" title="View" (click)="onDomainSelect(domain)">
+                      <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain)">
                         <i class="ion-edit"></i>
                       </button>
                     </div>
@@ -116,8 +116,21 @@
             </table>
           </div>
         </div>
-        <div role="tabpanel" class="tab-pane fade" id="tab_archived">
-            <!-- <table class="table table-striped" [mfData]="domainSourceClosed | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="name">
+        <!-- <div role="tabpanel" class="tab-pane fade" id="tab_archived">
+          <div role="tabpanel" class="tab-pane fade show active" id="tab_active">
+              <div class="panel panel-default">
+                <form class="row form-inline">
+                  <div class="form-group col-sm-10">
+                    <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Domains" />
+                  </div>
+                  <div class="form-group col-sm-2">
+                    <button type="button" class="btn btn-primary" (click)="onDomainSelect()">
+                      Create Domain
+                    </button>
+                  </div>
+                </form>
+                <br>
+            <table class="table table-striped" [mfData]="domainSourceClosed | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="name">
                 <thead>
                   <tr>
                     <th>
@@ -166,7 +179,7 @@
                     </td>
                     <td *ngIf="domain.statusCd && domain.statusCd === CLOSED">
                       <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-primary" title="View" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
+                        <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
                           <i class="ion-eye"></i>
                         </button>
                         <button type="button" class="btn btn-primary" title="Activate" (click)="activateDomain(domain)">
@@ -179,7 +192,7 @@
                     </td>
                     <td *ngIf="domain.statusCd && domain.statusCd === ACTIVE">
                       <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-primary" title="View" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
+                        <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
                           <i class="ion-edit"></i>
                         </button>
                         <button type="button" class="btn btn-primary" title="Deactivate" (click)="deactivateDomain(domain)">
@@ -192,7 +205,7 @@
                     </td>
                     <td *ngIf="!domain.statusCd">
                       <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-primary" title="View" (click)="onDomainSelect(domain)">
+                        <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain)">
                           <i class="ion-edit"></i>
                         </button>
                       </div>
@@ -206,10 +219,41 @@
                     </td>
                   </tr>
                 </tfoot>
-            </table> -->
+            </table>
+          </div>
         </div>
+      </div> -->
       </div>
     </ba-card>
+  </div>
+</div>
+
+<div class="modal fade" id="finalWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="finalWarningLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="finalWarningLabel">
+          Warning
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        Once it is finalised it can no longer be edited for the same version after editing new version of domain will be 
+        created. This will create a new version of the Domain. Are you sure you want to finalise the Domain?
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="activateDomain(selectedDomain, 'finalWarningModal')">Finalise</button>
+      </div>
+    </div>
   </div>
 </div>
 

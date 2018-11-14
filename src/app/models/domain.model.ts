@@ -201,6 +201,7 @@ export class Response {
   expression: any;
   lang: string;
   response: string;
+  request:string;
   stage: string;
   disableUserInput: boolean;
   options: ResponseData[];
@@ -208,14 +209,17 @@ export class Response {
   selectionExpression: string;
   uploadDocument: {};
   contextExpression: string;
+  faqResponse:boolean;
+  features:any;
 
-  constructor(expression?: string[], lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
-      options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string) {
+  constructor(expression?: string[], lang?: string, response?: string,request?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
+      options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string,faqResponse?:boolean,features?:any) {
     this.level = 1;
 
     this.expression = expression ? expression : [];
     this.lang = lang ? lang : '';
     this.response = response ? response : '';
+    this.request = request ? request : '';
     this.actionHTML = actionHTML ? actionHTML : '';
     this.sequence = sequence ? sequence : 0;
     this.stage = stage ? stage : '';
@@ -225,6 +229,8 @@ export class Response {
     this.selectionExpression = selectionExpression ? selectionExpression : '';
     this.uploadDocument = {};
     this.contextExpression = contextExpression ? contextExpression : '';
+    this.faqResponse = faqResponse ? faqResponse : false;
+    this.features = features ? features : [];
   }
 }
 

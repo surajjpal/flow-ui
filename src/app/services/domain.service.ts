@@ -50,6 +50,7 @@ export class DomainService {
     const crudInput = new CRUDOperationInput();
     crudInput.payload = payload;
     crudInput.collection = 'domain';
+    crudInput.fields = ["name","_id","langSupported","version","statusCd"]
     crudInput.operation = "READ_ALL";
     crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     
@@ -76,6 +77,73 @@ export class DomainService {
 
     return subject.asObservable();
   }
+
+  getDomain(payload?: any,fields?:any): Observable<Domain> {
+    const subject = new Subject<Domain>();
+    
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = payload;
+    crudInput.collection = 'domain';
+    crudInput.operation = "READ";
+    crudInput.fields = fields;
+    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    
+    this.httpClient.post<Map<string, Domain>>(
+      crudUrl, 
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Map<string, Domain>>) => {
+        subject.next(response.body['data']);
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+  getFeatures(payload?: any): Observable<any> {
+    const subject = new Subject<any>();
+    
+    const featureUrl = `${environment.fetaureurl}`;
+    
+   
+    
+    this.httpClient.post<any>(
+      featureUrl, 
+      payload,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        subject.next(response.body);
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
 
   /*
   domainLookup(query?: string): Observable<Domain[]> {

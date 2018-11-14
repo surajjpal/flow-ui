@@ -54,6 +54,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   domainSucess: boolean;
   operandSource: string[];
   bulkExpressions: string;
+  featureList:any[];
+
 
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
@@ -79,6 +81,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.domainSucess = false;
     this.templateNames = ["default"]
     this.stagesSource = [];
+    this.featureList = [];
     this.stagesSource.push(new Stage('Initialization', 'INIT'));
     this.stagesSource.push(new Stage('Context Setting', 'CONTEXT'));
     this.stagesSource.push(new Stage('Information Input', 'INFO'));
@@ -123,6 +126,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     const domain: Domain = this.sharingService.getSharedObject();
     if (domain) {
       this.selectedDomain = domain;
+      
       this.domainCreateMode = false;
     } else {
       this.selectedDomain = new Domain();
@@ -540,6 +544,28 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.createMode = false;
       this.selectedResponse = response;
       this.tempResponse = JSON.parse(JSON.stringify(this.selectedResponse));
+      if(this.tempResponse.faqResponse){
+        this.tempResponse.features
+      }
+      if (this.tempResponse.uploadDocument) {
+        this.isAddFileUploadResponse = true;
+      }
+      this.populateBulkExpressions(this.tempResponse.expression);
+    } else {
+      this.modalHeader = 'Create Response';
+      this.createMode = true;
+      this.selectedResponse = null;
+      this.tempResponse = new Response();
+      this.populateBulkExpressions(this.tempResponse.expression);
+    }
+  }
+
+  onFaqResponseSelect(response?: Response) {
+    if (response) {
+      this.modalHeader = 'Update Response';
+      this.createMode = false;
+      this.selectedResponse = response;
+      this.tempResponse = JSON.parse(JSON.stringify(this.selectedResponse));
       if (this.tempResponse.uploadDocument) {
         this.isAddFileUploadResponse = true;
       }
@@ -571,6 +597,75 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.tempCard = new CardData();
     }
   }
+
+  addFaqResponse(response?: Response) {
+    let domainId = null;
+    let version = null;
+    if(this.selectedDomain!=null && this.selectedDomain._id){
+      domainId = this.selectedDomain._id;
+      version = this.selectedDomain.version;
+    }
+    else{
+      domainId = this.saveDomain(this.selectedDomain);
+      version = 1;
+    }
+    if (response) {
+      response.faqResponse = true;
+      this.selectedDomain.domainResponse.push(response);
+    } else if (this.selectedResponse) {
+        this.tempResponse.faqResponse = true;
+        const index: number = this.selectedDomain.domainResponse.indexOf(this.selectedResponse);
+        if (index !== -1) {
+          this.selectedDomain.domainResponse[index] = this.tempResponse;
+        }
+        if (domainId!=null){
+          //this.trainDomain(domainId,version);
+        }
+        new closeModal('faqResponseModal');
+
+        // This is to forcefully call the digest cycle of angular so that,
+        // the filtered list would get updated with these chanegs made in master list
+        this.responseFilterQuery = (` ${this.responseFilterQuery}`);
+        setTimeout(() => {
+          this.responseFilterQuery = this.responseFilterQuery.slice(1);
+        }, 10);
+    } else {
+        console.log(this.featureList);
+        this.tempResponse.faqResponse = true;
+        // this.selectedDomain.domainResponse.push(this.tempResponse);
+       
+        if (domainId!=null){
+        //  this.trainDomain(domainId,version);
+        }
+        
+        new closeModal('faqResponseModal');
+
+        // This is to forcefully call the digest cycle of angular so that,
+        // the filtered list would get updated with these chanegs made in master list
+        this.responseFilterQuery = (` ${this.responseFilterQuery}`);
+        setTimeout(() => {
+          this.responseFilterQuery = this.responseFilterQuery.slice(1);
+        }, 10);
+      }
+    }
+
+
+    saveDomain(domain?: Domain,modalName?:string){
+      let domainId = null;
+      domain.statusCd = "ACTIVE"
+      domain.version = 1
+      this.subscription = this.domainService.saveDomain(domain)
+        .subscribe(
+          response => {
+            domainId = response._id;
+            this.selectedDomain = response;
+          },
+          error => {
+            
+          }
+        );
+        return domainId;
+    }
 
   addResponse(response?: Response) {
     if (response) {
@@ -720,25 +815,30 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         }
       }
       
-      if(!this.selectedDomain.statusCd){
-        this.selectedDomain.statusCd = "ACTIVE"
-        this.selectedDomain.version = 1
+      // if(!this.selectedDomain.statusCd){
+      //   this.selectedDomain.statusCd = "ACTIVE"
+      //   this.selectedDomain.version = 1
        
-      }
+      // }
       if(this.selectedDomain.statusCd == "DRAFT"){
         this.selectedDomain.version = this.selectedDomain.version + 1
       }
       if(this.selectedDomain.statusCd == "CLONED"){
         this.selectedDomain.version = 1
       }
+      console.log("-----------------DOMAIN------------------------------------")
+      console.log(this.selectedDomain)
       this.subscription = this.domainService.saveDomain(this.selectedDomain)
+      
         .subscribe(
           response => {
+            console.log("=======SAVED RESPONSE===============");
+            console.log(response);
             this.selectedDomain = response;
             //this.updateClassifierTraining();
 
             //this.updateIntenTrainingData();
-
+            new closeModal('domainUpdateModal');
            this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
           },
           error => {
@@ -925,6 +1025,30 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   // Being used by for loop in html to keep track of a string in array of strings
   customTrackBy(index: number, obj: any): any {
     return index;
+  }
+
+
+  getFeatures(){
+    let payload = {"text":this.tempResponse.request}
+    this.subscription = this.domainService.getFeatures(payload)
+      .subscribe(
+        features => {
+          console.log(features)
+          if (features) {
+            for(let feature of features){
+              console.log(feature)
+              for (const property in feature) {
+                if (property) {
+                  const map = new Map();
+                  map.set('key', property);
+                  map.set('value', feature[property]);
+                  this.featureList.push(map);
+                }
+              }
+            }
+          }
+        }
+      );
   }
 
   populateBulkExpressions(expressions) {

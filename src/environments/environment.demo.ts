@@ -1,7 +1,10 @@
 export const environment = {
     production: true,
     name: 'demo',
-  
+    //feature Domain 2.0
+    fetaureurl:"http://0.0.0.0:9090/api/getFeatures",
+
+
     // Root
     root: 'https://flow.automatapi.com/flow/',
       

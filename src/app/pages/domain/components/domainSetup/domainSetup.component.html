@@ -21,6 +21,9 @@
           <a class="nav-link" id="responseMessagesTab" data-toggle="tab" href="#responseMessagesContent" role="tab" aria-controls="responseMessages">Response Messages</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" id="faqResponseMessagesTab" data-toggle="tab" href="#faqResponseMessagesContent" role="tab" aria-controls="responseMessages">FAQ Responses</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" id="cardsTab" data-toggle="tab" href="#cardsContent" role="tab" aria-controls="cards">Cards</a>
         </li>
       </ul>
@@ -265,6 +268,53 @@
             </table>
           </div>
         </div>
+        <div role="tabpanel" class="tab-pane fade" id="faqResponseMessagesContent" aria-labelledby="faqResponseMessagesTab">
+            <!--Contents of Response messages tab-->
+            <div class="panel panel-default">
+              <form class="row form-inline">
+                <div class="form-group col-sm-10">
+                  <input class="form-control" [(ngModel)]="responseFilterQuery" name="responseFilterQuery" placeholder="Filter Query" />
+                </div>
+                <div class="form-group col-sm-2">
+                  <button type="button" class="btn btn-primary" (click)="onFaqResponseSelect()" data-toggle="modal" data-target="#faqResponseModal">
+                    Add Response
+                  </button>
+                </div>
+              </form>
+              <br>
+  
+              <table class="table table-striped" [mfData]="selectedDomain.domainResponse | universalDataFilter : responseFilterQuery" #mfResponse="mfDataTable"
+                [mfRowsOnPage]="10" mfSortBy="response">
+                <thead>
+                  <tr>
+                    <th>
+                      <mfDefaultSorter by="request">Request</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="response">Response</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="expression">Expression</mfDefaultSorter>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let response of mfResponse.data" (click)="onFaqResponseSelect(response)" data-toggle="modal" data-target="#faqResponseModal">
+                    <td *ngIf="response.faqResponse">{{response.request}}</td>
+                    <td *ngIf="response.faqResponse">{{response.response}}</td>
+                    <td *ngIf="response.faqResponse">{{response.expression}}</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="100%">
+                      <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
         <div role="tabpanel" class="tab-pane fade" id="cardsContent" aria-labelledby="cardsTab">
             <div class="panel panel-default">
                 <form class="row form-inline">
@@ -2742,3 +2792,97 @@
     </div>
   </div>
 </div>
+
+
+<!-- FAQ response Modal -->
+
+<div class="modal fade" id="faqResponseModal" tabindex="-1" role="dialog" attr.aria-labelledby="faqResponseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="faqResponseModalLabel">
+            {{modalHeader}}
+          </h4>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+  
+        <!-- Modal Body -->
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+                <label>Request</label>
+                <input class="form-control" placeholder="User Message" [(ngModel)]="tempResponse.request" name="request" />
+            </div>
+            <div class="form-group">
+              <label>Response</label>
+              <input class="form-control" placeholder="Response" [(ngModel)]="tempResponse.response" name="response" />
+            </div>
+            <div class="form-group">
+                <label>Language</label>
+                <select class="selectpicker form-control" title="Select Language" [(ngModel)]="tempResponse.lang" name="lang">
+                  <option *ngFor="let language of selectedDomain.langSupported" [ngValue]="language">{{language}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" (click)="getFeatures()">
+                    Get Features
+                </button>
+            </div>
+            <div class="form-group">
+                <label>Features</label>
+                <table class="table" [mfData]="featureList" #mfBody="mfDataTable" [mfRowsOnPage]="5">
+                    <thead>
+                      <tr>
+                        <th>Action</th>
+                        <th>Key</th>
+                        <th>Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let body of mfBody.data">
+                        <td>
+                          <button type="button" class="btn btn-danger" title="Delete" (click)="removeBody(body)"><i class="ion-close-round"></i></button>
+                        </td>
+                        <td>
+                          <input type="text" class="form-control" placeholder="Key" [value]="body.get('key')" (input)="body.set('key', $event.target.value)">
+                        </td>
+                        <td>
+                          <input type="text" class="form-control" placeholder="Value" [value]="body.get('value')" (input)="body.set('value', $event.target.value)" />
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="2">
+                          <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                        </td>
+                        <td colspan="1" style="text-align: right;">
+                          <button type="button" class="btn btn-primary" (click)="addBody()">Add Param</button>
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                <!-- <input class="form-control" placeholder="Expression" [(ngModel)]="tempResponse.features" name="expression" /> -->
+                <!--<textarea class="form-control" placeholder="Enter response expressions (separated by line)" [(ngModel)]="bulkExpressions" name="bulkExpressions"></textarea>-->
+            </div>
+            <div class="form-group">
+              <label>Placeholder</label>
+              <input class="form-control" placeholder="Placeholder" [(ngModel)]="tempResponse.settings.placeholder" name="placeholder"
+              />
+            </div>
+          </form>
+        </div>
+  
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeFaqResponse()">Remove</button>
+          <button type="submit" class="btn btn-primary" (click)="addFaqResponse()">{{createMode ? 'Create' : 'Update'}}</button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -6,6 +6,8 @@
 export const environment = {
   production: false,
   name: 'development',
+  //feature Domain 2.0
+  fetaureurl:"http://0.0.0.0:9090/api/getFeatures",
 
   // Root
   root: 'http://108.168.190.82:8080/flow/',
