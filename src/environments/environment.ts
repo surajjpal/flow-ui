@@ -8,7 +8,9 @@ export const environment = {
   name: 'development',
   //feature Domain 2.0
   fetaureurl:"http://0.0.0.0:9090/api/getFeatures",
-
+  traindt:"http://0.0.0.0:9090/api/train",
+  converse:"http://0.0.0.0:9090/api/converse",
+  faqupload:"http://0.0.0.0:9090/api/uploadFaq",
   // Root
   root: 'http://108.168.190.82:8080/flow/',
 

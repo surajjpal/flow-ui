@@ -3,7 +3,9 @@ export const environment = {
     name: 'demo',
     //feature Domain 2.0
     fetaureurl:"http://0.0.0.0:9090/api/getFeatures",
-
+    traindt:"http://0.0.0.0:9090/api/train",
+    converse:"http://0.0.0.0:9090/api/converse",
+    faqupload:"http://0.0.0.0:9090/api/uploadFaq",
 
     // Root
     root: 'https://flow.automatapi.com/flow/',

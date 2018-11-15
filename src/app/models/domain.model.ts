@@ -195,6 +195,7 @@ export class Settings {
 }
 
 export class Response {
+  uniqueId:string;
   sequence: number;
   level: number;
   actionHTML: string;
@@ -213,7 +214,7 @@ export class Response {
   features:any;
 
   constructor(expression?: string[], lang?: string, response?: string,request?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
-      options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string,faqResponse?:boolean,features?:any) {
+      options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string,faqResponse?:boolean,features?:any,uniqueId?:string) {
     this.level = 1;
 
     this.expression = expression ? expression : [];
@@ -231,6 +232,7 @@ export class Response {
     this.contextExpression = contextExpression ? contextExpression : '';
     this.faqResponse = faqResponse ? faqResponse : false;
     this.features = features ? features : [];
+    this.uniqueId = uniqueId ? uniqueId : '';
   }
 }
 

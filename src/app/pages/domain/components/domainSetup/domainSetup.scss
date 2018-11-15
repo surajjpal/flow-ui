@@ -1,0 +1,40 @@
+// #myModal1 {
+//     top:70%;
+//     left:27%;
+//     outline: none;
+//   }
+
+//   .modal-dialog1 {
+//     //position:fixed;
+//     width: 50%;
+//     //height: 40%;
+//     // bottom:0px;
+//     // right:0px;
+//     // margin:0px;
+// }
+
+.input1,
+  html .ng-select .ng-select-container {
+    border: none;
+    border-bottom: 2px solid #333;
+    outline: none;
+    text-align: left;
+    width: 70%;
+    font-size: 20px;
+  }
+
+  #outer
+{
+    width:100%;
+    text-align: center;
+}
+.inner
+{
+    display: inline-block;
+}
+  
+  .modal-dialog1{
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+  }

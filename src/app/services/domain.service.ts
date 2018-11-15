@@ -145,6 +145,97 @@ export class DomainService {
   }
 
 
+  uploadFaq(payload?: any): Observable<any> {
+    const subject = new Subject<any>();
+    
+    const featureUrl = `${environment.faqupload}`;
+    
+   
+    
+    this.httpClient.post<any>(
+      featureUrl, 
+      payload,
+      {
+        //headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        subject.next(response.body);
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+
+  trainDt(payload?: any): Observable<any> {
+    const subject = new Subject<any>();
+    
+    const trainurl = `${environment.traindt}`;
+    
+    this.httpClient.post<any>(
+      trainurl, 
+      payload,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        subject.next(response.body["Success"]);
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+  converse(payload?: any): Observable<any> {
+    const subject = new Subject<any>();
+    
+    const trainurl = `${environment.converse}`;
+    
+    this.httpClient.post<any>(
+      trainurl, 
+      payload,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        subject.next(response.body);
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+
   /*
   domainLookup(query?: string): Observable<Domain[]> {
     const subject = new Subject<Domain[]>();

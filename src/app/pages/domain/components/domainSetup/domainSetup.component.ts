@@ -13,13 +13,16 @@ import { AlertService, DataSharingService } from '../../../../services/shared.se
 
 import { environment } from '../../../../../environments/environment';
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
+import { Body } from '@angular/http/src/body';
 
 @Component({
   selector: 'api-agent-domain',
-  templateUrl: './domainSetup.component.html'
+  templateUrl: './domainSetup.component.html',
+  styleUrls: ['./domainSetup.scss']
 })
 export class DomainSetupComponent implements OnInit, OnDestroy {
   entityUploaderOptions: NgUploaderOptions;
+  faqUploaderOptions:NgUploaderOptions;
 
   domainCreateMode: boolean;
   isAddFileUploadResponse: boolean;
@@ -55,7 +58,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   operandSource: string[];
   bulkExpressions: string;
   featureList:any[];
-
+  faqDomain:boolean;
+  response:string;
+  request:string;
 
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
@@ -78,10 +83,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.modelKeysSource = [];
     this.domainUpdate = 'Domain';
     this.domainBody = 'Please wait updating domain........';
+    this.response = 'Please feel free to ask anything';
+    this.request = '';
     this.domainSucess = false;
     this.templateNames = ["default"]
     this.stagesSource = [];
     this.featureList = [];
+    this.faqDomain = false;
     this.stagesSource.push(new Stage('Initialization', 'INIT'));
     this.stagesSource.push(new Stage('Context Setting', 'CONTEXT'));
     this.stagesSource.push(new Stage('Information Input', 'INFO'));
@@ -109,12 +117,19 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     const uploadIntentUrl = `${environment.autoServer}${environment.uploadintentexcelurl}`;
     this.intentUploaderOptions = {
       url: uploadIntentUrl
+    
     };
 
     const uploadEntityUrl = `${environment.autoServer}${environment.uploadentityexcelurl}`;
     this.entityUploaderOptions = {
       url: uploadEntityUrl
     };
+
+    const uploadFaqUrl = `${environment.faqupload}`;
+    this.faqUploaderOptions = {
+      url:uploadFaqUrl,
+      data:{"file":"UploadedFile"}
+    }
 
     this.slimLoadingBarService.color = '#2DACD1'; // Primary color
     this.slimLoadingBarService.height = '4px';
@@ -562,15 +577,28 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
   onFaqResponseSelect(response?: Response) {
     if (response) {
+      this.featureList = [];
       this.modalHeader = 'Update Response';
       this.createMode = false;
       this.selectedResponse = response;
       this.tempResponse = JSON.parse(JSON.stringify(this.selectedResponse));
+      
+      for(let feature of this.tempResponse.features){
+        for (const property in feature) {
+          if (property) {
+            const map = new Map();
+            map.set('key', property);
+            map.set('value', feature[property]);
+            this.featureList.push(map);
+          }
+        }
+      }
       if (this.tempResponse.uploadDocument) {
         this.isAddFileUploadResponse = true;
       }
       this.populateBulkExpressions(this.tempResponse.expression);
     } else {
+      this.featureList = [];
       this.modalHeader = 'Create Response';
       this.createMode = true;
       this.selectedResponse = null;
@@ -601,19 +629,30 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   addFaqResponse(response?: Response) {
     let domainId = null;
     let version = null;
-    if(this.selectedDomain!=null && this.selectedDomain._id){
-      domainId = this.selectedDomain._id;
-      version = this.selectedDomain.version;
-    }
-    else{
-      domainId = this.saveDomain(this.selectedDomain);
-      version = 1;
-    }
+    // if(this.selectedDomain!=null && this.selectedDomain._id){
+    //   domainId = this.selectedDomain._id;
+    //   version = this.selectedDomain.version;
+    // }
+    // else{
+    //   domainId = this.saveDomain(this.selectedDomain);
+    //   version = 1;
+    // }
     if (response) {
       response.faqResponse = true;
       this.selectedDomain.domainResponse.push(response);
     } else if (this.selectedResponse) {
+        let features = [];
+        for (const feature of this.featureList){
+          let map = new Map();
+          map[feature.get('key')] = feature.get('value');
+          features.push(map);
+          
+        }
+        this.tempResponse.features = features;
         this.tempResponse.faqResponse = true;
+        if(!this.tempResponse.uniqueId || this.tempResponse.uniqueId.trim().length === 0){
+             this.tempResponse.uniqueId = this.newGuid();
+           }
         const index: number = this.selectedDomain.domainResponse.indexOf(this.selectedResponse);
         if (index !== -1) {
           this.selectedDomain.domainResponse[index] = this.tempResponse;
@@ -631,12 +670,31 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         }, 10);
     } else {
         console.log(this.featureList);
-        this.tempResponse.faqResponse = true;
-        // this.selectedDomain.domainResponse.push(this.tempResponse);
-       
-        if (domainId!=null){
-        //  this.trainDomain(domainId,version);
+        let features = [];
+        for (const feature of this.featureList){
+          let map = new Map();
+          map[feature.get('key')] = feature.get('value');
+          features.push(map);
+          
         }
+        this.tempResponse.features = features;
+        this.tempResponse.faqResponse = true;
+        this.tempResponse.uniqueId = this.newGuid();
+        this.selectedDomain.domainResponse.push(this.tempResponse);
+        // if(!this.selectedDomain.name || this.selectedDomain.name.trim().length === 0){
+        //   new showAlertModal('Error', 'Please specify the domain name and language first');
+        // }
+        // else{
+        //   this.saveDomain(this.selectedDomain)
+        // }
+        
+        // if(this.selectedDomain.domainResponse.length == 1){
+
+        // }
+       
+        // if (domainId!=null){
+        // //  this.trainDomain(domainId,version);
+        // }
         
         new closeModal('faqResponseModal');
 
@@ -649,10 +707,29 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       }
     }
 
+  newGuid() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+          return v.toString(16);
+      });
+  }
 
+    addFeature() {
+      const body = new Map();
+      body.set('key', '');
+      body.set('value', '');
+      this.featureList.push(body);
+    }
+
+    removeFeature(body: any) {
+      if (body && this.featureList && this.featureList.includes(body)) {
+        const index = this.featureList.indexOf(body);
+        this.featureList.splice(index, 1);
+      }
+    }
     saveDomain(domain?: Domain,modalName?:string){
       let domainId = null;
-      domain.statusCd = "ACTIVE"
+      domain.statusCd = "DRAFT"
       domain.version = 1
       this.subscription = this.domainService.saveDomain(domain)
         .subscribe(
@@ -839,6 +916,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
             //this.updateIntenTrainingData();
             new closeModal('domainUpdateModal');
+            this.trainDt(this.selectedDomain._id,this.selectedDomain.version)
+            
            this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
           },
           error => {
@@ -847,6 +926,21 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           }
         );
     }
+  }
+
+  trainDt(id,version){
+    let payload = {"domainId":id,"version":version}
+    this.subscription = this.domainService.trainDt(payload)
+        .subscribe(
+          response => {
+            console.log("pppppppppppppppppppppppppppppppp")
+            console.log(response);
+            new closeModal('domainUpdateModal');
+            console.log(response);
+          },
+          error => {
+          }
+        );
   }
 
   updateClassifierTraining() {
@@ -973,6 +1067,69 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  onFaqExcelUpload(event: any) {
+    if (event) {
+      if (event.hasOwnProperty('progress') && event['progress'].hasOwnProperty('percent')) {
+        const percent = (event['progress'])['percent'];
+        if (percent) {
+          if (percent < 100) {
+            this.slimLoadingBarService.progress = percent;
+          } else {
+            this.slimLoadingBarService.complete();
+          }
+        }
+      }
+    }
+  }
+
+  onFaqExcelUploadComplete(event: UploadedFile) {
+    this.slimLoadingBarService.complete();
+    console.log(event);
+    if (event.response && event.response.length > 0) {
+      const responseObject = JSON.parse(event.response);
+    }
+
+    //   if (responseObject) {
+    //     if (responseObject.hasOwnProperty('domainIntents')) {
+    //       const excelIntents: Intent[] = responseObject['domainIntents'];
+
+    //       if (excelIntents && excelIntents.length > 0) {
+    //         for (const intent of excelIntents) {
+    //           this.selectedDomain.domainIntents.push(intent);
+    //         }
+    //       }
+    //     } else if (responseObject.hasOwnProperty('domainEntities')) {
+    //       const excelEntities: Entity[] = responseObject['domainEntities'];
+
+    //       if (excelEntities && excelEntities.length > 0) {
+    //         for (const entity of excelEntities) {
+    //           this.selectedDomain.domainEntities.push(entity);
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+  }
+
+
+  onFaqFileUpload(fileData: FormData) {
+    console.log("onFileUpload");
+    console.log(fileData);
+    this.subscription = this.domainService.uploadFaq(fileData)
+      .subscribe(
+        response => {
+          
+        }
+      );
+    //console.log(fileData);
+ 
+    
+  }
+
+  
+
+
   onAddResponseOption(response) {
     if (!response.options) {
       response.options = [];
@@ -1028,6 +1185,23 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
 
+  testFaq()
+  {
+    this.response = "Please feel free to ask anything";
+  }
+  converse(){
+    let payload = {"text":this.request,"domainId":this.selectedDomain._id}
+    this.subscription = this.domainService.converse(payload)
+    .subscribe(
+      res => {
+        console.log(res) ;
+        if(res){
+          this.response = res['result'][0];
+          this.request = "";
+        }
+      }
+    );
+  }
   getFeatures(){
     let payload = {"text":this.tempResponse.request}
     this.subscription = this.domainService.getFeatures(payload)
