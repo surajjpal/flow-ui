@@ -38,10 +38,13 @@ export class AgentsComponent implements OnInit, OnDestroy {
     this.agentPageNo = 0;
     this.agentPageSize = 5;
     this.fields = [];
-    this.fields.push("_id")
-    this.fields.push("name")
-    this.fields.push("domainNameList")
-    this.fields.push("agentFlow")
+    this.fields.push("_id");
+    this.fields.push("name");
+    this.fields.push("agentFlow");
+    this.fields.push("langSupported");
+    this.fields.push("agentDomain");
+    this.fields.push("agentPlugins");
+    this.fields.push("agentClassifier");
     this.fetchAgents();
   }
   
