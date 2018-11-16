@@ -110,7 +110,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   loadingConfigMap:boolean = false;
   temp:any;
   stateConnectorTaskConfig: ConnectorConfig[];
-
+  copyStateConnectorTaskConfig: ConnectorConfig[];
   //file
   fileSelected:boolean;
   selectedFile:FormData;
@@ -121,6 +121,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   progressBarFlag: boolean = false;
   selectedConfig: boolean = false;
   specificConfigSelected: boolean = false;
+
+  //error
+  errorToSaveGraphObject: string = null;
 
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
@@ -192,11 +195,14 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   load(): void {
+    console.log("graphobject on load");
+    console.log(this.graphObject);
     this.getSourceEntryActions();
     this.getTimerUnits();
     this.getApiConfigLookup();
     this.getConList();
     this.getAllConnectors();
+    this.removeOldTaskConfig();
     this.getAllConnectorInfos();
     
 
@@ -303,19 +309,30 @@ export class DesignComponent implements OnInit, OnDestroy {
             }
           }
         }
-        else {
-          if (state && state.taskConfig && state.taskConfig.length>0) {
-            for(let con of state.taskConfig) {
-              var configName = con.configName;
-              if (configName == state.stateCd) {
-                configName = uuid();
-              }
-              con.configName = configName;
-              this.stateConnectorTaskConfig.push(con);
+        
+      }
+    }
+    
+  }
+
+  removeOldTaskConfig() {
+    if (this.graphObject &&  this.graphObject.states) {
+      for(let state of this.graphObject.states) {
+        if (state && state.taskConfig && state.taskConfig.length>0) {
+          for(let con of state.taskConfig) {
+            var configName = con.configName;
+            if (configName == state.stateCd) {
+              configName = uuid();
             }
+            con.configName = configName;
+            this.stateConnectorTaskConfig.push(con);
           }
+          state.taskConfig = [];
+          state.connectorConfig = [];
+            
         }
       }
+      
     }
     
   }
@@ -379,15 +396,16 @@ export class DesignComponent implements OnInit, OnDestroy {
     // this.specificConfigSelected = false;
     // this.selectedConfig = false;
     // this.gotConInfo = false;
-
+    
     this.tempState = JSON.parse(JSON.stringify(state));
+    this.setPreviousConnectorTaskList();
+    this.setConnectorTaskConfig();
     // if(this.tempState.connectorConfig){
     //   if(this.tempState.connectorConfig.length > 0){
     //     this.onConfigSelect(this.tempState.connectorConfig);
     //   }
     // }
-    this.setPreviousConnectorTaskList();
-    this.setConnectorTaskConfig();
+    
   }
 
   setPreviousConnectorTaskList() {
@@ -526,7 +544,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   saveState(): void {
-    
+    console.log("save state");
+    console.log(this.tempState.connectorConfigList);
+    console.log(this.tempState.taskConfigList);
     this.tempState.endState = (this.tempState.events.length === 0);
     if (!this.isStateApiCompatible()) {
       this.tempState.apiConfigurationList = [];
@@ -541,7 +561,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.tempState.taskConfig = [];
     }
 
-    if (this.tempState.connectorConfigList && this.tempState.taskConfigList && this.tempState.connectorConfigList.length > 0 && this.tempState.taskConfigList.length>0) {
+    if (this.tempState.connectorConfigList && this.tempState.taskConfigList && this.tempState.connectorConfigList.length > 0) {
       this.saveConnectorTaskConfig();
     }
     else {
@@ -693,12 +713,86 @@ export class DesignComponent implements OnInit, OnDestroy {
       console.log("save graph object");
       console.log(this.stateConnectorTaskConfig);
       console.log(states);
-      // this.subscription = this.graphService.save(this.graphObject)
-      //   .subscribe(graphObject => {
-      //     this.graphObject = graphObject;
-      //     this.router.navigate(['/pg/flw/flsr'], { relativeTo: this.route });
-      //   });
+      if (this.stateConnectorTaskConfig && this.stateConnectorTaskConfig.length>0) {
+        this.saveStateconnectorConfigurations();
+      }
+      else {
+        this.saveGraphObject();
+      }
+      
     }
+  }
+
+  saveGraphObject() {
+    if (this.graphObject && this.graphObject.states && this.stateConnectorTaskConfig && this.stateConnectorTaskConfig.length>0) {
+      for (let state of this.graphObject.states) {
+        state.taskConfig = [];
+        state.connectorConfig = [];
+      }
+    }
+    console.log("graphobject");
+    console.log(this.graphObject);
+    // this.subscription = this.graphService.save(this.graphObject)
+    //   .subscribe(graphObject => {
+    //     this.graphObject = graphObject;
+    //     this.router.navigate(['/pg/flw/flsr'], { relativeTo: this.route });
+    //   });
+  }
+
+  saveStateconnectorConfigurations() {
+    var responseCount = 0;
+    console.log(responseCount);
+    console.log(this.stateConnectorTaskConfig.length);
+    this.copyStateConnectorTaskConfig = JSON.parse(JSON.stringify(this.stateConnectorTaskConfig));
+      for (let stateConTaskconfig of this.stateConnectorTaskConfig) {
+        console.log(stateConTaskconfig);
+        var errorFound = false;
+        if (stateConTaskconfig._id != null) {
+          this.subscriptionConConfig = this.connectorConfigService.updateConConfig(stateConTaskconfig)
+              .subscribe(
+                response => {
+                  responseCount += 1;
+                  console.log("lenght of stat config update ");
+                  console.log(responseCount);
+                  stateConTaskconfig = response;
+                  if (responseCount == this.stateConnectorTaskConfig.length) {
+                    this.saveGraphObject();
+                  }
+                },
+                error => {
+                  this.errorToSaveGraphObject = "unable to update task object for config " + stateConTaskconfig.configType;
+                  errorFound = true;
+                  showModal("errorModal");
+                  
+                }
+              )
+        }
+        else {
+          this.subscriptionConConfig = this.connectorConfigService.createConConfig(stateConTaskconfig)
+              .subscribe(
+                response => {
+                  responseCount += 1;
+                  console.log("lenght of stat config create");
+                  console.log(responseCount);
+                  stateConTaskconfig = response;
+                  if (responseCount == this.stateConnectorTaskConfig.length) {
+                    console.log("whola!!");
+                    this.saveGraphObject();
+                  }
+                },
+                error => {
+                  this.errorToSaveGraphObject = "unable to update task object for config " + stateConTaskconfig.configType;
+                  errorFound = true;
+                  showModal("errorModal");
+                  
+                }
+              )
+        }
+        
+      }
+      console.log("after save");
+      console.log(responseCount);
+    
   }
 
   discardChanges(): void {

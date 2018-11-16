@@ -849,7 +849,7 @@
     <button type="button" class="btn btn-default" data-dismiss="modal" (click)="disableBulkEdit()">Close</button>
     <!-- <button type="button" class="btn btn-default" data-toggle="modal" data-target="#eventModal" (click)="addEvent()">Add Event</button> -->
     <button type="button" class="btn btn-primary" (click)="addEvent()">Add Event</button>
-    <button type="submit" class="btn btn-success" (click)="disableBulkEdit(); saveConnectorTaskConfig();">{{stateCreateMode ? 'Create' : 'Update'}}</button>
+    <button type="submit" class="btn btn-success" (click)="disableBulkEdit(); saveState();">{{stateCreateMode ? 'Create' : 'Update'}}</button>
  </div>
  </div>
  </div>
@@ -1488,6 +1488,29 @@
           <!-- Modal Footer -->
           <div class="modal-footer" id="modal_footer" *ngIf="fileUploaded">
           </div>
+       </div>
+    </div>
+ </div>
+<!-- error modal -->
+ <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
+    <div class="modal-dialog">
+       <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+             <h4 class="modal-title" id="warningLabel">
+                Error
+             </h4>
+          </div>
+          <!-- Modal Body -->
+          <div class="modal-body" id="modal_body">
+             <div>
+               {{ errorToSaveGraphObject }}
+             </div>
+          </div>
+          <!-- Modal Footer -->
+          <div class="modal-footer" id="modal_footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+         </div>
        </div>
     </div>
  </div>
