@@ -14,8 +14,13 @@ import { DataSharingService } from '../../../../services/shared.service';
 export class DomainsComponent implements OnInit, OnDestroy {
   domainSource: Domain[];
   selectedDomain: Domain;
+  domainPageNo: number;
+  domainPageSize : number;
+  moreDomainPages: boolean;
+  fields : String[];
 
   private subscription: Subscription;
+  private domainSubscription: Subscription;
   
   constructor(
     private domainService: DomainService,
@@ -25,9 +30,16 @@ export class DomainsComponent implements OnInit, OnDestroy {
   ) {
     this.domainSource = [];
     this.selectedDomain = new Domain();
+    this.fields = [];
+    this.fields.push("_id");
+    this.fields.push("name");
+    this.fields.push("desc");
+    this.fields.push("langSupported");
   }
   
   ngOnInit() {
+    this.domainPageNo = 0;
+    this.domainPageSize = 5;
     this.fetchDomains();
   }
   
@@ -35,15 +47,26 @@ export class DomainsComponent implements OnInit, OnDestroy {
     if (this.subscription && !this.subscription.closed) {
       this.subscription.unsubscribe();
     }
+    if(this.domainSubscription && !this.domainSubscription.closed) {
+      this.domainSubscription.unsubscribe();
+    }
   }
 
   filterQuery: string;
+
   fetchDomains() {
-    this.subscription = this.domainService.domainLookup()
+    this.subscription = this.domainService.domainLookupByPage(this.domainPageNo, this.domainPageSize, this.fields)
       .subscribe(
         domains => {
           if (domains) {
-            this.domainSource = domains;
+            if(domains.length < this.domainPageSize) {
+              this.moreDomainPages = false;
+            }
+            else {
+              this.moreDomainPages = true;
+              this.domainPageNo += 1;
+            }
+            this.domainSource = this.domainSource.concat(domains);
           }
         }
       );
@@ -52,13 +75,17 @@ export class DomainsComponent implements OnInit, OnDestroy {
   onDomainSelect(domain?: Domain) {
     if (domain) {
       this.selectedDomain = domain;
+      this.domainSubscription = this.domainService.getDomainById(domain._id).subscribe(recevedDomain=> {
+        if(recevedDomain) {
+          this.sharingService.setSharedObject(recevedDomain);
+          this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
+        }
+      });
     } else {
       this.selectedDomain = null;
+      this.sharingService.setSharedObject(this.selectedDomain);
+      this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
     }
-
-    this.sharingService.setSharedObject(this.selectedDomain);
-
-    this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
   }
 
   domainGoalsToString(goals: Goal[]) {

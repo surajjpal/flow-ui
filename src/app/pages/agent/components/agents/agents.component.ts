@@ -16,7 +16,13 @@ export class AgentsComponent implements OnInit, OnDestroy {
   filterQuery: string;
   agentSource: Agent[];
   selectedAgent: Agent;
-  
+  agentPageNo: number;
+  agentPageSize: number;
+  moreAgentPages: boolean;
+  fields: String[];
+
+  private subscription: Subscription;
+  private agentSubscription: Subscription;
   
   constructor(
     private agentService: AgentService,
@@ -29,6 +35,13 @@ export class AgentsComponent implements OnInit, OnDestroy {
   }
   
   ngOnInit() {
+    this.agentPageNo = 0;
+    this.agentPageSize = 5;
+    this.fields = [];
+    this.fields.push("_id")
+    this.fields.push("name")
+    this.fields.push("domainNameList")
+    this.fields.push("agentFlow")
     this.fetchAgents();
   }
   
@@ -36,15 +49,24 @@ export class AgentsComponent implements OnInit, OnDestroy {
     if (this.subscription && !this.subscription.closed) {
       this.subscription.unsubscribe();
     }
+    if(this.agentSubscription && !this.agentSubscription.closed) {
+      this.agentSubscription.unsubscribe();
+    }
   }
 
-  private subscription: Subscription;
+  
   fetchAgents() {
-    this.subscription = this.agentService.agentLookup()
+    this.subscription = this.agentService.agentLookupByPage(this.agentPageNo, this.agentPageSize, this.fields)
       .subscribe(
         agents => {
           if (agents) {
-            this.agentSource = agents;
+            if(agents.length < this.agentPageSize) {
+              this.moreAgentPages = false;
+            } else {
+              this.moreAgentPages = true;
+              this.agentPageNo += 1;
+            }
+            this.agentSource = this.agentSource.concat(agents);
           }
         }
       );
@@ -53,13 +75,16 @@ export class AgentsComponent implements OnInit, OnDestroy {
   onAgentSelect(agent?: Agent) {
     if (agent) {
       this.selectedAgent = agent;
+      this.agentSubscription = this.agentService.getAgentById(agent._id).subscribe(receivedAgent=> {
+        if(receivedAgent) {
+          this.sharingService.setSharedObject(receivedAgent);
+          this.router.navigate(['/pg/agnt/ags'], { relativeTo: this.route });
+        }
+      });
     } else {
+      this.router.navigate(['/pg/agnt/ags'], { relativeTo: this.route });
       this.selectedAgent = null;
-    }
-
-    this.sharingService.setSharedObject(this.selectedAgent);
-
-    this.router.navigate(['/pg/agnt/ags'], { relativeTo: this.route });
+    }    
   }
 
   arrayToString(array: String[]) {

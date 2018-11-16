@@ -42,6 +42,73 @@ export class DomainService {
     return subject.asObservable();
   }
 
+  getDomainById(_id: String) : Observable<Domain> {
+    const subject = new Subject<Domain>();
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = new Map<any, any>();
+    crudInput.collection = 'domain';
+    crudInput.operation = "READ";
+    crudInput.payload = {"_id" : _id};
+    this.httpClient.post<Map<string, Domain[]>>(
+      crudUrl, 
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Map<string, Domain[]>>) => {
+        subject.next(response.body['data']);
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+  domainLookupByPage(pageNo: number, pageSize: number, fields: String[]) : Observable<Domain[]> {
+    const subject = new Subject<Domain[]>();
+
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = new Map<any, any>();
+    crudInput.collection = 'domain';
+    crudInput.operation = "READ_ALL";
+    crudInput.page = pageNo;
+    crudInput.pageSize = pageSize;
+    crudInput.fields = fields;
+    
+    this.httpClient.post<Map<string, Domain[]>>(
+      crudUrl, 
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Map<string, Domain[]>>) => {
+        subject.next(response.body['data']);
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
 
   domainLookup(query?: string): Observable<Domain[]> {
     const subject = new Subject<Domain[]>();

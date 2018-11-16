@@ -3,4 +3,6 @@ export class CRUDOperationInput {
     collection: string;
     payload: any;
     fields: any;
+    page: number;
+    pageSize: number;
 }
