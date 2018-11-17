@@ -204,12 +204,12 @@
                 <div class="tab-content">
                    <div *ngFor="let taskConfig of getTempStateConnectorList()"  >
                       <div class="form-group">
-                         <label><span>{{ getRefConConfigName(taskConfig) }}</span></label>
-                         <div *ngIf="getTempConInfoList(getRefConConfigName(taskConfig)).length > 1" style="margin-bottom: 15px;">
+                         <label><b>{{ getDisplyConConfigName(taskConfig) }}</b></label>
+                         <div *ngIf="getTempConInfoList(getDisplyConConfigName(taskConfig)).length > 1" style="margin-bottom: 15px;">
                             <label>Select task</label>
-                            <select (change)="onMachineTypeSelect()" class="form-control" required id="selectmachinetype" title="Choose Process" [(ngModel)]="tempSelectedConnectorInfoList[getRefConConfigName(taskConfig)].type"
+                            <select (change)="onConInfoTaskSelect($event, taskConfig, getDisplyConConfigName(taskConfig))" class="form-control" required id="configTypeTaskselection" title="Choose Process" [(ngModel)]="tempSelectedConfigTypeTask[getDisplyConConfigName(taskConfig)]"
                                 name="machineType">
-                                <option *ngFor="let conInfo of tempSelectedConnectorInfoList[getRefConConfigName(taskConfig)]" [ngValue]="conInfo.type">{{ conInfo.displayName }}
+                                <option *ngFor="let conInfo of tempSelectedConnectorInfoList[getDisplyConConfigName(taskConfig)]" [ngValue]="conInfo.type">{{ conInfo.displayName }}
                                 </option>
                             </select>
                          </div>
