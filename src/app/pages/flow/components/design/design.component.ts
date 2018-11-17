@@ -173,6 +173,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log(this.graphObject);
     this.load();
   }
 
@@ -195,24 +196,33 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   load(): void {
-    console.log("graphobject on load");
-    console.log(this.graphObject);
     this.getSourceEntryActions();
     this.getTimerUnits();
     this.getApiConfigLookup();
     this.getConList();
-    this.getAllConnectors();
-    this.removeOldTaskConfig();
-    this.getAllConnectorInfos();
+    var graphLoad = false;
+    if (!this.graphObject || this.graphObject === null) {
+      this.loadGraphObject();
+      graphLoad = true;
+    }
+    // else {
+    //   this.loadGraphObject();
+    // }
+    this.getAllConnectorInfos(graphLoad);
     
 
+    //this.fetchStatesOrPayload();
+  }
+
+  loadGraphObject() {
+    console.log("graphobject on load");
+    console.log(this.graphObject);
     if (!this.graphObject || this.graphObject === null) {
       this.graphObject = new GraphObject();
       this.graphObject.statusCd = this.sourceStatusCodes[0],
         this.addNewDataPoint(true);
     }
     new designFlowEditor(this.graphObject.xml, this.readOnly);
-    //this.fetchStatesOrPayload();
   }
 
   fetchStatesOrPayload(){
@@ -266,7 +276,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       });
   }
 
-  getAllConnectorInfos() {
+  getAllConnectorInfos(graphLoad: boolean) {
     this.subscriptionConConfig = this.connectorConfigService.getConnecterInfo()
       .subscribe(
         infos => {
@@ -274,6 +284,7 @@ export class DesignComponent implements OnInit, OnDestroy {
           console.log(infos);
           this.connectorInfoList = infos;
           console.log(this.connectorInfoList);
+          this.getAllConnectors(graphLoad);
         },
         error => {
           console.log("getAllConnectorInfos error");
@@ -282,14 +293,18 @@ export class DesignComponent implements OnInit, OnDestroy {
       )
   }
 
-  getAllConnectors() {
+  getAllConnectors(graphLoad: boolean) {
     this.subscriptionConConfig = this.connectorConfigService.getAllCons()
       .subscribe(
         connectors => {
-          console.log("connectors")
           this.connectorList = connectors;
-          console.log(this.connectorList);
+          this.removeOldTaskConfig();
           this.setTaskconfigsFromConnConfigs();
+          if(!graphLoad) {
+            this.loadGraphObject();
+          }
+          console.log("after graph load stateConnectorTaskConfig");
+          console.log(this.stateConnectorTaskConfig)
         },
         error => {
 
@@ -325,10 +340,19 @@ export class DesignComponent implements OnInit, OnDestroy {
               configName = uuid();
             }
             con.configName = configName;
-            this.stateConnectorTaskConfig.push(con);
+            if(!state.connectorConfigList) {
+              state.connectorConfigList = [];
+            }
+            var configTypeRefConName = this.getConfigTypeAndRefConNameForTaskConfigFromConnectors(con);
+            if (configTypeRefConName != null && configTypeRefConName.configType != null && configTypeRefConName.refConName != null) {
+              state.connectorConfigList.push(configTypeRefConName.refConName);
+              con.configType = configTypeRefConName.configType;
+              this.stateConnectorTaskConfig.push(JSON.parse(JSON.stringify(con)));
+              state.taskConfig = [];
+              state.connectorConfig = [];
+            }
           }
-          state.taskConfig = [];
-          state.connectorConfig = [];
+          
             
         }
       }
@@ -723,9 +747,49 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
   }
 
+  getConfigTypeAndRefConNameForTaskConfigFromConnectors(taskConfig) {
+    var result = { refConName: null, configType: null }
+    for(let con of this.connectorList) {
+      if(con.functionInstanceName == taskConfig.connectorConfigRef) {
+        for (let conInfo of this.connectorInfoList) {
+          if (conInfo.referenceType == con.configType) {
+            result.refConName = con.configName;
+            result.configType = conInfo.type;
+            return result;
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  
+
   saveGraphObject() {
     if (this.graphObject && this.graphObject.states && this.stateConnectorTaskConfig && this.stateConnectorTaskConfig.length>0) {
       for (let state of this.graphObject.states) {
+        console.log("statetaskConfig");
+        if (this.stateConnectorTaskConfig && this.stateConnectorTaskConfig.length > 0 && (!state.connectorConfigList || state.connectorConfigList.length == 0) && state.taskConfig && state.taskConfig.length>0) {
+          console.log("***********");
+          for (let sttaskconfig of this.stateConnectorTaskConfig) {
+            for(let tcon of state.taskConfig) {
+              if (tcon.functionInstanceName == sttaskconfig.functionInstanceName) {
+                console.log("match fun")
+                if(!state.connectorConfigList) {
+                  state.connectorConfigList = []
+                }
+                if(!state.taskConfigList) {
+                  state.taskConfigList = []
+                }
+                var configTypeConfigName = this.getConfigTypeAndRefConNameForTaskConfigFromConnectors(sttaskconfig);
+                if (configTypeConfigName != null && configTypeConfigName.configType != null) {
+                  state.connectorConfigList.push(configTypeConfigName.refConName);
+                  state.taskConfigList.push(sttaskconfig.configName);
+                }
+              }
+            }
+          }
+        }
         state.taskConfig = [];
         state.connectorConfig = [];
       }
@@ -1118,8 +1182,8 @@ export class DesignComponent implements OnInit, OnDestroy {
       if (!isTaskConfigPresent && selectedCon != null && selectedConInfo != null) {
         var conTaskConfig = new ConnectorConfig();
         conTaskConfig.taskConfig = true;
-        conTaskConfig.configType = selectedCon.configType;
-        conTaskConfig.connectorInfoRef = selectedCon.configType;
+        conTaskConfig.configType = selectedConInfo.type;
+        conTaskConfig.connectorInfoRef = selectedConInfo.type;
         conTaskConfig.connectorConfigRef = selectedCon.functionInstanceName;
         conTaskConfig.configName = uuid();
         conTaskConfig = this.convertConInfoToStateTaskConfig(selectedConInfo, conTaskConfig);
