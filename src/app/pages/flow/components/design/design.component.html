@@ -204,7 +204,15 @@
                 <div class="tab-content">
                    <div *ngFor="let taskConfig of getTempStateConnectorList()"  >
                       <div class="form-group">
-                         <label> {{ getRefConConfigName(taskConfig) }}</label>
+                         <label><span>{{ getRefConConfigName(taskConfig) }}</span></label>
+                         <div *ngIf="getTempConInfoList(getRefConConfigName(taskConfig)).length > 1" style="margin-bottom: 15px;">
+                            <label>Select task</label>
+                            <select (change)="onMachineTypeSelect()" class="form-control" required id="selectmachinetype" title="Choose Process" [(ngModel)]="tempSelectedConnectorInfoList[getRefConConfigName(taskConfig)].type"
+                                name="machineType">
+                                <option *ngFor="let conInfo of tempSelectedConnectorInfoList[getRefConConfigName(taskConfig)]" [ngValue]="conInfo.type">{{ conInfo.displayName }}
+                                </option>
+                            </select>
+                         </div>
                          <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
                                <a class="nav-link active" data-toggle="tab" [href]="'#tab_config' + getRefConConfigName(taskConfig)" role="tab" aria-expanded="true">Configuration</a>
