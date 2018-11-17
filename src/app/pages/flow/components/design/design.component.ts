@@ -423,27 +423,29 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.tempState.taskConfigList.push(taskId);
   }
 
-  getTaskConfigFromOldConfigForState(connectorName) {
-    if (this.connectorNamesForOld &&  this.connectorNamesForOld[this.tempState.stateCd] && this.connectorNamesForOld[this.tempState.stateCd].length>0) {
-      for(let funConName of this.connectorNamesForOld[this.tempState.stateCd]) {
-        if (funConName.connectorName == connectorName) {
-          for(let sttaskconfig of this.stateConnectorTaskConfig) {
-            if (sttaskconfig.functionInstanceName == funConName.functionInstanceName) {
-              for (let conInfo of this.connectorInfoList) {
-                if (conInfo.type == sttaskconfig.configType) {
-                  this.addToTempStateTaskConfig(sttaskconfig, conInfo, connectorName);
-                  this.addToTaskIdToTempStateTaskConfig(sttaskconfig.functionInstanceName);
-                  this.tempSelectedConfigTypeTask[connectorName] = conInfo.type;
-                  return true;
+  setTaskConfigFromOldConfigForState() {
+    for(let connectorName of this.tempState.connectorConfigList) {
+      if (this.connectorNamesForOld &&  this.connectorNamesForOld[this.tempState.stateCd] && this.connectorNamesForOld[this.tempState.stateCd].length>0) {
+        for(let funConName of this.connectorNamesForOld[this.tempState.stateCd]) {
+          if (funConName.connectorName == connectorName) {
+            for(let sttaskconfig of this.stateConnectorTaskConfig) {
+              if (sttaskconfig.functionInstanceName == funConName.functionInstanceName) {
+                for (let conInfo of this.connectorInfoList) {
+                  if (conInfo.type == sttaskconfig.configType) {
+                    this.addToTempStateTaskConfig(sttaskconfig, conInfo, connectorName);
+                    this.addToTaskIdToTempStateTaskConfig(sttaskconfig.functionInstanceName);
+                    this.tempSelectedConfigTypeTask[connectorName] = conInfo.type;
+                    
+                  }
                 }
+                
               }
-              
             }
           }
         }
       }
     }
-    return false;
+    
   }
 
   getRefConConfigName(taskConfig) {
@@ -508,6 +510,9 @@ export class DesignComponent implements OnInit, OnDestroy {
     console.log("updatestate");
     console.log("fdfsd");
     console.log(state);
+    this.tempStateConnectorList = [];
+    this.tempSelectedConfigTypeTask = {};
+    this.tempSelectedConnectorInfoList = {};
     this.removeOldStateTaskconfig(state);
     console.log("after removing old");
     console.log(state);
@@ -519,6 +524,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     // this.gotConInfo = false;
     this.tempState = JSON.parse(JSON.stringify(state));
     //this.setPreviousConnectorTaskList();
+    this.setTaskConfigFromOldConfigForState()
     this.setConnectorTaskConfig();
     // if(this.tempState.connectorConfig){
     //   if(this.tempState.connectorConfig.length > 0){
@@ -639,6 +645,12 @@ export class DesignComponent implements OnInit, OnDestroy {
       for(let configName of this.tempState.connectorConfigList) {
         for (let tmpTskCon of this.tempStateConnectorList) {
           if(tmpTskCon.connectorConfRefName == configName) {
+            console.log("new task config");
+            console.log(configName);
+            console.log(tmpTskCon.configName);
+            console.log(this.tempState.stateCd);
+            console.log(tmpTskCon._id);
+            console.log(tmpTskCon.taskObjectBody);
             tempTaskConfigs.push(tmpTskCon);
             this.tempState.taskConfigList.push(tmpTskCon.configName);
           }
@@ -648,18 +660,19 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (tempTaskConfigs.length>0) {
       this.addToStateTaskconfigList(tempTaskConfigs);
     }
-    console.log("lenght of task config");
-    console.log(this.tempState.taskConfigList);
-    this.tempStateConnectorList = [];
-    console.log("saveConnectorTaskConfig");
-    for(let ts of this.tempState.taskConfigList) {
-      for(let st of this.stateConnectorTaskConfig) {
-        if (st.configName == ts) {
-          console.log(st.configName)
-          console.log(st);
-        }
+    if(this.tempState && this.stateTaskConfigFunctionInstanceMap) {
+      console.log("lenght of task config");
+      console.log(this.tempState.taskConfigList);
+      for(let taskId of this.tempState.taskConfigList) {
+        this.stateTaskConfigFunctionInstanceMap[this.tempState.stateId] = []
+        this.addTaskIdToStateTaskConfigFunctionInstanceMap(this.tempState, taskId);
       }
     }
+    this.tempStateConnectorList = [];
+    console.log("saveConnectorTaskConfig");
+    console.log(this.tempState.taskConfigList);
+    console.log(this.stateConnectorTaskConfig);
+    console.log(this.stateTaskConfigFunctionInstanceMap);
     //console.log(this.tempState);;
   }
 
@@ -1194,6 +1207,8 @@ export class DesignComponent implements OnInit, OnDestroy {
       if (tempConTaskconfig.taskObjectBody && tempConTaskconfig.taskObjectBody.length > 0) {
         taskConfig.taskObject.body = {};
         for (let body of tempConTaskconfig.taskObjectBody) {
+          console.log("convertTempStateTaskConfigToTaskConfig");
+          console.log(body);
           taskConfig.taskObject.body[body.key] = body.value;
         }
         
@@ -1201,6 +1216,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       if (tempConTaskconfig.taskObjectResponseList.length > 0) {
         taskConfig.taskObject.responseList = tempConTaskconfig.taskObjectResponseList;
       }
+      
       return taskConfig;
     }
     return null;
@@ -1213,7 +1229,11 @@ export class DesignComponent implements OnInit, OnDestroy {
         var alreadyExist = false;
         for (let stateTaskConfig of this.stateConnectorTaskConfig) {
           if (stateTaskConfig._id != null && stateTaskConfig._id == taskconfig._id) {
-            stateTaskConfig = taskconfig;
+            var index  = this.stateConnectorTaskConfig.indexOf(stateTaskConfig);
+            if (index != -1) {
+              this.stateConnectorTaskConfig.splice(index, 1);
+            }
+            this.stateConnectorTaskConfig.push(taskconfig);
             alreadyExist = true;
           }
         }
@@ -1277,19 +1297,32 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   getConTaskConfigFromListOfStateconfigs(connConfigName: string, conInfo: ConnectorInfo, functionInstanceName: string, configName: string) {
     if (this.stateConnectorTaskConfig && this.stateConnectorTaskConfig.length>0) {
-      for (let stateConTaskConfig of this.stateConnectorTaskConfig) {
-        if (stateConTaskConfig.taskConfig && 
-          stateConTaskConfig.configType == conInfo.type && 
-          stateConTaskConfig.connectorConfigRef == functionInstanceName) {
-          if (stateConTaskConfig.configName != null && stateConTaskConfig.configName.length != 0) {
-            console.log("getConTaskConfigFromListOfStateconfigs");
-            console.log(stateConTaskConfig);
-            return stateConTaskConfig;
-            
+      console.log(this.stateTaskConfigFunctionInstanceMap);
+      if (this.stateTaskConfigFunctionInstanceMap && this.stateTaskConfigFunctionInstanceMap[this.tempState.stateId] && this.stateTaskConfigFunctionInstanceMap[this.tempState.stateId].length>0) {
+        for (let taskId of this.stateTaskConfigFunctionInstanceMap[this.tempState.stateId]) {
+          console.log("stateTaskConfigFunctionInstanceMap");
+          console.log(this.tempState.stateId);
+          console.log(taskId);
+          if (taskId == configName) {
+            console.log("stateTaskConfigFunctionInstanceMap *******");
+            for (let stateConTaskConfig of this.stateConnectorTaskConfig) {
+              if (stateConTaskConfig.taskConfig && 
+                stateConTaskConfig.configType == conInfo.type && 
+                stateConTaskConfig.connectorConfigRef == functionInstanceName) {
+                if (stateConTaskConfig.configName != null && stateConTaskConfig.configName.length != 0) {
+                  console.log("getConTaskConfigFromListOfStateconfigs");
+                  console.log(stateConTaskConfig);
+                  return stateConTaskConfig;
+                  
+                }
+              }
+            }
           }
         }
       }
+      
     }
+    return null;
   }
   
   setConnectorTaskConfig() {
@@ -1315,8 +1348,9 @@ export class DesignComponent implements OnInit, OnDestroy {
 
     for(let connConfigName of configNames) {
       var isTaskConfigPresent = false;
+      var conInfoTypeFound = false;
       this.tempSelectedConnectorInfoList[connConfigName] = []
-      var foundInOldConfig = this.getTaskConfigFromOldConfigForState(connConfigName);
+      var foundInOldConfig = false; //this.getTaskConfigFromOldConfigForState(connConfigName);
       console.log("getTaskConfigFromOldConfigForState");
       console.log(foundInOldConfig);
       for(let con of this.connectorList) {
@@ -1333,16 +1367,7 @@ export class DesignComponent implements OnInit, OnDestroy {
                   const conTaskConfig = this.createTempConTaskConfig(conInfo, con, connConfigName);
                   this.addToTempStateTaskConfig(conTaskConfig, conInfo, connConfigName);
                 }
-                else {
-                  var foundTaskId = false;
-                  for(let tid of this.tempState.taskConfigList) {
-                    const conTaskConfig = this.getConTaskConfigFromListOfStateconfigs(connConfigName, conInfo, con.functionInstanceName, tid);
-                    if (conTaskConfig != null) {
-                      this.tempSelectedConfigTypeTask[connConfigName] = conInfo.type;
-                      this.addToTempStateTaskConfig(conTaskConfig, conInfo, connConfigName);
-                    }
-                  }
-                }
+                
               }
               
             }
@@ -1350,6 +1375,61 @@ export class DesignComponent implements OnInit, OnDestroy {
           
         }
       }
+
+      for(let con of this.connectorList) {
+        if (con.configName == connConfigName) {
+          selectedCon = con;
+          selectedConInfos = []
+          for (let conInfo of this.connectorInfoList) {
+            console.log(conInfo.referenceType);
+            if (conInfo.referenceType == con.configType) {
+              selectedConInfos.push(conInfo);
+              if(!foundInOldConfig) {
+                var foundTaskId = false;
+                for(let tid of this.tempState.taskConfigList) {
+                  console.log("try to get by " + tid.toString());
+                  const conTaskConfig = this.getConTaskConfigFromListOfStateconfigs(connConfigName, conInfo, con.functionInstanceName, tid);
+                  console.log("from getConTaskConfigFromListOfStateconfigs");
+                  console.log(conTaskConfig);
+                  if (conTaskConfig != null) {
+                    conInfoTypeFound = true;
+                    this.tempSelectedConfigTypeTask[connConfigName] = conInfo.type;
+                    this.addToTempStateTaskConfig(conTaskConfig, conInfo, connConfigName);
+                  }
+                }
+                
+              }
+              
+            }
+          }
+          
+        }
+      }
+
+      for(let con of this.connectorList) {
+        if (con.configName == connConfigName) {
+          selectedCon = con;
+          selectedConInfos = []
+          for (let conInfo of this.connectorInfoList) {
+            console.log(conInfo.referenceType);
+            if (conInfo.referenceType == con.configType) {
+              selectedConInfos.push(conInfo);
+              if(!foundInOldConfig) {
+                if(!conInfoTypeFound) {
+                  this.tempSelectedConfigTypeTask[connConfigName] = this.tempSelectedConnectorInfoList[connConfigName][0].type;
+                }
+                const conTaskConfig = this.createTempConTaskConfig(conInfo, con, connConfigName);
+                this.addToTempStateTaskConfig(conTaskConfig, conInfo, connConfigName);
+              }
+              
+            }
+          }
+          
+        }
+      }
+
+      
+
       
     }
     
