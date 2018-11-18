@@ -48,7 +48,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   // List counts
   dataPointCount: number = 0;
-  stateCount: number = 1;
+  stateCount: number = 0;
 
   // Dynamic html titles for dialogs
   stateCreateMode: boolean = true;
@@ -77,6 +77,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   graphObject: GraphObject;
   tempGraphObject: GraphObject;
   tempState: StateModel;
+  tempStateCd: string;
   tempParentState: StateModel;
   tempEvent: EventModel;
   tempEdgeEvent: EventModel;
@@ -160,6 +161,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.selectedFile = new FormData();
     this.tempGraphObject = new GraphObject();
     this.tempState = new StateModel();
+    this.tempStateCd = null;
     this.tempParentState = new StateModel();
     this.tempEvent = new EventModel();
     this.apiConfig = new ApiConfig();
@@ -394,8 +396,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
     console.log("stateTaskConfigFunctionInstanceMap count");
     console.log(countInstatInstance);
-    for(let stateId in this.stateTaskConfigFunctionInstanceMap) {
-      for(let taskId of this.stateTaskConfigFunctionInstanceMap[stateId]) {
+    for(let stateCd in this.stateTaskConfigFunctionInstanceMap) {
+      for(let taskId of this.stateTaskConfigFunctionInstanceMap[stateCd]) {
         var found = false;
         for(let statetask of this.stateConnectorTaskConfig) {
           if (statetask.configName == taskId) {
@@ -414,11 +416,22 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (!this.stateTaskConfigFunctionInstanceMap) {
       this.stateTaskConfigFunctionInstanceMap = {};
     }
-    if(!this.stateTaskConfigFunctionInstanceMap[state.stateId]) {
-      this.stateTaskConfigFunctionInstanceMap[state.stateId] = [];
+    if(!this.stateTaskConfigFunctionInstanceMap[state.stateCd]) {
+      this.stateTaskConfigFunctionInstanceMap[state.stateCd] = [];
     }
     console.log("addTaskIdToStateTaskConfigFunctionInstanceMap for " + taskId.toString());
-    this.stateTaskConfigFunctionInstanceMap[state.stateId].push(taskId);
+    this.stateTaskConfigFunctionInstanceMap[state.stateCd].push(taskId);
+  }
+
+  updateStateCdInStateTaskConfigFunctionInstanceMap(oldStateCd: string, newStateCd: string) {
+    if(this.stateTaskConfigFunctionInstanceMap) {
+      for(let statCd in this.stateTaskConfigFunctionInstanceMap) {
+        if (statCd == oldStateCd) {
+          this.stateTaskConfigFunctionInstanceMap[newStateCd] = this.stateTaskConfigFunctionInstanceMap[statCd];
+          this.stateTaskConfigFunctionInstanceMap[statCd] = [];
+        }
+      }
+    }
   }
 
   removeOldStateTaskconfig(state: StateModel) {
@@ -555,6 +568,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     // this.selectedConfig = false;
     // this.gotConInfo = false;
     this.tempState = JSON.parse(JSON.stringify(state));
+    this.tempStateCd = JSON.parse(JSON.stringify(this.tempState.stateCd));
     //this.setPreviousConnectorTaskList();
     this.setTaskConfigFromOldConfigForState()
     this.setConnectorTaskConfig();
@@ -703,7 +717,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     if(this.tempState && this.stateTaskConfigFunctionInstanceMap) {
       console.log("lenght of task config");
       console.log(this.tempState.taskConfigList);
-      this.stateTaskConfigFunctionInstanceMap[this.tempState.stateId] = []
+      this.stateTaskConfigFunctionInstanceMap[this.tempState.stateCd] = []
       for(let taskId of this.tempState.taskConfigList) {
         this.addTaskIdToStateTaskConfigFunctionInstanceMap(this.tempState, taskId);
       }
@@ -721,6 +735,15 @@ export class DesignComponent implements OnInit, OnDestroy {
     console.log(this.tempState.stateId);
     console.log(this.tempState.taskConfigList);
     this.tempState.endState = (this.tempState.events.length === 0);
+    if (this.tempState.stateCd == null || this.tempState.stateCd.trim().length == 0) {
+      this.errorToSaveGraphObject = "state code can not be empty";
+      showModal("errorModel");
+      return;
+    }
+    if (this.tempState.stateCd != this.tempStateCd) {
+      this.updateStateCdInStateTaskConfigFunctionInstanceMap(this.tempStateCd, this.tempState.stateCd);
+    }
+    this.tempStateCd = null;
     if (!this.isStateApiCompatible()) {
       this.tempState.apiConfigurationList = [];
     }
@@ -734,32 +757,23 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.tempState.taskConfig = [];
     }
     
+    if (this.isStateConnectorCompatible() && this.tempState.connectorConfigList && this.tempState.taskConfigList && this.tempState.connectorConfigList.length > 0) {
+      this.saveConnectorTaskConfig();
+    }
+    else {
+      this.tempState.connectorConfigList = [];
+      this.tempState.taskConfigList = [];
+    }
+    
 
     if (this.tempState.stateId && this.tempState.stateId.toString().trim().length > 0) {
-      if (this.isStateConnectorCompatible() && this.tempState.connectorConfigList && this.tempState.taskConfigList && this.tempState.connectorConfigList.length > 0) {
-        this.saveConnectorTaskConfig();
-      }
-      else {
-        this.tempState.connectorConfigList = [];
-        this.tempState.taskConfigList = [];
-      }
       console.log("update state");
       const customObject: Object = JSON.parse(JSON.stringify(this.tempState));  // Very important line of code, don't remove
       new updateStateObject(customObject);
     } else {
-      this.stateCount++;
-      this.tempState.stateId = this.stateCount.toString();
-      if (this.isStateConnectorCompatible() &&this.tempState.connectorConfigList && this.tempState.taskConfigList && this.tempState.connectorConfigList.length > 0) {
-        this.saveConnectorTaskConfig();
-      }
-      else {
-        this.tempState.connectorConfigList = [];
-        this.tempState.taskConfigList = [];
-      }
-      console.log("stateId :; " + this.tempState.stateId);
       const newState = JSON.parse(JSON.stringify(this.tempState));
-      console.log("new state");
-      
+      this.stateCount++;
+      newState.stateId = 'state' + this.stateCount;
       const customObject: Object = JSON.parse(JSON.stringify(newState));  // Very important line of code, don't remove
       new saveStateObject(customObject);
       
@@ -959,12 +973,12 @@ export class DesignComponent implements OnInit, OnDestroy {
         var taskconfigs = [];
         this.tempStateConnectorList = [];
         if ((state.taskConfig && state.taskConfig.length > 0) || (state.connectorConfig && state.connectorConfig.length>0)) {
-          for(let stateId in this.stateTaskConfigFunctionInstanceMap) {
-            if (stateId == state.stateId && this.stateTaskConfigFunctionInstanceMap[stateId] && this.stateTaskConfigFunctionInstanceMap[stateId].length>0) {
+          for(let stateCd in this.stateTaskConfigFunctionInstanceMap) {
+            if (stateCd == state.stateCd && this.stateTaskConfigFunctionInstanceMap[stateCd] && this.stateTaskConfigFunctionInstanceMap[stateCd].length>0) {
               state.taskConfigList = [];
               state.connectorConfigList = [];
               var connectorName = null;
-              for(let taskConfigName of this.stateTaskConfigFunctionInstanceMap[stateId]) {
+              for(let taskConfigName of this.stateTaskConfigFunctionInstanceMap[stateCd]) {
                 console.log("updateOldStateTaskConfig task config : " + taskConfigName);
                 for(let stattask of this.stateConnectorTaskConfig) {
                   if (stattask.configName == taskConfigName) {
@@ -994,19 +1008,20 @@ export class DesignComponent implements OnInit, OnDestroy {
             }
           }
         }
-        // if (foundtaskconfig) {
-        //   state.taskConfig = [];
-        //   state.connectorConfig = [];
-        //   if(!state.taskConfigList) {
-        //     state.taskConfigList = [];
-        //   }
-        //   if(!state.connectorConfigList) {
-        //     state.connectorConfigList = [];
-        //   }
-        //   this.tempState = JSON.parse(JSON.stringify(state));
-        //   console.log("save state old");
-        //   this.saveState();
-        // }
+        if (foundtaskconfig) {
+          state.taskConfig = [];
+          state.connectorConfig = [];
+          if(!state.taskConfigList) {
+            state.taskConfigList = [];
+          }
+          if(!state.connectorConfigList) {
+            state.connectorConfigList = [];
+          }
+          this.tempState = JSON.parse(JSON.stringify(state));
+          console.log("save state old " + state.stateCd);
+          console.log(state.stateId)
+          this.saveState();
+        }
       }
     }
   }
@@ -1407,8 +1422,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   getConTaskConfigFromListOfStateconfigs(connConfigName: string, conInfo: ConnectorInfo, functionInstanceName: string, configName: string) {
     if (this.stateConnectorTaskConfig && this.stateConnectorTaskConfig.length>0) {
       console.log(this.stateTaskConfigFunctionInstanceMap);
-      if (this.stateTaskConfigFunctionInstanceMap && this.stateTaskConfigFunctionInstanceMap[this.tempState.stateId] && this.stateTaskConfigFunctionInstanceMap[this.tempState.stateId].length>0) {
-        for (let taskId of this.stateTaskConfigFunctionInstanceMap[this.tempState.stateId]) {
+      if (this.stateTaskConfigFunctionInstanceMap && this.stateTaskConfigFunctionInstanceMap[this.tempState.stateCd] && this.stateTaskConfigFunctionInstanceMap[this.tempState.stateCd].length>0) {
+        for (let taskId of this.stateTaskConfigFunctionInstanceMap[this.tempState.stateCd]) {
           console.log("stateTaskConfigFunctionInstanceMap " + taskId.toString() + " func " + functionInstanceName);
           console.log(this.tempState.stateId);
           console.log(taskId);
