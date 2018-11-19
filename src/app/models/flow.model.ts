@@ -166,7 +166,9 @@ export class StateModel {
   runAtDateExpression: string;
   runAtTimeExpression: string;
   taskConfig:ConnectorConfig[];
+  taskConfigList: string[];
   connectorConfig:ConnectorConfig[];
+  connectorConfigList: string[];
   reportFlag: boolean;
 
   constructor() {
@@ -189,7 +191,9 @@ export class StateModel {
     this.runAtDateExpression = '';
     this.runAtTimeExpression = '';
     this.taskConfig = [];
+    this.taskConfigList = [];
     this.connectorConfig = [];
+    this.connectorConfigList = [];
     this.reportFlag = false;
   }
 }
