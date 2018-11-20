@@ -651,6 +651,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     var tempTaskConfigs = []
     this.tempState.taskConfigList = [];
     if(this.tempStateConnectorList && this.tempStateConnectorList.length>0) {
+      this.tempState.connectorConfig = [];
       for(let configName of this.tempState.connectorConfigList) {
         for (let tmpTskCon of this.tempStateConnectorList) {
           if(tmpTskCon.connectorConfRefName == configName) {
@@ -1246,7 +1247,15 @@ export class DesignComponent implements OnInit, OnDestroy {
         
       }
       if (tempConTaskconfig.taskObjectResponseList.length > 0) {
-        taskConfig.taskObject.responseList = tempConTaskconfig.taskObjectResponseList;
+        var apiresponses = [];
+        for (let apiresponse of tempConTaskconfig.taskObjectResponseList) {
+          if (typeof apiresponse.responseCode == 'string') {
+              apiresponse.responseCode = parseInt(apiresponse.responseCode) {
+            }
+            apiresponses.push(apiresponse);
+          }
+        }
+        taskConfig.taskObject.responseList = apiresponses;
       }
       
       return taskConfig;
