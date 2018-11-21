@@ -160,8 +160,9 @@ export class ActivityMonitorService {
         url, 
         onDemandReportRequest,
         {
-          headers: this.httpHeaders,
-          reportProgress: true
+          //headers: this.httpHeaders,
+          reportProgress: true,
+          withCredentials: true
         }
       ).subscribe(
         (response: HttpResponse<any>) => {
