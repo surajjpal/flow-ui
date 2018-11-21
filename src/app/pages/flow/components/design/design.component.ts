@@ -1250,11 +1250,11 @@ export class DesignComponent implements OnInit, OnDestroy {
         var apiresponses = [];
         for (let apiresponse of tempConTaskconfig.taskObjectResponseList) {
           if (typeof apiresponse.responseCode == 'string') {
-              apiresponse.responseCode = parseInt(apiresponse.responseCode) {
+              apiresponse.responseCode = parseInt(apiresponse.responseCode) 
             }
             apiresponses.push(apiresponse);
           }
-        }
+        
         taskConfig.taskObject.responseList = apiresponses;
       }
       
