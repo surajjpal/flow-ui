@@ -164,5 +164,5 @@ export const environment = {
   businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
 
   //python project in api-utils ondemandreport project
-  sendReportCSV: 'https://flow.automatapi.io/flow/report/generatereport',
+  sendReportCSV: 'https://flow.automatapi.io/flow/report/reports/generatereport',
 };

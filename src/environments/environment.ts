@@ -167,6 +167,6 @@ export const environment = {
   businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
   businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
 
-  sendReportCSV: 'http://localhost:8080/flow/report/generatereport',
+  sendReportCSV: 'http://localhost:8080/flow/report/reports/generatereport',
   funnelReport: 'state/fetchfunneldata',
 };
