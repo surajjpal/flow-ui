@@ -73,7 +73,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         this.tempDateRange.end = moment().endOf('day');
         let commonsearchModel = new CommonSearchModel();
         commonsearchModel.searchParams = [{"statusCd":"ACTIVE"},{"statusCd":"DRAFT"},{"statusCd":"CLOSED"}];
-        commonsearchModel.returnFields = ["machineLabel","version","statusCd","machineType"];
+        commonsearchModel.returnFields = ["machineLabel","version","statusCd","machineType","dataPointConfigurationList"];
         this.subscription = this.graphService.fetch(commonsearchModel)
                             .subscribe(
                                 response => {
@@ -273,16 +273,21 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
             if (!this.businessProcessMonitorRequest.companyId) {
                 this.businessProcessMonitorRequest.companyId = graphData.companyId;
             }
+            
+            
             if (graphData.machineType == this.businessProcessMonitorRequest.machineType) {
+               
                 if (this.businessProcessMonitorRequest.machineIds.indexOf(graphData._id) == -1) {
                     this.businessProcessMonitorRequest.machineIds = this.businessProcessMonitorRequest.machineIds.concat(graphData._id);
                 }
                 for (let dataPointconfig of graphData.dataPointConfigurationList) {
                     let found = false;
+                    
                     if (graphData.statusCd == 'ACTIVE' && dataPointconfig.businessMonitorKey && dataPointconfig.graphType != null) {
                         this.businessDataPointConfiguationsForGraph = this.businessDataPointConfiguationsForGraph.concat(dataPointconfig);
                     }
-                    else if (graphData.statusCd == 'ACTIVE' && dataPointconfig.businessMonitorKey && (dataPointconfig.percentageChange || dataPointconfig.businessKeyFlag )) {
+                    
+                    if (graphData.statusCd == 'ACTIVE' && dataPointconfig.businessMonitorKey && (dataPointconfig.percentageChange || dataPointconfig.businessKeyFlag )) {
                         businessDataPointConfiguationsForSummary = businessDataPointConfiguationsForSummary.concat(dataPointconfig);
                     }
                     for (let businessDataPointConfig of this.businessProcessMonitorRequest.dataPointConfigurations) {
@@ -297,17 +302,18 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                 }
             }
         }
-        
+        console.log("changes reflecting")
         console.log("submit filter");
-        console.log(this.businessProcessMonitorRequest);
+        console.log(this.businessDataPointConfiguationsForGraph);
         for (let graphDataPoint of this.businessDataPointConfiguationsForGraph) {
             this.businessProcessMonitorRequest.selectedDataPointConfiguration = JSON.parse(JSON.stringify(graphDataPoint));
-            //this.getFilterGraphData(graphDataPoint);
+            
+            this.getFilterGraphData(graphDataPoint);
             
         }
         for (let summaryDataConfig of businessDataPointConfiguationsForSummary) {
             this.businessProcessMonitorRequest.selectedDataPointConfiguration = JSON.parse(JSON.stringify(summaryDataConfig));
-            //this.getCountWithPercentage(summaryDataConfig);
+            this.getCountWithPercentage(summaryDataConfig);
         }
         
     }
@@ -329,6 +335,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
     }
 
     getCountWithPercentage(dataPoint: DataPoint) {
+        console.log("----------------------inside----------------------------------")
         this.loading=true;
         this.activityMonitorService.getCountwithPercentageChange(this.businessProcessMonitorRequest)
                     .subscribe(
