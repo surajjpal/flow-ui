@@ -3,28 +3,28 @@ export const environment = {
   name: 'production',
 
   // Root
-  root: 'https://prod-flow.automatapi.io/flow/',
+  root: 'https://flow.automatapi.io/flow/',
     
   // API
-  authurl: 'https://prod-flow.automatapi.io/flow/auth/',
+  authurl: 'https://flow.automatapi.io/flow/auth/',
 
   // Services
-  saveaccounturl: 'https://prod-flow.automatapi.io/flow/account/create',
-  fetchaccountbyidurl: 'https://prod-flow.automatapi.io/flow/account/',
-  publishaccounturl:'https://prod-flow.automatapi.io/flow/account/publish/',
-  unpublishaccounturl:'https://prod-flow.automatapi.io/flow/account/unpublish/',
+  saveaccounturl: 'https://flow.automatapi.io/flow/account/create',
+  fetchaccountbyidurl: 'https://flow.automatapi.io/flow/account/',
+  publishaccounturl:'https://flow.automatapi.io/flow/account/publish/',
+  unpublishaccounturl:'https://flow.automatapi.io/flow/account/unpublish/',
 
 
   processauditurl:"http://localhost:5000/api/universalsearch/search/flow",
   // Interfaces
-  interfaceService: 'https://prod-flow.automatapi.io/flow/interfaces',
-  updateClassifierTraining : 'https://prod-flow.automatapi.io/flow/interfaces/auto_decorate_training',
-  updateIntentTraining: 'https://prod-flow.automatapi.io/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'https://prod-flow.automatapi.io/flow/interfaces/entity_classification_training',
+  interfaceService: 'https://flow.automatapi.io/flow/interfaces',
+  updateClassifierTraining : 'https://flow.automatapi.io/flow/interfaces/auto_decorate_training',
+  updateIntentTraining: 'https://flow.automatapi.io/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'https://flow.automatapi.io/flow/interfaces/entity_classification_training',
 
   // Flow
-  server: 'https://prod-flow.automatapi.io/flow/console/',
-  autourl:'https://prod-agent.automatapi.io/#/pg/ch/cnv/',
+  server: 'https://flow.automatapi.io/flow/console/',
+  autourl:'https://agent.automatapi.xyz/#/pg/ch/cnv/',
 
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
@@ -82,7 +82,7 @@ export const environment = {
 
 
   // auto
-  autoServer: 'https://prod-flow.automatapi.io/flow/auto/',
+  autoServer: 'https://flow.automatapi.io/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',
@@ -111,7 +111,7 @@ export const environment = {
   flowsearch:'/api/search/flow',
 
   // Analytics
-  reportservice: 'https://prod-flow.automatapi.io/flow/report',
+  reportservice: 'https://flow.automatapi.io/flow/report',
   sendReportUrl: '/reports/analyticsreport/sendreport',
   scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
   getAnalyticsReports: "/reports/analyticsreport",
@@ -134,7 +134,7 @@ export const environment = {
   businessObjectPredictUrl: '/automatons/businessobject/predict',
   
   //Dashboard
-  dashboardServer: 'https://prod-flow.automatapi.io/flow/dashboard/',
+  dashboardServer: 'https://flow.automatapi.io/flow/dashboard/',
   dashboardsummary:'auto/dashboard_summary',
   episodetimeline:'auto/episode_timeline',
   intentcount:'auto/intent_count',
@@ -150,7 +150,7 @@ export const environment = {
   statetransactionvalue:'flow/state_transaction_value',
 
   //Dashboard from interfaces
-  dashboardinterface: 'https://prod-flow.automatapi.io/flow/interfaces/dashboard',
+  dashboardinterface: 'https://flow.automatapi.io/flow/interfaces/dashboard',
 
   //Following APIs path - To be used in conjunction with interfaceService property
   crudFunction: '/crud',
@@ -164,5 +164,5 @@ export const environment = {
   businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
 
   //python project in api-utils ondemandreport project
-  sendReportCSV: 'https://prod-flow.automatapi.io/flow/report/generatereport',
+  sendReportCSV: 'https://flow.automatapi.io/flow/report/generatereport',
 };
