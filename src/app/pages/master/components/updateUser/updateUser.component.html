@@ -5,8 +5,8 @@
         <form>
           <div *ngIf="(!profileEditMode && selectedUser._id != null)" class="form-group">
             <label>Id</label>
-            <input type="text" class="form-control" required placeholder="Id" [(ngModel)]="selectedUser._id" name="_id" disabled="disabled"
-            />
+            <input type="text" class="form-control" required placeholder="Id" [(ngModel)]="selectedUser._id" name="_id"
+              disabled="disabled" />
           </div>
           <div class="form-group">
             <label>Name</label>
@@ -23,7 +23,8 @@
           </div>
           <div *ngIf="!profileEditMode" class="form-group">
             <label>Enabled</label>
-            <select class="selectpicker form-control" required title="Select status" [(ngModel)]="selectedUser.enabled" name="enabled">
+            <select class="selectpicker form-control" required title="Select status" [(ngModel)]="selectedUser.enabled"
+              name="enabled">
               <option [ngValue]="true">Enabled</option>
               <option [ngValue]="false">Disabled</option>
             </select>
@@ -32,19 +33,34 @@
             <label>Authorities</label>
             <select class="selectpicker form-control" multiple="true" required title="Select authorities" [(ngModel)]="selectedUser.authorities"
               name="authorities">
-                <option *ngFor="let authority of authorityList" [value]="authority">{{authority}}</option>
+              <option *ngFor="let authority of authorityList" [value]="authority">{{authority}}</option>
             </select>
           </div>
           <div *ngIf="!profileEditMode" class="form-group">
             <label>Groups</label>
-            <tag-input [(ngModel)]="selectedUser.groupAsStringList" name="groupAsStringList" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
+            <tag-input [(ngModel)]="selectedUser.groupAsStringList" name="groupAsStringList" [modelAsStrings]="true"
+              [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups"
+              theme="minimal" class="custom-input-tag-border"></tag-input>
           </div>
           <div *ngIf="!profileEditMode" class="form-group">
             <label>Auto Task Assign</label>
-            <select class="selectpicker form-control" required title="Select status" [(ngModel)]="selectedUser.autoAssignFlag" name="enabled">
+            <select class="selectpicker form-control" required title="Select status" [(ngModel)]="selectedUser.autoAssignFlag"
+              name="enabled">
               <option [ngValue]="true">Enabled</option>
               <option [ngValue]="false">Disabled</option>
             </select>
+          </div>
+          <div class="form-group">
+            <label for="selectSLAType">Select SLA</label>
+            <select class="selectpicker form-control" required id="selectSLAType" title="Choose SLA Type" [(ngModel)]="selectedUser.sla.slaUnit"
+              name="slaUnit">
+              <option *ngFor="let slaType of slaUnitType" [value]="slaType">{{slaType}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>SLA Units</label>
+            <input type="number" class="form-control" required placeholder="SLA Units" [(ngModel)]="selectedUser.sla.unit"
+              name="SLA Units" />
           </div>
 
           <div class="form-group">
