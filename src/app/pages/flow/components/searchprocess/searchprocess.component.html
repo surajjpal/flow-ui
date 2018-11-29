@@ -59,6 +59,7 @@
                     <th>
                       <mfDefaultSorter [by]="toInt">Process Owner</mfDefaultSorter>
                     </th>
+                    <th>Match</th>
                     <th>
                       <mfDefaultSorter by="statusCd">Status</mfDefaultSorter>
                     </th>
@@ -72,6 +73,11 @@
                     <td>{{flow.processType}}</td>
                     <!-- <td>{{graph.machineType}}</td> -->
                     <td>{{flow.processOwner}}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" title="View" (click)="showHighlights(flow)">
+                            Show 
+                        </button>
+                    </td>
                     <td>{{flow.status}}</td>
                     <td>
                       <div class="btn-group" role="group">
@@ -212,3 +218,37 @@
       </div>
     </div>
   </div>
+
+  <!-- highlights modal -->
+ <div class="modal fade" id="highlightsmodal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+       <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+             <h4 class="modal-title" id="warningLabel">
+                Matched Fields
+             </h4>
+          </div>
+          <!-- Modal Body -->
+          <div class="modal-body" id="modal_body">
+             <table class="table table-striped">
+              <thead>
+                <th>Field</th>
+                <th>Value</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let match of selectedHighLights">
+                  <td>{{ match.key }}</td>
+                  <td>{{ match.value }}</td>
+                </tr>
+              </tbody>
+
+             </table>
+          </div>
+          <!-- Modal Footer -->
+          <div class="modal-footer" id="modal_footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+         </div>
+       </div>
+    </div>
+ </div>
