@@ -265,6 +265,7 @@ export class ProcessModel extends BaseModel{
   statusCd:string;
   parameters:any;
   states:any;
+  highlights: any[] = [];
 }
 
 export class GraphObject extends BaseModel {
