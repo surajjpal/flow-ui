@@ -5,7 +5,7 @@ import { AgentCreationComponent } from './components/agent/agentCreation.compone
 import { AgentsComponent } from './components/agents/agents.component';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ConversationComponent } from './components/conversation/conversation.component';
+import { BargeInComponent } from './components/bargeIn/bargeIn.component';
 
 const routes: Routes = [
   {
@@ -17,7 +17,7 @@ const routes: Routes = [
       { path: 'agsr', component: AgentsComponent },
 
       { path: 'agdb', component: DashboardComponent },
-      { path: 'agcv', component: ConversationComponent }
+      { path: 'agcv', component: BargeInComponent }
     ]
   }
 ];

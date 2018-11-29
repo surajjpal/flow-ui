@@ -21,7 +21,7 @@ import { AgentsComponent } from './components/agents/agents.component';
 
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ConversationComponent } from './components/conversation/conversation.component';
+import { BargeInComponent } from './components/bargeIn/bargeIn.component';
 import { DateRangePickerComponent } from './components/dashboard/daterangepicker/daterangepicker.component';
 
 import { SharedModule } from '../../shared/shared.module';
@@ -44,7 +44,7 @@ import { SharedModule } from '../../shared/shared.module';
     AgentCreationComponent,
     AgentsComponent,
     DashboardComponent,
-    ConversationComponent,
+    BargeInComponent,
     DateRangePickerComponent
   ]
 })

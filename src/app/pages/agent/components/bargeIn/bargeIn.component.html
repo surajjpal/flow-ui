@@ -1,0 +1,109 @@
+<!-- <div class="form-group row">
+  <div class="col-md-12">
+    <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+    />
+    <input class="form-control" placeholder="Search conversations" type="text" [value]="searchQuery" (input)="onTextChange($event.target.value)">
+  </div>
+</div> -->
+
+<div class="row">
+  <ba-card class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" cardTitle="Episode Timeline">
+    <nvd3 [options]="episodeCountOptions" [data]="episodeCountData"></nvd3>
+  </ba-card>
+</div>
+
+<div class="row">
+  <ba-card *ngIf="!selectedEpisode && episodeList && episodeList.length > 0" class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+      <h4 align="center">Please select an episode from graph shown above to check the details and intercept the chat if needed.</h4>
+  </ba-card>
+
+  <ba-card *ngIf="selectedEpisode" class="col-md-6 col-sm-12" cardTitle="Episode Details">
+    <button *ngIf="!bargedIntoSelectedEpisode()" type="button" class="btn btn-primary" [disabled]="fetchingEpisodeDetails || hasUserAlreadyBargedIn()"
+      (click)="bargeIn()">Manual Override</button>
+    <button *ngIf="bargedIntoSelectedEpisode()" type="button" class="btn btn-primary" [disabled]="fetchingEpisodeDetails || !hasUserAlreadyBargedIn()"
+      (click)="bargeOut()">Disengage</button>
+    <form [attr.disabled]="fetchingEpisodeDetails" style="height: 400px; overflow:scroll">
+      <div *ngIf="selectedEpisode && selectedEpisode.statusCd" class="form-group">
+        <label>Status</label>
+        <input class="form-control" placeholder="Status" disabled="disabled" value="{{selectedEpisode.statusCd}}" />
+      </div>
+      <div *ngIf="selectedEpisode && selectedEpisode.intents && selectedEpisode.intents.length > 0" class="form-group">
+        <label>Intents</label>
+        <select multiple class="form-control" disabled="disabled">
+          <option *ngFor="let intent of selectedEpisode.intents">{{intent}}</option>
+        </select>
+      </div>
+      <div *ngIf="selectedEpisode && selectedEpisode.entities && selectedEpisode.entities.length > 0" class="form-group">
+        <label>Entities</label>
+        <select multiple class="form-control" disabled="disabled">
+          <option *ngFor="let entity of selectedEpisode.entities">{{entity}}</option>
+        </select>
+      </div>
+      <div *ngIf="selectedEpisode && selectedEpisode.mode" class="form-group">
+        <label>Mode</label>
+        <input class="form-control" placeholder="Mode" disabled="disabled" value="{{selectedEpisode.mode}}" />
+      </div>
+      <div *ngIf="selectedEpisode && selectedEpisode.startTime" class="form-group">
+        <label>Start Time</label>
+        <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode.startTime | date: 'dd/MM/y, h:mm:ss a'}}"
+        />
+      </div>
+      <div *ngIf="selectedEpisode && selectedEpisode.endTime" class="form-group">
+        <label>End Time</label>
+        <input class="form-control" placeholder="End Time" disabled="disabled" value="{{selectedEpisode.endTime | date: 'dd/MM/y, h:mm:ss a'}}"
+        />
+      </div>
+      <div *ngIf="selectedEpisode && selectedEpisode.goals && selectedEpisode.goals.length > 0" class="form-group">
+        <label>Goals</label>
+        <select multiple class="form-control" disabled="disabled">
+          <option *ngFor="let goal of selectedEpisode.goals">{{goal.goalName}}</option>
+        </select>
+      </div>
+    </form>
+  </ba-card>
+  <ba-card id="episodeDetailsCard" *ngIf="selectedEpisode" baCardClass="with-scroll" class="data-table-container col-md-6 col-sm-12" cardTitle="Conversation">
+    <form [attr.disabled]="fetchingEpisodeChat" style="height: 395px; overflow:scroll">
+      <thead>
+        <th style="width: 50%"></th>
+        <th style="width: 50%"></th>
+      </thead>
+      <tbody *ngFor="let message of chatMessageList">
+        <tr *ngIf="message.to !== 'AUTO'">
+          <td></td>
+          <td align="right" style="width: 50%">
+            <div class="talk-bubble tri-right round top-right" style="background-color: #E4E4E4">
+              <div class="talktext">
+                <div [innerHTML]="getSafeHTML(message.messageText)"></div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="message.to === 'AUTO'">
+          <td align="left" style="width: 50%">
+            <div class="talk-bubble tri-right round top-left" style="background-color: #B9F1FB">
+              <div class="talktext">
+                <p *ngIf="message.displayText && message.displayText.trim().length > 0">{{message.displayText}}</p>
+                <p *ngIf="!message.displayText || message.displayText.trim().length === 0">{{message.messageText}}</p>
+              </div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+      <div id="chatWindowBottomDiv" style="width:0; height:0; opacity:0;"></div>
+    </form>
+    
+    <form *ngIf="bargedIntoSelectedEpisode()" class="row form-inline">
+      <div class="form-group col-sm-10">
+        <input id="agentInput" [disabled]="fetchingEpisodeChat" class="form-control" placeholder="Enter message here..." [(ngModel)]="agentMessage" name="agentMessage"
+          (keyup.enter)="sendAgentMessage()" dir="auto" />
+      </div>
+      <div class="form-group col-sm-2">
+        <button [disabled]="fetchingEpisodeChat" type="button" class="btn btn-primary" (click)="sendAgentMessage()">
+            <i class="ion ion-android-send"></i>
+        </button>
+      </div>
+    </form>
+
+  </ba-card>
+</div>
