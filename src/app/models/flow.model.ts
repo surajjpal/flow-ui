@@ -121,7 +121,7 @@ export class CostModel {
   constructor() {
     this.expression = '';
     this.amount = 0;
-    this.costType = '';
+    this.costType = "FIXED";
     this.apiCd = '';
     this.currency = '';
   }
