@@ -2,14 +2,14 @@
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="progress">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;" aria-valuenow="99"
-                    aria-valuemin="0" aria-valuemax="100">Loading...</div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;"
+                    aria-valuenow="99" aria-valuemin="0" aria-valuemax="100">Loading...</div>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
-            <br/>
+            <br />
         </div>
     </div>
 </div>
@@ -20,7 +20,8 @@
             <div class="panel panel-default">
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#tab_assigned" role="tab" aria-expanded="true" (click)="fetchRecordsFor(TAB_ASSIGNED, assignedStates)">Assigned</a>
+                        <a class="nav-link active" data-toggle="tab" href="#tab_assigned" role="tab" aria-expanded="true"
+                            (click)="fetchRecordsFor(TAB_ASSIGNED, assignedStates)">Assigned</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#tab_unassigned" role="tab" (click)="fetchRecordsFor(TAB_UNASSIGNED, unassignedStates)">Unassigned</a>
@@ -38,7 +39,8 @@
                                         <b>Tasks</b>
                                     </div>
                                     <div class="card-block">
-                                        <table class="table table-striped" [mfData]="assignedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords">
+                                        <table class="table table-striped" [mfData]="assignedStates" #mf="mfDataTable"
+                                            [mfRowsOnPage]="fetchRecords">
                                             <tr *ngFor="let asgnState of mf.data; let index=index;" (click)="onPersonalAssignedSubjectSelect(asgnState)">
                                                 <div [class]="assignedStateTabclass[asgnState._id]" id="defaultOpen">
                                                     <div class="row">
@@ -46,7 +48,8 @@
                                                             <label>{{asgnState.machineLabel}}</label>
                                                         </div>
                                                         <div class="col">
-                                                            {{ asgnState.startTimeLong | amDateFormat: 'DD/MM hh:mm A' }}
+                                                            {{ asgnState.startTimeLong | amDateFormat: 'DD/MM hh:mm A'
+                                                            }}
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -70,8 +73,9 @@
 
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-outline-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
-                                    *ngIf="assignedStates.length != 0" (click)="loadMore('ACTIVE','Personal')">Load More
+                                <button type="button" class="btn btn-outline-info" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
+                                    *ngIf="assignedStates.length != 0" (click)="loadMore('ACTIVE','Personal')">Load
+                                    More
                                 </button>
                             </div>
                             <div class="col col-lg-9 col-md-9 col-sm-9">
@@ -84,29 +88,37 @@
                                             <div class="card-block">
                                                 <div class="row">
                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd === 'Personal'"
-                                                            type="button" class="btn btn-outline-primary btn-with-icon" (click)="updateProcessFlow(assignedTaskDdetails, 'ASSIGNED')">
+                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
+                                                            *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd === 'Personal'"
+                                                            type="button" class="btn btn-outline-success btn-with-icon"
+                                                            (click)="updateProcessFlow(assignedTaskDdetails, 'ASSIGNED')">
                                                             <i class="ion-checkmark"></i>Update Process</button>
-                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && users.length > 0"
+                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
+                                                            *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && users.length > 0"
                                                             type="button" data-toggle="modal" data-target="#assginedUserModal"
                                                             class="btn btn-outline-info btn-with-icon">
                                                             <i class="ion-person-add"></i>Allocate Team</button>
-                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd !== 'Personal' "
-                                                            type="button" (click)="reserve()" class="btn btn-outline-info btn-with-icon">
+                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
+                                                            *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd !== 'Personal' "
+                                                            type="button" (click)="reserve()" class="btn btn-outline-primary btn-with-icon">
                                                             <i class="ion-archive"></i>Reserve Task</button>
-                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd === 'Personal' && userHierarchy.parentUserId.length > 0"
+                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
+                                                            *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd === 'Personal' && userHierarchy.parentUserId.length > 0"
                                                             type="button" (click)="escalate()" class="btn btn-outline-warning btn-with-icon">
                                                             <i class="ion-alert-circled"></i>Escalate Task</button>
-                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" type="button" class="btn btn-outline-warning btn-with-icon"
+                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
+                                                            type="button" class="btn btn-outline-warning btn-with-icon"
                                                             title="Flag" *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd == 'Personal' && assignedTaskDdetails.subStatus !== 'FLAGGED'"
-                                                            data-toggle="modal" data-target="#assignedTaskflagModal" data-backdrop="static"
-                                                            data-keyboard="false">
+                                                            data-toggle="modal" data-target="#assignedTaskflagModal"
+                                                            data-backdrop="static" data-keyboard="false">
                                                             <i class="ion-flag"></i>Flag Task</button>
-                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]" type="button" class="btn btn-outline-danger btn-with-icon"
+                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
+                                                            type="button" class="btn btn-outline-danger btn-with-icon"
                                                             title="Archive" *ngIf="assignedTaskDdetails.statusCd ==='ACTIVE' && assignedTaskDdetails.assignedUserGroupCd == 'Personal' "
                                                             data-toggle="modal" data-target="#archiveTaskWarningModal">
                                                             <i class="ion-ios-trash"></i>Archive Task</button>
-                                                        <button type="button" class="btn btn-outline-primary pull-right" title="Show Details" (click)="onSelect(assignedTaskDdetails)">
+                                                        <button type="button" class="btn btn-outline-primary pull-right"
+                                                            title="Show Details" (click)="onSelect(assignedTaskDdetails)">
                                                             <i class="ion-eye"></i>
                                                         </button>
                                                     </div>
@@ -119,19 +131,23 @@
                                             </div>
                                             <div class="card-block">
                                                 <div class="row">
-                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Process: </b>
                                                         </label>
-                                                        <span>{{ assignedTaskDdetails.machineLabel }} v{{ getGraphObject(assignedTaskDdetails.stateMachineInstanceModelId).version}}</span>
+                                                        <span>{{ assignedTaskDdetails.machineLabel }} v{{
+                                                            getGraphObject(assignedTaskDdetails.stateMachineInstanceModelId).version}}</span>
                                                     </div>
-                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Task: </b>
                                                         </label>
                                                         <span>{{ assignedTaskDdetails.stateCd }}</span>
                                                     </div>
-                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Status: </b>
                                                         </label>
@@ -139,22 +155,27 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Start Time: </b>
                                                         </label>
-                                                        <span>{{ assignedTaskDdetails.startTimeLong | amDateFormat: 'DD/MM/YYYY
+                                                        <span>{{ assignedTaskDdetails.startTimeLong | amDateFormat:
+                                                            'DD/MM/YYYY
                                                             hh:mm A' }}</span>
                                                     </div>
-                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>End Time: </b>
                                                         </label>
-                                                        <span>{{ assignedTaskDdetails.endTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm
+                                                        <span>{{ assignedTaskDdetails.endTimeLong | amDateFormat:
+                                                            'DD/MM/YYYY hh:mm
                                                             A' }}
                                                         </span>
                                                     </div>
-                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Assigned Group: </b>
                                                         </label>
@@ -162,19 +183,22 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Assigned To: </b>
                                                         </label>
                                                         <span>{{ assignedTaskDdetails.assignedUserDisplayName }}</span>
                                                     </div>
-                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Flagged: </b>
                                                         </label>
                                                         <span>{{ assignedTaskDdetails.flagged }}</span>
                                                     </div>
-                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" style="margin-top:10px;">
+                                                    <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Flag Level: </b>
                                                         </label>
@@ -190,45 +214,53 @@
                                             <div class="card-block">
                                                 <div>
                                                     <div class="row">
-                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(assignedTaskDdetails)">
+                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                            style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(assignedTaskDdetails)">
                                                             <label>
                                                                 <b>{{ dataPoint.dataPointLabel }}: </b>
                                                             </label>
-                                                            <input *ngIf="dataPoint.dataType === 'NUMBER'" type="number" class="form-control col-md-12 col-sm-12" [title]="dataPoint.description"
+                                                            <input *ngIf="dataPoint.dataType === 'NUMBER'" type="number"
+                                                                class="form-control col-md-12 col-sm-12" [title]="dataPoint.description"
                                                                 [placeholder]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
-                                                            />
-                                                            <input *ngIf="dataPoint.dataType === 'STRING'" type="text" class="form-control" required [placeholder]="dataPoint.description"
+                                                                name="parameters[dataPoint.dataPointName]" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                                            <input *ngIf="dataPoint.dataType === 'STRING'" type="text"
+                                                                class="form-control" required [placeholder]="dataPoint.description"
                                                                 [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
                                                                 name="parameters[dataPoint.dataPointName]" />
-                                                            <select *ngIf="dataPoint.dataType === 'BOOLEAN'" class="selectpicker form-control col-md-12 col-sm-12" [title]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                            <select *ngIf="dataPoint.dataType === 'BOOLEAN'" class="selectpicker form-control col-md-12 col-sm-12"
+                                                                [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
                                                                 name="parameters[dataPoint.dataPointName]">
                                                                 <option [ngValue]="true">True</option>
                                                                 <option [ngValue]="false">False</option>
                                                             </select>
-                                                            <select *ngIf="dataPoint.dataType === 'SINGLE_SELECT'" class="selectpicker form-control col-md-12 col-sm-12" [title]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]">
-                                                                <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
-                                                            </select>
-                                                            <select *ngIf="dataPoint.dataType === 'MULTI_SELECT'" multiple="true" class="selectpicker form-control col-md-12 col-sm-12"
+                                                            <select *ngIf="dataPoint.dataType === 'SINGLE_SELECT'"
+                                                                class="selectpicker form-control col-md-12 col-sm-12"
                                                                 [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
                                                                 name="parameters[dataPoint.dataPointName]">
-                                                                <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
+                                                                <option *ngFor="let choice of dataPoint.inputSource"
+                                                                    [ngValue]="choice">{{choice}}</option>
                                                             </select>
-                                                            <tag-input *ngIf="dataPoint.dataType === 'ARRAY'" class="custom-input-tag-border form-control col-md-12 col-sm-12" [title]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]" [modelAsStrings]="true"
-                                                                [editable]="true" [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
+                                                            <select *ngIf="dataPoint.dataType === 'MULTI_SELECT'"
+                                                                multiple="true" class="selectpicker form-control col-md-12 col-sm-12"
+                                                                [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                name="parameters[dataPoint.dataPointName]">
+                                                                <option *ngFor="let choice of dataPoint.inputSource"
+                                                                    [ngValue]="choice">{{choice}}</option>
+                                                            </select>
+                                                            <tag-input *ngIf="dataPoint.dataType === 'ARRAY'" class="custom-input-tag-border form-control col-md-12 col-sm-12"
+                                                                [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                name="parameters[dataPoint.dataPointName]"
+                                                                [modelAsStrings]="true" [editable]="true"
+                                                                [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
                                                                 [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'"
                                                                 theme="minimal">
                                                             </tag-input>
                                                         </div>
                                                     </div>
-                                                    <hr/>
+                                                    <hr />
                                                     <div class="row">
-                                                        <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(assignedTaskDdetails)">
+                                                        <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+                                                            style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(assignedTaskDdetails)">
                                                             <label>
                                                                 <b>{{ dataPoint.dataPointLabel }}: </b>
                                                             </label>
@@ -236,7 +268,8 @@
                                                                 <table class="table table-striped">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, assignedTaskDdetails)">{{ dp.dataPointLabel }}</th>
+                                                                            <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, assignedTaskDdetails)">{{
+                                                                                dp.dataPointLabel }}</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -285,7 +318,8 @@
                                                             <label>{{unasgnState.machineLabel}}</label>
                                                         </div>
                                                         <div class="col">
-                                                            {{ unasgnState.startTimeLong | amDateFormat: 'DD/MM hh:mm A' }}
+                                                            {{ unasgnState.startTimeLong | amDateFormat: 'DD/MM hh:mm
+                                                            A' }}
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -322,15 +356,18 @@
                                             <div class="card-block">
                                                 <div class="row">
                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                        <button [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]" *ngIf="unassignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && users.length > 0"
+                                                        <button [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]"
+                                                            *ngIf="unassignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && users.length > 0"
                                                             type="button" data-toggle="modal" data-target="#unassginedUserModal"
                                                             class="btn btn-outline-info btn-with-icon">
                                                             <i class="ion-person-add"></i>Allocate Team</button>
-                                                        <button [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]" *ngIf="unassignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && unassignedTaskDdetails.assignedUserGroupCd !== 'Personal' "
+                                                        <button [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]"
+                                                            *ngIf="unassignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && unassignedTaskDdetails.assignedUserGroupCd !== 'Personal' "
                                                             type="button" (click)="reserveUnassignedTask(unassignedTaskDdetails)"
                                                             class="btn btn-outline-info btn-with-icon">
                                                             <i class="ion-archive"></i>Reserve Task</button>
-                                                        <button type="button" class="btn btn-outline-primary pull-right" title="Show Details" (click)="onSelect(unassignedTaskDdetails)">
+                                                        <button type="button" class="btn btn-outline-primary pull-right"
+                                                            title="Show Details" (click)="onSelect(unassignedTaskDdetails)">
                                                             <i class="ion-eye"></i>
                                                         </button>
                                                     </div>
@@ -343,29 +380,34 @@
                                             </div>
                                             <div class="card-block">
                                                 <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Process: </b>
                                                         </label>
                                                         <span>{{ unassignedTaskDdetails.machineLabel }}</span>
                                                     </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Version: </b>
                                                         </label>
-                                                        <span>{{ getGraphObject(unassignedTaskDdetails.stateMachineInstanceModelId).version
+                                                        <span>{{
+                                                            getGraphObject(unassignedTaskDdetails.stateMachineInstanceModelId).version
                                                             }}
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Task: </b>
                                                         </label>
                                                         <span>{{ unassignedTaskDdetails.stateCd }}</span>
                                                     </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Status: </b>
                                                         </label>
@@ -373,31 +415,37 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Start Time: </b>
                                                         </label>
-                                                        <span>{{ unassignedTaskDdetails.startTimeLong | amDateFormat: 'DD/MM/YYYY
+                                                        <span>{{ unassignedTaskDdetails.startTimeLong | amDateFormat:
+                                                            'DD/MM/YYYY
                                                             hh:mm A' }}
                                                         </span>
                                                     </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>End Time: </b>
                                                         </label>
-                                                        <span>{{ unassignedTaskDdetails.endTimeLong | amDateFormat: 'DD/MM/YYYY
+                                                        <span>{{ unassignedTaskDdetails.endTimeLong | amDateFormat:
+                                                            'DD/MM/YYYY
                                                             hh:mm A' }}
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Assigned Group: </b>
                                                         </label>
                                                         <span>{{ unassignedTaskDdetails.assignedUserGroupCd }}</span>
                                                     </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Assigned To: </b>
                                                         </label>
@@ -405,13 +453,15 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Flagged: </b>
                                                         </label>
                                                         <span>{{ unassignedTaskDdetails.flagged }}</span>
                                                     </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Flag Level: </b>
                                                         </label>
@@ -426,18 +476,21 @@
                                             </div>
                                             <div class="card-block">
                                                 <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(unassignedTaskDdetails)">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(unassignedTaskDdetails)">
                                                         <label>
                                                             <b>{{ dataPoint.dataPointLabel }}: </b>
                                                         </label>
-                                                        <span>{{ unassignedTaskDdetails['parameters'][dataPoint.dataPointName]
+                                                        <span>{{
+                                                            unassignedTaskDdetails['parameters'][dataPoint.dataPointName]
                                                             }}
                                                         </span>
 
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(unassignedTaskDdetails)">
+                                                    <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+                                                        style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(unassignedTaskDdetails)">
                                                         <label>
                                                             <b>{{ dataPoint.dataPointLabel }}: </b>
                                                         </label>
@@ -445,7 +498,8 @@
                                                             <table class="table table-striped">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, unassignedTaskDdetails)">{{ dp.dataPointLabel }}</th>
+                                                                        <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, unassignedTaskDdetails)">{{
+                                                                            dp.dataPointLabel }}</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -489,7 +543,8 @@
                                                             <label>{{flgState.machineLabel}}</label>
                                                         </div>
                                                         <div class="col">
-                                                            {{ flgState.startTimeLong | amDateFormat: 'DD/MM hh:mm A' }}
+                                                            {{ flgState.startTimeLong | amDateFormat: 'DD/MM hh:mm A'
+                                                            }}
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -513,7 +568,8 @@
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-outline-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
-                                    *ngIf="flaggedStates.length != 0" (click)="loadMore('FLAGGED','Personal')">Load More
+                                    *ngIf="flaggedStates.length != 0" (click)="loadMore('FLAGGED','Personal')">Load
+                                    More
                                 </button>
                             </div>
                             <div class="col col-lg-9 col-md-9 col-sm-9">
@@ -526,7 +582,8 @@
                                             <div class="card-block">
                                                 <div class="row">
                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                        <button type="button" class="btn btn-outline-primary pull-right" title="Show Details" (click)="onSelect(flaggedTaskDdetails)">
+                                                        <button type="button" class="btn btn-outline-primary pull-right"
+                                                            title="Show Details" (click)="onSelect(flaggedTaskDdetails)">
                                                             <i class="ion-eye"></i>
                                                         </button>
                                                     </div>
@@ -539,29 +596,34 @@
                                             </div>
                                             <div class="card-block">
                                                 <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Process: </b>
                                                         </label>
                                                         <span>{{ flaggedTaskDdetails.machineLabel }}</span>
                                                     </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Version: </b>
                                                         </label>
-                                                        <span>{{ getGraphObject(flaggedTaskDdetails.stateMachineInstanceModelId).version
+                                                        <span>{{
+                                                            getGraphObject(flaggedTaskDdetails.stateMachineInstanceModelId).version
                                                             }}
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Task: </b>
                                                         </label>
                                                         <span>{{ flaggedTaskDdetails.stateCd }}</span>
                                                     </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Status: </b>
                                                         </label>
@@ -569,30 +631,36 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Start Time: </b>
                                                         </label>
-                                                        <span>{{ flaggedTaskDdetails.startTimeLong | amDateFormat: 'DD/MM/YYYY
+                                                        <span>{{ flaggedTaskDdetails.startTimeLong | amDateFormat:
+                                                            'DD/MM/YYYY
                                                             hh:mm A' }}</span>
                                                     </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>End Time: </b>
                                                         </label>
-                                                        <span>{{ flaggedTaskDdetails.endTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm
+                                                        <span>{{ flaggedTaskDdetails.endTimeLong | amDateFormat:
+                                                            'DD/MM/YYYY hh:mm
                                                             A' }}
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Assigned Group: </b>
                                                         </label>
                                                         <span>{{ flaggedTaskDdetails.assignedUserGroupCd }}</span>
                                                     </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Assigned To: </b>
                                                         </label>
@@ -600,13 +668,15 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Flagged: </b>
                                                         </label>
                                                         <span>{{ flaggedTaskDdetails.flagged }}</span>
                                                     </div>
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;">
                                                         <label>
                                                             <b>Flag Level: </b>
                                                         </label>
@@ -621,17 +691,21 @@
                                             </div>
                                             <div class="card-block">
                                                 <div class="row">
-                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(flaggedTaskDdetails)">
+                                                    <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                        style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(flaggedTaskDdetails)">
                                                         <label>
                                                             <b>{{ dataPoint.dataPointLabel }}: </b>
                                                         </label>
-                                                        <span>{{ flaggedTaskDdetails['parameters'][dataPoint.dataPointName] }}
+                                                        <span>{{
+                                                            flaggedTaskDdetails['parameters'][dataPoint.dataPointName]
+                                                            }}
                                                         </span>
 
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(flaggedTaskDdetails)">
+                                                    <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+                                                        style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(flaggedTaskDdetails)">
                                                         <label>
                                                             <b>{{ dataPoint.dataPointLabel }}: </b>
                                                         </label>
@@ -639,7 +713,8 @@
                                                             <table class="table table-striped">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, flaggedTaskDdetails)">{{ dp.dataPointLabel }}</th>
+                                                                        <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, flaggedTaskDdetails)">{{
+                                                                            dp.dataPointLabel }}</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -691,7 +766,8 @@
     </div>
 </div>
 
-<div class="modal fade" id="assginedUserModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel" aria-hidden="true">
+<div class="modal fade" id="assginedUserModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -707,8 +783,8 @@
                 <form>
                     <div class="form-group">
                         <label for="selectUser">Select team member</label>
-                        <select class="selectpicker form-control" required id="selectUser" title="Choose User" [ngModel]="tempUser" [ngModelOptions]="{standalone: true}"
-                            (ngModelChange)="onUserSelectAssignedTask($event)">
+                        <select class="selectpicker form-control" required id="selectUser" title="Choose User"
+                            [ngModel]="tempUser" [ngModelOptions]="{standalone: true}" (ngModelChange)="onUserSelectAssignedTask($event)">
                             <option *ngFor="let user of users" [ngValue]="user">{{user.userName}}</option>
                         </select>
                     </div>
@@ -722,7 +798,8 @@
     </div>
 </div>
 
-<div class="modal fade" id="unassginedUserModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel" aria-hidden="true">
+<div class="modal fade" id="unassginedUserModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -738,8 +815,8 @@
                 <form>
                     <div class="form-group">
                         <label for="selectUser">Select team member</label>
-                        <select class="selectpicker form-control" required id="selectUser" title="Choose User" [ngModel]="tempUser" [ngModelOptions]="{standalone: true}"
-                            (ngModelChange)="onUserSelectUnAssignedTask($event)">
+                        <select class="selectpicker form-control" required id="selectUser" title="Choose User"
+                            [ngModel]="tempUser" [ngModelOptions]="{standalone: true}" (ngModelChange)="onUserSelectUnAssignedTask($event)">
                             <option *ngFor="let user of users" [ngValue]="user">{{user.userName}}</option>
                         </select>
                     </div>
@@ -754,7 +831,8 @@
 </div>
 
 
-<div class="modal fade" id="assignedTaskflagModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagmodalLabel" aria-hidden="true">
+<div class="modal fade" id="assignedTaskflagModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagmodalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -770,8 +848,9 @@
                 <form>
                     <div class="form-group" *ngIf="assignedTaskDdetails">
                         <label for="selectReason">Select Reason</label>
-                        <select class="selectpicker form-control" required id="selectReason" title="Choose Flag Reason" [(ngModel)]="assignedTaskDdetails.flagReason"
-                            [ngModelOptions]="{standalone: true}" (ngModelChange)="onReasonSelectAssignedTask($event)">
+                        <select class="selectpicker form-control" required id="selectReason" title="Choose Flag Reason"
+                            [(ngModel)]="assignedTaskDdetails.flagReason" [ngModelOptions]="{standalone: true}"
+                            (ngModelChange)="onReasonSelectAssignedTask($event)">
                             <option *ngFor="let flagReason of FlagReasons" [value]="flagReason">{{flagReason}}</option>
                         </select>
                     </div>
