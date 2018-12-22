@@ -1,17 +1,20 @@
 <div>
   <div class="col-md-12 col-sm-12 col-xs-12">
-    <button type="button" id="#discardHierarchy" class="btn btn-default btn-with-icon" style="margin-right: 5px" data-toggle="modal"
-      data-target="#discardWarningModal"><i class="ion-ios-refresh"></i>Discard</button>
-    <button type="button" id="#saveHierarchy" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="saveOnServer()">
+    <button type="button" id="#discardHierarchy" class="btn btn-outline-default btn-with-icon" style="margin-right: 5px"
+      data-toggle="modal" data-target="#discardWarningModal"><i class="ion-ios-refresh"></i>Discard</button>
+    <button type="button" id="#saveHierarchy" class="btn btn-outline-default btn-with-icon" style="margin-right: 5px"
+      (click)="saveOnServer()">
       <i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
-    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
+    <button type="button" class="btn btn-outline-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
       <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>
-    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
+    <button type="button" class="btn btn-outline-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
       <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>
-    <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
+    <button type="button" class="btn btn-outline-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
       <i class="ion-arrow-expand"></i>Zoom Actual</button>
-    <button type="button" id="#rootuser" class="btn btn-default btn-with-icon" style="margin-right: 5px" data-toggle="modal"
-      data-target="#rootUserModal" *ngIf="!readOnly"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Add Root</button>
+    <button type="button" id="#rootuser" class="btn btn-outline-default btn-with-icon" style="margin-right: 5px"
+      data-toggle="modal" data-target="#rootUserModal" *ngIf="!readOnly"><i class="fa fa-exclamation-circle"
+        aria-hidden="true"></i>Add
+      Root</button>
   </div>
   <br>
   <div class="col-md-12 col-sm-12 col-xs-12">
@@ -42,8 +45,8 @@
         <form>
           <div class="form-group">
             <label for="selectUser">Select User</label>
-            <select class="selectpicker form-control" required id="selectUser" title="Choose User" [ngModel]="tempUser" [ngModelOptions]="{standalone: true}"
-              (ngModelChange)="onUserSelect($event)">
+            <select class="selectpicker form-control" required id="selectUser" title="Choose User" [ngModel]="tempUser"
+              [ngModelOptions]="{standalone: true}" (ngModelChange)="onUserSelect($event)">
               <option *ngFor="let user of Users" [ngValue]="user">{{user.userName}}</option>
             </select>
           </div>
@@ -62,7 +65,8 @@
 
 <!-- UPDATE USER MODAL-->
 
-<div class="modal fade" id="userUpdateModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel" aria-hidden="true">
+<div class="modal fade" id="userUpdateModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <!-- Modal Header -->
@@ -81,8 +85,8 @@
         <form>
           <div class="form-group">
             <label for="selectUpdateUser">Select User</label>
-            <select class="selectpicker form-control" required id="selectUser" title="Choose User" [ngModel]="tempUser" [ngModelOptions]="{standalone: true}"
-              (ngModelChange)="onUserSelect($event)">
+            <select class="selectpicker form-control" required id="selectUser" title="Choose User" [ngModel]="tempUser"
+              [ngModelOptions]="{standalone: true}" (ngModelChange)="onUserSelect($event)">
               <option *ngFor="let user of Users" [ngValue]="user">{{user.userName}}</option>
             </select>
           </div>
@@ -99,7 +103,8 @@
 
 
 <!-- ROOT USER MODAL-->
-<div class="modal fade" id="rootUserModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel" aria-hidden="true">
+<div class="modal fade" id="rootUserModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <!-- Modal Header -->
@@ -118,7 +123,8 @@
         <form>
           <div class="form-group">
             <label for="selectRootUser">Select User</label>
-            <select class="selectpicker form-control" required id="selectRootUser" title="Choose User" [(ngModel)]="tempUser" name="tempUser">
+            <select class="selectpicker form-control" required id="selectRootUser" title="Choose User" [(ngModel)]="tempUser"
+              name="tempUser">
               <option *ngFor="let user of Users" [ngValue]="user">{{user.userName}}</option>
             </select>
           </div>
@@ -135,7 +141,8 @@
 
 
 <!-- Discard Warning Modal -->
-<div class="modal fade" id="discardWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="discardWarningLabel" aria-hidden="true">
+<div class="modal fade" id="discardWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="discardWarningLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Modal Header -->
