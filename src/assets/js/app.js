@@ -1381,23 +1381,26 @@ styleStates = function (activeStateIdList, closedStateIdList) {
       for (var vertex of vertices) {
         if (vertex != null && vertex.id != null) {
           if (activeStateIdList.indexOf(vertex.id) >= 0) {
-            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#007BFF', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#FFFFFF', [vertex]);
-            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/active.png', 18, 18), 'Active');
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#FFC107', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#FFC107', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, '#FFFFFF', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/active.png', 20, 20), 'Active');
             overlay.align = mxConstants.ALIGN_RIGHT;
             overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
             graph.addCellOverlay(vertex, overlay);
           } else if (closedStateIdList.indexOf(vertex.id) >= 0) {
             graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#28A745', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#FFFFFF', [vertex]);
-            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 18, 18), 'Closed');
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#28A745', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, '#FFFFFF', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 20, 20), 'Closed');
             overlay.align = mxConstants.ALIGN_RIGHT;
             overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
             graph.addCellOverlay(vertex, overlay);
           } else if (vertex != null && vertex.id == 'treeRoot') {
             graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#28A745', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#FFFFFF', [vertex]);
-            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 18, 18), 'Closed');
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#28A745', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, '#FFFFFF', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 20, 20), 'Closed');
             overlay.align = mxConstants.ALIGN_RIGHT;
             overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
             graph.addCellOverlay(vertex, overlay);
