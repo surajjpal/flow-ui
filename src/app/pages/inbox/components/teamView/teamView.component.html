@@ -35,13 +35,13 @@
           <div role="tabpanel" class="tab-pane fade show active" id="tab_assigned">
             <apitable *ngIf="assignedStates" [rawDataArray]="assignedStates" [isLoading]="loadingAssigned"
               (selectedData)="onSelect($event)"></apitable>
-            <button type="button" class="btn btn-outline-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; width: 200px"
+            <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; width: 200px"
               *ngIf="assignedStates.length == 10" (click)="loadMore('ASSIGNED')">Load More</button>
           </div>
           <div role="tabpanel" class="tab-pane fade" id="tab_unassigned">
             <apitable *ngIf="unassignedStates" [rawDataArray]="unassignedStates" [isLoading]="loadingUnassigned"
               (selectedData)="onSelect($event)"></apitable>
-            <button type="button" class="btn btn-outline-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
+            <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
               *ngIf="unassignedStates.length == 10" (click)="loadMore('UNASSIGNED')">Load More</button>
           </div>
           <div role="tabpanel" class="tab-pane fade" id="tab_flagged">
@@ -144,7 +144,7 @@
                   <td align="center">{{s.assignedUserDisplayName}}</td>
                   <td>
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-outline-primary" title="View" (click)="onSelect(s)">
+                      <button type="button" class="btn btn-primary" title="View" (click)="onSelect(s)">
                         <i class="ion-eye"></i>
                       </button>
                     </div>
@@ -165,7 +165,7 @@
                 </tr>
               </tfoot>
             </table>
-            <button type="button" class="btn btn-outline-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
+            <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
               *ngIf="flaggedStates.length > 10" (click)="loadMore('FLAGGED')">Load More</button>
           </div>
         </div>
@@ -203,8 +203,8 @@
 
       <!-- Modal Footer -->
       <div class="modal-footer" id="modal_footer">
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-outline-primary" (click)="moveToArchive()">Finalise</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="moveToArchive()">Finalise</button>
       </div>
     </div>
   </div>

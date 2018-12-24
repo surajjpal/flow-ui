@@ -131,7 +131,7 @@
           </div>
           <div class="row">
             <div class="col-md-3">
-              <button *ngIf="!containsAll()" type="button" class="btn btn-outline-primary" (click)="addAllDomain()">
+              <button *ngIf="!containsAll()" type="button" class="btn btn-primary" (click)="addAllDomain()">
                 Add All
               </button>
               <button *ngIf="containsAll()" type="button" class="btn btn--outline-danger" (click)="removeAllDomain()">
@@ -169,10 +169,10 @@
                     name="domainGoals" />
                 </div>
                 <div class="form-group">
-                  <button *ngIf="!domainAddedToList()" type="button" class="btn btn-outline-primary" (click)="addDomain()">
+                  <button *ngIf="!domainAddedToList()" type="button" class="btn btn-primary" (click)="addDomain()">
                     Add
                   </button>
-                  <button *ngIf="domainAddedToList()" type="button" class="btn btn-outline-danger" (click)="removeDomain()">
+                  <button *ngIf="domainAddedToList()" type="button" class="btn btn-danger" (click)="removeDomain()">
                     Remove
                   </button>
                 </div>
@@ -261,7 +261,7 @@
             </div>
             <form>
               <div class="form-group">
-                <button type="button" class="btn btn-outline-success" (click)="createAgent()">
+                <button type="button" class="btn btn-success" (click)="createAgent()">
                   {{agentCreateMode ? 'Create Agent' : 'Update Agent'}}
                 </button>
               </div>
@@ -282,7 +282,7 @@
         <h4 class="modal-title" id="successModalLabel">
           {{isSuccess ? 'Success' : 'Error'}}
         </h4>
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -311,7 +311,7 @@
 
       <!-- Modal Footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal" (click)="goToAgentsListing();">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="goToAgentsListing();">Close</button>
       </div>
     </div>
   </div>
@@ -323,7 +323,7 @@
       <p class="card-text">
         <b><a [href]="autoUrl" target="_blank">{{autoUrl}}</a></b>
       </p>
-      <button type="button" class="btn btn-outline-info" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
+      <button type="button" class="btn btn-info" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
         (click)="goBack();">Got It</button>
     </ba-card>
   </div>

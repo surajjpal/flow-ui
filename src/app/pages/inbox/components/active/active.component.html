@@ -31,12 +31,12 @@
           <div role="tabpanel" class="tab-pane fade show active" id="tab_personal">
             <apitable *ngIf="personalStates" [rawDataArray]="personalStates" [isLoading]="loadingPersonal"
               (selectedData)="onSelect($event)"></apitable>
-            <button type="button" class="btn btn-outline-info" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; width: 200px"
+            <button type="button" class="btn btn-info" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; width: 200px"
               *ngIf="personalStates.length !== 0" (click)="loadMore('ACTIVE','Personal')">Load More</button>
           </div>
           <div role="tabpanel" class="tab-pane fade" id="tab_group">
             <apitable *ngIf="groupStates" [rawDataArray]="groupStates" [isLoading]="loadingGroup" (selectedData)="onSelect($event)"></apitable>
-            <button type="button" class="btn btn-outline-info" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
+            <button type="button" class="btn btn-info" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
               *ngIf="groupStates.length !== 0" (click)="loadMore('ACTIVE','Group')">Load More</button>
           </div>
         </div>

@@ -72,13 +72,13 @@ export class UpdateUserComponent implements OnInit, OnDestroy {
         this.selectedUser.password = '';
         this.passwordPlaceholder = 'Password (keep blank for unchanged)';
         this.formHeader = 'Update User';
-        this.buttonName = 'Update User';
+        this.buttonName = 'Update';
         this.updateMode = true;
       } else {
         this.selectedUser = new User();
         this.passwordPlaceholder = 'Password';
         this.formHeader = 'Create User';
-        this.buttonName = 'Create User';
+        this.buttonName = 'Create';
         this.updateMode = false;
       }
 

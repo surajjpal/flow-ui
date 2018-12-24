@@ -67,10 +67,10 @@
                   <td>{{graph.statusCd}}</td>
                   <td *ngIf="graph.statusCd === DRAFT">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-outline-primary" title="Edit" (click)="onSelect(graph, OPEN_IN_EDIT_MODE)">
+                      <button type="button" class="btn btn-primary" title="Edit" (click)="onSelect(graph, OPEN_IN_EDIT_MODE)">
                         <i class="ion-edit"></i>
                       </button>
-                      <button type="button" class="btn btn-outline-success" title="Publish" (click)="onSelect(graph)"
+                      <button type="button" class="btn btn-success" title="Publish" (click)="onSelect(graph)"
                         data-toggle="modal" data-target="#finalWarningModal">
                         <i class="fa fa-check-square-o"></i>
                       </button>
@@ -78,26 +78,26 @@
                   </td>
                   <td *ngIf="graph.statusCd === CLOSED">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-outline-info" title="View" (click)="onSelect(graph, OPEN_IN_READONLY_MODE)">
+                      <button type="button" class="btn btn-info" title="View" (click)="onSelect(graph, OPEN_IN_READONLY_MODE)">
                         <i class="ion-eye"></i>
                       </button>
-                      <button type="button" class="btn btn-outline-success" title="Activate" (click)="activateFlow(graph)">
+                      <button type="button" class="btn btn-success" title="Activate" (click)="activateFlow(graph)">
                         <i class="ion-power"></i>
                       </button>
-                      <button type="button" class="btn btn-outline-primary" title="Clone" (click)="onSelect(graph, CLONE_AND_EDIT_MODE)">
+                      <button type="button" class="btn btn-primary" title="Clone" (click)="onSelect(graph, CLONE_AND_EDIT_MODE)">
                         <i class="fa fa-clone"></i>
                       </button>
                     </div>
                   </td>
                   <td *ngIf="graph.statusCd === ACTIVE">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-outline-info" title="View" (click)="onSelect(graph, OPEN_IN_READONLY_MODE)">
+                      <button type="button" class="btn btn-info" title="View" (click)="onSelect(graph, OPEN_IN_READONLY_MODE)">
                         <i class="ion-eye"></i>
                       </button>
-                      <button type="button" class="btn btn-outline-danger" title="Deactivate" (click)="deactivateFlow(graph)">
+                      <button type="button" class="btn btn-danger" title="Deactivate" (click)="deactivateFlow(graph)">
                         <i class="ion-close-round"></i>
                       </button>
-                      <button type="button" class="btn btn-outline-primary" title="Clone" (click)="onSelect(graph, CLONE_AND_EDIT_MODE)">
+                      <button type="button" class="btn btn-primary" title="Clone" (click)="onSelect(graph, CLONE_AND_EDIT_MODE)">
                         <i class="fa fa-clone"></i>
                       </button>
                     </div>
@@ -148,10 +148,10 @@
                   <td>{{graph.statusCd}}</td>
                   <td *ngIf="graph.statusCd === DRAFT">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-outline-primary" title="Edit" (click)="onSelect(graph, OPEN_IN_EDIT_MODE)">
+                      <button type="button" class="btn btn-primary" title="Edit" (click)="onSelect(graph, OPEN_IN_EDIT_MODE)">
                         <i class="ion-edit"></i>
                       </button>
-                      <button type="button" class="btn btn-outline-success" title="Publish" (click)="onSelect(graph)"
+                      <button type="button" class="btn btn-success" title="Publish" (click)="onSelect(graph)"
                         data-toggle="modal" data-target="#finalWarningModal">
                         <i class="fa fa-check-square-o"></i>
                       </button>
@@ -159,26 +159,26 @@
                   </td>
                   <td *ngIf="graph.statusCd === CLOSED">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-outline-info" title="View" (click)="onSelect(graph, OPEN_IN_READONLY_MODE)">
+                      <button type="button" class="btn btn-info" title="View" (click)="onSelect(graph, OPEN_IN_READONLY_MODE)">
                         <i class="ion-eye"></i>
                       </button>
-                      <button type="button" class="btn btn-outline-success" title="Activate" (click)="activateFlow(graph)">
+                      <button type="button" class="btn btn-success" title="Activate" (click)="activateFlow(graph)">
                         <i class="ion-power"></i>
                       </button>
-                      <button type="button" class="btn btn-outline-primary" title="Clone" (click)="onSelect(graph, CLONE_AND_EDIT_MODE)">
+                      <button type="button" class="btn btn-primary" title="Clone" (click)="onSelect(graph, CLONE_AND_EDIT_MODE)">
                         <i class="fa fa-clone"></i>
                       </button>
                     </div>
                   </td>
                   <td *ngIf="graph.statusCd === ACTIVE">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-outline-info" title="View" (click)="onSelect(graph, OPEN_IN_READONLY_MODE)">
+                      <button type="button" class="btn btn-info" title="View" (click)="onSelect(graph, OPEN_IN_READONLY_MODE)">
                         <i class="ion-eye"></i>
                       </button>
-                      <button type="button" class="btn btn-outline-danger" title="Deactivate" (click)="deactivateFlow(graph)">
+                      <button type="button" class="btn btn-danger" title="Deactivate" (click)="deactivateFlow(graph)">
                         <i class="ion-close-round"></i>
                       </button>
-                      <button type="button" class="btn btn-outline-primary" title="Clone" (click)="onSelect(graph, CLONE_AND_EDIT_MODE)">
+                      <button type="button" class="btn btn-primary" title="Clone" (click)="onSelect(graph, CLONE_AND_EDIT_MODE)">
                         <i class="fa fa-clone"></i>
                       </button>
                     </div>
@@ -213,7 +213,7 @@
         <h4 class="modal-title" id="finalWarningLabel">
           Warning
         </h4>
-        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -228,8 +228,8 @@
 
       <!-- Modal Footer -->
       <div class="modal-footer" id="modal_footer">
-        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-outline-success" (click)="activateFlow(selectedGraphObject, 'finalWarningModal')">Finalise</button>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" (click)="activateFlow(selectedGraphObject, 'finalWarningModal')">Finalise</button>
       </div>
     </div>
   </div>

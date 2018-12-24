@@ -1,22 +1,22 @@
 <!-- page content -->
 <div>
    <div class="col-md-12 col-sm-12 col-xs-12">
-      <button type="button" class="btn btn-outline-danger btn-with-icon" style="margin-right: 5px" data-toggle="modal"
+      <button type="button" class="btn btn-danger btn-with-icon" style="margin-right: 5px" data-toggle="modal"
          data-target="#discardWarningModal">
          <i class="ion-ios-refresh"></i>Discard</button>
-      <button type="button" class="btn btn-outline-success btn-with-icon" style="margin-right: 5px" (click)="saveOnServer()"
+      <button type="button" class="btn btn-success btn-with-icon" style="margin-right: 5px" (click)="saveOnServer()"
          *ngIf="!readOnly">
          <i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
-      <button type="button" class="btn btn-outline-primary btn-with-icon" style="margin-right: 5px" (click)="prepareDummyObject()"
+      <button type="button" class="btn btn-primary btn-with-icon" style="margin-right: 5px" (click)="prepareDummyObject()"
          *ngIf="!readOnly" data-toggle="modal" data-target="#settignsModal">
          <i class="fa fa-cogs" aria-hidden="true"></i>Settings</button>
-      <button type="button" class="btn btn-outline-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
+      <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
          <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>
-      <button type="button" class="btn btn-outline-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
+      <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
          <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>
-      <button type="button" class="btn btn-outline-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
+      <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
          <i class="ion-arrow-expand"></i>Zoom Actual</button>
-      <button type="button" class="btn btn-outline-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)">
+      <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)">
          <i class="ion-printer"></i>Print Preview</button>
    </div>
    <br>
@@ -35,7 +35,7 @@
             <h4 class="modal-title" id="stateModalLabel">
                {{stateCreateMode ? 'Add State' : 'Update State'}}
             </h4>
-            <button type="button" class="btn btn-outline-info" data-dismiss="modal" (click)="disableBulkEdit()">
+            <button type="button" class="btn btn-info" data-dismiss="modal" (click)="disableBulkEdit()">
                <span aria-hidden="true">&times;</span>
                <span class="sr-only">Close</span>
             </button>
@@ -176,7 +176,7 @@
                   <form class="row form-inline">
                      <div *ngFor="let conInfo of conInfoList">
                         <div class="form-group col-sm-1">
-                           <button type="button" class="btn btn-outline-primary" (click)="connectorSelected(conInfo)">Configure
+                           <button type="button" class="btn btn-primary" (click)="connectorSelected(conInfo)">Configure
                               {{conInfo.displayName}}</button>
                         </div>
                      </div>
@@ -187,10 +187,10 @@
                      <div *ngFor="let conInfo of conInfoList">
                         <div class="form-group col-sm-1">
                            <button *ngIf="tempState.taskConfig[0].connectorInfoRef == conInfo.type " type="button"
-                              class="btn btn-outline-success" (click)="connectorSelected(conInfo)">Configured
+                              class="btn btn-success" (click)="connectorSelected(conInfo)">Configured
                               {{conInfo.displayName}}</button>
                            <button *ngIf="tempState.taskConfig[0].connectorInfoRef !== conInfo.type " type="button"
-                              class="btn btn-outline-primary" (click)="connectorSelected(conInfo)">Configure
+                              class="btn btn-primary" (click)="connectorSelected(conInfo)">Configure
                               {{conInfo.displayName}}</button>
                         </div>
                      </div>
@@ -260,7 +260,7 @@
                                     <tbody>
                                        <tr *ngFor="let config of mfConfigs.data">
                                           <td>
-                                             <button type="button" class="btn btn-outline-danger" title="Delete"
+                                             <button type="button" class="btn btn-danger" title="Delete"
                                                 (click)="removeConfigParamFromTask(taskConfig.configMap, config)"><i
                                                    class="ion-close-round"></i></button>
                                           </td>
@@ -297,7 +297,7 @@
                                              <mfBootstrapPaginator></mfBootstrapPaginator>
                                           </td>
                                           <td colspan="1" style="text-align: right;">
-                                             <button type="button" class="btn btn-outline-primary" (click)="addConfigParamToTask(taskConfig.configMap)">Add
+                                             <button type="button" class="btn btn-primary" (click)="addConfigParamToTask(taskConfig.configMap)">Add
                                                 Param</button>
                                           </td>
                                        </tr>
@@ -317,7 +317,7 @@
                                     <tbody>
                                        <tr *ngFor="let body of mfPayloadConfigs.data">
                                           <td>
-                                             <button type="button" class="btn btn-outline-danger" title="Delete"
+                                             <button type="button" class="btn btn-danger" title="Delete"
                                                 (click)="removeBodyFromTask(taskConfig.taskObjectBody, body)"><i class="ion-close-round"></i></button>
                                           </td>
                                           <td>
@@ -336,7 +336,7 @@
                                              <mfBootstrapPaginator></mfBootstrapPaginator>
                                           </td>
                                           <td colspan="1" style="text-align: right;">
-                                             <button type="button" class="btn btn-outline-primary" (click)="addBodyToTask(taskConfig.taskObjectBody)">Add
+                                             <button type="button" class="btn btn-primary" (click)="addBodyToTask(taskConfig.taskObjectBody)">Add
                                                 Param</button>
                                           </td>
                                        </tr>
@@ -405,12 +405,12 @@
                                                    <div class="form-group">
                                                       <form class="row form-inline">
                                                          <div class="form-group col-sm-2">
-                                                            <button type="button" class="btn btn-outline-primary"
+                                                            <button type="button" class="btn btn-primary"
                                                                (click)="cloneResponseForTaskConfig(taskConfig.taskObjectResponseList, response)">Clone
                                                                Response</button>
                                                          </div>
                                                          <div class="form-group col-sm-2 offset-sm-6">
-                                                            <button type="button" class="btn btn-outline-danger"
+                                                            <button type="button" class="btn btn-danger"
                                                                (click)="removeResponseFromTask(taskConfig.taskObjectResponseList, response)">Remove
                                                                Response</button>
                                                          </div>
@@ -430,7 +430,7 @@
                                                    <tbody>
                                                       <tr *ngFor="let expressionMap of response.keyExpressionList">
                                                          <td>
-                                                            <button type="button" class="btn btn-outline-danger" title="Delete"
+                                                            <button type="button" class="btn btn-danger" title="Delete"
                                                                (click)="removeResponseExpressionFromTask(response, expressionMap)"><i
                                                                   class="ion-close-round"></i></button>
                                                          </td>
@@ -450,7 +450,7 @@
                                                             <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
                                                          </td>
                                                          <td colspan="1" style="text-align: right;">
-                                                            <button type="button" class="btn btn-outline-primary"
+                                                            <button type="button" class="btn btn-primary"
                                                                (click)="addResponseExpressionToTask(response)">Add
                                                                Expression</button>
                                                          </td>
@@ -493,12 +493,12 @@
                                                    <div class="form-group">
                                                       <form class="row form-inline">
                                                          <div class="form-group col-sm-2">
-                                                            <button type="button" class="btn btn-outline-primary"
+                                                            <button type="button" class="btn btn-primary"
                                                                (click)="cloneResponseForTaskConfig(taskConfig.taskObjectResponseList, response)">Clone
                                                                Response</button>
                                                          </div>
                                                          <div class="form-group col-sm-2 offset-sm-6">
-                                                            <button type="button" class="btn btn-outline-danger"
+                                                            <button type="button" class="btn btn-danger"
                                                                (click)="removeResponseFromTask(taskConfig.taskObjectResponseList, response)">Remove
                                                                Response</button>
                                                          </div>
@@ -518,7 +518,7 @@
                                                    <tbody>
                                                       <tr *ngFor="let expressionMap of response.keyExpressionList">
                                                          <td>
-                                                            <button type="button" class="btn btn-outline-danger" title="Delete"
+                                                            <button type="button" class="btn btn-danger" title="Delete"
                                                                (click)="removeResponseExpressionFromTask(response, expressionMap)"><i
                                                                   class="ion-close-round"></i></button>
                                                          </td>
@@ -538,7 +538,7 @@
                                                             <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
                                                          </td>
                                                          <td colspan="1" style="text-align: right;">
-                                                            <button type="button" class="btn btn-outline-primary"
+                                                            <button type="button" class="btn btn-primary"
                                                                (click)="addResponseExpressionToTask(response)">Add
                                                                Expression</button>
                                                          </td>
@@ -551,7 +551,7 @@
                                     </div>
                                  </div>
                                  <div class="row col-sm-12">
-                                    <button type="button" class="btn btn-outline-primary" (click)="addResponseToTask(taskConfig.taskObjectResponseList)">Add
+                                    <button type="button" class="btn btn-primary" (click)="addResponseToTask(taskConfig.taskObjectResponseList)">Add
                                        Response</button>
                                  </div>
                               </div>
@@ -618,7 +618,7 @@
                            <tbody>
                               <tr *ngFor="let manualAction of tempState.manualActions">
                                  <td>
-                                    <button type="button" class="btn btn-outline-danger" title="Delete" (click)="removeManualAction(manualAction)">
+                                    <button type="button" class="btn btn-danger" title="Delete" (click)="removeManualAction(manualAction)">
                                        <i class="ion-close-round"></i>
                                     </button>
                                  </td>
@@ -661,7 +661,7 @@
                                     <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
                                  </td>
                                  <td colspan="1" style="text-align: right;">
-                                    <button type="button" class="btn btn-outline-primary" (click)="addManualAction()">Add
+                                    <button type="button" class="btn btn-primary" (click)="addManualAction()">Add
                                        Action</button>
                                  </td>
                               </tr>
@@ -694,7 +694,7 @@
                            <tbody>
                               <tr *ngFor="let rule of tempState.ruleList">
                                  <td>
-                                    <button type="button" class="btn btn-outline-danger" title="Delete" (click)="removeRule(rule)">
+                                    <button type="button" class="btn btn-danger" title="Delete" (click)="removeRule(rule)">
                                        <i class="ion-close-round"></i>
                                     </button>
                                  </td>
@@ -714,7 +714,7 @@
                                     <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
                                  </td>
                                  <td colspan="1" style="text-align: right;">
-                                    <button type="button" class="btn btn-outline-primary" (click)="addRule()">Add Rule</button>
+                                    <button type="button" class="btn btn-primary" (click)="addRule()">Add Rule</button>
                                  </td>
                               </tr>
                            </tfoot>
@@ -799,7 +799,7 @@
                                                       placeholder="Value" [(ngModel)]="expression.value" name="value" />
                                                 </div>
                                                 <div class="form-group" *ngIf="event.expressionList.length > 1">
-                                                   <button type="button" class="btn btn-outline-danger" (click)="deleteExpression(expression, event)">
+                                                   <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
                                                       Remove Expression
                                                    </button>
                                                 </div>
@@ -818,7 +818,7 @@
                                                       placeholder="Value" [(ngModel)]="expression.value" name="value" />
                                                 </div>
                                                 <div class="form-group" *ngIf="event.expressionList.length > 1">
-                                                   <button type="button" class="btn btn-outline-danger" (click)="deleteExpression(expression, event)">
+                                                   <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
                                                       Remove Expression
                                                    </button>
                                                 </div>
@@ -836,16 +836,16 @@
                                     [(ngModel)]="bulkExpressions" name="bulkExpressions"></textarea>
                               </div>
                               <div class="form-group">
-                                 <button type="button" class="btn btn-outline-danger" (click)="disableBulkEdit(); deleteEvent(event);">
+                                 <button type="button" class="btn btn-danger" (click)="disableBulkEdit(); deleteEvent(event);">
                                     Remove Event
                                  </button>
-                                 <button *ngIf="!bulkEdit" type="button" class="btn btn-outline-primary" (click)="addExpression(event)">
+                                 <button *ngIf="!bulkEdit" type="button" class="btn btn-primary" (click)="addExpression(event)">
                                     Add Expression
                                  </button>
-                                 <button *ngIf="!bulkEdit" type="button" class="btn btn-outline-primary" (click)="enableBulkEdit(event)">
+                                 <button *ngIf="!bulkEdit" type="button" class="btn btn-primary" (click)="enableBulkEdit(event)">
                                     Bulk Edit
                                  </button>
-                                 <button *ngIf="bulkEdit" type="button" class="btn btn-outline-primary" (click)="disableBulkEdit()">
+                                 <button *ngIf="bulkEdit" type="button" class="btn btn-primary" (click)="disableBulkEdit()">
                                     Normal Edit
                                  </button>
                               </div>
@@ -907,7 +907,7 @@
                                                       placeholder="Value" [(ngModel)]="expression.value" name="value" />
                                                 </div>
                                                 <div class="form-group" *ngIf="event.expressionList.length > 1">
-                                                   <button type="button" class="btn btn-outline-danger" (click)="deleteExpression(expression, event)">
+                                                   <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
                                                       Remove Expression
                                                    </button>
                                                 </div>
@@ -926,7 +926,7 @@
                                                       placeholder="Value" [(ngModel)]="expression.value" name="value" />
                                                 </div>
                                                 <div class="form-group" *ngIf="event.expressionList.length > 1">
-                                                   <button type="button" class="btn btn-outline-danger" (click)="deleteExpression(expression, event)">
+                                                   <button type="button" class="btn btn-danger" (click)="deleteExpression(expression, event)">
                                                       Remove Expression
                                                    </button>
                                                 </div>
@@ -944,16 +944,16 @@
                                     [(ngModel)]="bulkExpressions" name="bulkExpressions"></textarea>
                               </div>
                               <div class="form-group">
-                                 <button type="button" class="btn btn-outline-danger" (click)="disableBulkEdit(); deleteEvent(event)">
+                                 <button type="button" class="btn btn-danger" (click)="disableBulkEdit(); deleteEvent(event)">
                                     Remove Event
                                  </button>
-                                 <button *ngIf="!bulkEdit" type="button" class="btn btn-outline-primary" (click)="addExpression(event)">
+                                 <button *ngIf="!bulkEdit" type="button" class="btn btn-primary" (click)="addExpression(event)">
                                     Add Expression
                                  </button>
-                                 <button *ngIf="!bulkEdit" type="button" class="btn btn-outline-primary" (click)="enableBulkEdit(event)">
+                                 <button *ngIf="!bulkEdit" type="button" class="btn btn-primary" (click)="enableBulkEdit(event)">
                                     Bulk Edit
                                  </button>
-                                 <button *ngIf="bulkEdit" type="button" class="btn btn-outline-primary" (click)="disableBulkEdit()">
+                                 <button *ngIf="bulkEdit" type="button" class="btn btn-primary" (click)="disableBulkEdit()">
                                     Normal Edit
                                  </button>
                               </div>
@@ -966,10 +966,10 @@
          </div>
          <!-- Modal Footer -->
          <div class="modal-footer" id="modal_footer">
-            <button type="button" class="btn btn-outline-info" data-dismiss="modal" (click)="disableBulkEdit()">Close</button>
+            <button type="button" class="btn btn-info" data-dismiss="modal" (click)="disableBulkEdit()">Close</button>
             <!-- <button type="button" class="btn btn-default" data-toggle="modal" data-target="#eventModal" (click)="addEvent()">Add Event</button> -->
-            <button type="button" class="btn btn-outline-primary" (click)="addEvent()">Add Event</button>
-            <button type="submit" class="btn btn-outline-success" (click)="disableBulkEdit(); saveState();">{{stateCreateMode
+            <button type="button" class="btn btn-primary" (click)="addEvent()">Add Event</button>
+            <button type="submit" class="btn btn-success" (click)="disableBulkEdit(); saveState();">{{stateCreateMode
                ?
                'Create' : 'Update'}}</button>
          </div>
@@ -986,7 +986,7 @@
             <h4 class="modal-title" id="settingsModalLabel">
                Settings
             </h4>
-            <button type="button" class="btn btn-outline-info" data-dismiss="modal">
+            <button type="button" class="btn btn-info" data-dismiss="modal">
                <span aria-hidden="true">&times;</span>
                <span class="sr-only">Close</span>
             </button>
@@ -1171,7 +1171,7 @@
                                                 <th>key</th>
                                                 <th>Value</th>
                                                 <th>
-                                                   <button type="button" class="btn btn-outline-primary" (click)="onAddChildDataPoint(dataPoint)">
+                                                   <button type="button" class="btn btn-primary" (click)="onAddChildDataPoint(dataPoint)">
                                                       <i class="ion-plus-round"></i>
                                                    </button>
                                                 </th>
@@ -1188,7 +1188,7 @@
                                                       (input)="childDataPoint.dataPointLabel = $event.target.value">
                                                 </td>
                                                 <td>
-                                                   <button type="button" class="btn btn-outline-danger" (click)="deleteChildDataPoint(dataPoint.childdataPoints,childDataPoint)">
+                                                   <button type="button" class="btn btn-danger" (click)="deleteChildDataPoint(dataPoint.childdataPoints,childDataPoint)">
                                                       <i class="ion-ios-trash"></i>
                                                    </button>
                                                 </td>
@@ -1232,7 +1232,7 @@
                                     <tbody>
                                        <tr *ngFor="let validation of dataPoint.validations">
                                           <td>
-                                             <button type="button" class="btn btn-outline-danger" title="Delete"
+                                             <button type="button" class="btn btn-danger" title="Delete"
                                                 (click)="removeDataPointValidation(validation, dataPoint)">
                                                 <i class="ion-close-round"></i>
                                              </button>
@@ -1253,12 +1253,12 @@
                                     </tbody>
                                  </table>
                                  <br>
-                                 <button type="button" class="btn btn-outline-primary pull-right" (click)="addDataPointValidation(dataPoint)">Add
+                                 <button type="button" class="btn btn-primary pull-right" (click)="addDataPointValidation(dataPoint)">Add
                                     Validation</button>
                                  <br>
                                  <form>
                                     <div class="form-group" *ngIf="tempGraphObject.dataPointConfigurationList.length > 1">
-                                       <button type="button" class="btn btn-outline-danger" (click)="deleteDataPoint(dataPoint)">
+                                       <button type="button" class="btn btn-danger" (click)="deleteDataPoint(dataPoint)">
                                           Remove Data Point
                                        </button>
                                     </div>
@@ -1348,7 +1348,7 @@
                                                 <th>key</th>
                                                 <th>Value</th>
                                                 <th>
-                                                   <button type="button" class="btn btn-outline-primary" (click)="onAddChildDataPoint(dataPoint)">
+                                                   <button type="button" class="btn btn-primary" (click)="onAddChildDataPoint(dataPoint)">
                                                       <i class="ion-plus-round"></i>
                                                    </button>
                                                 </th>
@@ -1365,7 +1365,7 @@
                                                       (input)="childDataPoint.dataPointLabel = $event.target.value">
                                                 </td>
                                                 <td>
-                                                   <button type="button" class="btn btn-outline-danger" (click)="deleteChildDataPoint(dataPoint.childdataPoints,childDataPoint)">
+                                                   <button type="button" class="btn btn-danger" (click)="deleteChildDataPoint(dataPoint.childdataPoints,childDataPoint)">
                                                       <i class="ion-ios-trash"></i>
                                                    </button>
                                                 </td>
@@ -1407,7 +1407,7 @@
                                     <tbody>
                                        <tr *ngFor="let validation of dataPoint.validations">
                                           <td>
-                                             <button type="button" class="btn btn-outline-danger" title="Delete"
+                                             <button type="button" class="btn btn-danger" title="Delete"
                                                 (click)="removeDataPointValidation(validation, dataPoint)">
                                                 <i class="ion-close-round"></i>
                                              </button>
@@ -1429,7 +1429,7 @@
                                     <tfoot>
                                        <tr>
                                           <td colspan="0" style="text-align: right;">
-                                             <button type="button" class="btn btn-outline-primary" (click)="addDataPointValidation(dataPoint)">Add
+                                             <button type="button" class="btn btn-primary" (click)="addDataPointValidation(dataPoint)">Add
                                                 Validation</button>
                                           </td>
                                        </tr>
@@ -1438,7 +1438,7 @@
                                  <br>
                                  <form>
                                     <div class="form-group" *ngIf="tempGraphObject.dataPointConfigurationList.length > 1">
-                                       <button type="button" class="btn btn-outline-danger" (click)="deleteDataPoint(dataPoint)">
+                                       <button type="button" class="btn btn-danger" (click)="deleteDataPoint(dataPoint)">
                                           Remove Data Point
                                        </button>
                                     </div>
@@ -1470,7 +1470,7 @@
             <h4 class="modal-title" id="newEdgeLabel">
                Select Event
             </h4>
-            <button type="button" class="btn btn-outline-info" data-dismiss="modal" (click)="deleteEdge()">
+            <button type="button" class="btn btn-info" data-dismiss="modal" (click)="deleteEdge()">
                <span aria-hidden="true">&times;</span>
                <span class="sr-only">Close</span>
             </button>
@@ -1491,8 +1491,8 @@
          </div>
          <!-- Modal Footer -->
          <div class="modal-footer" id="modal_footer">
-            <button type="button" class="btn btn-outline-danger" data-dismiss="modal" (click)="deleteEdge()">Cancel</button>
-            <button type="button" class="btn btn-outline-success" data-dismiss="modal" (click)="saveEdge()">Confirm</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteEdge()">Cancel</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" (click)="saveEdge()">Confirm</button>
          </div>
       </div>
    </div>
@@ -1507,7 +1507,7 @@
             <h4 class="modal-title" id="discardWarningLabel">
                Discard Changes
             </h4>
-            <button type="button" class="btn btn-outline-info" data-dismiss="modal">
+            <button type="button" class="btn btn-info" data-dismiss="modal">
                <span aria-hidden="true">&times;</span>
                <span class="sr-only">Close</span>
             </button>
@@ -1518,8 +1518,8 @@
          </div>
          <!-- Modal Footer -->
          <div class="modal-footer" id="modal_footer">
-            <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-outline-danger" data-dismiss="modal" (click)="discardChanges()">Confirm</button>
+            <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="discardChanges()">Confirm</button>
          </div>
       </div>
    </div>
@@ -1534,7 +1534,7 @@
             <h4 class="modal-title" id="reassignEventsLabel">
                {{warningHeader}}
             </h4>
-            <button type="button" class="btn btn-outline-info" data-dismiss="modal">
+            <button type="button" class="btn btn-info" data-dismiss="modal">
                <span aria-hidden="true">&times;</span>
                <span class="sr-only">Close</span>
             </button>
@@ -1554,8 +1554,8 @@
          </div>
          <!-- Modal Footer -->
          <div class="modal-footer" id="modal_footer">
-            <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-outline-success" data-dismiss="modal" (click)="updateStateTriggers()">Update</button>
+            <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" (click)="updateStateTriggers()">Update</button>
          </div>
       </div>
    </div>
@@ -1569,7 +1569,7 @@
             <h4 class="modal-title" id="successModal">
                State Information
             </h4>
-            <button type="button" class="btn btn-outline-info" data-dismiss="modal">
+            <button type="button" class="btn btn-info" data-dismiss="modal">
                <span aria-hidden="true">&times;</span>
                <span class="sr-only">Close</span>
             </button>
@@ -1618,7 +1618,7 @@
          </div>
          <!-- Modal Footer -->
          <div class="modal-footer" id="modal_footer">
-            <button type="button" class="btn btn-outline-info" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
          </div>
       </div>
    </div>
@@ -1632,7 +1632,7 @@
             <h4 class="modal-title" id="warningLabel">
                {{warningHeader}}
             </h4>
-            <button type="button" class="btn btn-outline-info" data-dismiss="modal">
+            <button type="button" class="btn btn-info" data-dismiss="modal">
                <span aria-hidden="true">&times;</span>
                <span class="sr-only">Close</span>
             </button>
@@ -1643,7 +1643,7 @@
          </div>
          <!-- Modal Footer -->
          <div class="modal-footer" id="modal_footer">
-            <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Dismiss</button>
+            <button type="button" class="btn btn-warning" data-dismiss="modal">Dismiss</button>
          </div>
       </div>
    </div>
@@ -1700,7 +1700,7 @@
          </div>
          <!-- Modal Footer -->
          <div class="modal-footer" id="modal_footer">
-            <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Dismiss</button>
+            <button type="button" class="btn btn-warning" data-dismiss="modal">Dismiss</button>
          </div>
       </div>
    </div>
