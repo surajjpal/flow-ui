@@ -1,40 +1,45 @@
 <ba-card cardTitle="FILTER">
     <api-daterangepicker (selectedRange)="selectDate($event)"></api-daterangepicker>
-        <div class="row">
+    <div class="row">
         <table class="table">
             <thead>
                 <tr class="filters">
                     <th>
                         <label for="selectDomain">DOMAIN</label>
-                        <select  multiple class="form-control"  required id="selectDomain"  title="Choose Domain" [(ngModel)]="selectedDomains" [ngModelOptions]="{standalone: true}" >
+                        <select multiple class="form-control" required id="selectDomain" title="Choose Domain"
+                            [(ngModel)]="selectedDomains" [ngModelOptions]="{standalone: true}">
                             <option *ngFor="let domain of domainSource" [ngValue]="domain">{{domain.name}}</option>
                         </select>
                     </th>
                     <th>
                         <label for="selectDomain">AGENT</label>
-                        <select multiple class="form-control" required id="selectAgent"  title="Choose Agent" [(ngModel)]="selectedAgents" [ngModelOptions]="{standalone: true}" >
+                        <select multiple class="form-control" required id="selectAgent" title="Choose Agent"
+                            [(ngModel)]="selectedAgents" [ngModelOptions]="{standalone: true}">
                             <option *ngFor="let agent of agentSource" [ngValue]="agent">{{agent.name}}</option>
                         </select>
                     </th>
                     <th>
                         <label for="selectDomain">SOURCE</label>
-                        <select multiple  class="form-control" required id="selectSource"  title="Choose Source" [(ngModel)]="selectedSources" [ngModelOptions]="{standalone: true}" >
+                        <select multiple class="form-control" required id="selectSource" title="Choose Source"
+                            [(ngModel)]="selectedSources" [ngModelOptions]="{standalone: true}">
                             <option *ngFor="let source of Sources" [ngValue]="source">{{source}}</option>
                         </select>
                     </th>
                     <th>
-                            <label for="selectDomain">LANGUAGE</label>
-                        <select multiple class="form-control"  required id="selectLanguage"  title="Choose Language" [(ngModel)]="selectedLanguages" [ngModelOptions]="{standalone: true}" >
+                        <label for="selectDomain">LANGUAGE</label>
+                        <select multiple class="form-control" required id="selectLanguage" title="Choose Language"
+                            [(ngModel)]="selectedLanguages" [ngModelOptions]="{standalone: true}">
                             <option *ngFor="let lang of Language" [ngValue]="lang">{{lang}}</option>
                         </select>
                     </th>
-                    <th>        
-                        <button type="button" class="btn btn-success" id="submit" style="display: block; text-align: center;width: 100px;margin-bottom: 25px;" (click)="submit()">SUBMIT</button> 
+                    <th>
+                        <button type="button" class="btn btn-outline-success" id="submit" style="display: block; text-align: center;width: 100px;margin-bottom: 25px;"
+                            (click)="submit()">SUBMIT</button>
                     </th>
                 </tr>
             </thead>
-            </table>
-        </div>
+        </table>
+    </div>
 </ba-card>
 
 
@@ -80,32 +85,38 @@
     <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-user"></i>Total Conversations</span>
         <div class="count">{{conversationSummary.episodes_count}}</div>
-        <span class="count_bottom"><i class="green">{{conversationSummary.episode_percentage_change}}% </i> from last week</span>
+        <span class="count_bottom"><i class="green">{{conversationSummary.episode_percentage_change}}% </i> from last
+            week</span>
     </div>
     <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-user"></i>Total Users</span>
         <div class="count ">{{conversationSummary.conversation_count}}</div>
-        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>{{conversationSummary.user_percentage_change}}% </i> from last week</span>
+        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>{{conversationSummary.user_percentage_change}}%
+            </i> from last week</span>
     </div>
     <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-user"></i>Total Messages</span>
         <div class="count">{{conversationSummary.user_messages_count}}</div>
-        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>{{conversationSummary.user_messages_percentage_change}}% </i> from last week</span>
+        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>{{conversationSummary.user_messages_percentage_change}}%
+            </i> from last week</span>
     </div>
     <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-user"></i>Total Replies</span>
         <div class="count ">{{conversationSummary.auto_messages_count}}</div>
-        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>{{conversationSummary.auto_messages_percentage_change}}% </i> from last week</span>
+        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>{{conversationSummary.auto_messages_percentage_change}}%
+            </i> from last week</span>
     </div>
     <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-clock-o"></i>Average Chat Time (minutes)</span>
         <div class="count">{{conversationSummary.avg_time}}</div>
-        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>{{conversationSummary.avg_time_percentage_change}}% </i> from last week</span>
+        <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>{{conversationSummary.avg_time_percentage_change}}%
+            </i> from last week</span>
     </div>
     <div *ngIf="conversationSummary" class="col-md-2 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-user"></i>Goals Met</span>
         <div class="count ">{{conversationSummary.goals_met_count}}</div>
-        <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>{{conversationSummary.goal_met_percentage_change}}% </i> from last week</span>
+        <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>{{conversationSummary.goal_met_percentage_change}}%
+            </i> from last week</span>
     </div>
 </div>
 

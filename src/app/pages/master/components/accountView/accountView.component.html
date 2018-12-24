@@ -1,62 +1,64 @@
 <div class="widgets">
-    <div class="row">
-      <ba-card cardTitle="Account" baCardClass="with-scroll" class="data-table-container">
-        <div class="panel panel-default">
-          <form class="row form-inline">
-            <div class="form-group col-sm-10">
-              <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Query" />
-            </div>
-            <div class="form-group col-sm-2">
-              <button type="button" class="btn btn-primary" (click)="createAccount()">
-                Create Company Account
-              </button>
-            </div>
-          </form>
-          <br>
-  
-          <table class="table table-striped" [mfData]="companyList | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="name">
-            <thead>
-              <tr>
-                <th>
-                  <mfDefaultSorter by="name">Name</mfDefaultSorter>
-                </th>
-                <th>
-                  <mfDefaultSorter by="loginid">Login Id</mfDefaultSorter>
-                </th>
-                <th>
-                  <mfDefaultSorter by="description">Description</mfDefaultSorter>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let company of mf.data">
-                <td>{{company.companyName}}</td>
-                <td>{{company.loginId}}</td>
-                <td>{{company.companyDesc}}</td>
-                <td>
-                    <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-primary" title="Edit" (click)="onSelect(company)">
-                        <i class="ion-android-create"></i>
-                      </button>
-                      <button type="button" class="btn btn-success" title="Publish"  (click)="publishAccount(company)">
-                        <i class="fa fa-check-square-o"></i>
-                      </button>
-                      <button type="button" *ngIf='company.trainingModeFl' class="btn btn-danger" title="Unpublish"  (click)="unpublishAccount(company)">
-                        <i class="fa fa-check-square-o"></i>
-                      </button>
-                    </div>
-                  </td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <td colspan="100%">
-                  <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      </ba-card>
-    </div>
+  <div class="row">
+    <ba-card cardTitle="Account" baCardClass="with-scroll" class="data-table-container">
+      <div class="panel panel-default">
+        <form class="row form-inline">
+          <div class="form-group col-sm-10">
+            <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Query" />
+          </div>
+          <div class="form-group col-sm-2">
+            <button type="button" class="btn btn-outline-primary" (click)="createAccount()">
+              Create Company Account
+            </button>
+          </div>
+        </form>
+        <br>
+
+        <table class="table table-striped" [mfData]="companyList | universalDataFilter : filterQuery" #mf="mfDataTable"
+          [mfRowsOnPage]="10" mfSortBy="name">
+          <thead>
+            <tr>
+              <th>
+                <mfDefaultSorter by="name">Name</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="loginid">Login Id</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="description">Description</mfDefaultSorter>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let company of mf.data">
+              <td>{{company.companyName}}</td>
+              <td>{{company.loginId}}</td>
+              <td>{{company.companyDesc}}</td>
+              <td>
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-outline-primary" title="Edit" (click)="onSelect(company)">
+                    <i class="ion-android-create"></i>
+                  </button>
+                  <button type="button" class="btn btn-outline-success" title="Publish" (click)="publishAccount(company)">
+                    <i class="fa fa-check-square-o"></i>
+                  </button>
+                  <button type="button" *ngIf='company.trainingModeFl' class="btn btn-outline-danger" title="Unpublish"
+                    (click)="unpublishAccount(company)">
+                    <i class="fa fa-check-square-o"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="100%">
+                <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </ba-card>
   </div>
+</div>

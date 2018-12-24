@@ -64,13 +64,13 @@
           </div>
 
           <div class="form-group">
-            <button type="button" class="btn btn-default" (click)="goBack()">
+            <button type="button" class="btn btn-outline-default" (click)="goBack()">
               Cancel
             </button>
-            <button *ngIf="!profileEditMode && updateMode" type="button" class="btn btn-danger" (click)="deleteUser()">
+            <button *ngIf="!profileEditMode && updateMode" type="button" class="btn btn-outline-danger" (click)="deleteUser()">
               Delete User
             </button>
-            <button type="button" class="btn btn-primary" (click)="updateUser()">
+            <button type="button" class="btn btn-outline-primary" (click)="updateUser()">
               {{buttonName}}
             </button>
           </div>

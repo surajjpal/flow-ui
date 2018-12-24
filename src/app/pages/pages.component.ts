@@ -19,13 +19,13 @@ import { RoutesService } from '../services/setup.service';
     </div>
     <footer class="al-footer clearfix">
       <div class="al-footer-right" translate>
-        <div class="al-copy">&copy;<a href="http://www.automatapi.com" translate>{{'general.auto'}}</a> 2018</div>
+        <!-- <div class="al-copy">&copy;<a href="http://www.automatapi.com" translate>{{'general.auto'}}</a> 2018</div> -->
       </div>
       <div class="al-footer-main clearfix">
-        <ul class="al-share clearfix">
+        <!-- <ul class="al-share clearfix">
           <li><a href="https://www.facebook.com/automatapi/"><i class="socicon socicon-facebook"></i></a></li>
           <li><a href="https://twitter.com/AutomataPi"><i class="socicon socicon-twitter"></i></a></li>
-        </ul>
+        </ul> -->
       </div>
     </footer>
     <ba-back-top position="200"></ba-back-top>
@@ -39,10 +39,10 @@ export class PagesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription = this.routesService.routes()
-    .subscribe(routes => {
-      console.log(routes)
-      this._menuService.updateMenuByRoutes(<Routes>routes);
-    });
+      .subscribe(routes => {
+        console.log(routes)
+        this._menuService.updateMenuByRoutes(<Routes>routes);
+      });
   }
 
   ngOnDestroy(): void {
