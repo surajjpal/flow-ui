@@ -591,7 +591,7 @@
                   </select>
                </div>
             </form>
-            <div id="manualActionAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'">
+            <!--<div id="manualActionAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'">
                <div class="panel card">
                   <div id="manualActionTabHeader" class="card-header" heightStyle="content" role="tab">
                      <h5 class="mb-0">
@@ -670,7 +670,7 @@
                      </div>
                   </div>
                </div>
-            </div>
+            </div>-->
             <div id="ruleAccordion" role="tablist" aria-multiselectable="true" *ngIf="isStateRuleCompatible()">
                <div class="panel card">
                   <div id="ruleTabHeader" class="card-header" heightStyle="content" role="tab">
@@ -731,7 +731,7 @@
                         <h5 class="mb-0">
                            <a data-toggle="collapse" data-parent="#eventAccordion" [href]="'#eventCollapse' + eventIndex"
                               aria-expanded="true" [attr.aria-controls]="'eventCollapse' + eventIndex">
-                              {{event.eventCd}}
+                              {{event.eventCd != null? event.eventCd : "Event"}}
                            </a>
                         </h5>
                      </div>
@@ -740,7 +740,7 @@
                         <h5 class="mb-0">
                            <a class="collapsed" data-toggle="collapse" data-parent="#eventAccordion" [href]="'#eventCollapse' + eventIndex"
                               aria-expanded="false" [attr.aria-controls]="'eventCollapse' + eventIndex">
-                              {{event.eventCd}}
+                              {{event.eventCd != null? event.eventCd : "Event"}}
                            </a>
                         </h5>
                      </div>
@@ -773,7 +773,7 @@
                                              <a data-toggle="collapse" [attr.data-parent]="'#expAccordion' + eventIndex"
                                                 [href]="'#event' + eventIndex + 'expCollapse' + expIndex" aria-expanded="true"
                                                 [attr.aria-controls]="'event' + eventIndex + 'expCollapse' + expIndex">
-                                                {{expression.value}}
+                                                {{expression.value != null ? expression.value : "Expression"}}
                                              </a>
                                           </h5>
                                        </div>
@@ -783,7 +783,7 @@
                                              <a class="collapsed" data-toggle="collapse" [attr.data-parent]="'#expAccordion' + eventIndex"
                                                 [href]="'#event' + eventIndex + 'expCollapse' + expIndex" aria-expanded="false"
                                                 [attr.aria-controls]="'event' + eventIndex + 'expCollapse' + expIndex">
-                                                {{expression.value}}
+                                                {{expression.value != null ? expression.value : "Expression"}}
                                              </a>
                                           </h5>
                                        </div>
@@ -796,7 +796,7 @@
                                                       Value
                                                    </label>
                                                    <input type="text" class="form-control" required [id]="'expValue' + expIndex"
-                                                      placeholder="Value" [(ngModel)]="expression.value" name="value" />
+                                                      placeholder="Expression" [(ngModel)]="expression.value" name="value" />
                                                 </div>
                                                 <div class="form-group" *ngIf="event.expressionList.length > 1">
                                                    <button type="button" class="btn btn-outline-danger" (click)="deleteExpression(expression, event)">

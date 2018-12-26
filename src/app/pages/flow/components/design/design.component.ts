@@ -605,7 +605,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   addEvent(): void {
     const tempEvent: EventModel = new EventModel();
-    tempEvent.eventCd = 'Event';
+    tempEvent.eventCd = null;
     tempEvent.operand = this.sourceOperands[0];
     tempEvent.expressionList = [];
 
@@ -616,7 +616,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   addExpression(event: EventModel): void {
     const tempExpression: Expression = new Expression();
-    tempExpression.value = 'Expression';
+    tempExpression.value = null;
 
     event.expressionList.push(tempExpression);
   }
