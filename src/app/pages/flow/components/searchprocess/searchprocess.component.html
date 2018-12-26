@@ -58,6 +58,9 @@
                   <th>
                     <mfDefaultSorter [by]="toInt">Process Owner</mfDefaultSorter>
                   </th>
+                  <th>Start time</th>
+                  <th>Entity Id</th>
+                  <th>Business Key</th>
                   <th>Match</th>
                   <th>
                     <mfDefaultSorter by="statusCd">Status</mfDefaultSorter>
@@ -72,6 +75,9 @@
                   <td>{{flow.processType}}</td>
                   <!-- <td>{{graph.machineType}}</td> -->
                   <td>{{flow.processOwner}}</td>
+                  <td>{{flow.startTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A'}}</td>
+                  <td>{{flow.entityId}}</td>
+                  <td>{{flow.businessKey}}</td>
                   <td>
                     <button type="button" class="btn btn-outline-primary" title="View" (click)="showHighlights(flow)">
                       Show
