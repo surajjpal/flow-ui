@@ -5,19 +5,19 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
 import { environment } from '../../environments/environment';
-import { RoleRouteMap, ApiConfig,ConnectorInfo,ConnectorConfig } from '../models/setup.model';
+import { RoleRouteMap, ApiConfig, ConnectorInfo, ConnectorConfig } from '../models/setup.model';
 import { Account } from '../models/account.model';
 import { UniversalUser } from './shared.service';
 
 @Injectable()
 export class RoutesService {
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-  
+
   constructor(private router: Router, private httpClient: HttpClient, private universalUser: UniversalUser) { }
 
   routes(): Observable<Routes> {
     const subject = new Subject<Routes>();
-    
+
     const loggedinuser = this.universalUser.getUser();
     const url = `${environment.server + environment.menurouteurl}`;
 
@@ -32,23 +32,23 @@ export class RoutesService {
       }
     )
       .subscribe(
-      (response: HttpResponse<Routes>) => {
-        if (response.body) {
-         // console.log(response.body)
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        (response: HttpResponse<Routes>) => {
+          if (response.body) {
+            // console.log(response.body)
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
     console.log(subject.asObservable());
     return subject.asObservable();
   }
-  
+
   getAllRoutes(): Observable<RoleRouteMap[]> {
     const subject = new Subject<RoleRouteMap[]>();
 
@@ -63,17 +63,17 @@ export class RoutesService {
       }
     )
       .subscribe(
-      (response: HttpResponse<RoleRouteMap[]>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        (response: HttpResponse<RoleRouteMap[]>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
 
     return subject.asObservable();
@@ -98,17 +98,17 @@ export class RoutesService {
         }
       )
         .subscribe(
-        (response: HttpResponse<RoleRouteMap>) => {
-          if (response.body) {
-            subject.next(response.body);
-          }
-        },
-        (err: HttpErrorResponse) => {
-          // All errors are handled in ErrorInterceptor, no further handling required
-          // Unless any specific action is to be taken on some error
+          (response: HttpResponse<RoleRouteMap>) => {
+            if (response.body) {
+              subject.next(response.body);
+            }
+          },
+          (err: HttpErrorResponse) => {
+            // All errors are handled in ErrorInterceptor, no further handling required
+            // Unless any specific action is to be taken on some error
 
-          subject.error(err);
-        }
+            subject.error(err);
+          }
         );
     } else {
       subject.error('Object is null');
@@ -134,17 +134,17 @@ export class RoutesService {
         }
       )
         .subscribe(
-        (response: HttpResponse<RoleRouteMap>) => {
-          if (response.body) {
-            subject.next(response.body);
-          }
-        },
-        (err: HttpErrorResponse) => {
-          // All errors are handled in ErrorInterceptor, no further handling required
-          // Unless any specific action is to be taken on some error
+          (response: HttpResponse<RoleRouteMap>) => {
+            if (response.body) {
+              subject.next(response.body);
+            }
+          },
+          (err: HttpErrorResponse) => {
+            // All errors are handled in ErrorInterceptor, no further handling required
+            // Unless any specific action is to be taken on some error
 
-          subject.error(err);
-        }
+            subject.error(err);
+          }
         );
     } else {
       subject.error('Object is null or invalid');
@@ -158,7 +158,7 @@ export class RoutesService {
 
     if (roleRouteMap && roleRouteMap._id && roleRouteMap._id.length > 0) {
       const url = `${environment.server + environment.roleroutemapurl}/${roleRouteMap._id}`;
-      
+
       this.httpClient.delete<any>(
         url,
         {
@@ -168,15 +168,15 @@ export class RoutesService {
         }
       )
         .subscribe(
-        (response: HttpResponse<any>) => {
-          subject.next(response);
-        },
-        (err: HttpErrorResponse) => {
-          // All errors are handled in ErrorInterceptor, no further handling required
-          // Unless any specific action is to be taken on some error
+          (response: HttpResponse<any>) => {
+            subject.next(response);
+          },
+          (err: HttpErrorResponse) => {
+            // All errors are handled in ErrorInterceptor, no further handling required
+            // Unless any specific action is to be taken on some error
 
-          subject.error(err);
-        }
+            subject.error(err);
+          }
         );
     } else {
       subject.error('Object is null or invalid');
@@ -199,17 +199,17 @@ export class RoutesService {
       }
     )
       .subscribe(
-      (response: HttpResponse<string[]>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        (response: HttpResponse<string[]>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
 
     return subject.asObservable();
@@ -229,17 +229,17 @@ export class RoutesService {
       }
     )
       .subscribe(
-      (response: HttpResponse<string[]>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        (response: HttpResponse<string[]>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
 
     return subject.asObservable();
@@ -249,7 +249,7 @@ export class RoutesService {
 @Injectable()
 export class ApiConfigService {
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-  
+
   constructor(private router: Router, private httpClient: HttpClient) { }
 
   getAllApi(): Observable<ApiConfig[]> {
@@ -266,17 +266,17 @@ export class ApiConfigService {
       }
     )
       .subscribe(
-      (response: HttpResponse<ApiConfig[]>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        (response: HttpResponse<ApiConfig[]>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
 
     return subject.asObservable();
@@ -300,17 +300,17 @@ export class ApiConfigService {
         }
       )
         .subscribe(
-        (response: HttpResponse<ApiConfig>) => {
-          if (response.body) {
-            subject.next(response.body);
-          }
-        },
-        (err: HttpErrorResponse) => {
-          // All errors are handled in ErrorInterceptor, no further handling required
-          // Unless any specific action is to be taken on some error
+          (response: HttpResponse<ApiConfig>) => {
+            if (response.body) {
+              subject.next(response.body);
+            }
+          },
+          (err: HttpErrorResponse) => {
+            // All errors are handled in ErrorInterceptor, no further handling required
+            // Unless any specific action is to be taken on some error
 
-          subject.error(err);
-        }
+            subject.error(err);
+          }
         );
     } else {
       subject.error('Object is null or invalid');
@@ -336,17 +336,17 @@ export class ApiConfigService {
         }
       )
         .subscribe(
-        (response: HttpResponse<ApiConfig>) => {
-          if (response.body) {
-            subject.next(response.body);
-          }
-        },
-        (err: HttpErrorResponse) => {
-          // All errors are handled in ErrorInterceptor, no further handling required
-          // Unless any specific action is to be taken on some error
+          (response: HttpResponse<ApiConfig>) => {
+            if (response.body) {
+              subject.next(response.body);
+            }
+          },
+          (err: HttpErrorResponse) => {
+            // All errors are handled in ErrorInterceptor, no further handling required
+            // Unless any specific action is to be taken on some error
 
-          subject.error(err);
-        }
+            subject.error(err);
+          }
         );
     } else {
       subject.error('Object is null or invalid');
@@ -366,20 +366,20 @@ export class ApiConfigService {
         {
           observe: 'response',
           reportProgress: true,
-          
+
           withCredentials: true
         }
       )
         .subscribe(
-        (response: HttpResponse<any>) => {
-          subject.next(response);
-        },
-        (err: HttpErrorResponse) => {
-          // All errors are handled in ErrorInterceptor, no further handling required
-          // Unless any specific action is to be taken on some error
+          (response: HttpResponse<any>) => {
+            subject.next(response);
+          },
+          (err: HttpErrorResponse) => {
+            // All errors are handled in ErrorInterceptor, no further handling required
+            // Unless any specific action is to be taken on some error
 
-          subject.error(err);
-        }
+            subject.error(err);
+          }
         );
     } else {
       subject.error('Object is null or invalid');
@@ -402,17 +402,17 @@ export class ApiConfigService {
       }
     )
       .subscribe(
-      (response: HttpResponse<string[]>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        (response: HttpResponse<string[]>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
 
     return subject.asObservable();
@@ -422,7 +422,7 @@ export class ApiConfigService {
 @Injectable()
 export class FileService {
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-  
+
   constructor(private router: Router, private httpClient: HttpClient) { }
   upload(formData: FormData): Observable<any> {
     const subject = new Subject<any>();
@@ -460,7 +460,7 @@ export class FileService {
 @Injectable()
 export class ConnectorConfigService {
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-  
+
   constructor(private router: Router, private httpClient: HttpClient) { }
   getConnecterInfo(): Observable<ConnectorInfo[]> {
     const subject = new Subject<ConnectorInfo[]>();
@@ -476,23 +476,23 @@ export class ConnectorConfigService {
       }
     )
       .subscribe(
-      (response: HttpResponse<ConnectorInfo[]>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        (response: HttpResponse<ConnectorInfo[]>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
 
     return subject.asObservable();
   }
 
-  
+
 
   getAllCons(): Observable<ConnectorConfig[]> {
     const subject = new Subject<ConnectorConfig[]>();
@@ -508,17 +508,17 @@ export class ConnectorConfigService {
       }
     )
       .subscribe(
-      (response: HttpResponse<ConnectorConfig[]>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        (response: HttpResponse<ConnectorConfig[]>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
 
     return subject.asObservable();
@@ -542,17 +542,17 @@ export class ConnectorConfigService {
         }
       )
         .subscribe(
-        (response: HttpResponse<ConnectorConfig>) => {
-          if (response.body) {
-            subject.next(response.body);
-          }
-        },
-        (err: HttpErrorResponse) => {
-          // All errors are handled in ErrorInterceptor, no further handling required
-          // Unless any specific action is to be taken on some error
+          (response: HttpResponse<ConnectorConfig>) => {
+            if (response.body) {
+              subject.next(response.body);
+            }
+          },
+          (err: HttpErrorResponse) => {
+            // All errors are handled in ErrorInterceptor, no further handling required
+            // Unless any specific action is to be taken on some error
 
-          subject.error(err);
-        }
+            subject.error(err);
+          }
         );
     } else {
       subject.error('Object is null or invalid');
@@ -578,17 +578,17 @@ export class ConnectorConfigService {
         }
       )
         .subscribe(
-        (response: HttpResponse<ConnectorConfig>) => {
-          if (response.body) {
-            subject.next(response.body);
-          }
-        },
-        (err: HttpErrorResponse) => {
-          // All errors are handled in ErrorInterceptor, no further handling required
-          // Unless any specific action is to be taken on some error
+          (response: HttpResponse<ConnectorConfig>) => {
+            if (response.body) {
+              subject.next(response.body);
+            }
+          },
+          (err: HttpErrorResponse) => {
+            // All errors are handled in ErrorInterceptor, no further handling required
+            // Unless any specific action is to be taken on some error
 
-          subject.error(err);
-        }
+            subject.error(err);
+          }
         );
     } else {
       subject.error('Object is null or invalid');
@@ -608,20 +608,20 @@ export class ConnectorConfigService {
         {
           observe: 'response',
           reportProgress: true,
-          
+
           withCredentials: true
         }
       )
         .subscribe(
-        (response: HttpResponse<any>) => {
-          subject.next(response);
-        },
-        (err: HttpErrorResponse) => {
-          // All errors are handled in ErrorInterceptor, no further handling required
-          // Unless any specific action is to be taken on some error
+          (response: HttpResponse<any>) => {
+            subject.next(response);
+          },
+          (err: HttpErrorResponse) => {
+            // All errors are handled in ErrorInterceptor, no further handling required
+            // Unless any specific action is to be taken on some error
 
-          subject.error(err);
-        }
+            subject.error(err);
+          }
         );
     } else {
       subject.error('Object is null or invalid');
@@ -630,9 +630,9 @@ export class ConnectorConfigService {
     return subject.asObservable();
   }
 
-  getConnectorInfos(type:string): Observable<ConnectorInfo[]> {
+  getConnectorInfos(type: string): Observable<ConnectorInfo[]> {
     const subject = new Subject<ConnectorInfo[]>();
-    
+
     const url = `${environment.server + environment.getallconinfo + type}`;
 
     this.httpClient.get<ConnectorInfo[]>(
@@ -645,25 +645,25 @@ export class ConnectorConfigService {
       }
     )
       .subscribe(
-      (response: HttpResponse<ConnectorInfo[]>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        (response: HttpResponse<ConnectorInfo[]>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
 
     return subject.asObservable();
   }
 
-  getConInfoByType(type:string): Observable<ConnectorInfo> {
+  getConInfoByType(type: string): Observable<ConnectorInfo> {
     const subject = new Subject<ConnectorInfo>();
-    
+
     const url = `${environment.server + environment.getconinfobytype + type}`;
 
     this.httpClient.get<ConnectorInfo>(
@@ -676,17 +676,17 @@ export class ConnectorConfigService {
       }
     )
       .subscribe(
-      (response: HttpResponse<ConnectorInfo>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        (response: HttpResponse<ConnectorInfo>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
 
     return subject.asObservable();
@@ -696,10 +696,154 @@ export class ConnectorConfigService {
 }
 
 
+
+@Injectable()
+export class ConnectorInfoService {
+  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+  constructor(private router: Router, private httpClient: HttpClient) { }
+  getConnecterInfos(): Observable<ConnectorInfo[]> {
+    const subject = new Subject<ConnectorInfo[]>();
+
+    const url = `${environment.server + environment.getallconnectorinfo}`;
+
+    this.httpClient.get<ConnectorInfo[]>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+        (response: HttpResponse<ConnectorInfo[]>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
+
+          subject.error(err);
+        }
+      );
+
+    return subject.asObservable();
+  }
+
+  createConnectorInfo(connectorinfo: ConnectorInfo): Observable<ConnectorInfo> {
+    const subject = new Subject<ConnectorInfo>();
+
+    if (connectorinfo) {
+      connectorinfo._id = null;
+      const url = `${environment.server + environment.saveconnectorinfo}`;
+
+      this.httpClient.post<ConnectorInfo>(
+        url,
+        connectorinfo,
+        {
+          headers: this.httpHeaders,
+          observe: 'response',
+          reportProgress: true,
+          withCredentials: true
+        }
+      )
+        .subscribe(
+          (response: HttpResponse<ConnectorInfo>) => {
+            if (response.body) {
+              subject.next(response.body);
+            }
+          },
+          (err: HttpErrorResponse) => {
+            // All errors are handled in ErrorInterceptor, no further handling required
+            // Unless any specific action is to be taken on some error
+
+            subject.error(err);
+          }
+        );
+    } else {
+      subject.error('Object is null or invalid');
+    }
+
+    return subject.asObservable();
+  }
+
+  updateConnectorInfo(connectorInfo: ConnectorInfo): Observable<ConnectorInfo> {
+    const subject = new Subject<ConnectorInfo>();
+
+    if (connectorInfo) {
+      const url = `${environment.server + environment.saveconnectorinfo}`;
+
+      this.httpClient.put<ConnectorInfo>(
+        url,
+        connectorInfo,
+        {
+          headers: this.httpHeaders,
+          observe: 'response',
+          reportProgress: true,
+          withCredentials: true
+        }
+      )
+        .subscribe(
+          (response: HttpResponse<ConnectorInfo>) => {
+            if (response.body) {
+              subject.next(response.body);
+            }
+          },
+          (err: HttpErrorResponse) => {
+            // All errors are handled in ErrorInterceptor, no further handling required
+            // Unless any specific action is to be taken on some error
+
+            subject.error(err);
+          }
+        );
+    } else {
+      subject.error('Object is null or invalid');
+    }
+
+    return subject.asObservable();
+  }
+
+  deleteConnectorInfo(connectorInfo: ConnectorInfo): Observable<any> {
+    const subject = new Subject<any>();
+
+    if (connectorInfo && connectorInfo._id && connectorInfo._id.length > 0) {
+      const url = `${environment.server + environment.deleteconnectorinfo + connectorInfo._id}`;
+
+      this.httpClient.delete<any>(
+        url,
+        {
+          observe: 'response',
+          reportProgress: true,
+
+          withCredentials: true
+        }
+      )
+        .subscribe(
+          (response: HttpResponse<any>) => {
+            subject.next(response);
+          },
+          (err: HttpErrorResponse) => {
+            // All errors are handled in ErrorInterceptor, no further handling required
+            // Unless any specific action is to be taken on some error
+
+            subject.error(err);
+          }
+        );
+    } else {
+      subject.error('Object is null or invalid');
+    }
+
+    return subject.asObservable();
+  }
+}
+
+
 @Injectable()
 export class AccountService {
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-  
+
   constructor(private router: Router, private httpClient: HttpClient) { }
 
   saveAccount(account: Account): Observable<Account> {
@@ -718,17 +862,17 @@ export class AccountService {
       }
     )
       .subscribe(
-      (response: HttpResponse<Account>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        (response: HttpResponse<Account>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
 
     return subject.asObservable();
@@ -750,17 +894,17 @@ export class AccountService {
       }
     )
       .subscribe(
-      (response: HttpResponse<Account>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        (response: HttpResponse<Account>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
 
     return subject.asObservable();
@@ -781,17 +925,17 @@ export class AccountService {
       }
     )
       .subscribe(
-      (response: HttpResponse<Account>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        (response: HttpResponse<Account>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
 
     return subject.asObservable();
@@ -813,17 +957,17 @@ export class AccountService {
       }
     )
       .subscribe(
-      (response: HttpResponse<Account>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        (response: HttpResponse<Account>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
 
     return subject.asObservable();
@@ -843,27 +987,27 @@ export class AccountService {
       }
     )
       .subscribe(
-      (response: HttpResponse<Account[]>) => {
-        if (response.body) {
-          const accounts: Account[] = response.body;
+        (response: HttpResponse<Account[]>) => {
+          if (response.body) {
+            const accounts: Account[] = response.body;
 
-          // Currenlty service sends array of Account even though it has single object in it.
-          // So we are extracting object out of array in case array size is greater than 0.
-          // TODO: Once service is updated, expect object in api response and remove parsing.
+            // Currenlty service sends array of Account even though it has single object in it.
+            // So we are extracting object out of array in case array size is greater than 0.
+            // TODO: Once service is updated, expect object in api response and remove parsing.
 
-          if (accounts && accounts.length > 0) {
-            subject.next(accounts[0]);
-          } else {
-            subject.next(null);
+            if (accounts && accounts.length > 0) {
+              subject.next(accounts[0]);
+            } else {
+              subject.next(null);
+            }
           }
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
 
     return subject.asObservable();
@@ -883,17 +1027,17 @@ export class AccountService {
       }
     )
       .subscribe(
-      (response: HttpResponse<Account[]>) => {
-        if (response.body) {
-          subject.next(response.body);
-        }
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
+        (response: HttpResponse<Account[]>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
 
-        subject.error(err);
-      }
+          subject.error(err);
+        }
       );
 
     return subject.asObservable();

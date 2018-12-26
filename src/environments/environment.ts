@@ -12,36 +12,36 @@ export const environment = {
 
   // API
   authurl: 'http://108.168.190.82:8080/flow/auth/',
-  
+
   // Services
   saveaccounturl: 'http://108.168.190.82:8080/flow/services/saveaccount',
   fetchaccountbyidurl: 'http://108.168.190.82:8080/flow/services/fetchaccountbyid?query=',
-  publishaccounturl:'http://108.168.190.82:8080/flow/services/publish/',
-  unpublishaccounturl:'http://108.168.190.82:8080/flow/services/unpublish/',
+  publishaccounturl: 'http://108.168.190.82:8080/flow/services/publish/',
+  unpublishaccounturl: 'http://108.168.190.82:8080/flow/services/unpublish/',
 
-  processauditurl:"http://localhost:5000/api/universalsearch/search/flow",
-  
+  processauditurl: "http://localhost:5000/api/universalsearch/search/flow",
+
   // Interfaces
   interfaceService: 'http://108.168.190.82:8080/flow/interfaces',
-  updateClassifierTraining : 'http://108.168.190.82:8080/flow/interfaces/auto_decorate_training',
+  updateClassifierTraining: 'http://108.168.190.82:8080/flow/interfaces/auto_decorate_training',
   updateIntentTraining: 'http://108.168.190.82:8080/flow/interfaces/intent_classification_training',
   updateEntityTraining: 'http://108.168.190.82:8080/flow/interfaces/entity_classification_training',
 
   // Flow
   server: 'http://108.168.190.82:8080/flow/console/',
-  autourl:'https://virtualagent.automatapi.xyz/#/pg/ch/cnv/',
+  autourl: 'https://virtualagent.automatapi.xyz/#/pg/ch/cnv/',
 
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
-  orPayloadMachineType:'state/saveOrPayload/machineType/',
+  orPayloadMachineType: 'state/saveOrPayload/machineType/',
   statebystatusandfolderurl: 'state/pagebystatusandfolder/,', // status: CLOSED, ACTIVE; folder: Group, Personal
-  statebysubstatusandfolderurl:'state/pagebysubstatusandfolder/',
-  saveflaggedstate:'state/saveFlaggedState',
-  savearchivestate:'state/archive',
-  gettatrecords:'state/fetchtat',
-  getallstats:'state/fetchstatestatus',
-  getpersonalstats:'state/getstatestatusbyuser',
-  getstateinstance:'state/fetchstateinstance',
+  statebysubstatusandfolderurl: 'state/pagebysubstatusandfolder/',
+  saveflaggedstate: 'state/saveFlaggedState',
+  savearchivestate: 'state/archive',
+  gettatrecords: 'state/fetchtat',
+  getallstats: 'state/fetchstatestatus',
+  getpersonalstats: 'state/getstatestatusbyuser',
+  getstateinstance: 'state/fetchstateinstance',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
@@ -49,41 +49,45 @@ export const environment = {
   messageurl: 'data/message/byuser/Admin',
   stateflowimageurl: 'statemachine/stateflow/',
   updatestatemachineurl: 'statemachine/updateflow/withState',
-  alocateuserurl:'statemachine/allocateto',
+  alocateuserurl: 'statemachine/allocateto',
   graphobjectbyflowinstanceid: 'statemachine/graphobject',
   autosummary: 'dashboard/CONVERSATION_SUMMARY',
   graphurl: 'graph/',
   usergraphurl: 'usergraph/saveUserGraph/',
-  getusergraphurl:'usergraph/',
+  getusergraphurl: 'usergraph/',
   graphbystatusurl: 'graph/findbystatus/',
   entryactionurl: 'graph/actions',
   timeruniturl: 'graph/timerunit',
   autodashboardurl: 'dashboard',
   userurl: 'user/',
-  
+
 
   registerurl: 'user/createUser',
-  forgotpassword:'user/forgotPassword',
-  savehierarchy:'user/hierarchy',
-  getuserhierarchy:'user/getUserHierarchy/',
-  userchildren:'user/userChildren',
+  forgotpassword: 'user/forgotPassword',
+  savehierarchy: 'user/hierarchy',
+  getuserhierarchy: 'user/getUserHierarchy/',
+  userchildren: 'user/userChildren',
 
   createcompanyadminurl: 'user/createcompanyadmin',
   updateuserurl: 'user/update',
   authoritiesurl: 'user/roles',
-  userlisturl:'user/getUserList/',
+  userlisturl: 'user/getUserList/',
   roleroutemapurl: 'master/roleroutemap',
   rolesurl: 'master/roles',
   routesurl: 'master/routes',
   apiconfigurl: 'apiConfig/',
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
-  connectorinfo:'connectors/',
-  getallconconfig:'connectors/getAll/',
-  deleteconconfig:'connectors/delete/',
-  saveconconfig:'connectors/save/',
-  getallconinfo:'connectors/getConInfo/',
-  getconinfobytype:'connectors/getConInfoByType/',
+  getallconnectorinfo: 'connectorInfo/',
+  saveconnectorinfo: 'connectorInfo/save/',
+  deleteconnectorinfo: 'connectorInfo/delete/',
+
+  connectorinfo: 'connectors/',
+  getallconconfig: 'connectors/getAll/',
+  deleteconconfig: 'connectors/delete/',
+  saveconconfig: 'connectors/save/',
+  getallconinfo: 'connectors/getConInfo/',
+  getconinfobytype: 'connectors/getConInfoByType/',
 
   // auto
   autoServer: 'http://108.168.190.82:8080/flow/auto/',
@@ -113,7 +117,7 @@ export const environment = {
   validationtypekeyslookupurl: 'load/validations',
 
 
-  flowsearch:'/api/search/flow',
+  flowsearch: '/api/search/flow',
 
   // Analytics
   reportservice: 'http://localhost:8080/flow/report',
@@ -124,7 +128,7 @@ export const environment = {
   getanalyticsReportEmailTemplates: "/reports/analyticsreport/emailtemplate",
   // Schedule
   scheduleTaskConfiguration: "api/schedule/",
-  
+
   // file upload download service
   fileUploadUrl: '/api/uploadData',
   fileDownloadUrl: '/api/downloadData',
@@ -139,19 +143,19 @@ export const environment = {
 
   //Dashboard
   dashboardServer: 'http://108.168.190.82:8080/flow/dashboard/',
-  dashboardsummary:'auto/dashboard_summary',
-  episodetimeline:'auto/episode_timeline',
-  intentcount:'auto/intent_count',
-  entitycount:'auto/entity_count',
-  sentimentcount:'auto/sentiment_count',
-  goal_count:'auto/goal_count',
-  episodemessages:'auto/episode_message',
-  flowdashboardsummary:'flow/dashboard_summary',
-  flowtimeline:'flow/flow_timeline',
-  transactionvalues:'flow/transaction_values',
-  avgstatetime:'flow/avgstate_time',
-  resourcevalues:'flow/resources_values',
-  statetransactionvalue:'flow/state_transaction_value',
+  dashboardsummary: 'auto/dashboard_summary',
+  episodetimeline: 'auto/episode_timeline',
+  intentcount: 'auto/intent_count',
+  entitycount: 'auto/entity_count',
+  sentimentcount: 'auto/sentiment_count',
+  goal_count: 'auto/goal_count',
+  episodemessages: 'auto/episode_message',
+  flowdashboardsummary: 'flow/dashboard_summary',
+  flowtimeline: 'flow/flow_timeline',
+  transactionvalues: 'flow/transaction_values',
+  avgstatetime: 'flow/avgstate_time',
+  resourcevalues: 'flow/resources_values',
+  statetransactionvalue: 'flow/state_transaction_value',
 
   //Dashboard from interfaces
   dashboardinterface: 'http://108.168.190.82:8080/flow/interfaces/dashboard',

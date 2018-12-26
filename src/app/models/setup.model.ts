@@ -21,11 +21,11 @@ export class ApiConfig extends BaseModel {
   headers: any;
   body: any;
   responseList: ApiResponse[];
-  taskConConfigApi:boolean;
+  taskConConfigApi: boolean;
 
   constructor() {
     super();
-    
+
     this.name = '';
     this.url = '';
     this.method = '';
@@ -40,15 +40,15 @@ export class ConnectorInfo extends BaseModel {
   type: string;
   metaData: any;
   displayName: string;
-  taskType:String;
-  referenceType:string;
-  payload:any;
+  taskType: String;
+  referenceType: string;
+  payload: any;
 
-  
+
   constructor() {
     super();
     this.type = '';
-    this.metaData = {};
+    this.metaData = null;
     this.displayName = "";
     this.taskType = "";
     this.referenceType = "";
@@ -56,11 +56,25 @@ export class ConnectorInfo extends BaseModel {
   }
 }
 
-export class TaskObject{
-  responseList:ApiResponse[];
-  body:any;
+export class MetaDataProperty {
+  name: string;
+  mandatory: boolean;
+  type: string;
+  validationExpr: string;
 
-  constructor(){
+  constructor() {
+    this.name = "";
+    this.type = "";
+    this.mandatory = false;
+    this.validationExpr = "";
+  }
+}
+
+export class TaskObject {
+  responseList: ApiResponse[];
+  body: any;
+
+  constructor() {
     this.responseList = [];
     this.body = {};
   }
@@ -69,17 +83,17 @@ export class TaskObject{
 export class ConnectorConfig extends BaseModel {
   configName: string;
   configType: string;
-  connectorInfoRef:string;
-  configMap:any;
-  connectorConfigRef:string;
-  displayName:string;
-  functionInstanceName:string;
-  taskObject:TaskObject;
-  taskConfig:boolean;
-  
+  connectorInfoRef: string;
+  configMap: any;
+  connectorConfigRef: string;
+  displayName: string;
+  functionInstanceName: string;
+  taskObject: TaskObject;
+  taskConfig: boolean;
+
   constructor() {
     super();
-    
+
     this.configName = '';
     this.configType = '';
     this.configMap = {};
@@ -88,7 +102,7 @@ export class ConnectorConfig extends BaseModel {
     this.functionInstanceName = "";
     this.taskObject = new TaskObject();
     this.taskConfig = false;
-    
+
   }
 }
 
@@ -118,7 +132,7 @@ export class TempConnectorConfig extends BaseModel {
     this.configMap = [];
     this.taskObjectBody = [];
     this.taskObjectResponseList = [];
-    
+
   }
 }
 

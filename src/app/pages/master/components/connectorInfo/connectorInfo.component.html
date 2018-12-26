@@ -1,0 +1,61 @@
+<div class="widgets">
+  <div class="row">
+    <ba-card cardTitle="Connector Info" baCardClass="with-scroll" class="data-table-container">
+      <div class="panel panel-default">
+        <form class="row form-inline">
+          <div class="form-group col-sm-10">
+            <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Query" />
+          </div>
+          <div class="form-group col-sm-2">
+            <button type="button" class="btn btn-primary" (click)="createConnecterInfo()">
+              Create Connector Info
+            </button>
+          </div>
+        </form>
+        <br>
+
+        <table class="table table-striped" [mfData]="connectorInfoList | universalDataFilter : filterQuery" #mf="mfDataTable"
+          [mfRowsOnPage]="10" mfSortBy="name">
+          <thead>
+            <tr>
+              <th>
+                <mfDefaultSorter by="name">Display Name</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="type">Type</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="action">Reference Type</mfDefaultSorter>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of mf.data">
+              <td>{{s.displayName}}</td>
+              <td>{{s.type}}</td>
+              <td>{{s.referenceType}}</td>
+              <td>
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-primary" title="Edit" (click)="onSelect(s)">
+                    <i class="ion-android-create"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger" title="Delete" (click)="delete(s)" data-backdrop="static"
+                    data-keyboard="false">
+                    <i class="ion-trash-a"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="100%">
+                <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </ba-card>
+  </div>
+</div>
