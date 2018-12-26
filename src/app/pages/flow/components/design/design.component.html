@@ -881,7 +881,7 @@
                                              <a data-toggle="collapse" [attr.data-parent]="'#expAccordion' + eventIndex"
                                                 [href]="'#event' + eventIndex + 'expCollapse' + expIndex" aria-expanded="true"
                                                 [attr.aria-controls]="'event' + eventIndex + 'expCollapse' + expIndex">
-                                                {{expression.value}}
+                                                {{expression.value != null? expression.value : "Expression"}}
                                              </a>
                                           </h5>
                                        </div>
@@ -891,7 +891,7 @@
                                              <a class="collapsed" data-toggle="collapse" [attr.data-parent]="'#expAccordion' + eventIndex"
                                                 [href]="'#event' + eventIndex + 'expCollapse' + expIndex" aria-expanded="false"
                                                 [attr.aria-controls]="'event' + eventIndex + 'expCollapse' + expIndex">
-                                                {{expression.value}}
+                                                {{expression.value != null? expression.value : "Expression"}}
                                              </a>
                                           </h5>
                                        </div>
