@@ -64,7 +64,7 @@
                 <input class="form-control" [(ngModel)]="intentFilterQuery" name="intentFilterQuery" placeholder="Filter Query" />
               </div>
               <div class="form-group col-sm-2">
-                <button type="button" class="btn btn-outline-primary" (click)="onIntentSelect()" data-toggle="modal"
+                <button type="button" class="btn btn-primary" (click)="onIntentSelect()" data-toggle="modal"
                   data-target="#intentModal">
                   Add Intent
                 </button>
@@ -120,7 +120,7 @@
                 <input class="form-control" [(ngModel)]="entityFilterQuery" name="entityFilterQuery" placeholder="Filter Query" />
               </div>
               <div class="form-group col-sm-2">
-                <button type="button" class="btn btn-outline-primary" (click)="onEntitySelect()" data-toggle="modal"
+                <button type="button" class="btn btn-primary" (click)="onEntitySelect()" data-toggle="modal"
                   data-target="#entityModal">
                   Add Entity
                 </button>
@@ -172,7 +172,7 @@
                 <input class="form-control" [(ngModel)]="goalFilterQuery" name="goalFilterQuery" placeholder="Filter Query" />
               </div>
               <div class="form-group col-sm-2">
-                <button type="button" class="btn btn-outline-primary" (click)="onGoalSelect()" data-toggle="modal"
+                <button type="button" class="btn btn-primary" (click)="onGoalSelect()" data-toggle="modal"
                   data-target="#goalModal">
                   Add Goal
                 </button>
@@ -224,7 +224,7 @@
                 <input class="form-control" [(ngModel)]="responseFilterQuery" name="responseFilterQuery" placeholder="Filter Query" />
               </div>
               <div class="form-group col-sm-2">
-                <button type="button" class="btn btn-outline-primary" (click)="onResponseSelect()" data-toggle="modal"
+                <button type="button" class="btn btn-primary" (click)="onResponseSelect()" data-toggle="modal"
                   data-target="#responseModal">
                   Add Response
                 </button>
@@ -323,7 +323,7 @@
 
       <form>
         <div class="form-group">
-          <button type="button" class="btn btn-outline-primary" (click)="createDomain()" data-toggle="modal"
+          <button type="button" class="btn btn-primary" (click)="createDomain()" data-toggle="modal"
             data-target="#domainUpdateModal">
             {{domainCreateMode ? 'Create Domain' : 'Update Domain'}}
           </button>
@@ -379,9 +379,9 @@
 
       <!-- Modal Footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">Close</button>
-        <button *ngIf="!createMode" type="submit" class="btn btn-outline-danger" data-dismiss="modal" (click)="removeIntent()">Remove</button>
-        <button type="submit" class="btn btn-outline-primary" data-dismiss="modal" (click)="addIntent()">{{createMode ?
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeIntent()">Remove</button>
+        <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="addIntent()">{{createMode ?
           'Create' : 'Update'}}</button>
       </div>
     </div>
@@ -430,9 +430,9 @@
 
       <!-- Modal Footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">Close</button>
-        <button *ngIf="!createMode" type="submit" class="btn btn-outline-danger" data-dismiss="modal" (click)="removeEntity()">Remove</button>
-        <button type="submit" class="btn btn-outline-primary" data-dismiss="modal" (click)="addEntity()">{{createMode ?
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeEntity()">Remove</button>
+        <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="addEntity()">{{createMode ?
           'Create' : 'Update'}}</button>
       </div>
     </div>
@@ -609,7 +609,7 @@
                         placeholder="Dependency Expression" [(ngModel)]="goalStep.dependencyExpression" name="dependencyExpression" />
                     </div>
                     <div class="form-group">
-                      <button type="button" class="btn btn-outline-danger" (click)="deleteGoalStep(goalStep)">
+                      <button type="button" class="btn btn-danger" (click)="deleteGoalStep(goalStep)">
                         Remove Goal Response
                       </button>
                     </div>
@@ -745,7 +745,7 @@
                                                 <th>URL</th>
                                                 <th>Options</th>
                                                 <th>
-                                                  <button type="button" class="btn btn-outline-primary" (click)="onAddResponseOption(gsResponse)">
+                                                  <button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)">
                                                     <i class="ion-plus-round"></i>
                                                   </button>
                                                 </th>
@@ -778,7 +778,7 @@
                                                         <th>Language</th>
                                                         <th>Agent ID</th>
                                                         <th>
-                                                          <button type="button" class="btn btn-outline-primary" (click)="onAddData(option)">
+                                                          <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                             <i class="ion-plus-round"></i>
                                                           </button>
                                                         </th>
@@ -807,7 +807,7 @@
                                                             [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                         </td>
                                                         <td>
-                                                          <button type="button" class="btn btn-outline-danger" (click)="delete(option.data,row)">
+                                                          <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
                                                             <i class="ion-ios-trash"></i>
                                                           </button>
                                                         </td>
@@ -848,7 +848,7 @@
 
                                                 </td>
                                                 <td>
-                                                  <button type="button" class="btn btn-outline-danger" (click)="delete(gsResponse.options, option)">
+                                                  <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                     <i class="ion-ios-trash"></i>
                                                   </button>
                                                 </td>
@@ -856,7 +856,7 @@
                                             </tbody>
                                           </table>
                                         </div>
-                                        <button type="button" class="btn btn-outline-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                        <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                           Remove Response
                                         </button>
                                       </form>
@@ -944,7 +944,7 @@
                                                   <th>URL</th>
                                                   <th>Options</th>
                                                   <th>
-                                                    <button type="button" class="btn btn-outline-primary" (click)="onAddResponseOption(gsResponse)">
+                                                    <button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)">
                                                       <i class="ion-plus-round"></i>
                                                     </button>
                                                   </th>
@@ -977,7 +977,7 @@
                                                           <th>Language</th>
                                                           <th>Agent ID</th>
                                                           <th>
-                                                            <button type="button" class="btn btn-outline-primary"
+                                                            <button type="button" class="btn btn-primary"
                                                               (click)="onAddData(option)">
                                                               <i class="ion-plus-round"></i>
                                                             </button>
@@ -1007,7 +1007,7 @@
                                                               [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                           </td>
                                                           <td>
-                                                            <button type="button" class="btn btn-outline-danger"
+                                                            <button type="button" class="btn btn-danger"
                                                               (click)="delete(option.data,row)">
                                                               <i class="ion-ios-trash"></i>
                                                             </button>
@@ -1049,7 +1049,7 @@
 
                                                   </td>
                                                   <td>
-                                                    <button type="button" class="btn btn-outline-danger" (click)="delete(gsResponse.options, option)">
+                                                    <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                       <i class="ion-ios-trash"></i>
                                                     </button>
                                                   </td>
@@ -1057,7 +1057,7 @@
                                               </tbody>
                                             </table>
                                           </div>
-                                          <button type="button" class="btn btn-outline-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                          <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                             Remove Response
                                           </button>
                                         </form>
@@ -1069,7 +1069,7 @@
                             </div>
 
                             <form>
-                              <button type="button" class="btn btn-outline-success" (click)="addNewGoalStepResponse(goalStep, language)">Add
+                              <button type="button" class="btn btn-success" (click)="addNewGoalStepResponse(goalStep, language)">Add
                                 Response</button>
                             </form>
                           </div>
@@ -1183,7 +1183,7 @@
                                                 <th>URL</th>
                                                 <th>Options</th>
                                                 <th>
-                                                  <button type="button" class="btn btn-outline-primary" (click)="onAddResponseOption(gsResponse)">
+                                                  <button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)">
                                                     <i class="ion-plus-round"></i>
                                                   </button>
                                                 </th>
@@ -1216,7 +1216,7 @@
                                                         <th>Language</th>
                                                         <th>Agent ID</th>
                                                         <th>
-                                                          <button type="button" class="btn btn-outline-primary" (click)="onAddData(option)">
+                                                          <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                             <i class="ion-plus-round"></i>
                                                           </button>
                                                         </th>
@@ -1245,7 +1245,7 @@
                                                             [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                         </td>
                                                         <td>
-                                                          <button type="button" class="btn btn-outline-danger" (click)="delete(option.data,row)">
+                                                          <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
                                                             <i class="ion-ios-trash"></i>
                                                           </button>
                                                         </td>
@@ -1286,7 +1286,7 @@
 
                                                 </td>
                                                 <td>
-                                                  <button type="button" class="btn btn-outline-danger" (click)="delete(gsResponse.options, option)">
+                                                  <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                     <i class="ion-ios-trash"></i>
                                                   </button>
                                                 </td>
@@ -1294,7 +1294,7 @@
                                             </tbody>
                                           </table>
                                         </div>
-                                        <button type="button" class="btn btn-outline-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                        <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                           Remove Response
                                         </button>
                                       </form>
@@ -1382,7 +1382,7 @@
                                                   <th>URL</th>
                                                   <th>Options</th>
                                                   <th>
-                                                    <button type="button" class="btn btn-outline-primary" (click)="onAddResponseOption(gsResponse)">
+                                                    <button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)">
                                                       <i class="ion-plus-round"></i>
                                                     </button>
                                                   </th>
@@ -1415,7 +1415,7 @@
                                                           <th>Language</th>
                                                           <th>Agent ID</th>
                                                           <th>
-                                                            <button type="button" class="btn btn-outline-primary"
+                                                            <button type="button" class="btn btn-primary"
                                                               (click)="onAddData(option)">
                                                               <i class="ion-plus-round"></i>
                                                             </button>
@@ -1445,7 +1445,7 @@
                                                               [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                           </td>
                                                           <td>
-                                                            <button type="button" class="btn btn-outline-danger"
+                                                            <button type="button" class="btn btn-danger"
                                                               (click)="delete(option.data,row)">
                                                               <i class="ion-ios-trash"></i>
                                                             </button>
@@ -1487,7 +1487,7 @@
 
                                                   </td>
                                                   <td>
-                                                    <button type="button" class="btn btn-outline-danger" (click)="delete(gsResponse.options, option)">
+                                                    <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                       <i class="ion-ios-trash"></i>
                                                     </button>
                                                   </td>
@@ -1495,7 +1495,7 @@
                                               </tbody>
                                             </table>
                                           </div>
-                                          <button type="button" class="btn btn-outline-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                          <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                             Remove Response
                                           </button>
                                         </form>
@@ -1507,7 +1507,7 @@
                             </div>
 
                             <form>
-                              <button type="button" class="btn btn-outline-success" (click)="addNewGoalStepResponse(goalStep, language)">Add
+                              <button type="button" class="btn btn-success" (click)="addNewGoalStepResponse(goalStep, language)">Add
                                 Response</button>
                             </form>
                           </div>
@@ -1587,7 +1587,7 @@
                         placeholder="Dependency Expression" [(ngModel)]="goalStep.dependencyExpression" name="dependencyExpression" />
                     </div>
                     <div class="form-group">
-                      <button type="button" class="btn btn-outline-danger" (click)="deleteGoalStep(goalStep)">
+                      <button type="button" class="btn btn-danger" (click)="deleteGoalStep(goalStep)">
                         Remove Goal Response
                       </button>
                     </div>
@@ -1723,7 +1723,7 @@
                                                 <th>URL</th>
                                                 <th>Options</th>
                                                 <th>
-                                                  <button type="button" class="btn btn-outline-primary" (click)="onAddResponseOption(gsResponse)">
+                                                  <button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)">
                                                     <i class="ion-plus-round"></i>
                                                   </button>
                                                 </th>
@@ -1756,7 +1756,7 @@
                                                         <th>Language</th>
                                                         <th>Agent ID</th>
                                                         <th>
-                                                          <button type="button" class="btn btn-outline-primary" (click)="onAddData(option)">
+                                                          <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                             <i class="ion-plus-round"></i>
                                                           </button>
                                                         </th>
@@ -1785,7 +1785,7 @@
                                                             [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                         </td>
                                                         <td>
-                                                          <button type="button" class="btn btn-outline-danger" (click)="delete(option.data,row)">
+                                                          <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
                                                             <i class="ion-ios-trash"></i>
                                                           </button>
                                                         </td>
@@ -1826,7 +1826,7 @@
 
                                                 </td>
                                                 <td>
-                                                  <button type="button" class="btn btn-outline-danger" (click)="delete(gsResponse.options, option)">
+                                                  <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                     <i class="ion-ios-trash"></i>
                                                   </button>
                                                 </td>
@@ -1834,7 +1834,7 @@
                                             </tbody>
                                           </table>
                                         </div>
-                                        <button type="button" class="btn btn-outline-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                        <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                           Remove Response
                                         </button>
                                       </form>
@@ -1922,7 +1922,7 @@
                                                   <th>URL</th>
                                                   <th>Options</th>
                                                   <th>
-                                                    <button type="button" class="btn btn-outline-primary" (click)="onAddResponseOption(gsResponse)">
+                                                    <button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)">
                                                       <i class="ion-plus-round"></i>
                                                     </button>
                                                   </th>
@@ -1955,7 +1955,7 @@
                                                           <th>Language</th>
                                                           <th>Agent ID</th>
                                                           <th>
-                                                            <button type="button" class="btn btn-outline-primary"
+                                                            <button type="button" class="btn btn-primary"
                                                               (click)="onAddData(option)">
                                                               <i class="ion-plus-round"></i>
                                                             </button>
@@ -1985,7 +1985,7 @@
                                                               [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                           </td>
                                                           <td>
-                                                            <button type="button" class="btn btn-outline-danger"
+                                                            <button type="button" class="btn btn-danger"
                                                               (click)="delete(option.data,row)">
                                                               <i class="ion-ios-trash"></i>
                                                             </button>
@@ -2027,7 +2027,7 @@
 
                                                   </td>
                                                   <td>
-                                                    <button type="button" class="btn btn-outline-danger" (click)="delete(gsResponse.options, option)">
+                                                    <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                       <i class="ion-ios-trash"></i>
                                                     </button>
                                                   </td>
@@ -2035,7 +2035,7 @@
                                               </tbody>
                                             </table>
                                           </div>
-                                          <button type="button" class="btn btn-outline-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                          <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                             Remove Response
                                           </button>
                                         </form>
@@ -2047,7 +2047,7 @@
                             </div>
 
                             <form>
-                              <button type="button" class="btn btn-outline-success" (click)="addNewGoalStepResponse(goalStep, language)">Add
+                              <button type="button" class="btn btn-success" (click)="addNewGoalStepResponse(goalStep, language)">Add
                                 Response</button>
                             </form>
                           </div>
@@ -2161,7 +2161,7 @@
                                                 <th>URL</th>
                                                 <th>Options</th>
                                                 <th>
-                                                  <button type="button" class="btn btn-outline-primary" (click)="onAddResponseOption(gsResponse)">
+                                                  <button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)">
                                                     <i class="ion-plus-round"></i>
                                                   </button>
                                                 </th>
@@ -2194,7 +2194,7 @@
                                                         <th>Language</th>
                                                         <th>Agent ID</th>
                                                         <th>
-                                                          <button type="button" class="btn btn-outline-primary" (click)="onAddData(option)">
+                                                          <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                             <i class="ion-plus-round"></i>
                                                           </button>
                                                         </th>
@@ -2223,7 +2223,7 @@
                                                             [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                         </td>
                                                         <td>
-                                                          <button type="button" class="btn btn-outline-danger" (click)="delete(option.data,row)">
+                                                          <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
                                                             <i class="ion-ios-trash"></i>
                                                           </button>
                                                         </td>
@@ -2264,7 +2264,7 @@
 
                                                 </td>
                                                 <td>
-                                                  <button type="button" class="btn btn-outline-danger" (click)="delete(gsResponse.options, option)">
+                                                  <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                     <i class="ion-ios-trash"></i>
                                                   </button>
                                                 </td>
@@ -2272,7 +2272,7 @@
                                             </tbody>
                                           </table>
                                         </div>
-                                        <button type="button" class="btn btn-outline-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                        <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                           Remove Response
                                         </button>
                                       </form>
@@ -2360,7 +2360,7 @@
                                                   <th>URL</th>
                                                   <th>Options</th>
                                                   <th>
-                                                    <button type="button" class="btn btn-outline-primary" (click)="onAddResponseOption(gsResponse)">
+                                                    <button type="button" class="btn btn-primary" (click)="onAddResponseOption(gsResponse)">
                                                       <i class="ion-plus-round"></i>
                                                     </button>
                                                   </th>
@@ -2393,7 +2393,7 @@
                                                           <th>Language</th>
                                                           <th>Agent ID</th>
                                                           <th>
-                                                            <button type="button" class="btn btn-outline-primary"
+                                                            <button type="button" class="btn btn-primary"
                                                               (click)="onAddData(option)">
                                                               <i class="ion-plus-round"></i>
                                                             </button>
@@ -2423,7 +2423,7 @@
                                                               [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                           </td>
                                                           <td>
-                                                            <button type="button" class="btn btn-outline-danger"
+                                                            <button type="button" class="btn btn-danger"
                                                               (click)="delete(option.data,row)">
                                                               <i class="ion-ios-trash"></i>
                                                             </button>
@@ -2465,7 +2465,7 @@
 
                                                   </td>
                                                   <td>
-                                                    <button type="button" class="btn btn-outline-danger" (click)="delete(gsResponse.options, option)">
+                                                    <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                       <i class="ion-ios-trash"></i>
                                                     </button>
                                                   </td>
@@ -2473,7 +2473,7 @@
                                               </tbody>
                                             </table>
                                           </div>
-                                          <button type="button" class="btn btn-outline-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
+                                          <button type="button" class="btn btn-danger" (click)="deleteGoalStepResponse(goalStep, gsResponse)">
                                             Remove Response
                                           </button>
                                         </form>
@@ -2485,7 +2485,7 @@
                             </div>
 
                             <form>
-                              <button type="button" class="btn btn-outline-success" (click)="addNewGoalStepResponse(goalStep, language)">Add
+                              <button type="button" class="btn btn-success" (click)="addNewGoalStepResponse(goalStep, language)">Add
                                 Response</button>
                             </form>
                           </div>
@@ -2502,9 +2502,9 @@
 
       <!-- Modal Footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-success" (click)="addNewGoalStep()">Add Goal Response</button>
-        <button *ngIf="!createMode" type="submit" class="btn btn-outline-danger" data-dismiss="modal" (click)="removeGoal()">Remove</button>
-        <button type="submit" class="btn btn-outline-primary" (click)="addGoal()">{{createMode ? 'Create' : 'Update'}}</button>
+        <button type="button" class="btn btn-success" (click)="addNewGoalStep()">Add Goal Response</button>
+        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeGoal()">Remove</button>
+        <button type="submit" class="btn btn-primary" (click)="addGoal()">{{createMode ? 'Create' : 'Update'}}</button>
       </div>
     </div>
   </div>
@@ -2601,7 +2601,7 @@
           </div>
           <div class="form-group">
             <label>File Upload</label>
-            <button type="button" class="btn btn-outline-primary pull-right" (click)="onAddFileUploadResponse()">
+            <button type="button" class="btn btn-primary pull-right" (click)="onAddFileUploadResponse()">
               <i class="ion-plus-round"></i>
             </button>
           </div>
@@ -2640,7 +2640,7 @@
                   <th>URL</th>
                   <th>Options</th>
                   <th>
-                    <button type="button" class="btn btn-outline-primary" (click)="onAddResponseOption(tempResponse)">
+                    <button type="button" class="btn btn-primary" (click)="onAddResponseOption(tempResponse)">
                       <i class="ion-plus-round"></i>
                     </button>
                   </th>
@@ -2671,7 +2671,7 @@
                           <th>Language</th>
                           <th>Agent ID</th>
                           <th>
-                            <button type="button" class="btn btn-outline-primary" (click)="onAddData(option)">
+                            <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                               <i class="ion-plus-round"></i>
                             </button>
                           </th>
@@ -2697,7 +2697,7 @@
                               (input)="row.agentId = $event.target.value">
                           </td>
                           <td>
-                            <button type="button" class="btn btn-outline-danger" (click)="delete(option.data,row)">
+                            <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
                               <i class="ion-ios-trash"></i>
                             </button>
                           </td>
@@ -2750,9 +2750,9 @@
 
       <!-- Modal Footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">Close</button>
-        <button *ngIf="!createMode" type="submit" class="btn btn-outline-danger" data-dismiss="modal" (click)="removeResponse()">Remove</button>
-        <button type="submit" class="btn btn-outline-primary" (click)="addResponse()">{{createMode ? 'Create' :
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeResponse()">Remove</button>
+        <button type="submit" class="btn btn-primary" (click)="addResponse()">{{createMode ? 'Create' :
           'Update'}}</button>
       </div>
     </div>
@@ -2815,7 +2815,7 @@
                   <th>Input type</th>
                   <th>Options</th>
                   <th>
-                    <button type="button" class="btn btn-outline-primary" (click)="onAddCardActionOption(tempCard)">
+                    <button type="button" class="btn btn-primary" (click)="onAddCardActionOption(tempCard)">
                       <i class="ion-plus-round"></i>
                     </button>
                   </th>
@@ -2842,7 +2842,7 @@
                           <th>URL</th>
                           <th *ngIf="option.type == 'AGENT_SWITCH'">Agent ID</th>
                           <th>
-                            <button type="button" class="btn btn-outline-primary" (click)="onAddCardActinableData(option)">
+                            <button type="button" class="btn btn-primary" (click)="onAddCardActinableData(option)">
                               <i class="ion-plus-round"></i>
                             </button>
                           </th>
@@ -2864,7 +2864,7 @@
                               (input)="row.agentId = $event.target.value">
                           </td>
                           <td>
-                            <button type="button" class="btn btn-outline-danger" (click)="delete(option.data,row)">
+                            <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
                               <i class="ion-ios-trash"></i>
                             </button>
                           </td>
@@ -2873,7 +2873,7 @@
                     </table>
                   </td>
                   <td>
-                    <button type="button" class="btn btn-outline-danger" title="delete" (click)="delete(tempCard.actionable, option)">
+                    <button type="button" class="btn btn-danger" title="delete" (click)="delete(tempCard.actionable, option)">
                       <i class="ion-ios-trash"></i>
                     </button>
                   </td>
@@ -2909,9 +2909,9 @@
 
       <!-- Modal Footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">Close</button>
-        <button *ngIf="!createMode" type="submit" class="btn btn-outline-danger" data-dismiss="modal" (click)="removeCard()">Remove</button>
-        <button type="submit" class="btn btn-outline-primary" (click)="addCard()">{{createMode ? 'Create' : 'Update'}}</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeCard()">Remove</button>
+        <button type="submit" class="btn btn-primary" (click)="addCard()">{{createMode ? 'Create' : 'Update'}}</button>
       </div>
     </div>
   </div>
@@ -2936,7 +2936,7 @@
 
       <!-- Modal Footer -->
       <div class="modal-footer" id="modal_footer" *ngIf="domainSucess">
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">Dismiss</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
       </div>
     </div>
   </div>

@@ -19,9 +19,9 @@
   </ba-card>
 
   <ba-card *ngIf="selectedEpisode" class="col-md-6 col-sm-12" cardTitle="Episode Details">
-    <button *ngIf="!bargedIntoSelectedEpisode()" type="button" class="btn btn-outline-primary" [disabled]="fetchingEpisodeDetails || hasUserAlreadyBargedIn()"
+    <button *ngIf="!bargedIntoSelectedEpisode()" type="button" class="btn btn-primary" [disabled]="fetchingEpisodeDetails || hasUserAlreadyBargedIn()"
       (click)="bargeIn()">Manual Override</button>
-    <button *ngIf="bargedIntoSelectedEpisode()" type="button" class="btn btn-outline-danger" [disabled]="fetchingEpisodeDetails || !hasUserAlreadyBargedIn()"
+    <button *ngIf="bargedIntoSelectedEpisode()" type="button" class="btn btn-danger" [disabled]="fetchingEpisodeDetails || !hasUserAlreadyBargedIn()"
       (click)="bargeOut()">Disengage</button>
     <form [attr.disabled]="fetchingEpisodeDetails" style="height: 400px; overflow:scroll">
       <div *ngIf="selectedEpisode && selectedEpisode.statusCd" class="form-group">
@@ -99,7 +99,7 @@
           [(ngModel)]="agentMessage" name="agentMessage" (keyup.enter)="sendAgentMessage()" dir="auto" />
       </div>
       <div class="form-group col-sm-2">
-        <button [disabled]="fetchingEpisodeChat" type="button" class="btn btn-outline-primary" (click)="sendAgentMessage()">
+        <button [disabled]="fetchingEpisodeChat" type="button" class="btn btn-primary" (click)="sendAgentMessage()">
           <i class="ion ion-android-send"></i>
         </button>
       </div>

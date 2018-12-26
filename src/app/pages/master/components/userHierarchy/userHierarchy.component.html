@@ -1,19 +1,17 @@
 <div>
   <div class="col-md-12 col-sm-12 col-xs-12">
-    <button type="button" id="#discardHierarchy" class="btn btn-outline-default btn-with-icon" style="margin-right: 5px"
+    <button type="button" id="#discardHierarchy" class="btn btn-danger btn-with-icon" style="margin-right: 5px"
       data-toggle="modal" data-target="#discardWarningModal"><i class="ion-ios-refresh"></i>Discard</button>
-    <button type="button" id="#saveHierarchy" class="btn btn-outline-default btn-with-icon" style="margin-right: 5px"
-      (click)="saveOnServer()">
+    <button type="button" id="#saveHierarchy" class="btn btn-success btn-with-icon" style="margin-right: 5px" (click)="saveOnServer()">
       <i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
-    <button type="button" class="btn btn-outline-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
+    <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
       <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>
-    <button type="button" class="btn btn-outline-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
+    <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
       <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>
-    <button type="button" class="btn btn-outline-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
+    <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
       <i class="ion-arrow-expand"></i>Zoom Actual</button>
-    <button type="button" id="#rootuser" class="btn btn-outline-default btn-with-icon" style="margin-right: 5px"
-      data-toggle="modal" data-target="#rootUserModal" *ngIf="!readOnly"><i class="fa fa-exclamation-circle"
-        aria-hidden="true"></i>Add
+    <button type="button" id="#rootuser" class="btn btn-primary btn-with-icon" style="margin-right: 5px" data-toggle="modal"
+      data-target="#rootUserModal" *ngIf="!readOnly"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>Add
       Root</button>
   </div>
   <br>

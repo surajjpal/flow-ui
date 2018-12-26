@@ -39,7 +39,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Algorithms </label>
-                                <button type="button" class="btn btn-outline-primary pull-right" (click)="onAlgorithmAdd()"
+                                <button type="button" class="btn btn-primary pull-right" (click)="onAlgorithmAdd()"
                                     data-toggle="modal" data-target="#algorithmModal">
                                     Add Algorithms <i class="ion-plus-round"></i>
                                 </button>
@@ -117,10 +117,10 @@
                                     <td>{{ trainer.inputLabels }}</td>
                                     <td>{{ trainer.outputLabels }}</td>
                                     <td *ngIf="trainer.status != 'ACTIVE'">
-                                        <button type="submit" class="btn btn-outline-success" (click)="activateTriner(trainer)">Activate</button>
+                                        <button type="submit" class="btn btn-success" (click)="activateTriner(trainer)">Activate</button>
                                     </td>
                                     <td *ngIf="trainer.status == 'ACTIVE'">
-                                        <button type="submit" class="btn btn-outline-danger" (click)="deactivateTriner(trainer)">Deactivate</button>
+                                        <button type="submit" class="btn btn-danger" (click)="deactivateTriner(trainer)">Deactivate</button>
                                     </td>
                                     <td>
                                         <i class="fa fa-download"></i>
@@ -154,7 +154,7 @@
                                     secondaryPlaceholder="Enter a new tag (Enter separated)" theme="minimal" class="custom-input-tag-border"></tag-input>
 
                                 <div *ngIf="!testByUrl" class="form-group">
-                                    <button type="button" class="btn btn-outline-primary pull-right" (click)="addTestImages()">
+                                    <button type="button" class="btn btn-primary pull-right" (click)="addTestImages()">
                                         Add Image <i class="ion-plus-round"></i>
                                     </button>
                                 </div>
@@ -170,7 +170,7 @@
                                     <tbody>
                                         <tr *ngFor="let row of testImages;let index=index">
                                             <td>
-                                                <button type="button" class="btn btn-outline-danger" title="Delete"
+                                                <button type="button" class="btn btn-danger" title="Delete"
                                                     (click)="removeTestImage(row)"><i class="ion-close-round"></i></button>
                                             </td>
                                             <td>
@@ -198,7 +198,7 @@
                             <pre>{{ testRequestdataResult | json }} </pre>
                         </div>
                         <div>
-                            <button type="button" class="btn btn-outline-primary pull-right" (click)="testPredictRequestData()">
+                            <button type="button" class="btn btn-primary pull-right" (click)="testPredictRequestData()">
                                 Test
                             </button>
                         </div>
@@ -209,7 +209,7 @@
 
             <form>
                 <div class="form-group">
-                    <button type="button" class="btn btn-outline-primary" (click)="createBusinessObject()" data-toggle="modal">
+                    <button type="button" class="btn btn-primary" (click)="createBusinessObject()" data-toggle="modal">
                         {{apiDesignCreateMode ? 'Create Business Object' : 'Update Business Object'}}
                     </button>
                 </div>
@@ -228,7 +228,7 @@
                 <h4 class="modal-title" id="agorithmModalLabel">
                     {{ algorithmsModalHeader }}
                 </h4>
-                <button type="button" class="btn btn-outline-info" data-dismiss="modal">
+                <button type="button" class="btn btn-info" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span>
                     <span class="sr-only">Close</span>
                 </button>
@@ -245,7 +245,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-primary" (click)="addConfigParameters(tempBusinessAlgorithm)">
+                        <button type="button" class="btn btn-primary" (click)="addConfigParameters(tempBusinessAlgorithm)">
                             Add Config <i class="ion-plus-round"></i>
                         </button>
                     </div>
@@ -276,10 +276,10 @@
 
             <!-- Modal Footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-info" data-dismiss="modal">Close</button>
-                <button *ngIf="!algorithmAddUpdateMode" type="submit" class="btn btn-outline-danger" data-dismiss="modal"
+                <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                <button *ngIf="!algorithmAddUpdateMode" type="submit" class="btn btn-danger" data-dismiss="modal"
                     (click)="removeAlgorithm()">Remove</button>
-                <button type="submit" class="btn btn-outline-success" (click)="addAlgorithm()">{{algorithmAddUpdateMode
+                <button type="submit" class="btn btn-success" (click)="addAlgorithm()">{{algorithmAddUpdateMode
                     ? 'Add'
                     : 'Update'}}</button>
             </div>
@@ -308,7 +308,7 @@
 
             <!-- Modal Footer -->
             <div class="modal-footer" id="modal_footer">
-                <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Dismiss</button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Dismiss</button>
             </div>
         </div>
     </div>

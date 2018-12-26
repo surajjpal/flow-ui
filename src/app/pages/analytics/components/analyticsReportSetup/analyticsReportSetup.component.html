@@ -145,7 +145,7 @@
                                         <input class="form-control" placeholder="yyyy-mm-dd" [(ngModel)]="tempEndDate"
                                             name="tempEndDate" ngbDatepicker #d="ngbDatepicker">
                                         <div class="input-group-append">
-                                            <button class="btn btn-outline-default" (click)="d.toggle()" type="button">
+                                            <button class="btn btn-default" (click)="d.toggle()" type="button">
                                                 <i class="ion ion-calendar" style="width: 1.2rem; height: 1rem; cursor: pointer;"></i>
                                                 <!-- <img src="img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/> -->
                                             </button>
@@ -159,7 +159,7 @@
                     </ng-container>
 
                     <div class="form-group">
-                        <button type="button" class="btn btn-outline-primary" (click)="scheduleAnalyticsReport()">
+                        <button type="button" class="btn btn-primary" (click)="scheduleAnalyticsReport()">
                             {{createUpdateModel ? 'Add' : 'Update'}}
                         </button>
                     </div>

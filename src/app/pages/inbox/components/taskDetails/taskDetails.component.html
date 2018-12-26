@@ -37,22 +37,22 @@
             <form>
               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd === 'Personal'"
-                  type="button" class="btn btn-outline-success btn-with-icon" (click)="updateFlow()">
+                  type="button" class="btn btn-success btn-with-icon" (click)="updateFlow()">
                   <i class="ion-checkmark"></i>Update Process</button>
                 <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && Users.length > 0"
-                  type="button" data-toggle="modal" data-target="#userModal" class="btn btn-outline-info btn-with-icon">
+                  type="button" data-toggle="modal" data-target="#userModal" class="btn btn-info btn-with-icon">
                   <i class="ion-person-add"></i>Allocate Team</button>
                 <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd !== 'Personal' "
-                  type="button" (click)="reserve()" class="btn btn-outline-primary btn-with-icon">
+                  type="button" (click)="reserve()" class="btn btn-primary btn-with-icon">
                   <i class="ion-archive"></i>Reserve Task</button>
                 <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd === 'Personal' && userHierarchy.parentUserId.length > 0"
-                  type="button" (click)="escalate()" class="btn btn-outline-warning btn-with-icon">
+                  type="button" (click)="escalate()" class="btn btn-warning btn-with-icon">
                   <i class="ion-alert-circled"></i>Escalate Task</button>
-                <button [disabled]="!isButtonEnabled" type="button" class="btn btn-outline-warning btn-with-icon" title="Flag"
+                <button [disabled]="!isButtonEnabled" type="button" class="btn btn-warning btn-with-icon" title="Flag"
                   *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd == 'Personal' && selectedState.subStatus !== 'FLAGGED'"
                   data-toggle="modal" data-target="#flagTaskModal" data-backdrop="static" data-keyboard="false" (click)="setFlagReason()">
                   <i class="ion-flag"></i>Flag Task</button>
-                <button [disabled]="!isButtonEnabled" type="button" class="btn btn-outline-danger btn-with-icon" title="Archive"
+                <button [disabled]="!isButtonEnabled" type="button" class="btn btn-danger btn-with-icon" title="Archive"
                   *ngIf="selectedState.statusCd ==='ACTIVE' && selectedState.assignedUserGroupCd == 'Personal' "
                   data-toggle="modal" data-target="#archiveTaskWarningModal">
                   <i class="ion-ios-trash"></i>Archive Task</button>
@@ -301,13 +301,13 @@
         </div>
         <div role="tabpanel" class="tab-pane fade" id="tabFlow" aria-labelledby="flow-tab">
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <button type="button" class="btn btn-outline-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
               <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>&nbsp;&nbsp;&nbsp;
-            <button type="button" class="btn btn-outline-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
               <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>&nbsp;&nbsp;&nbsp;
-            <button type="button" class="btn btn-outline-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
               <i class="ion-arrow-expand"></i>Zoom Actual</button>&nbsp;&nbsp;&nbsp;
-            <button type="button" class="btn btn-outline-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)">
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)">
               <i class="ion-printer"></i>Print Preview</button>
           </div>
           <br>
@@ -326,7 +326,7 @@
         <h4 class="modal-title" id="successModal">
           Success
         </h4>
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -335,7 +335,7 @@
         Task completed successfully.
       </div>
       <div class="modal-footer" id="modal_footer">
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal" (click)="onBack()">Ok</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="onBack()">Ok</button>
       </div>
     </div>
   </div>
@@ -347,7 +347,7 @@
         <h4 class="modal-title" id="userModalLabel">
           Allocate Task
         </h4>
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -364,8 +364,8 @@
         </form>
       </div>
       <div class="modal-footer" id="modal_footer">
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-outline-success" data-dismiss="modal" (click)="allocate()">Allocate</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="allocate()">Allocate</button>
       </div>
     </div>
   </div>
@@ -378,7 +378,7 @@
         <h4 class="modal-title" id="userModalLabel">
           Flag Reason
         </h4>
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal" (click)="flagClose()">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="flagClose()">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -395,8 +395,8 @@
         </form>
       </div>
       <div class="modal-footer" id="modal_footer">
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal" (click)="flagClose()">Close</button>
-        <button type="submit" class="btn btn-outline-primary" data-dismiss="modal" (click)="confirm()">Confirm</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="flagClose()">Close</button>
+        <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="confirm()">Confirm</button>
       </div>
     </div>
   </div>
@@ -409,7 +409,7 @@
         <h4 class="modal-title" id="finalWarningLabel">
           Warning
         </h4>
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -418,7 +418,7 @@
         The Task is already flagged three times, appropriate action will be taken by the team lead!!!
       </div>
       <div class="modal-footer" id="modal_footer">
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -431,7 +431,7 @@
         <h4 class="modal-title" id="finalWarningLabel">
           Warning
         </h4>
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -440,8 +440,8 @@
         The Task will be archived and the associated process will be closed.
       </div>
       <div class="modal-footer" id="modal_footer">
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-outline-danger" data-dismiss="modal" (click)="archive()">Archive</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-danger" data-dismiss="modal" (click)="archive()">Archive</button>
       </div>
     </div>
   </div>
@@ -455,7 +455,7 @@
         <h4 class="modal-title" id="finalWarningLabel">
           Warning
         </h4>
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -464,7 +464,7 @@
         Could not allocate task as no user was selected!!
       </div>
       <div class="modal-footer" id="modal_footer">
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -477,7 +477,7 @@
         <h4 class="modal-title" id="flagSuccessModal">
           Success
         </h4>
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -486,7 +486,7 @@
         Task Flagged successfully.
       </div>
       <div class="modal-footer" id="modal_footer">
-        <button type="button" class="btn btn-outline-default" data-dismiss="modal" (click)="onBack()">Ok</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="onBack()">Ok</button>
       </div>
     </div>
   </div>

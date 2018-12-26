@@ -18,7 +18,7 @@
           <option *ngFor="let user of Users" [ngValue]="user">{{user.userName}}</option>
         </select>
       </div>
-      <button type="button" class="btn btn-outline-success" style="margin-top: 10px" id="submit" (click)="submit()">SUBMIT</button>
+      <button type="button" class="btn btn-success" style="margin-top: 10px" id="submit" (click)="submit()">SUBMIT</button>
     </form>
   </ba-card>
 </div>
@@ -189,7 +189,7 @@
                 <td>{{s.reportTatTime}}</td>
                 <td>
                   <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-outline-primary" title="View" (click)="onSelect(s)">
+                    <button type="button" class="btn btn-primary" title="View" (click)="onSelect(s)">
                       <i class="ion-eye"></i>
                     </button>
                   </div>
