@@ -165,5 +165,9 @@ export const environment = {
    
    //python project in api-utils ondemandreport project
   sendReportCSV: 'https://demo-console.automatapi.com/flow/report/reports/generatereport',
+
+
+  //Vocabulary
+  vocabulary :'http://localhost:5000/api/vocabulary',
   };
   

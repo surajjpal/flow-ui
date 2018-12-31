@@ -169,4 +169,9 @@ export const environment = {
 
   sendReportCSV: 'http://localhost:8080/flow/report/reports/generatereport',
   funnelReport: 'state/fetchfunneldata',
+
+
+
+  //Vocabulary
+  vocabulary :'http://localhost:5000/api/vocabulary',
 };

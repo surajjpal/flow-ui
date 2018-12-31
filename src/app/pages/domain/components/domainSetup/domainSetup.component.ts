@@ -30,6 +30,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   validationKeysSource: string[];
   stagesSource: Stage[];
   templateNames: string[];
+  suggestedTags:string[];
 
 
   intentFilterQuery: string;
@@ -55,6 +56,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   operandSource: string[];
   bulkExpressions: string;
 
+  showTags:boolean;
+
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
   private subscriptionValidationKeys: Subscription;
@@ -71,6 +74,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.domainCreateMode = true;
     this.modalHeader = '';
     this.createMode = false;
+    this.showTags = false;
     this.languageSource = ['ENG', 'HIN', 'MAR', 'ID', 'ML', 'ARA'];
     this.operandSource = ['AND', 'OR'];
     this.modelKeysSource = [];
@@ -937,4 +941,21 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.bulkExpressions = '';
     return expressions;
   }
+
+  getSynonyms(){
+    this.showTags = true;
+    
+    if(this.tempIntent.tags.length > 0){
+      console.log("------------------------------------------");
+      this.subscription = this.domainService.getSynonyms(this.tempIntent.tags[this.tempIntent.tags.length-1])
+      .subscribe(
+        response => {
+          this.suggestedTags = response["synonyms"];
+          // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
+        }
+      );
+    }
+    }
+    
+
 }

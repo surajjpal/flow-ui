@@ -171,4 +171,7 @@ export const environment = {
   
   //python project in api-utils ondemandreport project
   sendReportCSV: 'http://127.0.0.1:5000/generatereport',
+
+  //Vocabulary
+  vocabulary :'http://localhost:5000/api/vocabulary',
 };

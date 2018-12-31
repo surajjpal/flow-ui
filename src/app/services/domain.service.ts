@@ -351,4 +351,39 @@ export class DomainService {
     )
     return subject.asObservable();
   }
+
+  
+  
+  getSynonyms(tag:string): Observable<any> {
+    const subject = new Subject<any>();
+    let request = {};
+    request["word"] = tag;
+    request["language"] = "ENG";
+    request["category"] = "synonyms";
+    const url = `${environment.vocabulary}`;
+
+    this.httpClient.post<any>(
+      url,
+      request,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
 }
