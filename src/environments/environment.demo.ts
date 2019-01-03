@@ -168,6 +168,6 @@ export const environment = {
 
 
   //Vocabulary
-  vocabulary :'http://localhost:5000/api/vocabulary',
+  vocabulary :'https://api.automatapi.com/vocabulary',
   };
   

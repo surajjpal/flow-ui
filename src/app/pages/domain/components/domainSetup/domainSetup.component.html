@@ -347,12 +347,12 @@
           </div>
           <div class="form-group">
             <label>Tags</label>
-            <tag-input [(ngModel)]="tempIntent.tags" (keyup.enter)="getSynonyms()" name="tags" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Tags (Enter separated)"
+            <tag-input [(ngModel)]="tempIntent.tags" dragZone="tags" (keyup.enter)="getIntentSynonyms()" name="tags" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Tags (Enter separated)"
               secondaryPlaceholder="Enter a new tag (Enter separated)" theme="minimal" class="custom-input-tag-border"></tag-input>
           </div>
           <div class="form-group" *ngIf='showTags'>
             <label>Suggested Tags</label>
-            <tag-input [(ngModel)]="suggestedTags"  name="suggestedTags" [modelAsStrings]="true" [editable]="false" [separatorKeys]="[32]"
+            <tag-input [(ngModel)]="suggestedTags"  dragZone="tags" name="suggestedTags" [modelAsStrings]="true" [removable]="false" [separatorKeys]="[32]"
                theme="minimal" class="custom-input-tag-border"></tag-input>
           </div>
           <div class="form-group">
@@ -400,8 +400,13 @@
           </div>
           <div class="form-group">
             <label>Tags</label>
-            <tag-input [(ngModel)]="tempEntity.tags" name="tags" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Tags (Enter separated)"
+            <tag-input [(ngModel)]="tempEntity.tags" name="tags" dragZone="tags" (keyup.enter)="getEntitySynonyms()" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Tags (Enter separated)"
               secondaryPlaceholder="Enter a new tag (Enter separated)" theme="minimal" class="custom-input-tag-border"></tag-input>
+          </div>
+          <div class="form-group" *ngIf='showTags'>
+            <label>Suggested Tags</label>
+            <tag-input [(ngModel)]="suggestedTags"  dragZone="tags" name="suggestedTags" [modelAsStrings]="true" [removable]="false" [separatorKeys]="[32]"
+               theme="minimal" class="custom-input-tag-border"></tag-input>
           </div>
           <div class="form-group">
             <label>Transaction Value</label>
