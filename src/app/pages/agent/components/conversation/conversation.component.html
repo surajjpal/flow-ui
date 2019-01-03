@@ -14,13 +14,14 @@
 
 <div class="row">
   <ba-card *ngIf="!selectedEpisode && episodeList && episodeList.length > 0" class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-      <h4 align="center">Please select an episode from graph shown above to check the details and intercept the chat if needed.</h4>
+    <h4 align="center">Please select an episode from graph shown above to check the details and intercept the chat if
+      needed.</h4>
   </ba-card>
 
   <ba-card *ngIf="selectedEpisode" class="col-md-6 col-sm-12" cardTitle="Episode Details">
     <button *ngIf="!bargedIntoSelectedEpisode()" type="button" class="btn btn-primary" [disabled]="fetchingEpisodeDetails || hasUserAlreadyBargedIn()"
       (click)="bargeIn()">Manual Override</button>
-    <button *ngIf="bargedIntoSelectedEpisode()" type="button" class="btn btn-primary" [disabled]="fetchingEpisodeDetails || !hasUserAlreadyBargedIn()"
+    <button *ngIf="bargedIntoSelectedEpisode()" type="button" class="btn btn-danger" [disabled]="fetchingEpisodeDetails || !hasUserAlreadyBargedIn()"
       (click)="bargeOut()">Disengage</button>
     <form [attr.disabled]="fetchingEpisodeDetails" style="height: 400px; overflow:scroll">
       <div *ngIf="selectedEpisode && selectedEpisode.statusCd" class="form-group">
@@ -45,13 +46,11 @@
       </div>
       <div *ngIf="selectedEpisode && selectedEpisode.startTime" class="form-group">
         <label>Start Time</label>
-        <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode.startTime | date: 'dd/MM/y, h:mm:ss a'}}"
-        />
+        <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode.startTime | date: 'dd/MM/y, h:mm:ss a'}}" />
       </div>
       <div *ngIf="selectedEpisode && selectedEpisode.endTime" class="form-group">
         <label>End Time</label>
-        <input class="form-control" placeholder="End Time" disabled="disabled" value="{{selectedEpisode.endTime | date: 'dd/MM/y, h:mm:ss a'}}"
-        />
+        <input class="form-control" placeholder="End Time" disabled="disabled" value="{{selectedEpisode.endTime | date: 'dd/MM/y, h:mm:ss a'}}" />
       </div>
       <div *ngIf="selectedEpisode && selectedEpisode.goals && selectedEpisode.goals.length > 0" class="form-group">
         <label>Goals</label>
@@ -61,7 +60,8 @@
       </div>
     </form>
   </ba-card>
-  <ba-card id="episodeDetailsCard" *ngIf="selectedEpisode" baCardClass="with-scroll" class="data-table-container col-md-6 col-sm-12" cardTitle="Conversation">
+  <ba-card id="episodeDetailsCard" *ngIf="selectedEpisode" baCardClass="with-scroll" class="data-table-container col-md-6 col-sm-12"
+    cardTitle="Conversation">
     <form [attr.disabled]="fetchingEpisodeChat" style="height: 395px; overflow:scroll">
       <thead>
         <th style="width: 50%"></th>
@@ -92,15 +92,15 @@
       </tbody>
       <div id="chatWindowBottomDiv" style="width:0; height:0; opacity:0;"></div>
     </form>
-    
+
     <form *ngIf="bargedIntoSelectedEpisode()" class="row form-inline">
       <div class="form-group col-sm-10">
-        <input id="agentInput" [disabled]="fetchingEpisodeChat" class="form-control" placeholder="Enter message here..." [(ngModel)]="agentMessage" name="agentMessage"
-          (keyup.enter)="sendAgentMessage()" dir="auto" />
+        <input id="agentInput" [disabled]="fetchingEpisodeChat" class="form-control" placeholder="Enter message here..."
+          [(ngModel)]="agentMessage" name="agentMessage" (keyup.enter)="sendAgentMessage()" dir="auto" />
       </div>
       <div class="form-group col-sm-2">
         <button [disabled]="fetchingEpisodeChat" type="button" class="btn btn-primary" (click)="sendAgentMessage()">
-            <i class="ion ion-android-send"></i>
+          <i class="ion ion-android-send"></i>
         </button>
       </div>
     </form>

@@ -2,14 +2,14 @@
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
       <div class="progress">
-        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;" aria-valuenow="99"
-          aria-valuemin="0" aria-valuemax="100">Loading...</div>
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;"
+          aria-valuenow="99" aria-valuemin="0" aria-valuemax="100">Loading...</div>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
-      <br/>
+      <br />
     </div>
   </div>
 </div>
@@ -23,18 +23,20 @@
               role="tab" aria-expanded="true">Assigned</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" (click)="fetchRecordsFor(TAB_UNASSIGNED, groupStates)" data-toggle="tab" href="#tab_group" role="tab">Unassigned</a>
+            <a class="nav-link" (click)="fetchRecordsFor(TAB_UNASSIGNED, groupStates)" data-toggle="tab" href="#tab_group"
+              role="tab">Unassigned</a>
           </li>
         </ul>
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane fade show active" id="tab_personal">
-            <apitable *ngIf="personalStates" [rawDataArray]="personalStates" [isLoading]="loadingPersonal" (selectedData)="onSelect($event)"></apitable>
-            <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; width: 200px"
+            <apitable *ngIf="personalStates" [rawDataArray]="personalStates" [isLoading]="loadingPersonal"
+              (selectedData)="onSelect($event)"></apitable>
+            <button type="button" class="btn btn-info" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; width: 200px"
               *ngIf="personalStates.length !== 0" (click)="loadMore('CLOSED','Personal')">Load More</button>
           </div>
           <div role="tabpanel" class="tab-pane fade" id="tab_group">
             <apitable *ngIf="groupStates" [rawDataArray]="groupStates" [isLoading]="loadingGroup" (selectedData)="onSelect($event)"></apitable>
-            <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; width: 200px"
+            <button type="button" class="btn btn-info" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; width: 200px"
               *ngIf="groupStates.length !== 0" (click)="loadMore('CLOSED','Group')">Load More</button>
           </div>
         </div>

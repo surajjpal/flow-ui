@@ -3,14 +3,16 @@
     <ba-card [cardTitle]="agentCreateMode ? 'Create Agent' : 'Update Agent'" baCardClass="with-scroll" class="col-md-12">
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-          <a class="nav-link active" id="agentInfoTab" data-toggle="tab" href="#agentInfoContent" role="tab" aria-controls="agentInfo"
-            aria-expanded="true">Agent Info</a>
+          <a class="nav-link active" id="agentInfoTab" data-toggle="tab" href="#agentInfoContent" role="tab"
+            aria-controls="agentInfo" aria-expanded="true">Agent Info</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="agentTrainingTab" data-toggle="tab" href="#agentTrainingContent" role="tab" aria-controls="agentTraining">Agent Training</a>
+          <a class="nav-link" id="agentTrainingTab" data-toggle="tab" href="#agentTrainingContent" role="tab"
+            aria-controls="agentTraining">Agent Training</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="agentPluginsTab" data-toggle="tab" href="#agentPluginsContent" role="tab" aria-controls="agentPlugins">Agent Plugins</a>
+          <a class="nav-link" id="agentPluginsTab" data-toggle="tab" href="#agentPluginsContent" role="tab"
+            aria-controls="agentPlugins">Agent Plugins</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" id="settingsTab" data-toggle="tab" href="#settingsContent" role="tab" aria-controls="settings">Settings</a>
@@ -22,17 +24,18 @@
             <form>
               <div class="form-group">
                 <label>Agent Name</label>
-                <input type="text" class="form-control" required placeholder="Agent Name" [(ngModel)]="selectedAgent.name" name="name" />
+                <input type="text" class="form-control" required placeholder="Agent Name" [(ngModel)]="selectedAgent.name"
+                  name="name" />
               </div>
               <div class="form-group">
                 <label>Agent Description</label>
-                <input type="text" class="form-control" required placeholder="Agent Description" [(ngModel)]="selectedAgent.desc" name="desc"
-                />
+                <input type="text" class="form-control" required placeholder="Agent Description" [(ngModel)]="selectedAgent.desc"
+                  name="desc" />
               </div>
               <div *ngIf="selectedAgent.agenturl && selectedAgent.agenturl.length > 0" class="form-group">
                 <label>Agent URL</label>
-                <input type="text" disabled class="form-control" placeholder="Agent URL" [(ngModel)]="selectedAgent.agenturl" name="agenturl"
-                />
+                <input type="text" disabled class="form-control" placeholder="Agent URL" [(ngModel)]="selectedAgent.agenturl"
+                  name="agenturl" />
               </div>
               <div class="form-group">
                 <label>Color CSS</label>
@@ -61,31 +64,33 @@
               </div>
               <div class="form-group">
                 <label>Agent Placeholder Text</label>
-                <input type="text" class="form-control" required placeholder="Agent Placeholder Text (Optional)" [(ngModel)]="selectedAgent.uiComponent.placeHolderText"
-                  name="placeHolderText" />
+                <input type="text" class="form-control" required placeholder="Agent Placeholder Text (Optional)"
+                  [(ngModel)]="selectedAgent.uiComponent.placeHolderText" name="placeHolderText" />
               </div>
               <div class="form-group">
                 <label>Episode Idle Timeout (in Minutes)</label>
-                <input type="number" class="form-control" required placeholder="Episode Idle Timeout (in Minutes)" [(ngModel)]="selectedAgent.uiComponent.episodeIdleTimeout"
-                  name="episodeIdleTimeout" min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
-                />
+                <input type="number" class="form-control" required placeholder="Episode Idle Timeout (in Minutes)"
+                  [(ngModel)]="selectedAgent.uiComponent.episodeIdleTimeout" name="episodeIdleTimeout" min="0"
+                  onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
               </div>
               <div class="form-group">
                 <label>Episode Close Timeout (in Minutes)</label>
-                <input type="number" class="form-control" required placeholder="Episode Close Timeout (in Minutes)" [(ngModel)]="selectedAgent.uiComponent.episodeCloseTimeout"
-                  name="episodeCloseTimeout" min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
-                />
+                <input type="number" class="form-control" required placeholder="Episode Close Timeout (in Minutes)"
+                  [(ngModel)]="selectedAgent.uiComponent.episodeCloseTimeout" name="episodeCloseTimeout" min="0"
+                  onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
               </div>
               <div class="form-group">
                 <label>Conversation window title</label>
                 <input type="text" class="form-control" required placeholder="Chatting with" [(ngModel)]="selectedAgent.uiComponent.conversationWindowTitlePrefix"
-                  name="conversationWindowTitlePrefix"/>
+                  name="conversationWindowTitlePrefix" />
               </div>
               <div class="checkbox">
-                <ba-checkbox [(ngModel)]="selectedAgent.uiComponent.delayInMessages" [label]="'Delay in messages'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+                <ba-checkbox [(ngModel)]="selectedAgent.uiComponent.delayInMessages" [label]="'Delay in messages'"
+                  [ngModelOptions]="{standalone: true}"></ba-checkbox>
               </div>
               <div class="checkbox">
-                <ba-checkbox [(ngModel)]="selectedAgent.uiComponent.cronEnabled" [label]="'Cron Enabled'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+                <ba-checkbox [(ngModel)]="selectedAgent.uiComponent.cronEnabled" [label]="'Cron Enabled'"
+                  [ngModelOptions]="{standalone: true}"></ba-checkbox>
               </div>
               <div class="checkbox">
                 <ba-checkbox [(ngModel)]="selectedAgent.disabled" [label]="'Disable Agent'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
@@ -94,7 +99,8 @@
                 <ba-checkbox [(ngModel)]="selectedAgent.debugMode" [label]="'Enable Debug Mode'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
               </div>
               <div class="checkbox">
-                <ba-checkbox [(ngModel)]="selectedAgent.uiComponent.isBargeable" [label]="'Is Agent Bargeable'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+                <ba-checkbox [(ngModel)]="selectedAgent.uiComponent.isBargeable" [label]="'Is Agent Bargeable'"
+                  [ngModelOptions]="{standalone: true}"></ba-checkbox>
               </div>
             </form>
           </div>
@@ -104,18 +110,22 @@
             <form>
               <div class="form-group">
                 <label>Select Flows</label>
-                <select class="selectpicker form-control" multiple="true" title="Select Flows" [(ngModel)]="selectedAgent.agentFlow" name="agentFlow">
-                  <option *ngFor="let flow of flowSource" [ngValue]="flow.machineType">{{flow.machineType + ' v' + flow.version}}</option>
+                <select class="selectpicker form-control" multiple="true" title="Select Flows" [(ngModel)]="selectedAgent.agentFlow"
+                  name="agentFlow">
+                  <option *ngFor="let flow of flowSource" [ngValue]="flow.machineType">{{flow.machineType + ' v' +
+                    flow.version}}</option>
                 </select>
               </div>
               <div class="form-group">
                 <label>Select Default Language</label>
-                <select class="selectpicker form-control" title="Select Language" [(ngModel)]="selectedAgent.defaultLanguage" name="defaultLanguage">
+                <select class="selectpicker form-control" title="Select Language" [(ngModel)]="selectedAgent.defaultLanguage"
+                  name="defaultLanguage">
                   <option *ngFor="let lang of supportedLanguageSource" [ngValue]="lang">{{lang}}</option>
                 </select>
               </div>
               <div class="form-group checkbox">
-                <ba-checkbox [(ngModel)]="selectedAgent.autodetectLanguage" [label]="'Autodetect Language'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
+                <ba-checkbox [(ngModel)]="selectedAgent.autodetectLanguage" [label]="'Autodetect Language'"
+                  [ngModelOptions]="{standalone: true}"></ba-checkbox>
               </div>
             </form>
           </div>
@@ -124,7 +134,7 @@
               <button *ngIf="!containsAll()" type="button" class="btn btn-primary" (click)="addAllDomain()">
                 Add All
               </button>
-              <button *ngIf="containsAll()" type="button" class="btn btn-default" (click)="removeAllDomain()">
+              <button *ngIf="containsAll()" type="button" class="btn btn--outline-danger" (click)="removeAllDomain()">
                 Remove All
               </button>
               <ul class="domain-list">
@@ -140,12 +150,13 @@
               <form>
                 <div class="form-group">
                   <label>Domain Name</label>
-                  <input type="text" class="form-control" disabled placeholder="Domain Name" [value]="selectedDomain.name" name="name" />
+                  <input type="text" class="form-control" disabled placeholder="Domain Name" [value]="selectedDomain.name"
+                    name="name" />
                 </div>
                 <div class="form-group">
                   <label>Domain Description</label>
-                  <input type="text" class="form-control" disabled placeholder="Domain Description" [value]="selectedDomain.desc" name="desc"
-                  />
+                  <input type="text" class="form-control" disabled placeholder="Domain Description" [value]="selectedDomain.desc"
+                    name="desc" />
                 </div>
                 <div class="form-group">
                   <label>Language Supported</label>
@@ -161,7 +172,7 @@
                   <button *ngIf="!domainAddedToList()" type="button" class="btn btn-primary" (click)="addDomain()">
                     Add
                   </button>
-                  <button *ngIf="domainAddedToList()" type="button" class="btn btn-default" (click)="removeDomain()">
+                  <button *ngIf="domainAddedToList()" type="button" class="btn btn-danger" (click)="removeDomain()">
                     Remove
                   </button>
                 </div>
@@ -177,15 +188,18 @@
                   <legend>Facebook Messenger Plugin</legend>
                   <div *ngIf="facebookPlugin.webhook.length > 0" class="form-group">
                     <label>Webhook</label>
-                    <input type="text" disabled class="form-control" placeholder="Webhook" [(ngModel)]="facebookPlugin.webhook" name="webhook">
+                    <input type="text" disabled class="form-control" placeholder="Webhook" [(ngModel)]="facebookPlugin.webhook"
+                      name="webhook">
                   </div>
                   <div class="form-group">
                     <label>API Token</label>
-                    <input type="text" class="form-control" placeholder="API Token" [(ngModel)]="facebookPlugin.apitoken" name="apitoken">
+                    <input type="text" class="form-control" placeholder="API Token" [(ngModel)]="facebookPlugin.apitoken"
+                      name="apitoken">
                   </div>
                   <div class="form-group">
                     <label>Verification Key</label>
-                    <input type="text" class="form-control" placeholder="Verification Key" [(ngModel)]="facebookPlugin.validation" name="validation">
+                    <input type="text" class="form-control" placeholder="Verification Key" [(ngModel)]="facebookPlugin.validation"
+                      name="validation">
                   </div>
                   <div class="form-group">
                     <label>Service Downtime Message</label>
@@ -207,19 +221,23 @@
                 <fieldset *ngIf="isWatsonEnabled" class="form-group">
                   <div class="form-group">
                     <label>Workspace ID</label>
-                    <input type="text" class="form-control" placeholder="Workspace ID" [(ngModel)]="watsonClassifier.classifierWorkspaceId" name="classifierWorkspaceId">
+                    <input type="text" class="form-control" placeholder="Workspace ID" [(ngModel)]="watsonClassifier.classifierWorkspaceId"
+                      name="classifierWorkspaceId">
                   </div>
                   <div class="form-group">
                     <label>Username</label>
-                    <input type="text" class="form-control" placeholder="Username" [(ngModel)]="watsonClassifier.classifierUsername" name="classifierUsername">
+                    <input type="text" class="form-control" placeholder="Username" [(ngModel)]="watsonClassifier.classifierUsername"
+                      name="classifierUsername">
                   </div>
                   <div class="form-group">
                     <label>Password</label>
-                    <input type="password" class="form-control" placeholder="Password" [(ngModel)]="watsonClassifier.classifierPassword" name="classifierPassword">
+                    <input type="password" class="form-control" placeholder="Password" [(ngModel)]="watsonClassifier.classifierPassword"
+                      name="classifierPassword">
                   </div>
                   <div class="form-group">
                     <label>Version</label>
-                    <input type="text" class="form-control" placeholder="Version" [(ngModel)]="watsonClassifier.classifierVersion" name="classifierVersion">
+                    <input type="text" class="form-control" placeholder="Version" [(ngModel)]="watsonClassifier.classifierVersion"
+                      name="classifierVersion">
                   </div>
                 </fieldset>
               </form>
@@ -230,18 +248,20 @@
                 <fieldset *ngIf="isApiEnabled" class="form-group">
                   <div class="form-group">
                     <label>Service Url</label>
-                    <input type="text" class="form-control" placeholder="Service Url" [(ngModel)]="apiClassifier.classifierServiceUrl" name="classifierServiceUrl">
+                    <input type="text" class="form-control" placeholder="Service Url" [(ngModel)]="apiClassifier.classifierServiceUrl"
+                      name="classifierServiceUrl">
                   </div>
                   <div class="form-group">
                     <label>Service Token</label>
-                    <input type="text" class="form-control" placeholder="Service Token" [(ngModel)]="apiClassifier.classifierServiceToken" name="classifierServiceToken">
+                    <input type="text" class="form-control" placeholder="Service Token" [(ngModel)]="apiClassifier.classifierServiceToken"
+                      name="classifierServiceToken">
                   </div>
                 </fieldset>
               </form>
             </div>
             <form>
               <div class="form-group">
-                <button type="button" class="btn btn-primary" (click)="createAgent()">
+                <button type="button" class="btn btn-success" (click)="createAgent()">
                   {{agentCreateMode ? 'Create Agent' : 'Update Agent'}}
                 </button>
               </div>
@@ -253,8 +273,8 @@
   </div>
 </div>
 
-<div class="modal fade" id="successModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" attr.aria-labelledby="successModalLabel"
-  aria-hidden="true">
+<div class="modal fade" id="successModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+  attr.aria-labelledby="successModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <!-- Modal Header -->
@@ -262,7 +282,7 @@
         <h4 class="modal-title" id="successModalLabel">
           {{isSuccess ? 'Success' : 'Error'}}
         </h4>
-        <button type="button" class="close" data-dismiss="modal">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -271,7 +291,8 @@
       <!-- Modal Body -->
       <div class="modal-body">
         <div *ngIf="isSuccess && facebookIntegrated">
-          You have successfully {{agentCreateMode ? 'created' : 'updated'}} the agent. Following is the webhook for Facebook plugin
+          You have successfully {{agentCreateMode ? 'created' : 'updated'}} the agent. Following is the webhook for
+          Facebook plugin
           integrated.
           <form>
             <div class="form-group">
@@ -299,11 +320,11 @@
 <div class="widgets" *ngIf="isCreated">
   <div class="row">
     <ba-card cardTitle="Agent URL to use" baCardClass="with-scroll" class="col-md-12">
-        <p class="card-text">
-          <b><a [href]="autoUrl" target="_blank">{{autoUrl}}</a></b>
-        </p>
-        <button type="button" class="btn btn-success" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
-          (click)="goBack();">Got It</button>
+      <p class="card-text">
+        <b><a [href]="autoUrl" target="_blank">{{autoUrl}}</a></b>
+      </p>
+      <button type="button" class="btn btn-info" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
+        (click)="goBack();">Got It</button>
     </ba-card>
   </div>
 </div>

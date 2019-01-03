@@ -24,8 +24,9 @@
               </div>
             </form>
             <br>
-    
-            <table class="table table-striped" [mfData]="agentSource | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="agentPageSize" mfSortBy="name">
+
+            <table class="table table-striped" [mfData]="agentSource | universalDataFilter : filterQuery" #mf="mfDataTable"
+              [mfRowsOnPage]="agentPageSize" mfSortBy="name">
               <thead>
                 <tr>
                   <th>
@@ -61,7 +62,7 @@
               <tfoot>
                 <tr>
                   <td colspan="100%">
-                      <button type="button" class="btn btn-outline-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
+                    <button type="button" class="btn btn-info" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
                       *ngIf="moreAgentPages" (click)="fetchAgents()">Load More
                     </button>
                     <mfBootstrapPaginator></mfBootstrapPaginator>
@@ -72,7 +73,7 @@
           </div>
         </div>
         <div role="tabpanel" class="tab-pane fade" id="tab_archived">
-          
+
         </div>
       </div>
     </ba-card>
