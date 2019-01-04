@@ -13,6 +13,9 @@ export const environment = {
   fetchaccountbyidurl: 'https://flow.automatapi.io/flow/account/',
   publishaccounturl:'https://flow.automatapi.io/flow/account/publish/',
   unpublishaccounturl:'https://flow.automatapi.io/flow/account/unpublish/',
+
+
+  processauditurl:"http://localhost:5000/api/universalsearch/search/flow",
   // Interfaces
   interfaceService: 'https://flow.automatapi.io/flow/interfaces',
   updateClassifierTraining : 'https://flow.automatapi.io/flow/interfaces/auto_decorate_training',
@@ -21,7 +24,7 @@ export const environment = {
 
   // Flow
   server: 'https://flow.automatapi.io/flow/console/',
-  autourl:'https://api.automatapi.io/?',
+  autourl:'https://agent.automatapi.xyz/#/pg/ch/cnv/',
 
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
@@ -33,6 +36,7 @@ export const environment = {
   gettatrecords:'state/fetchtat',
   getallstats:'state/fetchstatestatus',
   getpersonalstats:'state/getstatestatusbyuser',
+  getstateinstance:'state/fetchstateinstance',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
@@ -104,6 +108,8 @@ export const environment = {
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
+  flowsearch:'/api/search/flow',
+
   // Analytics
   reportservice: 'https://flow.automatapi.io/flow/report',
   sendReportUrl: '/reports/analyticsreport/sendreport',
@@ -125,6 +131,7 @@ export const environment = {
   businessObjectTrainingUrl: '/automatons/businessobject/training',
   businessObjectActivateTrainerUrl: '/automatons/businessobject/activate',
   businessObjectDectivateTrainerUrl: '/automatons/businessobject/deactivate',
+  businessObjectPredictUrl: '/automatons/businessobject/predict',
   
   //Dashboard
   dashboardServer: 'https://flow.automatapi.io/flow/dashboard/',
@@ -145,12 +152,20 @@ export const environment = {
   //Dashboard from interfaces
   dashboardinterface: 'https://flow.automatapi.io/flow/interfaces/dashboard',
 
-  //CRUD API path - To be used in conjunction with interfaceService property
-  crudFunction : '/crud',
+  //Following APIs path - To be used in conjunction with interfaceService property
+  crudFunction: '/crud',
+  sendAgentMessage: '/sendMessage',
 
   // activity monitor services
   businessDataPointValues: 'businessactivitymanagement/datapointvalues',
   businessDataPoints: 'businessactivitymanagement/datapoints',
-  businessDataPonitsPercentageCount: 'businessactivitymanagement/percentagecount',
+  businessDataPonitsPercentageCount: 'businessactivitymanagement/datapoint/percentagecount',
   businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
+  businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
+
+  //python project in api-utils ondemandreport project
+  sendReportCSV: 'https://flow.automatapi.io/flow/report/reports/generatereport',
+
+  //Vocabulary
+  vocabulary :'https://api.automatapi.io/vocabulary',
 };

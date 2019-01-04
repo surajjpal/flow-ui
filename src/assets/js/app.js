@@ -241,8 +241,9 @@ showModal = function (modalId) {
 }
 
 showAlertModal = function (header, message) {
-  window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
-    showAppJSWarning(header, message); 
+  window['appComponentRef'].zone.run(() => {
+    window['appComponentRef'].component.
+      showAppJSWarning(header, message);
   });
   showModal("warningModal");
 }
@@ -347,8 +348,8 @@ designFlowEditor = function (serverXml, readOnly) {
     style[mxConstants.STYLE_OVERFLOW] = 'width';
     style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
     style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
-    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
-    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
+    style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
     style[mxConstants.STYLE_FONTCOLOR] = '#000000';
     style[mxConstants.STYLE_FONTFAMILY] = 'Raleway';
     style[mxConstants.STYLE_FONTSIZE] = '12';
@@ -361,13 +362,13 @@ designFlowEditor = function (serverXml, readOnly) {
     graph.getStylesheet().putCellStyle('PENDING_STATE', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#B7F7D1';
-    style[mxConstants.STYLE_STROKECOLOR] = '#B7F7D1';
+    style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+    style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
     graph.getStylesheet().putCellStyle('ACTIVE_STATE', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#D9E1DC';
-    style[mxConstants.STYLE_STROKECOLOR] = '#D9E1DC';
+    style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+    style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
     graph.getStylesheet().putCellStyle('CLOSED_STATE', style);
 
     style = [];
@@ -376,8 +377,8 @@ designFlowEditor = function (serverXml, readOnly) {
     style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
     style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
 
-    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
-    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
+    style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
 
     style[mxConstants.STYLE_FONTCOLOR] = '#000000';
     style[mxConstants.STYLE_FONTFAMILY] = 'Raleway';
@@ -393,13 +394,13 @@ designFlowEditor = function (serverXml, readOnly) {
     graph.getStylesheet().putCellStyle('PENDING_DECISION', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#E5F9FF';
-    style[mxConstants.STYLE_STROKECOLOR] = '#E5F9FF';
+    style[mxConstants.STYLE_FILLCOLOR] = '#007BFF';
+    style[mxConstants.STYLE_STROKECOLOR] = '#FFFFFF';
     graph.getStylesheet().putCellStyle('ACTIVE_DECISION', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
-    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_FILLCOLOR] = '#007BFF';
+    style[mxConstants.STYLE_STROKECOLOR] = '#FFFFFF';
     graph.getStylesheet().putCellStyle('CLOSED_DECISION', style);
 
     style = [];
@@ -408,8 +409,8 @@ designFlowEditor = function (serverXml, readOnly) {
     style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
     style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
 
-    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
-    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
+    style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
 
     style[mxConstants.STYLE_FONTCOLOR] = '#000000';
     style[mxConstants.STYLE_FONTFAMILY] = 'Raleway';
@@ -425,32 +426,32 @@ designFlowEditor = function (serverXml, readOnly) {
     graph.getStylesheet().putCellStyle('PENDING_START', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
-    style[mxConstants.STYLE_STROKECOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+    style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
     graph.getStylesheet().putCellStyle('ACTIVE_START', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
-    style[mxConstants.STYLE_STROKECOLOR] = '#000000';
+    style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+    style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
     graph.getStylesheet().putCellStyle('CLOSED_START', style);
 
     style = mxUtils.clone(style);
     style[mxConstants.STYLE_STROKEWIDTH] = '2';
-    style[mxConstants.STYLE_STROKECOLOR] = '#000000';
-    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
+    style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
+    style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
     graph.getStylesheet().putCellStyle('end', style);
 
     style = mxUtils.clone(style);
     graph.getStylesheet().putCellStyle('PENDING_END', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
-    style[mxConstants.STYLE_STROKECOLOR] = '#000000';
+    style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+    style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
     graph.getStylesheet().putCellStyle('ACTIVE_END', style);
 
     style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#E3E3E3';
-    style[mxConstants.STYLE_STROKECOLOR] = '#000000';
+    style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+    style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
     graph.getStylesheet().putCellStyle('CLOSED_END', style);
 
     // style[mxConstants.STYLE_IMAGE] = 'assets/js/mxGraph/images/dude3.png';
@@ -663,8 +664,9 @@ designFlowEditor = function (serverXml, readOnly) {
     var mxConnectionHandlerInsertEdge = mxConnectionHandler.prototype.insertEdge;
     mxConnectionHandler.prototype.insertEdge = function (parent, id, value, source, target, style) {
       if (target && target.id == 'treeRoot') {
-        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
-          showAppJSWarning("Not Allowed", "You are not allowed to connect to the root state. Please select any other state."); 
+        window['appComponentRef'].zone.run(() => {
+          window['appComponentRef'].component.
+            showAppJSWarning("Not Allowed", "You are not allowed to connect to the root state. Please select any other state.");
         });
         showModal("warningModal");
         return;
@@ -677,8 +679,9 @@ designFlowEditor = function (serverXml, readOnly) {
 
         for (var edge of existingEdges) {
           if (edge.target.value.stateCd == target.value.stateCd) {
-            window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
-              showAppJSWarning("Used State", "The state you are trying to connect to is already connected from current state. Please choose any other state."); 
+            window['appComponentRef'].zone.run(() => {
+              window['appComponentRef'].component.
+                showAppJSWarning("Used State", "The state you are trying to connect to is already connected from current state. Please choose any other state.");
             });
             showModal("warningModal");
             return;
@@ -712,8 +715,9 @@ designFlowEditor = function (serverXml, readOnly) {
         }
       }
 
-      window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
-        showAppJSWarning("No Events Left", "There aren't any source events left to be attached to the new state, thus this connection can't be made."); 
+      window['appComponentRef'].zone.run(() => {
+        window['appComponentRef'].component.
+          showAppJSWarning("No Events Left", "There aren't any source events left to be attached to the new state, thus this connection can't be made.");
       });
       showModal("warningModal");
       return;
@@ -857,8 +861,9 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
             showModal("stateModal");
             return;
           } else {
-            window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
-              showAppJSWarning("Not Allowed", "Root state can only have one child state. You can't create more than one child for root state.");
+            window['appComponentRef'].zone.run(() => {
+              window['appComponentRef'].component.
+                showAppJSWarning("Not Allowed", "Root state can only have one child state. You can't create more than one child for root state.");
             });
             showModal("warningModal");
             return;
@@ -888,9 +893,10 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
             return;
           }
         }
-        
-        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
-          showAppJSWarning("No Events Left", "There aren't any source events from which the new state can be created.");
+
+        window['appComponentRef'].zone.run(() => {
+          window['appComponentRef'].component.
+            showAppJSWarning("No Events Left", "There aren't any source events from which the new state can be created.");
         });
         showModal("warningModal");
         return;
@@ -1111,8 +1117,9 @@ saveStateObject = function (state) {
   for (var vertex of vertices) {
     if (vertex.value && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
       if (state.stateCd == vertex.value.stateCd) {
-        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
-          showAppJSWarning("Duplicate State", "Duplicate states found. State '" + state.stateCd + "' is already being used. Please use different state code for defining the state.");
+        window['appComponentRef'].zone.run(() => {
+          window['appComponentRef'].component.
+            showAppJSWarning("Duplicate State", "Duplicate states found. State '" + state.stateCd + "' is already being used. Please use different state code for defining the state.");
         });
         showModal("warningModal");
         return;
@@ -1129,8 +1136,9 @@ saveStateObject = function (state) {
       }
 
       if (repeatCount > 1) {
-        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
-          showAppJSWarning("Duplicate Events", "Duplicate events found. All the events must be unique.");
+        window['appComponentRef'].zone.run(() => {
+          window['appComponentRef'].component.
+            showAppJSWarning("Duplicate Events", "Duplicate events found. All the events must be unique.");
         });
         showModal("warningModal");
         return;
@@ -1141,8 +1149,9 @@ saveStateObject = function (state) {
       if (vertex.value && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
         for (var stateEvent of vertex.value.events) {
           if (event.eventCd == stateEvent.eventCd) {
-            window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
-              showAppJSWarning("Duplicate Events", "Duplicate events found. Event '" + event.eventCd + "' is already defined as a source event in state '" + vertex.value.stateCd + "'. Please use different event code for defining the event.");
+            window['appComponentRef'].zone.run(() => {
+              window['appComponentRef'].component.
+                showAppJSWarning("Duplicate Events", "Duplicate events found. Event '" + event.eventCd + "' is already defined as a source event in state '" + vertex.value.stateCd + "'. Please use different event code for defining the event.");
             });
             showModal("warningModal");
             return;
@@ -1161,8 +1170,9 @@ updateStateObject = function (state) {
   for (var vertex of vertices) {
     if (vertex.value && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
       if ((state.stateCd == vertex.value.stateCd) && (vertex.value.stateCd != sourceCell.value.stateCd)) {
-        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
-          showAppJSWarning("Duplicate State", "Duplicate states found. State '" + state.stateCd + "' is already being used. Please use different state code for defining the state.");
+        window['appComponentRef'].zone.run(() => {
+          window['appComponentRef'].component.
+            showAppJSWarning("Duplicate State", "Duplicate states found. State '" + state.stateCd + "' is already being used. Please use different state code for defining the state.");
         });
         showModal("warningModal");
         return;
@@ -1179,8 +1189,9 @@ updateStateObject = function (state) {
       }
 
       if (repeatCount > 1) {
-        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
-          showAppJSWarning("Duplicate Events", "Duplicate events found. All the events must be unique.");
+        window['appComponentRef'].zone.run(() => {
+          window['appComponentRef'].component.
+            showAppJSWarning("Duplicate Events", "Duplicate events found. All the events must be unique.");
         });
         showModal("warningModal");
         return;
@@ -1192,8 +1203,9 @@ updateStateObject = function (state) {
         if (vertex.value.stateCd !== sourceCell.value.stateCd) {
           for (var stateEvent of vertex.value.events) {
             if (event.eventCd == stateEvent.eventCd) {
-              window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
-                showAppJSWarning("Duplicate Events", "Duplicate events found. Event '" + event.eventCd + "' is already defined as a source event in state '" + vertex.value.stateCd + "'. Please use different event code for defining the event.");
+              window['appComponentRef'].zone.run(() => {
+                window['appComponentRef'].component.
+                  showAppJSWarning("Duplicate Events", "Duplicate events found. Event '" + event.eventCd + "' is already defined as a source event in state '" + vertex.value.stateCd + "'. Please use different event code for defining the event.");
               });
               showModal("warningModal");
               return;
@@ -1211,8 +1223,9 @@ updateStateObject = function (state) {
       var childStateCount = existingEdgesBeforeUpdate.length;
       var newEventCount = newEvents.length;
       var difference = childStateCount - newEventCount;
-      window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
-        showAppJSWarning("Event Mismatch", "There already exisits " + childStateCount + " child state(s) for the current state. After update there will be a total number of " + newEventCount + " events left, which doesn't suffice the total child states. Please add " + difference + " more event(s) or delete " + difference + " child state(s) to suffice the conditions.");
+      window['appComponentRef'].zone.run(() => {
+        window['appComponentRef'].component.
+          showAppJSWarning("Event Mismatch", "There already exisits " + childStateCount + " child state(s) for the current state. After update there will be a total number of " + newEventCount + " events left, which doesn't suffice the total child states. Please add " + difference + " more event(s) or delete " + difference + " child state(s) to suffice the conditions.");
       });
       showModal("warningModal");
       return;
@@ -1278,8 +1291,9 @@ updateStateObject = function (state) {
 updateStateTrigger = function (eventEdgeMap, stateData) {
   for (var key in eventEdgeMap) {
     if (key && (!eventEdgeMap[key] || eventEdgeMap[key] == null)) {
-      window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
-        showAppJSWarning("Error" ,"You can't leave trigger for any child state empty. Please fill in all values.");
+      window['appComponentRef'].zone.run(() => {
+        window['appComponentRef'].component.
+          showAppJSWarning("Error", "You can't leave trigger for any child state empty. Please fill in all values.");
       });
       showModal("warningModal");
       return;
@@ -1299,8 +1313,9 @@ updateStateTrigger = function (eventEdgeMap, stateData) {
           childStateList.push(edge.target.value.stateCd);
         }
 
-        window['appComponentRef'].zone.run(() => { window['appComponentRef'].component.
-          showAppJSWarning("Error", "Same event has been assigned to '" + key + "' and '" + internalKey + "'. One event can be attached to only one child state at max");
+        window['appComponentRef'].zone.run(() => {
+          window['appComponentRef'].component.
+            showAppJSWarning("Error", "Same event has been assigned to '" + key + "' and '" + internalKey + "'. One event can be attached to only one child state at max");
         });
         showModal("warningModal");
         return;
@@ -1373,28 +1388,31 @@ styleStates = function (activeStateIdList, closedStateIdList) {
       for (var vertex of vertices) {
         if (vertex != null && vertex.id != null) {
           if (activeStateIdList.indexOf(vertex.id) >= 0) {
-            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
-            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/warning.gif', 18, 18), 'Active');
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#FFC107', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#FFC107', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, '#FFFFFF', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/active.png', 20, 20), 'Active');
             overlay.align = mxConstants.ALIGN_RIGHT;
             overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
             graph.addCellOverlay(vertex, overlay);
           } else if (closedStateIdList.indexOf(vertex.id) >= 0) {
-            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
-            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 18, 18), 'Closed');
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#28A745', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#28A745', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, '#FFFFFF', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 20, 20), 'Closed');
             overlay.align = mxConstants.ALIGN_RIGHT;
             overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
             graph.addCellOverlay(vertex, overlay);
           } else if (vertex != null && vertex.id == 'treeRoot') {
-            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
-            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 18, 18), 'Closed');
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#28A745', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#28A745', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, '#FFFFFF', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 20, 20), 'Closed');
             overlay.align = mxConstants.ALIGN_RIGHT;
             overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
             graph.addCellOverlay(vertex, overlay);
           }
-         
+
         }
       }
     } finally {
@@ -1404,9 +1422,98 @@ styleStates = function (activeStateIdList, closedStateIdList) {
   addTaskIconOverlays(graph);
 }
 
-styleInfo = function(orModels,type){
-  
-  addInfoOverlays(graph,orModels,type);
+
+styleProcessAuditStates = function (activeStateIdList, closedStateIdList) {
+
+  if (activeStateIdList != null && closedStateIdList != null) {
+    graph.getModel().beginUpdate();
+    try {
+      var vertices = graph.getChildVertices(graph.getDefaultParent());
+      for (var vertex of vertices) {
+        if (vertex != null && vertex.id != null) {
+          if (activeStateIdList.indexOf(vertex.id) >= 0) {
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/warning.gif', 18, 18), 'Active');
+            overlay.align = mxConstants.ALIGN_RIGHT;
+            overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
+            graph.addCellOverlay(vertex, overlay);
+          } if (activeStateIdList.indexOf(vertex.id) >= 0) {
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/info.png', 18, 18), 'Information');
+            overlay.align = mxConstants.ALIGN_LEFT;
+            overlay.verticalAlign = mxConstants.ALIGN_TOP;
+
+            overlay.cursor = 'hand';
+            overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
+              var cell = evt.getProperty('cell')
+              try {
+                window['processAuditRef'].zone.run(() => { window['processAuditRef'].component.showStateInfo(cell.value); })
+
+              }
+              catch (exception) {
+                // console.log(exception);
+              }
+
+            }));
+
+            graph.addCellOverlay(vertex, overlay);
+
+
+          } if (closedStateIdList.indexOf(vertex.id) >= 0) {
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/info.png', 18, 18), 'Information');
+            overlay.align = mxConstants.ALIGN_LEFT;
+            overlay.verticalAlign = mxConstants.ALIGN_TOP;
+
+            overlay.cursor = 'hand';
+            overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
+              var cell = evt.getProperty('cell')
+              try {
+                window['processAuditRef'].zone.run(() => { window['processAuditRef'].component.showStateInfo(cell.value); })
+
+              }
+              catch (exception) {
+                // console.log(exception);
+              }
+
+            }));
+
+            graph.addCellOverlay(vertex, overlay);
+
+
+          }
+          else if (closedStateIdList.indexOf(vertex.id) >= 0) {
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 18, 18), 'Closed');
+            overlay.align = mxConstants.ALIGN_RIGHT;
+            overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
+            graph.addCellOverlay(vertex, overlay);
+          }
+          else if (vertex != null && vertex.id == 'treeRoot') {
+            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 18, 18), 'Closed');
+            overlay.align = mxConstants.ALIGN_RIGHT;
+            overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
+            graph.addCellOverlay(vertex, overlay);
+          }
+
+        }
+      }
+    } finally {
+      graph.getModel().endUpdate();
+    }
+  }
+  addTaskIconOverlays(graph);
+}
+
+styleInfo = function (orModels, type) {
+
+  addInfoOverlays(graph, orModels, type);
 }
 
 
@@ -2007,7 +2114,7 @@ function addOverlaysUser(hierarchygraph, cell, addDeleteIcon) {
         document.getElementById('#discardHierarchy').style.visibility = 'hidden';
         document.getElementById('#saveHierarchy').style.visibility = 'hidden';
 
-        window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.discard();})
+        window['userHierarchyRef'].zone.run(() => { window['userHierarchyRef'].component.discard(); })
 
       }
       deleteUserSubtree(hierarchygraph, cell);
@@ -2019,6 +2126,11 @@ function addOverlaysUser(hierarchygraph, cell, addDeleteIcon) {
   }
 };
 
+
+function getStateInfo(cell) {
+  window['processAuditRef'].zone.run(() => { window['processAuditRef'].component.showStateInfo(cell); })
+
+}
 
 function addUser(hierarchygraph, cell) {
   try {
@@ -2092,7 +2204,7 @@ function deleteUserSubtree(hierarchygraph, cell) {
   hierarchygraph.removeCells(cells);
 };
 
-addInfoOverlays = function (graph,orModels,type) {
+addInfoOverlays = function (graph, orModels, type) {
   if (graph != null && graph.getModel() != null) {
     graph.getModel().beginUpdate();
     try {
@@ -2100,45 +2212,45 @@ addInfoOverlays = function (graph,orModels,type) {
       if (vertices != null) {
         for (var vertex of vertices) {
           if (vertex != null && vertex.id != null) {
-             if (vertex.value.stateCd != null && orModels != null) {
-                for (var model of orModels){
-                  if (model.name === vertex.value.stateCd){
-                    var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/info.png', 18, 18), 'Information');
-                    overlay.align = mxConstants.ALIGN_LEFT;
-                    overlay.verticalAlign = mxConstants.ALIGN_TOP;
-                    
-                    overlay.cursor = 'hand';
-                    overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
-                      try {
-                  
-                        var cell = evt.getProperty('cell')
-                        for (var model of orModels){
-                          if(model.name == cell.value.stateCd){
-                            //showModal("infoModal")
-                            if(type == "archive"){
-                              window['taskDetailsRef'].zone.run(() => { window['taskDetailsRef'].component.storeModel(model); })
-                              $("#infoModal").modal();
-                            }
-                            if(type == "design"){
-                              window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.storeModel(model); })
-                              $("#infoModalDesign").modal();
-                            }
+            if (vertex.value.stateCd != null && orModels != null) {
+              for (var model of orModels) {
+                if (model.name === vertex.value.stateCd) {
+                  var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/info.png', 18, 18), 'Information');
+                  overlay.align = mxConstants.ALIGN_LEFT;
+                  overlay.verticalAlign = mxConstants.ALIGN_TOP;
+
+                  overlay.cursor = 'hand';
+                  overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
+                    try {
+
+                      var cell = evt.getProperty('cell')
+                      for (var model of orModels) {
+                        if (model.name == cell.value.stateCd) {
+                          //showModal("infoModal")
+                          if (type == "archive") {
+                            window['taskDetailsRef'].zone.run(() => { window['taskDetailsRef'].component.storeModel(model); })
+                            $("#infoModal").modal();
+                          }
+                          if (type == "design") {
+                            window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.storeModel(model); })
+                            $("#infoModalDesign").modal();
                           }
                         }
                       }
-                      catch (exception) {
-                        // console.log(exception);
-                      }
-                  
-                    }));
-                    
-                    graph.addCellOverlay(vertex, overlay);
-                  }
-                }
+                    }
+                    catch (exception) {
+                      // console.log(exception);
+                    }
+
+                  }));
+
+                  graph.addCellOverlay(vertex, overlay);
                 }
               }
+            }
           }
         }
+      }
     } finally {
       graph.getModel().endUpdate();
     }
@@ -2169,15 +2281,15 @@ addTaskIconOverlays = function (graph) {
                 overlay.align = mxConstants.ALIGN_LEFT;
                 overlay.verticalAlign = mxConstants.ALIGN_BOTTOM;
                 graph.addCellOverlay(vertex, overlay);
-              }else if (vertex.value.stateCd != null && orModels != null) {
-                
+              } else if (vertex.value.stateCd != null && orModels != null) {
+
                 var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/info.png', 18, 18), 'Information');
                 overlay.align = mxConstants.ALIGN_LEFT;
                 overlay.verticalAlign = mxConstants.ALIGN_BOTTOM;
                 graph.addCellOverlay(vertex, overlay);
-                }
-                
               }
+
+            }
           }
         }
       }

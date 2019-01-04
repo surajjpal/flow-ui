@@ -32,6 +32,7 @@ export class DataPoint {
   businessMonitorKey: boolean;
   percentageChange: boolean;
   graphType: string;
+  reportDataKey: boolean;
   childdataPoints: DataPoint[];
 
   constructor() {
@@ -50,6 +51,7 @@ export class DataPoint {
     this.graphType = null;
     this.businessKeyFlag = false;
     this.percentageChange = false;
+    this.reportDataKey=false;
     this.childdataPoints = [];
   }
 }
@@ -119,7 +121,7 @@ export class CostModel {
   constructor() {
     this.expression = '';
     this.amount = 0;
-    this.costType = '';
+    this.costType = "FIXED";
     this.apiCd = '';
     this.currency = '';
   }
@@ -164,8 +166,10 @@ export class StateModel {
   runAtDateExpression: string;
   runAtTimeExpression: string;
   taskConfig:ConnectorConfig[];
+  taskConfigList: string[];
   connectorConfig:ConnectorConfig[];
- 
+  connectorConfigList: string[];
+  reportFlag: boolean;
 
   constructor() {
     this.stateId = '';
@@ -187,8 +191,10 @@ export class StateModel {
     this.runAtDateExpression = '';
     this.runAtTimeExpression = '';
     this.taskConfig = [];
+    this.taskConfigList = [];
     this.connectorConfig = [];
-   
+    this.connectorConfigList = [];
+    this.reportFlag = false;
   }
 }
 
@@ -238,6 +244,30 @@ export class Transition {
   }
 }
 
+
+export class ProcessModel extends BaseModel{
+  status:string;
+	endTime :any;
+	startTimeLong:any;
+	operationType:any;
+	processOwner:string;
+	endState:any;
+	businessValue:any;
+  subStatus: string;
+	resourceCost :any;
+	flowId:string;
+	businessCost:any;
+	startTime :any;
+	flowVersion: string;
+	entityId:string;
+	processType:string;
+	endTimeLong:any;
+  statusCd:string;
+  parameters:any;
+  states:any;
+  highlights: any[] = [];
+}
+
 export class GraphObject extends BaseModel {
   machineLabel: string;
   machineType: string;
@@ -266,4 +296,17 @@ export class GraphObject extends BaseModel {
     this.activeStateIdList = [];
     this.closedStateIdList = [];
   }
+}
+
+  
+export class CommonSearchModel {
+  searchParams:any;
+  returnFields:any;
+
+  constructor() {
+    this.searchParams = [];
+    this.returnFields = [];
+  
+  }
+
 }

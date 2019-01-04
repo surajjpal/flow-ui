@@ -2,14 +2,14 @@
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
       <div class="progress">
-        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;" aria-valuenow="99"
-          aria-valuemin="0" aria-valuemax="100">Loading...</div>
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;"
+          aria-valuenow="99" aria-valuemin="0" aria-valuemax="100">Loading...</div>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
-      <br/>
+      <br />
     </div>
   </div>
 </div>
@@ -19,39 +19,44 @@
       <div class="panel panel-default">
         <ul class="nav nav-tabs" role="tablist">
           <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#tab_assigned" role="tab" aria-expanded="true">Assigned</a>
+            <a class="nav-link active" (click)="fetchRecordsFor(TAB_ASSIGNED, assignedStates)" data-toggle="tab" href="#tab_assigned"
+              role="tab" aria-expanded="true">Assigned</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#tab_unassigned" role="tab">Unassigned</a>
+            <a class="nav-link" (click)="fetchRecordsFor(TAB_UNASSIGNED, unassignedStates)" data-toggle="tab" href="#tab_unassigned"
+              role="tab">Unassigned</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#tab_flagged" role="tab">Flagged</a>
+            <a class="nav-link" (click)="fetchRecordsFor(TAB_FLAGGED, flaggedStates)" data-toggle="tab" href="#tab_flagged"
+              role="tab">Flagged</a>
           </li>
         </ul>
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane fade show active" id="tab_assigned">
-            <apitable *ngIf="assignedStates" [rawDataArray]="assignedStates" [isLoading]="loadingAssigned" (selectedData)="onSelect($event)"></apitable>
+            <apitable *ngIf="assignedStates" [rawDataArray]="assignedStates" [isLoading]="loadingAssigned"
+              (selectedData)="onSelect($event)"></apitable>
             <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; width: 200px"
               *ngIf="assignedStates.length == 10" (click)="loadMore('ASSIGNED')">Load More</button>
           </div>
           <div role="tabpanel" class="tab-pane fade" id="tab_unassigned">
-            <apitable *ngIf="unassignedStates" [rawDataArray]="unassignedStates" [isLoading]="loadingUnassigned" (selectedData)="onSelect($event)"></apitable>
+            <apitable *ngIf="unassignedStates" [rawDataArray]="unassignedStates" [isLoading]="loadingUnassigned"
+              (selectedData)="onSelect($event)"></apitable>
             <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;  margin-bottom: 20px; width: 200px"
               *ngIf="unassignedStates.length == 10" (click)="loadMore('UNASSIGNED')">Load More</button>
           </div>
           <div role="tabpanel" class="tab-pane fade" id="tab_flagged">
             <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
             <br>
-            <table class="table table-striped" [mfData]="flaggedStates | universalDataFilter : filterQuery" #mf="mfDataTable" [(mfSortBy)]="sortBy"
-              [(mfSortOrder)]="sortOrder">
+            <table class="table table-striped" [mfData]="flaggedStates | universalDataFilter : filterQuery" #mf="mfDataTable"
+              [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
               <thead>
                 <tr>
                   <th>
-                      <mfDefaultSorter by="">
-                        <h6>
-                          <b>Business Key</b>
-                        </h6>
-                      </mfDefaultSorter>
+                    <mfDefaultSorter by="">
+                      <h6>
+                        <b>Business Key</b>
+                      </h6>
+                    </mfDefaultSorter>
                   </th>
                   <th>
                     <mfDefaultSorter by="">
@@ -176,7 +181,8 @@
 </div>
 
 
-<div class="modal fade" id="flagWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagWarningLabel" aria-hidden="true">
+<div class="modal fade" id="flagWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagWarningLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <!-- Modal Header -->

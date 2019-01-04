@@ -4,6 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 import { User } from '../models/user.model';
 import { commonKeys } from '../models/constants';
+import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
 
 @Injectable()
 export class DataSharingService {
@@ -137,5 +138,20 @@ export class AlertService {
 
   getMessage(): Observable<any> {
     return this.subject.asObservable();
+  }
+}
+
+@Injectable()
+export class ScrollService {
+
+  constructor(private _scrollToService: ScrollToService) { }
+
+  public triggerScrollTo(targetId: string) {
+
+    const config: ScrollToConfigOptions = {
+      target: targetId
+    };
+
+    this._scrollToService.scrollTo(config);
   }
 }

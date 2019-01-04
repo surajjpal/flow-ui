@@ -21,9 +21,12 @@ export const environment = {
   updateEntityTraining: 'http://localhost:8080/flow/interfaces/entity_classification_training',
   
 
+  //
+  processauditurl:"http://localhost:5000/api/universalsearch/search/flow",
+
   // Flow
   server: 'http://localhost:8080/flow/console/',
-  autourl:'http://localhost:5002/?',
+  autourl:'http://localhost:4200/#/pg/ch/cnv/',
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
   orPayloadMachineType:'state/saveOrPayload/machineType/',
@@ -34,6 +37,7 @@ export const environment = {
   gettatrecords:'state/fetchtat',
   getallstats:'state/fetchstatestatus',
   getpersonalstats:'state/getstatestatusbyuser',
+  getstateinstance:'state/fetchstateinstance',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
@@ -109,6 +113,9 @@ export const environment = {
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
+
+  flowsearch:'/api/search/flow',
+
   // Analytics
   reportservice: 'http://localhost:8080/flow/report',
   sendReportUrl: '/reports/analyticsreport/sendreport',
@@ -130,6 +137,7 @@ export const environment = {
   businessObjectTrainingUrl: '/automatons/businessobject/training',
   businessObjectActivateTrainerUrl: '/automatons/businessobject/activate',
   businessObjectDectivateTrainerUrl: '/automatons/businessobject/deactivate',
+  businessObjectPredictUrl: '/automatons/businessobject/predict',
   
   //Dashboard
   dashboardServer: 'http://localhost:8080/flow/dashboard/',
@@ -150,12 +158,20 @@ export const environment = {
   //Dashboard from interfaces
   dashboardinterface: 'http://localhost:8080/flow/interfaces/dashboard',
 
-  //CRUD API path - To be used in conjunction with interfaceService property
-  crudFunction : '/crud',
+  //Following APIs path - To be used in conjunction with interfaceService property
+  crudFunction: '/crud',
+  sendAgentMessage: '/sendMessage',
 
   // activity monitor services
   businessDataPointValues: 'businessactivitymanagement/datapointvalues',
   businessDataPoints: 'businessactivitymanagement/datapoints',
-  businessDataPonitsPercentageCount: 'businessactivitymanagement/percentagecount',
+  businessDataPonitsPercentageCount: 'businessactivitymanagement/datapoint/percentagecount',
   businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
+  businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
+  
+  //python project in api-utils ondemandreport project
+  sendReportCSV: 'http://127.0.0.1:5000/generatereport',
+
+  //Vocabulary
+  vocabulary :'http://localhost:5000/api/vocabulary',
 };

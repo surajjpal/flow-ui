@@ -30,7 +30,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   validationKeysSource: string[];
   stagesSource: Stage[];
   templateNames: string[];
-  
+  suggestedTags:string[];
+  globalIntents:string[];
 
   intentFilterQuery: string;
   entityFilterQuery: string;
@@ -53,6 +54,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   domainBody: string;
   domainSucess: boolean;
   operandSource: string[];
+  bulkExpressions: string;
+
+  showTags:boolean;
 
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
@@ -70,7 +74,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.domainCreateMode = true;
     this.modalHeader = '';
     this.createMode = false;
-    this.languageSource = ['ENG', 'HIN', 'MAR', 'ID', 'ML'];
+    this.showTags = false;
+    this.languageSource = ['ENG', 'HIN', 'MAR', 'ID', 'ML', 'ARA'];
     this.operandSource = ['AND', 'OR'];
     this.modelKeysSource = [];
     this.domainUpdate = 'Domain';
@@ -78,6 +83,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.domainSucess = false;
     this.templateNames = ["default"]
     this.stagesSource = [];
+    this.suggestedTags = [];
+    this.globalIntents = ["closure","apiIdle","negation","skip","cancel","apiRetry","affirmation","default","apiInit","initiation"]
+    
     this.stagesSource.push(new Stage('Initialization', 'INIT'));
     this.stagesSource.push(new Stage('Context Setting', 'CONTEXT'));
     this.stagesSource.push(new Stage('Information Input', 'INFO'));
@@ -146,7 +154,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   intentUploaderOptions: NgUploaderOptions;
 
   fetchValidationKeys() {
-    this.validationKeysSource = ['dobdate','phonenumber','email','otp','incidentdate','incidentdescreption','pincode','imeiemail','incidenttime','imei','emailmobile'];
+    this.validationKeysSource = ['dobdate', 'phonenumber', 'email', 'otp', 'incidentdate', 'incidentdescreption', 'pincode', 'imeiemail', 'incidenttime', 'imei', 'emailmobile'];
   }
 
   resetFields() {
@@ -154,6 +162,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   onIntentSelect(intent?: Intent) {
+    this.suggestedTags = [];
+    this.showTags = false;
     if (intent) {
       this.modalHeader = 'Update Intent';
       this.createMode = false;
@@ -168,22 +178,47 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   addIntent() {
-    if (this.selectedIntent) {
-      const index: number = this.selectedDomain.domainIntents.indexOf(this.selectedIntent);
-      if (index !== -1) {
-        this.selectedDomain.domainIntents[index] = this.tempIntent;
+      if(this.tempIntent.tags.length >= 8)
+      {
+        if (this.selectedIntent) {
+          const index: number = this.selectedDomain.domainIntents.indexOf(this.selectedIntent);
+          if (index !== -1) {
+            this.selectedDomain.domainIntents[index] = this.tempIntent;
+          }
+        } else {
+          this.selectedDomain.domainIntents.push(this.tempIntent);
+        }
+    
+        // This is to forcefully call the digest cycle of angular so that,
+        // the filtered list would get updated with these chanegs made in master list
+        this.intentFilterQuery = (` ${this.intentFilterQuery}`);
+        setTimeout(() => {
+          this.intentFilterQuery = this.intentFilterQuery.slice(1);
+        }, 10);
       }
-    } else {
-      this.selectedDomain.domainIntents.push(this.tempIntent);
+      else{
+          if(!this.globalIntents.includes(this.tempIntent.intentCd))
+          {
+            new showAlertModal('Error! Unable to save', "Number of tags should be atleast 8");
+          }
+          else{
+            if (this.selectedIntent) {
+              const index: number = this.selectedDomain.domainIntents.indexOf(this.selectedIntent);
+              if (index !== -1) {
+                this.selectedDomain.domainIntents[index] = this.tempIntent;
+              }
+            } else {
+              this.selectedDomain.domainIntents.push(this.tempIntent);
+            }
+            this.intentFilterQuery = (` ${this.intentFilterQuery}`);
+            setTimeout(() => {
+              this.intentFilterQuery = this.intentFilterQuery.slice(1);
+            }, 10);
+          }
+      }
     }
-
-    // This is to forcefully call the digest cycle of angular so that,
-    // the filtered list would get updated with these chanegs made in master list
-    this.intentFilterQuery = (` ${this.intentFilterQuery}`);
-    setTimeout(() => {
-      this.intentFilterQuery = this.intentFilterQuery.slice(1);
-    }, 10);
-  }
+   
+  
 
   removeIntent() {
     if (this.selectedIntent) {
@@ -191,10 +226,19 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       if (index !== -1) {
         this.selectedDomain.domainIntents.splice(index, 1);
       }
+
+      // This is to forcefully call the digest cycle of angular so that,
+      // the filtered list would get updated with these chanegs made in master list
+      this.intentFilterQuery = (` ${this.intentFilterQuery}`);
+      setTimeout(() => {
+        this.intentFilterQuery = this.intentFilterQuery.slice(1);
+      }, 10);
     }
   }
 
   onEntitySelect(entity?: Entity) {
+    this.suggestedTags = [];
+    this.showTags = false;
     if (entity) {
       this.modalHeader = 'Update Entity';
       this.createMode = false;
@@ -209,21 +253,27 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   addEntity() {
-    if (this.selectedEntity) {
-      const index: number = this.selectedDomain.domainEntities.indexOf(this.selectedEntity);
-      if (index !== -1) {
-        this.selectedDomain.domainEntities[index] = this.tempEntity;
+    if(this.tempEntity.tags.length >= 8){
+      if (this.selectedEntity) {
+        const index: number = this.selectedDomain.domainEntities.indexOf(this.selectedEntity);
+        if (index !== -1) {
+          this.selectedDomain.domainEntities[index] = this.tempEntity;
+        }
+      } else {
+        this.selectedDomain.domainEntities.push(this.tempEntity);
       }
-    } else {
-      this.selectedDomain.domainEntities.push(this.tempEntity);
+  
+      // This is to forcefully call the digest cycle of angular so that,
+      // the filtered list would get updated with these chanegs made in master list
+      this.entityFilterQuery = (` ${this.entityFilterQuery}`);
+      setTimeout(() => {
+        this.entityFilterQuery = this.entityFilterQuery.slice(1);
+      }, 10);
     }
-
-    // This is to forcefully call the digest cycle of angular so that,
-    // the filtered list would get updated with these chanegs made in master list
-    this.entityFilterQuery = (` ${this.entityFilterQuery}`);
-    setTimeout(() => {
-      this.entityFilterQuery = this.entityFilterQuery.slice(1);
-    }, 10);
+    else{
+      new showAlertModal('Error! Unable to save', "Number of tags should be atleast 8");
+    }
+    
   }
 
   removeEntity() {
@@ -232,6 +282,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       if (index !== -1) {
         this.selectedDomain.domainEntities.splice(index, 1);
       }
+
+      // This is to forcefully call the digest cycle of angular so that,
+      // the filtered list would get updated with these chanegs made in master list
+      this.entityFilterQuery = (` ${this.entityFilterQuery}`);
+      setTimeout(() => {
+        this.entityFilterQuery = this.entityFilterQuery.slice(1);
+      }, 10);
     }
   }
 
@@ -241,15 +298,19 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.createMode = false;
       this.selectedGoal = goal;
       this.tempGoal = JSON.parse(JSON.stringify(this.selectedGoal));
+      this.populateBulkExpressions(this.tempGoal.expression);
     } else {
       this.modalHeader = 'Create Goal';
       this.createMode = true;
       this.selectedGoal = null;
       this.tempGoal = new Goal();
+      this.populateBulkExpressions(this.tempGoal.expression);
     }
   }
 
   addGoal() {
+    this.tempGoal.expression = this.readBulkExpressions();
+
     let error = this.isInvalidGoalSteps(this.tempGoal.domainGoalSteps);
     if (error) {
       new showAlertModal('Error', error);
@@ -271,7 +332,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
           if (goalStep.responses) {
             for (const goalStepResponse of goalStep.responses) {
-              goalStepResponse.expression = goalStep.goalExpression;
+              goalStepResponse.expression = [goalStep.goalExpression];
             }
           }
         }
@@ -297,7 +358,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.goalFilterQuery = this.goalFilterQuery.slice(1);
       }, 10);
     }
-    
+
   }
 
   checkStageCodeInGoalResponses(goalSteps: GoalStep[]) {
@@ -308,7 +369,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           for (const response of goalStep.responses) {
             if (response) {
               if (!response.stage || response.stage.trim().length === 0) {
-                errorExpressionList.push(response.expression);
+                errorExpressionList.push(response.expression != null && response.expression.length > 0 ? response.expression[0] : response.response);
               }
             }
           }
@@ -330,6 +391,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.selectedDomain.domainGoals.splice(index, 1);
       }
     }
+
+    // This is to forcefully call the digest cycle of angular so that,
+    // the filtered list would get updated with these chanegs made in master list
+    this.goalFilterQuery = (` ${this.goalFilterQuery}`);
+    setTimeout(() => {
+      this.goalFilterQuery = this.goalFilterQuery.slice(1);
+    }, 10);
   }
 
   addNewGoalStep() {
@@ -372,6 +440,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         const responsesToBeRemoved: Response[] = [];
 
         for (const goal of this.selectedDomain.domainGoals) {
+          if (goal.expression && (typeof goal.expression === 'string' || goal.expression instanceof String)) {
+            goal.expression = [goal.expression];
+          }
+
           goal.domainGoalSteps = goal.domainGoalSteps.sort((gs1, gs2) => {
             if (gs1.sequence > gs2.sequence) {
               return 1;
@@ -407,6 +479,18 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
                 response.options = [];
               }
 
+              if (!response.contextExpression || response.contextExpression === null) {
+                response.contextExpression = '';
+              }
+
+              if (response.expression && (typeof response.expression === 'string' || response.expression instanceof String)) {
+                response.expression = [response.expression];
+              }
+
+              if (!response.uploadDocument || response.uploadDocument === null) {
+                response.uploadDocument = {};
+              }
+
               for (const option of response.options) {
                 if (!option.type || option.type === null) {
                   option.type = '';
@@ -437,7 +521,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
                 }
               }
 
-              if (response.expression === goalStep.goalExpression) {
+              if (response.expression && response.expression.length === 1 && response.expression[0] && goalStep.goalExpression && response.expression[0].trim().toLowerCase() === goalStep.goalExpression.trim().toLowerCase()) {
                 responsesToBeRemoved.push(response);
                 goalStep.responses.push(response);
               }
@@ -501,11 +585,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       if (this.tempResponse.uploadDocument) {
         this.isAddFileUploadResponse = true;
       }
+      this.populateBulkExpressions(this.tempResponse.expression);
     } else {
       this.modalHeader = 'Create Response';
       this.createMode = true;
       this.selectedResponse = null;
       this.tempResponse = new Response();
+      this.populateBulkExpressions(this.tempResponse.expression);
     }
   }
 
@@ -532,6 +618,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     if (response) {
       this.selectedDomain.domainResponse.push(response);
     } else if (this.selectedResponse) {
+      this.tempResponse.expression = this.readBulkExpressions();
+
       if (!this.tempResponse.stage || this.tempResponse.stage.trim().length === 0) {
         new showAlertModal('Error', 'Stage can\'t be left empty.');
       } else {
@@ -552,6 +640,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       if (!this.tempResponse.stage || this.tempResponse.stage.trim().length === 0) {
         new showAlertModal('Error', 'Stage can\'t be left empty.');
       } else {
+        this.tempResponse.expression = this.readBulkExpressions();
+
         this.selectedDomain.domainResponse.push(this.tempResponse);
         new closeModal('responseModal');
 
@@ -563,7 +653,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         }, 10);
       }
     }
-    
+
   }
 
   removeResponse(response?: Response) {
@@ -578,6 +668,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.selectedDomain.domainResponse.splice(index, 1);
       }
     }
+
+    // This is to forcefully call the digest cycle of angular so that,
+    // the filtered list would get updated with these chanegs made in master list
+    this.responseFilterQuery = (` ${this.responseFilterQuery}`);
+    setTimeout(() => {
+      this.responseFilterQuery = this.responseFilterQuery.slice(1);
+    }, 10);
   }
 
   removeCard(card?: CardData) {
@@ -592,14 +689,21 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.selectedDomain.cards.splice(index, 1);
       }
     }
+
+    // This is to forcefully call the digest cycle of angular so that,
+    // the filtered list would get updated with these chanegs made in master list
+    this.cardsFilterQuery = (` ${this.cardsFilterQuery}`);
+    setTimeout(() => {
+      this.cardsFilterQuery = this.cardsFilterQuery.slice(1);
+    }, 10);
   }
 
   addCard(card?: CardData) {
-    if(card) {
+    if (card) {
       this.selectedDomain.cards.push(card);
     }
-    else if(this.selectedCard) {
-      if(!this.tempCard.cardName || !this.tempCard.templateName) {
+    else if (this.selectedCard) {
+      if (!this.tempCard.cardName || !this.tempCard.templateName) {
         new showAlertModal('Error', 'card name can not be blank');
       }
       else {
@@ -616,13 +720,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           this.cardsFilterQuery = this.cardsFilterQuery.slice(1);
         }, 10);
       }
-      
+
     }
     else {
       if (!this.tempCard.cardName || this.tempCard.cardName.trim().length === 0) {
         new showAlertModal('Error', 'card name can\'t be left empty.');
       } else {
-        if(!this.selectedDomain.cards) {
+        if (!this.selectedDomain.cards) {
           this.selectedDomain.cards = [];
         }
         this.selectedDomain.cards.push(this.tempCard);
@@ -636,7 +740,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         }, 10);
       }
     }
-    
+
   }
 
   createDomain() {
@@ -661,7 +765,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         .subscribe(
           response => {
             this.updateClassifierTraining();
-            
+
             //this.updateIntenTrainingData();
 
             // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
@@ -676,20 +780,20 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
   updateClassifierTraining() {
     this.subscription = this.domainService.updateDomainClassifierTraining(this.selectedDomain)
-    .subscribe(
-      response => {
-        if (response) {
-          this.domainBody = `Domain updated successfully!!`;
-          this.domainSucess = true;
-          this.selectedDomain = response;
-        } else {
-          this.domainBody = `Something went wrong please try again!!`;
-          this.domainSucess = true;
+      .subscribe(
+        response => {
+          if (response) {
+            this.domainBody = `Domain updated successfully!!`;
+            this.domainSucess = true;
+            this.selectedDomain = response;
+          } else {
+            this.domainBody = `Something went wrong please try again!!`;
+            this.domainSucess = true;
+          }
+          //this.updateEntityTrainingData();
+          //this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
         }
-        //this.updateEntityTrainingData();
-        //this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
-      }
-    )
+      )
   }
 
   updateIntenTrainingData() {
@@ -824,9 +928,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     cardData.actionable.push(new ResponseData())
   }
 
-  
 
-  deleteCardData(cardData,row) {
+
+  deleteCardData(cardData, row) {
     const index: number = cardData.indexOf(row);
     if (index !== -1) {
       cardData.slice(index, 1);
@@ -851,4 +955,60 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   customTrackBy(index: number, obj: any): any {
     return index;
   }
+
+  populateBulkExpressions(expressions) {
+    this.bulkExpressions = '';
+    if (expressions) {
+      for (const exp of expressions) {
+        if (exp) {
+          if (this.bulkExpressions.length > 0) {
+            this.bulkExpressions = this.bulkExpressions + '\n' + exp;
+          } else {
+            this.bulkExpressions = exp;
+          }
+        }
+      }
+    }
+  }
+
+  readBulkExpressions() {
+    let expressions = [];
+    if (this.bulkExpressions && this.bulkExpressions.trim().length > 0) {
+      expressions = this.bulkExpressions.split("\n");
+    }
+    this.bulkExpressions = '';
+    return expressions;
+  }
+
+  getIntentSynonyms(){
+    if(this.tempIntent.tags.length > 0){
+      if (!this.suggestedTags.includes(this.tempIntent.tags[this.tempIntent.tags.length-1])){
+        this.subscription = this.domainService.getSynonyms(this.tempIntent.tags[this.tempIntent.tags.length-1])
+        .subscribe(
+          response => {
+            this.showTags = true;
+            this.suggestedTags = response["synonyms"];
+          }
+        );
+      }
+      }
+      
+    }
+
+    getEntitySynonyms(){
+      if(this.tempEntity.tags.length > 0){
+        if (!this.suggestedTags.includes(this.tempEntity.tags[this.tempEntity.tags.length-1])){
+          this.subscription = this.domainService.getSynonyms(this.tempEntity.tags[this.tempEntity.tags.length-1])
+          .subscribe(
+            response => {
+              this.showTags = true;
+              this.suggestedTags = response["synonyms"];
+            }
+          );
+        }
+        }
+        
+      }
+    
+
 }

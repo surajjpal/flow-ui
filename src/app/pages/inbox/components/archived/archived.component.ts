@@ -15,12 +15,17 @@ export class ArchivedComponent implements OnInit, OnDestroy {
   personalStates: State[];
   loadingGroup: boolean = false;
   loadingPersonal: boolean = false;
-  pageNumber :any;
-  fetchRecords:any;
+  pageNumber: any;
+  fetchRecords: any;
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
 
   progressBarFlag: boolean = false;
+
+  TAB_ASSIGNED = 'Personal';
+  TAB_UNASSIGNED = 'Group';
+  personalFetched = false;
+  groupFetched = false;
 
   constructor(private stateService: StateService) {
     this.groupStates = [];
@@ -28,9 +33,9 @@ export class ArchivedComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.pageNumber= 0;
+    this.pageNumber = 0;
     this.fetchRecords = 10;
-    this.fetchData(this.pageNumber,this.fetchRecords);
+    this.fetchRecordsFor(this.TAB_ASSIGNED, this.personalStates);
   }
 
   ngOnDestroy(): void {
@@ -42,51 +47,66 @@ export class ArchivedComponent implements OnInit, OnDestroy {
     }
   }
 
-  fetchData(pageNumber,fetchRecords): void {
+  loadMore(status, type): void {
     this.loadingPersonal = true;
     this.loadingGroup = true;
+    this.pageNumber = this.pageNumber + 1;
+    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder(status, type, this.pageNumber, this.fetchRecords)
+      .subscribe(states => {
+        this.loadingGroup = false;
+        if (type == 'Group') {
+          this.groupStates = this.groupStates.concat(states)
+        }
+        else if (type == 'Personal') {
+          this.personalStates = this.personalStates.concat(states)
+        }
 
-    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('CLOSED', 'Group',pageNumber,fetchRecords)
-    .subscribe(states => {
-      this.loadingGroup = false;
-      this.groupStates = states;
 
-    }, error => {
-      this.loadingGroup = false;
-    });
 
-    this.subscriptionPersonal = this.stateService.getStatesByStatusAndFolder('CLOSED', 'Personal',pageNumber,fetchRecords)
-    .subscribe(states => {
-      this.loadingPersonal = false;
-      this.personalStates = states;
-    }, error => {
-      this.loadingPersonal = false;
-    });
-  }
+      }, error => {
+        this.loadingGroup = false;
 
-  loadMore(status,type):void{
-    this.loadingPersonal = true;
-    this.loadingGroup = true;
-    this.pageNumber = this.pageNumber + 1; 
-    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder(status,type,this.pageNumber,this.fetchRecords)
-    .subscribe(states => {
-      this.loadingGroup = false;
-      if(type=='Group'){
-        this.groupStates = this.groupStates.concat(states)
-      }
-      else if(type=='Personal'){
-        this.personalStates = this.personalStates.concat(states)
-      }
-      
-     
-
-    }, error => {
-      this.loadingGroup = false;
-     
-    });
+      });
   }
 
   onSelect(selectedData: State): void {
 
+  }
+
+  fetchRecordsFor(tabName: string, existingRecords: State[]) {
+    if (!tabName || tabName == null || tabName.trim().length == 0) {
+      return;
+    }
+    else if (tabName === this.TAB_ASSIGNED) {
+      if (this.personalFetched) {
+        return;
+      } else {
+        this.personalFetched = true;
+      }
+    }
+    else if (tabName === this.TAB_UNASSIGNED) {
+      if (this.groupFetched) {
+        return;
+      } else {
+        this.groupFetched = true;
+      }
+    } else {
+      return;
+    }
+
+    if (existingRecords == null) {
+      existingRecords = [];
+    }
+
+    this.progressBarFlag = true;
+    this.subscriptionGroup = this.stateService.getStatesByStatusAndFolder('CLOSED', tabName, 0, this.fetchRecords)
+      .subscribe(states => {
+        this.progressBarFlag = false;
+        for (const state of states) {
+          existingRecords.push(state);
+        }
+      }, error => {
+        this.progressBarFlag = false;
+      });
   }
 }

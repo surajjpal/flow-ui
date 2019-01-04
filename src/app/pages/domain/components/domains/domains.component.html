@@ -23,8 +23,9 @@
               </div>
             </form>
             <br>
-    
-            <table class="table table-striped" [mfData]="domainSource | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="name">
+
+            <table class="table table-striped" [mfData]="domainSource | universalDataFilter : filterQuery" #mf="mfDataTable"
+              [mfRowsOnPage]="domainPageSize" mfSortBy="name">
               <thead>
                 <tr>
                   <th>
@@ -52,7 +53,10 @@
               <tfoot>
                 <tr>
                   <td colspan="100%">
-                    <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                    <button type="button" class="btn btn-info" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
+                      *ngIf="moreDomainPages" (click)="fetchDomains()">Load More
+                    </button>
+                    <mfBootstrapPaginator></mfBootstrapPaginator>
                   </td>
                 </tr>
               </tfoot>
@@ -60,7 +64,7 @@
           </div>
         </div>
         <div role="tabpanel" class="tab-pane fade" id="tab_archived">
-          
+
         </div>
       </div>
     </ba-card>

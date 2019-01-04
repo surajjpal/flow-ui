@@ -239,6 +239,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.MESSAGES_IN_EPISODE_FLAG = true;
         this.updateProgressBar();
         this.messagesInEpisodeData = autoDashboard['result'];
+        
       }, err => {
         this.MESSAGES_IN_EPISODE_FLAG = true;
         this.updateProgressBar();
@@ -262,12 +263,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.sentimentCountOptions = this.donutChartOptions();
     this.goalsCountOptions = this.donutChartOptions();
     this.messagesInEpisodeOptions = this.mulitBarChartOptionsStringVsValue();
-    this.goalsEfficiencyOptions = this.goalEfficiencyBarChartOptions();
+    this.goalsEfficiencyOptions = this.singleDiscreteChartOptions("goals", "efficiency");
   }
 
   parseGoalsCountAndEfficiency(autoDashboard: any) {
     this.goalsCountData = autoDashboard[0].values;
     this.goalsEfficiencyData = autoDashboard[1];
+    
   }
 
   donutChartOptions() {
@@ -431,6 +433,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  singleDiscreteChartOptions(xAxisLabel, yAxisLabel) {
+    return  {
+        chart: {
+            type: 'discreteBarChart',
+            height: 450,
+            margin : {
+                top: 35,
+                right: 20,
+                bottom: 70,
+                left: 60
+            },
+            staggerLabels: true,
+            x: function(d){return d.label;},
+            y: function(d){return d.value + (1e-10);},
+            showValues: true,
+            valueFormat: function(d){
+                return d3.format(',.2f')(d);
+            },
+            duration: 500,
+            xAxis: {
+                axisLabel: xAxisLabel
+            },
+            yAxis: {
+                axisLabel: yAxisLabel,
+                axisLabelDistance: -10
+            }
+        }
+    };
+  }
+
 
   /*
   // this is used to change keys in map with new keys

@@ -1,6 +1,7 @@
 <div class="widgets">
   <div class="row">
-    <ba-card [cardTitle]="createMode ? 'Create Connector Configuration' : 'Update Connector Configuration'" baCardClass="with-scroll" class="data-table-container">
+    <ba-card [cardTitle]="createMode ? 'Create Connector Configuration' : 'Update Connector Configuration'" baCardClass="with-scroll"
+      class="data-table-container">
       <div class="panel panel-default">
         <form>
           <div class="form-group">
@@ -9,70 +10,76 @@
           </div>
           <div class="form-group">
             <label>Type</label>
-            <select class="selectpicker form-control" required id="selectRootUser" ng-disabled="!createMode" title="Choose Connector" [(ngModel)]="conInfo.displayName" name="connector" [ngModelOptions]="{standalone: true}" (ngModelChange)="onConfigSelect($event)">
-                <option *ngFor="let connector of Connectors" [ngValue]="connector">{{connector.displayName}}</option>
-              </select>
+            <select class="selectpicker form-control" required id="selectRootUser" ng-disabled="!createMode" title="Choose Connector"
+              [(ngModel)]="selectedConnector" name="connector" [ngModelOptions]="{standalone: true}" (ngModelChange)="onConfigSelect($event)">
+              <option *ngFor="let connector of Connectors" [ngValue]="connector">{{connector.displayName}}</option>
+            </select>
           </div>
           <div *ngIf="selected">
-              <div class="form-group">
-                  <ul class="nav nav-tabs" role="tablist">
-                    <li class="nav-item">
-                      <a class="nav-link active" data-toggle="tab" href="#tab_config" role="tab" aria-expanded="true">Configuration</a>
-                    </li>
-                    <!-- <li class="nav-item">
+            <div class="form-group">
+              <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" data-toggle="tab" href="#tab_config" role="tab" aria-expanded="true">Configuration</a>
+                </li>
+                <!-- <li class="nav-item">
                       <a class="nav-link" data-toggle="tab" href="#tab_response" role="tab">Response</a>
                     </li> -->
-                  </ul>
-                <div class="tab-content">
-                  <div role="tabpanel" class="tab-pane fade show active" id="tab_config">
-                    <table class="table" [mfData]="configList" #mfConfigs="mfDataTable" [mfRowsOnPage]="10">
-                        <thead>
-                          <tr>
-                            <th>Action</th>
-                            <th>Key</th>
-                            <th>Value</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let config of mfConfigs.data; let i = index" [attr.data-index]="i">
-                                <td >
-                                  <button type="button" class="btn btn-danger" title="Delete" (click)="removeBody(config)" ><i class="ion-close-round"></i></button>
-                                </td>
-                                <td>
-                                  <input type="text" class="form-control" placeholder="Key" [value]="config.get('key')" (input)="config.set('key', $event.target.value)"/>
-                                </td>
-                                <!-- <td *ngIf="typeConfigList[i].get('value') == 'file'">
+              </ul>
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade show active" id="tab_config">
+                  <table class="table" [mfData]="configList" #mfConfigs="mfDataTable" [mfRowsOnPage]="20">
+                    <thead>
+                      <tr>
+                        <th>Action</th>
+                        <th>Key</th>
+                        <th>Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let config of mfConfigs.data; let i = index" [attr.data-index]="i">
+                        <td>
+                          <button type="button" class="btn btn-danger" title="Delete" (click)="removeBody(config)"><i
+                              class="ion-close-round"></i></button>
+                        </td>
+                        <td>
+                          <input type="text" class="form-control" placeholder="Key" [value]="config.get('key')" (input)="config.set('key', $event.target.value)" />
+                        </td>
+                        <!-- <td *ngIf="typeConfigList[i].get('value') == 'file'">
                                 
                                 </td> -->
-                                <td *ngIf="typeConfigList[i].get('value') == 'string'">
-                                  <input type="text" class="form-control" placeholder="Value" [value]="config.get('value')"  (input)="config.set('value', $event.target.value)" />
-                                </td >
-                                <td *ngIf="typeConfigList[i].get('value') == 'file'">
-                                    <label for="file-upload" class="custom-file-upload">
-                                        <i class="fa fa-cloud-upload"></i> {{createMode ? 'Upload File ' : 'Upload New File'}}
-                                      </label>
-                                      <label>{{fileName}}</label>
-                                      <input id="file-upload" type="file" (change)=fileEvent($event,config)/>
-                                </td>
-                                <td *ngIf="typeConfigList[i].get('value') == 'list'">
-                                 <select class="selectpicker form-control" required id="selectUser"  title="Choose Value"  name="value"  [(ngModel)]="temp" (ngModelChange)="onValueSelect($event,config)">
-                                    <option *ngFor="let value of config.get('values')" [ngValue]="value">{{value}}</option>
-                                 </select>
-                                </td>
-                              </tr>
-                        </tbody>
-                        <tfoot>
-                          <tr>
-                            <td colspan="2">
-                              <mfBootstrapPaginator ></mfBootstrapPaginator>
-                            </td>
-                            <td colspan="1" style="text-align: right;">
-                              <button type="button" class="btn btn-primary" (click)="addParam()">Add Param</button>
-                            </td>
-                          </tr>
-                        </tfoot>
-                      </table>
-                      <!-- <table class="table" [mfData]="requiredConfigList" #mfRequired="mfDataTable" [mfRowsOnPage]="10">
+                        <td *ngIf="typeConfigList[i].get('value') == 'string'">
+                          <input type="text" class="form-control" placeholder="Value" [value]="config.get('value')"
+                            (input)="config.set('value', $event.target.value)" />
+                        </td>
+                        <td *ngIf="typeConfigList[i].get('value') == 'file'">
+                          <label for="file-upload" class="custom-file-upload">
+                            <i class="fa fa-cloud-upload"></i> {{createMode ? 'Upload File ' : 'Upload New File'}}
+                          </label>
+                          <label>{{fileName}}</label>
+                          <input id="file-upload" type="file" (change)=fileEvent($event,config) />
+                        </td>
+                        <td *ngIf="typeConfigList[i].get('value') == 'list'">
+                          <select class="selectpicker form-control" required id="selectUser" title="Choose Value" name="value"
+                            [(ngModel)]="temp[config.get('key')]" [ngModelOptions]="{standalone: true}" (ngModelChange)="onValueSelect($event,config)">
+                            <option *ngFor="let value of config.get('values')" [ngValue]="value">{{value}}</option>
+                          </select>
+                        <td *ngIf="typeConfigList[i].get('value') == 'boolean'">
+                          <api-checkbox [checked]="config.get('value')" [label]="config.get('value')" (event)="config.set('value', $event.target.checked)"></api-checkbox>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="2">
+                          <mfBootstrapPaginator></mfBootstrapPaginator>
+                        </td>
+                        <td colspan="1" style="text-align: right;">
+                          <button type="button" class="btn btn-primary" (click)="addParam()">Add Param</button>
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                  <!-- <table class="table" [mfData]="requiredConfigList" #mfRequired="mfDataTable" [mfRowsOnPage]="10">
                           <thead>
                             <tr>
                               <th>Action</th>
@@ -100,8 +107,8 @@
                             </tr>
                           </tfoot>
                         </table> -->
-                      </div>
-                      <!-- <div role="tabpanel" class="tab-pane fade" id="tab_response">
+                </div>
+                <!-- <div role="tabpanel" class="tab-pane fade" id="tab_response">
                           <div id="responseAccordion" role="tablist" aria-multiselectable="true" *ngIf="conConfig.responseList.length > 0">
                             <div *ngFor="let response of conConfig.responseList; let index=index" class="panel">
                               <div class="card">
@@ -273,24 +280,27 @@
                             <button type="button" class="btn btn-primary" (click)="addResponse()">Add Response</button>
                           </div>
                         </div> -->
-                  </div>
               </div>
+            </div>
           </div>
         </form>
         <div class="panel-footer" *ngIf="selected">
-          <button type="button" class="btn btn-success" (click)="saveConnectorConfiguration()">Save Connector Configuration</button>
-          <button *ngIf="!createMode" type="button" class="btn btn-danger" (click)="deleteConnectorConfig()">Delete Connector Configuration</button>
+          <button type="button" class="btn btn-success" (click)="saveConnectorConfiguration()">Save Connector
+            Configuration</button>
+          <button *ngIf="!createMode" type="button" class="btn btn-danger" (click)="deleteConnectorConfig()">Delete
+            Connector Configuration</button>
         </div>
-    </div>
-  </ba-card>
- </div>
+      </div>
+    </ba-card>
+  </div>
 </div>
 
 
 
 
 <!-- Warning Modal -->
-<div class="modal fade" id="fileUploadModel" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
+<div class="modal fade" id="fileUploadModel" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Modal Header -->
@@ -303,7 +313,7 @@
       <!-- Modal Body -->
       <div class="modal-body" id="modal_body">
         {{'Uploading file please wait....'}}
-        
+
       </div>
 
       <!-- Modal Footer -->
@@ -314,7 +324,8 @@
   </div>
 </div>
 
-<div class="modal fade" id="validationModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
+<div class="modal fade" id="validationModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Modal Header -->
@@ -330,7 +341,7 @@
         <br>
         <br>
         {{notSatisfiedDataPoints}}
-        
+
       </div>
 
       <!-- Modal Footer -->
@@ -342,7 +353,8 @@
 </div>
 
 
-<div class="modal fade" id="fileNotUploaded" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
+<div class="modal fade" id="fileNotUploaded" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Modal Header -->

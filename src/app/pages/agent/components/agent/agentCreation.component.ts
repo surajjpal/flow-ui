@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { Agent, Plugin, Classifier, UIComponent } from '../../../../models/agent.model';
 import { Domain, Goal } from '../../../../models/domain.model';
-import { GraphObject } from '../../../../models/flow.model';
+import { GraphObject,CommonSearchModel } from '../../../../models/flow.model';
 
 import { AgentService } from '../../../../services/agent.service';
 import { DomainService } from '../../../../services/domain.service';
@@ -124,6 +124,9 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       if (!this.selectedAgent.uiComponent.episodeCloseTimeout) {
         this.selectedAgent.uiComponent.episodeCloseTimeout = 2880;
       }
+      if (!this.selectedAgent.uiComponent.isBargeable || this.selectedAgent.uiComponent.isBargeable === null) {
+        this.selectedAgent.uiComponent.isBargeable = false;
+      }
 
       if (this.selectedAgent.agentPlugins && this.selectedAgent.agentPlugins.length > 0) {
         const pluginsToBeRemoved: Plugin[] = [];
@@ -205,8 +208,10 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
           }
         }
       );
-
-    this.subscriptionGraph = this.graphService.fetch('ACTIVE')
+    let commonsearchModel = new CommonSearchModel();
+    commonsearchModel.searchParams = [{"statusCd":"ACTIVE"}];
+    commonsearchModel.returnFields = ["version","machineType"]
+    this.subscriptionGraph = this.graphService.fetch(commonsearchModel)
       .subscribe(flowSource => {
         if (flowSource) {
           this.flowSource = flowSource;
@@ -249,7 +254,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
           createdAgent => {
             this.isSuccess = true;
             this.isCreated = true;
-            this.autoUrl = `${environment.autourl}param1=${createdAgent._id}&param2=welcomeTo&param3=agentName`;
+            this.autoUrl = `${environment.autourl}${createdAgent._id}`;
             if (this.selectedAgent._id == null && createdAgent) {
               this.analyticsReportService.scheduleDailyReportForAgent(this.selectedAgent)
               .subscribe(

@@ -27,10 +27,11 @@ export class User extends BaseModel {
   accountNonLocked: boolean;
   accountNonExpired: boolean;
   autoAssignFlag: boolean;
+  sla: SLA;
 
   constructor() {
     super();
-    
+
     this.username = '';
     this.password = '';
     this.email = '';
@@ -43,41 +44,60 @@ export class User extends BaseModel {
     this.accountNonLocked = true;
     this.accountNonExpired = true;
     this.autoAssignFlag = false;
+    this.sla = new SLA();
   }
 }
-  export class UserHierarchy extends BaseModel {
-    
-    parentUserId: string;
-    userId:string;
-    userName: string;
-    parentUserName: string;
-    reportingUserId:string
-    reportingUserName: string;
-    companyId: string;
+export class UserHierarchy extends BaseModel {
 
-    constructor() {
-      super();
-      this.parentUserId = '';
-      this.userName = '';
-      this.parentUserName = '';
-      this.reportingUserId = '';
-      this.reportingUserName = '';
-      this.userId = "";
-      
+  parentUserId: string;
+  userId: string;
+  userName: string;
+  parentUserName: string;
+  reportingUserId: string
+  reportingUserName: string;
+  companyId: string;
+
+  constructor() {
+    super();
+    this.parentUserId = '';
+    this.userName = '';
+    this.parentUserName = '';
+    this.reportingUserId = '';
+    this.reportingUserName = '';
+    this.userId = "";
+
+  }
 }
+
+export class UserGraphObject extends BaseModel {
+
+  xml: string;
+  userHierarchy: UserHierarchy[];
+
+  constructor() {
+    super();
+    this.xml = "";
+    this.userHierarchy = [];
   }
+}
 
-  export class UserGraphObject extends BaseModel {
-    
-    xml:string;
-    userHierarchy:UserHierarchy[];
 
-    constructor() {
-      super();
-      this.xml = "";
-      this.userHierarchy=[];
-      }
+export class SLA extends BaseModel {
+
+  slaUnit: string;
+  level: number;
+  unit: number;
+  escalationLevel: number;
+
+
+  constructor() {
+    super();
+    this.slaUnit = '';
+    this.level = 0;
+    this.unit = 0;
+    this.escalationLevel = 0;
+
   }
-
+}
 
 
