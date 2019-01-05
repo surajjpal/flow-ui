@@ -174,4 +174,8 @@ export const environment = {
 
   //Vocabulary
   vocabulary :'http://localhost:5000/api/vocabulary',
+
+  // USP
+  uspsearch: '/api/usp/relevancesearch',
+  uspselftrain: '/api/usp/selftrain',
 };

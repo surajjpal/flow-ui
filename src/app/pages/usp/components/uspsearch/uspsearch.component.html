@@ -1,0 +1,59 @@
+<ba-card>
+    <form class="row form-inline">
+      <div class="form-group col-sm-10">
+        <input class="form-control" [(ngModel)]="uspSearchRequest.searchText" name="searchText" placeholder="Search..." (keydown.enter)="onUSPSearch()" />
+      </div>
+      <!-- <div class="form-group col-sm-2">
+        <api-daterangepicker (selectedRange)="onDateRangeSelect($event)"></api-daterangepicker>
+      </div> -->
+      <div class="form-group col-sm-2">
+        <button type="button" class="btn btn-primary" (click)="onSubmit()">
+          Submit
+        </button>
+      </div>
+    </form>
+</ba-card>
+
+<div *ngIf="searchResultData.length > 0" class="widgets">
+    <div class="row">
+        <ba-card baCardClass="with-scroll" class="data-table-container" style="width: 100%;">
+                <div class="search-result-container">
+                    <table class="itemdata" [mfData]="searchResultData" #mf="mfDataTable" [mfRowsOnPage]="10">
+                        <tr *ngFor='let item of mf.data'>
+                            <div class="row">
+                                <div class="col-md-2">
+                    
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="search-item">
+                                        <div  (click)="uspSelfTrain(item);" >
+                                            <p><span class="item-title">{{item.data.title}} </span>
+                                                <span style="color: red;font-size: 14px;">  {{ item.data.entityType }}</span>
+                                            <span *ngIf="item.relevant == 'most relevant'" style="font-size: 14px;" class="badge badge-pill badge-success">relevant</span>
+                                            </p>
+                                        </div>
+                                        <div class="item-description">{{item.data.description}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                    
+                                </div>
+                            </div>
+                            
+                        </tr>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <mfBootstrapPaginator></mfBootstrapPaginator>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <button type="button" class="btn btn-outline-primary" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
+                        *ngIf="searchResultData.length != 0" (click)="onSearchLoadMore()">Load More
+                    </button>
+                    
+                </div>
+        </ba-card>
+    </div>
+</div>

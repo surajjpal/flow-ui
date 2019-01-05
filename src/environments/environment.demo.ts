@@ -169,5 +169,9 @@ export const environment = {
 
   //Vocabulary
   vocabulary :'https://api.automatapi.com/vocabulary',
+
+  // USP
+  uspsearch: '/api/usp/relevancesearch',
+  uspselftrain: '/api/usp/selftrain',
   };
   

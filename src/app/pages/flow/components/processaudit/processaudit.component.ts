@@ -65,6 +65,8 @@ export class ProcessAuditComponent implements OnInit, OnDestroy {
   iterationLevel:number;
   tempUser:User;
   arrayTableHeaders = {};
+  flowId: string;
+  entityId: string;
   
   private subscription: Subscription;
   
@@ -75,25 +77,40 @@ export class ProcessAuditComponent implements OnInit, OnDestroy {
     private router: Router, 
     private route: ActivatedRoute,
     private dataCachingService: DataCachingService,
+    private stateService: StateService
     
   ) { 
+    this.flowId = null;
+    this.entityId = null;
     window['processAuditRef'] = { component: this, zone: zone };
   }
 
   ngOnInit(): void {
     //document.getElementById('#alocateButton').style.visibility = 'hidden';
-    this.selectedProcess = this.dataCachingService.getSelectedState();
-    if (!this.selectedProcess) {
-      this.router.navigate(['/pg/flw/flpsr'], { relativeTo: this.route });
-      return;
+    this.flowId = this.route.snapshot.paramMap.get('flowId');
+    this.entityId = this.route.snapshot.paramMap.get('entityId');
+    if (this.flowId && this.entityId) {
+      const subscriptionXML = this.stateService.getXMLforActiveState(this.flowId)
+        .subscribe(graphObject => {
+            this.graphObject = graphObject
+            this.initUI();
+        });
+    }
+    else {
+      this.selectedProcess = this.dataCachingService.getSelectedState();
+      if (!this.selectedProcess) {
+        this.router.navigate(['/pg/flw/flpsr'], { relativeTo: this.route });
+        return;
+      }
+      
+      this.graphObject = this.dataCachingService.getGraphObject();
+      if (!this.graphObject) {
+        this.graphObject = new GraphObject();
+      }
+
+      this.initUI();
     }
     
-    this.graphObject = this.dataCachingService.getGraphObject();
-    if (!this.graphObject) {
-      this.graphObject = new GraphObject();
-    }
-
-    this.initUI();
   }
 
   initUI() {
@@ -106,9 +123,19 @@ export class ProcessAuditComponent implements OnInit, OnDestroy {
      
       this.close();
       let body = {};
-      body["machineId"] = this.selectedProcess.flowId;
+      if (this.flowId) {
+        body["machineId"] = this.flowId;  
+      }
+      else{
+        body["machineId"] = this.selectedProcess.flowId;
+      }
       body["stateCd"] = state.stateCd;
-      body["entityId"] = this.selectedProcess.entityId;
+      if (this.entityId) {
+        body["entityId"] = this.entityId;
+      }
+      else {
+        body["entityId"] = this.selectedProcess.entityId;
+      }
       //body["entityId"] = "5b9254e2393380118dcf294c";
 
       this.subscription = this.processService.getSelectedState(body)
