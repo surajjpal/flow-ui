@@ -94,30 +94,34 @@ export class USPSearchComponent implements OnInit, OnDestroy {
           highlightData.push(temp);
         }
         this.uspService.selfTrainSerchData(highlightData, this.uspSearchRequest.searchText);
-        if (entityType == "Flow" || entityType == "State") {
-            if (redirectLink) {
-                const flowId = redirectLink.split("/")[redirectLink.split("/").length - 1];
-                console.log("flowId " + flowId);
-                console.log("processmodel");
-                console.log(data.data["payload"]);
-                const subscriptionXML = this.stateService.getXMLforActiveState(flowId)
-                .subscribe(graphObject => {
-                    const entityId = data.data["payload"]["entityId"];
-                    window.open(
-                        '/#/pg/flw/flpa/' + flowId + "/" + entityId,
-                        '_blank' // <- This is what makes it open in a new window.
-                        );
-                    //this.router.navigate(['/pg/flw/flpa'], { relativeTo: this.route});
-                });
-            }
-            
-        }
-        else {
-            window.open(
+        window.open(
             redirectLink,
             '_blank' // <- This is what makes it open in a new window.
             );
-        }
+        // if (entityType == "Flow" || entityType == "State") {
+        //     if (redirectLink) {
+        //         const flowId = redirectLink.split("/")[redirectLink.split("/").length - 1];
+        //         console.log("flowId " + flowId);
+        //         console.log("processmodel");
+        //         console.log(data.data["payload"]);
+        //         const subscriptionXML = this.stateService.getXMLforActiveState(flowId)
+        //         .subscribe(graphObject => {
+        //             const entityId = data.data["payload"]["entityId"];
+        //             window.open(
+        //                 '/#/pg/flw/flpa/' + flowId + "/" + entityId,
+        //                 '_blank' // <- This is what makes it open in a new window.
+        //                 );
+        //             //this.router.navigate(['/pg/flw/flpa'], { relativeTo: this.route});
+        //         });
+        //     }
+            
+        // }
+        // else {
+        //     window.open(
+        //     redirectLink,
+        //     '_blank' // <- This is what makes it open in a new window.
+        //     );
+        // }
         
       }
 }

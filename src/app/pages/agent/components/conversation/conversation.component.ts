@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { ConversationService } from '../../../../services/agent.service';
 import { Episode, ChatMessage, EpisodeContext } from '../../../../models/conversation.model';
@@ -41,7 +42,8 @@ export class ConversationComponent implements OnInit, OnDestroy {
     private conversationService: ConversationService,
     private universalUser: UniversalUser,
     private sanitizer: DomSanitizer,
-    private scrollService: ScrollService
+    private scrollService: ScrollService,
+    private route: ActivatedRoute,
   ) {
     this.searchQuery = '';
     this.agentMessage = '';
@@ -52,9 +54,19 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getEpisodesApplicableForBargeIn();
-    this.populateChartOptions();
-    this.transformEpisodeIntoGraph();
+    const episodeId = this.route.snapshot.paramMap.get('episodeId');
+    if (episodeId) {
+      //this.getEpisode(episodeId);
+      this.showEpisodeDetails(episodeId, true);
+      this.populateChartOptions();
+      this.transformEpisodeIntoGraph();
+    }
+    else {
+      this.getEpisodesApplicableForBargeIn();
+      this.populateChartOptions();
+      this.transformEpisodeIntoGraph();
+    }
+    
   }
 
   ngOnDestroy(): void {
@@ -78,7 +90,19 @@ export class ConversationComponent implements OnInit, OnDestroy {
     }
   }
 
-  getEpisodesApplicableForBargeIn() {
+  getEpisode(episodeId: string) {
+    this.subscriptionBargeIn = this.conversationService.getEpisode(episodeId)
+      .subscribe(
+        episode => {
+          this.selectedEpisode = episode;
+        },
+        error => {
+          console.log("episode not found");
+        }
+      )
+  }
+
+  getEpisodesApplicableForBargeIn(existingEpisode?: boolean) {
     if (!this.pollBargeInEpisode) {
       return;
     }
@@ -91,6 +115,9 @@ export class ConversationComponent implements OnInit, OnDestroy {
       .subscribe(
         episodeList => {
           if (episodeList) {
+            if (existingEpisode) {
+              episodeList.push(this.selectedEpisode);
+            }
             this.episodeList = episodeList;
             this.transformEpisodeIntoGraph();
           }
@@ -307,19 +334,25 @@ export class ConversationComponent implements OnInit, OnDestroy {
     */
   }
 
-  showEpisodeDetails(episodeId: string) {
+  showEpisodeDetails(episodeId: string, viewMode?: boolean) {
     this.fetchingEpisodeDetails = true;
     this.subscriptionEpisodeDetails = this.conversationService.getEpisode(episodeId)
       .subscribe(
         episode => {
           if (episode) {
             this.selectedEpisode = episode;
-
-            if (this.bargedIntoSelectedEpisode()) {
-              this.pollEpisodeChat = true;
+            if (viewMode) {
               this.getChatMessages();
-            } else {
-              this.pollEpisodeChat = false;
+              this.getEpisodesApplicableForBargeIn(true);
+              
+            }
+            else {
+              if (this.bargedIntoSelectedEpisode()) {
+                this.pollEpisodeChat = true;
+                this.getChatMessages();
+              } else {
+                this.pollEpisodeChat = false;
+              }
             }
           }
 
