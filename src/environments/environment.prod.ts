@@ -167,5 +167,5 @@ export const environment = {
   sendReportCSV: 'https://flow.automatapi.io/flow/report/reports/generatereport',
 
   //Vocabulary
-  vocabulary :'https://api.automatapi.io/vocabulary',
+  vocabulary : 'https://flow.automatapi.io/flow/interfaces/vocabulary',
 };
