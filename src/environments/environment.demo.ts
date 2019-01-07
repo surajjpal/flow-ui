@@ -168,6 +168,6 @@ export const environment = {
 
 
   //Vocabulary
-  vocabulary :'https://api.automatapi.com/vocabulary',
+  vocabulary : 'https://flow.automatapi.com/flow/interfaces/vocabulary',
   };
   
