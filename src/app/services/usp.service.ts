@@ -18,10 +18,10 @@ export class USPService {
     
     search(uspSearchRequest: USPSearchRequest) {
         const subject = new Subject<USPSearchResult>();
-        //const url = `${environment.interfaceService + environment.uspsearch}`;
-        const url = "http://localhost:5010" + `${environment.uspsearch}`
-        uspSearchRequest.companyContext = { "companyId" : "e95764c923e74e308d0019516b17cabd" }
-        uspSearchRequest.dataIngestorName = "automatapi";
+        const url = `${environment.interfaceService + environment.uspsearch}`;
+        //const url = "http://localhost:5010" + `${environment.uspsearch}`
+        //uspSearchRequest.companyContext = { "companyId" : "e95764c923e74e308d0019516b17cabd" }
+        //uspSearchRequest.dataIngestorName = "automatapi";
         this.httpClient.post<USPSearchResult>(
             url,
             uspSearchRequest,
@@ -47,11 +47,11 @@ export class USPService {
         var selfTrainRequest = {
             highlight: highlights,
             searchText : query,
-            dataIngestorName: "automatapi",
-            companyContext: { "companyId" : "e95764c923e74e308d0019516b17cabd" }
+            dataIngestorName: "automatapi"
+            //companyContext: { "companyId" : "e95764c923e74e308d0019516b17cabd" }
         }
-        //const url = `${environment.interfaceService + environment.uspsearch}`;
-        const url = "http://localhost:5010" + `${environment.uspselftrain}`
+        const url = `${environment.interfaceService + environment.uspselftrain}`;
+        //const url = "http://localhost:5010" + `${environment.uspselftrain}`
         this.httpClient.post<any>(
             url,
             selfTrainRequest,

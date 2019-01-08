@@ -20,6 +20,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   agentMessage: string;
   episodeList: Episode[];
   selectedEpisode: Episode;
+  exitstingEpisode: Episode;
   chatMessageList: ChatMessage[];
   loading;
   pollBargeInEpisode: boolean = true;
@@ -50,6 +51,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
     this.loading = false;
     this.episodeList = [];
     this.selectedEpisode = null;
+    this.exitstingEpisode = null;
     this.chatMessageList = [];
   }
 
@@ -58,8 +60,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
     if (episodeId) {
       //this.getEpisode(episodeId);
       this.showEpisodeDetails(episodeId, true);
-      this.populateChartOptions();
-      this.transformEpisodeIntoGraph();
+      
     }
     else {
       this.getEpisodesApplicableForBargeIn();
@@ -115,10 +116,10 @@ export class ConversationComponent implements OnInit, OnDestroy {
       .subscribe(
         episodeList => {
           if (episodeList) {
-            if (existingEpisode) {
-              episodeList.push(this.selectedEpisode);
-            }
             this.episodeList = episodeList;
+            if (this.exitstingEpisode) {
+              this.episodeList.push(this.exitstingEpisode);
+            }
             this.transformEpisodeIntoGraph();
           }
 
@@ -342,8 +343,11 @@ export class ConversationComponent implements OnInit, OnDestroy {
           if (episode) {
             this.selectedEpisode = episode;
             if (viewMode) {
+              this.exitstingEpisode = episode;
               this.getChatMessages();
               this.getEpisodesApplicableForBargeIn(true);
+              this.populateChartOptions();
+              this.transformEpisodeIntoGraph();
               
             }
             else {
