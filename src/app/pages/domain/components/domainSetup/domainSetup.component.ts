@@ -986,14 +986,17 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.subscription = this.domainService.getSynonyms(this.tempIntent.tags[this.tempIntent.tags.length-1])
         .subscribe(
           response => {
-            this.showTags = true;
-            this.suggestedTags = response["synonyms"];
+            if(response){
+              this.suggestedTags = response["synonyms"];
+              if (this.suggestedTags.length > 0){
+                this.showTags = true;
+              }
+            }
           }
         );
       }
-      }
-      
     }
+  }
 
     getEntitySynonyms(){
       if(this.tempEntity.tags.length > 0){
@@ -1001,14 +1004,17 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           this.subscription = this.domainService.getSynonyms(this.tempEntity.tags[this.tempEntity.tags.length-1])
           .subscribe(
             response => {
-              this.showTags = true;
-              this.suggestedTags = response["synonyms"];
+              if(response){
+                this.suggestedTags = response["synonyms"];
+                if (this.suggestedTags.length > 0){
+                    this.showTags = true;
+                }
+              }
             }
           );
         }
-        }
-        
       }
+    }
     
 
 }
