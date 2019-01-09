@@ -27,7 +27,7 @@
               </ul>
               <div class="tab-content">
                 <div role="tabpanel" class="tab-pane fade show active" id="tab_config">
-                  <table class="table" [mfData]="configList" #mfConfigs="mfDataTable" [mfRowsOnPage]="20">
+                  <table class="table" [mfData]="taskConfigAttributeList" #mfConfigs="mfDataTable" [mfRowsOnPage]="20">
                     <thead>
                       <tr>
                         <th>Action</th>
@@ -36,35 +36,34 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let config of mfConfigs.data; let i = index" [attr.data-index]="i">
+                      <tr *ngFor="let taskConfigAttribute of mfConfigs.data; let i = index" [attr.data-index]="i">
                         <td>
-                          <button type="button" class="btn btn-danger" title="Delete" (click)="removeBody(config)"><i
+                          <button type="button" class="btn btn-danger" title="Delete" (click)="removeBody(taskConfigAttribute)"><i
                               class="ion-close-round"></i></button>
                         </td>
                         <td>
-                          <input type="text" class="form-control" placeholder="Key" [value]="config.get('key')" (input)="config.set('key', $event.target.value)" />
+                          <input type="text" class="form-control" placeholder="Key" [value]="taskConfigAttribute.key"
+                            [(ngModel)]="taskConfigAttribute.key" [ngModelOptions]="{standalone: true}" />
                         </td>
-                        <!-- <td *ngIf="typeConfigList[i].get('value') == 'file'">
-                                
-                                </td> -->
-                        <td *ngIf="typeConfigList[i].get('value') == 'string'">
-                          <input type="text" class="form-control" placeholder="Value" [value]="config.get('value')"
-                            (input)="config.set('value', $event.target.value)" />
+                        <td *ngIf="taskConfigAttribute.type == 'string'">
+                          <input type="text" class="form-control" placeholder="Value" [value]="taskConfigAttribute.value"
+                            [(ngModel)]="taskConfigAttribute.value" [ngModelOptions]="{standalone: true}" />
                         </td>
-                        <td *ngIf="typeConfigList[i].get('value') == 'file'">
+                        <td *ngIf="taskConfigAttribute.type == 'file'">
                           <label for="file-upload" class="custom-file-upload">
                             <i class="fa fa-cloud-upload"></i> {{createMode ? 'Upload File ' : 'Upload New File'}}
                           </label>
                           <label>{{fileName}}</label>
-                          <input id="file-upload" type="file" (change)=fileEvent($event,config) />
+                          <input id="file-upload" type="file" (change)=fileEvent($event,taskConfigAttribute) />
                         </td>
-                        <td *ngIf="typeConfigList[i].get('value') == 'list'">
-                          <select class="selectpicker form-control" required id="selectUser" title="Choose Value" name="value"
-                            [(ngModel)]="temp[config.get('key')]" [ngModelOptions]="{standalone: true}" (ngModelChange)="onValueSelect($event,config)">
-                            <option *ngFor="let value of config.get('values')" [ngValue]="value">{{value}}</option>
+                        <td *ngIf="taskConfigAttribute.type == 'list'">
+                          <select class="selectpicker form-control" required id="selectValues" title="Choose Value"
+                            [id]="taskConfigAttribute.key+i" [(ngModel)]="taskConfigAttribute.value" [ngModelOptions]="{standalone: true}">
+                            <option *ngFor="let value of taskConfigAttribute.valueList" [ngValue]="value">{{value}}</option>
                           </select>
-                        <td *ngIf="typeConfigList[i].get('value') == 'boolean'">
-                          <api-checkbox [checked]="config.get('value')" [label]="config.get('value')" (event)="config.set('value', $event.target.checked)"></api-checkbox>
+                        <td *ngIf="taskConfigAttribute.type == 'boolean'">
+                          <api-checkbox [checked]="taskConfigAttribute.value" [label]="taskConfigAttribute.value"
+                            (event)="taskConfigAttribute.value = $event.target.checked"></api-checkbox>
                         </td>
                       </tr>
                     </tbody>
@@ -79,207 +78,7 @@
                       </tr>
                     </tfoot>
                   </table>
-                  <!-- <table class="table" [mfData]="requiredConfigList" #mfRequired="mfDataTable" [mfRowsOnPage]="10">
-                          <thead>
-                            <tr>
-                              <th>Action</th>
-                              <th>Value</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr *ngFor="let r of mfRequired.data">
-                              <td *ngIf="r.get('key')=='file-upload'">
-                                <label for="file-upload" class="custom-file-upload">
-                                  <i class="fa fa-cloud-upload"></i> Upload File
-                                </label>
-                                <input id="file-upload" type="file" (change)=fileEvent($event)/>
-                              </td>
-                              <td *ngIf="r.get('key')=='file-upload'">
-                                <input type="text" class="form-control" [disabled]='true' placeholder="please upload a file" [value]="r.get('value')" />
-                              </td>
-                            </tr>
-                          </tbody>
-                          <tfoot>
-                            <tr>
-                              <td colspan="2">
-                                <mfBootstrapPaginator></mfBootstrapPaginator>
-                              </td>
-                            </tr>
-                          </tfoot>
-                        </table> -->
                 </div>
-                <!-- <div role="tabpanel" class="tab-pane fade" id="tab_response">
-                          <div id="responseAccordion" role="tablist" aria-multiselectable="true" *ngIf="conConfig.responseList.length > 0">
-                            <div *ngFor="let response of conConfig.responseList; let index=index" class="panel">
-                              <div class="card">
-                                <div *ngIf="index == 0" [id]="'responseTabHeading' + index" class="card-header" heightStyle="content" role="tab">
-                                  <h5 class="mb-0">
-                                    <a data-toggle="collapse" data-parent="#responseAccordion" [href]="'#responseCollapse' + index" aria-expanded="true" [attr.aria-controls]="'responseCollapse' + index"
-                                      (click)="selectedResponse=response">
-                                      Response for status {{response.responseCode}}
-                                    </a>
-                                  </h5>
-                                </div>
-                                <div *ngIf="index != 0" [id]="'responseTabHeading' + index" class="card-header" heightStyle="content" role="tab">
-                                  <h5 class="mb-0">
-                                    <a class="collapsed" data-toggle="collapse" data-parent="#responseAccordion" [href]="'#responseCollapse' + index" aria-expanded="false"
-                                      [attr.aria-controls]="'responseCollapse' + index" (click)="selectedResponse=response">
-                                      Response for status {{response.responseCode}}
-                                    </a>
-                                  </h5>
-                                </div>
-                  
-                                <div *ngIf="index == 0" [id]="'responseCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'responseTabHeading' + index">
-                                  <div class="card-block">
-          
-                                    <form>
-                                      <div class="form-group">
-                                        <label>Status Code</label>
-                                        <input type="text" class="form-control" placeholder="Status Code" [(ngModel)]="response.responseCode" name="responseCode" />
-                                      </div>
-                                      <div class="form-group">
-                                        <label>Response Type</label>
-                                        <select class="selectpicker form-control" title="Select response type" [(ngModel)]="response.responseType" name="responseType">
-                                          <option *ngFor="let responseType of responseTypeSource" [value]="responseType">{{responseType}}</option>
-                                        </select>
-                                      </div>
-                                      <div class="form-group" *ngIf="response.responseType === 'PARAM'">
-                                        <label>Params to select</label>
-                                        <select (onchange)="onResponseTypeChange()" class="selectpicker form-control" title="Choose params to select" [(ngModel)]="response.paramsToSelect" name="paramsToSelect">
-                                          <option *ngFor="let paramsToSelect of paramsToSelectSource" [value]="paramsToSelect">{{paramsToSelect}}</option>
-                                        </select>
-                                      </div>
-                                      <div class="form-group" *ngIf="response.responseType === 'PAYLOAD'">
-                                        <label>Key to save payload</label>
-                                        <input type="text" class="form-control" placeholder="Key to save payload" [(ngModel)]="response.keyExpressionList[0].key" name="key" />
-                                      </div>
-                                      <div class="form-group">
-                                        <form class="row form-inline">
-                                          <div class="form-group col-sm-2">
-                                            <button type="button" class="btn btn-primary" (click)="cloneResponse()">Clone Response</button>
-                                          </div>
-                                          <div class="form-group col-sm-2 offset-sm-8">
-                                            <button type="button" class="btn btn-danger" (click)="removeResponse()">Remove Response</button>
-                                          </div>
-                                        </form>
-                                      </div>
-                                    </form>
-                                    <br>
-                                    
-                                    <table *ngIf="response.responseType === 'PARAM' && response.paramsToSelect === 'SELECTIVE'" class="table" [mfData]="response.keyExpressionList" [mfRowsOnPage]="5">
-                                      <thead>
-                                        <tr>
-                                          <th>Action</th>
-                                          <th>Key to save param</th>
-                                          <th>Expression</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr *ngFor="let expressionMap of response.keyExpressionList">
-                                          <td>
-                                            <button type="button" class="btn btn-danger" title="Delete" (click)="removeExpression(expressionMap)"><i class="ion-close-round"></i></button>
-                                          </td>
-                                          <td>
-                                            <input type="text" class="form-control" placeholder="Key" [value]="expressionMap.key" (input)="expressionMap.key = $event.target.value">
-                                          </td>
-                                          <td>
-                                            <input type="text" class="form-control" placeholder="Expression" [value]="expressionMap.expression" (input)="expressionMap.expression = $event.target.value"/>
-                                          </td>
-                                        </tr>
-                                      </tbody>
-                                      <tfoot>
-                                        <tr>
-                                          <td colspan="2">
-                                            <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
-                                          </td>
-                                          <td colspan="1" style="text-align: right;">
-                                            <button type="button" class="btn btn-primary" (click)="addExpression()">Add Expression</button>
-                                          </td>
-                                        </tr>
-                                      </tfoot>
-                                    </table>
-          
-                                  </div>
-                                </div>
-                                <div *ngIf="index != 0" [id]="'responseCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'responseTabHeading' + index">
-                                  <div class="card-block">
-                                      
-                                    <form>
-                                      <div class="form-group">
-                                        <label>Status Code</label>
-                                        <input type="text" class="form-control" placeholder="Status Code" [(ngModel)]="response.responseCode" name="responseCode" />
-                                      </div>
-                                      <div class="form-group">
-                                        <label>Response Type</label>
-                                        <select class="selectpicker form-control" title="Select response type" [(ngModel)]="response.responseType" name="responseType">
-                                          <option *ngFor="let responseType of responseTypeSource" [value]="responseType">{{responseType}}</option>
-                                        </select>
-                                      </div>
-                                      <div class="form-group" *ngIf="response.responseType === 'PARAM'">
-                                        <label>Params to select</label>
-                                        <select (onchange)="onResponseTypeChange()" class="selectpicker form-control" title="Choose params to select" [(ngModel)]="response.paramsToSelect" name="paramsToSelect">
-                                          <option *ngFor="let paramsToSelect of paramsToSelectSource" [value]="paramsToSelect">{{paramsToSelect}}</option>
-                                        </select>
-                                      </div>
-                                      <div class="form-group" *ngIf="response.responseType === 'PAYLOAD'">
-                                        <label>Key to save payload</label>
-                                        <input type="text" class="form-control" placeholder="Key to save payload" [(ngModel)]="response.keyExpressionList[0].key" name="key" />
-                                      </div>
-                                      <div class="form-group">
-                                        <form class="row form-inline">
-                                          <div class="form-group col-sm-2">
-                                            <button type="button" class="btn btn-primary" (click)="cloneResponse()">Clone Response</button>
-                                          </div>
-                                          <div class="form-group col-sm-2 offset-sm-8">
-                                            <button type="button" class="btn btn-danger" (click)="removeResponse()">Remove Response</button>
-                                          </div>
-                                        </form>
-                                      </div>
-                                    </form>
-                                    <br>
-                                    
-                                    <table *ngIf="response.responseType === 'PARAM' && response.paramsToSelect === 'SELECTIVE'" class="table" [mfData]="response.keyExpressionList" [mfRowsOnPage]="5">
-                                      <thead>
-                                        <tr>
-                                          <th>Action</th>
-                                          <th>Key to save param</th>
-                                          <th>Expression</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr *ngFor="let expressionMap of response.keyExpressionList">
-                                          <td>
-                                            <button type="button" class="btn btn-danger" title="Delete" (click)="removeExpression(expressionMap)"><i class="ion-close-round"></i></button>
-                                          </td>
-                                          <td>
-                                            <input type="text" class="form-control" placeholder="Key" [value]="expressionMap.key" (input)="expressionMap.key = $event.target.value">
-                                          </td>
-                                          <td>
-                                            <input type="text" class="form-control" placeholder="Expression" [value]="expressionMap.expression" (input)="expressionMap.expression = $event.target.value"/>
-                                          </td>
-                                        </tr>
-                                      </tbody>
-                                      <tfoot>
-                                        <tr>
-                                          <td colspan="2">
-                                            <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
-                                          </td>
-                                          <td colspan="1" style="text-align: right;">
-                                            <button type="button" class="btn btn-primary" (click)="addExpression()">Add Expression</button>
-                                          </td>
-                                        </tr>
-                                      </tfoot>
-                                    </table>
-          
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row col-sm-12">
-                            <button type="button" class="btn btn-primary" (click)="addResponse()">Add Response</button>
-                          </div>
-                        </div> -->
               </div>
             </div>
           </div>
