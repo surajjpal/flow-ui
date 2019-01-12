@@ -764,7 +764,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.subscription = this.domainService.saveDomain(this.selectedDomain)
         .subscribe(
           response => {
-            this.updateClassifierTraining();
+            
+            this.updateClassifierTraining(response);
 
             //this.updateIntenTrainingData();
 
@@ -778,14 +779,14 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateClassifierTraining() {
+  updateClassifierTraining(updatedDomain: Domain) {
     this.subscription = this.domainService.updateDomainClassifierTraining(this.selectedDomain)
       .subscribe(
         response => {
           if (response) {
             this.domainBody = `Domain updated successfully!!`;
             this.domainSucess = true;
-            this.selectedDomain = response;
+            this.selectedDomain = updatedDomain;
           } else {
             this.domainBody = `Something went wrong please try again!!`;
             this.domainSucess = true;
