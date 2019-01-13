@@ -6,10 +6,11 @@ import { Subscription } from 'rxjs/Subscription';
 // import 'rxjs/add/operator/switchMap';
 
 // Model Imports
-import { GraphObject } from '../../../../models/flow.model';
+import { GraphObject,CommonSearchModel } from '../../../../models/flow.model';
 
 // Service Imports
 import { GraphService, CommunicationService } from '../../../../services/flow.service';
+
 
 @Component({
   selector: 'api-flow-search',
@@ -76,12 +77,21 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   fetchGraphs(): void {
-    this.subscriptionActive = this.graphService.fetch('ACTIVE')
+    let commonsearchModel = new CommonSearchModel();
+    commonsearchModel.searchParams = [{"statusCd":"ACTIVE"},{"statusCd":"DRAFT"}];
+    commonsearchModel.returnFields = ["machineLabel","version","statusCd"];
+    this.subscriptionActive = this.graphService.fetch(commonsearchModel)
       .subscribe(graphObjects => this.activeGraphObjectList = graphObjects);
-    this.subscriptionActive = this.graphService.fetch('CLOSED')
+
+    commonsearchModel = new CommonSearchModel();
+    commonsearchModel.searchParams = [{"statusCd":"CLOSED"}];
+    commonsearchModel.returnFields = ["machineLabel","version","statusCd","machineType"];
+    this.subscriptionActive = this.graphService.fetch(commonsearchModel)
       .subscribe(graphObjects => this.closedGraphObjectList = graphObjects);
-    this.subscriptionActive = this.graphService.fetch('TEMPLATE')
-      .subscribe(graphObjects => this.dictionaryGraphObjectList = graphObjects);
+    
+    
+    // this.subscriptionActive = this.graphService.fetch('TEMPLATE')
+    //   .subscribe(graphObjects => this.dictionaryGraphObjectList = graphObjects);
   }
 
   toInt(num: string) {
@@ -93,20 +103,31 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   onSelect(graphObject: GraphObject, task?: number): void {
-    this.selectedGraphObject = graphObject;
-
-    if (task) {
-      if (task === this.OPEN_IN_READONLY_MODE) {
-        this.openInDesigner(this.selectedGraphObject, true);
-      } else if (task === this.OPEN_IN_EDIT_MODE) {
-        this.openInDesigner(this.selectedGraphObject);
-      } else if (task === this.CLONE_AND_EDIT_MODE) {
-        this.selectedGraphObject._id = null;
-        this.selectedGraphObject.statusCd = this.DRAFT;
-
-        this.openInDesigner(this.selectedGraphObject);
-      }
-    }
+    this.progressBarFlag = true;
+    this.subscription = this.graphService.getGraphObject(graphObject._id)
+    .subscribe(
+      graph => {
+        if(graph!=null && graph._id.length > 0)
+        {
+          this.progressBarFlag = false;
+          this.selectedGraphObject = graph;
+          if (task) {
+            if (task === this.OPEN_IN_READONLY_MODE) {
+              this.openInDesigner(this.selectedGraphObject, true);
+            } else if (task === this.OPEN_IN_EDIT_MODE) {
+              this.openInDesigner(this.selectedGraphObject);
+            } else if (task === this.CLONE_AND_EDIT_MODE) {
+              this.selectedGraphObject._id = null;
+              this.selectedGraphObject.statusCd = this.DRAFT;
+      
+              this.openInDesigner(this.selectedGraphObject);
+            }
+          }
+        }
+        else{
+          this.progressBarFlag = false
+        }
+      });
   }
 
   openInDesigner(graph: GraphObject, readOnly?: boolean) {

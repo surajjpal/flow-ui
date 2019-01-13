@@ -3,24 +3,27 @@ export const environment = {
   name: 'production',
 
   // Root
-  root: 'https://flow.automatapi.com/flow/',
+  root: 'https://compusoft-console.automatapi.xyz/flow/',
     
   // API
-  authurl: 'https://flow.automatapi.com/flow/auth/',
+  authurl: 'https://compusoft-console.automatapi.xyz/flow/auth/',
 
   // Services
-  saveaccounturl: 'https://flow.automatapi.com/flow/account/create',
-  fetchaccountbyidurl: 'https://flow.automatapi.com/flow/account/',
-  publishaccounturl:'https://flow.automatapi.com/flow/account/publish/',
-  unpublishaccounturl:'https://flow.automatapi.com/flow/account/unpublish/',
+
+  saveaccounturl: 'https://compusoft-console.automatapi.xyz/flow/account/create',
+  fetchaccountbyidurl: 'https://compusoft-console.automatapi.xyz/flow/account/',
+  publishaccounturl:'https://compusoft-console.automatapi.xyz/flow/account/publish/',
+  unpublishaccounturl:'https://compusoft-console.automatapi.xyz/flow/account/unpublish/',
+  processauditurl:"http://localhost:5000/api/universalsearch/search/flow",
+
   // Interfaces
-  interfaceService: 'https://flow.automatapi.com/flow/interfaces',
-  updateClassifierTraining : 'https://flow.automatapi.com/flow/interfaces/auto_decorate_training',
-  updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'https://flow.automatapi.com/flow/interfaces/entity_classification_training',
+  interfaceService: 'https://compusoft-console.automatapi.xyz/flow/interfaces',
+  updateClassifierTraining : 'https://compusoft-console.automatapi.xyz/flow/interfaces/auto_decorate_training',
+  updateIntentTraining: 'https://compusoft-console.automatapi.xyz/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'https://compusoft-console.automatapi.xyz/flow/interfaces/entity_classification_training',
 
   // Flow
-  server: 'https://flow.automatapi.com/flow/console/',
+  server: 'https://compusoft-console.automatapi.xyz/flow/console/',
   autourl:'https://compusoft-agent.automatapi.xyz/?',
 
   stateinsight: 'state/insight/',
@@ -33,6 +36,7 @@ export const environment = {
   gettatrecords:'state/fetchtat',
   getallstats:'state/fetchstatestatus',
   getpersonalstats:'state/getstatestatusbyuser',
+  getstateinstance:'state/fetchstateinstance',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
@@ -78,7 +82,7 @@ export const environment = {
 
 
   // auto
-  autoServer: 'https://flow.automatapi.com/flow/auto/',
+  autoServer: 'https://compusoft-console.automatapi.xyz/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',
@@ -104,8 +108,10 @@ export const environment = {
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
+  flowsearch:'/api/search/flow',
+
   // Analytics
-  reportservice: 'https://flow.automatapi.com/flow/report',
+  reportservice: 'https://compusoft-console.automatapi.xyz/flow/report',
   sendReportUrl: '/reports/analyticsreport/sendreport',
   scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
   getAnalyticsReports: "/reports/analyticsreport",
@@ -128,7 +134,7 @@ export const environment = {
   businessObjectPredictUrl: '/automatons/businessobject/predict',
   
   //Dashboard
-  dashboardServer: 'https://flow.automatapi.com/flow/dashboard/',
+  dashboardServer: 'https://compusoft-console.automatapi.xyz/flow/dashboard/',
   dashboardsummary:'auto/dashboard_summary',
   episodetimeline:'auto/episode_timeline',
   intentcount:'auto/intent_count',
@@ -144,10 +150,11 @@ export const environment = {
   statetransactionvalue:'flow/state_transaction_value',
 
   //Dashboard from interfaces
-  dashboardinterface: 'https://flow.automatapi.com/flow/interfaces/dashboard',
+  dashboardinterface: 'https://compusoft-console.automatapi.xyz/flow/interfaces/dashboard',
 
-  //CRUD API path - To be used in conjunction with interfaceService property
-  crudFunction : '/crud',
+  //Following APIs path - To be used in conjunction with interfaceService property
+  crudFunction: '/crud',
+  sendAgentMessage: '/sendMessage',
 
   // activity monitor services
   businessDataPointValues: 'businessactivitymanagement/datapointvalues',
@@ -155,4 +162,10 @@ export const environment = {
   businessDataPonitsPercentageCount: 'businessactivitymanagement/datapoint/percentagecount',
   businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
   businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
+
+  //python project in api-utils ondemandreport project
+  sendReportCSV: 'https://flow.automatapi.io/flow/report/reports/generatereport',
+
+  //Vocabulary
+  vocabulary : 'https://flow.automatapi.io/flow/interfaces/vocabulary',
 };

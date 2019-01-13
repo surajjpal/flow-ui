@@ -1,14 +1,13 @@
-import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone,Output,EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import {
   GraphObject, DataPoint, Classifier, StateModel,
   EventModel, Expression, Transition, ManualAction, DataPointValidation
 } from '../../../../models/flow.model';
-
 import { User, UserHierarchy, UserGroup, UserGraphObject } from '../../../../models/user.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { GraphService, CommunicationService } from '../../../../services/flow.service';
-import { StateService} from '../../../../services/inbox.service';
+import { StateService,DataCachingService} from '../../../../services/inbox.service';
 import { UniversalUser } from '../../../../services/shared.service';
 import { FetchUserService, UserGraphService } from '../../../../services/userhierarchy.service';
 import { DateRangePickerComponent } from './daterangepicker/daterangepicker.component';
@@ -17,13 +16,16 @@ import { State,CommonInsightWrapper,StateReportModel } from '../../../../models/
 @Component({
   selector: 'api-inbox-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.scss'],
-  providers: [FetchUserService, UserGraphService,StateService]
+  styleUrls: ['./dashboard.scss']
+ // providers: [FetchUserService, UserGraphService,StateService]
 })
 
 
 
 export class DashboardComponent implements OnInit, OnDestroy {
+    @Output()
+    selectedData: EventEmitter<any> = new EventEmitter<any>();
+
 
     private subscriptionUsers: Subscription;
     private tatSubscription: Subscription;
@@ -39,7 +41,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     status:string;
     selectedDate:any;
     stateReportModel:StateReportModel = new StateReportModel();
-    tatReports:StateReportModel[] = [];
+    tatReports:State[] = [];
+    selectedState:State;
     overallStateReportModel:StateReportModel = new StateReportModel();
     personalStateReportModel:StateReportModel = new StateReportModel();
     constructor(
@@ -47,6 +50,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private communicationService: CommunicationService,
+        private dataCachingService: DataCachingService,
         private fetchUserService: FetchUserService,
         private stateService:StateService,
         private universalUser: UniversalUser
@@ -54,6 +58,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       ){
 
       }
+
+     
 
     ngOnInit(): void {
         this.load()
@@ -116,7 +122,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
                     
                 //this.stateReportModel.statusCd = this.status;
-                this.stateReportModel.reportStatusCd = this.status;
+                this.stateReportModel.reportStatusCd = "FLAGGED";
                 this.stateReportModel.companyId = this.companyId;
                 this.progressBarFlag = true;
                 this.buttonSelected = false;
@@ -140,13 +146,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 this.tatSubscription = this.stateService.getTatRecords(this.stateReportModel)
                 .subscribe(reports => {
                   if (reports && reports.length > 0) {
-                    this.stateReportModel = new StateReportModel();
+                    
+                    this.selectedState = new State();
                     this.tatReports = reports;
                     this.buttonSelected = true;
                     this.progressBarFlag = false;
                   }
                   else{
-                    this.stateReportModel = new StateReportModel()
+                    this.selectedState = new State();
                     this.tatReports = reports;
                     this.progressBarFlag = false;
                     this.buttonSelected = true;
@@ -155,6 +162,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
                 
                 
+            }
+
+            onSelect(selectedData: any): void {
+
+
+              this.selectedData.emit(selectedData);
+              this.selectedState = selectedData;
+              //this.selectedStateCd = selectedData.stateCd;
+                       
+              this.tatSubscription = this.stateService.getXMLforActiveState(selectedData.stateMachineInstanceModelId)
+                .subscribe(graphObject => {
+                  this.dataCachingService.setSharedObject(graphObject, this.selectedState);
+                  this.router.navigate(['/pg/tsk/tdts'], { relativeTo: this.route });
+                });
             }
       
 }

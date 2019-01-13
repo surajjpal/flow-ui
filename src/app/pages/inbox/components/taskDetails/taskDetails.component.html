@@ -14,11 +14,11 @@
       </div>
       <br>
       <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item">
-              <a class="nav-link active" id="details-tab" data-toggle="tab" href="#tabDetails" role="tab" aria-controls="details">
-                <b>Task details</b>
-              </a>
-            </li>
+        <li class="nav-item">
+          <a class="nav-link active" id="details-tab" data-toggle="tab" href="#tabDetails" role="tab" aria-controls="details">
+            <b>Task details</b>
+          </a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" id="conversation-tab" data-toggle="tab" href="#tabConversation" role="tab" aria-controls="flow"
             aria-expanded="true">
@@ -37,27 +37,29 @@
             <form>
               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd === 'Personal'"
-                  type="button" class="btn btn-primary btn-with-icon" (click)="updateFlow()">
+                  type="button" class="btn btn-success btn-with-icon" (click)="updateFlow()">
                   <i class="ion-checkmark"></i>Update Process</button>
-                <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && Users.length > 0" type="button"
-                  data-toggle="modal" data-target="#userModal" class="btn btn-info btn-with-icon">
+                <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && Users.length > 0"
+                  type="button" data-toggle="modal" data-target="#userModal" class="btn btn-info btn-with-icon">
                   <i class="ion-person-add"></i>Allocate Team</button>
                 <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd !== 'Personal' "
-                  type="button" (click)="reserve()" class="btn btn-info btn-with-icon">
+                  type="button" (click)="reserve()" class="btn btn-primary btn-with-icon">
                   <i class="ion-archive"></i>Reserve Task</button>
                 <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd === 'Personal' && userHierarchy.parentUserId.length > 0"
                   type="button" (click)="escalate()" class="btn btn-warning btn-with-icon">
                   <i class="ion-alert-circled"></i>Escalate Task</button>
-                <button [disabled]="!isButtonEnabled" type="button" class="btn btn-warning btn-with-icon" title="Flag" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd == 'Personal' && selectedState.subStatus !== 'FLAGGED'"
+                <button [disabled]="!isButtonEnabled" type="button" class="btn btn-warning btn-with-icon" title="Flag"
+                  *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd == 'Personal' && selectedState.subStatus !== 'FLAGGED'"
                   data-toggle="modal" data-target="#flagTaskModal" data-backdrop="static" data-keyboard="false" (click)="setFlagReason()">
                   <i class="ion-flag"></i>Flag Task</button>
-                <button [disabled]="!isButtonEnabled" type="button" class="btn btn-danger btn-with-icon" title="Archive" *ngIf="selectedState.statusCd ==='ACTIVE' && selectedState.assignedUserGroupCd == 'Personal' "
+                <button [disabled]="!isButtonEnabled" type="button" class="btn btn-danger btn-with-icon" title="Archive"
+                  *ngIf="selectedState.statusCd ==='ACTIVE' && selectedState.assignedUserGroupCd == 'Personal' "
                   data-toggle="modal" data-target="#archiveTaskWarningModal">
                   <i class="ion-ios-trash"></i>Archive Task</button>
               </div>
             </form>
           </div>
-          <hr/>
+          <hr />
           <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
               <div class="card card-default">
@@ -74,34 +76,37 @@
                         :
                       </label>
 
-                      <input *ngIf="index % 2 === 1 && (dataPoint.dataType === '' || dataPoint.dataType === 'STRING')" type="text" class="form-control col-md-12 col-sm-12"
-                        [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
-                      />
+                      <input *ngIf="index % 2 === 1 && (dataPoint.dataType === '' || dataPoint.dataType === 'STRING')"
+                        type="text" class="form-control col-md-12 col-sm-12" [title]="dataPoint.description"
+                        [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value" />
 
                       <input *ngIf="index % 2 === 1 && dataPoint.dataType === 'NUMBER'" type="number" class="form-control col-md-12 col-sm-12"
-                        [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
-                        onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
-                      />
+                        [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value"
+                        (input)="dataPoint.value = $event.target.value" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
 
                       <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'BOOLEAN'" class="selectpicker form-control col-md-12 col-sm-12"
-                        [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataPoint.value = $event">
+                        [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
+                        (ngModelChange)="dataPoint.value = $event">
                         <option [ngValue]="true">True</option>
                         <option [ngValue]="false">False</option>
                       </select>
 
                       <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'SINGLE_SELECT'" class="selectpicker form-control col-md-12 col-sm-12"
-                        [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataPoint.value = $event">
+                        [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
+                        (ngModelChange)="dataPoint.value = $event">
                         <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
                       </select>
 
                       <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'MULTI_SELECT'" multiple="true" class="selectpicker form-control col-md-12 col-sm-12"
-                        [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataPoint.value = $event">
+                        [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
+                        (ngModelChange)="dataPoint.value = $event">
                         <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
                       </select>
 
                       <tag-input *ngIf="index % 2 === 1 && dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && isString(dataPoint.value[0])"
-                        class="custom-input-tag-border form-control col-md-12 col-sm-12" [title]="dataPoint.description" [(ngModel)]="dataPoint.value"
-                        name="value" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
+                        class="custom-input-tag-border form-control col-md-12 col-sm-12" [title]="dataPoint.description"
+                        [(ngModel)]="dataPoint.value" name="value" [modelAsStrings]="true" [editable]="true"
+                        [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
                         [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'" theme="minimal">
                       </tag-input>
                     </div>
@@ -174,13 +179,11 @@
                 </div>
                 <div *ngIf="selectedEpisode && selectedEpisode.startTime" class="form-group">
                   <label>Start Time</label>
-                  <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode.startTime | date: 'dd/MM/y, h:mm:ss a'}}"
-                  />
+                  <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode.startTime | date: 'dd/MM/y, h:mm:ss a'}}" />
                 </div>
                 <div *ngIf="selectedEpisode && selectedEpisode.endTime" class="form-group">
                   <label>End Time</label>
-                  <input class="form-control" placeholder="End Time" disabled="disabled" value="{{selectedEpisode.endTime | date: 'dd/MM/y, h:mm:ss a'}}"
-                  />
+                  <input class="form-control" placeholder="End Time" disabled="disabled" value="{{selectedEpisode.endTime | date: 'dd/MM/y, h:mm:ss a'}}" />
                 </div>
                 <div *ngIf="selectedEpisode && selectedEpisode.goals && selectedEpisode.goals.length > 0" class="form-group">
                   <label>Goals</label>
@@ -231,15 +234,13 @@
                   <label>Status</label>
                   <input class="form-control" placeholder="Status" disabled="disabled" value="{{selectedEpisode.statusCd}}" />
                 </div>
-                <div *ngIf="selectedEpisode && selectedEpisode.intents && selectedEpisode.intents.length > 0"
-                  class="form-group">
+                <div *ngIf="selectedEpisode && selectedEpisode.intents && selectedEpisode.intents.length > 0" class="form-group">
                   <label>Intents</label>
                   <select multiple class="form-control" disabled="disabled">
                     <option *ngFor="let intent of selectedEpisode.intents">{{intent}}</option>
                   </select>
                 </div>
-                <div *ngIf="selectedEpisode && selectedEpisode.entities && selectedEpisode.entities.length > 0"
-                  class="form-group">
+                <div *ngIf="selectedEpisode && selectedEpisode.entities && selectedEpisode.entities.length > 0" class="form-group">
                   <label>Entities</label>
                   <select multiple class="form-control" disabled="disabled">
                     <option *ngFor="let entity of selectedEpisode.entities">{{entity}}</option>
@@ -251,16 +252,13 @@
                 </div>
                 <div *ngIf="selectedEpisode && selectedEpisode.startTime" class="form-group">
                   <label>Start Time</label>
-                  <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode.startTime | date: 'dd/MM/y, h:mm:ss a'}}"
-                  />
+                  <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode.startTime | date: 'dd/MM/y, h:mm:ss a'}}" />
                 </div>
                 <div *ngIf="selectedEpisode && selectedEpisode.endTime" class="form-group">
                   <label>End Time</label>
-                  <input class="form-control" placeholder="End Time" disabled="disabled" value="{{selectedEpisode.endTime | date: 'dd/MM/y, h:mm:ss a'}}"
-                  />
+                  <input class="form-control" placeholder="End Time" disabled="disabled" value="{{selectedEpisode.endTime | date: 'dd/MM/y, h:mm:ss a'}}" />
                 </div>
-                <div *ngIf="selectedEpisode && selectedEpisode.goals && selectedEpisode.goals.length > 0"
-                  class="form-group">
+                <div *ngIf="selectedEpisode && selectedEpisode.goals && selectedEpisode.goals.length > 0" class="form-group">
                   <label>Goals</label>
                   <select multiple class="form-control" disabled="disabled">
                     <option *ngFor="let goal of selectedEpisode.goals">{{goal.goalName}}</option>
@@ -303,18 +301,18 @@
         </div>
         <div role="tabpanel" class="tab-pane fade" id="tabFlow" aria-labelledby="flow-tab">
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
               <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>&nbsp;&nbsp;&nbsp;
-            <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
               <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>&nbsp;&nbsp;&nbsp;
-            <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
               <i class="ion-arrow-expand"></i>Zoom Actual</button>&nbsp;&nbsp;&nbsp;
-            <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)">
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)">
               <i class="ion-printer"></i>Print Preview</button>
           </div>
           <br>
           <div class="col-md-12 col-sm-12 col-xs-12">
-            <div id="editorGrid" class="col-md-12 col-sm-12 col-xs-12" style="height:68vh;overflow:hidden;margin-bottom:5px;border-style:solid;border-color:#1C2B36;"></div>
+            <div id="editorGrid" class="col-md-12 col-sm-12 col-xs-12" style="height:75vh;overflow:hidden;margin-bottom:1px;border-style:solid;border-color:silver;"></div>
           </div>
         </div>
       </div>
@@ -328,7 +326,7 @@
         <h4 class="modal-title" id="successModal">
           Success
         </h4>
-        <button type="button" class="close" data-dismiss="modal">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -349,7 +347,7 @@
         <h4 class="modal-title" id="userModalLabel">
           Allocate Task
         </h4>
-        <button type="button" class="close" data-dismiss="modal">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -358,8 +356,8 @@
         <form>
           <div class="form-group">
             <label for="selectUser">Select team member</label>
-            <select class="selectpicker form-control" required id="selectUser" title="Choose User" [ngModel]="tempUser" [ngModelOptions]="{standalone: true}"
-              (ngModelChange)="onUserSelect($event)">
+            <select class="selectpicker form-control" required id="selectUser" title="Choose User" [ngModel]="tempUser"
+              [ngModelOptions]="{standalone: true}" (ngModelChange)="onUserSelect($event)">
               <option *ngFor="let user of Users" [ngValue]="user">{{user.userName}}</option>
             </select>
           </div>
@@ -372,14 +370,15 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="flagTaskModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagmodalLabel" aria-hidden="true">
+<div class="modal fade" id="flagTaskModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagmodalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="userModalLabel">
           Flag Reason
         </h4>
-        <button type="button" class="close" data-dismiss="modal" (click)="flagClose()">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="flagClose()">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -402,14 +401,15 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="flagTaskWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagWarningLabel" aria-hidden="true">
+<div class="modal fade" id="flagTaskWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagWarningLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="finalWarningLabel">
           Warning
         </h4>
-        <button type="button" class="close" data-dismiss="modal">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -431,7 +431,7 @@
         <h4 class="modal-title" id="finalWarningLabel">
           Warning
         </h4>
-        <button type="button" class="close" data-dismiss="modal">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -447,14 +447,15 @@
   </div>
 </div>
 
-<div class="modal fade" id="userNotSelected" tabindex="-1" role="dialog" attr.aria-labelledby="archiveWarningLabel" aria-hidden="true">
+<div class="modal fade" id="userNotSelected" tabindex="-1" role="dialog" attr.aria-labelledby="archiveWarningLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="finalWarningLabel">
           Warning
         </h4>
-        <button type="button" class="close" data-dismiss="modal">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>
@@ -468,14 +469,15 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="flagSuccessModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagSuccessModal" aria-hidden="true">
+<div class="modal fade" id="flagSuccessModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagSuccessModal"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="flagSuccessModal">
           Success
         </h4>
-        <button type="button" class="close" data-dismiss="modal">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
         </button>

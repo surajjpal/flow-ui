@@ -76,7 +76,7 @@ export class ConnectorConfig extends BaseModel {
   functionInstanceName:string;
   taskObject:TaskObject;
   taskConfig:boolean;
-
+  
   constructor() {
     super();
     
@@ -88,6 +88,36 @@ export class ConnectorConfig extends BaseModel {
     this.functionInstanceName = "";
     this.taskObject = new TaskObject();
     this.taskConfig = false;
+    
+  }
+}
+
+export class TempConnectorConfig extends BaseModel {
+  configName: string;
+  configType: string;
+  connectorInfoRef: string;
+  connectorConfigRef: string;
+  connectorConfRefName: string;
+  displayName: string;
+  functionInstanceName: string;
+  taskConfig: boolean;
+  configMap: any;
+  taskObjectBody: any;
+  taskObjectResponseList: ApiResponse[];
+
+  constructor() {
+    super();
+    this.configName = null;
+    this.configType = null;
+    this.connectorInfoRef = null;
+    this.connectorConfigRef = null;
+    this.connectorConfRefName = null;
+    this.displayName = null;
+    this.functionInstanceName = null;
+    this.taskConfig = false;
+    this.configMap = [];
+    this.taskObjectBody = [];
+    this.taskObjectResponseList = [];
     
   }
 }

@@ -1,0 +1,133 @@
+<div class="widgets" *ngIf="visible" [@slideInOut]>
+  <ba-card baCardClass="with-scroll" class="data-table-container">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-md-6">
+            <h3>
+              <b>State Information</b>
+            </h3>
+          </div>
+          <div class="col-md-6 text-right">
+            <button type="button" class="btn btn-warning" (click)="close()">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="card-block">
+        <form class="row form-inline">
+          <div class="form-group col-md-12 alert-danger" style="margin-bottom: 10px;" *ngIf="responseError && responseError.length > 0"
+            [innerHTML]="responseError"></div>
+
+          <div class="form-group col-md-3 col-sm-6" style="margin-bottom: 10px;" *ngFor="let dataPoint of dataPoints; let index = index">
+            <label *ngIf="index % 2 === 0 && dataPoint.dataType !== 'ARRAY' && dataPoint.dataType !== 'ANY' ">{{dataPoint.dataPointLabel}}
+              :
+            </label>
+
+            <input *ngIf="index % 2 === 1 && (dataPoint.dataType === '' || dataPoint.dataType === 'STRING')" type="text"
+              class="form-control col-md-12 col-sm-12" [title]="dataPoint.description" [placeholder]="dataPoint.description"
+              [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value" />
+
+            <input *ngIf="index % 2 === 1 && dataPoint.dataType === 'NUMBER'" type="number" class="form-control col-md-12 col-sm-12"
+              [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
+              onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+
+            <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'BOOLEAN'" class="selectpicker form-control col-md-12 col-sm-12"
+              [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="dataPoint.value = $event">
+              <option [ngValue]="true">True</option>
+              <option [ngValue]="false">False</option>
+            </select>
+
+            <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'SINGLE_SELECT'" class="selectpicker form-control col-md-12 col-sm-12"
+              [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="dataPoint.value = $event">
+              <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
+            </select>
+
+            <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'MULTI_SELECT'" multiple="true" class="selectpicker form-control col-md-12 col-sm-12"
+              [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="dataPoint.value = $event">
+              <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
+            </select>
+
+            <tag-input *ngIf="index % 2 === 1 && dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && isString(dataPoint.value[0])"
+              class="custom-input-tag-border form-control col-md-12 col-sm-12" [title]="dataPoint.description"
+              [(ngModel)]="dataPoint.value" name="value" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]"
+              [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'" [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'"
+              theme="minimal">
+            </tag-input>
+          </div>
+
+        </form>
+        <div *ngFor="let dataPoint of getUniqueDataPoints()">
+          <ng-container class="form-group col-md-12" *ngIf="dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && !isString(dataPoint.value[0])">
+            <label *ngIf="dataPoint.dataType === 'ARRAY'">{{ dataPoint.dataPointLabel }}</label>
+            <table class="table" *ngIf="dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && !isString(dataPoint.value[0])">
+              <thead>
+                <tr>
+                  <th *ngFor="let key of getKeysForArrayDataType(dataPoint.value, dataPoint.dataPointName)">{{
+                    key }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let value of getValueForArraydatatype(dataPoint.value, dataPoint.dataPointName)">
+                  <td *ngFor="let v of value">{{ v }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </ng-container>
+
+        </div>
+      </div>
+    </div>
+  </ba-card>
+</div>
+
+
+
+<div class="widgets">
+  <ba-card baCardClass="with-scroll" class="data-table-container">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-md-6">
+            <h3>
+              <b>Process Trail</b>
+            </h3>
+          </div>
+          <div class="col-md-6 text-right">
+          </div>
+        </div>
+      </div>
+      <br>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <!-- <li class="nav-item">
+            <a class="nav-link active" id="flow-tab" data-toggle="tab" href="#tabFlow" role="tab" aria-controls="flow">
+              <b>Process trail</b>
+            </a>
+          </li> -->
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div role="tabpanel" id="tabFlow" aria-labelledby="flow-tab">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
+              <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
+              <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
+              <i class="ion-arrow-expand"></i>Zoom Actual</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)">
+              <i class="ion-printer"></i>Print Preview</button>
+          </div>
+          <br>
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div id="editorGrid" class="col-md-12 col-sm-12 col-xs-12" style="height:68vh;overflow:hidden;margin-bottom:5px;border-style:solid;border-color:#1C2B36;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ba-card>
+</div>

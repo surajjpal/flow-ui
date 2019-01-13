@@ -8,6 +8,7 @@ export class BaseModel {
   constructor() {
     this._id = null;
     this.statusCd = null;
+    this.subStatus = null;
     this.companyId = null;
     // this.companyName = "";
   }

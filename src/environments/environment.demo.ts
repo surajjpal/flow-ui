@@ -14,6 +14,8 @@ export const environment = {
     publishaccounturl:'https://flow.automatapi.com/flow/account/publish/',
     unpublishaccounturl:'https://flow.automatapi.com/flow/services/unpublish/',
 
+    
+
     // Interfaces
     interfaceService: 'https://flow.automatapi.com/flow/interfaces',
     updateClassifierTraining : 'https://flow.automatapi.com/flow/interfaces/auto_decorate_training',
@@ -34,6 +36,7 @@ export const environment = {
     gettatrecords:'state/fetchtat',
     getallstats:'state/fetchstatestatus',
     getpersonalstats:'state/getstatestatusbyuser',
+    getstateinstance:'state/fetchstateinstance',
     menutreeurl: 'menu/tree',
     menuurl: 'menu/',
     menurouteurl: 'menu/route',
@@ -104,8 +107,11 @@ export const environment = {
     modelkeyslookupurl: 'load/modelkeys',
     validationtypekeyslookupurl: 'load/validations',
 
+    flowsearch:'/api/search/flow',
+
+
     // Analytics
-    reportservice: 'https://flow.automatapi.com/flow/report',
+    reportservice: 'https://demo-console.automatapi.com/flow/report',
     sendReportUrl: '/reports/analyticsreport/sendreport',
     scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
     getAnalyticsReports: "/reports/analyticsreport",
@@ -146,8 +152,9 @@ export const environment = {
    //Dashboard from interfaces
    dashboardinterface: 'https://flow.automatapi.com/flow/interfaces/dashboard',
 
-   //CRUD API path - To be used in conjunction with interfaceService property
-   crudFunction : '/crud',
+   //Following APIs path - To be used in conjunction with interfaceService property
+   crudFunction: '/crud',
+   sendAgentMessage: '/sendMessage',
 
    // activity monitor services
    businessDataPointValues: 'businessactivitymanagement/datapointvalues',
@@ -155,5 +162,12 @@ export const environment = {
    businessDataPonitsPercentageCount: 'businessactivitymanagement/datapoint/percentagecount',
    businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
    businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
+   
+   //python project in api-utils ondemandreport project
+  sendReportCSV: 'https://demo-console.automatapi.com/flow/report/reports/generatereport',
+
+
+  //Vocabulary
+  vocabulary : 'https://flow.automatapi.com/flow/interfaces/vocabulary',
   };
   

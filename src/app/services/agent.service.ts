@@ -8,7 +8,8 @@ import { Agent } from '../models/agent.model';
 import { Episode, ChatMessage } from '../models/conversation.model';
 import { environment } from '../../environments/environment';
 import { DomainService } from './domain.service';
-import { CRUDOperationInput} from '../models/crudOperationInput.model';
+import { CRUDOperationInput } from '../models/crudOperationInput.model';
+import { UniversalUser } from './shared.service';
 
 @Injectable()
 export class AgentService {
@@ -20,7 +21,7 @@ export class AgentService {
     return this.domainService.domainLookup(query);
   }
 
-  agentLookup(query?: string): Observable<Agent[]> {
+  agentLookupByPage(pageNo: number, pageSize: number, fields: String[]) : Observable<Agent[]> {
     const subject = new Subject<Agent[]>();
 
     const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
@@ -28,7 +29,42 @@ export class AgentService {
     crudInput.payload = new Map<any, any>();
     crudInput.collection = 'agent';
     crudInput.operation = "READ_ALL";
-    
+    crudInput.page = pageNo;
+    crudInput.pageSize = pageSize;
+    crudInput.fields = fields;
+
+    this.httpClient.post<Map<string, Agent[]>>(
+      crudUrl,
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Map<string, Agent[]>>) => {
+        subject.next(response.body['data']);
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+  getAgentById(_id: String) : Observable<Agent> {
+    const subject = new Subject<Agent>();
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = new Map<any, any>();
+    crudInput.collection = 'agent';
+    crudInput.operation = "READ";
+    crudInput.payload = {"_id" : _id};
     this.httpClient.post<Map<string, Agent[]>>(
       crudUrl, 
       crudInput,
@@ -49,14 +85,45 @@ export class AgentService {
         subject.error(err);
       }
     );
-    
+
+    return subject.asObservable();
+  }
+
+  agentLookup(query?: string): Observable<Agent[]> {
+    const subject = new Subject<Agent[]>();
+
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = new Map<any, any>();
+    crudInput.collection = 'agent';
+    crudInput.operation = "READ_ALL";
+
+    this.httpClient.post<Map<string, Agent[]>>(
+      crudUrl,
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Map<string, Agent[]>>) => {
+        subject.next(response.body['data']);
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
     return subject.asObservable();
   }
 
   saveAgent(agent: Agent): Observable<any> {
     const subject = new Subject<any>();
-
-    console.log(agent.agentDomain)
 
     if (agent.agentDomain !== null) {
       agent.agentDomain = null;
@@ -72,7 +139,7 @@ export class AgentService {
     }
     const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
     this.httpClient.post<any>(
-      crudUrl, 
+      crudUrl,
       crudInput,
       {
         headers: this.httpHeaders,
@@ -89,7 +156,6 @@ export class AgentService {
       (err: HttpErrorResponse) => {
         // All errors are handled in ErrorInterceptor, no further handling required
         // Unless any specific action is to be taken on some error
-        console.log(err);
         subject.error(err);
       }
     );
@@ -211,7 +277,7 @@ export class AgentDashboardService {
 
   constructor(private httpClient: HttpClient) { }
 
-  fetchSummary(body:any): Observable<any> {
+  fetchSummary(body: any): Observable<any> {
     const subject = new Subject<any>();
 
     body['operation'] = "get_dashboard_summary";
@@ -239,14 +305,14 @@ export class AgentDashboardService {
 
         subject.error(err);
       }
-      );
+    );
 
     return subject.asObservable();
   }
 
 
 
-  fetchEpisodeTimeline(body:any): Observable<any> {
+  fetchEpisodeTimeline(body: any): Observable<any> {
     const subject = new Subject<any>();
     body['operation'] = "get_episode_timeline";
     body['dashboard'] = "auto"
@@ -273,13 +339,13 @@ export class AgentDashboardService {
 
         subject.error(err);
       }
-      );
+    );
 
     return subject.asObservable();
   }
 
 
-  fetchIntentCount(body:any): Observable<any> {
+  fetchIntentCount(body: any): Observable<any> {
     const subject = new Subject<any>();
     body['operation'] = "get_intent_count";
     body['dashboard'] = "auto"
@@ -307,168 +373,29 @@ export class AgentDashboardService {
 
         subject.error(err);
       }
-      );
-      
-          return subject.asObservable();
-      }
+    );
+
+    return subject.asObservable();
+  }
 
 
-      fetchEntityCount(body:any): Observable<any> {
-        const subject = new Subject<any>();
-        body['operation'] = "get_entity_count";
-        body['dashboard'] = "auto"
-        const url = `${environment.dashboardinterface}`;
-    
-        this.httpClient.post<any>(
-          url,
-          body,
-          {
-            headers: this.httpHeaders,
-            observe: 'response',
-            reportProgress: true,
-            withCredentials: true
-          }
-        ).subscribe(
-          (response: HttpResponse<any>) => {
-            if (response.body) {
-              subject.next(response.body);
-            }
-          },
-          (err: HttpErrorResponse) => {
-            // All errors are handled in ErrorInterceptor, no further handling required
-            // Unless any specific action is to be taken on some error
-    
-            subject.error(err);
-          }
-          );
-          
-              return subject.asObservable();
-          }
+  fetchEntityCount(body: any): Observable<any> {
+    const subject = new Subject<any>();
+    body['operation'] = "get_entity_count";
+    body['dashboard'] = "auto"
+    const url = `${environment.dashboardinterface}`;
 
-
-          fetchSentimentCount(body:any): Observable<any> {
-            const subject = new Subject<any>();
-            body['operation'] = "get_sentiment_count";
-            body['dashboard'] = "auto"
-            const url = `${environment.dashboardinterface}`;
-        
-        
-            this.httpClient.post<any>(
-              url,
-              body,
-              {
-                headers: this.httpHeaders,
-                observe: 'response',
-                reportProgress: true,
-                withCredentials: true
-              }
-            ).subscribe(
-              (response: HttpResponse<any>) => {
-                if (response.body) {
-                  subject.next(response.body);
-                }
-              },
-              (err: HttpErrorResponse) => {
-                // All errors are handled in ErrorInterceptor, no further handling required
-                // Unless any specific action is to be taken on some error
-        
-                subject.error(err);
-              }
-              );
-              
-                  return subject.asObservable();
-              }
-
-
-              fetchGoalCount(body:any): Observable<any> {
-                const subject = new Subject<any>();
-
-                body['operation'] = "get_goal_count_effeciency";
-                body['dashboard'] = "auto"
-                const url = `${environment.dashboardinterface}`;
-            
-            
-                this.httpClient.post<any>(
-                  url,
-                  body,
-                  {
-                    headers: this.httpHeaders,
-                    observe: 'response',
-                    reportProgress: true,
-                    withCredentials: true
-                  }
-                ).subscribe(
-                  (response: HttpResponse<any>) => {
-                    if (response.body) {
-                      subject.next(response.body);
-                    }
-                  },
-                  (err: HttpErrorResponse) => {
-                    // All errors are handled in ErrorInterceptor, no further handling required
-                    // Unless any specific action is to be taken on some error
-            
-                    subject.error(err);
-                  }
-                  );
-                  
-                      return subject.asObservable();
-                  }
-
-                  fetchEpisodeMessages(body:any): Observable<any> {
-                    const subject = new Subject<any>();
-                
-                    body['operation'] = "get_episode_messages";
-                    body['dashboard'] = "auto"
-                    const url = `${environment.dashboardinterface}`;
-                
-                    this.httpClient.post<any>(
-                      url,
-                      body,
-                      {
-                        headers: this.httpHeaders,
-                        observe: 'response',
-                        reportProgress: true,
-                        withCredentials: true
-                      }
-                    ).subscribe(
-                      (response: HttpResponse<any>) => {
-                        if (response.body) {
-                          subject.next(response.body);
-                        }
-                      },
-                      (err: HttpErrorResponse) => {
-                        // All errors are handled in ErrorInterceptor, no further handling required
-                        // Unless any specific action is to be taken on some error
-                
-                        subject.error(err);
-                      }
-                      );
-                      
-                          return subject.asObservable();
-                      }
-
-}
-
-@Injectable()
-export class ConversationService {
-  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-
-  constructor(private httpClient: HttpClient) { }
-
-  search(searchQuery: string): Observable<Episode[]> {
-    const subject = new Subject<Episode[]>();
-
-    const url = `${environment.autoServer + environment.episodelisturl + searchQuery}`;
-
-    this.httpClient.get<Episode[]>(
+    this.httpClient.post<any>(
       url,
+      body,
       {
+        headers: this.httpHeaders,
         observe: 'response',
         reportProgress: true,
         withCredentials: true
       }
     ).subscribe(
-      (response: HttpResponse<Episode[]>) => {
+      (response: HttpResponse<any>) => {
         if (response.body) {
           subject.next(response.body);
         }
@@ -479,10 +406,123 @@ export class ConversationService {
 
         subject.error(err);
       }
-      );
+    );
 
     return subject.asObservable();
   }
+
+
+  fetchSentimentCount(body: any): Observable<any> {
+    const subject = new Subject<any>();
+    body['operation'] = "get_sentiment_count";
+    body['dashboard'] = "auto"
+    const url = `${environment.dashboardinterface}`;
+
+
+    this.httpClient.post<any>(
+      url,
+      body,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+
+  fetchGoalCount(body: any): Observable<any> {
+    const subject = new Subject<any>();
+
+    body['operation'] = "get_goal_count_effeciency";
+    body['dashboard'] = "auto"
+    const url = `${environment.dashboardinterface}`;
+
+
+    this.httpClient.post<any>(
+      url,
+      body,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+  fetchEpisodeMessages(body: any): Observable<any> {
+    const subject = new Subject<any>();
+
+    body['operation'] = "get_episode_messages";
+    body['dashboard'] = "auto"
+    const url = `${environment.dashboardinterface}`;
+
+    this.httpClient.post<any>(
+      url,
+      body,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+}
+
+@Injectable()
+export class ConversationService {
+  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+  constructor(
+    private httpClient: HttpClient,
+    private universalUser: UniversalUser
+  ) { }
 
   getChat(episodeId: string): Observable<ChatMessage[]> {
     const subject = new Subject<ChatMessage[]>();
@@ -511,9 +551,12 @@ export class ConversationService {
 
           if (messageList && messageList.length > 1) {
             messageList = messageList.sort((msg1, msg2) => {
-              if (msg1.messageTime > msg2.messageTime) {
+              const date1 = new Date(msg1.messageTime);
+              const date2 = new Date(msg2.messageTime);
+
+              if (date1 > date2) {
                 return 1;
-              } else if (msg1.messageTime < msg2.messageTime) {
+              } else if (date1 < date2) {
                 return -1;
               } else {
                 return 0;
@@ -530,7 +573,7 @@ export class ConversationService {
 
         subject.error(err);
       }
-      );
+    );
 
     return subject.asObservable();
   }
@@ -567,8 +610,167 @@ export class ConversationService {
 
         subject.error(err);
       }
-      );
+    );
 
+    return subject.asObservable();
+  }
+
+  getEpisodesForBargeIn(missedExpressionTheshold: number): Observable<Episode[]> {
+    const subject = new Subject<Episode[]>();
+
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+
+    crudInput.payload = {
+      '$and': [
+        { 'statusCd': { '$exists': true } },
+        { 'episodeContext': { '$exists': true } },
+        { 'episodeContext.missedExpressionCount': { '$exists': true } },
+        { 'statusCd': 'ACTIVE' },
+        { 'episodeContext.missedExpressionCount': { '$gte': missedExpressionTheshold } },
+        {
+          '$or': [
+            {
+              '$and': [
+                {
+                  '$or': [
+                    { 'bargedIn': { '$exists': false } },
+                    { 'bargedIn': null },
+                    { 'bargedIn': false }
+                  ]
+                },
+                {
+                  '$or': [
+                    { 'bargedInAgentId': { '$exists': false } },
+                    { 'bargedInAgentId': null },
+                    { 'bargedInAgentId': '' }
+                  ]
+                }
+              ]
+            },
+            {
+              '$and': [
+                { 'bargedIn': { '$exists': true } },
+                { 'bargedInAgentId': { '$exists': true } },
+                { 'bargedIn': true },
+                { 'bargedInAgentId': this.universalUser.getUser()._id }
+              ]
+            }
+          ]
+        },
+      ]
+    };
+
+    crudInput.fields = {
+      '_id': 1,
+      'episodeContext.missedExpressionCount': 1,
+      'modifiedTime': 1,
+      'bargedIn': 1,
+      'bargedInAgentId': 1
+    };
+    crudInput.collection = 'episode';
+    crudInput.operation = "READ_ALL";
+
+    this.httpClient.post<Episode[]>(
+      crudUrl,
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          let episodeList: Episode[] = response.body['data'];
+
+          if (episodeList && episodeList.length > 1) {
+            episodeList = episodeList.sort((ep1, ep2) => {
+              const date1 = new Date(ep1.modifiedTime);
+              const date2 = new Date(ep2.modifiedTime);
+
+              if (date1 < date2) {
+                return 1;
+              } else if (date1 > date2) {
+                return -1;
+              } else {
+                return 0;
+              }
+            });
+          }
+
+          subject.next(episodeList);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+  saveEpisode(episode: Episode): Observable<any> {
+    const subject = new Subject<any>();
+
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = episode;
+    crudInput.collection = 'episode';
+    crudInput.operation = "UPDATE";
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    this.httpClient.post<any>(
+      crudUrl, 
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+        subject.error(err);
+      }
+    );
+    return subject.asObservable();
+  }
+
+  sendAgentMessage(messagePayload: any): Observable<any> {
+    const subject = new Subject<any>();
+
+    const url = `${environment.interfaceService + environment.sendAgentMessage}`;
+    this.httpClient.post<any>(
+      url, 
+      messagePayload,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+        subject.error(err);
+      }
+    );
     return subject.asObservable();
   }
 }

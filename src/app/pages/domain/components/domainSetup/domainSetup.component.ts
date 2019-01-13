@@ -30,7 +30,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   validationKeysSource: string[];
   stagesSource: Stage[];
   templateNames: string[];
-
+  suggestedTags:string[];
+  globalIntents:string[];
 
   intentFilterQuery: string;
   entityFilterQuery: string;
@@ -55,6 +56,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   operandSource: string[];
   bulkExpressions: string;
 
+  showTags:boolean;
+
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
   private subscriptionValidationKeys: Subscription;
@@ -71,7 +74,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.domainCreateMode = true;
     this.modalHeader = '';
     this.createMode = false;
-    this.languageSource = ['ENG', 'HIN', 'MAR', 'ID', 'ML'];
+    this.showTags = false;
+    this.languageSource = ['ENG', 'HIN', 'MAR', 'ID', 'ML', 'ARA'];
     this.operandSource = ['AND', 'OR'];
     this.modelKeysSource = [];
     this.domainUpdate = 'Domain';
@@ -79,6 +83,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.domainSucess = false;
     this.templateNames = ["default"]
     this.stagesSource = [];
+    this.suggestedTags = [];
+    this.globalIntents = ["closure","apiIdle","negation","skip","cancel","apiRetry","affirmation","default","apiInit","initiation"]
+    
     this.stagesSource.push(new Stage('Initialization', 'INIT'));
     this.stagesSource.push(new Stage('Context Setting', 'CONTEXT'));
     this.stagesSource.push(new Stage('Information Input', 'INFO'));
@@ -155,6 +162,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   onIntentSelect(intent?: Intent) {
+    this.suggestedTags = [];
+    this.showTags = false;
     if (intent) {
       this.modalHeader = 'Update Intent';
       this.createMode = false;
@@ -169,22 +178,47 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   addIntent() {
-    if (this.selectedIntent) {
-      const index: number = this.selectedDomain.domainIntents.indexOf(this.selectedIntent);
-      if (index !== -1) {
-        this.selectedDomain.domainIntents[index] = this.tempIntent;
+      if(this.tempIntent.tags.length >= 8)
+      {
+        if (this.selectedIntent) {
+          const index: number = this.selectedDomain.domainIntents.indexOf(this.selectedIntent);
+          if (index !== -1) {
+            this.selectedDomain.domainIntents[index] = this.tempIntent;
+          }
+        } else {
+          this.selectedDomain.domainIntents.push(this.tempIntent);
+        }
+    
+        // This is to forcefully call the digest cycle of angular so that,
+        // the filtered list would get updated with these chanegs made in master list
+        this.intentFilterQuery = (` ${this.intentFilterQuery}`);
+        setTimeout(() => {
+          this.intentFilterQuery = this.intentFilterQuery.slice(1);
+        }, 10);
       }
-    } else {
-      this.selectedDomain.domainIntents.push(this.tempIntent);
+      else{
+          if(!this.globalIntents.includes(this.tempIntent.intentCd))
+          {
+            new showAlertModal('Error! Unable to save', "Number of tags should be atleast 8");
+          }
+          else{
+            if (this.selectedIntent) {
+              const index: number = this.selectedDomain.domainIntents.indexOf(this.selectedIntent);
+              if (index !== -1) {
+                this.selectedDomain.domainIntents[index] = this.tempIntent;
+              }
+            } else {
+              this.selectedDomain.domainIntents.push(this.tempIntent);
+            }
+            this.intentFilterQuery = (` ${this.intentFilterQuery}`);
+            setTimeout(() => {
+              this.intentFilterQuery = this.intentFilterQuery.slice(1);
+            }, 10);
+          }
+      }
     }
-
-    // This is to forcefully call the digest cycle of angular so that,
-    // the filtered list would get updated with these chanegs made in master list
-    this.intentFilterQuery = (` ${this.intentFilterQuery}`);
-    setTimeout(() => {
-      this.intentFilterQuery = this.intentFilterQuery.slice(1);
-    }, 10);
-  }
+   
+  
 
   removeIntent() {
     if (this.selectedIntent) {
@@ -203,6 +237,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   onEntitySelect(entity?: Entity) {
+    this.suggestedTags = [];
+    this.showTags = false;
     if (entity) {
       this.modalHeader = 'Update Entity';
       this.createMode = false;
@@ -217,21 +253,27 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   addEntity() {
-    if (this.selectedEntity) {
-      const index: number = this.selectedDomain.domainEntities.indexOf(this.selectedEntity);
-      if (index !== -1) {
-        this.selectedDomain.domainEntities[index] = this.tempEntity;
+    if(this.tempEntity.tags.length >= 8){
+      if (this.selectedEntity) {
+        const index: number = this.selectedDomain.domainEntities.indexOf(this.selectedEntity);
+        if (index !== -1) {
+          this.selectedDomain.domainEntities[index] = this.tempEntity;
+        }
+      } else {
+        this.selectedDomain.domainEntities.push(this.tempEntity);
       }
-    } else {
-      this.selectedDomain.domainEntities.push(this.tempEntity);
+  
+      // This is to forcefully call the digest cycle of angular so that,
+      // the filtered list would get updated with these chanegs made in master list
+      this.entityFilterQuery = (` ${this.entityFilterQuery}`);
+      setTimeout(() => {
+        this.entityFilterQuery = this.entityFilterQuery.slice(1);
+      }, 10);
     }
-
-    // This is to forcefully call the digest cycle of angular so that,
-    // the filtered list would get updated with these chanegs made in master list
-    this.entityFilterQuery = (` ${this.entityFilterQuery}`);
-    setTimeout(() => {
-      this.entityFilterQuery = this.entityFilterQuery.slice(1);
-    }, 10);
+    else{
+      new showAlertModal('Error! Unable to save', "Number of tags should be atleast 8");
+    }
+    
   }
 
   removeEntity() {
@@ -722,7 +764,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.subscription = this.domainService.saveDomain(this.selectedDomain)
         .subscribe(
           response => {
-            this.updateClassifierTraining();
+            
+            this.updateClassifierTraining(response);
 
             //this.updateIntenTrainingData();
 
@@ -736,14 +779,14 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateClassifierTraining() {
+  updateClassifierTraining(updatedDomain: Domain) {
     this.subscription = this.domainService.updateDomainClassifierTraining(this.selectedDomain)
       .subscribe(
         response => {
           if (response) {
             this.domainBody = `Domain updated successfully!!`;
             this.domainSucess = true;
-            this.selectedDomain = response;
+            this.selectedDomain = updatedDomain;
           } else {
             this.domainBody = `Something went wrong please try again!!`;
             this.domainSucess = true;
@@ -937,4 +980,36 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.bulkExpressions = '';
     return expressions;
   }
+
+  getIntentSynonyms(){
+    if(this.tempIntent.tags.length > 0){
+      if (!this.suggestedTags.includes(this.tempIntent.tags[this.tempIntent.tags.length-1])){
+        this.subscription = this.domainService.getSynonyms(this.tempIntent.tags[this.tempIntent.tags.length-1])
+        .subscribe(
+          response => {
+            this.showTags = true;
+            this.suggestedTags = response["synonyms"];
+          }
+        );
+      }
+      }
+      
+    }
+
+    getEntitySynonyms(){
+      if(this.tempEntity.tags.length > 0){
+        if (!this.suggestedTags.includes(this.tempEntity.tags[this.tempEntity.tags.length-1])){
+          this.subscription = this.domainService.getSynonyms(this.tempEntity.tags[this.tempEntity.tags.length-1])
+          .subscribe(
+            response => {
+              this.showTags = true;
+              this.suggestedTags = response["synonyms"];
+            }
+          );
+        }
+        }
+        
+      }
+    
+
 }

@@ -22,7 +22,8 @@ import { KeysPipe } from './key-filter.pipe';
     UniversalFilterPipe,
     KeysPipe,
     NgbdDatepickerPopup,
-    FileUploaderComponent
+    FileUploaderComponent,
+    // APISpinnerComponent,
   ],
   exports: [
     AlertComponent,
@@ -30,7 +31,8 @@ import { KeysPipe } from './key-filter.pipe';
     UniversalFilterPipe,
     KeysPipe,
     NgbdDatepickerPopup,
-    FileUploaderComponent
+    FileUploaderComponent,
+    // APISpinnerComponent
 
   ]
 })

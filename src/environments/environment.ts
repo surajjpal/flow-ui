@@ -18,6 +18,9 @@ export const environment = {
   fetchaccountbyidurl: 'http://108.168.190.82:8080/flow/services/fetchaccountbyid?query=',
   publishaccounturl:'http://108.168.190.82:8080/flow/services/publish/',
   unpublishaccounturl:'http://108.168.190.82:8080/flow/services/unpublish/',
+
+  processauditurl:"http://localhost:5000/api/universalsearch/search/flow",
+  
   // Interfaces
   interfaceService: 'http://108.168.190.82:8080/flow/interfaces',
   updateClassifierTraining : 'http://108.168.190.82:8080/flow/interfaces/auto_decorate_training',
@@ -38,6 +41,7 @@ export const environment = {
   gettatrecords:'state/fetchtat',
   getallstats:'state/fetchstatestatus',
   getpersonalstats:'state/getstatestatusbyuser',
+  getstateinstance:'state/fetchstateinstance',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
@@ -108,6 +112,9 @@ export const environment = {
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
+
+  flowsearch:'/api/search/flow',
+
   // Analytics
   reportservice: 'http://localhost:8080/flow/report',
   sendReportUrl: '/reports/analyticsreport/sendreport',
@@ -149,8 +156,9 @@ export const environment = {
   //Dashboard from interfaces
   dashboardinterface: 'http://108.168.190.82:8080/flow/interfaces/dashboard',
 
-  //CRUD API path - To be used in conjunction with interfaceService property
-  crudFunction : '/crud',
+  //Following APIs path - To be used in conjunction with interfaceService property
+  crudFunction: '/crud',
+  sendAgentMessage: '/sendMessage',
 
   // activity monitor services
   businessDataPointValues: 'businessactivitymanagement/datapointvalues',
@@ -158,4 +166,12 @@ export const environment = {
   businessDataPonitsPercentageCount: 'businessactivitymanagement/datapoint/percentagecount',
   businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
   businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
+
+  sendReportCSV: 'http://localhost:8080/flow/report/reports/generatereport',
+  funnelReport: 'state/fetchfunneldata',
+
+
+
+  //Vocabulary
+  vocabulary :'http://108.168.190.82:8080/flow/interfaces/vocabulary',
 };

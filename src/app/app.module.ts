@@ -19,7 +19,7 @@ import { AppState, InternalStateType } from './app.service';
 import { GlobalState } from './global.state';
 import { NgaModule } from './theme/nga.module';
 import { PagesModule } from './pages/pages.module';
-
+import { FetchUserService, UserGraphService } from './services/userhierarchy.service';
 import { AuthService } from './services/auth.service';
 import { AgentService, ConversationService, AgentDashboardService } from './services/agent.service';
 import { DomainService } from './services/domain.service';
@@ -27,7 +27,7 @@ import { FlowDashboardService, GraphService, CommunicationService } from './serv
 import { DataCachingService, StateService } from './services/inbox.service';
 import { AccountService, ApiConfigService, RoutesService } from './services/setup.service';
 import { ApiDesignService } from './services/apidesign.service';
-import { AuthGuard, AntiAuthGuard, AlertService, DataSharingService, UniversalUser } from './services/shared.service';
+import { AuthGuard, AntiAuthGuard, AlertService, DataSharingService, UniversalUser, ScrollService } from './services/shared.service';
 import { AnalyticsService } from './services/analytics.service';
 import { ScheduleTaskService } from './services/scheduletasks.service';
 import { ActivityMonitorService } from  './services/activitymonitor.service'
@@ -35,10 +35,11 @@ import { FileUploaderService } from './shared/services/file-uploader.service'
 
 import { SharedModule } from './shared/shared.module';
 
-import { ErrorInterceptor, UnauthenticateInterceptor } from './services/interceptors';
+import { ErrorInterceptor } from './services/interceptors';
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
+import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -47,21 +48,16 @@ const APP_PROVIDERS = [
     useClass: ErrorInterceptor,
     multi: true
   },
-  {
-    provide: HTTP_INTERCEPTORS,
-    useClass: UnauthenticateInterceptor,
-    multi: true
-  },
   AgentService, ConversationService, AgentDashboardService,
   DomainService,
   FlowDashboardService, GraphService, CommunicationService,
   DataCachingService, StateService,
-  AccountService, ApiConfigService, RoutesService,
+  AccountService, ApiConfigService, RoutesService,FetchUserService,UserGraphService,
   ApiDesignService,
   AnalyticsService,
   ScheduleTaskService,
   ActivityMonitorService,
-  AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService, UniversalUser, FileUploaderService
+  AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService, UniversalUser, FileUploaderService, ScrollService
 ];
 
 export type StoreType = {
@@ -92,7 +88,8 @@ export type StoreType = {
     routing,
     SlimLoadingBarModule.forRoot(),
     AngularFontAwesomeModule,
-    SharedModule
+    SharedModule,
+    ScrollToModule.forRoot()
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     APP_PROVIDERS

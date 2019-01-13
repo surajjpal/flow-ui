@@ -29,11 +29,20 @@ $bootstrap-panel-header-bg: $bootstrap-panel-bg;
 $bootstrap-panel-header-border: 1px solid rgba(0, 0, 0, 0.12);
 $bootstrap-panel-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.25);
 
-$primary: #209e91 !default;
-$info: #2dacd1 !default;
-$success: #90b900 !default;
-$warning: #dfb81c !default;
-$danger: #e85656 !default;
+// $primary: #209e91 !default;
+// $primary: #5CC0DE !default;
+// $info: #2dacd1 !default;
+// $success: #90b900 !default;
+// $warning: #dfb81c !default;
+// $danger: #e85656 !default;
+
+$primary: #007BFF !default;
+$secondary: #6C757D !default;
+$info: #5CC0DE !default;
+$success: #28A745 !default;
+$warning: #FFC107 !default;
+$danger: #DC3545 !default;
+$light: #F8F9FA !default;
 
 $primary-light: tint($primary, 30%);
 $info-light: tint($info, 30%);

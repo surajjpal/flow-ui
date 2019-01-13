@@ -1,13 +1,13 @@
 import { OnInit, OnDestroy } from "@angular/core/src/metadata/lifecycle_hooks";
 import { Component } from "@angular/core";
 
-import { BusinessProcessMonitorRequest, BusinessProcessMonitorCountPercentageChange, BusinessProcessMonitorGraphData } from '../../../../models/businessprocessmonitor.model'
+import { BusinessProcessMonitorRequest, BusinessProcessMonitorCountPercentageChange, BusinessProcessMonitorGraphData, OnDemandReportRequest } from '../../../../models/businessprocessmonitor.model'
 
 import { ActivityMonitorService } from '../../../../services/activitymonitor.service'
 import { GraphService } from  '../../../../services/flow.service'
 
 import { Subscription } from "rxjs/Subscription";
-import { GraphObject, DataPoint } from "app/models/flow.model";
+import { GraphObject, DataPoint,CommonSearchModel } from "app/models/flow.model";
 
 declare let moment: any;
 
@@ -21,6 +21,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
     graphObjects: GraphObject[]
     graphObjectFilterByMachineTypes: GraphObject[];
     businessProcessMonitorRequest: BusinessProcessMonitorRequest;
+    onDemandReportRequest:OnDemandReportRequest;
     businessDataPointConfiguationsForGraph: DataPoint[];
     businessDataPoints: DataPoint[];
     tempBusinessDataPoints: DataPoint[];
@@ -58,6 +59,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
 
     ) {
         this.businessProcessMonitorRequest = new BusinessProcessMonitorRequest();
+        this.onDemandReportRequest = new OnDemandReportRequest();
         this.businessDataPoints = [];
         this.tempBusinessDataPoints = [];
         this.businessDataPointsValues = {};
@@ -69,7 +71,10 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
         this.loading=true;
         this.tempDateRange.start = moment().startOf('day');
         this.tempDateRange.end = moment().endOf('day');
-        this.subscription = this.graphService.fetch()
+        let commonsearchModel = new CommonSearchModel();
+        commonsearchModel.searchParams = [{"statusCd":"ACTIVE"},{"statusCd":"DRAFT"},{"statusCd":"CLOSED"}];
+        commonsearchModel.returnFields = ["machineLabel","version","statusCd","machineType","dataPointConfigurationList"];
+        this.subscription = this.graphService.fetch(commonsearchModel)
                             .subscribe(
                                 response => {
                                     if (response.length>0) {
@@ -136,6 +141,13 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
             this.businessProcessMonitorRequest.endTime = dateTimeRange.end;
         }
         
+    }
+
+    setTimeRangeReport(dateTimeRange) {
+        if (dateTimeRange != null) {
+            this.onDemandReportRequest.startDate = dateTimeRange.start.format('YYYY-MM-DD');
+            this.onDemandReportRequest.endDate = dateTimeRange.end.format('YYYY-MM-DD');
+        }
     }
 
     getBusinessDataPoints(machinetype: string, getResult?: boolean) {
@@ -261,16 +273,21 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
             if (!this.businessProcessMonitorRequest.companyId) {
                 this.businessProcessMonitorRequest.companyId = graphData.companyId;
             }
+            
+            
             if (graphData.machineType == this.businessProcessMonitorRequest.machineType) {
+               
                 if (this.businessProcessMonitorRequest.machineIds.indexOf(graphData._id) == -1) {
                     this.businessProcessMonitorRequest.machineIds = this.businessProcessMonitorRequest.machineIds.concat(graphData._id);
                 }
                 for (let dataPointconfig of graphData.dataPointConfigurationList) {
                     let found = false;
+                    
                     if (graphData.statusCd == 'ACTIVE' && dataPointconfig.businessMonitorKey && dataPointconfig.graphType != null) {
                         this.businessDataPointConfiguationsForGraph = this.businessDataPointConfiguationsForGraph.concat(dataPointconfig);
                     }
-                    else if (graphData.statusCd == 'ACTIVE' && dataPointconfig.businessMonitorKey && (dataPointconfig.percentageChange || dataPointconfig.businessKeyFlag )) {
+                    
+                    if (graphData.statusCd == 'ACTIVE' && dataPointconfig.businessMonitorKey && (dataPointconfig.percentageChange || dataPointconfig.businessKeyFlag )) {
                         businessDataPointConfiguationsForSummary = businessDataPointConfiguationsForSummary.concat(dataPointconfig);
                     }
                     for (let businessDataPointConfig of this.businessProcessMonitorRequest.dataPointConfigurations) {
@@ -285,11 +302,12 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                 }
             }
         }
-        
+        console.log("changes reflecting")
         console.log("submit filter");
-        console.log(this.businessProcessMonitorRequest);
+        console.log(this.businessDataPointConfiguationsForGraph);
         for (let graphDataPoint of this.businessDataPointConfiguationsForGraph) {
             this.businessProcessMonitorRequest.selectedDataPointConfiguration = JSON.parse(JSON.stringify(graphDataPoint));
+            
             this.getFilterGraphData(graphDataPoint);
             
         }
@@ -298,6 +316,12 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
             this.getCountWithPercentage(summaryDataConfig);
         }
         
+    }
+
+    sendEmail(initiate?: boolean) {
+        console.log("send email filter");
+        console.log(this.onDemandReportRequest);
+        this.sendEmailCSV();
     }
 
     getResult() {
@@ -311,6 +335,7 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
     }
 
     getCountWithPercentage(dataPoint: DataPoint) {
+        console.log("----------------------inside----------------------------------")
         this.loading=true;
         this.activityMonitorService.getCountwithPercentageChange(this.businessProcessMonitorRequest)
                     .subscribe(
@@ -378,6 +403,23 @@ export class BusinessProcessMonitorcomponent implements OnInit, OnDestroy {
                           this.loading=false;  
                         }
                     )
+    }
+
+    sendEmailCSV() {
+        this.activityMonitorService.sendReportCSV(this.onDemandReportRequest)
+                    .subscribe(
+                        response => {
+                            let gdata = response;
+                            if (gdata != null) {
+
+                            }
+                            
+                            this.loading=false; 
+                        },
+                        error => {
+                          this.loading=false;  
+                        }
+                    )   
     }
 
     getFilterGraphData(dataPoint: DataPoint) {
