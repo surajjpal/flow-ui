@@ -46,8 +46,7 @@ export class USPService {
         const subject = new Subject<any>();
         var selfTrainRequest = {
             highlight: highlights,
-            searchText : query,
-            dataIngestorName: "automatapi"
+            searchText : query
             //companyContext: { "companyId" : "e95764c923e74e308d0019516b17cabd" }
         }
         const url = `${environment.interfaceService + environment.uspselftrain}`;

@@ -43,6 +43,10 @@ export class USPSearchComponent implements OnInit, OnDestroy {
     onUSPSearch() {
         console.log("on usp search");
         this.searchResultData = [];
+        this.maxScore = 0;
+        if (this.uspSearchRequest) {
+            this.uspSearchRequest.scrollId = null;
+        }
         this.getSearchResult(false);
         
     }
