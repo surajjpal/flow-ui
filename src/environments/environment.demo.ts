@@ -111,7 +111,7 @@ export const environment = {
 
 
     // Analytics
-    reportservice: 'https://demo-console.automatapi.com/flow/report',
+    reportservice: 'https://flow.automatapi.com/flow/report',
     sendReportUrl: '/reports/analyticsreport/sendreport',
     scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
     getAnalyticsReports: "/reports/analyticsreport",
@@ -164,7 +164,7 @@ export const environment = {
    businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
    
    //python project in api-utils ondemandreport project
-  sendReportCSV: 'https://demo-console.automatapi.com/flow/report/reports/generatereport',
+  sendReportCSV: 'https://flow.automatapi.com/flow/report/reports/generatereport',
 
 
   //Vocabulary
