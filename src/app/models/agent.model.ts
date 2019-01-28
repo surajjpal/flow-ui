@@ -13,6 +13,7 @@ export class UIComponent {
   cronEnabled: boolean;
   isBargeable: boolean;
   conversationWindowTitlePrefix: string;
+  startTime:any;
 
   constructor() {
     this.colorCss = '';
@@ -27,6 +28,7 @@ export class UIComponent {
     this.cronEnabled = false;
     this.isBargeable = false;
     this.conversationWindowTitlePrefix = 'Chatting with';
+    this.startTime = null;
   }
 }
 
