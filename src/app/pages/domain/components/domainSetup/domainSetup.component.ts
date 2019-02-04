@@ -518,6 +518,15 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
                   if (!d.agentId || d.agentId === null) {
                     d.agentId = '';
                   }
+                  if (!d.fileSize || d.fileSize === null) {
+                    d.fileSize = '';
+                  }
+                  if (!d.fileType || d.fileType === null) {
+                    d.fileType = '';
+                  }
+                  if (!d.fileReference || d.fileReference === null) {
+                    d.fileReference = '';
+                  }
                 }
               }
 
