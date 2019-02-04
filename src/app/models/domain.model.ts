@@ -112,13 +112,19 @@ export class ResponseOption {
   url: string;
   agentId: string;
   language: string;
+  fileSize: string;
+  fileType: string;
+  fileReference: string;
 
-  constructor(value?: string, label?: string, url?: string, agentId?: string, language?: string) {
+  constructor(value?: string, label?: string, url?: string, agentId?: string, language?: string, fileSize?: string, fileType?:string, fileReference?:string) {
     this.value = value ? value : '';
     this.label = label ? label : '';
     this.url = url ? url : '';
     this.agentId = agentId ? agentId : '';
     this.language = language ? language : '';
+    this.fileSize = fileSize ? fileSize : '';
+    this.fileType = fileType ? fileType : '';
+    this.fileReference = fileReference ? fileReference: '';
   }
 }
 

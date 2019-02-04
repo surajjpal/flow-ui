@@ -172,8 +172,7 @@
                 <input class="form-control" [(ngModel)]="goalFilterQuery" name="goalFilterQuery" placeholder="Filter Query" />
               </div>
               <div class="form-group col-sm-2">
-                <button type="button" class="btn btn-primary" (click)="onGoalSelect()" data-toggle="modal"
-                  data-target="#goalModal">
+                <button type="button" class="btn btn-primary" (click)="onGoalSelect()" data-toggle="modal" data-target="#goalModal">
                   Add Goal
                 </button>
               </div>
@@ -323,8 +322,7 @@
 
       <form>
         <div class="form-group">
-          <button type="button" class="btn btn-primary" (click)="createDomain()" data-toggle="modal"
-            data-target="#domainUpdateModal">
+          <button type="button" class="btn btn-primary" (click)="createDomain()" data-toggle="modal" data-target="#domainUpdateModal">
             {{domainCreateMode ? 'Create Domain' : 'Update Domain'}}
           </button>
         </div>
@@ -365,13 +363,14 @@
           </div>
           <div class="form-group">
             <label>Tags</label>
-            <tag-input [(ngModel)]="tempIntent.tags" dragZone="tags" (keyup.enter)="getIntentSynonyms()" name="tags" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Tags (Enter separated)"
+            <tag-input [(ngModel)]="tempIntent.tags" dragZone="tags" (keyup.enter)="getIntentSynonyms()" name="tags"
+              [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Tags (Enter separated)"
               secondaryPlaceholder="Enter a new tag (Enter separated)" theme="minimal" class="custom-input-tag-border"></tag-input>
           </div>
           <div class="form-group" *ngIf='showTags'>
             <label>Suggested Tags</label>
-            <tag-input [(ngModel)]="suggestedTags"  dragZone="tags" name="suggestedTags" [modelAsStrings]="true" [removable]="false" [separatorKeys]="[32]"
-               theme="minimal" class="custom-input-tag-border"></tag-input>
+            <tag-input [(ngModel)]="suggestedTags" dragZone="tags" name="suggestedTags" [modelAsStrings]="true"
+              [removable]="false" [separatorKeys]="[32]" theme="minimal" class="custom-input-tag-border"></tag-input>
           </div>
           <div class="form-group">
             <label>Weight</label>
@@ -420,13 +419,14 @@
           </div>
           <div class="form-group">
             <label>Tags</label>
-            <tag-input [(ngModel)]="tempEntity.tags" name="tags" dragZone="tags" (keyup.enter)="getEntitySynonyms()" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Tags (Enter separated)"
+            <tag-input [(ngModel)]="tempEntity.tags" name="tags" dragZone="tags" (keyup.enter)="getEntitySynonyms()"
+              [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Tags (Enter separated)"
               secondaryPlaceholder="Enter a new tag (Enter separated)" theme="minimal" class="custom-input-tag-border"></tag-input>
           </div>
           <div class="form-group" *ngIf='showTags'>
             <label>Suggested Tags</label>
-            <tag-input [(ngModel)]="suggestedTags"  dragZone="tags" name="suggestedTags" [modelAsStrings]="true" [removable]="false" [separatorKeys]="[32]"
-               theme="minimal" class="custom-input-tag-border"></tag-input>
+            <tag-input [(ngModel)]="suggestedTags" dragZone="tags" name="suggestedTags" [modelAsStrings]="true"
+              [removable]="false" [separatorKeys]="[32]" theme="minimal" class="custom-input-tag-border"></tag-input>
           </div>
           <div class="form-group">
             <label>Transaction Value</label>
@@ -769,6 +769,7 @@
                                                     <option value="CHECKBOX">Checkbox</option>
                                                     <option value="RADIO">Radio</option>
                                                     <option value="FILE_UPLOAD">File Upload</option>
+                                                    <option value="OFFERED_DOCUMENT">Offering</option>
                                                     <option value="CARD">Card</option>
                                                   </select>
                                                 </td>
@@ -776,7 +777,7 @@
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url"
                                                     name="url">
                                                 </td>
-                                                <td *ngIf="option.type != 'CARD'">
+                                                <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT'">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
@@ -853,8 +854,58 @@
                                                       </tr>
                                                     </tbody>
                                                   </table>
-
                                                 </td>
+
+                                                <!--  adding metadata of offered document -->
+                                                <td *ngIf="option.type == 'OFFERED_DOCUMENT'">
+                                                  <table class="table table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Label</th>
+                                                        <th>URL</th>
+                                                        <th>File Size</th>
+                                                        <th>File Type</th>
+                                                        <th>File Reference</th>
+
+                                                        <th>
+                                                          <button type="button" class="btn btn-primary" (click)="onAddData(option)">
+                                                            <i class="ion-plus-round"></i>
+                                                          </button>
+                                                        </th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <tr *ngFor="let row of option.data">
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Label"
+                                                            [value]="row.label" (input)="row.label = $event.target.value" />
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="URL"
+                                                            [value]="row.url" (input)="row.url = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Size"
+                                                            [value]="row.fileSize" (input)="row.fileSize = $event.target.value" />
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="File Type"
+                                                            [value]="row.fileType" (input)="row.fileType = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="File Reference"
+                                                            [value]="row.fileReference" (input)="row.fileReference = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
+                                                            <i class="ion-ios-trash"></i>
+                                                          </button>
+                                                        </td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </td>
+
                                                 <td>
                                                   <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                     <i class="ion-ios-trash"></i>
@@ -968,6 +1019,7 @@
                                                       <option value="CHECKBOX">Checkbox</option>
                                                       <option value="RADIO">Radio</option>
                                                       <option value="FILE_UPLOAD">File Upload</option>
+                                                      <option value="OFFERED_DOCUMENT">Offering</option>
                                                       <option value="CARD">Card</option>
                                                     </select>
                                                   </td>
@@ -975,7 +1027,7 @@
                                                     <input type="text" class="form-control" placeholder="URL"
                                                       [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td *ngIf="option.type != 'CARD'">
+                                                  <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
@@ -985,8 +1037,7 @@
                                                           <th>Language</th>
                                                           <th>Agent ID</th>
                                                           <th>
-                                                            <button type="button" class="btn btn-primary"
-                                                              (click)="onAddData(option)">
+                                                            <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                               <i class="ion-plus-round"></i>
                                                             </button>
                                                           </th>
@@ -1015,8 +1066,7 @@
                                                               [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                           </td>
                                                           <td>
-                                                            <button type="button" class="btn btn-danger"
-                                                              (click)="delete(option.data,row)">
+                                                            <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
                                                               <i class="ion-ios-trash"></i>
                                                             </button>
                                                           </td>
@@ -1056,6 +1106,57 @@
                                                     </table>
 
                                                   </td>
+
+                                                  <!--  adding metadata of offered document -->
+                                                  <td *ngIf="option.type == 'OFFERED_DOCUMENT'">
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                        <tr>
+                                                          <th>Label</th>
+                                                          <th>URL</th>
+                                                          <th>File Size</th>
+                                                          <th>File Type</th>
+                                                          <th>File Reference</th>
+
+                                                          <th>
+                                                            <button type="button" class="btn btn-primary" (click)="onAddData(option)">
+                                                              <i class="ion-plus-round"></i>
+                                                            </button>
+                                                          </th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <tr *ngFor="let row of option.data">
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="Label"
+                                                              [value]="row.label" (input)="row.label = $event.target.value" />
+                                                          </td>
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="URL"
+                                                              [value]="row.url" (input)="row.url = $event.target.value">
+                                                          </td>
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="Size"
+                                                              [value]="row.fileSize" (input)="row.fileSize = $event.target.value" />
+                                                          </td>
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="File Type"
+                                                              [value]="row.fileType" (input)="row.fileType = $event.target.value">
+                                                          </td>
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="File Reference"
+                                                              [value]="row.fileReference" (input)="row.fileReference = $event.target.value">
+                                                          </td>
+                                                          <td>
+                                                            <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
+                                                              <i class="ion-ios-trash"></i>
+                                                            </button>
+                                                          </td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+
                                                   <td>
                                                     <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                       <i class="ion-ios-trash"></i>
@@ -1207,6 +1308,7 @@
                                                     <option value="CHECKBOX">Checkbox</option>
                                                     <option value="RADIO">Radio</option>
                                                     <option value="FILE_UPLOAD">File Upload</option>
+                                                    <option value="OFFERED_DOCUMENT">Offering</option>
                                                     <option value="CARD">Card</option>
                                                   </select>
                                                 </td>
@@ -1214,7 +1316,7 @@
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url"
                                                     name="url">
                                                 </td>
-                                                <td *ngIf="option.type != 'CARD'">
+                                                <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
@@ -1293,6 +1395,57 @@
                                                   </table>
 
                                                 </td>
+
+                                                <!--  adding metadata of offered document -->
+                                                <td *ngIf="option.type == 'OFFERED_DOCUMENT'">
+                                                  <table class="table table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Label</th>
+                                                        <th>URL</th>
+                                                        <th>File Size</th>
+                                                        <th>File Type</th>
+                                                        <th>File Reference</th>
+
+                                                        <th>
+                                                          <button type="button" class="btn btn-primary" (click)="onAddData(option)">
+                                                            <i class="ion-plus-round"></i>
+                                                          </button>
+                                                        </th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <tr *ngFor="let row of option.data">
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Label"
+                                                            [value]="row.label" (input)="row.label = $event.target.value" />
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="URL"
+                                                            [value]="row.url" (input)="row.url = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Size"
+                                                            [value]="row.fileSize" (input)="row.fileSize = $event.target.value" />
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="File Type"
+                                                            [value]="row.fileType" (input)="row.fileType = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="File Reference"
+                                                            [value]="row.fileReference" (input)="row.fileReference = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
+                                                            <i class="ion-ios-trash"></i>
+                                                          </button>
+                                                        </td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </td>
+
                                                 <td>
                                                   <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                     <i class="ion-ios-trash"></i>
@@ -1406,6 +1559,7 @@
                                                       <option value="CHECKBOX">Checkbox</option>
                                                       <option value="RADIO">Radio</option>
                                                       <option value="FILE_UPLOAD">File Upload</option>
+                                                      <option value="OFFERED_DOCUMENT">Offering</option>
                                                       <option value="CARD">Card</option>
                                                     </select>
                                                   </td>
@@ -1413,7 +1567,7 @@
                                                     <input type="text" class="form-control" placeholder="URL"
                                                       [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td *ngIf="option.type != 'CARD'">
+                                                  <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
@@ -1423,8 +1577,7 @@
                                                           <th>Language</th>
                                                           <th>Agent ID</th>
                                                           <th>
-                                                            <button type="button" class="btn btn-primary"
-                                                              (click)="onAddData(option)">
+                                                            <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                               <i class="ion-plus-round"></i>
                                                             </button>
                                                           </th>
@@ -1453,8 +1606,7 @@
                                                               [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                           </td>
                                                           <td>
-                                                            <button type="button" class="btn btn-danger"
-                                                              (click)="delete(option.data,row)">
+                                                            <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
                                                               <i class="ion-ios-trash"></i>
                                                             </button>
                                                           </td>
@@ -1494,6 +1646,57 @@
                                                     </table>
 
                                                   </td>
+
+                                                  <!--  adding metadata of offered document -->
+                                                <td *ngIf="option.type == 'OFFERED_DOCUMENT'">
+                                                  <table class="table table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Label</th>
+                                                        <th>URL</th>
+                                                        <th>File Size</th>
+                                                        <th>File Type</th>
+                                                        <th>File Reference</th>
+
+                                                        <th>
+                                                          <button type="button" class="btn btn-primary" (click)="onAddData(option)">
+                                                            <i class="ion-plus-round"></i>
+                                                          </button>
+                                                        </th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <tr *ngFor="let row of option.data">
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Label"
+                                                            [value]="row.label" (input)="row.label = $event.target.value" />
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="URL"
+                                                            [value]="row.url" (input)="row.url = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Size"
+                                                            [value]="row.fileSize" (input)="row.fileSize = $event.target.value" />
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="File Type"
+                                                            [value]="row.fileType" (input)="row.fileType = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="File Reference"
+                                                            [value]="row.fileReference" (input)="row.fileReference = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
+                                                            <i class="ion-ios-trash"></i>
+                                                          </button>
+                                                        </td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </td>
+
                                                   <td>
                                                     <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                       <i class="ion-ios-trash"></i>
@@ -1747,6 +1950,7 @@
                                                     <option value="CHECKBOX">Checkbox</option>
                                                     <option value="RADIO">Radio</option>
                                                     <option value="FILE_UPLOAD">File Upload</option>
+                                                    <option value="OFFERED_DOCUMENT">Offering</option>
                                                     <option value="CARD">Card</option>
                                                   </select>
                                                 </td>
@@ -1754,7 +1958,7 @@
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url"
                                                     name="url">
                                                 </td>
-                                                <td *ngIf="option.type != 'CARD'">
+                                                <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
@@ -1833,6 +2037,58 @@
                                                   </table>
 
                                                 </td>
+
+                                                <!--  adding metadata of offered document -->
+                                                <td *ngIf="option.type == 'OFFERED_DOCUMENT'">
+                                                  <table class="table table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Label</th>
+                                                        <th>URL</th>
+                                                        <th>File Size</th>
+                                                        <th>File Type</th>
+                                                        <th>File Reference</th>
+
+                                                        <th>
+                                                          <button type="button" class="btn btn-primary" (click)="onAddData(option)">
+                                                            <i class="ion-plus-round"></i>
+                                                          </button>
+                                                        </th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <tr *ngFor="let row of option.data">
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Label"
+                                                            [value]="row.label" (input)="row.label = $event.target.value" />
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="URL"
+                                                            [value]="row.url" (input)="row.url = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Size"
+                                                            [value]="row.fileSize" (input)="row.fileSize = $event.target.value" />
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="File Type"
+                                                            [value]="row.fileType" (input)="row.fileType = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="File Reference"
+                                                            [value]="row.fileReference" (input)="row.fileReference = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
+                                                            <i class="ion-ios-trash"></i>
+                                                          </button>
+                                                        </td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </td>
+
+
                                                 <td>
                                                   <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                     <i class="ion-ios-trash"></i>
@@ -1946,6 +2202,7 @@
                                                       <option value="CHECKBOX">Checkbox</option>
                                                       <option value="RADIO">Radio</option>
                                                       <option value="FILE_UPLOAD">File Upload</option>
+                                                      <option value="OFFERED_DOCUMENT">Offering</option>
                                                       <option value="CARD">Card</option>
                                                     </select>
                                                   </td>
@@ -1953,7 +2210,7 @@
                                                     <input type="text" class="form-control" placeholder="URL"
                                                       [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td *ngIf="option.type != 'CARD'">
+                                                  <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
@@ -1963,8 +2220,7 @@
                                                           <th>Language</th>
                                                           <th>Agent ID</th>
                                                           <th>
-                                                            <button type="button" class="btn btn-primary"
-                                                              (click)="onAddData(option)">
+                                                            <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                               <i class="ion-plus-round"></i>
                                                             </button>
                                                           </th>
@@ -1993,8 +2249,7 @@
                                                               [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                           </td>
                                                           <td>
-                                                            <button type="button" class="btn btn-danger"
-                                                              (click)="delete(option.data,row)">
+                                                            <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
                                                               <i class="ion-ios-trash"></i>
                                                             </button>
                                                           </td>
@@ -2034,6 +2289,57 @@
                                                     </table>
 
                                                   </td>
+
+                                                  <!--  adding metadata of offered document -->
+                                                <td *ngIf="option.type == 'OFFERED_DOCUMENT'">
+                                                  <table class="table table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Label</th>
+                                                        <th>URL</th>
+                                                        <th>File Size</th>
+                                                        <th>File Type</th>
+                                                        <th>File Reference</th>
+
+                                                        <th>
+                                                          <button type="button" class="btn btn-primary" (click)="onAddData(option)">
+                                                            <i class="ion-plus-round"></i>
+                                                          </button>
+                                                        </th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <tr *ngFor="let row of option.data">
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Label"
+                                                            [value]="row.label" (input)="row.label = $event.target.value" />
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="URL"
+                                                            [value]="row.url" (input)="row.url = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Size"
+                                                            [value]="row.fileSize" (input)="row.fileSize = $event.target.value" />
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="File Type"
+                                                            [value]="row.fileType" (input)="row.fileType = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="File Reference"
+                                                            [value]="row.fileReference" (input)="row.fileReference = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
+                                                            <i class="ion-ios-trash"></i>
+                                                          </button>
+                                                        </td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </td>
+
                                                   <td>
                                                     <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                       <i class="ion-ios-trash"></i>
@@ -2185,6 +2491,7 @@
                                                     <option value="CHECKBOX">Checkbox</option>
                                                     <option value="RADIO">Radio</option>
                                                     <option value="FILE_UPLOAD">File Upload</option>
+                                                    <option value="OFFERED_DOCUMENT">Offering</option>
                                                     <option value="CARD">Card</option>
                                                   </select>
                                                 </td>
@@ -2192,7 +2499,7 @@
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url"
                                                     name="url">
                                                 </td>
-                                                <td *ngIf="option.type != 'CARD'">
+                                                <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
@@ -2271,6 +2578,57 @@
                                                   </table>
 
                                                 </td>
+
+                                                <!--  adding metadata of offered document -->
+                                                <td *ngIf="option.type == 'OFFERED_DOCUMENT'">
+                                                  <table class="table table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Label</th>
+                                                        <th>URL</th>
+                                                        <th>File Size</th>
+                                                        <th>File Type</th>
+                                                        <th>File Reference</th>
+
+                                                        <th>
+                                                          <button type="button" class="btn btn-primary" (click)="onAddData(option)">
+                                                            <i class="ion-plus-round"></i>
+                                                          </button>
+                                                        </th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <tr *ngFor="let row of option.data">
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Label"
+                                                            [value]="row.label" (input)="row.label = $event.target.value" />
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="URL"
+                                                            [value]="row.url" (input)="row.url = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Size"
+                                                            [value]="row.fileSize" (input)="row.fileSize = $event.target.value" />
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="File Type"
+                                                            [value]="row.fileType" (input)="row.fileType = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="File Reference"
+                                                            [value]="row.fileReference" (input)="row.fileReference = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
+                                                            <i class="ion-ios-trash"></i>
+                                                          </button>
+                                                        </td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </td>
+
                                                 <td>
                                                   <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                     <i class="ion-ios-trash"></i>
@@ -2384,6 +2742,7 @@
                                                       <option value="CHECKBOX">Checkbox</option>
                                                       <option value="RADIO">Radio</option>
                                                       <option value="FILE_UPLOAD">File Upload</option>
+                                                      <option value="OFFERED_DOCUMENT">Offering</option>
                                                       <option value="CARD">Card</option>
                                                     </select>
                                                   </td>
@@ -2391,7 +2750,7 @@
                                                     <input type="text" class="form-control" placeholder="URL"
                                                       [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td *ngIf="option.type != 'CARD'">
+                                                  <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
@@ -2401,8 +2760,7 @@
                                                           <th>Language</th>
                                                           <th>Agent ID</th>
                                                           <th>
-                                                            <button type="button" class="btn btn-primary"
-                                                              (click)="onAddData(option)">
+                                                            <button type="button" class="btn btn-primary" (click)="onAddData(option)">
                                                               <i class="ion-plus-round"></i>
                                                             </button>
                                                           </th>
@@ -2431,8 +2789,7 @@
                                                               [value]="row.agentId" (input)="row.agentId = $event.target.value">
                                                           </td>
                                                           <td>
-                                                            <button type="button" class="btn btn-danger"
-                                                              (click)="delete(option.data,row)">
+                                                            <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
                                                               <i class="ion-ios-trash"></i>
                                                             </button>
                                                           </td>
@@ -2472,6 +2829,57 @@
                                                     </table>
 
                                                   </td>
+
+                                                  <!--  adding metadata of offered document -->
+                                                <td *ngIf="option.type == 'OFFERED_DOCUMENT'">
+                                                  <table class="table table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Label</th>
+                                                        <th>URL</th>
+                                                        <th>File Size</th>
+                                                        <th>File Type</th>
+                                                        <th>File Reference</th>
+
+                                                        <th>
+                                                          <button type="button" class="btn btn-primary" (click)="onAddData(option)">
+                                                            <i class="ion-plus-round"></i>
+                                                          </button>
+                                                        </th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <tr *ngFor="let row of option.data">
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Label"
+                                                            [value]="row.label" (input)="row.label = $event.target.value" />
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="URL"
+                                                            [value]="row.url" (input)="row.url = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Size"
+                                                            [value]="row.fileSize" (input)="row.fileSize = $event.target.value" />
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="File Type"
+                                                            [value]="row.fileType" (input)="row.fileType = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="File Reference"
+                                                            [value]="row.fileReference" (input)="row.fileReference = $event.target.value">
+                                                        </td>
+                                                        <td>
+                                                          <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
+                                                            <i class="ion-ios-trash"></i>
+                                                          </button>
+                                                        </td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </td>
+
                                                   <td>
                                                     <button type="button" class="btn btn-danger" (click)="delete(gsResponse.options, option)">
                                                       <i class="ion-ios-trash"></i>
@@ -2663,13 +3071,14 @@
                       <option value="CHECKBOX">Checkbox</option>
                       <option value="RADIO">Radio</option>
                       <option value="FILE_UPLOAD">File Upload</option>
+                      <option value="OFFERED_DOCUMENT">Offering</option>
                       <option value="CARD">Card</option>
                     </select>
                   </td>
                   <td>
                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                   </td>
-                  <td *ngIf="option.type != 'CARD'">
+                  <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT'">
                     <table class="table table-striped">
                       <thead>
                         <tr>
@@ -2744,6 +3153,57 @@
                     </table>
 
                   </td>
+
+                  <!--  adding metadata of offered document -->
+                  <td *ngIf="option.type == 'OFFERED_DOCUMENT'">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Label</th>
+                          <th>URL</th>
+                          <th>File Size</th>
+                          <th>File Type</th>
+                          <th>File Reference</th>
+
+                          <th>
+                            <button type="button" class="btn btn-primary" (click)="onAddData(option)">
+                              <i class="ion-plus-round"></i>
+                            </button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let row of option.data">
+                          <td>
+                            <input type="text" class="form-control" placeholder="Label"
+                              [value]="row.label" (input)="row.label = $event.target.value" />
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" placeholder="URL"
+                              [value]="row.url" (input)="row.url = $event.target.value">
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" placeholder="Size"
+                              [value]="row.fileSize" (input)="row.fileSize = $event.target.value" />
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" placeholder="File Type"
+                              [value]="row.fileType" (input)="row.fileType = $event.target.value">
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" placeholder="File Reference"
+                              [value]="row.fileReference" (input)="row.fileReference = $event.target.value">
+                          </td>
+                          <td>
+                            <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
+                              <i class="ion-ios-trash"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+
                   <td>
                     <button type="button" class="btn btn-danger" title="delete" (click)="delete(tempResponse.options, option)">
                       <i class="ion-ios-trash"></i>
