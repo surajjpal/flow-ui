@@ -19,7 +19,7 @@ import { AppState, InternalStateType } from './app.service';
 import { GlobalState } from './global.state';
 import { NgaModule } from './theme/nga.module';
 import { PagesModule } from './pages/pages.module';
-
+import { FetchUserService, UserGraphService } from './services/userhierarchy.service';
 import { AuthService } from './services/auth.service';
 import { AgentService, ConversationService, AgentDashboardService } from './services/agent.service';
 import { DomainService } from './services/domain.service';
@@ -52,7 +52,7 @@ const APP_PROVIDERS = [
   DomainService,
   FlowDashboardService, GraphService, CommunicationService,
   DataCachingService, StateService,
-  AccountService, ApiConfigService, RoutesService,
+  AccountService, ApiConfigService, RoutesService,FetchUserService,UserGraphService,
   ApiDesignService,
   AnalyticsService,
   ScheduleTaskService,

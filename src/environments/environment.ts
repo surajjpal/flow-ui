@@ -117,7 +117,7 @@ export const environment = {
   validationtypekeyslookupurl: 'load/validations',
 
 
-  flowsearch:'/api/flow/search',
+  flowsearch:'/api/search/flow',
 
   // Analytics
   reportservice: 'http://localhost:8080/flow/report',
@@ -170,4 +170,12 @@ export const environment = {
   businessDataPonitsPercentageCount: 'businessactivitymanagement/datapoint/percentagecount',
   businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
   businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
+
+  sendReportCSV: 'http://localhost:8080/flow/report/reports/generatereport',
+  funnelReport: 'state/fetchfunneldata',
+
+
+
+  //Vocabulary
+  vocabulary :'http://108.168.190.82:8080/flow/interfaces/vocabulary',
 };

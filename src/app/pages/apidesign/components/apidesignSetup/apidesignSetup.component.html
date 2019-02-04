@@ -3,16 +3,18 @@
         <ba-card [cardTitle]="apiDesignCreateMode ? 'Design API' : 'Update API'" baCardClass="with-scroll" class="col-md-12">
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="businessObjectTab" data-toggle="tab" href="#businessObjectContent" role="tab" aria-controls="businessObject"
-                    aria-expanded="true">Business Object</a>
+                    <a class="nav-link active" id="businessObjectTab" data-toggle="tab" href="#businessObjectContent"
+                        role="tab" aria-controls="businessObject" aria-expanded="true">Business Object</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="businessObjectTrainingTab" data-toggle="tab" href="#businessObjectTrainingContent" role="tab" aria-controls="businessObjectTraining">Business Object Training</a>
+                    <a class="nav-link" id="businessObjectTrainingTab" data-toggle="tab" href="#businessObjectTrainingContent"
+                        role="tab" aria-controls="businessObjectTraining">Business Object Training</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="businessObjectApiTab" data-toggle="tab" href="#businessObjectApiContent" role="tab" aria-controls="businessObjectapi">Business Object API</a>
+                    <a class="nav-link" id="businessObjectApiTab" data-toggle="tab" href="#businessObjectApiContent"
+                        role="tab" aria-controls="businessObjectapi">Business Object API</a>
                 </li>
-               
+
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane fade show active" id="businessObjectContent" aria-labelledby="businessObjectTab">
@@ -20,23 +22,25 @@
                         <form>
                             <div class="form-group">
                                 <label>Business Object Code</label>
-                                <input type="text" class="form-control" required placeholder="Business Object Code" [(ngModel)]="selectedBusinessObject.code" name="code"
-                                />
+                                <input type="text" class="form-control" required placeholder="Business Object Code"
+                                    [(ngModel)]="selectedBusinessObject.code" name="code" />
                             </div>
                             <div class="form-group">
                                 <label>Business Object Display Name</label>
-                                <input type="text" class="form-control" required placeholder="Business Object Display Name" [(ngModel)]="selectedBusinessObject.displayName" name="displayName"
-                                />
+                                <input type="text" class="form-control" required placeholder="Business Object Display Name"
+                                    [(ngModel)]="selectedBusinessObject.displayName" name="displayName" />
                             </div>
                             <div class="form-group">
-                                <select class="selectpicker form-control" title="Select supported algorith category" [(ngModel)]="selectedBusinessObject.algorithmCategory"
-                                name="algorithmCategory">
-                                    <option *ngFor="let algorithmCategory of supportedAlgorithmCategory" [ngValue]="algorithmCategory">{{ algorithmCategory }}</option>
+                                <select class="selectpicker form-control" title="Select supported algorith category"
+                                    [(ngModel)]="selectedBusinessObject.algorithmCategory" name="algorithmCategory">
+                                    <option *ngFor="let algorithmCategory of supportedAlgorithmCategory" [ngValue]="algorithmCategory">{{
+                                        algorithmCategory }}</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Algorithms </label>
-                                <button type="button" class="btn btn-primary pull-right" (click)="onAlgorithmAdd()" data-toggle="modal" data-target="#algorithmModal">
+                                <button type="button" class="btn btn-primary pull-right" (click)="onAlgorithmAdd()"
+                                    data-toggle="modal" data-target="#algorithmModal">
                                     Add Algorithms <i class="ion-plus-round"></i>
                                 </button>
                             </div>
@@ -47,19 +51,20 @@
                                             <th>Algorithm Name</th>
                                             <th>Version</th>
                                             <th>Score</th>
-                                            
+
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let algo of selectedBusinessObject.algorithms" (click) = "onAlgorithmAdd(algo)" data-toggle="modal" data-target="#algorithmModal">
+                                        <tr *ngFor="let algo of selectedBusinessObject.algorithms" (click)="onAlgorithmAdd(algo)"
+                                            data-toggle="modal" data-target="#algorithmModal">
                                             <td>
                                                 {{ getAlgorithmName(algo.algorithmId) }}
                                             </td>
                                             <td>
                                                 {{ algo.version }}
                                             </td>
-                                            <td *ngIf="selectedBusinessObject && algo.score" >
-                                                
+                                            <td *ngIf="selectedBusinessObject && algo.score">
+
                                                 <div *ngFor="let score of algo.score">
                                                     <div *ngFor="let e of score | keys">
                                                         {{ e.key }}
@@ -78,20 +83,29 @@
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="businessObjectTrainingContent" aria-labelledby="businessObjectTrainingTab">
                     <div class="panel panel-default">
-                            <div class="form-group pull-right">
-                                <label>Train active version: </label>
-                                <api-file-uploader [fileUploadUrl]="fileUploadUrl" [multiple]="false" (uploadEvent)="onTrainingFileUpload($event)"></api-file-uploader>
-                                <!-- <input class="form-control" [(ngModel)]="trainingFilterQuery" name="trainingFilterQuery" placeholder="Filter Training" /> -->
-                            </div>
+                        <div class="form-group pull-right">
+                            <label>Train active version: </label>
+                            <api-file-uploader [fileUploadUrl]="fileUploadUrl" [multiple]="false" (uploadEvent)="onTrainingFileUpload($event)"></api-file-uploader>
+                            <!-- <input class="form-control" [(ngModel)]="trainingFilterQuery" name="trainingFilterQuery" placeholder="Filter Training" /> -->
+                        </div>
                         <br>
-                        
-                        <table class="table table-striped" [mfData]="selectedBusinessObject.training | universalDataFilter : trainingFilterQuery" #mfTrainingData="mfDataTable" [mfRowsOnPage]="10" mfSortBy="version">
+
+                        <table class="table table-striped" [mfData]="selectedBusinessObject.training | universalDataFilter : trainingFilterQuery"
+                            #mfTrainingData="mfDataTable" [mfRowsOnPage]="10" mfSortBy="version">
                             <thead>
                                 <tr>
-                                    <td><mfDefaultSorter by="name">Version</mfDefaultSorter></td>
-                                    <td><mfDefaultSorter by="algorithmCategory">Status</mfDefaultSorter></td>
-                                    <td><mfDefaultSorter by="createdTime">Inputs</mfDefaultSorter></td>
-                                    <td><mfDefaultSorter by="modifiedTime">Outputs</mfDefaultSorter></td>
+                                    <td>
+                                        <mfDefaultSorter by="name">Version</mfDefaultSorter>
+                                    </td>
+                                    <td>
+                                        <mfDefaultSorter by="algorithmCategory">Status</mfDefaultSorter>
+                                    </td>
+                                    <td>
+                                        <mfDefaultSorter by="createdTime">Inputs</mfDefaultSorter>
+                                    </td>
+                                    <td>
+                                        <mfDefaultSorter by="modifiedTime">Outputs</mfDefaultSorter>
+                                    </td>
                                     <td>Activate</td>
                                     <td>Download</td>
                                 </tr>
@@ -103,7 +117,7 @@
                                     <td>{{ trainer.inputLabels }}</td>
                                     <td>{{ trainer.outputLabels }}</td>
                                     <td *ngIf="trainer.status != 'ACTIVE'">
-                                        <button type="submit" class="btn btn-primary" (click)="activateTriner(trainer)">Activate</button>
+                                        <button type="submit" class="btn btn-success" (click)="activateTriner(trainer)">Activate</button>
                                     </td>
                                     <td *ngIf="trainer.status == 'ACTIVE'">
                                         <button type="submit" class="btn btn-danger" (click)="deactivateTriner(trainer)">Deactivate</button>
@@ -116,7 +130,7 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="100%">
-                                    <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                                        <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
                                     </td>
                                 </tr>
                             </tfoot>
@@ -130,8 +144,54 @@
                                 <label>API: </label>
                                 <span> {{ apiEndPoint }}</span>
                             </div>
-                            <textarea style="width:100%; height:300px;" [(ngModel)]="testRequestData" name="testRequestData">{{ testRequestData }}</textarea>
-                            
+                            <div *ngIf="selectedBusinessObject.entityType === null">
+                                <textarea style="width:100%; height:300px;" [(ngModel)]="testRequestData" name="testRequestData">{{ testRequestData }}</textarea>
+                            </div>
+                            <div *ngIf="selectedBusinessObject.entityType == 'IMAGE'">
+                                <api-checkbox [checked]="testByUrl" [label]="'Test Images by URL'" (event)="testByUrl = $event.target.checked"></api-checkbox>
+                                <tag-input *ngIf="testByUrl" [(ngModel)]="testImageFileUrls" name="testImageFileUrls"
+                                    [modelAsStrings]="true" [editable]="true" [separatorKeys]="[64]" placeholder="+Tags (Enter separated)"
+                                    secondaryPlaceholder="Enter a new tag (Enter separated)" theme="minimal" class="custom-input-tag-border"></tag-input>
+
+                                <div *ngIf="!testByUrl" class="form-group">
+                                    <button type="button" class="btn btn-primary pull-right" (click)="addTestImages()">
+                                        Add Image <i class="ion-plus-round"></i>
+                                    </button>
+                                </div>
+
+                                <table *ngIf="!testByUrl" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Remove File</th>
+                                            <th>File Name</th>
+                                            <th>Upload File</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let row of testImages;let index=index">
+                                            <td>
+                                                <button type="button" class="btn btn-danger" title="Delete"
+                                                    (click)="removeTestImage(row)"><i class="ion-close-round"></i></button>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" placeholder="File Name" [value]="row.fileName"
+                                                    (input)="row.fileName = $event.target.value" />
+                                            </td>
+                                            <td>
+                                                <label [for]="'file-upload' + index" class="custom-file-upload">
+                                                    <i class="fa fa-cloud-upload"></i> Upload File
+                                                </label>
+                                                <label *ngIf="row.file != null && row.file.name != null">{{
+                                                    row.file.name }}</label>
+                                                <input [id]="'file-upload' + index" type="file" (change)="row.file = $event.target.files[0]" />
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+
                         </form>
                         <div *ngIf="testRequestdataResult != null && testRequestdataResult">
                             <label>Result: </label>
@@ -142,7 +202,7 @@
                                 Test
                             </button>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -150,8 +210,8 @@
             <form>
                 <div class="form-group">
                     <button type="button" class="btn btn-primary" (click)="createBusinessObject()" data-toggle="modal">
-                    {{apiDesignCreateMode ? 'Create Business Object' : 'Update Business Object'}}
-                </button>
+                        {{apiDesignCreateMode ? 'Create Business Object' : 'Update Business Object'}}
+                    </button>
                 </div>
             </form>
         </ba-card>
@@ -159,93 +219,97 @@
 </div>
 
 <!-- algorithm modal -->
-<div class="modal fade" id="algorithmModal" tabindex="-1" role="dialog" attr.aria-labelledby="algorithmModalLabel" aria-hidden="true">
+<div class="modal fade" id="algorithmModal" tabindex="-1" role="dialog" attr.aria-labelledby="algorithmModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title" id="agorithmModalLabel">
-            {{ algorithmsModalHeader }}
-          </h4>
-          <button type="button" class="close" data-dismiss="modal">
-            <span aria-hidden="true">&times;</span>
-            <span class="sr-only">Close</span>
-          </button>
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" id="agorithmModalLabel">
+                    {{ algorithmsModalHeader }}
+                </h4>
+                <button type="button" class="btn btn-info" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <select class="selectpicker form-control" title="Select supported algorith category"
+                            [(ngModel)]="tempBusinessAlgorithm.algorithmId" name="selectedAlgorithmName" #algoId
+                            (change)="onBusinessAlgorithmChange()">
+                            <option *ngFor="let algo of definedAlgorithms" [ngValue]="algo._id">{{ algo.name }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" (click)="addConfigParameters(tempBusinessAlgorithm)">
+                            Add Config <i class="ion-plus-round"></i>
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Config</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let row of tempBusinessAlgorithm.configList">
+                                    <td>
+                                        <input type="text" class="form-control" placeholder="Config Param" [value]="row.param"
+                                            (input)="row.param = $event.target.value" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" placeholder="Value" [value]="row.value"
+                                            (input)="row.value = $event.target.value" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                <button *ngIf="!algorithmAddUpdateMode" type="submit" class="btn btn-danger" data-dismiss="modal"
+                    (click)="removeAlgorithm()">Remove</button>
+                <button type="submit" class="btn btn-success" (click)="addAlgorithm()">{{algorithmAddUpdateMode
+                    ? 'Add'
+                    : 'Update'}}</button>
+            </div>
         </div>
-  
-        <!-- Modal Body -->
-        <div class="modal-body">
-            <form>
-                <div class="form-group">
-                    <select class="selectpicker form-control" title="Select supported algorith category" [(ngModel)]="tempBusinessAlgorithm.algorithmId"
-                    name="selectedAlgorithmName" #algoId (change) = "onBusinessAlgorithmChange()">
-                        <option *ngFor="let algo of definedAlgorithms" [ngValue]="algo._id">{{ algo.name }}</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary" (click)="addConfigParameters(tempBusinessAlgorithm)">
-                        Add Config <i class="ion-plus-round"></i>
-                    </button>
-                </div>
-                <div class="form-group">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Config</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let row of tempBusinessAlgorithm.configList">
-                                <td>
-                                    <input type="text" class="form-control" placeholder="Config Param" [value]="row.param"
-                                        (input)="row.param = $event.target.value" />
-                                </td>
-                                <td>
-                                <input type="text" class="form-control" placeholder="Value" [value]="row.value"
-                                    (input)="row.value = $event.target.value" />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </form>
-        </div>
-  
-        <!-- Modal Footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button *ngIf="!algorithmAddUpdateMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeAlgorithm()">Remove</button>
-          <button type="submit" class="btn btn-primary" (click)="addAlgorithm()">{{algorithmAddUpdateMode ? 'Add' : 'Update'}}</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 
 
 
 <!-- Warning Modal -->
-<div class="modal fade" id="businessObjectMsgModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
+<div class="modal fade" id="businessObjectMsgModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header">
-            <h4 class="modal-title" id="warningLabel">
-            Business Object
-            </h4>
-        </div>
-    
-        <!-- Modal Body -->
-        <div class="modal-body" id="modal_body">
-            {{businessObjectUpdateCreateMsg}}
-        </div>
-    
-        <!-- Modal Footer -->
-        <div class="modal-footer" id="modal_footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
-        </div>
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" id="warningLabel">
+                    Business Object
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body" id="modal_body">
+                {{businessObjectUpdateCreateMsg}}
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer" id="modal_footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Dismiss</button>
+            </div>
         </div>
     </div>
 </div>
-      
-        

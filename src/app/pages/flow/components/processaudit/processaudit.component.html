@@ -9,9 +9,9 @@
             </h3>
           </div>
           <div class="col-md-6 text-right">
-              <button type="button" class="btn btn-danger" (click)="close()">
-                Close
-              </button>
+            <button type="button" class="btn btn-warning" (click)="close()">
+              Close
+            </button>
           </div>
         </div>
       </div>
@@ -26,35 +26,38 @@
               :
             </label>
 
-            <input *ngIf="index % 2 === 1 && (dataPoint.dataType === '' || dataPoint.dataType === 'STRING')" type="text" class="form-control col-md-12 col-sm-12"
-              [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
-            />
+            <input *ngIf="index % 2 === 1 && (dataPoint.dataType === '' || dataPoint.dataType === 'STRING')" type="text"
+              class="form-control col-md-12 col-sm-12" [title]="dataPoint.description" [placeholder]="dataPoint.description"
+              [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value" />
 
             <input *ngIf="index % 2 === 1 && dataPoint.dataType === 'NUMBER'" type="number" class="form-control col-md-12 col-sm-12"
               [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value"
-              onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
-            />
+              onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
 
             <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'BOOLEAN'" class="selectpicker form-control col-md-12 col-sm-12"
-              [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataPoint.value = $event">
+              [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="dataPoint.value = $event">
               <option [ngValue]="true">True</option>
               <option [ngValue]="false">False</option>
             </select>
 
             <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'SINGLE_SELECT'" class="selectpicker form-control col-md-12 col-sm-12"
-              [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataPoint.value = $event">
+              [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="dataPoint.value = $event">
               <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
             </select>
 
             <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'MULTI_SELECT'" multiple="true" class="selectpicker form-control col-md-12 col-sm-12"
-              [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}" (ngModelChange)="dataPoint.value = $event">
+              [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="dataPoint.value = $event">
               <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
             </select>
 
             <tag-input *ngIf="index % 2 === 1 && dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && isString(dataPoint.value[0])"
-              class="custom-input-tag-border form-control col-md-12 col-sm-12" [title]="dataPoint.description" [(ngModel)]="dataPoint.value"
-              name="value" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
-              [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'" theme="minimal">
+              class="custom-input-tag-border form-control col-md-12 col-sm-12" [title]="dataPoint.description"
+              [(ngModel)]="dataPoint.value" name="value" [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]"
+              [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'" [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'"
+              theme="minimal">
             </tag-input>
           </div>
 
@@ -86,47 +89,45 @@
 
 
 <div class="widgets">
-    <ba-card baCardClass="with-scroll" class="data-table-container">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <div class="row">
-            <div class="col-md-6">
-              <h3>
-                <b>Process Trail</b>
-              </h3>
-            </div>
-            <div class="col-md-6 text-right">
-            </div>
+  <ba-card baCardClass="with-scroll" class="data-table-container">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <div class="col-md-6">
+            <h3>
+              <b>Process Trail</b>
+            </h3>
+          </div>
+          <div class="col-md-6 text-right">
           </div>
         </div>
-        <br>
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <!-- <li class="nav-item">
+      </div>
+      <br>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <!-- <li class="nav-item">
             <a class="nav-link active" id="flow-tab" data-toggle="tab" href="#tabFlow" role="tab" aria-controls="flow">
               <b>Process trail</b>
             </a>
           </li> -->
-        </ul>
-        <div class="tab-content" id="myTabContent">
-            <div role="tabpanel"  id="tabFlow" aria-labelledby="flow-tab">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-              <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
-                <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>&nbsp;&nbsp;&nbsp;
-              <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
-                <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>&nbsp;&nbsp;&nbsp;
-              <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
-                <i class="ion-arrow-expand"></i>Zoom Actual</button>&nbsp;&nbsp;&nbsp;
-              <button type="button" class="btn btn-default btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)">
-                <i class="ion-printer"></i>Print Preview</button>
-            </div>
-            <br>
-            <div class="col-md-12 col-sm-12 col-xs-12">
-              <div id="editorGrid" class="col-md-12 col-sm-12 col-xs-12" style="height:68vh;overflow:hidden;margin-bottom:5px;border-style:solid;border-color:#1C2B36;"></div>
-            </div>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div role="tabpanel" id="tabFlow" aria-labelledby="flow-tab">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
+              <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
+              <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
+              <i class="ion-arrow-expand"></i>Zoom Actual</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)">
+              <i class="ion-printer"></i>Print Preview</button>
+          </div>
+          <br>
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div id="editorGrid" class="col-md-12 col-sm-12 col-xs-12" style="height:68vh;overflow:hidden;margin-bottom:5px;border-style:solid;border-color:#1C2B36;"></div>
           </div>
         </div>
       </div>
-    </ba-card>
+    </div>
+  </ba-card>
 </div>
-
-   

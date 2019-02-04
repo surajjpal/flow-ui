@@ -7,15 +7,16 @@
             <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Query" />
           </div>
           <div class="form-group col-sm-2">
-            <button type="button" class="btn btn-primary" (click)="onSelect(null)" data-toggle="modal" data-target="#detailsModal">
-                Add Route
-              </button>
+            <button type="button" class="btn btn-primary" (click)="onSelect(null)" data-toggle="modal"
+              data-target="#detailsModal">
+              Add Route
+            </button>
           </div>
         </form>
         <br>
 
-        <table class="table table-striped" [mfData]="roleRouteList | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="10"
-          mfSortBy="_id">
+        <table class="table table-striped" [mfData]="roleRouteList | universalDataFilter : filterQuery" #mf="mfDataTable"
+          [mfRowsOnPage]="10" mfSortBy="_id">
           <thead>
             <tr>
               <th>
@@ -45,7 +46,8 @@
   </div>
 </div>
 
-<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" attr.aria-labelledby="detailsModalLabel" aria-hidden="true">
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" attr.aria-labelledby="detailsModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <!-- Modal Header -->
@@ -54,9 +56,9 @@
           {{modalHeader}}
         </h4>
         <button type="button" class="close" data-dismiss="modal" [disabled]="loading">
-                <span aria-hidden="true">&times;</span>
-                <span class="sr-only">Close</span>
-              </button>
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
       </div>
       <!-- Modal Body -->
       <div class="modal-body">
@@ -65,15 +67,15 @@
             <label>Role</label>
             <select class="selectpicker form-control" required title="Select role" [(ngModel)]="selectedRoleRouteMap.roleCd"
               name="roleCd">
-                  <option *ngFor="let role of roleMasterList" [value]="role">{{role}}</option>
-                </select>
+              <option *ngFor="let role of roleMasterList" [value]="role">{{role}}</option>
+            </select>
           </div>
           <div class="form-group">
             <label>Route</label>
             <select class="selectpicker form-control" required title="Select route" [(ngModel)]="selectedRoleRouteMap.entityId"
               name="entityId">
-                    <option *ngFor="let route of routeMasterList" [value]="route">{{route}}</option>
-                  </select>
+              <option *ngFor="let route of routeMasterList" [value]="route">{{route}}</option>
+            </select>
           </div>
           <div class="ln_solid"></div>
         </form>

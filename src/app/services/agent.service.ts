@@ -21,6 +21,74 @@ export class AgentService {
     return this.domainService.domainLookup(query);
   }
 
+  agentLookupByPage(pageNo: number, pageSize: number, fields: String[]) : Observable<Agent[]> {
+    const subject = new Subject<Agent[]>();
+
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = new Map<any, any>();
+    crudInput.collection = 'agent';
+    crudInput.operation = "READ_ALL";
+    crudInput.page = pageNo;
+    crudInput.pageSize = pageSize;
+    crudInput.fields = fields;
+
+    this.httpClient.post<Map<string, Agent[]>>(
+      crudUrl,
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Map<string, Agent[]>>) => {
+        subject.next(response.body['data']);
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+  getAgentById(_id: String) : Observable<Agent> {
+    const subject = new Subject<Agent>();
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = new Map<any, any>();
+    crudInput.collection = 'agent';
+    crudInput.operation = "READ";
+    crudInput.payload = {"_id" : _id};
+    this.httpClient.post<Map<string, Agent[]>>(
+      crudUrl, 
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Map<string, Agent[]>>) => {
+        subject.next(response.body['data']);
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
   agentLookup(query?: string): Observable<Agent[]> {
     const subject = new Subject<Agent[]>();
 

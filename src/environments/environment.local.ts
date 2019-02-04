@@ -118,7 +118,7 @@ export const environment = {
   validationtypekeyslookupurl: 'load/validations',
 
 
-  flowsearch:'/api/flow/search',
+  flowsearch:'/api/search/flow',
 
   // Analytics
   reportservice: 'http://localhost:8080/flow/report',
@@ -172,4 +172,10 @@ export const environment = {
   businessDataPonitsPercentageCount: 'businessactivitymanagement/datapoint/percentagecount',
   businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
   businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
+  
+  //python project in api-utils ondemandreport project
+  sendReportCSV: 'http://127.0.0.1:5000/generatereport',
+
+  //Vocabulary
+  vocabulary :'http://localhost:5000/api/vocabulary',
 };

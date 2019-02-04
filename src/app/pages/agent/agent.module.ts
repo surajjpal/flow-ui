@@ -23,9 +23,8 @@ import { AgentsComponent } from './components/agents/agents.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { DateRangePickerComponent } from './components/dashboard/daterangepicker/daterangepicker.component';
-
+import { MyDatePickerModule } from 'mydatepicker';
 import { SharedModule } from '../../shared/shared.module';
-
 @NgModule({
   imports: [
     CommonModule,
@@ -37,7 +36,8 @@ import { SharedModule } from '../../shared/shared.module';
     MomentModule,
     NvD3Module,
     TagInputModule,
-    SharedModule
+    SharedModule,
+    MyDatePickerModule
   ],
   declarations: [
     AgentComponent,

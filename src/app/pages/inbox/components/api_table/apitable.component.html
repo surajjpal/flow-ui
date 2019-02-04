@@ -1,8 +1,8 @@
 <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
 
 <br>
-<table class="table table-striped" [mfData]="rawDataArray | universalDataFilter : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage"
-  [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
+<table class="table table-striped" [mfData]="rawDataArray | universalDataFilter : filterQuery" #mf="mfDataTable"
+  [mfRowsOnPage]="rowsOnPage" [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
   <thead>
     <tr>
       <th>
@@ -48,12 +48,12 @@
         </mfDefaultSorter>
       </th>
       <th>
-          <mfDefaultSorter by="">
-            <h6>
-              <b>Assigned To</b>
-            </h6>
-          </mfDefaultSorter>
-        </th>
+        <mfDefaultSorter by="">
+          <h6>
+            <b>Assigned To</b>
+          </h6>
+        </mfDefaultSorter>
+      </th>
       <th>
         <mfDefaultSorter by="">
           <h6>

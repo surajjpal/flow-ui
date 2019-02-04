@@ -112,7 +112,7 @@ export const environment = {
     modelkeyslookupurl: 'load/modelkeys',
     validationtypekeyslookupurl: 'load/validations',
 
-    flowsearch:'/api/flow/search',
+    flowsearch:'/api/search/flow',
 
 
     // Analytics
@@ -167,5 +167,12 @@ export const environment = {
    businessDataPonitsPercentageCount: 'businessactivitymanagement/datapoint/percentagecount',
    businessDataPonitsGraphData: 'businessactivitymanagement/graphdata',
    businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
+   
+   //python project in api-utils ondemandreport project
+  sendReportCSV: 'https://flow.automatapi.com/flow/report/reports/generatereport',
+
+
+  //Vocabulary
+  vocabulary : 'https://flow.automatapi.com/flow/interfaces/vocabulary',
   };
   
