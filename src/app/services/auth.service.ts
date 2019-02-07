@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Rx';
 import { environment } from '../../environments/environment';
 import { User } from '../models/user.model';
 import { UniversalUser } from './shared.service';
+import { CRUDOperationInput } from '../models/crudOperationInput.model';
 
 @Injectable()
 export class AuthService {
@@ -390,5 +391,39 @@ export class AuthService {
       );
 
     return subject.asObservable();
+  }
+
+  getCompanyAgent(companyId:string): Observable<any> {
+    const subject = new Subject<any>();
+
+    const url = `${environment.publishaccounturl + "6efe654013b041e79c5935e2228f34b2"}`;
+    // const crudInput = new CRUDOperationInput();
+    // crudInput.payload = {"_id":"6efe654013b041e79c5935e2228f34b2"};
+    // crudInput.collection = 'companyAccount';
+    // crudInput.operation = "READ";
+    //crudInput.fields = ["agentId"];
+    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    this.httpClient.get<any>(
+      url, 
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        subject.next(response.body);
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+
+    
   }
 }

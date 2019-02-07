@@ -337,6 +337,42 @@ export class DomainService {
     return subject.asObservable();
   }*/
 
+  deleteDomain(domainId?: string): Observable<any> {
+    const subject = new Subject<any>();
+
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = {"_id":domainId};
+    crudInput.collection = 'domain';
+    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    crudInput.operation = "DELETE";
+    
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    this.httpClient.post<any>(
+      crudUrl, 
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+        console.log(err);
+        subject.error(err);
+      }
+    );
+    return subject.asObservable();
+  }
+
+
   saveDomain(domain: Domain): Observable<any> {
     const subject = new Subject<any>();
 
@@ -411,7 +447,7 @@ export class DomainService {
     const subject = new Subject<any>();
     let requestBody = new Map<string, string>();
     requestBody["domain"] = domain.name;
-    requestBody["version"] = "v1.0"   // currently we do not have any versioning system
+    requestBody["version"] = domain.version   // currently we do not have any versioning system
     const url = `${environment.updateIntentTraining}`;
     this.httpClient.post<any>(
       url,
@@ -445,8 +481,9 @@ export class DomainService {
   updateDomainClassifierTraining(domain: Domain): Observable<any> {
     const subject = new Subject<any>();
     let requestBody = new Map<string, string>();
+    requestBody["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     requestBody["domainId"] = domain._id;
-    requestBody["version"] = "v1.0"   // currently we do not have any versioning system
+    requestBody["version"] = domain.version   // currently we do not have any versioning system
     const url = `${environment.updateClassifierTraining}`;
     this.httpClient.post<any>(
       url,
@@ -482,7 +519,7 @@ export class DomainService {
     const subject = new Subject<any>();
     let requestBody = new Map<string, string>();
     requestBody["domain"] = domain.name;
-    requestBody["version"] = "v1.0"   // currently we do not have any versioning system
+    requestBody["version"] = domain.version   // currently we do not have any versioning system
     const url = `${environment.updateEntityTraining}`;
     this.httpClient.post<any>(
       url,

@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   returnUrl: string;
 
   private userSubscription: Subscription;
+  private crudSubscription:Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -78,11 +79,26 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.loading = false;
           this.user = user;
           this.universalUser.setUser(user, true);
+          this.setCompanyAgent(this.user.companyId);
           this.router.navigate([this.returnUrl]);
         },
         error => {
           this.loading = false;
         }
       );
+  }
+
+  setCompanyAgent(companyId){
+    this.crudSubscription = this.authService.getCompanyAgent(companyId).subscribe(
+      company =>{
+        if(company){
+        this.universalUser.setAgentId(company["companyAgentId"]);
+        }
+      },
+      error =>{
+
+      }
+
+    );
   }
 }

@@ -19,13 +19,19 @@ export const environment = {
     publishaccounturl:'https://flow.automatapi.com/flow/account/publish/',
     unpublishaccounturl:'https://flow.automatapi.com/flow/services/unpublish/',
 
-    
+    fetchaccountbyid:'https://flow.automatapi.com/flow/account/getAccount/',
 
     // Interfaces
+    // interfaceService: '',
+    // updateClassifierTraining : 'https://flow.automatapi.com/flow/interfaces/auto_decorate_training',
+    // updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',
+    // updateEntityTraining: 'https://flow.automatapi.com/flow/interfaces/entity_classification_training',
+
+
     interfaceService: '',
-    updateClassifierTraining : 'https://flow.automatapi.com/flow/interfaces/auto_decorate_training',
-    updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',
-    updateEntityTraining: 'https://flow.automatapi.com/flow/interfaces/entity_classification_training',
+    updateClassifierTraining : 'http://localhost:5101/auto_decorate_training',
+    updateIntentTraining: 'http://localhost:5100/intent_classification_training',
+    updateEntityTraining: 'http://localhost:5100/entity_classification_training',
   
     // Flow
     server: 'https://flow.automatapi.com/flow/console/',
@@ -158,7 +164,8 @@ export const environment = {
    dashboardinterface: 'https://flow.automatapi.com/flow/interfaces/dashboard',
 
    //Following APIs path - To be used in conjunction with interfaceService property
-   crudFunction: 'http://localhost:5100/api/crud',
+   crudFunction: 'http://localhost:5200/api/crud',
+   smCrud:'http://localhost:5300/api/crud',
    sendAgentMessage: '/sendMessage',
 
    // activity monitor services

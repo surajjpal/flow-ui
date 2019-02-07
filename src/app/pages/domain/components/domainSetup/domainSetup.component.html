@@ -1,9 +1,6 @@
 <div class="widgets">
   <div class="row">
     <ba-card [cardTitle]="domainCreateMode ? 'Create Domain' : 'Update Domain'" baCardClass="with-scroll" class="col-md-12">
-
-
-
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" id="domainTab" data-toggle="tab" href="#domainContent" role="tab" aria-controls="domain"
@@ -321,10 +318,18 @@
       </div>
 
       <form>
-        <div class="form-group">
+        <div class="form-group" *ngIf='!showAutoCon'>
           <button type="button" class="btn btn-primary" (click)="createDomain()" data-toggle="modal" data-target="#domainUpdateModal">
             {{domainCreateMode ? 'Create Domain' : 'Update Domain'}}
           </button>
+          <button type="button" *ngIf="showTestButton" class="btn btn-primary" (click)="testDomain()" >
+              {{'Test Domain'}}
+          </button>
+        </div>
+        <div class="form-group" *ngIf='showAutoCon'>
+            <button type="button" *ngIf="showTestButton" class="btn btn-danger" (click)="exitTesting()" >
+                {{'Exit Testing'}}
+            </button>
         </div>
       </form>
 
@@ -332,6 +337,7 @@
 
     </ba-card>
   </div>
+ 
 </div>
 
 
@@ -3433,3 +3439,10 @@
     </div>
   </div>
 </div>
+<div *ngIf='showAutoCon'>
+    <div dir="auto" [innerHTML]="botHtml"></div>
+</div>
+
+
+
+

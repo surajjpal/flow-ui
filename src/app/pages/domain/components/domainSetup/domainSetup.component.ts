@@ -5,11 +5,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
 import { Subscription } from 'rxjs/Subscription';
-
+import { DomSanitizer } from '@angular/platform-browser';
 import { Domain, Intent, Entity, Goal, GoalStep, Response, Stage, ResponseData, ResponseOption, Settings, CardData } from '../../../../models/domain.model';
 
 import { DomainService } from '../../../../services/domain.service';
-import { AlertService, DataSharingService } from '../../../../services/shared.service';
+import { AlertService, DataSharingService,UniversalUser } from '../../../../services/shared.service';
+import { AgentService } from '../../../../services/agent.service';
+import { Agent } from '../../../../models/agent.model';
 
 import { environment } from '../../../../../environments/environment';
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
@@ -63,11 +65,22 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   response:string;
   request:string;
 
+  //chat constants
+  agentLogoShadowColor:string;
+  marginBottom:string;
+  marginRight:string;
+  agentLogoUrl:string;
   showTags:boolean;
+  botHtml:any;
+  companyAgentId:string;
+  showTestButton:boolean;
+  showAutoCon:boolean;
+  updateForTest:boolean;
 
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
   private subscriptionValidationKeys: Subscription;
+  private agentSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -75,8 +88,20 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     private domainService: DomainService,
     private sharingService: DataSharingService,
-    private slimLoadingBarService: SlimLoadingBarService
+    private slimLoadingBarService: SlimLoadingBarService,
+    private sanitizer: DomSanitizer,
+    private user:UniversalUser,
+    private agentService: AgentService,
   ) {
+    this.agentLogoShadowColor  = "#666";
+    this.marginBottom  = "15px";
+    this.marginRight = "15px"
+    this.agentLogoUrl = "https://automatapi.com/images/autobot.jpg";
+    this.botHtml = "";
+    this.companyAgentId = "";
+    this.showTestButton = false;
+    this.showAutoCon = false;
+    this.updateForTest = false;        
     this.isAddFileUploadResponse = false;
     this.domainCreateMode = true;
     this.modalHeader = '';
@@ -143,12 +168,18 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    
     this.fetchValidationKeys();
+    
 
     const domain: Domain = this.sharingService.getSharedObject();
     if (domain) {
+      console.log("==========================domain=============================");
+      this.companyAgentId = this.user.getAgentId();
+      if (this.companyAgentId){
+        this.showTestButton = true;
+      }
       this.selectedDomain = domain;
-      
       this.domainCreateMode = false;
     } else {
       this.selectedDomain = new Domain();
@@ -156,6 +187,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     }
 
     this.removeGoalStepResponseFromDomainResponse();
+  }
+
+  getCompanyAgent(){
+
   }
 
   ngOnDestroy(): void {
@@ -167,6 +202,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     }
     if (this.subscriptionValidationKeys && !this.subscriptionValidationKeys.closed) {
       this.subscriptionValidationKeys.unsubscribe();
+    }
+    if(this.showAutoCon){
+      this.exitTesting();
     }
   }
 
@@ -948,11 +986,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       //   this.selectedDomain.version = 1
        
       // }
-      if(this.selectedDomain.statusCd == "DRAFT"){
-        this.selectedDomain.version = this.selectedDomain.version + 1
-      }
-      if(this.selectedDomain.statusCd == "CLONED"){
-        this.selectedDomain.version = 1
+      if(!this.updateForTest){
+          if(this.selectedDomain.statusCd == "DRAFT"){
+            this.selectedDomain.version = this.selectedDomain.version + 1
+          }
+          if(this.selectedDomain.statusCd == "CLONED"){
+            this.selectedDomain.version = 1
+          }
       }
       console.log("-----------------DOMAIN------------------------------------")
       console.log(this.selectedDomain)
@@ -961,17 +1001,11 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         .subscribe(
           response => {
             console.log("=======SAVED RESPONSE===============");
-            console.log(response);
-            this.selectedDomain = response;
-            //this.updateClassifierTraining();
+            // console.log(response);
+            // this.selectedDomain = response;
             
             this.updateClassifierTraining(response);
-
-            //this.updateIntenTrainingData();
-            new closeModal('domainUpdateModal');
-            //this.trainDt(this.selectedDomain._id,this.selectedDomain.version)
             
-           this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
           },
           error => {
             this.domainBody = `Something went wrong please try again!!`;
@@ -997,16 +1031,28 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   updateClassifierTraining(updatedDomain: Domain) {
-    this.subscription = this.domainService.updateDomainClassifierTraining(this.selectedDomain)
+    this.subscription = this.domainService.updateDomainClassifierTraining(updatedDomain)
       .subscribe(
         response => {
           if (response) {
-            this.domainBody = `Domain updated successfully!!`;
-            this.domainSucess = true;
             this.selectedDomain = updatedDomain;
+            if(this.updateForTest){
+              this.getAndUpdateAgent();
+            }
+            else{
+              this.domainBody = `Domain updated successfully!!`;
+              this.domainSucess = true;
+            }
+            
           } else {
-            this.domainBody = `Something went wrong please try again!!`;
+            if(this.updateForTest){
+              this.updateForTest = false;
+            }
+            else{
+              this.domainBody = `Something went wrong please try again!!`;
             this.domainSucess = true;
+            }
+            
           }
           //this.updateEntityTrainingData();
           //this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
@@ -1330,6 +1376,69 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         }
         }
         
+      }
+
+      createBotHtml(domain?:Domain,companyAgent?:Agent){
+        const autoUrl = `${environment.autourl}${this.companyAgentId}`
+        const html = '<div id="autoButton" style="text-align: center; background-color: transparent; position: fixed; right: ' + this.marginRight + '; bottom: ' + this.marginBottom + '; width: auto; height: auto; z-index:9999"><div style="margin-bottom: 8px;"><a href="javascript:toggleChat()"><img src="' + this.agentLogoUrl + '" style="width: 60px; height: 60px; border-radius: 50%; box-shadow: 0px 0px 10px ' + this.agentLogoShadowColor + ';"></img></a></div>' +
+        '</div>' +
+        '<div id="automataPi" class="containerStyle" role="dialog" z-index="9999"><iframe id="' + "autoBot" + '" src="' + autoUrl +'" class="iframeStyle" frameborder="0"></iframe></div>'
+        this.botHtml= this.sanitizer.bypassSecurityTrustHtml(html);
+        this.showAutoCon = true;
+        this.updateForTest = false;
+      }
+
+
+    
+      testDomain(){
+        
+        if(!this.selectedDomain._id){
+          this.updateForTest = true;
+          this.createDomain();
+        }
+        else{
+          this.getAndUpdateAgent();
+        }
+        
+      }
+
+      getAndUpdateAgent(){
+        this.agentSubscription = this.agentService.getAgentById(this.companyAgentId).subscribe(receivedAgent=> {
+          if(receivedAgent) {
+            receivedAgent.domainId = this.selectedDomain._id;
+            this.updateDomainOnAgent(receivedAgent);
+          }
+        });
+      }
+
+      updateDomainOnAgent(agent?:Agent){
+
+        this.agentSubscription = this.agentService.saveAgent(agent).subscribe(receivedAgent=> {
+          if(receivedAgent) {
+            this.createBotHtml(this.selectedDomain,receivedAgent);
+          }
+        });
+      }
+
+    exitTesting(){
+      if(this.updateForTest){
+        this.subscription = this.domainService.deleteDomain(this.selectedDomain._id)
+        .subscribe(
+          response => {
+            this.showAutoCon = false;
+            this.updateForTest =false;
+          },
+          error => {
+            this.showAutoCon = false;
+            this.updateForTest =false;
+          }
+        );
+      }
+      else{
+        this.showAutoCon = false;
+        this.updateForTest =false;
+      }
+      
       }
     
 
