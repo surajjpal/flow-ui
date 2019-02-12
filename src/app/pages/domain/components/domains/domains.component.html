@@ -54,30 +54,30 @@
                   <td>{{domain.version}}</td>
                   <td *ngIf="domain.statusCd && domain.statusCd === DRAFT">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_EDIT_MODE)">
+                      <button type="button" class="btn btn-info" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_EDIT_MODE)">
                         <i class="ion-edit"></i>
                       </button>
-                      <button type="button" class="btn btn-primary" title="Publish" (click)="onDomainSelect(domain)" data-toggle="modal" data-target="#finalWarningModal">
+                      <button type="button" class="btn btn-success" title="Publish" (click)="onDomainSelect(domain)" data-toggle="modal" data-target="#finalWarningModal">
                         <i class="fa fa-check-square-o"></i>
                       </button>
                     </div>
                   </td>
                   <td *ngIf="domain.statusCd && domain.statusCd === CLONED">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_EDIT_MODE)">
+                      <button type="button" class="btn btn-info" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_EDIT_MODE)">
                         <i class="ion-edit"></i>
                       </button>
-                      <button type="button" class="btn btn-primary" title="Publish" (click)="onDomainSelect(domain)" data-toggle="modal" data-target="#finalWarningModal">
+                      <button type="button" class="btn btn-success" title="Publish" (click)="onDomainSelect(domain)" data-toggle="modal" data-target="#finalWarningModal">
                         <i class="fa fa-check-square-o"></i>
                       </button>
                     </div>
                   </td>
                   <td *ngIf="domain.statusCd && domain.statusCd === CLOSED">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
+                      <button type="button" class="btn btn-info" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
                         <i class="ion-eye"></i>
                       </button>
-                      <button type="button" class="btn btn-primary" title="Activate" (click)="activateDomain(domain)">
+                      <button type="button" class="btn btn-success" title="Activate" (click)="activateDomain(domain)">
                         <i class="ion-power"></i>
                       </button>
                       <button type="button" class="btn btn-primary" title="Clone" (click)="onDomainSelect(domain, CLONE_AND_EDIT_MODE)">
@@ -87,10 +87,10 @@
                   </td>
                   <td *ngIf="domain.statusCd && domain.statusCd === ACTIVE">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
+                      <button type="button" class="btn btn-info" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
                         <i class="ion-edit"></i>
                       </button>
-                      <button type="button" class="btn btn-primary" title="Deactivate" (click)="deactivateDomain(domain)">
+                      <button type="button" class="btn btn-danger" title="Deactivate" (click)="deactivateDomain(domain)">
                         <i class="ion-close-round"></i>
                       </button>
                       <button type="button" class="btn btn-primary" title="Clone" (click)="onDomainSelect(domain, CLONE_AND_EDIT_MODE)">
@@ -100,7 +100,7 @@
                   </td>
                   <td *ngIf="!domain.statusCd">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain)">
+                      <button type="button" class="btn btn-info" title="Edit" (click)="onDomainSelect(domain)">
                         <i class="ion-edit"></i>
                       </button>
                     </div>
@@ -163,10 +163,10 @@
                   <td>{{domain.version}}</td>
                   <td *ngIf="domain.statusCd && domain.statusCd === CLOSED">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-primary" title="View" (click)="onDomainSelect(domain, OPEN_IN_EDIT_MODE)">
+                      <button type="button" class="btn btn-info" title="View" (click)="onDomainSelect(domain, OPEN_IN_EDIT_MODE)">
                         <i class="ion-eye"></i>
                       </button>
-                      <button type="button" class="btn btn-primary" title="Activate" (click)="activateDomaiWarning(domain)" data-toggle="modal" data-target="#activateModal">
+                      <button type="button" class="btn btn-success" title="Activate" (click)="activateDomaiWarning(domain)" data-toggle="modal" data-target="#activateModal">
                         <i class="ion-power"></i>
                       </button>
                       <button type="button" class="btn btn-primary" title="Clone" (click)="onDomainSelect(domain, CLONE_AND_EDIT_MODE)">
@@ -176,7 +176,7 @@
                   </td>
                   <td *ngIf="!domain.statusCd">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-primary" title="Edit" (click)="onDomainSelect(domain)">
+                      <button type="button" class="btn btn-info" title="Edit" (click)="onDomainSelect(domain)">
                         <i class="ion-edit"></i>
                       </button>
                     </div>
