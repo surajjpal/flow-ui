@@ -396,7 +396,7 @@ export class AuthService {
   getCompanyAgent(companyId:string): Observable<any> {
     const subject = new Subject<any>();
 
-    const url = `${environment.publishaccounturl + "6efe654013b041e79c5935e2228f34b2"}`;
+    const url = `${environment.fetchaccountbyid + "6efe654013b041e79c5935e2228f34b2"}`;
     // const crudInput = new CRUDOperationInput();
     // crudInput.payload = {"_id":"6efe654013b041e79c5935e2228f34b2"};
     // crudInput.collection = 'companyAccount';

@@ -1,4 +1,5 @@
 declare var closeModal: any;
+declare var openModal : any;
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
@@ -167,6 +168,10 @@ export class DomainsComponent implements OnInit, OnDestroy {
         this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
       }
     
+  }
+
+  activateDomaiWarning(domain?:Domain){
+    this.selectedDomain = domain;
   }
 
 

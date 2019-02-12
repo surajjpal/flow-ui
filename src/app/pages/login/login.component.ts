@@ -89,9 +89,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   setCompanyAgent(companyId){
+
     this.crudSubscription = this.authService.getCompanyAgent(companyId).subscribe(
       company =>{
         if(company){
+        console.log("company")
+        console.log(company)
         this.universalUser.setAgentId(company["companyAgentId"]);
         }
       },

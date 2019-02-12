@@ -77,10 +77,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   showAutoCon:boolean;
   updateForTest:boolean;
   showTooltip:boolean;
-  currentDomain:Domain;
+  currentDomainName:string;
   testingAgent:Agent;
-  domainCreatedForTestId:string;
+  deleteTestingDomain:boolean;
   increaseVersion:boolean;
+  domainCloneMode:boolean;
+  domainActivateMode:boolean;
+  activeDomain:Domain;
 
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
@@ -110,7 +113,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.showTooltip = false;   
     this.testingAgent = new Agent(); 
     this.increaseVersion = true;
-    this.domainCreatedForTestId = "";   
+    this.deleteTestingDomain = false;   
+    this.currentDomainName = "";
+    this.domainCloneMode = false;
+    this.domainActivateMode = false;
     this.isAddFileUploadResponse = false;
     this.domainCreateMode = true;
     this.modalHeader = '';
@@ -144,7 +150,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.cardsFilterQuery = '';
 
     this.selectedDomain = new Domain();
-    this.currentDomain = new Domain();
+    this.activeDomain = new Domain();
     this.tempIntent = new Intent();
     this.selectedIntent = new Intent();
     this.tempEntity = new Entity();
@@ -186,12 +192,20 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     if (domain) {
       console.log("==========================domain=============================");
       this.companyAgentId = this.user.getAgentId();
+      console.log(this.companyAgentId);
       if (this.companyAgentId){
         this.showTestButton = true;
       }
-      this.currentDomain = domain;
       this.selectedDomain = domain;
       this.domainCreateMode = false;
+      if(domain.statusCd == "CLONED" && !domain._id){
+        this.domainCloneMode = true;
+        this.currentDomainName = this.selectedDomain.name
+      }
+      if(domain.statusCd == "CLOSED"){
+        this.domainActivateMode = true;
+      }
+
     } else {
       this.selectedDomain = new Domain();
       this.domainCreateMode = true;
@@ -200,10 +214,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.removeGoalStepResponseFromDomainResponse();
   }
 
-  getCompanyAgent(){
-
-  }
-
+ 
   ngOnDestroy(): void {
     if (this.subscription && !this.subscription.closed) {
       this.subscription.unsubscribe();
@@ -971,8 +982,21 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
   }
 
+
+  cloneDomain(){
+    console.log("]]]]]]]]]]]]]]]");
+    console.log(this.selectedDomain.name);
+    console.log(this.currentDomainName);
+    if(this.selectedDomain.name == this.currentDomainName){
+      new showAlertModal('While cloning domain please make sure that the domain name is different!!!');
+    }
+    else{
+      this.selectedDomain.version = 1;
+      this.createDomain();
+    }
+  }
+
   createDomain() {
-      console.log("different")
       if (this.selectedDomain) {
         if (this.selectedDomain.domainGoals) {
           for (const goal of this.selectedDomain.domainGoals) {
@@ -1000,9 +1024,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
             if(this.selectedDomain.statusCd == "DRAFT"){
               this.selectedDomain.version = this.selectedDomain.version + 1
             }
-            if(this.selectedDomain.statusCd == "CLONED"){
-              this.selectedDomain.version = 1
-            }
         }
         console.log("-----------------DOMAIN------------------------------------")
         console.log(this.selectedDomain)
@@ -1011,13 +1032,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           .subscribe(
             response => {
               console.log("=======SAVED RESPONSE===============");
-              // console.log(response);
-              // this.selectedDomain = response;
-              if(!this.selectedDomain._id){
-                this.domainCreatedForTestId = response._id;
-              }
+              console.log(response);
               this.increaseVersion = false;
-              
               this.updateClassifierTraining(response);
               
             },
@@ -1050,9 +1066,11 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         response => {
           if (response) {
             this.selectedDomain = updatedDomain;
-            this.currentDomain = updatedDomain;
             if(this.updateForTest){
               this.getAndUpdateAgent();
+            }
+            else if(this.domainCloneMode){
+              this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route })
             }
             else{
               this.domainBody = `Domain updated successfully!!`;
@@ -1410,6 +1428,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         //give modal to update first
         if(!this.selectedDomain._id){
           this.updateForTest = true;
+          this.deleteTestingDomain = true;
           this.createDomain();
         }
         else{
@@ -1428,6 +1447,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           console.log("000000")
           this.agentSubscription = this.agentService.getAgentById(this.companyAgentId).subscribe(receivedAgent=> {
             if(receivedAgent) {
+              console.log("pppppppppppppppppppppppppppp");
+              console.log(receivedAgent)
               receivedAgent.domainId = this.selectedDomain._id;
               this.updateDomainOnAgent(receivedAgent);
             }
@@ -1447,7 +1468,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       }
 
     deleteDomainCreatedForTesting(){
-      if(this.domainCreatedForTestId){
+      if(this.deleteTestingDomain){
         this.subscription = this.domainService.deleteDomain(this.selectedDomain._id)
         .subscribe(
           response => {
@@ -1475,6 +1496,51 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.showTooltip = false;
       this.updateForTest =false;
     }
+
+
+    activateDomain(modalName?:string){
+    
+      let payload = {"name":this.selectedDomain.name,"statusCd":"ACTIVE"};
+      let fields = ["_id","statusCd"];
+      this.subscription = this.domainService.getDomain(payload,fields)
+      .subscribe(
+        response => {
+          console.log("ACTIVE DOMAIN SAME NAME");
+          console.log(response);
+          if(response){
+            this.activeDomain = response;
+            this.activeDomain.statusCd = "CLOSED";
+            this.subscription = this.domainService.saveDomain(this.activeDomain)
+            .subscribe(
+              response => {
+                if(response){
+                  
+                  this.selectedDomain.statusCd = "ACTIVE";
+                  this.saveAndActivateDomain(this.selectedDomain,modalName);
+                }
+              });
+          }
+          else{
+            this.selectedDomain.statusCd = "ACTIVE";
+            this.saveAndActivateDomain(this.selectedDomain,modalName);
+          }
+        });
+      }
+  
+  
+      saveAndActivateDomain(domain?: Domain,modalName?:string){
+        this.subscription = this.domainService.saveDomain(domain)
+          .subscribe(
+            response => {
+              new closeModal(modalName);
+              this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route })
+            },
+            error => {
+              
+            }
+          );
+      }
+  
     
 
 }
