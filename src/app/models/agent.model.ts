@@ -90,6 +90,7 @@ export class Agent {
   defaultLanguage: string;
   disabled: boolean;
   debugMode: boolean;
+  companyTestingAgent:boolean;
 
   constructor() {
     this._id = null;
@@ -111,5 +112,6 @@ export class Agent {
     this.defaultLanguage = '';
     this.disabled = false;
     this.debugMode = false;
+    this.companyTestingAgent = false;
   }
 }

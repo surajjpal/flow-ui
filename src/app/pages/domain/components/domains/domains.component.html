@@ -111,7 +111,7 @@
                 <tr>
                   <td colspan="100%">
                     <button type="button" class="btn btn-info" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
-                      *ngIf="moreDomainPages" (click)="fetchDomains()">Load More
+                      *ngIf="moreDomainPages" (click)="loadMore()">Load More
                     </button>
                     <mfBootstrapPaginator></mfBootstrapPaginator>
                   </td>
@@ -184,12 +184,15 @@
                 </tr>
               </tbody>
               <tfoot>
-                <tr>
-                  <td colspan="100%">
-                    <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
-                  </td>
-                </tr>
-              </tfoot>
+                  <tr>
+                    <td colspan="100%">
+                      <button type="button" class="btn btn-info" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
+                        *ngIf="moreClosedDomainPages" (click)="fetchClosedDomains()">Load More
+                      </button>
+                      <mfBootstrapPaginator></mfBootstrapPaginator>
+                    </td>
+                  </tr>
+                </tfoot>
             </table>
           </div>
         </div>

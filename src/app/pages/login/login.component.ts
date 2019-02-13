@@ -5,7 +5,8 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { AlertService, UniversalUser } from '../../services/shared.service';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user.model';
-
+import { Agent } from '../../models/agent.model';
+import { AgentService } from '../../services/agent.service';
 import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
@@ -25,11 +26,15 @@ export class LoginComponent implements OnInit, OnDestroy {
   submitted: boolean = false;
 
   user: User = new User();
+  agent:Agent = new Agent();
+
   loading = false;
   returnUrl: string;
 
   private userSubscription: Subscription;
   private crudSubscription:Subscription;
+  private agentSubscription: Subscription
+
 
   constructor(
     private fb: FormBuilder,
@@ -38,7 +43,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private alertService: AlertService,
     private httpClient: HttpClient,
-    private universalUser: UniversalUser
+    private universalUser: UniversalUser,
   ) {
     this.form = fb.group({
       'email': ['', Validators.compose([Validators.required, Validators.minLength(4)])],
@@ -79,7 +84,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.loading = false;
           this.user = user;
           this.universalUser.setUser(user, true);
-          this.setCompanyAgent(this.user.companyId);
           this.router.navigate([this.returnUrl]);
         },
         error => {
@@ -88,20 +92,4 @@ export class LoginComponent implements OnInit, OnDestroy {
       );
   }
 
-  setCompanyAgent(companyId){
-
-    this.crudSubscription = this.authService.getCompanyAgent(companyId).subscribe(
-      company =>{
-        if(company){
-        console.log("company")
-        console.log(company)
-        this.universalUser.setAgentId(company["companyAgentId"]);
-        }
-      },
-      error =>{
-
-      }
-
-    );
-  }
 }

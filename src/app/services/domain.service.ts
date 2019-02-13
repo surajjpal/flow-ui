@@ -81,7 +81,9 @@ export class DomainService {
     const crudInput = new CRUDOperationInput();
     crudInput.payload = new Map<any, any>();
     crudInput.collection = 'domain';
+    
     crudInput.operation = "READ_ALL";
+    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"};
     crudInput.page = pageNo;
     crudInput.pageSize = pageSize;
     crudInput.fields = fields;
@@ -110,14 +112,16 @@ export class DomainService {
     return subject.asObservable();
   }
 
-  domainLookup(payload?: any): Observable<Domain[]> {
+  domainLookup(payload?: any,pageNo?: number,pageSize?: number, fields?: String[]): Observable<Domain[]> {
     const subject = new Subject<Domain[]>();
 
     const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
     const crudInput = new CRUDOperationInput();
     crudInput.payload = payload;
     crudInput.collection = 'domain';
-    crudInput.fields = ["name","_id","langSupported","version","statusCd"]
+    crudInput.page = pageNo;
+    crudInput.pageSize = pageSize;
+    crudInput.fields = fields;
     crudInput.operation = "READ_ALL";
     crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     

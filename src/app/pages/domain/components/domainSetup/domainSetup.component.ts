@@ -84,6 +84,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   domainCloneMode:boolean;
   domainActivateMode:boolean;
   activeDomain:Domain;
+  companyAgent:Agent;
 
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
@@ -191,6 +192,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     const domain: Domain = this.sharingService.getSharedObject();
     if (domain) {
       console.log("==========================domain=============================");
+      if (!domain["statusCd"]){
+        this.updateDomainStatusCd(domain);
+      }
       this.companyAgentId = this.user.getAgentId();
       console.log(this.companyAgentId);
       if (this.companyAgentId){
@@ -984,9 +988,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
 
   cloneDomain(){
-    console.log("]]]]]]]]]]]]]]]");
-    console.log(this.selectedDomain.name);
-    console.log(this.currentDomainName);
     if(this.selectedDomain.name == this.currentDomainName){
       new showAlertModal('While cloning domain please make sure that the domain name is different!!!');
     }
@@ -1426,6 +1427,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     
       testDomain(){
         //give modal to update first
+        if(!this.companyAgentId == null){
+          this.createCompanyAgent();
+      }
+
         if(!this.selectedDomain._id){
           this.updateForTest = true;
           this.deleteTestingDomain = true;
@@ -1444,11 +1449,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           }
           
         else{
-          console.log("000000")
           this.agentSubscription = this.agentService.getAgentById(this.companyAgentId).subscribe(receivedAgent=> {
             if(receivedAgent) {
-              console.log("pppppppppppppppppppppppppppp");
-              console.log(receivedAgent)
               receivedAgent.domainId = this.selectedDomain._id;
               this.updateDomainOnAgent(receivedAgent);
             }
@@ -1540,7 +1542,63 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
             }
           );
       }
-  
-    
 
+
+
+      createCompanyAgent(){
+        let payload = {"name":"AutoCon","companyTestingAgent":true};
+        this.agentSubscription = this.agentSubscription = this.agentService.getCompanyAgent(payload).subscribe(receivedAgent=> {
+          if(receivedAgent) {
+            this.user.setAgentId(receivedAgent._id);
+            this.companyAgentId = receivedAgent._id;
+            this.testingAgent = receivedAgent;
+          }
+          else{
+            this.saveAgent();
+          }
+        });
+        
+      }
+    
+    
+      saveAgent(){
+        let agent:Agent = new Agent()
+        agent.companyId = this.user.getUser().companyId;
+        agent.uiComponent.colorCss = "#2e406f";
+        agent.uiComponent.avatarUrl = "https://s3-us-west-2.amazonaws.com/custom-ui/default/auto_idea.jpg";
+        agent.uiComponent.typingGif = "https://s3-us-west-2.amazonaws.com/custom-ui/default/typing-indicatorauto.gif";
+        agent.uiComponent.logoUrl = "https://automatapi.com/images/autobot.jpg";
+        agent.uiComponent.cronEnabled = false;
+        agent.uiComponent.isBargeable = false;
+        agent.uiComponent.placeHolderText = "Type your query...";
+        agent.domainId = null;
+        agent.agentFlow = [];
+        agent.name = "AutoCon";
+        agent.langSupported = [ "ENG", "HIN" ];
+        agent.domainNameList = [];
+        agent.companyTestingAgent = true;
+        this.agentSubscription = this.agentService.saveAgent(agent).subscribe(receivedAgent=> {
+          if(receivedAgent) {
+            this.user.setAgentId(receivedAgent._id);
+            this.companyAgentId = receivedAgent._id;
+            this.testingAgent = receivedAgent;
+          }
+        });
+      }
+
+
+      updateDomainStatusCd(domain?:Domain){
+        domain.statusCd = "ACTIVE";
+        domain.version = 1;
+        this.subscription = this.domainService.saveDomain(domain)
+          .subscribe(
+            response => {
+              this.selectedDomain = response;
+              this.increaseVersion = false;
+            },
+            error => {
+              
+            }
+          );
+      }
 }
