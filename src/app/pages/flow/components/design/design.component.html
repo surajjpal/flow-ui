@@ -55,10 +55,12 @@
                      <option *ngFor="let stateType of sourceStateTypes" [value]="stateType">{{stateType}}</option>
                   </select>
                </div>
-               <div class="form-group">
-                  <label for="reportFlag">Report Flag</label>
-                  <api-checkbox class="col-md-3 col-sm-3 col-xs-3" [checked]="tempState.reportFlag" [label]="'Report Flag'"
+               <div class="row">
+                  <api-checkbox class="col-md-6 col-sm-6 col-xs-6" [checked]="tempState.businessMonitorFlag" [label]="'Business Monitor Flag'"
+                     (event)="tempState.businessMonitorFlag = $event.target.checked"></api-checkbox>
+                  <api-checkbox class="col-md-6 col-sm-6 col-xs-6" [checked]="tempState.reportFlag" [label]="'Report Flag'"
                      (event)="tempState.reportFlag = $event.target.checked"></api-checkbox>
+                  
                </div>
                <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'">
                   <label for="selectAllocationType">Allocation Type</label>
