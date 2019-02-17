@@ -11,8 +11,9 @@ export class BusinessProcessMonitorRequest {
     dataPoints = {};
     startTime: Date;
     endTime: Date;
+    stateCd: string;
 
-    constructor(machineType?: string, flowStatus?: string,selectedDataPointConfiguration?: DataPoint, dataPointConfigurations?: DataPoint[], machineIds?: string[], startTime?: Date, endTime?: Date) {
+    constructor(machineType?: string, flowStatus?: string,selectedDataPointConfiguration?: DataPoint, dataPointConfigurations?: DataPoint[], machineIds?: string[], startTime?: Date, endTime?: Date, stateCd? : string) {
         this.machineType = machineType ? machineType : null;
         this.flowStatus = flowStatus ? flowStatus : null;
         this.selectedDataPointConfiguration = selectedDataPointConfiguration ? selectedDataPointConfiguration : null;
@@ -21,6 +22,7 @@ export class BusinessProcessMonitorRequest {
         this.dataPoints = {}
         this.startTime = startTime ? startTime : null;
         this.endTime = endTime ? endTime : null;
+        this.stateCd = stateCd ? stateCd : null;
     }
 }
 
