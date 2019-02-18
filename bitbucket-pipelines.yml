@@ -1,0 +1,33 @@
+# This is a sample build configuration for JavaScript.
+# Check our guides at https://confluence.atlassian.com/x/14UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+
+pipelines:
+  branches:
+    master:
+      - step:
+          image: node:8.10.0
+          caches:
+            - node
+          script: #Modify the commands below to build your repository.
+            - ng build --env=demo --aot --build-optimizer --base-href / --deploy-url /
+            - echo 'successfully build!'
+          artifacts: #Defining the artifacts to be passed to each future step.
+            - dist/**
+      - step:
+          name: S3 staging-Compressing files
+          script:
+            - ./compress.sh   #Calling compress.sh to uglify files and compressing build 
+      - step:
+          name: S3 staging-Deploying FlowUI
+          deployment: staging
+          trigger: manual
+          image: atlassian/pipelines-awscli
+          script:
+            - echo 'Deleting old build from s3'
+            - aws s3 rm s3://$AWS_BUCKET_TARGET --recursive #Deleting old build from s3
+            - echo 'Deleted old build from s3'
+            - echo 'Uploading new build on s3'
+            - aws s3 cp ./dist/flowUI s3://$AWS_BUCKET_TARGET/ --recursive #Uploading new build on s3
+            - echo 'build upload successful!'
