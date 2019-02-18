@@ -140,7 +140,7 @@ export const environment = {
   businessObjectPredictUrl: '/automatons/businessobject/predict',
   
   //Dashboard
-  dashboardServer: 'http://localhost:8080/flow/dashboard/',
+  dashboardServer: 'http://localhost:9093/',
   dashboardsummary:'auto/dashboard_summary',
   episodetimeline:'auto/episode_timeline',
   intentcount:'auto/intent_count',

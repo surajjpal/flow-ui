@@ -57,8 +57,8 @@ export class FlowDashboardService {
     body['operation'] = "get_flow_dashboard_summary"
     body['dashboard'] = "flow"
    
-    const url = `${environment.dashboardinterface}`;
-
+    const url = `${environment.dashboardServer + environment.flowdashboardsummary}`;
+    console.log(url)
     this.httpClient.post<Dashboard>(
       url,
       body,
@@ -89,7 +89,8 @@ export class FlowDashboardService {
     const subject = new Subject<Dashboard>();
     body['operation'] = "get_flow_timeline"
     body['dashboard'] = "flow"
-    const url = `${environment.dashboardinterface}`;
+    const url = `${environment.dashboardServer + environment.flowtimeline}`;
+    //const url = `${environment.dashboardinterface}`;
 
     this.httpClient.post<Dashboard>(
       url,
@@ -121,7 +122,8 @@ export class FlowDashboardService {
     const subject = new Subject<Dashboard>();
     body['operation'] = "range_of_transaction";
     body['dashboard'] = "flow";
-    const url = `${environment.dashboardinterface}`;
+    const url = `${environment.dashboardServer + environment.transactionvalues}`;
+   // const url = `${environment.dashboardinterface}`;
     
     this.httpClient.post<Dashboard>(
       url,
@@ -154,7 +156,8 @@ export class FlowDashboardService {
 
     body['operation'] = "get_max_resources_values";
     body['dashboard'] = "flow";
-    const url = `${environment.dashboardinterface}`;
+    const url = `${environment.dashboardServer + environment.resourcevalues}`;
+    //const url = `${environment.dashboardinterface}`;
 
     this.httpClient.post<Dashboard>(
       url,
@@ -187,7 +190,8 @@ export class FlowDashboardService {
 
     body['operation'] = "avg_state_time";
     body['dashboard'] = "flow";
-    const url = `${environment.dashboardinterface}`;
+    const url = `${environment.dashboardServer + environment.avgstatetime}`;
+    //const url = `${environment.dashboardinterface}`;
 
 
     this.httpClient.post<Dashboard>(
@@ -221,7 +225,8 @@ export class FlowDashboardService {
 
     body['operation'] = "transactionValue_each_state";
     body['dashboard'] = "flow";
-    const url = `${environment.dashboardinterface}`;
+    const url = `${environment.dashboardServer + environment.statetransactionvalue}`;
+    //const url = `${environment.dashboardinterface}`;
 
     this.httpClient.post<Dashboard>(
       url,
