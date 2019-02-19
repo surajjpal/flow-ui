@@ -83,7 +83,7 @@ export class DomainService {
     crudInput.collection = 'domain';
     
     crudInput.operation = "READ_ALL";
-    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"};
+    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"};
     crudInput.page = pageNo;
     crudInput.pageSize = pageSize;
     crudInput.fields = fields;
@@ -123,7 +123,7 @@ export class DomainService {
     crudInput.pageSize = pageSize;
     crudInput.fields = fields;
     crudInput.operation = "READ_ALL";
-    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     
     this.httpClient.post<Map<string, Domain[]>>(
       crudUrl, 
@@ -158,7 +158,7 @@ export class DomainService {
     crudInput.collection = 'domain';
     crudInput.operation = "READ";
     crudInput.fields = fields;
-    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     
     this.httpClient.post<Map<string, Domain>>(
       crudUrl, 
@@ -184,129 +184,7 @@ export class DomainService {
     return subject.asObservable();
   }
 
-  getFeatures(payload?: any): Observable<any> {
-    const subject = new Subject<any>();
-    
-    const featureUrl = `${environment.fetaureurl}`;
-    
-   
-    
-    this.httpClient.post<any>(
-      featureUrl, 
-      payload,
-      {
-        headers: this.httpHeaders,
-        observe: 'response',
-        reportProgress: true,
-        withCredentials: true
-      }
-    ).subscribe(
-      (response: HttpResponse<any>) => {
-        subject.next(response.body);
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
-
-        subject.error(err);
-      }
-    );
-
-    return subject.asObservable();
-  }
-
-
-  uploadFaq(payload?: any): Observable<any> {
-    const subject = new Subject<any>();
-    
-    const featureUrl = `${environment.faqupload}`;
-    
-   
-    
-    this.httpClient.post<any>(
-      featureUrl, 
-      payload,
-      {
-        //headers: this.httpHeaders,
-        observe: 'response',
-        reportProgress: true,
-        withCredentials: true
-      }
-    ).subscribe(
-      (response: HttpResponse<any>) => {
-        subject.next(response.body);
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
-
-        subject.error(err);
-      }
-    );
-
-    return subject.asObservable();
-  }
-
-
-  trainDt(payload?: any): Observable<any> {
-    const subject = new Subject<any>();
-    
-    const trainurl = `${environment.traindt}`;
-    
-    this.httpClient.post<any>(
-      trainurl, 
-      payload,
-      {
-        headers: this.httpHeaders,
-        observe: 'response',
-        reportProgress: true,
-        withCredentials: true
-      }
-    ).subscribe(
-      (response: HttpResponse<any>) => {
-        subject.next(response.body["Success"]);
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
-
-        subject.error(err);
-      }
-    );
-
-    return subject.asObservable();
-  }
-
-  converse(payload?: any): Observable<any> {
-    const subject = new Subject<any>();
-    
-    const trainurl = `${environment.converse}`;
-    
-    this.httpClient.post<any>(
-      trainurl, 
-      payload,
-      {
-        headers: this.httpHeaders,
-        observe: 'response',
-        reportProgress: true,
-        withCredentials: true
-      }
-    ).subscribe(
-      (response: HttpResponse<any>) => {
-        subject.next(response.body);
-      },
-      (err: HttpErrorResponse) => {
-        // All errors are handled in ErrorInterceptor, no further handling required
-        // Unless any specific action is to be taken on some error
-
-        subject.error(err);
-      }
-    );
-
-    return subject.asObservable();
-  }
-
-
+ 
   /*
   domainLookup(query?: string): Observable<Domain[]> {
     const subject = new Subject<Domain[]>();
@@ -347,7 +225,7 @@ export class DomainService {
     const crudInput = new CRUDOperationInput();
     crudInput.payload = {"_id":domainId};
     crudInput.collection = 'domain';
-    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     crudInput.operation = "DELETE";
     
     const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
@@ -383,7 +261,7 @@ export class DomainService {
     const crudInput = new CRUDOperationInput();
     crudInput.payload = domain;
     crudInput.collection = 'domain';
-    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     if (domain._id !== null) {
       crudInput.operation = "UPDATE";
     } else {
@@ -485,9 +363,9 @@ export class DomainService {
   updateDomainClassifierTraining(domain: Domain): Observable<any> {
     const subject = new Subject<any>();
     let requestBody = new Map<string, string>();
-    requestBody["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    //requestBody["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     requestBody["domainId"] = domain._id;
-    requestBody["version"] = domain.version   // currently we do not have any versioning system
+    requestBody["version"] = domain.version 
     const url = `${environment.updateClassifierTraining}`;
     this.httpClient.post<any>(
       url,

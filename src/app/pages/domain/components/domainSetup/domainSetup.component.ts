@@ -174,12 +174,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       url: uploadEntityUrl
     };
 
-    const uploadFaqUrl = `${environment.faqupload}`;
-    this.faqUploaderOptions = {
-      url:uploadFaqUrl,
-      data:{"file":"UploadedFile"}
-    }
-
     this.slimLoadingBarService.color = '#2DACD1'; // Primary color
     this.slimLoadingBarService.height = '4px';
   }
@@ -191,17 +185,14 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
     const domain: Domain = this.sharingService.getSharedObject();
     if (domain) {
-      console.log("==========================domain=============================");
       if (!domain["statusCd"]){
         this.updateDomainStatusCd(domain);
       }
-      this.companyAgentId = this.user.getAgentId();
-      console.log(this.companyAgentId);
-      if (this.companyAgentId){
-        this.showTestButton = true;
-      }
+      this.showTestButton = true;
       this.selectedDomain = domain;
       this.domainCreateMode = false;
+
+
       if(domain.statusCd == "CLONED" && !domain._id){
         this.domainCloneMode = true;
         this.currentDomainName = this.selectedDomain.name
@@ -794,20 +785,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.tempResponse.faqResponse = true;
         this.tempResponse.uniqueId = this.newGuid();
         this.selectedDomain.domainResponse.push(this.tempResponse);
-        // if(!this.selectedDomain.name || this.selectedDomain.name.trim().length === 0){
-        //   new showAlertModal('Error', 'Please specify the domain name and language first');
-        // }
-        // else{
-        //   this.saveDomain(this.selectedDomain)
-        // }
-        
-        // if(this.selectedDomain.domainResponse.length == 1){
-
-        // }
-       
-        // if (domainId!=null){
-        // //  this.trainDomain(domainId,version);
-        // }
+      
         
         new closeModal('faqResponseModal');
 
@@ -840,6 +818,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.featureList.splice(index, 1);
       }
     }
+
+
     saveDomain(domain?: Domain,modalName?:string){
       let domainId = null;
       domain.statusCd = "DRAFT"
@@ -1015,25 +995,16 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
             }
           }
         }
-        
-        // if(!this.selectedDomain.statusCd){
-        //   this.selectedDomain.statusCd = "ACTIVE"
-        //   this.selectedDomain.version = 1
-        
-        // }
+    
         if(this.increaseVersion && !this.updateForTest){
             if(this.selectedDomain.statusCd == "DRAFT"){
               this.selectedDomain.version = this.selectedDomain.version + 1
             }
         }
-        console.log("-----------------DOMAIN------------------------------------")
-        console.log(this.selectedDomain)
         this.subscription = this.domainService.saveDomain(this.selectedDomain)
         
           .subscribe(
             response => {
-              console.log("=======SAVED RESPONSE===============");
-              console.log(response);
               this.increaseVersion = false;
               this.updateClassifierTraining(response);
               
@@ -1046,20 +1017,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       }
   }
 
-  trainDt(id,version){
-    let payload = {"domainId":id,"version":version}
-    this.subscription = this.domainService.trainDt(payload)
-        .subscribe(
-          response => {
-            console.log("pppppppppppppppppppppppppppppppp")
-            console.log(response);
-            new closeModal('domainUpdateModal');
-            console.log(response);
-          },
-          error => {
-          }
-        );
-  }
 
   updateClassifierTraining(updatedDomain: Domain) {
     this.subscription = this.domainService.updateDomainClassifierTraining(updatedDomain)
@@ -1088,8 +1045,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
             }
             
           }
-          //this.updateEntityTrainingData();
-          //this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
         }
       )
   }
@@ -1099,7 +1054,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       .subscribe(
         response => {
           this.updateEntityTrainingData();
-          // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
         }
       );
   }
@@ -1245,24 +1199,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     // }
   }
 
-
-  onFaqFileUpload(fileData: FormData) {
-    console.log("onFileUpload");
-    console.log(fileData);
-    this.subscription = this.domainService.uploadFaq(fileData)
-      .subscribe(
-        response => {
-          
-        }
-      );
-    //console.log(fileData);
- 
-    
-  }
-
-  
-
-
   onAddResponseOption(response) {
     if (!response.options) {
       response.options = [];
@@ -1318,45 +1254,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
 
-  testFaq()
-  {
-    this.response = "Please feel free to ask anything";
-  }
-  converse(){
-    let payload = {"text":this.request,"domainId":this.selectedDomain._id}
-    this.subscription = this.domainService.converse(payload)
-    .subscribe(
-      res => {
-        console.log(res) ;
-        if(res){
-          this.response = res['result'][0];
-          this.request = "";
-        }
-      }
-    );
-  }
-  getFeatures(){
-    let payload = {"text":this.tempResponse.request}
-    this.subscription = this.domainService.getFeatures(payload)
-      .subscribe(
-        features => {
-          console.log(features)
-          if (features) {
-            for(let feature of features){
-              console.log(feature)
-              for (const property in feature) {
-                if (property) {
-                  const map = new Map();
-                  map.set('key', property);
-                  map.set('value', feature[property]);
-                  this.featureList.push(map);
-                }
-              }
-            }
-          }
-        }
-      );
-  }
 
   populateBulkExpressions(expressions) {
     this.bulkExpressions = '';
@@ -1412,9 +1309,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         
       }
 
-      createBotHtml(domain?:Domain,companyAgent?:Agent){
+      createBotHtml(){
         const autoUrl = `${environment.autourl}${this.companyAgentId}`
-        const html = '<div id="autoButton" style="text-align: center; background-color: transparent; position: fixed; right: ' + this.marginRight + '; bottom: ' + this.marginBottom + '; width: auto; height: auto; z-index:9999"><div style="margin-bottom: 8px;"><a href="javascript:toggleChat()"><img src="' + this.agentLogoUrl + '" style="width: 60px; height: 60px; border-radius: 50%; box-shadow: 0px 0px 10px ' + this.agentLogoShadowColor + ';"></img></a></div>' +
+        const html = '<div id="autoButton" style="text-align: center; background-color: transparent; position: fixed; right: ' + this.marginRight + '; bottom: ' + this.marginBottom + '; width: auto; height: auto; z-index:9999"><div style="margin-bottom: 8px;"><a href="javascript:toggleChat()"><img src="' + this.testingAgent.uiComponent.logoUrl + '" style="width: 60px; height: 60px; border-radius: 50%; box-shadow: 0px 0px 10px ' + this.agentLogoShadowColor + ';"></img></a></div>' +
         '</div>' +
         '<div id="automataPi" class="containerStyle" role="dialog" z-index="9999"><iframe id="' + "autoBot" + '" src="' + autoUrl +'" class="iframeStyle" frameborder="0"></iframe></div>'
         this.botHtml= this.sanitizer.bypassSecurityTrustHtml(html);
@@ -1426,20 +1323,20 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
     
       testDomain(){
-        //give modal to update first
-        if(!this.companyAgentId == null){
-          this.createCompanyAgent();
-      }
-
-        if(!this.selectedDomain._id){
-          this.updateForTest = true;
-          this.deleteTestingDomain = true;
-          this.createDomain();
-        }
-        else{
+        if(this.companyAgentId){
+          if(!this.selectedDomain._id){
             this.updateForTest = true;
+            this.deleteTestingDomain = true;
             this.createDomain();
           }
+          else{
+              this.updateForTest = true;
+              this.createDomain();
+            }
+        }
+        else{
+          this.createCompanyAgent();
+        }
       }
 
       getAndUpdateAgent(){
@@ -1461,10 +1358,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       updateDomainOnAgent(agent?:Agent){
         this.agentSubscription = this.agentService.saveAgent(agent).subscribe(receivedAgent=> {
           if(receivedAgent) {
-            console.log("=====================AGENT")
-            console.log(receivedAgent);
             this.testingAgent = receivedAgent;
-            this.createBotHtml(this.selectedDomain,receivedAgent);
+            this.createBotHtml();
           }
         });
       }
@@ -1548,10 +1443,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       createCompanyAgent(){
         let payload = {"name":"AutoCon","companyTestingAgent":true};
         this.agentSubscription = this.agentSubscription = this.agentService.getCompanyAgent(payload).subscribe(receivedAgent=> {
-          if(receivedAgent) {
-            this.user.setAgentId(receivedAgent._id);
+          if(receivedAgent["companyTestingAgent"]) {
             this.companyAgentId = receivedAgent._id;
             this.testingAgent = receivedAgent;
+            this.testDomain();
           }
           else{
             this.saveAgent();
@@ -1579,9 +1474,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         agent.companyTestingAgent = true;
         this.agentSubscription = this.agentService.saveAgent(agent).subscribe(receivedAgent=> {
           if(receivedAgent) {
-            this.user.setAgentId(receivedAgent._id);
             this.companyAgentId = receivedAgent._id;
             this.testingAgent = receivedAgent;
+            this.testDomain();
           }
         });
       }

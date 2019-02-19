@@ -65,7 +65,7 @@ export class AgentService {
     crudInput.collection = 'agent';
     crudInput.operation = "READ";
     crudInput.payload = payload;
-    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     this.httpClient.post<Map<string, Agent>>(
       crudUrl, 
       crudInput,
@@ -98,7 +98,7 @@ export class AgentService {
     crudInput.collection = 'agent';
     crudInput.operation = "READ";
     crudInput.payload = {"_id" : _id};
-    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     this.httpClient.post<Map<string, Agent>>(
       crudUrl, 
       crudInput,
@@ -165,7 +165,7 @@ export class AgentService {
 
     const crudInput = new CRUDOperationInput();
     crudInput.payload = agent;
-    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     crudInput.collection = 'agent';
     if (agent._id !== null) {
       crudInput.operation = "UPDATE";

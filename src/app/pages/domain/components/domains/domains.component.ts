@@ -62,7 +62,6 @@ export class DomainsComponent implements OnInit, OnDestroy {
 
     this.fetchActiveDomains();
     this.fetchClosedDomains();
-    //this.fetchDomains();
   }
  
   
@@ -78,33 +77,8 @@ export class DomainsComponent implements OnInit, OnDestroy {
 
   filterQuery: string;
 
-  fetchDomains() {
-    this.subscription = this.domainService.domainLookup({},this.domainPageNo, this.domainPageSize, this.fields)
-      .subscribe(
-        domains => {
-          if (domains) {
-            if(domains.length < this.domainPageSize) {
-              this.moreDomainPages = false;
-            }
-            else {
-              this.moreDomainPages = true;
-              this.domainPageNo += 1;
-            }
-            console.log("----------------------------------");
-            console.log(this.domainSource);
-            for(var i=0; i<domains.length; i++) {
-                if(!domains[i]["statusCd"]){
-                  this.domainSource.push(domains[i]);
-                }
-              }
-            //this.domainSource = this.domainSource.concat(domains);
-          }
-        }
-      );
-  }
-
   fetchActiveDomains() {
-    let payload = {"statusCd":{ "$in": ["ACTIVE","DRAFT","CLONED"]}}
+    let payload = { "$or": [ {"statusCd":{ "$in": ["ACTIVE","DRAFT","CLONED"]}}, { "statusCd": { "$exists": false } } ] } 
     this.subscription = this.domainService.domainLookup(payload,this.domainPageNo, this.domainPageSize,this.fields)
       .subscribe(
         domains => {
@@ -118,14 +92,9 @@ export class DomainsComponent implements OnInit, OnDestroy {
             }
             
             this.domainSource = this.domainSource.concat(domains);
-            this.fetchDomains();
           }
         }
       );
-  }
-
-  loadMore(){
-    this.fetchActiveDomains();
   }
 
   fetchClosedDomains() {
