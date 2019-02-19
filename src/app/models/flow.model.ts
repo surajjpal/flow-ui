@@ -170,6 +170,7 @@ export class StateModel {
   connectorConfig:ConnectorConfig[];
   connectorConfigList: string[];
   reportFlag: boolean;
+  businessMonitorFlag: boolean;
 
   constructor() {
     this.stateId = '';
@@ -195,6 +196,7 @@ export class StateModel {
     this.connectorConfig = [];
     this.connectorConfigList = [];
     this.reportFlag = false;
+    this.businessMonitorFlag = false;
   }
 }
 

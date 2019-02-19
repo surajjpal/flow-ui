@@ -479,9 +479,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
   }
 
   updateFlow() {
-    if (!this.actionMap) {
-      this.actionMap = {};
-    }
+    this.actionMap = JSON.parse(JSON.stringify(this.selectedState.parameters));
 
     for (let index = 0; index < this.dataPoints.length; index++) {
       if (index % 2 === 1) {

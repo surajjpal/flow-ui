@@ -20,6 +20,7 @@ import { ConversationService } from '../../../../services/agent.service';
 import { FetchUserService, UserGraphService ,AllocateTaskToUser} from '../../../../services/userhierarchy.service';
 import { UniversalUser } from '../../../../services/shared.service';
 import { Map } from 'd3';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'api-task-details',
@@ -58,6 +59,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   tempUser:User;
   FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
   arrayTableHeaders = {};
+  sourceEmailTrailList = null;
   
   private subscription: Subscription;
   private subscriptionEpisode: Subscription;
@@ -76,7 +78,8 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     private location: Location,
     private fetchUserService:FetchUserService,
     private allocateTaskToUser:AllocateTaskToUser,
-    private universalUser: UniversalUser
+    private universalUser: UniversalUser,
+    private sanitizer: DomSanitizer
   ) { 
     window['taskDetailsRef'] = { component: this, zone: zone };
   }
@@ -276,6 +279,14 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
         this.dataPoints = [];
       }
 
+      if (this.selectedState.parameters && this.selectedState.parameters["mailTrail"]) {
+        const emailTrail = JSON.parse(JSON.stringify(this.selectedState.parameters["mailTrail"]));
+
+        if (emailTrail != null && emailTrail.length > 0) {
+          this.sourceEmailTrailList = emailTrail;
+        }
+      }
+
       if (this.selectedState.parameters && this.graphObject.dataPointConfigurationList) {
         console.log("dataconfigList");
         console.log(this.graphObject.dataPointConfigurationList);
@@ -381,9 +392,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
     this.isButtonEnabled = false;
     
-    if (!this.actionMap) {
-      this.actionMap = {};
-    }
+    this.actionMap = JSON.parse(JSON.stringify(this.selectedState.parameters));
 
     for (let index = 0; index < this.dataPoints.length; index++) {
       if (index % 2 === 1) {
@@ -484,5 +493,13 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       values.push(headerValue);
     }
     return values;
+  }
+
+  sanitizeHTML(htmlContent) {
+    if (htmlContent) {
+      return this.sanitizer.bypassSecurityTrustHtml(htmlContent);
+    }
+
+    return "";
   }
 }

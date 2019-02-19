@@ -20,7 +20,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="conversation-tab" data-toggle="tab" href="#tabConversation" role="tab" aria-controls="flow"
+          <a class="nav-link" id="conversation-tab" data-toggle="tab" href="#tabConversation" role="tab" aria-controls="conversation"
             aria-expanded="true">
             <b>Conversation</b>
           </a>
@@ -28,6 +28,11 @@
         <li class="nav-item">
           <a class="nav-link" id="flow-tab" data-toggle="tab" href="#tabFlow" role="tab" aria-controls="flow">
             <b>Process trail</b>
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="sourceEmailTrailList && sourceEmailTrailList.length > 0">
+          <a class="nav-link" id="email-tab" data-toggle="tab" href="#tabEmail" role="tab" aria-controls="email">
+            <b>Email trail</b>
           </a>
         </li>
       </ul>
@@ -313,6 +318,85 @@
           <br>
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div id="editorGrid" class="col-md-12 col-sm-12 col-xs-12" style="height:75vh;overflow:hidden;margin-bottom:1px;border-style:solid;border-color:silver;"></div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="tabEmail" aria-labelledby="email-tab" *ngIf="sourceEmailTrailList && sourceEmailTrailList.length > 0">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="card card-default">
+                <div class="card-header">
+                  <b>Email Trail</b>
+                </div>
+                <div class="card-block">
+                  <div class="row">
+                    <div id="emailAccordion" role="tablist" aria-multiselectable="true" *ngIf="sourceEmailTrailList && sourceEmailTrailList.length > 0">
+                      <div *ngFor="let email of sourceEmailTrailList; let index=index" class="panel">
+                        <div class="card">
+                          <div *ngIf="index == 0" [id]="'emailTabHeading' + index" class="card-header" heightStyle="content"
+                            role="tab">
+                            <h5 class="mb-0">
+                              <a data-toggle="collapse" data-parent="#emailAccordion" [href]="'#emailCollapse' + index"
+                                aria-expanded="true" [attr.aria-controls]="'emailCollapse' + index">
+                                From - {{email.from}} - {{email.subject}}
+                              </a>
+                            </h5>
+                          </div>
+                          <div *ngIf="index != 0" [id]="'emailTabHeading' + index" class="card-header" heightStyle="content"
+                            role="tab">
+                            <h5 class="mb-0">
+                              <a class="collapsed" data-toggle="collapse" data-parent="#emailAccordion" [href]="'#emailCollapse' + index"
+                                aria-expanded="false" [attr.aria-controls]="'emailCollapse' + index">
+                                From - {{email.from}} - {{email.subject}}
+                              </a>
+                            </h5>
+                          </div>
+                          <div *ngIf="index == 0" [id]="'emailCollapse' + index" class="collapse show" role="tabpanel"
+                            [attr.aria-labelledby]="'emailTabHeading' + index">
+                            <div class="card-block">
+                              <form>
+                                <div class="form-group">
+                                  <label>From: {{email.from}}</label>
+                                </div>
+                                <div class="form-group">
+                                  <label>To: {{email.to}}</label>
+                                </div>
+                                <div class="form-group">
+                                  <label>Subject: {{email.subject}}</label>
+                                </div>
+                                <div class="form-group">
+                                  <label>Body: </label>
+                                  <div class="form-control" [innerHTML]="sanitizeHTML(email.body)"></div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                          <div *ngIf="index != 0" [id]="'emailCollapse' + index" class="collapse" role="tabpanel"
+                            [attr.aria-labelledby]="'emailTabHeading' + index">
+                            <div class="card-block">
+                              <form>
+                                <div class="form-group">
+                                  <label>From: {{email.from}}</label>
+                                </div>
+                                <div class="form-group">
+                                  <label>To: {{email.to}}</label>
+                                </div>
+                                <div class="form-group">
+                                  <label>Subject: {{email.subject}}</label>
+                                </div>
+                                <div class="form-group">
+                                  <label>Body: </label>
+                                  <div class="form-control" [innerHTML]="sanitizeHTML(email.body)"></div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
