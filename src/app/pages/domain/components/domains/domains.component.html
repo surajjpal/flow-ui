@@ -52,6 +52,19 @@
                   <td>{{arrayToString(domain.langSupported)}}</td>
                   <td>{{domain.statusCd}}</td>
                   <td>{{domain.version}}</td>
+                  <td *ngIf="domain.statusCd && domain.statusCd === ACTIVE">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-info" title="View" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
+                        <i class="ion-eye"></i>
+                      </button>
+                      <button type="button" class="btn btn-danger" title="Deactivate" (click)="deactivateDomain(domain)">
+                        <i class="ion-close-round"></i>
+                      </button>
+                      <button type="button" class="btn btn-primary" title="Clone" (click)="onDomainSelect(domain, CLONE_AND_EDIT_MODE)">
+                        <i class="fa fa-clone"></i>
+                      </button>
+                    </div>
+                  </td>
                   <td *ngIf="domain.statusCd && domain.statusCd === DRAFT">
                     <div class="btn-group" role="group">
                       <button type="button" class="btn btn-info" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_EDIT_MODE)">
@@ -72,36 +85,13 @@
                       </button>
                     </div>
                   </td>
-                  <td *ngIf="domain.statusCd && domain.statusCd === CLOSED">
-                    <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-info" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
-                        <i class="ion-eye"></i>
-                      </button>
-                      <button type="button" class="btn btn-success" title="Activate" (click)="activateDomain(domain)">
-                        <i class="ion-power"></i>
-                      </button>
-                      <button type="button" class="btn btn-primary" title="Clone" (click)="onDomainSelect(domain, CLONE_AND_EDIT_MODE)">
-                        <i class="fa fa-clone"></i>
-                      </button>
-                    </div>
-                  </td>
-                  <td *ngIf="domain.statusCd && domain.statusCd === ACTIVE">
-                    <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-info" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
-                        <i class="ion-edit"></i>
-                      </button>
-                      <button type="button" class="btn btn-danger" title="Deactivate" (click)="deactivateDomain(domain)">
-                        <i class="ion-close-round"></i>
-                      </button>
-                      <button type="button" class="btn btn-primary" title="Clone" (click)="onDomainSelect(domain, CLONE_AND_EDIT_MODE)">
-                        <i class="fa fa-clone"></i>
-                      </button>
-                    </div>
-                  </td>
                   <td *ngIf="!domain.statusCd">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-info" title="Edit" (click)="onDomainSelect(domain)">
-                        <i class="ion-edit"></i>
+                      <button type="button" class="btn btn-info" title="View" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
+                        <i class="ion-eye"></i>
+                      </button>
+                      <button type="button" class="btn btn-primary" title="Clone" (click)="onDomainSelect(domain, CLONE_AND_EDIT_MODE)">
+                        <i class="fa fa-clone"></i>
                       </button>
                     </div>
                   </td>
@@ -163,7 +153,7 @@
                   <td>{{domain.version}}</td>
                   <td *ngIf="domain.statusCd && domain.statusCd === CLOSED">
                     <div class="btn-group" role="group">
-                      <button type="button" class="btn btn-info" title="View" (click)="onDomainSelect(domain, OPEN_IN_EDIT_MODE)">
+                      <button type="button" class="btn btn-info" title="View" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
                         <i class="ion-eye"></i>
                       </button>
                       <button type="button" class="btn btn-success" title="Activate" (click)="activateDomaiWarning(domain)" data-toggle="modal" data-target="#activateModal">

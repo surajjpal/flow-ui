@@ -308,24 +308,26 @@
       </div>
 
       <form>
-        <div class="form-group" *ngIf='!showAutoCon'>
-          <button type="button" class="btn btn-primary" *ngIf="!domainCloneMode && !domainActivateMode" (click)="createDomain()" data-toggle="modal" data-target="#domainUpdateModal">
-            {{domainCreateMode ? 'Create Domain' : 'Update Domain'}}
-          </button>
-          <button type="button" class="btn btn-primary" *ngIf="domainCloneMode" (click)="cloneDomain()">
-            {{'Clone Domain'}}
-          </button>
-          <button type="button" class="btn btn-success" *ngIf="domainActivateMode"  data-toggle="modal" data-target="#activateModal">
-              {{'Activate Domain'}}
+        <div *ngIf='!hideButtons'>
+          <div class="form-group" *ngIf='!showAutoCon'>
+            <button type="button" class="btn btn-primary" *ngIf="!domainActivateMode" (click)="createDomain()" data-toggle="modal" data-target="#domainUpdateModal">
+              {{domainCreateMode ? 'Create Domain' : 'Update Domain'}}
             </button>
-          <button type="button" *ngIf="showTestButton" class="btn btn-primary" (click)="testDomain()">
-            {{'Test Domain'}}
-          </button>
-        </div>
-        <div class="form-group" *ngIf='showAutoCon'>
-          <button type="button" *ngIf="showTestButton" class="btn btn-danger" (click)="exitTesting()">
-            {{'Exit Testing'}}
-          </button>
+            <button type="button" class="btn btn-info" style="float: right;" *ngIf="!domainEditMode && !domainCreateMode" (click)="cloneDomain()">
+              {{'Clone Domain'}}
+            </button>
+            <button type="button" class="btn btn-primary" *ngIf="domainActivateMode"  data-toggle="modal" data-target="#activateModal">
+                {{'Activate Domain'}}
+              </button>
+            <button type="button" *ngIf="showTestButton" class="btn btn-success" (click)="testDomain()">
+              {{'Test Domain'}}
+            </button>
+          </div>
+          <div class="form-group" *ngIf='showAutoCon'>
+            <button type="button" *ngIf="showTestButton" class="btn btn-danger" (click)="exitTesting()">
+              {{'Exit Testing'}}
+            </button>
+          </div>
         </div>
       </form>
 

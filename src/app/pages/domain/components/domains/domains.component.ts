@@ -5,7 +5,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Domain, Goal } from '../../../../models/domain.model';
+import { Agent } from '../../../../models/agent.model';
 import { DomainService } from '../../../../services/domain.service';
+import { AgentService } from '../../../../services/agent.service';
 import { DataSharingService } from '../../../../services/shared.service';
 
 @Component ({
@@ -18,12 +20,14 @@ export class DomainsComponent implements OnInit, OnDestroy {
   domainSourceClosed: Domain[];
   selectedDomain: Domain;
   activeDomain:Domain;
+  associatedAgents:Agent[];
   private readonly OPEN_IN_READONLY_MODE = 1;
   private readonly OPEN_IN_EDIT_MODE = 2;
   private readonly CLONE_AND_EDIT_MODE = 3;
   private readonly ACTIVE = 'ACTIVE';
   private readonly CLOSED = 'CLOSED';
   private readonly DRAFT = 'DRAFT';
+  private readonly READ = "READ";
   private readonly CLONED = 'CLONED';
   domainPageNo: number;
   domainPageSize : number;
@@ -35,9 +39,11 @@ export class DomainsComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription;
   private domainSubscription: Subscription;
+  private agentSubscription: Subscription;
   
   constructor(
     private domainService: DomainService,
+    private agentService:AgentService,
     private router: Router,
     private route: ActivatedRoute,
     private sharingService: DataSharingService
@@ -46,6 +52,7 @@ export class DomainsComponent implements OnInit, OnDestroy {
     this.domainSourceClosed =[];
     this.selectedDomain = new Domain();
     this.activeDomain = new Domain();
+    this.associatedAgents = [];
   }
   
   ngOnInit() {
@@ -122,12 +129,9 @@ export class DomainsComponent implements OnInit, OnDestroy {
 
   
   onDomainSelect(domain?: Domain, task?: number): void {
-   // this.progressBarFlag = true;
-      
-      if(domain && domain.statusCd!=null){
+      if(domain && domain["statusCd"]){
         if(domain!=null && domain._id.length > 0)
         {
-         // this.progressBarFlag = false;
          let payload = {"_id":domain._id}
          this.subscription = this.domainService.getDomain(payload)
          .subscribe(
@@ -136,26 +140,24 @@ export class DomainsComponent implements OnInit, OnDestroy {
               this.selectedDomain = response;
               if (task) {
                 if (task === this.OPEN_IN_READONLY_MODE) {
-                  this.selectedDomain.statusCd = this.DRAFT;
-                  this.selectedDomain.previousDomainId = this.selectedDomain._id;
+                  this.selectedDomain.statusCd = this.READ;
+                  this.sharingService.setSharedObject(this.selectedDomain);
+                  this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
+    
+                } 
+                else if (task === this.OPEN_IN_EDIT_MODE) {
+                  this.sharingService.setSharedObject(this.selectedDomain);
+                  this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
+                } 
+                else if (task === this.CLONE_AND_EDIT_MODE) {
+                  console.log(this.selectedDomain["statusCd"]);
                   this.selectedDomain._id = null;
+                  if (this.selectedDomain.statusCd && this.selectedDomain.statusCd != this.CLOSED)
+                  {
+                    this.selectedDomain.statusCd = this.DRAFT;
+                  }
                   this.sharingService.setSharedObject(this.selectedDomain);
                   this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
-    
-                } else if (task === this.OPEN_IN_EDIT_MODE) {
-                  console.log("=========================this======================");
-                  console.log(this.selectedDomain)
-                  this.sharingService.setSharedObject(this.selectedDomain);
-                  this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
-                  
-    
-    
-                } else if (task === this.CLONE_AND_EDIT_MODE) {
-                  this.selectedDomain._id = null;
-                  this.selectedDomain.statusCd = this.CLONED;
-                  this.sharingService.setSharedObject(this.selectedDomain);
-                  this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
-                  
                 }
               }
              }
@@ -184,22 +186,19 @@ export class DomainsComponent implements OnInit, OnDestroy {
 
 
   activateDomain(domain?: Domain,modalName?:string){
-    
     let payload = {"name":domain.name,"statusCd":"ACTIVE"};
-    let fields = ["_id","statusCd"];
-    this.subscription = this.domainService.getDomain(payload,fields)
+    this.subscription = this.domainService.getDomain(payload)
     .subscribe(
       response => {
-        console.log("ACTIVE DOMAIN SAME NAME");
-        console.log(response);
-        if(response){
+        console.log(response)
+        if(response["statusCd"] == this.ACTIVE){
           this.activeDomain = response;
           this.activeDomain.statusCd = "CLOSED";
+          this.getAgentWithDomain(response["_id"]);
           this.subscription = this.domainService.saveDomain(this.activeDomain)
           .subscribe(
             response => {
               if(response){
-                
                 domain.statusCd = "ACTIVE";
                 this.saveDomain(domain,modalName);
               }
@@ -211,6 +210,27 @@ export class DomainsComponent implements OnInit, OnDestroy {
         }
       });
     }
+      
+    getAgentWithDomain(domainId?:string){
+      let payload ={ "$and": [{"domainId":domainId},{"companyTestingAgent":{"$exists":false}}]};
+      this.agentSubscription = this.agentService.getDomainAgents(payload).subscribe(receivedAgents=> {
+      if(receivedAgents.length > 0 ){
+        for(let a of receivedAgents){
+          this.associatedAgents.push(a);
+        }
+      }
+    });
+    }
+
+
+    saveAgentWithActiveDomain(agent?:Agent){
+      this.agentSubscription = this.agentService.saveAgent(agent).subscribe(receivedAgent=> {
+        if(receivedAgent) {
+         console.log(receivedAgent);
+        }
+      });
+    }
+    
 
 
     saveDomain(domain?: Domain,modalName?:string){
@@ -220,7 +240,19 @@ export class DomainsComponent implements OnInit, OnDestroy {
             if (modalName && modalName.length > 0) {
               new closeModal(modalName);
           }
+            this.domainPageNo = 0;
+            this.domainPageSize = 5;
+            this.closedDomainPageNo = 0;
             this.selectedDomain = response;
+            if (this.selectedDomain.statusCd == this.ACTIVE && this.associatedAgents.length > 0){
+              for(let agent of this.associatedAgents){
+                agent.domainId = this.selectedDomain._id;
+                this.saveAgentWithActiveDomain(agent);
+              }
+              
+            }
+            this.domainSource = [];
+            this.domainSourceClosed = [];
             this.fetchActiveDomains();
             this.fetchClosedDomains();
              
@@ -234,10 +266,12 @@ export class DomainsComponent implements OnInit, OnDestroy {
 
     deactivateDomain(domain){
       domain.statusCd = "CLOSED"
-    this.subscription = this.domainService.saveDomain(domain)
+      this.subscription = this.domainService.saveDomain(domain)
         .subscribe(
           response => {
             this.selectedDomain = response;
+            this.domainSource = [];
+            this.domainSourceClosed = [];
             this.fetchActiveDomains();
             this.fetchClosedDomains();
           },

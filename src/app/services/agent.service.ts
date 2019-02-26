@@ -32,9 +32,45 @@ export class AgentService {
     crudInput.page = pageNo;
     crudInput.pageSize = pageSize;
     crudInput.fields = fields;
+    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
 
     this.httpClient.post<Map<string, Agent[]>>(
       crudUrl,
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Map<string, Agent[]>>) => {
+        subject.next(response.body['data']);
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+  
+
+  getDomainAgents(payload:any) : Observable<Agent[]> {
+    const subject = new Subject<Agent[]>();
+    const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = new Map<any, any>();
+    crudInput.collection = 'agent';
+    crudInput.operation = "READ_ALL";
+    crudInput.payload = payload;
+    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    this.httpClient.post<Map<string, Agent[]>>(
+      crudUrl, 
       crudInput,
       {
         headers: this.httpHeaders,
@@ -65,7 +101,7 @@ export class AgentService {
     crudInput.collection = 'agent';
     crudInput.operation = "READ";
     crudInput.payload = payload;
-    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    // crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     this.httpClient.post<Map<string, Agent>>(
       crudUrl, 
       crudInput,
