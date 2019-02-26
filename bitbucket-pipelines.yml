@@ -27,8 +27,8 @@ pipelines:
           image: atlassian/pipelines-awscli
           script:
             - echo 'Deleting old build from s3'
-            - aws s3 rm s3://$AWS_BUCKET_TARGET --recursive #Deleting old build from s3
+            - aws s3 rm s3://$AWS_BUCKET_TARGET --recursive
             - echo 'Deleted old build from s3'
             - echo 'Uploading new build on s3'
-            - aws s3 cp ./dist/flowUI s3://$AWS_BUCKET_TARGET/ --recursive #Uploading new build on s3
+            - aws s3 cp ./dist/ s3://$AWS_BUCKET_TARGET/ --recursive
             - echo 'build upload successful!'
