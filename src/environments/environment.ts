@@ -22,10 +22,16 @@ export const environment = {
   processauditurl:"http://localhost:5000/api/universalsearch/search/flow",
   
   // Interfaces
-  interfaceService: 'http://108.168.190.82:8080/flow/interfaces',
-  updateClassifierTraining : 'http://108.168.190.82:8080/flow/interfaces/auto_decorate_training',
-  updateIntentTraining: 'http://108.168.190.82:8080/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'http://108.168.190.82:8080/flow/interfaces/entity_classification_training',
+  // interfaceService: 'http://108.168.190.82:8080/flow/interfaces',
+  // updateClassifierTraining : 'http://108.168.190.82:8080/flow/interfaces/auto_decorate_training',
+  // updateIntentTraining: 'http://108.168.190.82:8080/flow/interfaces/intent_classification_training',
+  // updateEntityTraining: 'http://108.168.190.82:8080/flow/interfaces/entity_classification_training',
+
+
+  interfaceService: '',
+  updateClassifierTraining : 'http://localhost:5101/api/auto_decorate_training',
+  updateIntentTraining: 'http://localhost:5100/api/intent_classification_training',
+  updateEntityTraining: 'http://localhost:5100/api/entity_classification_training',
 
   // Flow
   server: 'http://108.168.190.82:8080/flow/console/',
@@ -157,7 +163,7 @@ export const environment = {
   dashboardinterface: 'http://108.168.190.82:8080/flow/interfaces/dashboard',
 
   //Following APIs path - To be used in conjunction with interfaceService property
-  crudFunction: '/crud',
+  crudFunction: 'http://localhost:5200/crud',
   sendAgentMessage: '/sendMessage',
 
   // activity monitor services

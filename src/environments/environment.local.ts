@@ -21,11 +21,16 @@ export const environment = {
 
   fetchaccountbyid:'http://localhost:8080/flow/account/getAccount/',
 
-  // Interfaces
-  interfaceService: 'http://localhost:8080/flow/interfaces/',
-  updateClassifierTraining : 'http://localhost:8080/flow/interfaces/auto_decorate_training',
-  updateIntentTraining: 'http://localhost:8080/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'http://localhost:8080/flow/interfaces/entity_classification_training',
+  // // Interfaces
+  // interfaceService: 'http://localhost:8080/flow/interfaces/',
+  // updateClassifierTraining : 'http://localhost:8080/flow/interfaces/auto_decorate_training',
+  // updateIntentTraining: 'http://localhost:8080/flow/interfaces/intent_classification_training',
+  // updateEntityTraining: 'http://localhost:8080/flow/interfaces/entity_classification_training',
+
+  interfaceService: '',
+  updateClassifierTraining : 'http://localhost:5101/auto_decorate_training',
+  updateIntentTraining: 'http://localhost:5100/api/intent_classification_training',
+  updateEntityTraining: 'http://localhost:5100/api/entity_classification_training',
   
 
   // interfaceService: '',
@@ -171,7 +176,7 @@ export const environment = {
   dashboardinterface: 'http://localhost:8080/flow/interfaces/dashboard',
 
   //Following APIs path - To be used in conjunction with interfaceService property
-  crudFunction: '/crud',
+  crudFunction: 'http://localhost:5200/api/crud',
   sendAgentMessage: '/sendMessage',
 
   // activity monitor services

@@ -83,7 +83,7 @@ export class DomainService {
     crudInput.collection = 'domain';
     
     crudInput.operation = "READ_ALL";
-    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"};
+    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"};
     crudInput.page = pageNo;
     crudInput.pageSize = pageSize;
     crudInput.fields = fields;
@@ -123,7 +123,7 @@ export class DomainService {
     crudInput.pageSize = pageSize;
     crudInput.fields = fields;
     crudInput.operation = "READ_ALL";
-    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     
     this.httpClient.post<Map<string, Domain[]>>(
       crudUrl, 
@@ -158,7 +158,7 @@ export class DomainService {
     crudInput.collection = 'domain';
     crudInput.operation = "READ";
     crudInput.fields = fields;
-    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     
     this.httpClient.post<Map<string, Domain>>(
       crudUrl, 
@@ -225,7 +225,7 @@ export class DomainService {
     const crudInput = new CRUDOperationInput();
     crudInput.payload = {"_id":domainId};
     crudInput.collection = 'domain';
-    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     crudInput.operation = "DELETE";
     
     const crudUrl = `${environment.interfaceService + environment.crudFunction}`;
@@ -261,7 +261,7 @@ export class DomainService {
     const crudInput = new CRUDOperationInput();
     crudInput.payload = domain;
     crudInput.collection = 'domain';
-    //crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    crudInput["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     if (domain._id !== null) {
       crudInput.operation = "UPDATE";
     } else {
@@ -363,7 +363,7 @@ export class DomainService {
   updateDomainClassifierTraining(domain: Domain): Observable<any> {
     const subject = new Subject<any>();
     let requestBody = new Map<string, string>();
-    //requestBody["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    requestBody["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
     requestBody["domainId"] = domain._id;
     requestBody["version"] = domain.version 
     const url = `${environment.updateClassifierTraining}`;

@@ -16,11 +16,16 @@ export const environment = {
 
     
 
-    // Interfaces
-    interfaceService: 'https://flow.automatapi.com/flow/interfaces',
-    updateClassifierTraining : 'https://flow.automatapi.com/flow/interfaces/auto_decorate_training',
-    updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',
-    updateEntityTraining: 'https://flow.automatapi.com/flow/interfaces/entity_classification_training',
+    // // Interfaces
+    // interfaceService: 'https://flow.automatapi.com/flow/interfaces',
+    // updateClassifierTraining : 'https://flow.automatapi.com/flow/interfaces/auto_decorate_training',
+    // updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',
+    // updateEntityTraining: 'https://flow.automatapi.com/flow/interfaces/entity_classification_training',
+    //
+    interfaceService: '',
+    updateClassifierTraining : 'http://localhost:5101/api/auto_decorate_training',
+    updateIntentTraining: 'http://localhost:5100/api/intent_classification_training',
+    updateEntityTraining: 'http://localhost:5100/api/entity_classification_training',
   
     // Flow
     server: 'https://flow.automatapi.com/flow/console/',
@@ -153,7 +158,7 @@ export const environment = {
    dashboardinterface: 'https://flow.automatapi.com/flow/interfaces/dashboard',
 
    //Following APIs path - To be used in conjunction with interfaceService property
-   crudFunction: '/crud',
+   crudFunction: 'http://localhost:5200/crud',
    sendAgentMessage: '/sendMessage',
 
    // activity monitor services
