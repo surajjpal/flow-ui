@@ -35,6 +35,7 @@ pipelines:
     domain2.0:
       - step:
           image: node:8.10.0
+          trigger: manual
           caches:
             - node
           script: #Modify the commands below to build your repository.
@@ -50,7 +51,6 @@ pipelines:
       - step:
           name: S3 staging-Deploying FlowUI
           deployment: staging
-          trigger: manual
           image: atlassian/pipelines-awscli
           script:
             - echo 'Deleting old build from s3'
