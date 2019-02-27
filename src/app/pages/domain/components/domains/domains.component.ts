@@ -161,11 +161,12 @@ export class DomainsComponent implements OnInit, OnDestroy {
                     this.sharingService.setSharedObject(this.selectedDomain);
                     this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
                   }
+                  else if(task === this.PUBLISH_DOMAIN){
+                    console.log("Publishing Domain");
+                    new openModal("finalWarningModal");
+                  }
                 }
-                else if(task === this.PUBLISH_DOMAIN){
-                  console.log("Publishing Domain");
-                  new openModal("finalWarningModal");
-                }
+                
               }
               else{
                 this.sharingService.setSharedObject(this.selectedDomain);
