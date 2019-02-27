@@ -95,6 +95,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   hideButtons:boolean;
   domainEditMode:boolean;
   firstUpdate:boolean;
+  selectedDomainVersion:number;
 
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
@@ -126,6 +127,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.increaseVersion = true;
     this.deleteTestingDomain = false;   
     this.currentDomainName = "";
+    this.selectedDomainVersion =0;
     this.domainCloneMode = false;
     this.hideButtons = false;
     this.domainActivateMode = false;
@@ -207,6 +209,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.domainCreateMode = false;
       this.currentDomainName = this.selectedDomain.name
       if(domain["statusCd"]){
+        this.selectedDomainVersion = domain.version;
         this.showTestButton = true;
       }
       else{
@@ -244,7 +247,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     if (this.subscriptionValidationKeys && !this.subscriptionValidationKeys.closed) {
       this.subscriptionValidationKeys.unsubscribe();
     }
-      this.deleteDomainCreatedForTesting();
+      
   }
 
   intentUploaderOptions: NgUploaderOptions;
@@ -1027,6 +1030,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
             this.selectedDomain.statusCd  = this.ACTIVE;
             this.selectedDomain.version = 1
         }
+
+        if(!this.updateForTest && !this.domainCreateMode){
+          this.deleteTestingDomain = false;
+        }
     
         if(this.increaseVersion){
             if(this.selectedDomain.statusCd == this.DRAFT){
@@ -1040,10 +1047,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route })
               }
               else{
-                this.increaseVersion = false;
-                console.log("=====================================")
-                console.log(response)
-                this.updateClassifierTraining(response);
+                  this.increaseVersion = false;
+                  this.updateClassifierTraining(response);
               }
             },
             error => {
@@ -1430,6 +1435,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.showAutoCon = false;
       this.showTooltip = false;
       this.updateForTest =false;
+      this.deleteDomainCreatedForTesting();
     }
 
 
