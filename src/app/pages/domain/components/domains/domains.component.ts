@@ -129,7 +129,6 @@ export class DomainsComponent implements OnInit, OnDestroy {
 
   
   onDomainSelect(domain?: Domain, task?: number): void {
-      if(domain && domain["statusCd"]){
         if(domain!=null && domain._id.length > 0)
         {
          let payload = {"_id":domain._id}
@@ -174,17 +173,6 @@ export class DomainsComponent implements OnInit, OnDestroy {
         else{
           this.selectedDomain = null;
         }
-      }
-      else{
-        if (domain) {
-          this.selectedDomain = domain;
-        } else {
-          this.selectedDomain = null;
-        }
-        this.sharingService.setSharedObject(this.selectedDomain);
-        this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
-      }
-    
   }
 
   activateDomaiWarning(domain?:Domain){
