@@ -94,6 +94,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   companyAgent:Agent;
   hideButtons:boolean;
   domainEditMode:boolean;
+  firstUpdate:boolean;
 
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
@@ -131,6 +132,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.domainEditMode = false;
     this.isAddFileUploadResponse = false;
     this.domainCreateMode = true;
+    this.firstUpdate = false;
     this.modalHeader = '';
     this.createMode = false;
     this.showTags = false;
@@ -200,10 +202,16 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       console.log("domain in shared object");
       console.log(domain);
       
-      this.showTestButton = true;
+      
       this.selectedDomain = domain;
       this.domainCreateMode = false;
       this.currentDomainName = this.selectedDomain.name
+      if(domain["statusCd"]){
+        this.showTestButton = true;
+      }
+      else{
+        this.showTestButton = false;
+      }
 
       if(domain.statusCd == this.READ){
         this.hideButtons = true;
@@ -1015,11 +1023,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         }
 
         if (!this.selectedDomain["statusCd"]){
-          this.updateDomainStatusCd(this.selectedDomain);
+            this.firstUpdate = true;
+            this.selectedDomain.statusCd  = this.ACTIVE;
+            this.selectedDomain.version = 1
         }
     
-        if(this.increaseVersion && !this.updateForTest){
-            if(this.selectedDomain.statusCd == "DRAFT"){
+        if(this.increaseVersion){
+            if(this.selectedDomain.statusCd == this.DRAFT){
               this.selectedDomain.version = this.selectedDomain.version + 1
             }
         }
@@ -1057,6 +1067,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
             else{
               this.domainBody = `Domain updated successfully!!`;
               this.domainSucess = true;
+              if(this.firstUpdate){
+                new closeModal("domainUpdateModal");
+                this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route })
+              }
             }
             
           } else {
