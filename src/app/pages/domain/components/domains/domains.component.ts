@@ -137,6 +137,8 @@ export class DomainsComponent implements OnInit, OnDestroy {
            response => {
              if(response){
               this.selectedDomain = response;
+              console.log("-----------------------------");
+              console.log(this.selectedDomain);
               if(domain && domain["statusCd"])
               {
                 if (task) {
@@ -160,6 +162,10 @@ export class DomainsComponent implements OnInit, OnDestroy {
                     this.sharingService.setSharedObject(this.selectedDomain);
                     this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
                   }
+                }
+                else{
+                  console.log("=============no task===================");
+                  console.log(this.selectedDomain);
                 }
               }
               else{
