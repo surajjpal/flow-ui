@@ -138,28 +138,36 @@ export class DomainsComponent implements OnInit, OnDestroy {
            response => {
              if(response){
               this.selectedDomain = response;
-              if (task) {
-                if (task === this.OPEN_IN_READONLY_MODE) {
-                  this.selectedDomain.statusCd = this.READ;
-                  this.sharingService.setSharedObject(this.selectedDomain);
-                  this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
-    
-                } 
-                else if (task === this.OPEN_IN_EDIT_MODE) {
-                  this.sharingService.setSharedObject(this.selectedDomain);
-                  this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
-                } 
-                else if (task === this.CLONE_AND_EDIT_MODE) {
-                  console.log(this.selectedDomain["statusCd"]);
-                  this.selectedDomain._id = null;
-                  if (this.selectedDomain.statusCd && this.selectedDomain.statusCd != this.CLOSED)
-                  {
-                    this.selectedDomain.statusCd = this.DRAFT;
+              if(domain && domain["statusCd"])
+              {
+                if (task) {
+                  if (task === this.OPEN_IN_READONLY_MODE) {
+                    this.selectedDomain.statusCd = this.READ;
+                    this.sharingService.setSharedObject(this.selectedDomain);
+                    this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
+      
+                  } 
+                  else if (task === this.OPEN_IN_EDIT_MODE) {
+                    this.sharingService.setSharedObject(this.selectedDomain);
+                    this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
+                  } 
+                  else if (task === this.CLONE_AND_EDIT_MODE) {
+                    console.log(this.selectedDomain["statusCd"]);
+                    this.selectedDomain._id = null;
+                    if (this.selectedDomain.statusCd && this.selectedDomain.statusCd != this.CLOSED)
+                    {
+                      this.selectedDomain.statusCd = this.DRAFT;
+                    }
+                    this.sharingService.setSharedObject(this.selectedDomain);
+                    this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
                   }
-                  this.sharingService.setSharedObject(this.selectedDomain);
-                  this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
                 }
               }
+              else{
+                this.sharingService.setSharedObject(this.selectedDomain);
+                this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
+              }
+           
              }
            });
         }
