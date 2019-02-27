@@ -1,5 +1,5 @@
 declare var closeModal: any;
-declare var openModal : any;
+declare var showModal : any;
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
@@ -120,7 +120,6 @@ export class DomainsComponent implements OnInit, OnDestroy {
             }
             
             this.domainSourceClosed = this.domainSourceClosed.concat(domains);
-            console.log(this.domainSourceClosed);
           }
         }
       );
@@ -152,7 +151,6 @@ export class DomainsComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
                   } 
                   else if (task === this.CLONE_AND_EDIT_MODE) {
-                    console.log(this.selectedDomain["statusCd"]);
                     this.selectedDomain._id = null;
                     if (this.selectedDomain.statusCd && this.selectedDomain.statusCd != this.CLOSED)
                     {
@@ -163,7 +161,7 @@ export class DomainsComponent implements OnInit, OnDestroy {
                   }
                   else if(task === this.PUBLISH_DOMAIN){
                     console.log("Publishing Domain");
-                    new openModal("finalWarningModal");
+                    new showModal("finalWarningModal");
                   }
                 }
                 
