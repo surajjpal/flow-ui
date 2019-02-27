@@ -196,6 +196,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
     const domain: Domain = this.sharingService.getSharedObject();
     if (domain) {
+
+      console.log("domain in shared object");
+      console.log(domain);
       
       this.showTestButton = true;
       this.selectedDomain = domain;
@@ -1028,6 +1031,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
               }
               else{
                 this.increaseVersion = false;
+                console.log("=====================================")
+                console.log(response)
                 this.updateClassifierTraining(response);
               }
             },

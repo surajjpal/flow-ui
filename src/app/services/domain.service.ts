@@ -364,6 +364,8 @@ export class DomainService {
     const subject = new Subject<any>();
     let requestBody = new Map<string, string>();
     //requestBody["companyContext"] = {"companyId":"6efe654013b041e79c5935e2228f34b2"}
+    console.log("0000000000000000000000000000000");
+    console.log(domain._id)
     requestBody["domainId"] = domain._id;
     requestBody["version"] = domain.version 
     const url = `${environment.updateClassifierTraining}`;
