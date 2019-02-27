@@ -35,7 +35,6 @@ pipelines:
     domain2.0:
       - step:
           image: node:8.10.0
-          trigger: manual
           caches:
             - node
           script: #Modify the commands below to build your repository.
