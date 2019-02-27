@@ -24,6 +24,7 @@ export class DomainsComponent implements OnInit, OnDestroy {
   private readonly OPEN_IN_READONLY_MODE = 1;
   private readonly OPEN_IN_EDIT_MODE = 2;
   private readonly CLONE_AND_EDIT_MODE = 3;
+  private readonly PUBLISH_DOMAIN = 4;
   private readonly ACTIVE = 'ACTIVE';
   private readonly CLOSED = 'CLOSED';
   private readonly DRAFT = 'DRAFT';
@@ -137,8 +138,6 @@ export class DomainsComponent implements OnInit, OnDestroy {
            response => {
              if(response){
               this.selectedDomain = response;
-              console.log("-----------------------------");
-              console.log(this.selectedDomain);
               if(domain && domain["statusCd"])
               {
                 if (task) {
@@ -163,9 +162,9 @@ export class DomainsComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
                   }
                 }
-                else{
-                  console.log("=============no task===================");
-                  console.log(this.selectedDomain);
+                else if(task === this.PUBLISH_DOMAIN){
+                  console.log("Publishing Domain");
+                  new openModal("finalWarningModal");
                 }
               }
               else{
@@ -182,7 +181,12 @@ export class DomainsComponent implements OnInit, OnDestroy {
   }
 
   activateDomaiWarning(domain?:Domain){
-    this.selectedDomain = domain;
+    let payload = {"_id":domain._id};
+    this.subscription = this.domainService.getDomain(payload)
+    .subscribe(
+      response => {
+        this.selectedDomain = response;
+      });
   }
 
 
@@ -192,7 +196,6 @@ export class DomainsComponent implements OnInit, OnDestroy {
     this.subscription = this.domainService.getDomain(payload)
     .subscribe(
       response => {
-        console.log(response)
         if(response["statusCd"] == this.ACTIVE){
           this.activeDomain = response;
           this.activeDomain.statusCd = "CLOSED";
