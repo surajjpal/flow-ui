@@ -151,9 +151,9 @@ export class DomainsComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
                   } 
                   else if (task === this.CLONE_AND_EDIT_MODE) {
+                    this.selectedDomain._id = null;
                     if (this.selectedDomain.statusCd && this.selectedDomain.statusCd != this.CLOSED)
                     {
-                      this.selectedDomain._id = null;
                       this.selectedDomain.statusCd = this.DRAFT;
                     }
                     this.sharingService.setSharedObject(this.selectedDomain);
@@ -276,21 +276,17 @@ export class DomainsComponent implements OnInit, OnDestroy {
     }
 
 
-    deactivateDomain(domain){
-      domain.statusCd = "CLOSED"
-      this.subscription = this.domainService.saveDomain(domain)
-        .subscribe(
-          response => {
-            this.selectedDomain = response;
-            this.domainSource = [];
-            this.domainSourceClosed = [];
-            this.fetchActiveDomains();
-            this.fetchClosedDomains();
-          },
-          error => {
-            
-          }
-        )
+    deactivateDomain(domain?:Domain){
+      let payload = {"_id":domain._id};
+      this.subscription = this.domainService.getDomain(payload)
+      .subscribe(
+      response => {
+        if(response){
+          domain = response;
+          domain.statusCd = this.CLOSED;
+          this.saveDomain(domain);
+        }
+      });
     }
 
   domainGoalsToString(goals: Goal[]) {
