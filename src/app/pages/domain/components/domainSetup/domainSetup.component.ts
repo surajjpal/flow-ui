@@ -202,11 +202,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
     const domain: Domain = this.sharingService.getSharedObject();
     if (domain) {
-
-      console.log("domain in shared object");
-      console.log(domain);
-      
-      
       this.selectedDomain = domain;
       this.domainCreateMode = false;
       this.currentDomainName = this.selectedDomain.name
@@ -803,7 +798,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           this.responseFilterQuery = this.responseFilterQuery.slice(1);
         }, 10);
     } else {
-        console.log(this.featureList);
         let features = [];
         for (const feature of this.featureList){
           let map = new Map();
@@ -1222,7 +1216,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
   onFaqExcelUploadComplete(event: UploadedFile) {
     this.slimLoadingBarService.complete();
-    console.log(event);
     if (event.response && event.response.length > 0) {
       const responseObject = JSON.parse(event.response);
     }
@@ -1452,7 +1445,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.subscription = this.domainService.getDomain(payload)
       .subscribe(
         response => {
-          if(response){
+          if(response["statusCd"] == this.ACTIVE){
             this.activeDomain = response;
             this.activeDomain.statusCd = "CLOSED";
             this.getAgentWithDomain(response["_id"]);

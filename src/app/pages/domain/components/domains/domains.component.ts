@@ -207,7 +207,6 @@ export class DomainsComponent implements OnInit, OnDestroy {
           this.subscription = this.domainService.saveDomain(this.activeDomain)
           .subscribe(
             response => {
-              console.log(response)
               if(response){
                 domain.statusCd = "ACTIVE";
                 this.saveDomain(domain,modalName);
