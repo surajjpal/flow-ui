@@ -173,6 +173,8 @@ export class DomainsComponent implements OnInit, OnDestroy {
         }
         else{
           this.selectedDomain = null;
+          this.sharingService.setSharedObject(this.selectedDomain);
+          this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route })
         }
   }
 
