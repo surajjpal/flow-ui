@@ -1445,8 +1445,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     activateDomain(modalName?:string){
     
       let payload = {"name":this.selectedDomain.name,"statusCd":"ACTIVE"};
-      let fields = ["_id","statusCd"];
-      this.subscription = this.domainService.getDomain(payload,fields)
+      this.subscription = this.domainService.getDomain(payload)
       .subscribe(
         response => {
           if(response){
