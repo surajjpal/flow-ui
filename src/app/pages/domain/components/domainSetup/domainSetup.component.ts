@@ -247,6 +247,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     if (this.subscriptionValidationKeys && !this.subscriptionValidationKeys.closed) {
       this.subscriptionValidationKeys.unsubscribe();
     }
+    this.deleteDomainCreatedForTesting();
       
   }
 
@@ -1031,7 +1032,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
             this.selectedDomain.version = 1
         }
 
-        if(!this.updateForTest && !this.domainCreateMode){
+        if(!this.updateForTest && this.deleteTestingDomain){
+          this.increaseVersion = true;
           this.deleteTestingDomain = false;
         }
     
@@ -1434,7 +1436,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     exitTesting(){
       this.showAutoCon = false;
       this.showTooltip = false;
-      this.updateForTest =false;
+      this.updateForTest = false;
       this.deleteDomainCreatedForTesting();
     }
 

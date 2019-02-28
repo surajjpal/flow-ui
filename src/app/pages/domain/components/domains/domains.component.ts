@@ -159,10 +159,6 @@ export class DomainsComponent implements OnInit, OnDestroy {
                     this.sharingService.setSharedObject(this.selectedDomain);
                     this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
                   }
-                  else if(task === this.PUBLISH_DOMAIN){
-                    console.log("Publishing Domain");
-                    new showModal("finalWarningModal");
-                  }
                 }
                 
               }
@@ -179,14 +175,22 @@ export class DomainsComponent implements OnInit, OnDestroy {
         }
   }
 
-  activateDomaiWarning(domain?:Domain){
+  activateDomaiWarning(domain?:Domain,task?:number){
     let payload = {"_id":domain._id};
     this.subscription = this.domainService.getDomain(payload)
     .subscribe(
       response => {
         this.selectedDomain = response;
+        if(task === this.PUBLISH_DOMAIN){
+          new showModal("finalWarningModal");
+        }
+        else{
+          new showModal("activateModal");
+        }
       });
   }
+
+
 
 
 
