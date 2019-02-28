@@ -151,9 +151,9 @@ export class DomainsComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
                   } 
                   else if (task === this.CLONE_AND_EDIT_MODE) {
-                    this.selectedDomain._id = null;
                     if (this.selectedDomain.statusCd && this.selectedDomain.statusCd != this.CLOSED)
                     {
+                      this.selectedDomain._id = null;
                       this.selectedDomain.statusCd = this.DRAFT;
                     }
                     this.sharingService.setSharedObject(this.selectedDomain);
@@ -206,6 +206,7 @@ export class DomainsComponent implements OnInit, OnDestroy {
           this.subscription = this.domainService.saveDomain(this.activeDomain)
           .subscribe(
             response => {
+              console.log(response)
               if(response){
                 domain.statusCd = "ACTIVE";
                 this.saveDomain(domain,modalName);
@@ -213,8 +214,11 @@ export class DomainsComponent implements OnInit, OnDestroy {
             });
         }
         else{
-          domain.statusCd = "ACTIVE";
-          this.saveDomain(domain,modalName);
+          if(domain.statusCd == this.CLONED){
+            domain.statusCd = "ACTIVE";
+            this.saveDomain(domain,modalName);
+          }
+          
         }
       });
     }

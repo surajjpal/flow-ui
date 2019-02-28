@@ -96,6 +96,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   domainEditMode:boolean;
   firstUpdate:boolean;
   selectedDomainVersion:number;
+  associatedAgents:Agent[];
 
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
@@ -138,6 +139,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.modalHeader = '';
     this.createMode = false;
     this.showTags = false;
+    this.associatedAgents = [];
     this.languageSource = ['ENG', 'HIN', 'MAR', 'ID', 'ML', 'ARA'];
     this.operandSource = ['AND', 'OR'];
     this.modelKeysSource = [];
@@ -1450,6 +1452,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           if(response){
             this.activeDomain = response;
             this.activeDomain.statusCd = "CLOSED";
+            this.getAgentWithDomain(response["_id"]);
             this.subscription = this.domainService.saveDomain(this.activeDomain)
             .subscribe(
               response => {
@@ -1466,12 +1469,39 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           }
         });
       }
+
+      getAgentWithDomain(domainId?:string){
+        let payload ={ "$and": [{"domainId":domainId},{"companyTestingAgent":{"$exists":false}}]};
+        this.agentSubscription = this.agentService.getDomainAgents(payload).subscribe(receivedAgents=> {
+        if(receivedAgents.length > 0 ){
+          for(let a of receivedAgents){
+            this.associatedAgents.push(a);
+          }
+        }
+      });
+      }
+  
+  
+      saveAgentWithActiveDomain(agent?:Agent){
+        this.agentSubscription = this.agentService.saveAgent(agent).subscribe(receivedAgent=> {
+          if(receivedAgent) {
+           console.log(receivedAgent);
+          }
+        });
+      }
   
   
       saveAndActivateDomain(domain?: Domain,modalName?:string){
         this.subscription = this.domainService.saveDomain(domain)
           .subscribe(
             response => {
+              if (domain.statusCd == this.ACTIVE && this.associatedAgents.length > 0){
+                for(let agent of this.associatedAgents){
+                  agent.domainId = this.selectedDomain._id;
+                  this.saveAgentWithActiveDomain(agent);
+                }
+                
+              }
               new closeModal(modalName);
               this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route })
             },
