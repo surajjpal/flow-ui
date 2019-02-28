@@ -1002,9 +1002,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       new showAlertModal('While cloning domain please make sure that the domain name is different!!!');
     }
     else{
+      if(this.selectedDomain.statusCd == this.CLOSED){
+        this.selectedDomain._id = null;
+      }
       this.domainCloneMode = true;
       this.selectedDomain.statusCd = this.CLONED;
       this.selectedDomain.version = 1;
+      
       this.createDomain();
     }
   }
