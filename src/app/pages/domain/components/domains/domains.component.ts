@@ -129,7 +129,7 @@ export class DomainsComponent implements OnInit, OnDestroy {
 
   
   onDomainSelect(domain?: Domain, task?: number): void {
-        if(domain!=null && domain._id.length > 0)
+        if(domain)
         {
          let payload = {"_id":domain._id}
          this.subscription = this.domainService.getDomain(payload)

@@ -1,4 +1,5 @@
 declare var closeModal: any;
+declare var showModal: any;
 declare var showAlertModal: any;
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -1439,9 +1440,19 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     }
 
 
-    activateDomain(modalName?:string){
-    
-      let payload = {"name":this.selectedDomain.name,"statusCd":"ACTIVE"};
+    activateDomaiWarning(){
+      let payload = {"_id":this.selectedDomain._id};
+      this.subscription = this.domainService.getDomain(payload)
+      .subscribe(
+        response => {
+          this.selectedDomain = response;
+            new showModal("activateModal");
+        });
+    }
+
+
+    activateDomain(domain?:Domain,modalName?:string){
+      let payload = {"name":domain.name,"statusCd":"ACTIVE"};
       this.subscription = this.domainService.getDomain(payload)
       .subscribe(
         response => {
@@ -1454,14 +1465,14 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
               response => {
                 if(response){
                   
-                  this.selectedDomain.statusCd = "ACTIVE";
-                  this.saveAndActivateDomain(this.selectedDomain,modalName);
+                  domain.statusCd = "ACTIVE";
+                  this.saveAndActivateDomain(domain,modalName);
                 }
               });
           }
           else{
-            this.selectedDomain.statusCd = "ACTIVE";
-            this.saveAndActivateDomain(this.selectedDomain,modalName);
+            domain.statusCd = "ACTIVE";
+            this.saveAndActivateDomain(domain,modalName);
           }
         });
       }
@@ -1491,6 +1502,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.subscription = this.domainService.saveDomain(domain)
           .subscribe(
             response => {
+              this.selectedDomain = response;
               if (domain.statusCd == this.ACTIVE && this.associatedAgents.length > 0){
                 for(let agent of this.associatedAgents){
                   agent.domainId = this.selectedDomain._id;
