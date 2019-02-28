@@ -1033,7 +1033,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         }
 
         if(!this.updateForTest && this.deleteTestingDomain){
-          this.increaseVersion = true;
           this.deleteTestingDomain = false;
         }
     
