@@ -2288,3 +2288,107 @@ addTaskIconOverlays = function (graph) {
     }
   }
 };
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////CONSOLE CHAT///////////////////////////////////////////////////////////////////
+
+var animating = false;
+var autoBotClosed = true;
+var iframeDivId = "autoBot";
+
+function toggleChat() {
+  if (animating) {
+    return;
+  }
+
+  animating = true;
+
+  raiseChildEvent("Chat Bot Open: " + autoBotClosed);
+
+  var chatContainer = document.getElementById("automataPi");
+  var openChatButton = document.getElementById("autoButton");
+  var pos = 0;
+  var currentBottom = 0;
+  //var opacity = 0;
+  var id = setInterval(frame, 1);
+  var total_height = 640;
+  var increaseBy = 10;
+  
+  chatContainer.style.WebkitAnimationDuration = "1s";
+  chatContainer.style.animationDuration = "1s";
+  
+  if (autoBotClosed) {
+    openChatButton.style.zIndex = 0;
+    chatContainer.style.zIndex = 9999;
+  }
+  
+  function frame() {
+    if (pos >= total_height) {
+      clearInterval(id);
+      
+      if (!autoBotClosed) {
+        openChatButton.style.zIndex = 9999;
+        chatContainer.style.zIndex = 0;
+      }
+      
+      autoBotClosed = !autoBotClosed;
+      animating = false;
+    } else {
+      pos += increaseBy;
+      if (pos > total_height) {
+        pos = total_height;
+      }
+      
+      if (chatContainer.style.bottom) {
+        currentBottom = parseInt((chatContainer.style.bottom).replace("px", ""), 10);
+      } else {
+        currentBottom = -total_height;
+        autoBotClosed = true;
+      }
+      
+      if (autoBotClosed) {
+        currentBottom += increaseBy;
+        //opacity = pos / total_height;
+      } else {
+        currentBottom -= increaseBy;
+        //opacity = 1 - (pos / total_height);
+      }
+      
+      chatContainer.style.bottom = currentBottom + 'px';
+      
+      //chatContainer.style.opacity = opacity;
+      //openChatButton.style.opacity = 1 - opacity;
+    }
+  }
+}
+
+
+raiseChildEvent = function(eventCd) {
+  console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
+  var frame = document.getElementById(iframeDivId);
+  frame.contentWindow.postMessage(
+    {
+      event_id: 'API_CHAT_BOT_PARENT',
+      data: {
+        action: eventCd
+      }
+    }, 
+    "*" //or "www.parentpage.com"
+  );
+}
+
+window.addEventListener('message', function(event) {
+  console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[000000000[")
+
+  if(event.data.event_id === 'API_CHAT_BOT'){
+    var chatEvent = event.data.data;
+    if (chatEvent && chatEvent.action) {
+      if (chatEvent.action == 'TOGGLE_CHAT') {
+        toggleChat();
+      }
+  
+    }
+  }
+});
+

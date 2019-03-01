@@ -217,7 +217,8 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
   }
 
   fetchLookups() {
-    this.subscriptionDomain = this.domainService.domainLookup()
+    let payload = { "$or": [ {"statusCd":"ACTIVE"}, { "statusCd": { "$exists": false } } ] }
+    this.subscriptionDomain = this.domainService.domainLookup(payload)
       .subscribe(
         domainList => {
           if (domainList) {
