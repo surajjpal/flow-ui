@@ -67,6 +67,7 @@
                 <input type="text" class="form-control" required placeholder="Agent Placeholder Text (Optional)"
                   [(ngModel)]="selectedAgent.uiComponent.placeHolderText" name="placeHolderText" />
               </div>
+             
               <div class="form-group">
                 <label>Episode Idle Timeout (in Minutes)</label>
                 <input type="number" class="form-control" required placeholder="Episode Idle Timeout (in Minutes)"
@@ -90,7 +91,11 @@
               </div>
               <div class="checkbox">
                 <ba-checkbox [(ngModel)]="selectedAgent.uiComponent.cronEnabled" [label]="'Cron Enabled'"
-                  [ngModelOptions]="{standalone: true}"></ba-checkbox>
+                  [ngModelOptions]="{standalone: true}" (change)="onCronChange($event.target.checked)"></ba-checkbox>
+              </div>
+              <div class="form-group" *ngIf='showCronDate'>
+                <label for="selectdaterange">Select Cron start date</label>
+                <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="myDate" (dateChanged)="onDateChanged($event)" required></my-date-picker>
               </div>
               <div class="checkbox">
                 <ba-checkbox [(ngModel)]="selectedAgent.disabled" [label]="'Disable Agent'" [ngModelOptions]="{standalone: true}"></ba-checkbox>

@@ -173,9 +173,10 @@ export const environment = {
 
 
   //Vocabulary
-  vocabulary :'http://localhost:5000/api/vocabulary',
+  vocabulary :'http://108.168.190.82:8080/flow/interfaces/vocabulary',
 
   // USP
   uspsearch: '/api/usp/relevancesearch',
-  uspselftrain: '/api/usp/selftrain',
+  uspselftrain: '/api/usp/selftrain'
+  
 };

@@ -19,9 +19,6 @@ export class USPService {
     search(uspSearchRequest: USPSearchRequest) {
         const subject = new Subject<USPSearchResult>();
         const url = `${environment.interfaceService + environment.uspsearch}`;
-        //const url = "http://localhost:5010" + `${environment.uspsearch}`
-        //uspSearchRequest.companyContext = { "companyId" : "e95764c923e74e308d0019516b17cabd" }
-        //uspSearchRequest.dataIngestorName = "automatapi";
         this.httpClient.post<USPSearchResult>(
             url,
             uspSearchRequest,

@@ -67,7 +67,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   sourceConConfigList:ConnectorConfig[]=[];
   sourceManualActionType: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT'];
   sourceEvents: EventModel[] = [];
-  sourceDataTypes: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT', 'ARRAY', 'ANY'];
+  sourceDataTypes: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT', 'ARRAY', 'TEXT', 'ANY'];
   sourceTimerUnitList: string[] = [];
   graphtypList = [ null,"PIE_CHART", "BAR_GRAPH"];
   
