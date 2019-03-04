@@ -32,6 +32,17 @@ pipelines:
             - echo 'Uploading new build on s3'
             - aws s3 cp ./dist/ s3://$AWS_BUCKET_TARGET/ --recursive
             - echo 'build upload successful!'
+      - step:
+          name: S3 production-Deploying FlowUI
+          deployment: production
+          image: atlassian/pipelines-awscli
+          script:
+            - echo 'Deleting old build from s3'
+            - aws s3 rm s3://$AWS_BUCKET_TARGET --recursive
+            - echo 'Deleted old build from s3'
+            - echo 'Uploading new build on s3'
+            - aws s3 cp ./dist/ s3://$AWS_BUCKET_TARGET/ --recursive
+            - echo 'build upload successful!'              
     domain2.0:
       - step:
           image: node:8.10.0
@@ -58,15 +69,5 @@ pipelines:
             - echo 'Uploading new build on s3'
             - aws s3 cp ./dist/ s3://$AWS_BUCKET_TARGET/ --recursive
             - echo 'build upload successful!'
-      - step:
-          name: S3 production-Deploying FlowUI
-          deployment: production
-          image: atlassian/pipelines-awscli
-          script:
-            - echo 'Deleting old build from s3'
-            - aws s3 rm s3://$AWS_BUCKET_TARGET --recursive
-            - echo 'Deleted old build from s3'
-            - echo 'Uploading new build on s3'
-            - aws s3 cp ./dist/ s3://$AWS_BUCKET_TARGET/ --recursive
-            - echo 'build upload successful!'            
+         
 
