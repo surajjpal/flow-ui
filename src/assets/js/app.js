@@ -1359,7 +1359,7 @@ getTransitionForAllVertices = function () {
   var transitions = [];
   var edges = graph.getChildEdges(graph.getDefaultParent());
   for (var edge of edges) {
-    if (edge != null && edge.value != null && edge.source.value != null && edge.target.value != null && !(typeof edge.value == "string" || edge.value instanceof String) && !(typeof edge.source.value == "string" || edge.source.value instanceof String) && !(typeof edge.target.value == "string" || edge.target.value instanceof String)) {
+    if (edge != null && edge.value != null && edge.source != null && edge.source.value != null && edge.target != null && edge.target.value != null && !(typeof edge.value == "string" || edge.value instanceof String) && !(typeof edge.source.value == "string" || edge.source.value instanceof String) && !(typeof edge.target.value == "string" || edge.target.value instanceof String)) {
       var transition = {};
 
       transition.sourceStateCd = edge.source.value.stateCd;
