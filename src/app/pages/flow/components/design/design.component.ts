@@ -130,6 +130,11 @@ export class DesignComponent implements OnInit, OnDestroy {
   //error
   errorToSaveGraphObject: string = null;
 
+  //textEditor
+  ruleKey:string = "";
+  ruleValue:string = ""; 
+  selectedRule:ApiKeyExpressionMap;
+
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
   private subscriptionApiConfig: Subscription;
@@ -168,6 +173,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.tempConConfig = new ConnectorConfig();
     this.conConfig = new ConnectorConfig();
     this.conInfoOfNoMetadata = new ConnectorInfo();
+    this.selectedRule = new ApiKeyExpressionMap();
     this.sourceClassifiers = [new Classifier(), new Classifier()];
     this.sourceApiConfigList = [];
     this.sourceConConfigList = [];
@@ -2043,6 +2049,31 @@ export class DesignComponent implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  expandExp(rule?:ApiKeyExpressionMap){
+    this.ruleKey = rule.key;
+    this.ruleValue = rule.expression;
+    this.selectedRule = rule;
+    showModal("mvelEditModal")
+  }
+
+
+  saveExp(key,value){
+    let newKey = true;
+    for (let rule of this.tempState.ruleList){
+      if(rule.key.length > 0 && rule.key == key){
+        rule.expression = value;
+        const index = this.tempState.ruleList.indexOf(rule);
+        this.tempState.ruleList[index] = rule;
+        newKey = false;
+      }
+    }
+
+    if(newKey){
+      this.selectedRule.expression = value;
+    }
+    closeModal("mvelEditModal");
   }
 
   
