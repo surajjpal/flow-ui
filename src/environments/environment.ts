@@ -174,4 +174,9 @@ export const environment = {
 
   //Vocabulary
   vocabulary :'http://108.168.190.82:8080/flow/interfaces/vocabulary',
+
+  // USP
+  uspsearch: '/api/usp/relevancesearch',
+  uspselftrain: '/api/usp/selftrain'
+  
 };

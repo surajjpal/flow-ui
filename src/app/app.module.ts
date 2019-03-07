@@ -31,6 +31,7 @@ import { AuthGuard, AntiAuthGuard, AlertService, DataSharingService, UniversalUs
 import { AnalyticsService } from './services/analytics.service';
 import { ScheduleTaskService } from './services/scheduletasks.service';
 import { ActivityMonitorService } from  './services/activitymonitor.service'
+import { USPService } from './services/usp.service'
 import { FileUploaderService } from './shared/services/file-uploader.service'
 
 import { SharedModule } from './shared/shared.module';
@@ -57,6 +58,7 @@ const APP_PROVIDERS = [
   AnalyticsService,
   ScheduleTaskService,
   ActivityMonitorService,
+  USPService,
   AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService, UniversalUser, FileUploaderService, ScrollService
 ];
 

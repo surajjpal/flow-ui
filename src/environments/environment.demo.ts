@@ -169,5 +169,10 @@ export const environment = {
 
   //Vocabulary
   vocabulary : 'https://flow.automatapi.com/flow/interfaces/vocabulary',
+
+  // USP
+  uspsearch: '/api/usp/relevancesearch',
+  uspselftrain: '/api/usp/selftrain',
+  
   };
   
