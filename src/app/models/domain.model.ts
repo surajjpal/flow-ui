@@ -201,12 +201,14 @@ export class Settings {
 }
 
 export class Response {
+  uniqueId:string;
   sequence: number;
   level: number;
   actionHTML: string;
   expression: any;
   lang: string;
   response: string;
+  request:string;
   stage: string;
   disableUserInput: boolean;
   options: ResponseData[];
@@ -214,14 +216,17 @@ export class Response {
   selectionExpression: string;
   uploadDocument: {};
   contextExpression: string;
+  faqResponse:boolean;
+  features:any;
 
-  constructor(expression?: string[], lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
-      options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string) {
+  constructor(expression?: string[], lang?: string, response?: string,request?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
+      options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string,faqResponse?:boolean,features?:any,uniqueId?:string) {
     this.level = 1;
 
     this.expression = expression ? expression : [];
     this.lang = lang ? lang : '';
     this.response = response ? response : '';
+    this.request = request ? request : '';
     this.actionHTML = actionHTML ? actionHTML : '';
     this.sequence = sequence ? sequence : 0;
     this.stage = stage ? stage : '';
@@ -231,11 +236,17 @@ export class Response {
     this.selectionExpression = selectionExpression ? selectionExpression : '';
     this.uploadDocument = {};
     this.contextExpression = contextExpression ? contextExpression : '';
+    this.faqResponse = faqResponse ? faqResponse : false;
+    this.features = features ? features : [];
+    this.uniqueId = uniqueId ? uniqueId : '';
   }
 }
 
 export class Domain {
   _id: string;
+  previousDomainId:string;
+  statusCd:string;
+  version:number;
   name: string;
   createdDt: Date;
   desc: string;
@@ -250,6 +261,9 @@ export class Domain {
 
   constructor() {
     this._id = null;
+    this.previousDomainId = '';
+    this.statusCd = '';
+    this.version = 0;
     this.name = '';
     this.createdDt = new Date();
     this.desc = '';

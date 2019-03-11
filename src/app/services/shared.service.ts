@@ -37,12 +37,20 @@ export class UniversalUser {
     }
   }
 
+  setAgentId(agentId?:string){
+    window.localStorage.setItem(commonKeys.companyAgentId, agentId);
+  }
+
   getUser() {
     if (!this.user) {
       this.user = JSON.parse(window.localStorage.getItem(commonKeys.uninversalUser));
     }
 
     return this.user;
+  }
+
+  getAgentId(){
+    return window.localStorage.getItem(commonKeys.companyAgentId);
   }
 
   removeUser() {

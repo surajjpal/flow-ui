@@ -24,37 +24,84 @@
             </form>
             <br>
 
-            <table class="table table-striped" [mfData]="domainSource | universalDataFilter : filterQuery" #mf="mfDataTable"
-              [mfRowsOnPage]="domainPageSize" mfSortBy="name">
+            <table class="table table-striped" [mfData]="domainSource | universalDataFilter : filterQuery" #mfActive="mfDataTable" [mfRowsOnPage]="domainPageSize"
+              mfSortBy="name">
               <thead>
                 <tr>
                   <th>
                     <mfDefaultSorter by="name">Name</mfDefaultSorter>
                   </th>
-                  <th>
-                    <mfDefaultSorter by="desc">Description</mfDefaultSorter>
-                  </th>
+
                   <th>
                     <mfDefaultSorter by="langSupported">Languages Supported</mfDefaultSorter>
                   </th>
                   <th>
-                    <mfDefaultSorter by="domainGoals">Goals</mfDefaultSorter>
+                    <mfDefaultSorter by="status">Status</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="version">Version</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="domainGoals">Action</mfDefaultSorter>
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let domain of mf.data" (click)="onDomainSelect(domain)">
+                <tr *ngFor="let domain of mfActive.data">
                   <td>{{domain.name}}</td>
-                  <td>{{domain.desc}}</td>
                   <td>{{arrayToString(domain.langSupported)}}</td>
-                  <td>{{domainGoalsToString(domain.domainGoals)}}</td>
+                  <td>{{domain.statusCd}}</td>
+                  <td>{{domain.version}}</td>
+                  <td *ngIf="domain.statusCd && domain.statusCd === ACTIVE">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-info" title="View" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
+                        <i class="ion-eye"></i>
+                      </button>
+                      <button type="button" class="btn btn-danger" title="Deactivate" (click)="deactivateDomain(domain)">
+                        <i class="ion-close-round"></i>
+                      </button>
+                      <button type="button" class="btn btn-primary" title="Clone" (click)="onDomainSelect(domain, CLONE_AND_EDIT_MODE)">
+                        <i class="fa fa-clone"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td *ngIf="domain.statusCd && domain.statusCd === DRAFT">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-info" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_EDIT_MODE)">
+                        <i class="ion-edit"></i>
+                      </button>
+                      <button type="button" class="btn btn-success" title="Publish" (click)="activateDomaiWarning(domain,PUBLISH_DOMAIN)">
+                        <i class="fa fa-check-square-o"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td *ngIf="domain.statusCd && domain.statusCd === CLONED">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-info" title="Edit" (click)="onDomainSelect(domain, OPEN_IN_EDIT_MODE)">
+                        <i class="ion-edit"></i>
+                      </button>
+                      <button type="button" class="btn btn-success" title="Publish" (click)="activateDomaiWarning(domain, PUBLISH_DOMAIN)">
+                        <i class="fa fa-check-square-o"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td *ngIf="!domain.statusCd">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-info" title="View" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
+                        <i class="ion-eye"></i>
+                      </button>
+                      <button type="button" class="btn btn-primary" title="Clone" (click)="onDomainSelect(domain, CLONE_AND_EDIT_MODE)">
+                        <i class="fa fa-clone"></i>
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
               <tfoot>
                 <tr>
                   <td colspan="100%">
                     <button type="button" class="btn btn-info" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
-                      *ngIf="moreDomainPages" (click)="fetchDomains()">Load More
+                      *ngIf="moreDomainPages" (click)="fetchActiveDomains()">Load More
                     </button>
                     <mfBootstrapPaginator></mfBootstrapPaginator>
                   </td>
@@ -64,9 +111,142 @@
           </div>
         </div>
         <div role="tabpanel" class="tab-pane fade" id="tab_archived">
+          <div class="panel panel-default">
+            <form class="row form-inline">
+              <div class="form-group col-sm-10">
+                <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Domains" />
+              </div>
+              <div class="form-group col-sm-2">
+                <button type="button" class="btn btn-primary" (click)="onDomainSelect()">
+                  Create Domain
+                </button>
+              </div>
+            </form>
+            <br>
+            <table class="table table-striped" [mfData]="domainSourceClosed | universalDataFilter : filterQuery" #mfClosed="mfDataTable" [mfRowsOnPage]="10"
+              mfSortBy="name">
+              <thead>
+                <tr>
+                  <th>
+                    <mfDefaultSorter by="name">Name</mfDefaultSorter>
+                  </th>
 
+                  <th>
+                    <mfDefaultSorter by="langSupported">Languages Supported</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="status">Status</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="version">Version</mfDefaultSorter>
+                  </th>
+                  <th>
+                    <mfDefaultSorter by="domainGoals">Action</mfDefaultSorter>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let domain of mfClosed.data">
+                  <td>{{domain.name}}</td>
+                  <td>{{arrayToString(domain.langSupported)}}</td>
+                  <td>{{domain.statusCd}}</td>
+                  <td>{{domain.version}}</td>
+                  <td *ngIf="domain.statusCd && domain.statusCd === CLOSED">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-info" title="View" (click)="onDomainSelect(domain, OPEN_IN_READONLY_MODE)">
+                        <i class="ion-eye"></i>
+                      </button>
+                      <button type="button" class="btn btn-success" title="Activate" (click)="activateDomaiWarning(domain)">
+                        <i class="ion-power"></i>
+                      </button>
+                      <button type="button" class="btn btn-primary" title="Clone" (click)="onDomainSelect(domain, CLONE_AND_EDIT_MODE)">
+                        <i class="fa fa-clone"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td *ngIf="!domain.statusCd">
+                    <div class="btn-group" role="group">
+                      <button type="button" class="btn btn-info" title="Edit" (click)="onDomainSelect(domain)">
+                        <i class="ion-edit"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                  <tr>
+                    <td colspan="100%">
+                      <button type="button" class="btn btn-info" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
+                        *ngIf="moreClosedDomainPages" (click)="fetchClosedDomains()">Load More
+                      </button>
+                      <mfBootstrapPaginator></mfBootstrapPaginator>
+                    </td>
+                  </tr>
+                </tfoot>
+            </table>
+          </div>
         </div>
       </div>
     </ba-card>
   </div>
 </div>
+
+<div class="modal fade" id="finalWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="finalWarningLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="finalWarningLabel">
+          Warning
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        Once it is finalised it can no longer be edited for the same version after editing new version of domain will be created.
+        This will create a new version of the Domain. Are you sure you want to finalise the Domain?
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="activateDomain(selectedDomain, 'finalWarningModal')">Finalise</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="activateModal" tabindex="-1" role="dialog" attr.aria-labelledby="activateModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="activateModal">
+            Warning
+          </h4>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+        </div>
+  
+        <!-- Modal Body -->
+        <div class="modal-body" id="modal_body">
+          Once you activate this domain, previous active domain will be replaced by this domain.
+          Are you sure you want to continue?
+        </div>
+  
+        <!-- Modal Footer -->
+        <div class="modal-footer" id="modal_footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="activateDomain(selectedDomain, 'activateModal')">Activate</button>
+        </div>
+      </div>
+    </div>
+  </div>

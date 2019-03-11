@@ -17,7 +17,8 @@ const routes: Routes = [
       { path: 'agsr', component: AgentsComponent },
 
       { path: 'agdb', component: DashboardComponent },
-      { path: 'agcv', component: ConversationComponent }
+      { path: 'agcv', component: ConversationComponent },
+      { path: 'agcv/:episodeId', component: ConversationComponent },
     ]
   }
 ];
