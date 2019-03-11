@@ -26,7 +26,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   selector: 'api-task-details',
   templateUrl: './taskDetails.component.html',
   styleUrls: ['./taskDetails.scss'],
-  providers: [FetchUserService,AllocateTaskToUser]
+  providers: [FetchUserService,AllocateTaskToUser,EmailService]
 })
 
 export class TaskDetailsComponent implements OnInit, OnDestroy {
@@ -59,7 +59,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   tempUser:User;
   FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
   arrayTableHeaders = {};
-  sourceEmailTrailList:EmailPersister[];
+  sourceEmailTrailList:EmailPersister[] = [];
   
   private subscription: Subscription;
   private subscriptionEpisode: Subscription;
@@ -83,6 +83,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     private universalUser: UniversalUser,
     private sanitizer: DomSanitizer
   ) { 
+    this.sourceEmailTrailList = [];
     window['taskDetailsRef'] = { component: this, zone: zone };
   }
 
@@ -105,7 +106,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.getEpisode();
     this.extractParams();
     this.initUI();
-    this.fetchEmailTrai();
+    this.fetchEmailTrail();
    
 
     this.userId = this.universalUser.getUser()._id
@@ -131,7 +132,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  fetchEmailTrai(){
+  fetchEmailTrail(){
     this.subscriptionEmail = this.emailService.getEmailTrail(this.selectedState.entityId)
       .subscribe(emailTrail => {
         if (emailTrail) {

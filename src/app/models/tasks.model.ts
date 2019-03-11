@@ -15,6 +15,7 @@ export class EmailPersister{
   parsedBody:string;
   entityId:string;
   fileUrls:any;
+  emailType:string;
   dataModel:any;
 }
 
