@@ -1,0 +1,86 @@
+<div class="widgets">
+  <div class="row">
+    <ba-card cardTitle="DataModel Configurations" baCardClass="with-scroll" class="data-table-container">
+      <div class="panel panel-default">
+        <form class="row form-inline">
+          <div class="form-group col-sm-10">
+            <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Query" />
+          </div>
+          <div class="form-group col-sm-2">
+            <button type="button" class="btn btn-primary" (click)="createDataModel()">
+              Create DataModel Configuration
+            </button>
+          </div>
+        </form>
+        <br>
+
+        <table class="table table-striped" [mfData]="DataModelList | universalDataFilter : filterQuery" #mf="mfDataTable"
+          [mfRowsOnPage]="10" mfSortBy="name">
+          <thead>
+            <tr>
+              <th>
+                <mfDefaultSorter by="name">Name</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="type">status</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="action">Version</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="action">Action</mfDefaultSorter>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dataModel of mf.data">
+              <td>{{dataModel.displayName}}</td>
+              <td>{{dataModel.statuCd}}</td>
+              <td>{{dataModel.version}}</td>
+              <td *ngIf="dataModel.statusCd === ACTIVE">
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-info" title="View" (click)="onDataModelSelect(dataModel, OPEN_IN_READONLY_MODE)">
+                    <i class="ion-eye"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger" title="Deactivate" (click)="deactivateDataModel(dataModel)">
+                    <i class="ion-close-round"></i>
+                  </button>
+                  <button type="button" class="btn btn-primary" title="Clone" (click)="onDataModelSelect(dataModel, CLONE_AND_EDIT_MODE)">
+                    <i class="fa fa-clone"></i>
+                  </button>
+                </div>
+              </td>
+              <td *ngIf="dataModel.statusCd === DRAFT">
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-info" title="Edit" (click)="onDataModelSelect(dataModel, OPEN_IN_EDIT_MODE)">
+                    <i class="ion-edit"></i>
+                  </button>
+                  <button type="button" class="btn btn-success" title="Publish" (click)="activateDataModelWarning(dataModel,PUBLISH_DATAMODEL)">
+                    <i class="fa fa-check-square-o"></i>
+                  </button>
+                </div>
+              </td>
+              <td *ngIf="dataModel.statusCd && dataModel.statusCd === CLONED">
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-info" title="Edit" (click)="onDataModelSelect(dataModel, OPEN_IN_EDIT_MODE)">
+                    <i class="ion-edit"></i>
+                  </button>
+                  <button type="button" class="btn btn-success" title="Publish" (click)="activateDataModelWarning(dataModel, PUBLISH_DATAMODEL)">
+                    <i class="fa fa-check-square-o"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="100%">
+                <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </ba-card>
+  </div>
+</div>
