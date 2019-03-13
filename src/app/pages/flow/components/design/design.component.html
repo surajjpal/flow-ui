@@ -706,7 +706,7 @@
                                        (input)="rule.expression = $event.target.value" />
                                  </td>
                                  <td>
-                                    <button type="button" class="btn btn-primary" (click)="expandExp(rule)">Expand</button>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mvelEditModal" data-backdrop="static" data-keyboard="false" (click)="expandExp(rule)">Expand</button>
                                  </td>
                               </tr>
                            </tbody>
@@ -1719,12 +1719,12 @@
          <!-- Modal Body -->
          <div class="modal-body" id="modal_body">
             <div>
-            <textarea class="col-sm-12" [(ngModel)]="ruleValue" name="textBody"></textarea>
+            <textarea class="col-sm-12" [(ngModel)]="selectedRule.expression" rows="12" name="textBody"></textarea>
             </div>
          </div>
          <!-- Modal Footer -->
          <div class="modal-footer" id="modal_footer">
-            <button type="button" class="btn btn-warning" data-dismiss="modal">Dismiss</button>
+            <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="dismiss()" >Dismiss</button>
             <button type="button" class="btn btn-success" (click)= "saveExp(ruleKey,ruleValue)">Save</button>
          </div>
       </div>
