@@ -13,6 +13,7 @@ import { AnalyticsReportSetupComponent } from 'app/pages/analytics/components/an
 import { ConnectorConfigComponent } from './components/connectorConfig/connectorConfig.component';
 import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSetup.component';
 import { AccountViewComponent } from './components/accountView/accountView.component';
+import { DataModelComponent } from './components/dataModel/dataModel.component';
 
 
 const routes: Routes = [
@@ -32,6 +33,7 @@ const routes: Routes = [
       { path:'stuh', component: UserHierarchyComponent },
       { path: 'anlt', component: AnalyticsReportsComponent },
       { path : 'anltst', component: AnalyticsReportSetupComponent },
+      { path:'stdm', component: DataModelComponent },
       { path:'stcc', component: ConnectorConfigComponent },
       { path:'stccs', component: ConConfigSetupComponent }
 

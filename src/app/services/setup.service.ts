@@ -5,7 +5,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
 import { environment } from '../../environments/environment';
-import { RoleRouteMap, ApiConfig,ConnectorInfo,ConnectorConfig } from '../models/setup.model';
+import { RoleRouteMap, ApiConfig,ConnectorInfo,ConnectorConfig,DataModel } from '../models/setup.model';
 import { Account } from '../models/account.model';
 import { UniversalUser } from './shared.service';
 
@@ -884,6 +884,73 @@ export class AccountService {
     )
       .subscribe(
       (response: HttpResponse<Account[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+}
+
+@Injectable()
+export class DataModelService {
+  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+  
+  constructor(private router: Router, private httpClient: HttpClient) { }
+
+  getDataModelList(): Observable<DataModel[]> {
+    const subject = new Subject<DataModel[]>();
+
+    const url = `${environment.server + environment.datamodelurl}`;
+
+    this.httpClient.get<DataModel[]>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+      (response: HttpResponse<DataModel[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+  getDataModel(id?:string): Observable<DataModel> {
+    const subject = new Subject<DataModel>();
+
+    const url = `${environment.server + environment.datamodelurl + id}`;
+
+    this.httpClient.get<DataModel>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+      (response: HttpResponse<DataModel>) => {
         if (response.body) {
           subject.next(response.body);
         }

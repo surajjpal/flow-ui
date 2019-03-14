@@ -3,5 +3,6 @@ export const commonKeys = {
   sessionExpired: 'sessionExpired',
   sessionAvailable: 'sessionAvailable',
   companyAgentId:'companyAgentId',
-  returnUrl: 'returnUrl'
+  returnUrl: 'returnUrl',
+  dataModel: 'dataModel'
 };

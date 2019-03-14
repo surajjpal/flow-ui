@@ -50,22 +50,25 @@
                   </button>
                 </div>
               </td>
+              <td *ngIf="dataModel.statusCd === CLOSED">
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-info" title="View" (click)="onDataModelSelect(dataModel, OPEN_IN_READONLY_MODE)">
+                    <i class="ion-eye"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger" title="Activate" (click)="activateDataModel(dataModel)">
+                    <i class="ion-close-round"></i>
+                  </button>
+                  <button type="button" class="btn btn-primary" title="Clone" (click)="onDataModelSelect(dataModel, CLONE_AND_EDIT_MODE)">
+                    <i class="fa fa-clone"></i>
+                  </button>
+                </div>
+              </td>
               <td *ngIf="dataModel.statusCd === DRAFT">
                 <div class="btn-group" role="group">
                   <button type="button" class="btn btn-info" title="Edit" (click)="onDataModelSelect(dataModel, OPEN_IN_EDIT_MODE)">
                     <i class="ion-edit"></i>
                   </button>
                   <button type="button" class="btn btn-success" title="Publish" (click)="activateDataModelWarning(dataModel,PUBLISH_DATAMODEL)">
-                    <i class="fa fa-check-square-o"></i>
-                  </button>
-                </div>
-              </td>
-              <td *ngIf="dataModel.statusCd && dataModel.statusCd === CLONED">
-                <div class="btn-group" role="group">
-                  <button type="button" class="btn btn-info" title="Edit" (click)="onDataModelSelect(dataModel, OPEN_IN_EDIT_MODE)">
-                    <i class="ion-edit"></i>
-                  </button>
-                  <button type="button" class="btn btn-success" title="Publish" (click)="activateDataModelWarning(dataModel, PUBLISH_DATAMODEL)">
                     <i class="fa fa-check-square-o"></i>
                   </button>
                 </div>

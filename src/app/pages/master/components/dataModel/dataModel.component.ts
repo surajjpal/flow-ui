@@ -2,37 +2,47 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { ApiConfigService,ConnectorConfigService } from '../../../../services/setup.service';
-import { DataSharingService,AlertService } from '../../../../services/shared.service';
+import { DataModelService } from '../../../../services/setup.service';
+import { DataSharingService,AlertService,DataModelObject } from '../../../../services/shared.service';
 
-import { ApiConfig,ConnectorConfig } from '../../../../models/setup.model';
+import { DataModel } from '../../../../models/setup.model';
 
 @Component({
   selector: 'connector-connectorConfig',
   templateUrl: './connectorConfig.component.html',
   styleUrls: ['./connectorConfig.scss'],
-  providers:[ConnectorConfigService,AlertService]
+  providers:[AlertService]
 })
 
-export class ConnectorConfigComponent implements OnInit, OnDestroy {
-  conConfigList: ConnectorConfig[];
+export class DataModelComponent implements OnInit, OnDestroy {
+  dataModelList: DataModel[];
   filterQuery: string;
-  selectedConConfig: ConnectorConfig;
+  selectedDataModel: DataModel;
 
   private subscription: Subscription;
+  private readonly ACTIVE = 'ACTIVE';
+  private readonly CLOSED = 'CLOSED';
+  private readonly DRAFT = 'DRAFT';
 
+  private readonly OPEN_IN_READONLY_MODE = 1;
+  private readonly OPEN_IN_EDIT_MODE = 2;
+  private readonly CLONE_AND_EDIT_MODE = 3;
+
+  data;
+  rowsOnPage = 10;
+  sortBy = 'machineType';
+  sortOrder = 'asc';
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private apiConfigService: ApiConfigService,
-    private sharingService: DataSharingService,
-    private connectorConfigService:ConnectorConfigService,
+    private sharingObject: DataModelObject,
+    private dataModelService:DataModelService,
     private alertService:AlertService,
     
   ) {
-    this.conConfigList = [];
+    this.dataModelList = [];
     this.filterQuery = '';
-    this.selectedConConfig = new ConnectorConfig();
+    this.selectedDataModel = new DataModel();
   }
 
   ngOnInit(): void {
@@ -43,20 +53,26 @@ export class ConnectorConfigComponent implements OnInit, OnDestroy {
     
   }
 
-  onSelect(conConfig: ConnectorConfig) {
-    if (conConfig && conConfig._id && conConfig._id.length > 0) {
-      this.selectedConConfig = conConfig;
-      this.sharingService.setSharedObject(this.selectedConConfig);
-      this.router.navigate(['/pg/stp/stccs'], { relativeTo: this.route });
-    }
-  }
-
-  deleteConfig(conConfig){
-    this.subscription = this.connectorConfigService.deleteConConfig(conConfig)
+  onSelect(dataModel?: DataModel,task?:number) {
+    this.subscription = this.dataModelService.getDataModel(dataModel._id)
     .subscribe(
-      data => {
-        this.alertService.success('Connector Config deleted successfully', true);
-        this.getConList();
+      dataModel => {
+        if(dataModel!=null && dataModel._id.length > 0)
+        {
+          this.selectedDataModel = dataModel;
+          if (task) {
+            if (task === this.OPEN_IN_READONLY_MODE) {
+              this.sharingObject.setDataModel(this.selectedDataModel);
+            } else if (task === this.OPEN_IN_EDIT_MODE) {
+              this.sharingObject.setDataModel(this.selectedDataModel);
+            } else if (task === this.CLONE_AND_EDIT_MODE) {
+              this.selectedDataModel._id = null;
+              this.selectedDataModel.statusCd = this.DRAFT;
+      
+              this.sharingObject.setDataModel(this.selectedDataModel);
+            }
+          }
+        }
       });
   }
 
@@ -65,14 +81,10 @@ export class ConnectorConfigComponent implements OnInit, OnDestroy {
   }
 
   getConList(){
-  this.subscription = this.connectorConfigService.getAllCons()
-      .subscribe(conConfigList => {
-        if (conConfigList) {
-          for(let con of conConfigList){
-            if(!con.taskConfig && con.configType!=null){
-              this.conConfigList.push(con)
-            }
-          }
+  this.subscription = this.dataModelService.getDataModelList()
+      .subscribe(dataModelList => {
+        if (dataModelList) {
+          this.dataModelList = dataModelList;
         }
       });
   }

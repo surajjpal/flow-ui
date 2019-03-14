@@ -87,6 +87,9 @@ export const environment = {
   routesurl: 'master/routes',
   apiconfigurl: 'apiConfig/',
 
+  //DataModelUrls
+  datamodelurl:'dataModel/',
+
   supportedmethodsurl: 'apiConfig/supportedMethods',
   
   connectorinfo:'connectors/',

@@ -26,6 +26,7 @@ import { DateRangePickerComponent } from 'app/pages/analytics/components/analyti
 import { ConnectorConfigComponent } from './components/connectorConfig/connectorConfig.component';
 import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSetup.component';
 import { AccountViewComponent } from './components/accountView/accountView.component';
+import { DataModelComponent } from './components/dataModel/dataModel.component';
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { AccountViewComponent } from './components/accountView/accountView.compo
     DateRangePickerComponent,
     ConnectorConfigComponent,
     ConConfigSetupComponent,
-    AccountViewComponent
+    AccountViewComponent,
+    DataModelComponent
   ]
 })
 export class MasterModule { }

@@ -78,6 +78,9 @@ export const environment = {
   apiconfigurl: 'apiConfig/',
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
+  //DataModelUrls
+  datamodelurl:'dataModel/',
+
   connectorinfo:'connectors/',
   getallconconfig:'connectors/getAll/',
   deleteconconfig:'connectors/delete/',

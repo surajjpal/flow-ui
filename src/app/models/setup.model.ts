@@ -92,6 +92,22 @@ export class ConnectorConfig extends BaseModel {
   }
 }
 
+export class DataModel extends BaseModel{
+  displayName:string;
+  name:string;
+  fields:[DataModelField];
+
+}
+
+export class DataModelField{
+  displayName:string;
+  name:string;
+  type:string;
+  extractors:any;
+  validators:any;
+  order:number;
+}
+
 export class TempConnectorConfig extends BaseModel {
   configName: string;
   configType: string;
