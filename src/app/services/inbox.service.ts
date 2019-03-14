@@ -528,7 +528,7 @@ export class EmailService                                                     {
   getEmailTrail(entityId?:string): Observable<EmailPersister[]> {
     const subject = new Subject<EmailPersister[]>();
     const crudInput = new CRUDOperationInput();
-    crudInput.collection = 'emailPersister';
+    crudInput.collection = 'email';
     crudInput.payload = {"entityId":entityId}
     crudInput.operation = "READ_ALL";
   
