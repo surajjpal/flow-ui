@@ -3,15 +3,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { DataModelService } from '../../../../services/setup.service';
-import { DataSharingService,AlertService,DataModelObject } from '../../../../services/shared.service';
+import { DataModelObject } from '../../../../services/shared.service';
 
 import { DataModel } from '../../../../models/setup.model';
 
 @Component({
-  selector: 'connector-connectorConfig',
-  templateUrl: './connectorConfig.component.html',
-  styleUrls: ['./connectorConfig.scss'],
-  providers:[AlertService]
+  selector: 'datamodel-dataModel',
+  templateUrl: './dataModel.component.html',
+  styleUrls: ['./dataModel.scss']
 })
 
 export class DataModelComponent implements OnInit, OnDestroy {
@@ -36,8 +35,7 @@ export class DataModelComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private sharingObject: DataModelObject,
-    private dataModelService:DataModelService,
-    private alertService:AlertService,
+    private dataModelService:DataModelService
     
   ) {
     this.dataModelList = [];
