@@ -61,7 +61,4 @@ pipelines:
             - echo 'Uploading new build on s3'
             - aws s3 cp ./dist/ s3://$AWS_BUCKET_TARGET/ --recursive
             - echo 'build upload successful!'
-          
-
-         
 
