@@ -155,6 +155,9 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       if (!this.selectedAgent.uiComponent.isBargeable || this.selectedAgent.uiComponent.isBargeable === null) {
         this.selectedAgent.uiComponent.isBargeable = false;
       }
+      if (!this.selectedAgent.uiComponent.initMessage || this.selectedAgent.uiComponent.initMessage === null) {
+        this.selectedAgent.uiComponent.initMessage = '';
+      }
 
       if (this.selectedAgent.agentPlugins && this.selectedAgent.agentPlugins.length > 0) {
         const pluginsToBeRemoved: Plugin[] = [];

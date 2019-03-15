@@ -116,10 +116,15 @@
               <div class="form-group">
                 <label>Select Flows</label>
                 <select class="selectpicker form-control" multiple="true" title="Select Flows" [(ngModel)]="selectedAgent.agentFlow"
-                  name="agentFlow">
-                  <option *ngFor="let flow of flowSource" [ngValue]="flow.machineType">{{flow.machineType + ' v' +
-                    flow.version}}</option>
+                name="agentFlow">
+                <option *ngFor="let flow of flowSource" [ngValue]="flow.machineType">{{flow.machineType + ' v' +
+                  flow.version}}</option>
                 </select>
+              </div>
+              <div class="form-group">
+                <label>Custom Init Message</label>
+                <input type="text" class="form-control" required placeholder="Override for default init message (if any)"
+                  [(ngModel)]="selectedAgent.uiComponent.initMessage" name="initMessage" />
               </div>
               <div class="form-group">
                 <label>Select Default Language</label>
