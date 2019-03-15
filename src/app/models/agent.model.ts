@@ -14,6 +14,7 @@ export class UIComponent {
   isBargeable: boolean;
   conversationWindowTitlePrefix: string;
   startTime:any;
+  initMessage: string;
 
   constructor() {
     this.colorCss = '';
@@ -29,6 +30,7 @@ export class UIComponent {
     this.isBargeable = false;
     this.conversationWindowTitlePrefix = 'Chatting with';
     this.startTime = null;
+    this.initMessage = '';
   }
 }
 
