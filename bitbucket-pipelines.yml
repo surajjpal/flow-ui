@@ -4,9 +4,10 @@
 # -----
 
 pipelines:
-  branches:
+  custom:
     master:
-      - step:
+    - step:
+          name-: FlowUI-Demo Build and Release
           image: node:8.10.0
           caches:
             - node
@@ -16,13 +17,41 @@ pipelines:
             - echo 'successfully build!'
           artifacts: #Defining the artifacts to be passed to each future step.
             - dist/**
-      - step:
-          name: S3 staging-Compressing files
+    - step:
+          name: FlowUI-Demo-Compressing files
           script:
             - ./compress.sh   #Calling compress.sh to uglify files and compressing build 
-      - step:
-          name: S3 staging-Deploying FlowUI
+    - step:
+          name: FlowUI Demo Deployment
           deployment: staging
+          image: atlassian/pipelines-awscli
+          script:
+            - echo 'Deleting old build from s3'
+            - aws s3 rm s3://$AWS_BUCKET_TARGET --recursive
+            - echo 'Deleted old build from s3'
+            - echo 'Uploading new build on s3'
+            - aws s3 cp ./dist/ s3://$AWS_BUCKET_TARGET/ --recursive
+            - echo 'build upload successful!'
+  tags:                        
+    release-*:                 
+    - step:                   
+        name: Tag based Prod Build and release
+        image: 'node:8.10.0'
+        caches:
+          - node
+        script: #Modify the commands below to build your repository.
+            - npm install
+            - npm run build:prod
+            - echo 'successfully build!'
+        artifacts: #Defining the artifacts to be passed to each future step.
+            - dist/**
+    - step:
+          name: S3 Prod-Compressing files
+          script:
+            - ./compress.sh   #Calling compress.sh to uglify files and compressing build 
+    - step:
+          name: FlowUI Prod Deployment
+          deployment: production
           trigger: manual
           image: atlassian/pipelines-awscli
           script:
@@ -32,7 +61,4 @@ pipelines:
             - echo 'Uploading new build on s3'
             - aws s3 cp ./dist/ s3://$AWS_BUCKET_TARGET/ --recursive
             - echo 'build upload successful!'
-          
-
-         
 
