@@ -705,6 +705,9 @@
                                     <input type="text" class="form-control" placeholder="Expression" [value]="rule.expression"
                                        (input)="rule.expression = $event.target.value" />
                                  </td>
+                                 <td>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mvelEditModal" data-backdrop="static" data-keyboard="false" (click)="expandExp(rule)">Expand</button>
+                                 </td>
                               </tr>
                            </tbody>
                            <tfoot>
@@ -1698,6 +1701,31 @@
          <!-- Modal Footer -->
          <div class="modal-footer" id="modal_footer">
             <button type="button" class="btn btn-warning" data-dismiss="modal">Dismiss</button>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<div class="modal fade" id="mvelEditModal" tabindex="-1" role="dialog" attr.aria-labelledby="mvelEditModal" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <!-- Modal Header -->
+         <div class="modal-header">
+            <h4 class="modal-title" id="mvelEditModal">
+               {{ruleKey}}
+            </h4>
+         </div>
+         <!-- Modal Body -->
+         <div class="modal-body" id="modal_body">
+            <div>
+            <textarea class="col-sm-12" [(ngModel)]="selectedRule.expression" rows="12" name="textBody"></textarea>
+            </div>
+         </div>
+         <!-- Modal Footer -->
+         <div class="modal-footer" id="modal_footer">
+            <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="dismiss()" >Dismiss</button>
+            <button type="button" class="btn btn-success" (click)= "saveExp(ruleKey,ruleValue)">Save</button>
          </div>
       </div>
    </div>

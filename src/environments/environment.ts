@@ -158,6 +158,7 @@ export const environment = {
 
   //Following APIs path - To be used in conjunction with interfaceService property
   crudFunction: '/crud',
+  smCrudFunction:'/smCrud',
   sendAgentMessage: '/sendMessage',
 
   // activity monitor services
@@ -174,4 +175,9 @@ export const environment = {
 
   //Vocabulary
   vocabulary :'http://108.168.190.82:8080/flow/interfaces/vocabulary',
+
+  // USP
+  uspsearch: '/api/usp/relevancesearch',
+  uspselftrain: '/api/usp/selftrain'
+  
 };

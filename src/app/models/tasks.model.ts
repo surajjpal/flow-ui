@@ -5,6 +5,20 @@ export class Chronology {
   calendarType: string;
 }
 
+
+export class EmailPersister{
+  to:string;
+  from:string;
+  subject:string;
+  cc:string;
+  htmlText:any;
+  parsedBody:string;
+  entityId:string;
+  fileUrls:any;
+  emailType:string;
+  dataModel:any;
+}
+
 export class Time {
   hour: string;
   minute: string;

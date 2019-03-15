@@ -30,7 +30,8 @@ export const routes: Routes = [
       { path: 'stp', loadChildren: './master/master.module#MasterModule' },
       { path: 'stn', loadChildren: './settings/settings.module#SettingsModule' },
       { path: 'apidgn', loadChildren: './apidesign/apidesign.module#ApiDesignModule'},
-      { path: 'bam', loadChildren: './activitymonitor/activitymonitor.module#ActivityMonitorModule' }
+      { path: 'bam', loadChildren: './activitymonitor/activitymonitor.module#ActivityMonitorModule' },
+      { path: 'usp', loadChildren: './usp/usp.module#USPModule' }
     ]
   }
 ];

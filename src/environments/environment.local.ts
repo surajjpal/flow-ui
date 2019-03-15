@@ -1,7 +1,11 @@
 export const environment = {
   production: false,
   name: 'local',
-
+  //feature Domain 2.0
+  fetaureurl:"http://0.0.0.0:9090/api/getFeatures",
+  traindt:"http://0.0.0.0:9090/api/train",
+  converse:"http://0.0.0.0:9090/api/converse",
+  faqupload:"http://0.0.0.0:9090/api/uploadFaq",
   // Root
   root: 'http://localhost:8080/flow/',
   
@@ -14,19 +18,27 @@ export const environment = {
   publishaccounturl:'http://localhost:8080/flow/account/publish/',
   unpublishaccounturl:'http://localhost:8080/flow/account/unpublish/',
 
+
+  fetchaccountbyid:'http://localhost:8080/flow/account/getAccount/',
+
   // Interfaces
-  interfaceService: 'http://localhost:8080/flow/interfaces',
+  interfaceService: 'http://localhost:8080/flow/interfaces/',
   updateClassifierTraining : 'http://localhost:8080/flow/interfaces/auto_decorate_training',
   updateIntentTraining: 'http://localhost:8080/flow/interfaces/intent_classification_training',
   updateEntityTraining: 'http://localhost:8080/flow/interfaces/entity_classification_training',
   
+
+  // interfaceService: '',
+  // updateClassifierTraining : 'http://localhost:5101/auto_decorate_training',
+  // updateIntentTraining: 'http://localhost:5100/intent_classification_training',
+  // updateEntityTraining: 'http://localhost:5100/entity_classification_training',
 
   //
   processauditurl:"http://localhost:5000/api/universalsearch/search/flow",
 
   // Flow
   server: 'http://localhost:8080/flow/console/',
-  autourl:'http://localhost:4200/#/pg/ch/cnv/',
+  autourl:'http://localhost:4300/#/pg/ch/cnv/',
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
   orPayloadMachineType:'state/saveOrPayload/machineType/',
@@ -160,6 +172,7 @@ export const environment = {
 
   //Following APIs path - To be used in conjunction with interfaceService property
   crudFunction: '/crud',
+  smCrudFunction:'/smCrud',
   sendAgentMessage: '/sendMessage',
 
   // activity monitor services
@@ -174,4 +187,8 @@ export const environment = {
 
   //Vocabulary
   vocabulary :'http://localhost:5000/api/vocabulary',
+
+  // USP
+  uspsearch: '/api/usp/relevancesearch',
+  uspselftrain: '/api/usp/selftrain',
 };

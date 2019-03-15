@@ -11,11 +11,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
 import {User, UserHierarchy, UserGroup,UserGraphObject} from '../../../../models/user.model';
-import { State,CommonInsightWrapper } from '../../../../models/tasks.model';
+import { State,CommonInsightWrapper, EmailPersister } from '../../../../models/tasks.model';
 import { GraphObject, DataPoint, StateModel, ManualAction,StateInfoModel } from '../../../../models/flow.model';
 import { Episode, ChatMessage } from '../../../../models/conversation.model';
 
-import { StateService, DataCachingService } from '../../../../services/inbox.service';
+import { StateService, DataCachingService, EmailService } from '../../../../services/inbox.service';
 import { ConversationService } from '../../../../services/agent.service';
 import { FetchUserService, UserGraphService ,AllocateTaskToUser} from '../../../../services/userhierarchy.service';
 import { UniversalUser } from '../../../../services/shared.service';
@@ -26,7 +26,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   selector: 'api-task-details',
   templateUrl: './taskDetails.component.html',
   styleUrls: ['./taskDetails.scss'],
-  providers: [FetchUserService,AllocateTaskToUser]
+  providers: [FetchUserService,AllocateTaskToUser,EmailService]
 })
 
 export class TaskDetailsComponent implements OnInit, OnDestroy {
@@ -59,7 +59,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   tempUser:User;
   FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
   arrayTableHeaders = {};
-  sourceEmailTrailList = null;
+  sourceEmailTrailList:EmailPersister[] = [];
   
   private subscription: Subscription;
   private subscriptionEpisode: Subscription;
@@ -67,12 +67,14 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   private subscriptionUsers: Subscription;
   private subscriptionInsight: Subscription;
   private subscriptionXML: Subscription;
+  private subscriptionEmail:Subscription;
 
   constructor(
     private zone: NgZone,
     private router: Router, 
     private route: ActivatedRoute,
     private stateService: StateService,
+    private emailService:EmailService,
     private conversationService: ConversationService,
     private dataCachingService: DataCachingService,
     private location: Location,
@@ -81,6 +83,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     private universalUser: UniversalUser,
     private sanitizer: DomSanitizer
   ) { 
+    this.sourceEmailTrailList = [];
     window['taskDetailsRef'] = { component: this, zone: zone };
   }
 
@@ -103,6 +106,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.getEpisode();
     this.extractParams();
     this.initUI();
+    this.fetchEmailTrail();
    
 
     this.userId = this.universalUser.getUser()._id
@@ -126,6 +130,15 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     if (this.subscriptionInsight && !this.subscriptionInsight.closed) {
       this.subscriptionInsight.unsubscribe();
     }
+  }
+
+  fetchEmailTrail(){
+    this.subscriptionEmail = this.emailService.getEmailTrail(this.selectedState.entityId)
+      .subscribe(emailTrail => {
+        if (emailTrail) {
+          this.sourceEmailTrailList = emailTrail;
+        }
+      });
   }
 
   fetchInsight(){

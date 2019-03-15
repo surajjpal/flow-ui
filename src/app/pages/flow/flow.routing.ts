@@ -17,7 +17,8 @@ const routes: Routes = [
       { path: 'flsr', component: SearchComponent },
       { path: 'fld', component: DesignComponent },
       { path:'flpsr', component: SearchProcessComponent},
-      { path : 'flpa', component: ProcessAuditComponent}
+      { path : 'flpa', component: ProcessAuditComponent},
+      { path : 'flpa/:flowId/:entityId', component: ProcessAuditComponent}
     ]
   }
 ];
