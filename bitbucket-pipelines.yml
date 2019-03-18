@@ -33,7 +33,7 @@ pipelines:
             - aws s3 cp ./dist/ s3://$AWS_BUCKET_TARGET/ --recursive
             - echo 'build upload successful!'
   tags:                        
-    release-*:                 
+    RELEASE*:                 
     - step:                   
         name: Tag based Prod Build and release
         image: 'node:8.10.0'
