@@ -21,6 +21,9 @@
         <li class="nav-item">
           <a class="nav-link" id="cardsTab" data-toggle="tab" href="#cardsContent" role="tab" aria-controls="cards">Cards</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" id="formsTab" data-toggle="tab" href="#formsContent" role="tab" aria-controls="forms">Forms</a>
+        </li>
       </ul>
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade show active" id="domainContent" aria-labelledby="domainTab">
@@ -294,6 +297,42 @@
                   <td>{{card.templateName}}</td>
 
                 </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="100%">
+                    <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="formsContent" aria-labelledby="formsTab">
+          <div class="panel panel-default">
+            <form class="row form-inline">
+              <div class="form-group col-sm-10">
+                <input class="form-control" [(ngModel)]="modelsFilterQuery" name="modelsFilterQuery" placeholder="Filter Query" />
+              </div>
+              <div class="form-group col-sm-2">
+                <button type="button" class="btn btn-primary" (click)="onCardSelect()" data-toggle="modal" data-target="#modelModal">
+                  Add Form
+                </button>
+              </div>
+            </form>
+            <br>
+            <table class="table table-striped" [mfData]="selectedDomain.models | universalDataFilter : modelsFilterQuery" #mfCard="mfDataTable"
+              [mfRowsOnPage]="10" mfSortBy="modelName">
+              <thead>
+                <tr>
+                  <th>
+                    <mfDefaultSorter by="modelName">Name</mfDefaultSorter>
+                  </th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+
               </tbody>
               <tfoot>
                 <tr>
@@ -3218,6 +3257,167 @@
     </div>
   </div>
 </div>
+
+
+<!-- model modal -->
+<div class="modal fade" id="modelModal" tabindex="-1" role="dialog" attr.aria-labelledby="modelModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="modelModalLabel">
+          {{ modalHeader }}
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label>Card Name</label>
+            <input class="form-control" placeholder="Card Name" [(ngModel)]="tempCard.cardName" name="cardName" />
+          </div>
+          <div class="form-group">
+            <label>Template</label>
+            <select class="selectpicker form-control" title="Select Template" [(ngModel)]="tempCard.templateName" name="templateName">
+              <option *ngFor="let template of templateNames" [ngValue]="template">{{template}}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Title</label>
+            <input class="form-control" placeholder="Title" [(ngModel)]="tempCard.title" name="title" />
+          </div>
+          <div class="form-group">
+            <label>Sub Title</label>
+            <input class="form-control" placeholder="Sub Title" [(ngModel)]="tempCard.subTitle" name="subTitle" />
+          </div>
+          <div class="form-group">
+            <label>Avatar URL</label>
+            <input class="form-control" placeholder="Avatar Image Url" [(ngModel)]="tempCard.avatarImageUrl" name="avatarImageUrl" />
+          </div>
+          <div class="form-group">
+            <label>Image Url</label>
+            <input class="form-control" placeholder="Image Url" [(ngModel)]="tempCard.imageUrl" name="imageUrl" />
+          </div>
+          <div class="form-group">
+            <label>Content</label>
+            <input class="form-control" placeholder="Content" [(ngModel)]="tempCard.content" name="content" />
+          </div>
+          <div *ngIf="tempCard.templateName === 'default'" class="form-group">
+            <label>Response options</label>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Input type</th>
+                  <th>Options</th>
+                  <th>
+                    <button type="button" class="btn btn-primary" (click)="onAddCardActionOption(tempCard)">
+                      <i class="ion-plus-round"></i>
+                    </button>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let option of tempCard.actionable">
+                  <td>
+                    <select name="type" id="type" [(ngModel)]="option.type">
+                      <option value="">Choose One</option>
+                      <option value="BUTTON">Button</option>
+                      <option value="CHECKBOX">Checkbox</option>
+                      <option value="RADIO">Radio</option>
+                      <option value="FILE_UPLOAD">File Upload</option>
+                      <option value="AGENT_SWITCH">Agent Switch</option>
+                    </select>
+                  </td>
+                  <td>
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Value</th>
+                          <th>Label</th>
+                          <th>URL</th>
+                          <th *ngIf="option.type == 'AGENT_SWITCH'">Agent ID</th>
+                          <th>
+                            <button type="button" class="btn btn-primary" (click)="onAddCardActinableData(option)">
+                              <i class="ion-plus-round"></i>
+                            </button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let row of option.data">
+                          <td>
+                            <input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"
+                            />
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"
+                            />
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" placeholder="URL" [value]="row.url" (input)="row.url = $event.target.value">
+                          </td>
+                          <td *ngIf="option.type == 'AGENT_SWITCH'">
+                            <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId" (input)="row.agentId = $event.target.value">
+                          </td>
+                          <td>
+                            <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
+                              <i class="ion-ios-trash"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-danger" title="delete" (click)="delete(tempCard.actionable, option)">
+                      <i class="ion-ios-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div *ngIf="tempCard.templateName == 'download'">
+            <div class="form-group">
+              <label>Function Name</label>
+              <input class="form-control" placeholder="Function Name" [(ngModel)]="tempCard.document.functionInstanceName" name="functionInstanceName"
+              />
+            </div>
+            <div class="form-group">
+              <label>Entity Type</label>
+              <input class="form-control" placeholder="Entity Type" [(ngModel)]="tempCard.document.entityType" name="entityType" />
+            </div>
+            <div class="form-group">
+              <label>Entity Reference</label>
+              <input class="form-control" placeholder="Entity Reference" [(ngModel)]="tempCard.document.entityRef" name="entityRef" />
+            </div>
+            <div class="form-group">
+              <label>Version</label>
+              <input class="form-control" placeholder="Version" [(ngModel)]="tempCard.document.version" name="version" />
+            </div>
+            <div class="form-group">
+              <label>File Name</label>
+              <input class="form-control" placeholder="File Name" [(ngModel)]="tempCard.document.fileName" name="fileName" />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeCard()">Remove</button>
+        <button type="submit" class="btn btn-primary" (click)="addCard()">{{createMode ? 'Create' : 'Update'}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- Warning Modal -->
 <div class="modal fade" id="domainUpdateModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
