@@ -51,6 +51,10 @@
                           <input type="text" class="form-control" placeholder="Value" [value]="config.get('value')"
                             (input)="config.set('value', $event.target.value)" />
                         </td>
+                        <td *ngIf="typeConfigList[i].get('value') == 'encrypted'">
+                          <input type="password" class="form-control" placeholder="Value" [value]="config.get('value')"
+                            (input)="config.set('value', $event.target.value)" />
+                        </td>
                         <td *ngIf="typeConfigList[i].get('value') == 'file'">
                           <label for="file-upload" class="custom-file-upload">
                             <i class="fa fa-cloud-upload"></i> {{createMode ? 'Upload File ' : 'Upload New File'}}
