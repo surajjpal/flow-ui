@@ -31,7 +31,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   private readonly READ = "READ";
   private readonly CLONED = 'CLONED';
   
-  modelOptions: string[] = ["INPUT", "BUTTON", "CHECKBOX", "RADIO"]
+  modelOptions: string[] = ["INPUT", "SINGLE_SELECT_DROP_DOWN", "BUTTON", "CHECKBOX", "RADIO"]
 
   entityUploaderOptions: NgUploaderOptions;
   faqUploaderOptions:NgUploaderOptions;

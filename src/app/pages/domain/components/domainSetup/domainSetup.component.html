@@ -3299,7 +3299,7 @@
                   <div *ngIf="index == 0" [id]="'modeloptionsTabHeading' + index" class="card-header" heightStyle="content" role="tab">
                     <h5 class="mb-0">
                       <a data-toggle="collapse" data-parent="#modelOptionsAccordion" [href]="'#modeloptionsCollapse' + index" aria-expanded="true" [attr.aria-controls]="'modeloptionsCollapse' + index">
-                        {{'Click to expand ' + (responseOption.option ? responseOption.option : '') }}
+                        {{'Click to expand option ' + (responseOption.option ? responseOption.option : '') }}
                       </a>
                     </h5>
                   </div>
@@ -3307,7 +3307,7 @@
                     <h5 class="mb-0">
                       <a class="collapsed" data-toggle="collapse" data-parent="#modelOptionsAccordion" [href]="'#modeloptionsCollapse' + index" aria-expanded="false"
                         [attr.aria-controls]="'modeloptionsCollapse' + index">
-                        {{'Click to expand ' + (responseOption.option ? responseOption.option : '') }}
+                        {{'Click to expand option ' + (responseOption.option ? responseOption.option : '') }}
                       </a>
                     </h5>
                   </div>
@@ -3316,75 +3316,115 @@
                     <div class="card-block">
                       <form>
                         <div class="form-group">
+                          <button type="button" class="btn btn-primary pull-right" (click)="onAddModelActinableData(responseOption)">
+                              <i class="ion-plus-round">Add Option data</i>
+                          </button>
+                        </div>
+                        
+                        <div class="form-group">
                           <label>Option</label>
                           <select class="selectpicker form-control" title="Select Option" [(ngModel)]="responseOption.option" name="option">
                             <option *ngFor="let op of modelOptions" [ngValue]="op">{{ op }}</option>
                           </select>
                         </div>
                         <div class="form-group">
-                          <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'modelOptionsSequence' + index">
-                             Sequence
-                          </label>
+                          <label required [for]="'modelOptionsSequence' + index">Sequence</label>
                           <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" required
                              [id]="'modelOptionsSequence' + index" placeholder="Sequence" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"
                              [(ngModel)]="responseOption.sequence" name="sequence" />
                        </div>
-                       <button type="button" class="btn btn-primary pull-right" (click)="onAddModelActinableData(responseOption)">
-                          <i class="ion-plus-round">Add</i>
-                      </button>
                        <div class="form-group">
-                          <table class="table">  
-                            <thead>
-                              <tr>
-                                <th>Label</th>
-                                <th>Value</th>
-                                <th *ngIf="responseOption.option == 'INPUT'">Placeholder</th>
-                                <th *ngIf="responseOption.option == 'INPUT'">Mask</th>
-                                <th *ngIf="responseOption.option == 'INPUT'">Validation Exp</th>
-                                <th *ngIf="responseOption.option == 'INPUT'">errorMessage</th>
-                                <th>Is<br>mandatory</th>
-                                <th *ngIf="responseOption.option == 'INPUT'">Secured</th>
-                                
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr *ngFor=" let row of responseOption.responseData">
-                                <td>
-                                  <input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"/>
-                                </td>
-                                <td>
-                                  <input type="text" class="form-control" placeholder="value" [value]="row.value" (input)="row.value = $event.target.value"/>
-                                </td>
-                                <td *ngIf="responseOption.option == 'INPUT'">
-                                  <input type="text" class="form-control" placeholder="placeholder" [value]="row.settings.placeholder" (input)="row.settings.placeholder = $event.target.value"/>
-                                </td>
-                                <td *ngIf="responseOption.option == 'INPUT'">
-                                  <input type="text" class="form-control" placeholder="mask" [value]="row.settings.mask" (input)="row.settings.mask = $event.target.value"/>
-                                </td>
-                                <td *ngIf="responseOption.option == 'INPUT'">
-                                  <input type="text" class="form-control" placeholder="validationRegex" [value]="row.settings.validationRegex" (input)="row.settings.validationRegex = $event.target.value"/>
-                                </td>
-                                <td *ngIf="responseOption.option == 'INPUT'">
-                                  <input type="text" class="form-control" placeholder="errorMessage" [value]="row.settings.errorMessage" (input)="row.settings.errorMessage = $event.target.value"/>
-                                </td>
-                                <td style="text-align: center">
-                                  <api-checkbox [checked]="row.settings.isMandatory" (event)="row.settings.isMandatory = $event.target.checked"></api-checkbox>
-                                </td>
-                                <td *ngIf="responseOption.option == 'INPUT'" style="text-align: center">
-                                  <api-checkbox [checked]="row.settings.secured" (event)="row.settings.secured = $event.target.checked"></api-checkbox>
-                                </td>
-                                <td style="text-align: center">
-                                  <button type="button" class="btn btn-danger" (click)="removeModelOptionData(responseOption.responseData, row)">
-                                    <i class="ion-ios-trash"></i>
-                                  </button>
-                                </td>
-                              </tr>
+                          <label>Label</label>
+                          <input type="text" class="form-control" placeholder="Label" [(ngModel)]="responseOption.label" name="label"/>
+                       </div>
+                       <div class="form-group">
+                          <label>API to populate data</label>
+                          <input type="text" class="form-control" placeholder="API" [(ngModel)]="responseOption.api" name="api"/>
+                       </div>
+                       <div class="form-group row">
+                          <div class="col-md-6">
+                              <label>Key against which value to be store</label>
+                              <input type="text" class="form-control" placeholder="Key" [(ngModel)]="responseOption.key" name="key"/>
+                          </div>
+                          <div class="col-md-6">
+                              <label></label>
+                              <api-checkbox [checked]="responseOption.isMandatory" [label]="'Is Mandatory'" (event)="responseOption.isMandatory = $event.target.checked"></api-checkbox>
+                          </div>
+                          
+                          
+                       </div>
 
-                            </tbody>
-                          </table>
+                       <div class="form-group">
+                          <div id="modelOptionsDataAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempModel.responseOptions.length > 0">
+                            <div *ngFor="let row of responseOption.responseData; let dataindex=index" class="panel">
+                              <div class="card">
+                                <div *ngIf="dataindex == 0" [id]="'optionsdataTabHeading' + dataindex" class="card-header" heightStyle="content" role="tab">
+                                  <h5 class="mb-0">
+                                    <a data-toggle="collapse" data-parent="#modelOptionsDataAccordion" [href]="'#modeloptionsdataCollapse' + dataindex" aria-expanded="true" 
+                                      [attr.aria-controls]="'modeloptionsdataCollapse' + dataindex">
+                                      {{'Click to expand data for ' + (row.label ? row.label : '') }}
+                                    </a>
+                                  </h5>
+                                </div>
+                                <div *ngIf="dataindex != 0" [id]="'optionsdataTabHeading' + dataindex" class="card-header" heightStyle="content" role="tab">
+                                  <h5 class="mb-0">
+                                    <a class="collapsed" data-toggle="collapse" data-parent="#modelOptionsDataAccordion" [href]="'#modeloptionsdataCollapse' + dataindex" aria-expanded="false"
+                                      [attr.aria-controls]="'modeloptionsdataCollapse' + dataindex">
+                                      {{'Click to expand data for ' + (row.label ? row.label : '') }}
+                                    </a>
+                                  </h5>
+                                </div>
+  
+                                <div [id]="'modeloptionsdataCollapse' + dataindex" [class]="index ==0 ? 'collapse show' : 'collapse'" role="tabpanel" [attr.aria-labelledby]="'optionsdataTabHeading' + index">
+                                  <div class="card-block">
+                                    <form>
+                                      <div class="form-group row">
+                                          <div class="col-md-6">
+                                              <label>Label</label>
+                                              <input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"/>
+                                          </div>
+                                          <div class="col-md-6">
+                                              <label>Value</label>
+                                              <input type="text" class="form-control" placeholder="value" [value]="row.value" (input)="row.value = $event.target.value"/>
+                                          </div>
+                                          
+                                      </div>
+                                      <div *ngIf="responseOption.option == 'INPUT'" class="form-group">
+                                          <label>Placeholder</label>
+                                          <input type="text" class="form-control" placeholder="placeholder" [value]="row.settings.placeholder" (input)="row.settings.placeholder = $event.target.value"/>
+                                      </div>
+                                      <div *ngIf="responseOption.option == 'INPUT'" class="form-group">
+                                          <label>Mask</label>
+                                          <input type="text" class="form-control" placeholder="mask" [value]="row.settings.mask" (input)="row.settings.mask = $event.target.value"/>
+                                      </div>
+                                      <div *ngIf="responseOption.option == 'INPUT'" class="form-group">
+                                          <label>Validation Expression</label>
+                                          <input type="text" class="form-control" placeholder="validationRegex" [value]="row.settings.validationRegex" (input)="row.settings.validationRegex = $event.target.value"/>
+                                      </div>
+                                      <div *ngIf="responseOption.option == 'INPUT'" class="form-group">
+                                        <label>Errormessage if expression not matched</label>
+                                        <input type="text" class="form-control" placeholder="errorMessage" [value]="row.settings.errorMessage" (input)="row.settings.errorMessage = $event.target.value"/>
+                                      </div>
+                                      <div *ngIf="responseOption.option == 'INPUT'"  class="form-group">
+                                        <label>Is secured</label>
+                                        <api-checkbox [checked]="row.settings.secured" (event)="row.settings.secured = $event.target.checked"></api-checkbox>
+                                      </div>
+                                      <div class="form-group">
+                                        <button type="button" class="btn btn-danger" (click)="removeModelOptionData(responseOption.responseData, row)">
+                                          <i class="ion-ios-trash"> Remove data</i>
+                                        </button>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            
+                          </div>
+                          
                        </div>
                       </form>
-                      <button *ngIf="responseOption.option" class="btn btn-danger" (click)="removeModelOption(responseOption)">Remove</button>
+                      <button *ngIf="responseOption.option" class="btn btn-danger" (click)="removeModelOption(responseOption)">Remove Option</button>
                     </div>
                   </div>
                 </div>

@@ -184,11 +184,19 @@ export class Model {
 export class ModelResponseOption {
   option: string;
   sequence: number;
+  label: string = null;
+  key: string = null;
+  isMandatory: boolean;
+  api: string;
   responseData: ModelResponseData[];
 
-  constructor(option?: string, responseData?:  ModelResponseData[]) {
+  constructor(option?: string, responseData?:  ModelResponseData[], label?: string, key?: string, isMandatory?: boolean, api?: string) {
     this.option = option ? option : null;
     this.responseData = responseData ? responseData : [];
+    this.label = label ? label : null;
+    this.key = key ? key : null;
+    this.isMandatory = isMandatory ? isMandatory : false;
+    this.api = api ? api : null;
   }
 }
 
