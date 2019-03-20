@@ -315,24 +315,31 @@
                 <input class="form-control" [(ngModel)]="modelsFilterQuery" name="modelsFilterQuery" placeholder="Filter Query" />
               </div>
               <div class="form-group col-sm-2">
-                <button type="button" class="btn btn-primary" (click)="onCardSelect()" data-toggle="modal" data-target="#modelModal">
+                <button type="button" class="btn btn-primary" (click)="onModelSelect()" data-toggle="modal" data-target="#modelModal">
                   Add Form
                 </button>
               </div>
             </form>
             <br>
-            <table class="table table-striped" [mfData]="selectedDomain.models | universalDataFilter : modelsFilterQuery" #mfCard="mfDataTable"
+            <table class="table table-striped" [mfData]="selectedDomain.models | universalDataFilter : modelsFilterQuery" #mfModels="mfDataTable"
               [mfRowsOnPage]="10" mfSortBy="modelName">
               <thead>
                 <tr>
                   <th>
                     <mfDefaultSorter by="modelName">Name</mfDefaultSorter>
                   </th>
+                  <th>
+                    Header
+                  </th>
                   
                 </tr>
               </thead>
               <tbody>
+                <tr *ngFor="let model of mfModels.data" (click)="onModelSelect(model)" data-toggle="modal" data-target="#modelModal">
+                  <td>{{ model.modelName }}</td>
+                  <td>{{ model.header }}</td>
 
+                </tr>
               </tbody>
               <tfoot>
                 <tr>
@@ -3261,7 +3268,7 @@
 
 <!-- model modal -->
 <div class="modal fade" id="modelModal" tabindex="-1" role="dialog" attr.aria-labelledby="modelModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div id="largemodal" class="modal-dialog modal-lg">
     <div class="modal-content">
       <!-- Modal Header -->
       <div class="modal-header">
@@ -3278,141 +3285,122 @@
       <div class="modal-body">
         <form>
           <div class="form-group">
-            <label>Card Name</label>
-            <input class="form-control" placeholder="Card Name" [(ngModel)]="tempCard.cardName" name="cardName" />
+            <label>Form Name</label>
+            <input class="form-control" placeholder="Form Name" [(ngModel)]="tempModel.modelName" name="modelName" />
           </div>
           <div class="form-group">
-            <label>Template</label>
-            <select class="selectpicker form-control" title="Select Template" [(ngModel)]="tempCard.templateName" name="templateName">
-              <option *ngFor="let template of templateNames" [ngValue]="template">{{template}}</option>
-            </select>
+            <label>Header</label>
+            <input class="form-control" placeholder="Form header" [(ngModel)]="tempModel.header" name="header" />
           </div>
           <div class="form-group">
-            <label>Title</label>
-            <input class="form-control" placeholder="Title" [(ngModel)]="tempCard.title" name="title" />
-          </div>
-          <div class="form-group">
-            <label>Sub Title</label>
-            <input class="form-control" placeholder="Sub Title" [(ngModel)]="tempCard.subTitle" name="subTitle" />
-          </div>
-          <div class="form-group">
-            <label>Avatar URL</label>
-            <input class="form-control" placeholder="Avatar Image Url" [(ngModel)]="tempCard.avatarImageUrl" name="avatarImageUrl" />
-          </div>
-          <div class="form-group">
-            <label>Image Url</label>
-            <input class="form-control" placeholder="Image Url" [(ngModel)]="tempCard.imageUrl" name="imageUrl" />
-          </div>
-          <div class="form-group">
-            <label>Content</label>
-            <input class="form-control" placeholder="Content" [(ngModel)]="tempCard.content" name="content" />
-          </div>
-          <div *ngIf="tempCard.templateName === 'default'" class="form-group">
-            <label>Response options</label>
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Input type</th>
-                  <th>Options</th>
-                  <th>
-                    <button type="button" class="btn btn-primary" (click)="onAddCardActionOption(tempCard)">
-                      <i class="ion-plus-round"></i>
-                    </button>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let option of tempCard.actionable">
-                  <td>
-                    <select name="type" id="type" [(ngModel)]="option.type">
-                      <option value="">Choose One</option>
-                      <option value="BUTTON">Button</option>
-                      <option value="CHECKBOX">Checkbox</option>
-                      <option value="RADIO">Radio</option>
-                      <option value="FILE_UPLOAD">File Upload</option>
-                      <option value="AGENT_SWITCH">Agent Switch</option>
-                    </select>
-                  </td>
-                  <td>
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th>Value</th>
-                          <th>Label</th>
-                          <th>URL</th>
-                          <th *ngIf="option.type == 'AGENT_SWITCH'">Agent ID</th>
-                          <th>
-                            <button type="button" class="btn btn-primary" (click)="onAddCardActinableData(option)">
-                              <i class="ion-plus-round"></i>
-                            </button>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let row of option.data">
-                          <td>
-                            <input type="text" class="form-control" placeholder="Value" [value]="row.value" (input)="row.value = $event.target.value"
-                            />
-                          </td>
-                          <td>
-                            <input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"
-                            />
-                          </td>
-                          <td>
-                            <input type="text" class="form-control" placeholder="URL" [value]="row.url" (input)="row.url = $event.target.value">
-                          </td>
-                          <td *ngIf="option.type == 'AGENT_SWITCH'">
-                            <input type="text" class="form-control" placeholder="Agent ID" [value]="row.agentId" (input)="row.agentId = $event.target.value">
-                          </td>
-                          <td>
-                            <button type="button" class="btn btn-danger" (click)="delete(option.data,row)">
-                              <i class="ion-ios-trash"></i>
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </td>
-                  <td>
-                    <button type="button" class="btn btn-danger" title="delete" (click)="delete(tempCard.actionable, option)">
-                      <i class="ion-ios-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div *ngIf="tempCard.templateName == 'download'">
-            <div class="form-group">
-              <label>Function Name</label>
-              <input class="form-control" placeholder="Function Name" [(ngModel)]="tempCard.document.functionInstanceName" name="functionInstanceName"
-              />
-            </div>
-            <div class="form-group">
-              <label>Entity Type</label>
-              <input class="form-control" placeholder="Entity Type" [(ngModel)]="tempCard.document.entityType" name="entityType" />
-            </div>
-            <div class="form-group">
-              <label>Entity Reference</label>
-              <input class="form-control" placeholder="Entity Reference" [(ngModel)]="tempCard.document.entityRef" name="entityRef" />
-            </div>
-            <div class="form-group">
-              <label>Version</label>
-              <input class="form-control" placeholder="Version" [(ngModel)]="tempCard.document.version" name="version" />
-            </div>
-            <div class="form-group">
-              <label>File Name</label>
-              <input class="form-control" placeholder="File Name" [(ngModel)]="tempCard.document.fileName" name="fileName" />
+            <div id="modelOptionsAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempModel.responseOptions.length > 0">
+              <div *ngFor="let responseOption of tempModel.responseOptions; let index=index" class="panel">
+                <div class="card">
+                  <div *ngIf="index == 0" [id]="'modeloptionsTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                    <h5 class="mb-0">
+                      <a data-toggle="collapse" data-parent="#modelOptionsAccordion" [href]="'#modeloptionsCollapse' + index" aria-expanded="true" [attr.aria-controls]="'modeloptionsCollapse' + index">
+                        {{'Click to expand ' + (responseOption.option ? responseOption.option : '') }}
+                      </a>
+                    </h5>
+                  </div>
+                  <div *ngIf="index != 0" [id]="'modeloptionsTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                    <h5 class="mb-0">
+                      <a class="collapsed" data-toggle="collapse" data-parent="#modelOptionsAccordion" [href]="'#modeloptionsCollapse' + index" aria-expanded="false"
+                        [attr.aria-controls]="'modeloptionsCollapse' + index">
+                        {{'Click to expand ' + (responseOption.option ? responseOption.option : '') }}
+                      </a>
+                    </h5>
+                  </div>
+
+                  <div [id]="'modeloptionsCollapse' + index" [class]="index ==0 ? 'collapse show' : 'collapse'" role="tabpanel" [attr.aria-labelledby]="'modeloptionsTabHeading' + index">
+                    <div class="card-block">
+                      <form>
+                        <div class="form-group">
+                          <label>Option</label>
+                          <select class="selectpicker form-control" title="Select Option" [(ngModel)]="responseOption.option" name="option">
+                            <option *ngFor="let op of modelOptions" [ngValue]="op">{{ op }}</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'modelOptionsSequence' + index">
+                             Sequence
+                          </label>
+                          <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" required
+                             [id]="'modelOptionsSequence' + index" placeholder="Sequence" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"
+                             [(ngModel)]="responseOption.sequence" name="sequence" />
+                       </div>
+                       <button type="button" class="btn btn-primary pull-right" (click)="onAddModelActinableData(responseOption)">
+                          <i class="ion-plus-round">Add</i>
+                      </button>
+                       <div class="form-group">
+                          <table class="table">  
+                            <thead>
+                              <tr>
+                                <th>Label</th>
+                                <th>Value</th>
+                                <th *ngIf="responseOption.option == 'INPUT'">Placeholder</th>
+                                <th *ngIf="responseOption.option == 'INPUT'">Mask</th>
+                                <th *ngIf="responseOption.option == 'INPUT'">Validation Exp</th>
+                                <th *ngIf="responseOption.option == 'INPUT'">errorMessage</th>
+                                <th>Is<br>mandatory</th>
+                                <th *ngIf="responseOption.option == 'INPUT'">Secured</th>
+                                
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor=" let row of responseOption.responseData">
+                                <td>
+                                  <input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"/>
+                                </td>
+                                <td>
+                                  <input type="text" class="form-control" placeholder="value" [value]="row.value" (input)="row.value = $event.target.value"/>
+                                </td>
+                                <td *ngIf="responseOption.option == 'INPUT'">
+                                  <input type="text" class="form-control" placeholder="placeholder" [value]="row.settings.placeholder" (input)="row.settings.placeholder = $event.target.value"/>
+                                </td>
+                                <td *ngIf="responseOption.option == 'INPUT'">
+                                  <input type="text" class="form-control" placeholder="mask" [value]="row.settings.mask" (input)="row.settings.mask = $event.target.value"/>
+                                </td>
+                                <td *ngIf="responseOption.option == 'INPUT'">
+                                  <input type="text" class="form-control" placeholder="validationRegex" [value]="row.settings.validationRegex" (input)="row.settings.validationRegex = $event.target.value"/>
+                                </td>
+                                <td *ngIf="responseOption.option == 'INPUT'">
+                                  <input type="text" class="form-control" placeholder="errorMessage" [value]="row.settings.errorMessage" (input)="row.settings.errorMessage = $event.target.value"/>
+                                </td>
+                                <td style="text-align: center">
+                                  <api-checkbox [checked]="row.settings.isMandatory" (event)="row.settings.isMandatory = $event.target.checked"></api-checkbox>
+                                </td>
+                                <td *ngIf="responseOption.option == 'INPUT'" style="text-align: center">
+                                  <api-checkbox [checked]="row.settings.secured" (event)="row.settings.secured = $event.target.checked"></api-checkbox>
+                                </td>
+                                <td style="text-align: center">
+                                  <button type="button" class="btn btn-danger" (click)="removeModelOptionData(responseOption.responseData, row)">
+                                    <i class="ion-ios-trash"></i>
+                                  </button>
+                                </td>
+                              </tr>
+
+                            </tbody>
+                          </table>
+                       </div>
+                      </form>
+                      <button *ngIf="responseOption.option" class="btn btn-danger" (click)="removeModelOption(responseOption)">Remove</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+          
         </form>
       </div>
 
       <!-- Modal Footer -->
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeCard()">Remove</button>
-        <button type="submit" class="btn btn-primary" (click)="addCard()">{{createMode ? 'Create' : 'Update'}}</button>
+        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeModel(tempModel)">Remove</button>
+        <button type="submit" class="btn btn-primary" (click)="addModel()">{{createMode ? 'Create' : 'Update'}}</button>
+        <button type="submit" class="btn btn-success" (click)="onAddModelResponseOption(tempModel)">Add option</button>
       </div>
     </div>
   </div>

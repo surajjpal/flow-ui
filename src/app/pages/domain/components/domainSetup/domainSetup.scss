@@ -111,8 +111,6 @@ talktext{
     display: inline-block;
 }
   
-  .modal-dialog1{
-    display: inline-block;
-    text-align: left;
-    vertical-align: middle;
-  }
+#largemodal {
+  max-width: 80% !important;
+}

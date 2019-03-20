@@ -7,7 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
 import { Subscription } from 'rxjs/Subscription';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Domain, Intent, Entity, Goal, GoalStep, Response, Stage, ResponseData, ResponseOption, Settings, CardData } from '../../../../models/domain.model';
+import { Domain, Intent, Entity, Goal, GoalStep, Response, Stage, ResponseData, ResponseOption, Settings, CardData, Model, ModelResponseOption, ModelResponseData } from '../../../../models/domain.model';
 
 import { DomainService } from '../../../../services/domain.service';
 import { AlertService, DataSharingService,UniversalUser } from '../../../../services/shared.service';
@@ -30,6 +30,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   private readonly DRAFT = 'DRAFT';
   private readonly READ = "READ";
   private readonly CLONED = 'CLONED';
+  
+  modelOptions: string[] = ["INPUT", "BUTTON", "CHECKBOX", "RADIO"]
 
   entityUploaderOptions: NgUploaderOptions;
   faqUploaderOptions:NgUploaderOptions;
@@ -62,7 +64,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   tempResponse: Response;
   selectedResponse: Response;
   selectedCard: CardData;
+  selectedModel: Model;
   tempCard: CardData;
+  tempModel: Model;
   domainUpdate: string;
   domainBody: string;
   domainSucess: boolean;
@@ -180,6 +184,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.selectedResponse = new Response();
     this.selectedCard = new CardData();
     this.tempCard = new CardData();
+    this.selectedModel = new Model();
+    this.tempModel = new Model();
 
     const uploadIntentUrl = `${environment.autoServer}${environment.uploadintentexcelurl}`;
     this.intentUploaderOptions = {
@@ -756,6 +762,21 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     }
   }
 
+  onModelSelect(model?: Model) {
+    if(model) {
+      this.modalHeader = 'Update Form';
+      this.createMode = false;
+      this.selectedModel = model;
+      this.tempModel = model;
+    }
+    else {
+      this.modalHeader = 'Create Form';
+      this.createMode = true;
+      this.selectedModel = null;
+      this.tempModel = new Model();
+    }
+  }
+
   addFaqResponse(response?: Response) {
     let domainId = null;
     let version = null;
@@ -944,6 +965,87 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.cardsFilterQuery = this.cardsFilterQuery.slice(1);
     }, 10);
+  }
+
+  removeModelOption(responseOption: ModelResponseOption) {
+    console.log("removeModelOption");
+    console.log(responseOption);
+
+    if (this.tempModel &&  this.tempModel.responseOptions) {
+      const index: number = this.tempModel.responseOptions.indexOf(responseOption);
+      console.log(index);
+      if (index != -1) {
+        this.tempModel.responseOptions.splice(index, 1);
+        console.log(this.tempModel);
+      }
+    }
+  }
+
+  removeModelOptionData(responseOptionData: ModelResponseData[], data: ModelResponseData) {
+    if (responseOptionData && data) {
+      const index: number = responseOptionData.indexOf(data);
+      if (index != -1) {
+        responseOptionData.splice(index, 1);
+      }
+    }
+  }
+
+  removeModel(model?: Model) {
+    if (model) {
+      const index: number = this.selectedDomain.models.indexOf(model);
+      if (index != -1) {
+        this.selectedDomain.models.splice(index, 1);
+      }
+    }
+    
+  }
+
+  addModel() {
+    if (!this.tempModel.modelName) {
+      new showAlertModal('Error', 'form name can not be empty');
+      return;
+    }
+    if(!this.tempModel.responseOptions || this.tempModel.responseOptions.length == 0) {
+      new showAlertModal('Error', 'options can not be empty');
+      return;
+    }
+    for(let option of this.tempModel.responseOptions) {
+      if(!option.option) {
+        new showAlertModal('Error', 'option can not be empty');
+        return
+      }
+      if (!option.sequence) {
+        new showAlertModal('Error', 'sequence can not be empty');
+        return;
+      }
+      if(!option.responseData || option.responseData.length ==0 ) {
+        new showAlertModal('Error', 'option data can not be empty for option ' + option.option);
+        return;
+      }
+      for(let optionsData of option.responseData) {
+        if (!optionsData.label || !optionsData.value) {
+          new showAlertModal('Error', 'value and label can not be empty for option ' + option.option);
+          return;
+        }
+      }
+    }
+    if(!this.selectedDomain.models) {
+      this.selectedDomain.models = [];
+    }
+    if (this.selectedModel) {
+      const index: number = this.selectedDomain.models.indexOf(this.selectedModel);
+      if (index !== -1) {
+        this.selectedDomain.models[index] = this.tempModel;
+      }
+      else {
+        new showAlertModal('Error', 'form not found in forms');
+      }
+    }
+    else {
+      this.selectedDomain.models.push(this.tempModel);
+    }
+    new closeModal('modelModal');
+  
   }
 
   addCard(card?: CardData) {
@@ -1258,6 +1360,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     option.data.push(new ResponseOption());
   }
 
+  onAddModelActinableData(option) {
+    option.responseData.push(new ModelResponseData());
+  }
+
   onAddCardData(option) {
     option.cardData.push('');
   }
@@ -1267,6 +1373,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       cardData.actionable = [];
     }
     cardData.actionable.push(new ResponseData())
+  }
+
+  onAddModelResponseOption(model: Model) {
+    if (!model.responseOptions) {
+      model.responseOptions = [];
+    }
+    model.responseOptions.push(new ModelResponseOption());
   }
 
 

@@ -168,6 +168,46 @@ export class CardData {
   }
 }
 
+export class Model {
+  modelName: string;
+  header: string;
+  responseOptions: ModelResponseOption[]
+
+  constructor(modelName?: string, header?: string, responseOptions?: ModelResponseOption[]) {
+    this.modelName = modelName != null && modelName.trim().length >0 ? modelName : null;
+    this.responseOptions = responseOptions != null && responseOptions.length >0 ? responseOptions : [];
+    this.header = header ? header : null;
+  }
+
+}
+
+export class ModelResponseOption {
+  option: string;
+  sequence: number;
+  responseData: ModelResponseData[];
+
+  constructor(option?: string, responseData?:  ModelResponseData[]) {
+    this.option = option ? option : null;
+    this.responseData = responseData ? responseData : [];
+  }
+}
+
+export class ModelResponseData {
+  value: any;
+  label: string;
+  dataType: string;
+  settings: Settings;
+
+  constructor(label?: string, value?: string, dataType?: string, settings?: Settings) {
+    this.label = label ? label : null;
+    this.value = value ? value : null;
+    this.dataType = dataType ? dataType : null;
+    this.settings = settings ? settings : new Settings();
+    
+  }
+
+}
+
 export class ResponseData {
   url: string;
   type: string;
@@ -183,6 +223,7 @@ export class ResponseData {
 }
 
 export class Settings {
+  isMandatory: boolean;
   mask: string;
   secured: boolean;
   validationRegex: string;
@@ -197,6 +238,7 @@ export class Settings {
     this.placeholder = '';
     this.errorMessage = '';
     this.enableDatePicker = false;
+    this.isMandatory = false;
   }
 }
 
@@ -258,6 +300,7 @@ export class Domain {
   domainGoals: Goal[];
   domainResponse: Response[];
   cards: CardData[];
+  models: Model[];
 
   constructor() {
     this._id = null;
