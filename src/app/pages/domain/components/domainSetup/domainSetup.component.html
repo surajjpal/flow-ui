@@ -797,19 +797,21 @@
                                                     <option value="FILE_UPLOAD">File Upload</option>
                                                     <option value="OFFERED_DOCUMENT">Offering</option>
                                                     <option value="CARD">Card</option>
+                                                    <option value="FORM">Form</option>
                                                     <option value="DROPDOWN">Dropdown</option>
+                                                    
                                                   </select>
                                                 </td>
                                                 <td>
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
-                                                <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT'">
+                                                <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
                                                         <th>Value</th>
                                                         <th>Label</th>
-                                                        <th>URL</th>
+                                                        <th >URL</th>
                                                         <th>Language</th>
                                                         <th>Agent ID</th>
                                                         <th>
@@ -873,6 +875,22 @@
                                                             </button>
                                                           </td> -->
                                                       </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </td>
+                                                <td *ngIf="option.type == 'FORM'">
+                                                  <table class="table table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Forms</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <td>
+                                                        <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                          <option *ngFor="let model of selectedDomain.models" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                        </select>
+                                                      </td>
                                                     </tbody>
                                                   </table>
                                                 </td>
@@ -1030,13 +1048,14 @@
                                                       <option value="FILE_UPLOAD">File Upload</option>
                                                       <option value="OFFERED_DOCUMENT">Offering</option>
                                                       <option value="CARD">Card</option>
+                                                      <option value="FORM">Form</option>
                                                       <option value="DROPDOWN">Dropdown</option>
                                                     </select>
                                                   </td>
                                                   <td>
                                                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
+                                                  <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
@@ -1109,6 +1128,22 @@
                                                       </tbody>
                                                     </table>
 
+                                                  </td>
+                                                  <td *ngIf="option.type == 'FORM'">
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                        <tr>
+                                                          <th>Forms</th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <td>
+                                                          <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                            <option *ngFor="let model of selectedDomain.models" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                          </select>
+                                                        </td>
+                                                      </tbody>
+                                                    </table>
                                                   </td>
 
                                                   <!--  adding metadata of offered document -->
@@ -1298,13 +1333,14 @@
                                                     <option value="FILE_UPLOAD">File Upload</option>
                                                     <option value="OFFERED_DOCUMENT">Offering</option>
                                                     <option value="CARD">Card</option>
+                                                    <option value="FORM">Form</option>
                                                     <option value="DROPDOWN">Dropdown</option>
                                                   </select>
                                                 </td>
                                                 <td>
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
-                                                <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
+                                                <td *ngIf="FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
@@ -1377,6 +1413,23 @@
                                                     </tbody>
                                                   </table>
 
+                                                </td>
+                                                <!-- option to choose form -->
+                                                <td *ngIf="option.type == 'FORM'">
+                                                  <table class="table table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Forms</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <td>
+                                                        <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                          <option *ngFor="let model of selectedDomain.models" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                        </select>
+                                                      </td>
+                                                    </tbody>
+                                                  </table>
                                                 </td>
 
                                                 <!--  adding metadata of offered document -->
@@ -1532,19 +1585,20 @@
                                                       <option value="FILE_UPLOAD">File Upload</option>
                                                       <option value="OFFERED_DOCUMENT">Offering</option>
                                                       <option value="CARD">Card</option>
+                                                      <option value="FORM">Form</option>
                                                       <option value="DROPDOWN">Dropdown</option>
                                                     </select>
                                                   </td>
                                                   <td>
                                                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
+                                                  <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
                                                           <th>Value</th>
                                                           <th>Label</th>
-                                                          <th>URL</th>
+                                                          <th >URL</th>
                                                           <th>Language</th>
                                                           <th>Agent ID</th>
                                                           <th>
@@ -1611,6 +1665,24 @@
                                                       </tbody>
                                                     </table>
 
+                                                  </td>
+
+                                                  <!-- option to choose form -->
+                                                  <td *ngIf="option.type == 'FORM'">
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                        <tr>
+                                                          <th>Forms</th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <td>
+                                                          <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                            <option *ngFor="let model of selectedDomain.models" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                          </select>
+                                                        </td>
+                                                      </tbody>
+                                                    </table>
                                                   </td>
 
                                                   <!--  adding metadata of offered document -->
@@ -1897,13 +1969,14 @@
                                                     <option value="FILE_UPLOAD">File Upload</option>
                                                     <option value="OFFERED_DOCUMENT">Offering</option>
                                                     <option value="CARD">Card</option>
+                                                    <option value="FORM">Form</option>
                                                     <option value="DROPDOWN">Dropdown</option>
                                                   </select>
                                                 </td>
                                                 <td>
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
-                                                <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
+                                                <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
@@ -1976,6 +2049,24 @@
                                                     </tbody>
                                                   </table>
 
+                                                </td>
+
+                                                <!-- option to choose form -->
+                                                <td *ngIf="option.type == 'FORM'">
+                                                  <table class="table table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Forms</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <td>
+                                                        <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                          <option *ngFor="let model of selectedDomain.models" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                        </select>
+                                                      </td>
+                                                    </tbody>
+                                                  </table>
                                                 </td>
 
                                                 <!--  adding metadata of offered document -->
@@ -2132,13 +2223,14 @@
                                                       <option value="FILE_UPLOAD">File Upload</option>
                                                       <option value="OFFERED_DOCUMENT">Offering</option>
                                                       <option value="CARD">Card</option>
+                                                      <option value="FORM">Form</option>
                                                       <option value="DROPDOWN">Dropdown</option>
                                                     </select>
                                                   </td>
                                                   <td>
                                                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
+                                                  <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
@@ -2211,6 +2303,24 @@
                                                       </tbody>
                                                     </table>
 
+                                                  </td>
+
+                                                  <!-- option to choose form -->
+                                                  <td *ngIf="option.type == 'FORM'">
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                        <tr>
+                                                          <th>Forms</th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <td>
+                                                          <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                            <option *ngFor="let model of selectedDomain.models" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                          </select>
+                                                        </td>
+                                                      </tbody>
+                                                    </table>
                                                   </td>
 
                                                   <!--  adding metadata of offered document -->
@@ -2400,13 +2510,14 @@
                                                     <option value="FILE_UPLOAD">File Upload</option>
                                                     <option value="OFFERED_DOCUMENT">Offering</option>
                                                     <option value="CARD">Card</option>
+                                                    <option value="FORM">Form</option>
                                                     <option value="DROPDOWN">Dropdown</option>
                                                   </select>
                                                 </td>
                                                 <td>
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
-                                                <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
+                                                <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
@@ -2479,6 +2590,24 @@
                                                     </tbody>
                                                   </table>
 
+                                                </td>
+
+                                                <!-- option to choose form -->
+                                                <td *ngIf="option.type == 'FORM'">
+                                                  <table class="table table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Forms</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <td>
+                                                        <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                          <option *ngFor="let model of selectedDomain.models" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                        </select>
+                                                      </td>
+                                                    </tbody>
+                                                  </table>
                                                 </td>
 
                                                 <!--  adding metadata of offered document -->
@@ -2634,13 +2763,14 @@
                                                       <option value="FILE_UPLOAD">File Upload</option>
                                                       <option value="OFFERED_DOCUMENT">Offering</option>
                                                       <option value="CARD">Card</option>
+                                                      <option value="FORM">Form</option>
                                                       <option value="DROPDOWN">Dropdown</option>
                                                     </select>
                                                   </td>
                                                   <td>
                                                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
+                                                  <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
@@ -2713,6 +2843,24 @@
                                                       </tbody>
                                                     </table>
 
+                                                  </td>
+
+                                                  <!-- option to choose form -->
+                                                  <td *ngIf="option.type == 'FORM'">
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                        <tr>
+                                                          <th>Forms</th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <td>
+                                                          <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                            <option *ngFor="let model of selectedDomain.models" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                          </select>
+                                                        </td>
+                                                      </tbody>
+                                                    </table>
                                                   </td>
 
                                                   <!--  adding metadata of offered document -->
@@ -2955,13 +3103,14 @@
                       <option value="FILE_UPLOAD">File Upload</option>
                       <option value="OFFERED_DOCUMENT">Offering</option>
                       <option value="CARD">Card</option>
+                      <option value="FORM">Form</option>
                       <option value="DROPDOWN">Dropdown</option>
                     </select>
                   </td>
                   <td>
                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                   </td>
-                  <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT'">
+                  <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                     <table class="table table-striped">
                       <thead>
                         <tr>
@@ -3034,6 +3183,24 @@
                       </tbody>
                     </table>
 
+                  </td>
+
+                  <!-- option to choose form -->
+                  <td *ngIf="option.type == 'FORM'">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Forms</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <td>
+                          <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                            <option *ngFor="let model of selectedDomain.models" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                          </select>
+                        </td>
+                      </tbody>
+                    </table>
                   </td>
 
                   <!--  adding metadata of offered document -->
@@ -3337,7 +3504,7 @@
                           <label>Label</label>
                           <input type="text" class="form-control" placeholder="Label" [(ngModel)]="responseOption.label" name="label"/>
                        </div>
-                       <div class="form-group">
+                       <div *ngIf="responseOption.option != 'INPUT'" class="form-group">
                           <label>API to populate data</label>
                           <input type="text" class="form-control" placeholder="API" [(ngModel)]="responseOption.api" name="api"/>
                        </div>
@@ -3355,27 +3522,27 @@
                        </div>
 
                        <div class="form-group">
-                          <div id="modelOptionsDataAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempModel.responseOptions.length > 0">
+                          <div [id]="'modelOptionsDataAccordion' + index" role="tablist" aria-multiselectable="true" *ngIf="tempModel.responseOptions.length > 0">
                             <div *ngFor="let row of responseOption.responseData; let dataindex=index" class="panel">
                               <div class="card">
-                                <div *ngIf="dataindex == 0" [id]="'optionsdataTabHeading' + dataindex" class="card-header" heightStyle="content" role="tab">
+                                <div *ngIf="dataindex == 0" [id]="'optionsdataTabHeading' + index + dataindex" class="card-header" heightStyle="content" role="tab">
                                   <h5 class="mb-0">
-                                    <a data-toggle="collapse" data-parent="#modelOptionsDataAccordion" [href]="'#modeloptionsdataCollapse' + dataindex" aria-expanded="true" 
-                                      [attr.aria-controls]="'modeloptionsdataCollapse' + dataindex">
+                                    <a data-toggle="collapse" [attr.data-parent]="'#modelOptionsDataAccordion' + index" [href]="'#modeloptionsdataCollapse' + index+ dataindex" aria-expanded="true" 
+                                      [attr.aria-controls]="'modeloptionsdataCollapse' + index + dataindex">
                                       {{'Click to expand data for ' + (row.label ? row.label : '') }}
                                     </a>
                                   </h5>
                                 </div>
-                                <div *ngIf="dataindex != 0" [id]="'optionsdataTabHeading' + dataindex" class="card-header" heightStyle="content" role="tab">
+                                <div *ngIf="dataindex != 0" [id]="'optionsdataTabHeading' + index + dataindex" class="card-header" heightStyle="content" role="tab">
                                   <h5 class="mb-0">
-                                    <a class="collapsed" data-toggle="collapse" data-parent="#modelOptionsDataAccordion" [href]="'#modeloptionsdataCollapse' + dataindex" aria-expanded="false"
-                                      [attr.aria-controls]="'modeloptionsdataCollapse' + dataindex">
+                                    <a class="collapsed" data-toggle="collapse" [attr.data-parent]="'#modelOptionsDataAccordion' + index" [href]="'#modeloptionsdataCollapse' + index + dataindex" aria-expanded="false"
+                                      [attr.aria-controls]="'modeloptionsdataCollapse' + index + dataindex">
                                       {{'Click to expand data for ' + (row.label ? row.label : '') }}
                                     </a>
                                   </h5>
                                 </div>
   
-                                <div [id]="'modeloptionsdataCollapse' + dataindex" [class]="index ==0 ? 'collapse show' : 'collapse'" role="tabpanel" [attr.aria-labelledby]="'optionsdataTabHeading' + index">
+                                <div [id]="'modeloptionsdataCollapse' + index + dataindex" [class]="index ==0 ? 'collapse show' : 'collapse'" role="tabpanel" [attr.aria-labelledby]="'optionsdataTabHeading' + index + dataindex">
                                   <div class="card-block">
                                     <form>
                                       <div class="form-group row">
@@ -3406,8 +3573,7 @@
                                         <input type="text" class="form-control" placeholder="errorMessage" [value]="row.settings.errorMessage" (input)="row.settings.errorMessage = $event.target.value"/>
                                       </div>
                                       <div *ngIf="responseOption.option == 'INPUT'"  class="form-group">
-                                        <label>Is secured</label>
-                                        <api-checkbox [checked]="row.settings.secured" (event)="row.settings.secured = $event.target.checked"></api-checkbox>
+                                        <api-checkbox [checked]="row.settings.secured" [label]="'Is secured'" (event)="row.settings.secured = $event.target.checked"></api-checkbox>
                                       </div>
                                       <div class="form-group">
                                         <button type="button" class="btn btn-danger" (click)="removeModelOptionData(responseOption.responseData, row)">

@@ -32,6 +32,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   private readonly CLONED = 'CLONED';
   
   modelOptions: string[] = ["INPUT", "SINGLE_SELECT_DROP_DOWN", "BUTTON", "CHECKBOX", "RADIO"]
+  FILTER_VALUE_LABEL_OPTION_TYPES = ["CARD", "OFFERED_DOCUMENT", "FORM"]
 
   entityUploaderOptions: NgUploaderOptions;
   faqUploaderOptions:NgUploaderOptions;
@@ -968,15 +969,11 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   removeModelOption(responseOption: ModelResponseOption) {
-    console.log("removeModelOption");
-    console.log(responseOption);
-
+    
     if (this.tempModel &&  this.tempModel.responseOptions) {
       const index: number = this.tempModel.responseOptions.indexOf(responseOption);
-      console.log(index);
       if (index != -1) {
         this.tempModel.responseOptions.splice(index, 1);
-        console.log(this.tempModel);
       }
     }
   }
@@ -1022,10 +1019,16 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         new showAlertModal('Error', 'option data can not be empty for option ' + option.option);
         return;
       }
-      for(let optionsData of option.responseData) {
-        if (!optionsData.label || !optionsData.value) {
-          new showAlertModal('Error', 'value and label can not be empty for option ' + option.option);
-          return;
+      if(!option.key) {
+        new showAlertModal('Error', 'key can not be empty for option ' + option.option);
+        return;
+      }
+      if (option.option != "INPUT") {
+        for(let optionsData of option.responseData) {
+          if (!optionsData.label || !optionsData.value) {
+            new showAlertModal('Error', 'value and label can not be empty for option ' + option.option);
+            return;
+          }
         }
       }
     }
