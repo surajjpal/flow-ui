@@ -186,12 +186,13 @@ export class ModelResponseOption {
   sequence: number;
   label: string = null;
   afterSubmitLabel: string = null;
+  alignVertically: boolean;
   key: string = null;
   isMandatory: boolean;
   api: string;
   responseData: ModelResponseData[];
 
-  constructor(option?: string, responseData?:  ModelResponseData[], label?: string, key?: string, isMandatory?: boolean, api?: string, afterSubmitLabel?: string) {
+  constructor(option?: string, responseData?:  ModelResponseData[], label?: string, key?: string, isMandatory?: boolean, api?: string, afterSubmitLabel?: string, alignVertically?: boolean) {
     this.option = option ? option : null;
     this.responseData = responseData ? responseData : [];
     this.label = label ? label : null;
@@ -199,6 +200,7 @@ export class ModelResponseOption {
     this.isMandatory = isMandatory ? isMandatory : false;
     this.api = api ? api : null;
     this.afterSubmitLabel = afterSubmitLabel ? afterSubmitLabel : null;
+    this.alignVertically = alignVertically ? this.alignVertically : false;
   }
 }
 

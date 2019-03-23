@@ -3494,11 +3494,17 @@
                             <option *ngFor="let op of modelOptions" [ngValue]="op">{{ op }}</option>
                           </select>
                         </div>
-                        <div class="form-group">
-                          <label required [for]="'modelOptionsSequence' + index">Sequence</label>
-                          <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" required
-                             [id]="'modelOptionsSequence' + index" placeholder="Sequence" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"
-                             [(ngModel)]="responseOption.sequence" name="sequence" />
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label required [for]="'modelOptionsSequence' + index">Sequence</label>
+                                <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" required
+                                [id]="'modelOptionsSequence' + index" placeholder="Sequence" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"
+                                [(ngModel)]="responseOption.sequence" name="sequence" />
+                            </div>
+                            <div class="col-md-6">
+                                <api-checkbox [checked]="responseOption.alignVertically" [label]="'Align vertically'" (event)="responseOption.alignVertically = $event.target.checked"></api-checkbox>
+                            </div>
+                          
                        </div>
                        <div class="form-group row">
                           <div class="col-md-6">
