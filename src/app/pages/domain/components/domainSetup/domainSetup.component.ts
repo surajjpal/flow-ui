@@ -31,7 +31,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   private readonly READ = "READ";
   private readonly CLONED = 'CLONED';
   
-  modelOptions: string[] = ["INPUT", "SINGLE_SELECT_DROP_DOWN", "BUTTON", "CHECKBOX", "RADIO"]
+  modelOptions: string[] = ["INPUT", "SINGLE_SELECT_DROP_DOWN", "BUTTON", "CHECKBOX", "RADIO", "MULTI_SELECT_DROP_DOWN", "FILE_UPLOAD"]
   FILTER_VALUE_LABEL_OPTION_TYPES = ["CARD", "OFFERED_DOCUMENT", "FORM"]
 
   entityUploaderOptions: NgUploaderOptions;
@@ -989,9 +989,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
   removeModel(model?: Model) {
     if (model) {
-      const index: number = this.selectedDomain.models.indexOf(model);
+      const index: number = this.selectedDomain.formModels.indexOf(model);
       if (index != -1) {
-        this.selectedDomain.models.splice(index, 1);
+        this.selectedDomain.formModels.splice(index, 1);
       }
     }
     
@@ -1032,20 +1032,20 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         }
       }
     }
-    if(!this.selectedDomain.models) {
-      this.selectedDomain.models = [];
+    if(!this.selectedDomain.formModels) {
+      this.selectedDomain.formModels = [];
     }
     if (this.selectedModel) {
-      const index: number = this.selectedDomain.models.indexOf(this.selectedModel);
+      const index: number = this.selectedDomain.formModels.indexOf(this.selectedModel);
       if (index !== -1) {
-        this.selectedDomain.models[index] = this.tempModel;
+        this.selectedDomain.formModels[index] = this.tempModel;
       }
       else {
         new showAlertModal('Error', 'form not found in forms');
       }
     }
     else {
-      this.selectedDomain.models.push(this.tempModel);
+      this.selectedDomain.formModels.push(this.tempModel);
     }
     new closeModal('modelModal');
   

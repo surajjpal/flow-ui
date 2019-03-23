@@ -185,18 +185,20 @@ export class ModelResponseOption {
   option: string;
   sequence: number;
   label: string = null;
+  afterSubmitLabel: string = null;
   key: string = null;
   isMandatory: boolean;
   api: string;
   responseData: ModelResponseData[];
 
-  constructor(option?: string, responseData?:  ModelResponseData[], label?: string, key?: string, isMandatory?: boolean, api?: string) {
+  constructor(option?: string, responseData?:  ModelResponseData[], label?: string, key?: string, isMandatory?: boolean, api?: string, afterSubmitLabel?: string) {
     this.option = option ? option : null;
     this.responseData = responseData ? responseData : [];
     this.label = label ? label : null;
     this.key = key ? key : null;
     this.isMandatory = isMandatory ? isMandatory : false;
     this.api = api ? api : null;
+    this.afterSubmitLabel = afterSubmitLabel ? afterSubmitLabel : null;
   }
 }
 
@@ -310,7 +312,7 @@ export class Domain {
   domainGoals: Goal[];
   domainResponse: Response[];
   cards: CardData[];
-  models: Model[];
+  formModels: Model[];
 
   constructor() {
     this._id = null;
@@ -328,5 +330,6 @@ export class Domain {
     this.domainGoals = [];
     this.domainResponse = [];
     this.cards = [];
+    this.formModels = [];
   }
 }
