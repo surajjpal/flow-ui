@@ -1038,7 +1038,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         }
     
         if(this.increaseVersion){
-            if(this.selectedDomain.statusCd == this.DRAFT){
+            if(this.selectedDomain.statusCd == this.DRAFT && this.selectedDomain._id == null){
               this.selectedDomain.version = this.selectedDomain.version + 1
             }
         }
