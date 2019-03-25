@@ -5,7 +5,7 @@
          data-target="#discardWarningModal">
          <i class="ion-ios-refresh"></i>Discard</button>
       <button type="button" class="btn btn-success btn-with-icon" style="margin-right: 5px" (click)="saveOnServer()"
-         *ngIf="!readOnly">
+         *ngIf="!readOnly" data-toggle="modal"data-target="#saveGraphModal">
          <i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
       <button type="button" class="btn btn-primary btn-with-icon" style="margin-right: 5px" (click)="prepareDummyObject()"
          *ngIf="!readOnly" data-toggle="modal" data-target="#settignsModal">
@@ -1730,4 +1730,29 @@
       </div>
    </div>
 </div>
+
+<!-- save graph Modal -->
+<div class="modal fade" id="saveGraphModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">
+   <div class="modal-dialog">
+     <div class="modal-content">
+       <!-- Modal Header -->
+       <div class="modal-header">
+         <h4 class="modal-title" id="warningLabel">
+           Design
+         </h4>
+       </div>
+ 
+       <!-- Modal Body -->
+       <div class="modal-body" id="modal_body">
+         {{saveGraphModalBody}}
+       </div>
+ 
+       <!-- Modal Footer -->
+       <div class="modal-footer" id="modal_footer">
+         <button type="button" class="btn btn-default" data-dismiss="modal" (click)="dismiss()">Dismiss</button>
+       </div>
+     </div>
+   </div>
+ </div>
+ 
 <!-- /page content -->
