@@ -136,6 +136,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   selectedRule:ApiKeyExpressionMap;
   previousExpression:string = "";
 
+  //save graph modal body text
+  saveGraphModalBody = "Graph saved successfully!";
+
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
   private subscriptionApiConfig: Subscription;
@@ -890,7 +893,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.subscription = this.graphService.save(this.graphObject)
       .subscribe(graphObject => {
         this.graphObject = graphObject;
-        this.router.navigate(['/pg/flw/flsr'], { relativeTo: this.route });
+        //this.router.navigate(['/pg/flw/flsr'], { relativeTo: this.route });
       });
   }
 
