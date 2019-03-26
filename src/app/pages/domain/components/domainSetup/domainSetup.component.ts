@@ -54,6 +54,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   goalFilterQuery: string;
   responseFilterQuery: string;
   cardsFilterQuery: string;
+  modelsFilterQuery: string;
 
   selectedDomain: Domain;
   tempIntent: Intent;
