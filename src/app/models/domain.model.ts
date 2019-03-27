@@ -188,11 +188,13 @@ export class ModelResponseOption {
   afterSubmitLabel: string = null;
   alignVertically: boolean;
   key: string = null;
+  populateOptionDataKey: string = null;
+  prePopulatedValue: any;
   isMandatory: boolean;
   api: string;
   responseData: ModelResponseData[];
 
-  constructor(option?: string, responseData?:  ModelResponseData[], label?: string, key?: string, isMandatory?: boolean, api?: string, afterSubmitLabel?: string, alignVertically?: boolean) {
+  constructor(option?: string, responseData?:  ModelResponseData[], label?: string, key?: string, isMandatory?: boolean, api?: string, afterSubmitLabel?: string, alignVertically?: boolean, populateOptionDataKey?: string, prePopulatedValue?: any) {
     this.option = option ? option : null;
     this.responseData = responseData ? responseData : [];
     this.label = label ? label : null;
@@ -201,6 +203,8 @@ export class ModelResponseOption {
     this.api = api ? api : null;
     this.afterSubmitLabel = afterSubmitLabel ? afterSubmitLabel : null;
     this.alignVertically = alignVertically ? this.alignVertically : false;
+    this.populateOptionDataKey = populateOptionDataKey ? this.populateOptionDataKey : null;
+    this.prePopulatedValue = prePopulatedValue ? this.prePopulatedValue : null;
   }
 }
 

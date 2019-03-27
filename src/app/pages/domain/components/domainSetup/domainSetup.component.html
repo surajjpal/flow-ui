@@ -3519,10 +3519,23 @@
 
                           
                        </div>
-                       <div *ngIf="responseOption.option != 'INPUT'" class="form-group">
-                          <label>API to populate data</label>
-                          <input type="text" class="form-control" placeholder="API" [(ngModel)]="responseOption.api" name="api"/>
+                       <div *ngIf="responseOption.option != 'INPUT' && responseOption.option != 'TEXT_AREA' && responseOption.option != 'DATE'" class="form-group row">
+                         <div class="col-md-6">
+                            <label>API to populate data</label>
+                            <input type="text" class="form-control" placeholder="API" [(ngModel)]="responseOption.api" name="api"/>
+                         </div>
+                         <div class="col-md-6">
+                            <label>Key to populate option data</label>
+                            <input type="text" class="form-control" placeholder="populateOptionDataKey" [(ngModel)]="responseOption.populateOptionDataKey" name="populateDataKey"/>
+                         </div>
+
+                          
                        </div>
+                       <div class="form-group">
+                          <label>Prepopulated Value</label>
+                          <input type="text" class="form-control" placeholder="prePopulatedValue" [(ngModel)]="responseOption.prePopulatedValue" name="prePopulatedValue"/>
+                       </div>
+
                        <div class="form-group row">
                           <div class="col-md-6">
                               <label>Key against which value to be store</label>
@@ -3571,23 +3584,23 @@
                                           </div>
                                           
                                       </div>
-                                      <div *ngIf="responseOption.option == 'INPUT'" class="form-group">
+                                      <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)" class="form-group">
                                           <label>Placeholder</label>
                                           <input type="text" class="form-control" placeholder="placeholder" [value]="row.settings.placeholder" (input)="row.settings.placeholder = $event.target.value"/>
                                       </div>
-                                      <div *ngIf="responseOption.option == 'INPUT'" class="form-group">
+                                      <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)" class="form-group">
                                           <label>Mask</label>
                                           <input type="text" class="form-control" placeholder="mask" [value]="row.settings.mask" (input)="row.settings.mask = $event.target.value"/>
                                       </div>
-                                      <div *ngIf="responseOption.option == 'INPUT'" class="form-group">
+                                      <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)" class="form-group">
                                           <label>Validation Expression</label>
                                           <input type="text" class="form-control" placeholder="validationRegex" [value]="row.settings.validationRegex" (input)="row.settings.validationRegex = $event.target.value"/>
                                       </div>
-                                      <div *ngIf="responseOption.option == 'INPUT'" class="form-group">
+                                      <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)" class="form-group">
                                         <label>Errormessage if expression not matched</label>
                                         <input type="text" class="form-control" placeholder="errorMessage" [value]="row.settings.errorMessage" (input)="row.settings.errorMessage = $event.target.value"/>
                                       </div>
-                                      <div *ngIf="responseOption.option == 'INPUT'"  class="form-group">
+                                      <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)"  class="form-group">
                                         <api-checkbox [checked]="row.settings.secured" [label]="'Is secured'" (event)="row.settings.secured = $event.target.checked"></api-checkbox>
                                       </div>
                                       <div class="form-group">
