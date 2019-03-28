@@ -77,6 +77,7 @@ pipelines:
       - step:
           name: S3 Prod-Compressing files
           deployment: staging
+          image: atlassian/pipelines-awscli
           script:
             - ./compress.sh   #Calling compress.sh to uglify files and compressing build  
             - ./create_artifact.sh
