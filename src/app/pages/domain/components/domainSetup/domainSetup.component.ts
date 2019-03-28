@@ -31,7 +31,15 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   private readonly READ = "READ";
   private readonly CLONED = 'CLONED';
   
-  modelOptions: string[] = ["INPUT", "SINGLE_SELECT_DROP_DOWN", "BUTTON", "CHECKBOX", "RADIO", "MULTI_SELECT_DROP_DOWN", "FILE_UPLOAD"]
+  OPTION_INPUT = "INPUT"
+  OPTION_SINGLE_SELECT_DROP_DOWN = "SINGLE_SELECT_DROP_DOWN"
+  OPTION_CHECKBOX = "CHECKBOX";
+  OPTION_RADIO = "RADIO"
+  OPTION_MULTI_SELECT_DROP_DOWN = "MULTI_SELECT_DROP_DOWN";
+  OPTION_FILE_UPLOAD = "FILE_UPLOAD"
+  OPTION_TEXT_AREA = "TEXT_AREA"
+  OPTION_DATE = "DATE";
+  modelOptions: string[] = [ this.OPTION_INPUT, this.OPTION_SINGLE_SELECT_DROP_DOWN, this.OPTION_CHECKBOX, this.OPTION_RADIO, this.OPTION_MULTI_SELECT_DROP_DOWN, this.OPTION_FILE_UPLOAD, this.OPTION_TEXT_AREA, this.OPTION_DATE ];
   FILTER_VALUE_LABEL_OPTION_TYPES = ["CARD", "OFFERED_DOCUMENT", "FORM"]
 
   entityUploaderOptions: NgUploaderOptions;
@@ -1024,7 +1032,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         new showAlertModal('Error', 'key can not be empty for option ' + option.option);
         return;
       }
-      if (option.option != "INPUT") {
+      if (option.option != this.OPTION_INPUT && option.option != this.OPTION_TEXT_AREA && option.option != this.OPTION_DATE) {
         for(let optionsData of option.responseData) {
           if (!optionsData.label || !optionsData.value) {
             new showAlertModal('Error', 'value and label can not be empty for option ' + option.option);
@@ -1693,5 +1701,12 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
               
             }
           );
+      }
+
+      allowOtherThanValueLabelForForm(option: string) {
+        if (!option) {
+          return false;
+        }
+        return option == this.OPTION_INPUT || option == this.OPTION_TEXT_AREA || option == this.OPTION_DATE
       }
 }
