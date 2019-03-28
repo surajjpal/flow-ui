@@ -80,7 +80,7 @@ pipelines:
           image: atlassian/pipelines-awscli
           script:
             - ./compress.sh   #Calling compress.sh to uglify files and compressing build
-            - tar -cfvz flow-ui.tar.gz ./dist/* 
+            - tar -cvz -f flow-ui.tar.gz ./dist/* 
             - aws s3 cp flow-ui.tar.gz s3://automatapi-build-artifacts/compusoft/flow-ui/release/ 
       
 
