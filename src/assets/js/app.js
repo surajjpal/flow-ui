@@ -1024,6 +1024,8 @@ function deleteSubtree(graph, cell) {
     // Gets the subtree from cell downwards
     var cells = [];
     graph.traverse(cell, true, function (vertex) {
+      var state = vertex.value
+      window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.deleteConfig(state); })
       cells.push(vertex);
 
       return true;
