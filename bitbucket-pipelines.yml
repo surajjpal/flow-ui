@@ -7,7 +7,7 @@ pipelines:
   custom:
     master:
     - step:
-          name-: FlowUI-Demo Build and Release
+          name: FlowUI-Demo Build and Release
           image: node:8.10.0
           caches:
             - node
@@ -61,4 +61,25 @@ pipelines:
             - echo 'Uploading new build on s3'
             - aws s3 cp ./dist/ s3://$AWS_BUCKET_TARGET/ --recursive
             - echo 'build upload successful!'
+  branches:
+    compusoft:
+      - step:                   
+          name: Branch based Prod Build and release
+          image: 'node:8.10.0'
+          caches:
+            - node
+          script: #Modify the commands below to build your repository.
+            - npm install
+            - npm run build:prod
+            - echo 'successfully build!'
+          artifacts: #Defining the artifacts to be passed to each future step.
+            - dist/**
+      - step:
+          name: S3 Prod-Compressing files
+          deployment: staging
+          script:
+            - ./compress.sh   #Calling compress.sh to uglify files and compressing build  
+            - ./create_artifact.sh
+            - aws s3 cp flow-ui.zip s3://automatapi-build-artifacts/compusoft/flow-ui/release/
+      
 
