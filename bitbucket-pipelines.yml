@@ -80,7 +80,6 @@ pipelines:
           image: atlassian/pipelines-awscli
           script:
             - ./compress.sh   #Calling compress.sh to uglify files and compressing build  
-            - ./create_artifact.sh
-            - aws s3 cp flow-ui.zip s3://automatapi-build-artifacts/compusoft/flow-ui/release/
+            - aws s3 cp ./dist/ s3://automatapi-build-artifacts/compusoft/flow-ui/release/ --recursive
       
 
