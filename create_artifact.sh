@@ -5,7 +5,7 @@ ZIP_PRESENT=`which zip`
 if [ -z "$ZIP_PRESENT" ]
 then
   echo "Installation to zip"
-  apt-get install zip
+  yum install zip
 else
   echo "Proceeding to zip"
 fi
