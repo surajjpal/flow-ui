@@ -1032,14 +1032,14 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         new showAlertModal('Error', 'key can not be empty for option ' + option.option);
         return;
       }
-      if (option.option != this.OPTION_INPUT && option.option != this.OPTION_TEXT_AREA && option.option != this.OPTION_DATE) {
-        for(let optionsData of option.responseData) {
-          if (!optionsData.label || !optionsData.value) {
-            new showAlertModal('Error', 'value and label can not be empty for option ' + option.option);
-            return;
-          }
-        }
-      }
+      // if (option.option != this.OPTION_INPUT && option.option != this.OPTION_TEXT_AREA && option.option != this.OPTION_DATE) {
+      //   for(let optionsData of option.responseData) {
+      //     if (!optionsData.label || !optionsData.value) {
+      //       new showAlertModal('Error', 'value and label can not be empty for option ' + option.option);
+      //       return;
+      //     }
+      //   }
+      // }
     }
     if(!this.selectedDomain.formModels) {
       this.selectedDomain.formModels = [];
@@ -1707,6 +1707,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         if (!option) {
           return false;
         }
-        return option == this.OPTION_INPUT || option == this.OPTION_TEXT_AREA || option == this.OPTION_DATE
+        return option == this.OPTION_INPUT || option == this.OPTION_TEXT_AREA || option == this.OPTION_DATE || option == this.OPTION_FILE_UPLOAD;
       }
 }
