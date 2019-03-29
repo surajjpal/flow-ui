@@ -1,0 +1,215 @@
+<div class="widgets">
+    <div class="row">
+      <ba-card [cardTitle]="createMode ? 'Create Data Model' : 'Update Data Model'" baCardClass="with-scroll"
+        class="data-table-container">
+        <div class="panel panel-default">
+          <form>
+            <div class="form-group">
+              <label> Label </label>
+              <input type="text" class="form-control" required placeholder="label" [(ngModel)]="selectedDataModel.label" name="label" />
+            </div>
+            <div class="form-group">
+                <label> Code  </label>
+                <input type="text" class="form-control" required placeholder="code" [(ngModel)]="selectedDataModel.name" name="name" />
+            </div>
+            <div class="form-group">
+                <div id="fieldAccordian" role="tablist" aria-multiselectable="true" *ngIf="selectedDataModel.fields.length > 0">
+                    <div *ngFor="let field of selectedDataModel.fields; let index=index" class="panel">
+                        <div class="card">
+                            <div *ngIf="index == 0" [id]="'gsTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                                <h5 class="mb-0">
+                                    <a data-toggle="collapse" data-parent="#fieldAccordian" [href]="'#gsCollapse' + index" aria-expanded="true" [attr.aria-controls]="'gsCollapse' + index">
+                                    {{'Click to expand ' + field.label}}
+                                    </a>
+                                </h5>
+                            </div>
+                            <div *ngIf="index != 0" [id]="'gsTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                                <h5 class="mb-0">
+                                    <a class="collapsed" data-toggle="collapse" data-parent="#fieldAccordian" [href]="'#gsCollapse' + index" aria-expanded="false"
+                                    [attr.aria-controls]="'gsCollapse' + index">
+                                    {{'Click to expand ' + field.label}}
+                                    </a>
+                                </h5>
+                            </div>
+                            <div *ngIf="index == 0" [id]="'gsCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'gsTabHeading' + index">
+                                <div class="card-block">
+                                    <form>
+                                        <div class="form-group">
+                                            <label class="col-md-12 col-sm-12 col-xs-12" required for="'gsOrder' + index">
+                                            Order
+                                            </label>
+                                            <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'gsSequence' + index" placeholder="Order"
+                                            min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                                            [(ngModel)]="field.order" name="order" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsLabel' + index">
+                                            Label
+                                            </label>
+                                            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsLabel' + index" placeholder="Label"
+                                            [(ngModel)]="field.label" name="goalExpression" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsName' + index">
+                                            Code
+                                            </label>
+                                            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsName' + index" placeholder="Code" [(ngModel)]="field.name"
+                                            name="api" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsValidationTypes' + index">
+                                            Attribute Type
+                                            </label>
+                                            <select class="selectpicker form-control" multiple="false" title="Select Attribute Type Keys" [(ngModel)]="field.type"
+                                            name="goalValidationTypes">
+                                            <option *ngFor="let key of FieldTypes" [ngValue]="key">{{key}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-danger" (click)="removeAttribute(field)">
+                                            Remove Attribute
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div *ngIf="index != 0" [id]="'gsCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'gsTabHeading' + index">
+                                <div class="card-block">
+                                    <form>
+                                        <div class="form-group">
+                                            <label class="col-md-12 col-sm-12 col-xs-12" required for="'gsOrder' + index">
+                                            Order
+                                            </label>
+                                            <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'gsSequence' + index" placeholder="Order"
+                                            min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                                            [(ngModel)]="field.order" name="order" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsLabel' + index">
+                                            Label
+                                            </label>
+                                            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsLabel' + index" placeholder="Label"
+                                            [(ngModel)]="field.label" name="goalExpression" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsName' + index">
+                                            Code
+                                            </label>
+                                            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsName' + index" placeholder="Code" [(ngModel)]="field.name"
+                                            name="api" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsValidationTypes' + index">
+                                            Attribute Type
+                                            </label>
+                                            <select class="selectpicker form-control" multiple="false" title="Select Attribute Type Keys" [(ngModel)]="field.type"
+                                            name="goalValidationTypes">
+                                            <option *ngFor="let key of FieldTypes" [ngValue]="key">{{key}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-danger" (click)="removeAttribute(field)">
+                                            Remove Attribute
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+            <button type="button" class="btn btn-success" (click)="addNewField()">Add Attribute</button>
+            </div>
+          </form>
+          <div class="panel-footer" *ngIf="selected">
+            <button type="button" class="btn btn-success" (click)="saveDataModel()">Save Data Model</button>
+            <button *ngIf="!createMode" type="button" class="btn btn-danger" (click)="deleteDataModel()">Delete</button>
+          </div>
+        </div>
+      </ba-card>
+    </div>
+  </div>
+  
+  
+  
+  
+  <!-- Warning Modal -->
+  <div class="modal fade" id="fileUploadModel" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="warningLabel">
+            {{"File Upload"}}
+          </h4>
+        </div>
+  
+        <!-- Modal Body -->
+        <div class="modal-body" id="modal_body">
+          {{'Uploading file please wait....'}}
+  
+        </div>
+  
+        <!-- Modal Footer -->
+        <div class="modal-footer" id="modal_footer" *ngIf="uploadSucess">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="validationModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="warningLabel">
+            {{"Warning"}}
+          </h4>
+        </div>
+  
+        <!-- Modal Body -->
+        <div class="modal-body" id="modal_body">
+          {{"Sorry cannot save configuration without: "}}
+          <br>
+          <br>
+          {{notSatisfiedDataPoints}}
+  
+        </div>
+  
+        <!-- Modal Footer -->
+        <div class="modal-footer" id="modal_footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="modal fade" id="fileNotUploaded" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="warningLabel">
+            {{"Warning"}}
+          </h4>
+        </div>
+  
+        <!-- Modal Body -->
+        <div class="modal-body" id="modal_body">
+          {{"Please upload a template file"}}
+        </div>
+  
+        <!-- Modal Footer -->
+        <div class="modal-footer" id="modal_footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
+        </div>
+      </div>
+    </div>
+  </div>

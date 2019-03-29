@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { DataModelService } from '../../../../services/setup.service';
 import { DataModelObject } from '../../../../services/shared.service';
 
-import { DataModel } from '../../../../models/setup.model';
+import { DataModel } from '../../../../models/datamodel.model';
 
 @Component({
   selector: 'datamodel-dataModel',
@@ -29,7 +29,6 @@ export class DataModelComponent implements OnInit, OnDestroy {
 
   data;
   rowsOnPage = 10;
-  sortBy = 'machineType';
   sortOrder = 'asc';
   constructor(
     private router: Router,
@@ -44,7 +43,7 @@ export class DataModelComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getConList();
+    this.getDataModelList();
   }
 
   ngOnDestroy(): void {
@@ -74,11 +73,11 @@ export class DataModelComponent implements OnInit, OnDestroy {
       });
   }
 
-  createConnecterConfig(){
-    this.router.navigate(['/pg/stp/stccs'], { relativeTo: this.route });
+  createDataModel(){
+    this.router.navigate(['/pg/stp/stdms'], { relativeTo: this.route });
   }
 
-  getConList(){
+  getDataModelList(){
   this.subscription = this.dataModelService.getDataModelList()
       .subscribe(dataModelList => {
         if (dataModelList) {

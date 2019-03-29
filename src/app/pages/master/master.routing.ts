@@ -14,6 +14,7 @@ import { ConnectorConfigComponent } from './components/connectorConfig/connector
 import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSetup.component';
 import { AccountViewComponent } from './components/accountView/accountView.component';
 import { DataModelComponent } from './components/dataModel/dataModel.component';
+import { DataModelSetupComponent } from './components/dataModelSetup/dataModelSetup.component';
 
 
 const routes: Routes = [
@@ -34,6 +35,7 @@ const routes: Routes = [
       { path: 'anlt', component: AnalyticsReportsComponent },
       { path : 'anltst', component: AnalyticsReportSetupComponent },
       { path:'stdm', component: DataModelComponent },
+      { path:'stdms', component: DataModelSetupComponent},
       { path:'stcc', component: ConnectorConfigComponent },
       { path:'stccs', component: ConConfigSetupComponent }
 

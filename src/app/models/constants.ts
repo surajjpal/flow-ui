@@ -6,3 +6,7 @@ export const commonKeys = {
   returnUrl: 'returnUrl',
   dataModel: 'dataModel'
 };
+
+export enum FieldTypes {
+  TEXT, FLOAT, INT, DATE, BOOLEAN, MODEL
+} 

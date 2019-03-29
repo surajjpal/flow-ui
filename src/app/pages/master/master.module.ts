@@ -27,6 +27,8 @@ import { ConnectorConfigComponent } from './components/connectorConfig/connector
 import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSetup.component';
 import { AccountViewComponent } from './components/accountView/accountView.component';
 import { DataModelComponent } from './components/dataModel/dataModel.component';
+import { DataModelSetupComponent } from './components/dataModelSetup/dataModelSetup.component';
+
 
 @NgModule({
   imports: [
@@ -58,7 +60,8 @@ import { DataModelComponent } from './components/dataModel/dataModel.component';
     ConnectorConfigComponent,
     ConConfigSetupComponent,
     AccountViewComponent,
-    DataModelComponent
+    DataModelComponent,
+    DataModelSetupComponent
   ]
 })
 export class MasterModule { }
