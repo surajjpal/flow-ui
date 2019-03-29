@@ -21,6 +21,9 @@
         <li class="nav-item">
           <a class="nav-link" id="cardsTab" data-toggle="tab" href="#cardsContent" role="tab" aria-controls="cards">Cards</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" id="formsTab" data-toggle="tab" href="#formsContent" role="tab" aria-controls="forms">Forms</a>
+        </li>
       </ul>
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade show active" id="domainContent" aria-labelledby="domainTab">
@@ -292,6 +295,49 @@
                 <tr *ngFor="let card of mfCard.data" (click)="onCardSelect(card)" data-toggle="modal" data-target="#cardModal">
                   <td>{{card.cardName}}</td>
                   <td>{{card.templateName}}</td>
+
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="100%">
+                    <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="formsContent" aria-labelledby="formsTab">
+          <div class="panel panel-default">
+            <form class="row form-inline">
+              <div class="form-group col-sm-10">
+                <input class="form-control" [(ngModel)]="modelsFilterQuery" name="modelsFilterQuery" placeholder="Filter Query" />
+              </div>
+              <div class="form-group col-sm-2">
+                <button type="button" class="btn btn-primary" (click)="onModelSelect()" data-toggle="modal" data-target="#modelModal">
+                  Add Form
+                </button>
+              </div>
+            </form>
+            <br>
+            <table class="table table-striped" [mfData]="selectedDomain.formModels | universalDataFilter : modelsFilterQuery" #mfModels="mfDataTable"
+              [mfRowsOnPage]="10" mfSortBy="modelName">
+              <thead>
+                <tr>
+                  <th>
+                    <mfDefaultSorter by="modelName">Name</mfDefaultSorter>
+                  </th>
+                  <th>
+                    Header
+                  </th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let model of mfModels.data" (click)="onModelSelect(model)" data-toggle="modal" data-target="#modelModal">
+                  <td>{{ model.modelName }}</td>
+                  <td>{{ model.header }}</td>
 
                 </tr>
               </tbody>
@@ -690,6 +736,11 @@
                                           <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
                                         </div>
                                         <div class="form-group">
+                                          <label>Event Id to raise event</label>
+                                          <input class="form-control" placeholder="Event Id" [(ngModel)]="gsResponse.raiseEventIdOnResponse" name="raiseEventIdOnResponse"
+                                          />
+                                        </div>
+                                        <div class="form-group">
                                           <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
                                         </div>
                                         <!--Response settings start-->
@@ -751,19 +802,21 @@
                                                     <option value="FILE_UPLOAD">File Upload</option>
                                                     <option value="OFFERED_DOCUMENT">Offering</option>
                                                     <option value="CARD">Card</option>
+                                                    <option value="FORM">Form</option>
                                                     <option value="DROPDOWN">Dropdown</option>
+                                                    
                                                   </select>
                                                 </td>
                                                 <td>
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
-                                                <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT'">
+                                                <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
                                                         <th>Value</th>
                                                         <th>Label</th>
-                                                        <th>URL</th>
+                                                        <th >URL</th>
                                                         <th>Language</th>
                                                         <th>Agent ID</th>
                                                         <th>
@@ -827,6 +880,22 @@
                                                             </button>
                                                           </td> -->
                                                       </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </td>
+                                                <td *ngIf="option.type == 'FORM'">
+                                                  <table class="table table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Forms</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <td>
+                                                        <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                          <option *ngFor="let model of selectedDomain.formModels" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                        </select>
+                                                      </td>
                                                     </tbody>
                                                   </table>
                                                 </td>
@@ -923,6 +992,11 @@
                                             <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
                                           </div>
                                           <div class="form-group">
+                                            <label>Event Id to raise event</label>
+                                            <input class="form-control" placeholder="Event Id" [(ngModel)]="gsResponse.raiseEventIdOnResponse" name="raiseEventIdOnResponse"
+                                            />
+                                          </div>
+                                          <div class="form-group">
                                             <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
                                           </div>
                                           <!--Response settings start-->
@@ -984,13 +1058,14 @@
                                                       <option value="FILE_UPLOAD">File Upload</option>
                                                       <option value="OFFERED_DOCUMENT">Offering</option>
                                                       <option value="CARD">Card</option>
+                                                      <option value="FORM">Form</option>
                                                       <option value="DROPDOWN">Dropdown</option>
                                                     </select>
                                                   </td>
                                                   <td>
                                                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
+                                                  <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
@@ -1063,6 +1138,22 @@
                                                       </tbody>
                                                     </table>
 
+                                                  </td>
+                                                  <td *ngIf="option.type == 'FORM'">
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                        <tr>
+                                                          <th>Forms</th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <td>
+                                                          <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                            <option *ngFor="let model of selectedDomain.formModels" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                          </select>
+                                                        </td>
+                                                      </tbody>
+                                                    </table>
                                                   </td>
 
                                                   <!--  adding metadata of offered document -->
@@ -1191,6 +1282,11 @@
                                           <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
                                         </div>
                                         <div class="form-group">
+                                          <label>Event Id to raise event</label>
+                                          <input class="form-control" placeholder="Event Id" [(ngModel)]="gsResponse.raiseEventIdOnResponse" name="raiseEventIdOnResponse"
+                                          />
+                                        </div>
+                                        <div class="form-group">
                                           <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
                                         </div>
                                         <!--Response settings start-->
@@ -1252,13 +1348,14 @@
                                                     <option value="FILE_UPLOAD">File Upload</option>
                                                     <option value="OFFERED_DOCUMENT">Offering</option>
                                                     <option value="CARD">Card</option>
+                                                    <option value="FORM">Form</option>
                                                     <option value="DROPDOWN">Dropdown</option>
                                                   </select>
                                                 </td>
                                                 <td>
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
-                                                <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
+                                                <td *ngIf="FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
@@ -1331,6 +1428,23 @@
                                                     </tbody>
                                                   </table>
 
+                                                </td>
+                                                <!-- option to choose form -->
+                                                <td *ngIf="option.type == 'FORM'">
+                                                  <table class="table table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Forms</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <td>
+                                                        <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                          <option *ngFor="let model of selectedDomain.formModels" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                        </select>
+                                                      </td>
+                                                    </tbody>
+                                                  </table>
                                                 </td>
 
                                                 <!--  adding metadata of offered document -->
@@ -1425,6 +1539,12 @@
                                             <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
                                           </div>
                                           <div class="form-group">
+                                            <label>Event Id to raise event</label>
+                                            <input class="form-control" placeholder="Event Id" [(ngModel)]="gsResponse.raiseEventIdOnResponse" name="raiseEventIdOnResponse"
+                                            />
+                                          </div>
+                                          
+                                          <div class="form-group">
                                             <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
                                           </div>
                                           <!--Response settings start-->
@@ -1486,19 +1606,20 @@
                                                       <option value="FILE_UPLOAD">File Upload</option>
                                                       <option value="OFFERED_DOCUMENT">Offering</option>
                                                       <option value="CARD">Card</option>
+                                                      <option value="FORM">Form</option>
                                                       <option value="DROPDOWN">Dropdown</option>
                                                     </select>
                                                   </td>
                                                   <td>
                                                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
+                                                  <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
                                                           <th>Value</th>
                                                           <th>Label</th>
-                                                          <th>URL</th>
+                                                          <th >URL</th>
                                                           <th>Language</th>
                                                           <th>Agent ID</th>
                                                           <th>
@@ -1565,6 +1686,24 @@
                                                       </tbody>
                                                     </table>
 
+                                                  </td>
+
+                                                  <!-- option to choose form -->
+                                                  <td *ngIf="option.type == 'FORM'">
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                        <tr>
+                                                          <th>Forms</th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <td>
+                                                          <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                            <option *ngFor="let model of selectedDomain.formModels" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                          </select>
+                                                        </td>
+                                                      </tbody>
+                                                    </table>
                                                   </td>
 
                                                   <!--  adding metadata of offered document -->
@@ -1790,6 +1929,11 @@
                                           <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
                                         </div>
                                         <div class="form-group">
+                                          <label>Event Id to raise event</label>
+                                          <input class="form-control" placeholder="Event Id" [(ngModel)]="gsResponse.raiseEventIdOnResponse" name="raiseEventIdOnResponse"
+                                          />
+                                        </div>
+                                        <div class="form-group">
                                           <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
                                         </div>
                                         <!--Response settings start-->
@@ -1851,13 +1995,14 @@
                                                     <option value="FILE_UPLOAD">File Upload</option>
                                                     <option value="OFFERED_DOCUMENT">Offering</option>
                                                     <option value="CARD">Card</option>
+                                                    <option value="FORM">Form</option>
                                                     <option value="DROPDOWN">Dropdown</option>
                                                   </select>
                                                 </td>
                                                 <td>
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
-                                                <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
+                                                <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
@@ -1930,6 +2075,24 @@
                                                     </tbody>
                                                   </table>
 
+                                                </td>
+
+                                                <!-- option to choose form -->
+                                                <td *ngIf="option.type == 'FORM'">
+                                                  <table class="table table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Forms</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <td>
+                                                        <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                          <option *ngFor="let model of selectedDomain.formModels" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                        </select>
+                                                      </td>
+                                                    </tbody>
+                                                  </table>
                                                 </td>
 
                                                 <!--  adding metadata of offered document -->
@@ -2025,6 +2188,11 @@
                                             <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
                                           </div>
                                           <div class="form-group">
+                                            <label>Event Id to raise event</label>
+                                            <input class="form-control" placeholder="Event Id" [(ngModel)]="gsResponse.raiseEventIdOnResponse" name="raiseEventIdOnResponse"
+                                            />
+                                          </div>
+                                          <div class="form-group">
                                             <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
                                           </div>
                                           <!--Response settings start-->
@@ -2086,13 +2254,14 @@
                                                       <option value="FILE_UPLOAD">File Upload</option>
                                                       <option value="OFFERED_DOCUMENT">Offering</option>
                                                       <option value="CARD">Card</option>
+                                                      <option value="FORM">Form</option>
                                                       <option value="DROPDOWN">Dropdown</option>
                                                     </select>
                                                   </td>
                                                   <td>
                                                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
+                                                  <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
@@ -2165,6 +2334,24 @@
                                                       </tbody>
                                                     </table>
 
+                                                  </td>
+
+                                                  <!-- option to choose form -->
+                                                  <td *ngIf="option.type == 'FORM'">
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                        <tr>
+                                                          <th>Forms</th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <td>
+                                                          <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                            <option *ngFor="let model of selectedDomain.formModels" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                          </select>
+                                                        </td>
+                                                      </tbody>
+                                                    </table>
                                                   </td>
 
                                                   <!--  adding metadata of offered document -->
@@ -2293,6 +2480,11 @@
                                           <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
                                         </div>
                                         <div class="form-group">
+                                          <label>Event Id to raise event</label>
+                                          <input class="form-control" placeholder="Event Id" [(ngModel)]="gsResponse.raiseEventIdOnResponse" name="raiseEventIdOnResponse"
+                                          />
+                                        </div>
+                                        <div class="form-group">
                                           <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
                                         </div>
                                         <!--Response settings start-->
@@ -2354,13 +2546,14 @@
                                                     <option value="FILE_UPLOAD">File Upload</option>
                                                     <option value="OFFERED_DOCUMENT">Offering</option>
                                                     <option value="CARD">Card</option>
+                                                    <option value="FORM">Form</option>
                                                     <option value="DROPDOWN">Dropdown</option>
                                                   </select>
                                                 </td>
                                                 <td>
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                 </td>
-                                                <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
+                                                <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
@@ -2433,6 +2626,24 @@
                                                     </tbody>
                                                   </table>
 
+                                                </td>
+
+                                                <!-- option to choose form -->
+                                                <td *ngIf="option.type == 'FORM'">
+                                                  <table class="table table-striped">
+                                                    <thead>
+                                                      <tr>
+                                                        <th>Forms</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <td>
+                                                        <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                          <option *ngFor="let model of selectedDomain.formModels" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                        </select>
+                                                      </td>
+                                                    </tbody>
+                                                  </table>
                                                 </td>
 
                                                 <!--  adding metadata of offered document -->
@@ -2527,6 +2738,11 @@
                                             <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="gsResponse.actionHTML" name="actionHTML"></textarea>
                                           </div>
                                           <div class="form-group">
+                                            <label>Event Id to raise event</label>
+                                            <input class="form-control" placeholder="Event Id" [(ngModel)]="gsResponse.raiseEventIdOnResponse" name="raiseEventIdOnResponse"
+                                            />
+                                          </div>
+                                          <div class="form-group">
                                             <api-checkbox [checked]="gsResponse.disableUserInput" [label]="'Disable User Input'" (event)="gsResponse.disableUserInput = $event.target.checked"></api-checkbox>
                                           </div>
                                           <!--Response settings start-->
@@ -2588,13 +2804,14 @@
                                                       <option value="FILE_UPLOAD">File Upload</option>
                                                       <option value="OFFERED_DOCUMENT">Offering</option>
                                                       <option value="CARD">Card</option>
+                                                      <option value="FORM">Form</option>
                                                       <option value="DROPDOWN">Dropdown</option>
                                                     </select>
                                                   </td>
                                                   <td>
                                                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                                                   </td>
-                                                  <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT' ">
+                                                  <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
@@ -2667,6 +2884,24 @@
                                                       </tbody>
                                                     </table>
 
+                                                  </td>
+
+                                                  <!-- option to choose form -->
+                                                  <td *ngIf="option.type == 'FORM'">
+                                                    <table class="table table-striped">
+                                                      <thead>
+                                                        <tr>
+                                                          <th>Forms</th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        <td>
+                                                          <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                                                            <option *ngFor="let model of selectedDomain.formModels" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                                                          </select>
+                                                        </td>
+                                                      </tbody>
+                                                    </table>
                                                   </td>
 
                                                   <!--  adding metadata of offered document -->
@@ -2817,6 +3052,11 @@
             <textarea class="form-control" placeholder="Action HTML" [(ngModel)]="tempResponse.actionHTML" name="actionHTML"></textarea>
           </div>
           <div class="form-group">
+            <label>Event Id to raise event</label>
+            <input class="form-control" placeholder="Event Id" [(ngModel)]="tempResponse.raiseEventIdOnResponse" name="raiseEventIdOnResponse"
+            />
+          </div>
+          <div class="form-group">
             <api-checkbox [checked]="tempResponse.disableUserInput" [label]="'Disable User Input'" (event)="tempResponse.disableUserInput = $event.target.checked"></api-checkbox>
           </div>
           <!--Response settings start-->
@@ -2909,13 +3149,14 @@
                       <option value="FILE_UPLOAD">File Upload</option>
                       <option value="OFFERED_DOCUMENT">Offering</option>
                       <option value="CARD">Card</option>
+                      <option value="FORM">Form</option>
                       <option value="DROPDOWN">Dropdown</option>
                     </select>
                   </td>
                   <td>
                     <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
                   </td>
-                  <td *ngIf="option.type != 'CARD' && option.type != 'OFFERED_DOCUMENT'">
+                  <td *ngIf="option != null && FILTER_VALUE_LABEL_OPTION_TYPES.indexOf(option.type) == -1">
                     <table class="table table-striped">
                       <thead>
                         <tr>
@@ -2988,6 +3229,24 @@
                       </tbody>
                     </table>
 
+                  </td>
+
+                  <!-- option to choose form -->
+                  <td *ngIf="option.type == 'FORM'">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Forms</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <td>
+                          <select class="selectpicker form-control" title="Choose form" [(ngModel)]="option.modelName" name="modelName">
+                            <option *ngFor="let model of selectedDomain.formModels" [ngValue]="model.modelName">{{ model.modelName }}</option>
+                          </select>
+                        </td>
+                      </tbody>
+                    </table>
                   </td>
 
                   <!--  adding metadata of offered document -->
@@ -3218,6 +3477,215 @@
     </div>
   </div>
 </div>
+
+
+<!-- model modal -->
+<div class="modal fade" id="modelModal" tabindex="-1" role="dialog" attr.aria-labelledby="modelModalLabel" aria-hidden="true">
+  <div id="largemodal" class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="modelModalLabel">
+          {{ modalHeader }}
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label>Form Name</label>
+            <input class="form-control" placeholder="Form Name" [(ngModel)]="tempModel.modelName" name="modelName" />
+          </div>
+          <div class="form-group">
+            <label>Header</label>
+            <input class="form-control" placeholder="Form header" [(ngModel)]="tempModel.header" name="header" />
+          </div>
+          <div class="form-group">
+            <div id="modelOptionsAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempModel.responseOptions.length > 0">
+              <div *ngFor="let responseOption of tempModel.responseOptions; let index=index" class="panel">
+                <div class="card">
+                  <div *ngIf="index == 0" [id]="'modeloptionsTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                    <h5 class="mb-0">
+                      <a data-toggle="collapse" data-parent="#modelOptionsAccordion" [href]="'#modeloptionsCollapse' + index" aria-expanded="true" [attr.aria-controls]="'modeloptionsCollapse' + index">
+                        {{'Click to expand option ' + (responseOption.option ? responseOption.option : '') }}
+                      </a>
+                    </h5>
+                  </div>
+                  <div *ngIf="index != 0" [id]="'modeloptionsTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                    <h5 class="mb-0">
+                      <a class="collapsed" data-toggle="collapse" data-parent="#modelOptionsAccordion" [href]="'#modeloptionsCollapse' + index" aria-expanded="false"
+                        [attr.aria-controls]="'modeloptionsCollapse' + index">
+                        {{'Click to expand option ' + (responseOption.option ? responseOption.option : '') }}
+                      </a>
+                    </h5>
+                  </div>
+
+                  <div [id]="'modeloptionsCollapse' + index" [class]="index ==0 ? 'collapse show' : 'collapse'" role="tabpanel" [attr.aria-labelledby]="'modeloptionsTabHeading' + index">
+                    <div class="card-block">
+                      <form>
+                        <div class="form-group">
+                          <button type="button" class="btn btn-primary pull-right" (click)="onAddModelActinableData(responseOption)">
+                              <i class="ion-plus-round">Add Option data</i>
+                          </button>
+                        </div>
+                        
+                        <div class="form-group">
+                          <label>Option</label>
+                          <select class="selectpicker form-control" title="Select Option" [(ngModel)]="responseOption.option" name="option">
+                            <option *ngFor="let op of modelOptions" [ngValue]="op">{{ op }}</option>
+                          </select>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label required [for]="'modelOptionsSequence' + index">Sequence</label>
+                                <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" required
+                                [id]="'modelOptionsSequence' + index" placeholder="Sequence" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"
+                                [(ngModel)]="responseOption.sequence" name="sequence" />
+                            </div>
+                            <div class="col-md-6">
+                                <api-checkbox [checked]="responseOption.alignVertically" [label]="'Align vertically'" (event)="responseOption.alignVertically = $event.target.checked"></api-checkbox>
+                            </div>
+                          
+                       </div>
+                       <div class="form-group row">
+                          <div class="col-md-6">
+                              <label>Label</label>
+                              <input type="text" class="form-control" placeholder="Label" [(ngModel)]="responseOption.label" name="label"/>
+                          </div>
+                          <div class="col-md-6">
+                              <label>Label to be display after submit</label>
+                              <input type="text" class="form-control" placeholder="Label" [(ngModel)]="responseOption.afterSubmitLabel" name="afterSubmitLabel"/>
+                              
+                          </div>
+
+                          
+                       </div>
+                       <div *ngIf="responseOption.option != 'INPUT' && responseOption.option != 'TEXT_AREA' && responseOption.option != 'DATE'" class="form-group row">
+                         <div class="col-md-6">
+                            <label>API to populate data</label>
+                            <input type="text" class="form-control" placeholder="API" [(ngModel)]="responseOption.api" name="api"/>
+                         </div>
+                         <div class="col-md-6">
+                            <label>Key to populate option data</label>
+                            <input type="text" class="form-control" placeholder="populateOptionDataKey" [(ngModel)]="responseOption.populateOptionDataKey" name="populateDataKey"/>
+                         </div>
+
+                          
+                       </div>
+                       <div class="form-group">
+                          <label>Prepopulated Value</label>
+                          <input type="text" class="form-control" placeholder="prePopulatedValue" [(ngModel)]="responseOption.prePopulatedValue" name="prePopulatedValue"/>
+                       </div>
+
+                       <div class="form-group row">
+                          <div class="col-md-6">
+                              <label>Key against which value to be store</label>
+                              <input type="text" class="form-control" placeholder="Key" [(ngModel)]="responseOption.key" name="key"/>
+                          </div>
+                          <div class="col-md-6">
+                              <label></label>
+                              <api-checkbox [checked]="responseOption.isMandatory" [label]="'Is Mandatory'" (event)="responseOption.isMandatory = $event.target.checked"></api-checkbox>
+                          </div>
+                          
+                          
+                       </div>
+
+                       <div class="form-group">
+                          <div [id]="'modelOptionsDataAccordion' + index" role="tablist" aria-multiselectable="true" *ngIf="tempModel.responseOptions.length > 0">
+                            <div *ngFor="let row of responseOption.responseData; let dataindex=index" class="panel">
+                              <div class="card">
+                                <div *ngIf="dataindex == 0" [id]="'optionsdataTabHeading' + index + dataindex" class="card-header" heightStyle="content" role="tab">
+                                  <h5 class="mb-0">
+                                    <a data-toggle="collapse" [attr.data-parent]="'#modelOptionsDataAccordion' + index" [href]="'#modeloptionsdataCollapse' + index+ dataindex" aria-expanded="true" 
+                                      [attr.aria-controls]="'modeloptionsdataCollapse' + index + dataindex">
+                                      {{'Click to expand data for ' + (row.label ? row.label : '') }}
+                                    </a>
+                                  </h5>
+                                </div>
+                                <div *ngIf="dataindex != 0" [id]="'optionsdataTabHeading' + index + dataindex" class="card-header" heightStyle="content" role="tab">
+                                  <h5 class="mb-0">
+                                    <a class="collapsed" data-toggle="collapse" [attr.data-parent]="'#modelOptionsDataAccordion' + index" [href]="'#modeloptionsdataCollapse' + index + dataindex" aria-expanded="false"
+                                      [attr.aria-controls]="'modeloptionsdataCollapse' + index + dataindex">
+                                      {{'Click to expand data for ' + (row.label ? row.label : '') }}
+                                    </a>
+                                  </h5>
+                                </div>
+  
+                                <div [id]="'modeloptionsdataCollapse' + index + dataindex" [class]="index ==0 ? 'collapse show' : 'collapse'" role="tabpanel" [attr.aria-labelledby]="'optionsdataTabHeading' + index + dataindex">
+                                  <div class="card-block">
+                                    <form>
+                                      <div class="form-group row">
+                                          <div class="col-md-6">
+                                              <label>Label</label>
+                                              <input type="text" class="form-control" placeholder="Label" [value]="row.label" (input)="row.label = $event.target.value"/>
+                                          </div>
+                                          <div class="col-md-6">
+                                              <label>Value</label>
+                                              <input type="text" class="form-control" placeholder="value" [value]="row.value" (input)="row.value = $event.target.value"/>
+                                          </div>
+                                          
+                                      </div>
+                                      <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)" class="form-group">
+                                          <label>Placeholder</label>
+                                          <input type="text" class="form-control" placeholder="placeholder" [value]="row.settings.placeholder" (input)="row.settings.placeholder = $event.target.value"/>
+                                      </div>
+                                      <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)" class="form-group">
+                                          <label>Mask</label>
+                                          <input type="text" class="form-control" placeholder="mask" [value]="row.settings.mask" (input)="row.settings.mask = $event.target.value"/>
+                                      </div>
+                                      <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)" class="form-group">
+                                          <label>Validation Expression</label>
+                                          <input type="text" class="form-control" placeholder="validationRegex" [value]="row.settings.validationRegex" (input)="row.settings.validationRegex = $event.target.value"/>
+                                      </div>
+                                      <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)" class="form-group">
+                                        <label>Errormessage if expression not matched</label>
+                                        <input type="text" class="form-control" placeholder="errorMessage" [value]="row.settings.errorMessage" (input)="row.settings.errorMessage = $event.target.value"/>
+                                      </div>
+                                      <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)"  class="form-group">
+                                        <api-checkbox [checked]="row.settings.secured" [label]="'Is secured'" (event)="row.settings.secured = $event.target.checked"></api-checkbox>
+                                      </div>
+                                      <div class="form-group">
+                                        <button type="button" class="btn btn-danger" (click)="removeModelOptionData(responseOption.responseData, row)">
+                                          <i class="ion-ios-trash"> Remove data</i>
+                                        </button>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            
+                          </div>
+                          
+                       </div>
+                      </form>
+                      <button *ngIf="responseOption.option" class="btn btn-danger" (click)="removeModelOption(responseOption)">Remove Option</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal" (click)="removeModel(tempModel)">Remove</button>
+        <button type="submit" class="btn btn-primary" (click)="addModel()">{{createMode ? 'Create' : 'Update'}}</button>
+        <button type="submit" class="btn btn-success" (click)="onAddModelResponseOption(tempModel)">Add option</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- Warning Modal -->
 <div class="modal fade" id="domainUpdateModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel" aria-hidden="true">

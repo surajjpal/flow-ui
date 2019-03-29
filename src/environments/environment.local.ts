@@ -175,7 +175,7 @@ export const environment = {
 
   //Following APIs path - To be used in conjunction with interfaceService property
   crudFunction: '/crud',
-  smCrudFunction:'/smCrud',
+  smCrudFunction:'/smCrudApi',
   sendAgentMessage: '/sendMessage',
 
   // activity monitor services

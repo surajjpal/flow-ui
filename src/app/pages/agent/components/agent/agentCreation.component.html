@@ -122,6 +122,11 @@
                 </select>
               </div>
               <div class="form-group">
+                <label>Custom Init Message</label>
+                <input type="text" class="form-control" required placeholder="Override for default init message (if any)"
+                  [(ngModel)]="selectedAgent.uiComponent.initMessage" name="initMessage" />
+              </div>
+              <div class="form-group">
                 <label>Select Default Language</label>
                 <select class="selectpicker form-control" title="Select Language" [(ngModel)]="selectedAgent.defaultLanguage"
                   name="defaultLanguage">

@@ -30,6 +30,7 @@ import { GraphService, CommunicationService } from '../../../../services/flow.se
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
 import {ConnectorConfigService,FileService} from  '../../../../services/setup.service';
 import { environment } from '../../../../../environments/environment';
+import { AlertService } from 'app/services/shared.service';
 @Component({
   selector: 'api-flow-design',
   templateUrl: './design.component.html',
@@ -151,7 +152,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private graphService: GraphService,
     private communicationService: CommunicationService,
     private connectorConfigService:ConnectorConfigService,
-    private fileService:FileService
+    private fileService:FileService,
+    private alertService: AlertService,
   ) {
     window['flowComponentRef'] = { component: this, zone: zone };
 
@@ -890,7 +892,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.subscription = this.graphService.save(this.graphObject)
       .subscribe(graphObject => {
         this.graphObject = graphObject;
-        this.router.navigate(['/pg/flw/flsr'], { relativeTo: this.route });
+        this.alertService.success('Graph saved successfully!', false, 2000);
+        //this.router.navigate(['/pg/flw/flsr'], { relativeTo: this.route });
       });
   }
 

@@ -168,21 +168,80 @@ export class CardData {
   }
 }
 
+export class Model {
+  modelName: string;
+  header: string;
+  responseOptions: ModelResponseOption[]
+
+  constructor(modelName?: string, header?: string, responseOptions?: ModelResponseOption[]) {
+    this.modelName = modelName != null && modelName.trim().length >0 ? modelName : null;
+    this.responseOptions = responseOptions != null && responseOptions.length >0 ? responseOptions : [];
+    this.header = header ? header : null;
+  }
+
+}
+
+export class ModelResponseOption {
+  option: string;
+  sequence: number;
+  label: string = null;
+  afterSubmitLabel: string = null;
+  alignVertically: boolean;
+  key: string = null;
+  populateOptionDataKey: string = null;
+  prePopulatedValue: any;
+  isMandatory: boolean;
+  api: string;
+  responseData: ModelResponseData[];
+
+  constructor(option?: string, responseData?:  ModelResponseData[], label?: string, key?: string, isMandatory?: boolean, api?: string, afterSubmitLabel?: string, alignVertically?: boolean, populateOptionDataKey?: string, prePopulatedValue?: any) {
+    this.option = option ? option : null;
+    this.responseData = responseData ? responseData : [];
+    this.label = label ? label : null;
+    this.key = key ? key : null;
+    this.isMandatory = isMandatory ? isMandatory : false;
+    this.api = api ? api : null;
+    this.afterSubmitLabel = afterSubmitLabel ? afterSubmitLabel : null;
+    this.alignVertically = alignVertically ? this.alignVertically : false;
+    this.populateOptionDataKey = populateOptionDataKey ? this.populateOptionDataKey : null;
+    this.prePopulatedValue = prePopulatedValue ? this.prePopulatedValue : null;
+  }
+}
+
+export class ModelResponseData {
+  value: any;
+  label: string;
+  dataType: string;
+  settings: Settings;
+
+  constructor(label?: string, value?: string, dataType?: string, settings?: Settings) {
+    this.label = label ? label : null;
+    this.value = value ? value : null;
+    this.dataType = dataType ? dataType : null;
+    this.settings = settings ? settings : new Settings();
+    
+  }
+
+}
+
 export class ResponseData {
   url: string;
   type: string;
   data: ResponseOption[];
   cardData: string[];
+  modelName: string;
 
-  constructor(url?: string, type?: string, data?: ResponseOption[], cardData?: string[]) {
+  constructor(url?: string, type?: string, data?: ResponseOption[], cardData?: string[], modelName?: string) {
     this.url = url ? url : '';
     this.type = type ? type : '';
     this.data = data ? data : [];
     this.cardData = cardData ? cardData : [];
+    this.modelName = modelName ? modelName : null;
   }
 }
 
 export class Settings {
+  isMandatory: boolean;
   mask: string;
   secured: boolean;
   validationRegex: string;
@@ -197,6 +256,7 @@ export class Settings {
     this.placeholder = '';
     this.errorMessage = '';
     this.enableDatePicker = false;
+    this.isMandatory = false;
   }
 }
 
@@ -218,9 +278,10 @@ export class Response {
   contextExpression: string;
   faqResponse:boolean;
   features:any;
+  raiseEventIdOnResponse: string;
 
   constructor(expression?: string[], lang?: string, response?: string,request?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
-      options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string,faqResponse?:boolean,features?:any,uniqueId?:string) {
+      options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string,faqResponse?:boolean,features?:any,uniqueId?:string, raiseEventIdOnResponse?: string) {
     this.level = 1;
 
     this.expression = expression ? expression : [];
@@ -239,6 +300,7 @@ export class Response {
     this.faqResponse = faqResponse ? faqResponse : false;
     this.features = features ? features : [];
     this.uniqueId = uniqueId ? uniqueId : '';
+    this.raiseEventIdOnResponse = raiseEventIdOnResponse ? raiseEventIdOnResponse : null;
   }
 }
 
@@ -258,6 +320,7 @@ export class Domain {
   domainGoals: Goal[];
   domainResponse: Response[];
   cards: CardData[];
+  formModels: Model[];
 
   constructor() {
     this._id = null;
@@ -275,5 +338,6 @@ export class Domain {
     this.domainGoals = [];
     this.domainResponse = [];
     this.cards = [];
+    this.formModels = [];
   }
 }
