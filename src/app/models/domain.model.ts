@@ -278,9 +278,10 @@ export class Response {
   contextExpression: string;
   faqResponse:boolean;
   features:any;
+  raiseEventIdOnResponse: string;
 
   constructor(expression?: string[], lang?: string, response?: string,request?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
-      options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string,faqResponse?:boolean,features?:any,uniqueId?:string) {
+      options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string,faqResponse?:boolean,features?:any,uniqueId?:string, raiseEventIdOnResponse?: string) {
     this.level = 1;
 
     this.expression = expression ? expression : [];
@@ -299,6 +300,7 @@ export class Response {
     this.faqResponse = faqResponse ? faqResponse : false;
     this.features = features ? features : [];
     this.uniqueId = uniqueId ? uniqueId : '';
+    this.raiseEventIdOnResponse = raiseEventIdOnResponse ? raiseEventIdOnResponse : null;
   }
 }
 
