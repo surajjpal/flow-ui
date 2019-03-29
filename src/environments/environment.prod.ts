@@ -3,28 +3,28 @@ export const environment = {
   name: 'production',
 
   // Root
-  root: 'https://compusoft-console.automatapi.xyz/flow/',
+  root: 'http://flow.compusoft.com/flow/',
     
   // API
-  authurl: 'https://compusoft-console.automatapi.xyz/flow/auth/',
+  authurl: 'http://flow.compusoft.com/flow/auth/',
 
   // Services
 
-  saveaccounturl: 'https://compusoft-console.automatapi.xyz/flow/account/create',
-  fetchaccountbyidurl: 'https://compusoft-console.automatapi.xyz/flow/account/',
-  publishaccounturl:'https://compusoft-console.automatapi.xyz/flow/account/publish/',
-  unpublishaccounturl:'https://compusoft-console.automatapi.xyz/flow/account/unpublish/',
-  processauditurl:"http://localhost:5000/api/universalsearch/search/flow",
+  saveaccounturl: 'http://flow.compusoft.com/flow/account/create',
+  fetchaccountbyidurl: 'http://flow.compusoft.com/flow/account/',
+  publishaccounturl:'http://flow.compusoft.com/flow/account/publish/',
+  unpublishaccounturl:'http://flow.compusoft.com/flow/account/unpublish/',
+  processauditurl:"http://api.compusoft.com/api/universalsearch/search/flow",
 
   // Interfaces
-  interfaceService: 'https://compusoft-console.automatapi.xyz/flow/interfaces',
-  updateClassifierTraining : 'https://compusoft-console.automatapi.xyz/flow/interfaces/auto_decorate_training',
-  updateIntentTraining: 'https://compusoft-console.automatapi.xyz/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'https://compusoft-console.automatapi.xyz/flow/interfaces/entity_classification_training',
+  interfaceService: 'http://flow.compusoft.com/flow/interfaces',
+  updateClassifierTraining : 'http://flow.compusoft.com/flow/interfaces/auto_decorate_training',
+  updateIntentTraining: 'http://flow.compusoft.com/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'http://flow.compusoft.com/flow/interfaces/entity_classification_training',
 
   // Flow
-  server: 'https://compusoft-console.automatapi.xyz/flow/console/',
-  autourl:'https://compusoft-agent.automatapi.xyz/?',
+  server: 'http://flow.compusoft.com/flow/console/',
+  autourl:'http://chat.compusoft.com/?',
 
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
@@ -82,7 +82,7 @@ export const environment = {
 
 
   // auto
-  autoServer: 'https://compusoft-console.automatapi.xyz/flow/auto/',
+  autoServer: 'http://flow.compusoft.com/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',
@@ -111,7 +111,7 @@ export const environment = {
   flowsearch:'/api/search/flow',
 
   // Analytics
-  reportservice: 'https://compusoft-console.automatapi.xyz/flow/report',
+  reportservice: 'http://flow.compusoft.com/flow/report',
   sendReportUrl: '/reports/analyticsreport/sendreport',
   scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
   getAnalyticsReports: "/reports/analyticsreport",
@@ -134,7 +134,7 @@ export const environment = {
   businessObjectPredictUrl: '/automatons/businessobject/predict',
   
   //Dashboard
-  dashboardServer: 'https://compusoft-console.automatapi.xyz/flow/dashboard/',
+  dashboardServer: 'http://flow.compusoft.com/flow/dashboard/',
   dashboardsummary:'auto/dashboard_summary',
   episodetimeline:'auto/episode_timeline',
   intentcount:'auto/intent_count',
@@ -150,7 +150,7 @@ export const environment = {
   statetransactionvalue:'flow/state_transaction_value',
 
   //Dashboard from interfaces
-  dashboardinterface: 'https://compusoft-console.automatapi.xyz/flow/interfaces/dashboard',
+  dashboardinterface: 'http://flow.compusoft.com/flow/interfaces/dashboard',
 
   //Following APIs path - To be used in conjunction with interfaceService property
   crudFunction: '/crud',
@@ -164,8 +164,8 @@ export const environment = {
   businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
 
   //python project in api-utils ondemandreport project
-  sendReportCSV: 'https://compusoft-console.automatapi.xyz/flow/report/reports/generatereport',
+  sendReportCSV: 'http://flow.compusoft.com/flow/report/reports/generatereport',
 
   //Vocabulary
-  vocabulary : 'https://compusoft-console.automatapi.xyz/flow/interfaces/vocabulary',
+  vocabulary : 'http://flow.compusoft.com/flow/interfaces/vocabulary',
 };
