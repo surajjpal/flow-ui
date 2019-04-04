@@ -652,66 +652,71 @@
                   </div>
                   <!-- </div> -->
                </div>
+               <div class="row">
+                  <!--  Billing model setup -->
+                  <ba-card cardTitle="Billing Setup" baCardClass="with-scroll" class="col-md-6 col-lg-6 col-xs-6">
+                     <div class="form-group" *ngIf="tempState.billingModel !== null">
+                        <label for="selectBillingType">Billing Type</label>
+                        <select class="selectpicker form-control" required id="selectBillingType"
+                           title="Choose Billing Type" [(ngModel)]="tempState.billingModel.billType" name="billType">
+                           <option *ngFor="let amountType of amountTypes" [value]="amountType">{{amountType}}</option>
+                        </select>
+                     </div>
+                     <div class="form-group"
+                        *ngIf="tempState.billingModel !== null && tempState.billingModel.billType === 'FIXED'">
+                        <label for="amount">Fixed Billing</label>
+                        <input type="number" class="form-control" id="amount" placeholder="Fixed Billing"
+                           [(ngModel)]="tempState.billingModel.amount" name="amount" min="0"
+                           onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)" />
+                     </div>
+                     <div class="form-group"
+                        *ngIf="tempState.billingModel !== null && tempState.billingModel.billType === 'DERIVED'">
+                        <label for="expression">Derived Bill</label>
+                        <textarea class="form-control" placeholder="Billing expressions (separated by line)"
+                           [(ngModel)]="tempState.billingModel.expression" name="expression"></textarea>
+                     </div>
+                     <div class="form-group"
+                        *ngIf="tempState.billingModel !== null && tempState.billingModel.billType === 'API'">
+                        <label for="apiCd">Billing API</label>
+                        <input type="text" class="form-control" id="apiCd" placeholder="Billing API"
+                           [(ngModel)]="tempState.billingModel.apiCd" name="apiCd" />
+                     </div>
+                     <div class="form-group" *ngIf="tempState.billingModel !== null ">
+                        <api-checkbox [checked]="tempState.billingModel.overRideFl"
+                           [label]="'Override Previous Billing'"
+                           (event)="tempState.billingModel.overRideFl = $event.target.checked"></api-checkbox>
+                     </div>
+                  </ba-card>
+                  <!--  Cost model setup -->
+                  <ba-card cardTitle="Cost Setup" baCardClass="with-scroll" class="col-md-6 col-lg-6 col-xs-6">
+                     <div class="form-group" *ngIf="tempState.costModel !== null">
+                        <label for="selectCostType">Cost Type</label>
+                        <select class="selectpicker form-control" required id="selectCostType" title="Choose Cost Type"
+                           [(ngModel)]="tempState.costModel.costType" name="costType">
+                           <option *ngFor="let amountType of amountTypes" [value]="amountType">{{amountType}}</option>
+                        </select>
+                     </div>
+                     <div class="form-group"
+                        *ngIf="tempState.costModel !== null && tempState.costModel.costType === 'FIXED'">
+                        <label for="amount">Fixed cost</label>
+                        <input type="number" class="form-control" required id="amount" placeholder="Fixed cost"
+                           [(ngModel)]="tempState.costModel.amount" name="amount" min="0"
+                           onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)" />
+                     </div>
+                     <div class="form-group"
+                        *ngIf="tempState.costModel !== null && tempState.costModel.costType === 'DERIVED'">
+                        <label for="expression">Fixed cost</label>
+                        <textarea class="form-control" placeholder="Cost expressions (separated by line)"
+                           [(ngModel)]="tempState.costModel.expression" name="expression"></textarea>
+                     </div>
+                     <div class="form-group"
+                        *ngIf="tempState.costModel !== null && tempState.costModel.costType === 'API'">
+                        <label for="apiCd">Cost API</label>
+                        <input type="text" class="form-control" required id="apiCd" placeholder="Cost API"
+                           [(ngModel)]="tempState.costModel.apiCd" name="apiCd" />
+                     </div>
+                  </ba-card>
 
-               <!--  Cost model setup -->
-
-               <div class="form-group" *ngIf="tempState.costModel !== null">
-                  <label for="selectCostType">Cost Type</label>
-                  <select class="selectpicker form-control" required id="selectCostType" title="Choose Cost Type"
-                     [(ngModel)]="tempState.costModel.costType" name="costType">
-                     <option *ngFor="let amountType of amountTypes" [value]="amountType">{{amountType}}</option>
-                  </select>
-               </div>
-               <div class="form-group" *ngIf="tempState.costModel !== null && tempState.costModel.costType === 'FIXED'">
-                  <label for="amount">Fixed cost</label>
-                  <input type="number" class="form-control" required id="amount" placeholder="Fixed cost"
-                     [(ngModel)]="tempState.costModel.amount" name="amount" min="0"
-                     onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)" />
-               </div>
-               <div class="form-group"
-                  *ngIf="tempState.costModel !== null && tempState.costModel.costType === 'DERIVED'">
-                  <label for="expression">Fixed cost</label>
-                  <input type="text" class="form-control" required id="expression" placeholder="Cost Expression"
-                     [(ngModel)]="tempState.costModel.expression" name="expression" />
-               </div>
-               <div class="form-group" *ngIf="tempState.costModel !== null && tempState.costModel.costType === 'API'">
-                  <label for="apiCd">Cost API</label>
-                  <input type="text" class="form-control" required id="apiCd" placeholder="Cost API"
-                     [(ngModel)]="tempState.costModel.apiCd" name="apiCd" />
-               </div>
-
-               <!--  Billing model setup -->
-
-               <div class="form-group" *ngIf="tempState.billingModel !== null">
-                  <label for="selectBillingType">Billing Type</label>
-                  <select class="selectpicker form-control" required id="selectBillingType" title="Choose Billing Type"
-                     [(ngModel)]="tempState.billingModel.billType" name="billType">
-                     <option *ngFor="let amountType of amountTypes" [value]="amountType">{{amountType}}</option>
-                  </select>
-               </div>
-               <div class="form-group"
-                  *ngIf="tempState.billingModel !== null && tempState.billingModel.billType === 'FIXED'">
-                  <label for="amount">Fixed Billing</label>
-                  <input type="number" class="form-control" id="amount" placeholder="Fixed Billing"
-                     [(ngModel)]="tempState.billingModel.amount" name="amount" min="0"
-                     onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)" />
-               </div>
-               <div class="form-group"
-                  *ngIf="tempState.billingModel !== null && tempState.billingModel.billType === 'DERIVED'">
-                  <label for="expression">Derived Bill</label>
-                  <input type="text" class="form-control" id="expression" placeholder="Billing Expression"
-                     [(ngModel)]="tempState.billingModel.expression" name="expression" />
-               </div>
-               <div class="form-group"
-                  *ngIf="tempState.billingModel !== null && tempState.billingModel.billType === 'API'">
-                  <label for="apiCd">Billing API</label>
-                  <input type="text" class="form-control" id="apiCd" placeholder="Billing API"
-                     [(ngModel)]="tempState.billingModel.apiCd" name="apiCd" />
-               </div>
-               <div class="form-group" *ngIf="tempState.billingModel !== null ">
-                  <label for="apiCd">Override Previous Billing</label>
-                  <api-checkbox [checked]="tempState.billingModel.overRideFl" [label]="'Override Previous Billing'"
-                     (event)="tempState.billingModel.overRideFl = $event.target.checked"></api-checkbox>
                </div>
 
                <!-- Data point configuration-->
