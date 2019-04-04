@@ -80,14 +80,12 @@ export const environment = {
     saveconconfig:'connectors/save/',
     getallconinfo:'connectors/getConInfo/',
     getconinfobytype:'connectors/getConInfoByType/',
-<<<<<<< Updated upstream
-=======
+
 
     //DataModelUrls
     datamodelurl:'dataModel/',
     datamodelsaveurl:'dataModel/savedatamodel',
 
->>>>>>> Stashed changes
     
     // auto
     autoServer: 'https://flow.automatapi.com/flow/auto/',

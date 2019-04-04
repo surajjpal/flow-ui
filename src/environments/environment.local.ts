@@ -87,14 +87,11 @@ export const environment = {
   routesurl: 'master/routes',
   apiconfigurl: 'apiConfig/',
 
-<<<<<<< Updated upstream
-=======
   //DataModelUrls
   datamodelurl:'dataModel/',
   datamodelsaveurl:'dataModel/savedatamodel',
 
 
->>>>>>> Stashed changes
   supportedmethodsurl: 'apiConfig/supportedMethods',
   
   connectorinfo:'connectors/',
