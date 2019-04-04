@@ -117,6 +117,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   stateConnectorTaskConfig: ConnectorConfig[];
   stateTaskConfigFunctionInstanceMap = {};
   copyStateConnectorTaskConfig: ConnectorConfig[];
+  toDeleteConfigList:string[];
   //file
   fileSelected:boolean;
   selectedFile:FormData;
@@ -184,6 +185,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.connectorNamesForOld = {};
     this.stateTaskConfigFunctionInstanceMap = {};
     this.tempStateConnectorList = [];
+    this.toDeleteConfigList = [];
     this.temp = {};
     this.responseTypeSource = ['PAYLOAD', 'PARAM'];
     this.paramsToSelectSource = ['SELECTIVE', 'ALL'];
@@ -359,7 +361,6 @@ export class DesignComponent implements OnInit, OnDestroy {
               state.connectorConfigList = [];
             }
             var configTypeRefConName = this.getConfigTypeAndRefConNameForTaskConfigFromConnectors(con);
-            //console.log(configTypeRefConName);
             if (configTypeRefConName != null && configTypeRefConName.configType != null && configTypeRefConName.refConName != null) {
               state.connectorConfigList.push(configTypeRefConName.refConName);
               con.configType = configTypeRefConName.configType;
@@ -485,8 +486,9 @@ export class DesignComponent implements OnInit, OnDestroy {
         .subscribe(conConfigList => {
           if (conConfigList) {
             for (let con of conConfigList){
-              if(!con.taskConfig)
-              this.sourceConConfigList.push(con)
+              if(!con.taskConfig && con.configName){
+                this.sourceConConfigList.push(con)
+              }
             }
           }
         });
@@ -858,7 +860,7 @@ export class DesignComponent implements OnInit, OnDestroy {
           validation.dataPointKey = dataPoint.dataPointName;
         }
       }
-
+      this.removeStateConnectorTaskConfig();
       if (this.stateConnectorTaskConfig && this.stateConnectorTaskConfig.length>0) {
         this.saveStateconnectorConfigurations();
       }
@@ -888,10 +890,10 @@ export class DesignComponent implements OnInit, OnDestroy {
   
 
   saveGraphObject() {
-    
-    this.subscription = this.graphService.save(this.graphObject)
+      this.subscription = this.graphService.save(this.graphObject)
       .subscribe(graphObject => {
         this.graphObject = graphObject;
+        this.deleteTaskConfig();
         this.alertService.success('Graph saved successfully!', false, 2000);
         //this.router.navigate(['/pg/flw/flsr'], { relativeTo: this.route });
       });
@@ -975,48 +977,46 @@ export class DesignComponent implements OnInit, OnDestroy {
     var responseCount = 0;
     this.copyStateConnectorTaskConfig = JSON.parse(JSON.stringify(this.stateConnectorTaskConfig));
     //this.updateOldStateTaskConfig();
-      for (let stateConTaskconfig of this.stateConnectorTaskConfig) {
+    for (let stateConTaskconfig of this.stateConnectorTaskConfig) {
         var errorFound = false;
         if (stateConTaskconfig._id != null) {
           this.subscriptionConConfig = this.connectorConfigService.updateConConfig(stateConTaskconfig)
               .subscribe(
                 response => {
                   responseCount += 1;
+                  const index = this.stateConnectorTaskConfig.indexOf(stateConTaskconfig);
                   stateConTaskconfig = response;
+                  this.stateConnectorTaskConfig.splice(index, 1,stateConTaskconfig);
                   if (responseCount == this.stateConnectorTaskConfig.length) {
                     this.saveGraphObject();
                   }
                 },
                 error => {
-                  this.errorToSaveGraphObject = "unable to update task object for config " + stateConTaskconfig.configType;
+                  this.alertService.error(error["error"]["message"], false, 2000);
                   errorFound = true;
-                  showModal("errorModal");
-                  
                 }
               )
         }
         else {
-          this.subscriptionConConfig = this.connectorConfigService.createConConfig(stateConTaskconfig)
+              this.subscriptionConConfig = this.connectorConfigService.createConConfig(stateConTaskconfig)
               .subscribe(
                 response => {
                   responseCount += 1;
+                  const index = this.stateConnectorTaskConfig.indexOf(stateConTaskconfig);
                   stateConTaskconfig = response;
+                  this.stateConnectorTaskConfig.splice(index, 1,stateConTaskconfig);
                   if (responseCount == this.stateConnectorTaskConfig.length) {
                     this.saveGraphObject();
                   }
                 },
                 error => {
-                  this.errorToSaveGraphObject = "unable to update task object for config " + stateConTaskconfig.configType;
+                  this.alertService.error(error["error"]["message"], false, 2000);
                   errorFound = true;
-                  showModal("errorModal");
-                  
                 }
               )
-        }
+            }
+          }
         
-      }
-     
-    
   }
 
   discardChanges(): void {
@@ -1279,14 +1279,27 @@ export class DesignComponent implements OnInit, OnDestroy {
       if(taskconfig) {
         var alreadyExist = false;
         for (let stateTaskConfig of this.stateConnectorTaskConfig) {
-          if (stateTaskConfig._id != null && stateTaskConfig._id == taskconfig._id) {
-            var index  = this.stateConnectorTaskConfig.indexOf(stateTaskConfig);
-            if (index != -1) {
-              this.stateConnectorTaskConfig.splice(index, 1);
+          if(stateTaskConfig._id){
+            if (stateTaskConfig._id != null && stateTaskConfig._id == taskconfig._id) {
+              var index  = this.stateConnectorTaskConfig.indexOf(stateTaskConfig);
+              if (index != -1) {
+                this.stateConnectorTaskConfig.splice(index, 1);
+              }
+              this.stateConnectorTaskConfig.push(JSON.parse(JSON.stringify(taskconfig)));
+              alreadyExist = true;
             }
-            this.stateConnectorTaskConfig.push(JSON.parse(JSON.stringify(taskconfig)));
-            alreadyExist = true;
           }
+          else{
+            if (stateTaskConfig.configName != null && stateTaskConfig.configName == taskconfig.configName) {
+              var index  = this.stateConnectorTaskConfig.indexOf(stateTaskConfig);
+              if (index != -1) {
+                this.stateConnectorTaskConfig.splice(index, 1);
+              }
+              this.stateConnectorTaskConfig.push(JSON.parse(JSON.stringify(taskconfig)));
+              alreadyExist = true;
+            }
+          }
+          
         }
         if(!alreadyExist) {
           this.stateConnectorTaskConfig.push(JSON.parse(JSON.stringify(taskconfig)));
@@ -1374,14 +1387,6 @@ export class DesignComponent implements OnInit, OnDestroy {
         configNames.push(configName);
       }
     }
-
-    // if (this.tempState.connectorConfig) {
-    //   for(let con of this.tempState.connectorConfig) {
-    //     if(con.configName) {
-    //       configNames.push(con.configName);
-    //     }
-    //   }
-    // }
     
     for(let connConfigName of configNames) {
       var isTaskConfigPresent = false;
@@ -1577,7 +1582,6 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.subscriptionConConfig = this.connectorConfigService.getConInfoByType(type)
     .subscribe(conInfo => {
       if (conInfo) {
-      console.log(conInfo)
       this.conInfoOfNoMetadata = conInfo;
       this.addConfigParamsForNoMetatData();
     }
@@ -1951,14 +1955,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.fileSelected = true;
     this.selectedFile = input;
     this.fileName = file.name;
-    // for (let config of this.requiredConfigList){
-    //   if (config.get('key') == "file-upload"){
-    //     config.set('value',file.name);
-    //   }
-    // }
-    console.log("************ fileName *************");
     config.fileName = file.name;
-    console.log(config.fileName);
     this.uploadFileForTaskConfig(config,file.name);
   }
 
@@ -2084,5 +2081,39 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.previousExpression = "";
   }
 
+  deleteConfig(state?:any){
+    if(state.taskConfigList.length > 0){
+      for(let config of state.taskConfigList){
+        this.toDeleteConfigList.push(config)
+      }
+      
+    }
+  }
+
+  deleteTaskConfig(){
+    if(this.toDeleteConfigList.length > 0){
+      for(let con of this.toDeleteConfigList){
+        this.subscription = this.connectorConfigService.deleteTaskConfig(con)
+        .subscribe(
+          data => {
+          });
+      }
+      this.toDeleteConfigList = [];
+    }
+  }
   
+  removeStateConnectorTaskConfig(){
+    let taskConfigArr = this.stateConnectorTaskConfig;
+    if(this.toDeleteConfigList.length > 0){
+      for(let name of this.toDeleteConfigList){
+        for(let config of this.stateConnectorTaskConfig){
+          if(name == config.configName){
+            const index = taskConfigArr.indexOf(config);
+            taskConfigArr.splice(index, 1);
+          }
+        }
+      }
+      this.stateConnectorTaskConfig = taskConfigArr;
+    }
+  }
 }
