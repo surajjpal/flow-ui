@@ -86,7 +86,7 @@ export class DataModelComponent implements OnInit, OnDestroy {
     commonsearchModel.searchParams = [{"statusCd":"ACTIVE"},{"statusCd":"DRAFT"}];
     commonsearchModel.returnFields = ["label","version","statusCd"];
     this.subscription = this.dataModelService.getDataModelList(commonsearchModel)
-      .subscribe(dataModelList => this.dataModelList = dataModelList);
+      .subscribe(list => this.dataModelList = list);
 
     commonsearchModel = new CommonSearchModel();
     commonsearchModel.searchParams = [{"statusCd":"CLOSED"}];

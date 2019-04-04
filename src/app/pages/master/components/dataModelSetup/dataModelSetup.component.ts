@@ -45,7 +45,8 @@ export class DataModelSetupComponent implements OnInit, OnDestroy {
     private slimLoadingBarService: SlimLoadingBarService,
     private user:UniversalUser,
     private sharingObject: DataModelObject,
-    private dataModelService:DataModelService
+    private dataModelService:DataModelService,
+    private alertService: AlertService,
   )
   {
     this.createMode = false;
@@ -73,24 +74,41 @@ export class DataModelSetupComponent implements OnInit, OnDestroy {
     }
 
     saveDataModel(){
-     if(!this.selectedDataModel.statusCd && this.createMode){
+     if(this.createMode){
        this.selectedDataModel.statusCd = this.DRAFT;
        this.selectedDataModel.version = 1;
+       this.dataModelSubscription =  this.dataModelService.saveDataModel(this.selectedDataModel)
+      .subscribe(
+      dataModel => {
+        if(dataModel){
+          this.selectedDataModel = dataModel;
+          this.createMode = false;
+          this.alertService.success("Data Model saved successfully", false, 2000);
+        }
+      },
+      error => {
+        this.alertService.error(error["error"]["message"], false, 2000);
+      }
+    );
      }
      else if(!this.createMode){
        if(this.selectedDataModel.statusCd == this.ACTIVE){
          this.selectedDataModel.version = this.selectedDataModel.version + 1;
-       }
-     }
-     this.dataModelSubscription =  this.dataModelService.saveDataModel(this.selectedDataModel)
-    .subscribe(
+         this.dataModelSubscription =  this.dataModelService.updateDataModel(this.selectedDataModel)
+      .subscribe(
       dataModel => {
         if(dataModel){
           this.selectedDataModel = dataModel;
+          this.alertService.success("Data Model updated successfully", false, 2000);
         }
-      });
-
+      },
+      error => {
+        this.alertService.error(error["error"]["message"], false, 2000);
+      }
+    );
     }
+    }
+  }
 
     addNewField(){
         if (this.selectedDataModel && this.selectedDataModel.fields) {

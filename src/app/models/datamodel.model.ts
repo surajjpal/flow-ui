@@ -5,6 +5,7 @@ export class DataModel extends BaseModel{
     name: string;
     fields: Field[];
     version:number;
+    process:string;
     validators: ValidatorInstance[];
 
   constructor() {
@@ -14,6 +15,7 @@ export class DataModel extends BaseModel{
     this.name = '';
     this.fields = [];
     this.version = 0;
+    this.process = '';
     this.validators = [];
   }
 }
@@ -21,7 +23,6 @@ export class DataModel extends BaseModel{
 export class Field{
     label:string;
     name:string;
-    process:string;
     validators:ValidatorInstance[];
     extractors:ExtractorInstance[];
     modelName:string;
@@ -32,7 +33,6 @@ export class Field{
     constructor(){
         this.label = '';
         this.name = '';
-        this.process = '';
         this.validators = [];
         this.extractors = [];
         this.modelName = '';

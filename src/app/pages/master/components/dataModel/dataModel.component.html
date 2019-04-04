@@ -34,7 +34,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let dataModel of mf.data">
-              <td>{{dataModel.displayName}}</td>
+              <td>{{dataModel.label}}</td>
               <td>{{dataModel.statuCd}}</td>
               <td>{{dataModel.version}}</td>
               <td *ngIf="dataModel.statusCd === ACTIVE">
