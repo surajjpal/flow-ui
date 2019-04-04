@@ -9,6 +9,7 @@ import { AlertService, DataSharingService,UniversalUser } from '../../../../serv
 import { DataModelObject } from '../../../../services/shared.service';
 import { DataModelService } from '../../../../services/setup.service';
 import { DataModel,Field,ValidatorInstance, ExtractorInstance } from '../../../../models/datamodel.model';
+import { CommonSearchModel } from '../../../../models/flow.model';
 
 import {FieldTypes} from '../../../../models/constants';
 import { environment } from '../../../../../environments/environment';
@@ -30,11 +31,13 @@ export class DataModelSetupComponent implements OnInit, OnDestroy {
 
   private dataModelSubscription: Subscription;
   createMode:boolean;
+  readOnlyMode:boolean;
   selectedDataModel:DataModel;
   fieldTypes:string[];
   process:string;
   validatorTypes:string[];
   extractorTypes:string[];
+  dataModelList:DataModel[];
   
 
 
@@ -50,7 +53,9 @@ export class DataModelSetupComponent implements OnInit, OnDestroy {
   )
   {
     this.createMode = false;
+    this.readOnlyMode = false;
     this.selectedDataModel = new DataModel();
+    this.dataModelList = [];
     this.fieldTypes = ['TEXT', 'FLOAT', 'INT', 'DATE', 'BOOLEAN', 'MODEL'];
     this.validatorTypes = ['ApiInvoker','Rquired'];
     this.extractorTypes = ["Regex","Picklist"];
@@ -61,16 +66,38 @@ export class DataModelSetupComponent implements OnInit, OnDestroy {
         if(dataModel){
             this.createMode = false;
             this.selectedDataModel = dataModel;
+            if(this.selectedDataModel.statusCd == "READ_ONLY"){
+              this.readOnlyMode = true;
+            }
         }
         else{
             this.selectedDataModel = new DataModel();
             this.createMode = true;
         }
+        this.getActiveModels();
 
     }
 
     ngOnDestroy(){
       this.sharingObject.removeDataModel();
+    }
+
+
+    getActiveModels(){
+      let commonsearchModel = new CommonSearchModel();
+      commonsearchModel.searchParams = [{"statusCd":"ACTIVE"}];
+      commonsearchModel.returnFields = ["name"];
+      this.dataModelSubscription = this.dataModelService.getDataModelList(commonsearchModel)
+        .subscribe(list => {
+          if(list){
+              for(let dt of list){
+                if(dt._id!=this.selectedDataModel._id && dt.name!=this.selectedDataModel.name){
+                  this.dataModelList.push(dt);
+                }
+              }
+          }
+          
+        });
     }
 
     saveDataModel(){
@@ -92,8 +119,9 @@ export class DataModelSetupComponent implements OnInit, OnDestroy {
     );
      }
      else if(!this.createMode){
-       if(this.selectedDataModel.statusCd == this.ACTIVE){
+       if(this.selectedDataModel.statusCd == this.DRAFT && this.selectedDataModel._id == null){
          this.selectedDataModel.version = this.selectedDataModel.version + 1;
+       }
          this.dataModelSubscription =  this.dataModelService.updateDataModel(this.selectedDataModel)
       .subscribe(
       dataModel => {
@@ -106,7 +134,6 @@ export class DataModelSetupComponent implements OnInit, OnDestroy {
         this.alertService.error(error["error"]["message"], false, 2000);
       }
     );
-    }
     }
   }
 
@@ -177,8 +204,20 @@ export class DataModelSetupComponent implements OnInit, OnDestroy {
         }
       }
 
-      onTypeSelect(event,field){
-        console.log(field);
+      onTypeSelect(event,field?:Field){
+        if(field.type.toString() != "MODEL"){
+            field.modelName = "";
+         }
+         else if(field.type.toString() == "MODEL"){
+          if(this.dataModelList.length == 0){
+            this.alertService.error("You must have an active data model to attach", false, 2000);
+            field.type = null;
+          }
+         }
+      }
+
+      onModelSelect(event,field?:Field){
+       
       }
 
       onValidatorSelect(event,validator){

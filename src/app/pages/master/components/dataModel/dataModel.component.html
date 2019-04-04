@@ -8,13 +8,13 @@
           </div>
           <div class="form-group col-sm-2">
             <button type="button" class="btn btn-primary" (click)="createDataModel()">
-              Create DataModel Configuration
+              Create Data Model
             </button>
           </div>
         </form>
         <br>
 
-        <table class="table table-striped" [mfData]="DataModelList | universalDataFilter : filterQuery" #mf="mfDataTable"
+        <table class="table table-striped" [mfData]="dataModelList | universalDataFilter : filterQuery" #mf="mfDataTable"
           [mfRowsOnPage]="10" mfSortBy="name">
           <thead>
             <tr>
@@ -35,7 +35,7 @@
           <tbody>
             <tr *ngFor="let dataModel of mf.data">
               <td>{{dataModel.label}}</td>
-              <td>{{dataModel.statuCd}}</td>
+              <td>{{dataModel.statusCd}}</td>
               <td>{{dataModel.version}}</td>
               <td *ngIf="dataModel.statusCd === ACTIVE">
                 <div class="btn-group" role="group">
@@ -68,9 +68,10 @@
                   <button type="button" class="btn btn-info" title="Edit" (click)="onDataModelSelect(dataModel, OPEN_IN_EDIT_MODE)">
                     <i class="ion-edit"></i>
                   </button>
-                  <button type="button" class="btn btn-success" title="Publish" (click)="activateDataModelWarning(dataModel,PUBLISH_DATAMODEL)">
-                    <i class="fa fa-check-square-o"></i>
-                  </button>
+                  <button type="button" class="btn btn-success" title="Publish" (click)="onDataModelSelect(dataModel)"
+                        data-toggle="modal" data-target="#finalWarningModal">
+                        <i class="fa fa-check-square-o"></i>
+                      </button>
                 </div>
               </td>
             </tr>
@@ -85,5 +86,38 @@
         </table>
       </div>
     </ba-card>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="finalWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="finalWarningLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="finalWarningLabel">
+          Warning
+        </h4>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        Once it is finalised it can no longer be edited and you have to clone it and create a new copy of it to make
+        any further
+        changes. This will create a new version of the Data Model. Are you sure you want to finalise the Data Model?
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" (click)="activateDataModel(selectedDataModel, 'finalWarningModal')">Finalise</button>
+      </div>
+    </div>
   </div>
 </div>

@@ -6,11 +6,11 @@
           <form>
             <div class="form-group">
               <label> Label </label>
-              <input type="text" class="form-control" required placeholder="label" [(ngModel)]="selectedDataModel.label" name="label" />
+              <input type="text" class="form-control" [disabled] = "selectedDataModel.locked" required placeholder="label" [(ngModel)]="selectedDataModel.label" name="label" />
             </div>
             <div class="form-group">
                 <label> Code  </label>
-                <input type="text" class="form-control" required placeholder="code" [(ngModel)]="selectedDataModel.name" name="name" />
+                <input type="text" class="form-control" [disabled] = "selectedDataModel.locked" required placeholder="code" [(ngModel)]="selectedDataModel.name" name="name" />
             </div>
             <div class="form-group">
                 <label> Process to Invoke  </label>
@@ -24,7 +24,7 @@
                       <div class="card">
                           <div *ngIf="index == 0" [id]="'vTabHeading' + index" class="card-header" heightStyle="content" role="tab">
                               <h5 class="mb-0">
-                                  <a data-toggle="collapse" data-parent="#validatorAccordian" [href]="'#vCollapse' + index" aria-expanded="true" [attr.aria-controls]="'vCollapse' + index">
+                                  <a data-toggle="collapse" data-parent="#validatorAccordian" [href]="'#vCollapse' + index" aria-expanded="false" [attr.aria-controls]="'vCollapse' + index">
                                   {{'Click to expand Validator ' + validator.name}}
                                   </a>
                               </h5>
@@ -42,7 +42,7 @@
                                   <form>
                                       <div class="form-group">
                                         <label>Select Validator Type</label>
-                                        <select (change)="onValidatorSelect($event, validator)"
+                                        <select (change)="onValidatorSelect($event, validator)" 
                                             class="form-control" required id="validatorSelection" title="Choose Validator"
                                             [(ngModel)]="validator.name" name="validatorType">
                                             <option *ngFor="let validatorType of validatorTypes"
@@ -55,7 +55,7 @@
                                         <label class="col-md-12 col-sm-12 col-xs-12" required for="'vApi' + index">
                                           API
                                           </label>
-                                          <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'vApi' + index" placeholder="API"
+                                          <input type="text"  class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'vApi' + index" placeholder="API"
                                           [(ngModel)]="validator.params['api']" name="api" />
                                       </div>
                                       <div class="form-group">
@@ -66,13 +66,13 @@
                                   </form>
                               </div>
                           </div>
-                          <div *ngIf="index != 0" [id]="'vCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'vTabHeading' + index">
+                          <div *ngIf="index != 0" [id]="'vCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'vTabHeading' + index">
                               <div class="card-block">
                                 <form>
                                   <div class="form-group">
                                     <label>Select Validator Type</label>
                                     <select (change)="onValidatorSelect($event, field)"
-                                        class="form-control" required id="validatorSelection" title="Choose Validator"
+                                        class="form-control" required id="validatorSelection" title="Choose Validator" 
                                         [(ngModel)]="validator.name" name="validatorType">
                                         <option *ngFor="let validatorType of validatorTypes"
                                             [ngValue]="validatorType">{{ validatorType }}
@@ -84,7 +84,7 @@
                                     <label class="col-md-12 col-sm-12 col-xs-12" required for="'vApi' + index">
                                       API
                                       </label>
-                                      <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'vApi' + index" placeholder="API"
+                                      <input type="text"  class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'vApi' + index" placeholder="API"
                                       [(ngModel)]="validator.params['api']" name="api" />
                                   </div>
                                   <div class="form-group">
@@ -100,7 +100,7 @@
               </div>
           </div>
           <!-- Validator Button -->
-          <div class="form-group">
+          <div class="form-group" *ngIf="!readOnlyMode">
             <button type="button" class="btn btn-primary" (click)="addValidator()">Add Validator</button>
           </div>
         </form>
@@ -122,7 +122,7 @@
                         <div class="card">
                             <div *ngIf="index == 0" [id]="'gsTabHeading' + index" class="card-header" heightStyle="content" role="tab">
                                 <h5 class="mb-0">
-                                    <a data-toggle="collapse" data-parent="#fieldAccordian" [href]="'#gsCollapse' + index" aria-expanded="true" [attr.aria-controls]="'gsCollapse' + index">
+                                    <a data-toggle="collapse" class="collapsed" data-parent="#fieldAccordian" [href]="'#gsCollapse' + index" aria-expanded="false" [attr.aria-controls]="'gsCollapse' + index">
                                     {{'Click to expand Attribute ' + field.label}}
                                     </a>
                                 </h5>
@@ -142,28 +142,28 @@
                                             <label class="col-md-12 col-sm-12 col-xs-12" required for="'gsOrder' + index">
                                             Order
                                             </label>
-                                            <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'gsSequence' + index" placeholder="Order"
+                                            <input [disabled] = "field.locked" type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'gsSequence' + index" placeholder="Order"
                                             min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
-                                            [(ngModel)]="field.order" name="order" />
+                                            [(ngModel)]="field.sortOrder" name="order" />
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsLabel' + index">
                                             Label
                                             </label>
-                                            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsLabel' + index" placeholder="Label"
+                                            <input type="text" [disabled] = "field.locked" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsLabel' + index" placeholder="Label"
                                             [(ngModel)]="field.label" name="goalExpression" />
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsName' + index">
                                             Code
                                             </label>
-                                            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsName' + index" placeholder="Code" [(ngModel)]="field.name"
+                                            <input type="text" [disabled] = "field.locked" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsName' + index" placeholder="Code" [(ngModel)]="field.name"
                                             name="code" />
                                         </div>
                                         <div class="form-group">
                                             <label>Select Attribute Type</label>
                                             <select (change)="onTypeSelect($event, field)"
-                                                class="form-control" required id="typeSelection" title="Choose Type"
+                                                class="form-control" required id="typeSelection" title="Choose Type" [disabled] = "field.locked" 
                                                 [(ngModel)]="field.type" name="AttributeType">
                                                 <option *ngFor="let fieldType of fieldTypes"
                                                     [ngValue]="fieldType">{{ fieldType }}
@@ -174,8 +174,13 @@
                                             <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsModelName' + index">
                                             Model Name
                                             </label>
-                                            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsModelName' + index" placeholder="Model Name" [(ngModel)]="field.modelName"
-                                            name="code" />
+                                            <select (change)="onModelSelect($event, field)"
+                                                class="form-control" required id="typeSelection" title="Choose Type" [disabled] = "field.locked" 
+                                                [(ngModel)]="field.modelName" name="modelName">
+                                                <option *ngFor="let dataModel of dataModelList"
+                                                    [ngValue]="dataModel.name">{{ dataModel.name }}
+                                                </option>
+                                            </select>
                                         </div>
                                         <!-- Field Validator Accordian -->
                                         <div class="form-group">
@@ -184,7 +189,7 @@
                                                     <div class="card">
                                                         <div *ngIf="index == 0" [id]="'vfTabHeading' + index" class="card-header" heightStyle="content" role="tab">
                                                             <h5 class="mb-0">
-                                                                <a data-toggle="collapse" data-parent="#fieldValidatorAccordian" [href]="'#vfCollapse' + index" aria-expanded="true" [attr.aria-controls]="'vfCollapse' + index">
+                                                                <a data-toggle="collapse" data-parent="#fieldValidatorAccordian" [href]="'#vfCollapse' + index" aria-expanded="false" [attr.aria-controls]="'vfCollapse' + index">
                                                                 {{'Click to expand Validator ' + validator.name}}
                                                                 </a>
                                                             </h5>
@@ -197,7 +202,7 @@
                                                                 </a>
                                                             </h5>
                                                         </div>
-                                                        <div *ngIf="index == 0" [id]="'vfCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + index">
+                                                        <div *ngIf="index == 0" [id]="'vfCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + index">
                                                             <div class="card-block">
                                                                 <form>
                                                                     <div class="form-group">
@@ -214,7 +219,7 @@
                                                                       <label class="col-md-12 col-sm-12 col-xs-12" required for="'vfApi' + index">
                                                                         API
                                                                         </label>
-                                                                        <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'vfApi' + index" placeholder="API"
+                                                                        <input type="text"   class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'vfApi' + index" placeholder="API"
                                                                         [(ngModel)]="validator.params['api']" name="api" />
                                                                     </div>
                                                                     <div class="form-group">
@@ -225,7 +230,7 @@
                                                                 </form>
                                                             </div>
                                                         </div>
-                                                        <div *ngIf="index != 0" [id]="'vfCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + index">
+                                                        <div *ngIf="index != 0" [id]="'vfCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + index">
                                                             <div class="card-block">
                                                               <form>
                                                                 <div class="form-group">
@@ -267,7 +272,7 @@
                                                     <div class="card">
                                                         <div *ngIf="index == 0" [id]="'veTabHeading' + index" class="card-header" heightStyle="content" role="tab">
                                                             <h5 class="mb-0">
-                                                                <a data-toggle="collapse" data-parent="#fieldExtractorAccordian" [href]="'#veCollapse' + index" aria-expanded="true" [attr.aria-controls]="'veCollapse' + index">
+                                                                <a data-toggle="collapse" data-parent="#fieldExtractorAccordian" [href]="'#veCollapse' + index" aria-expanded="false" [attr.aria-controls]="'veCollapse' + index">
                                                                 {{'Click to expand Extractor ' + extractor.name}}
                                                                 </a>
                                                             </h5>
@@ -280,7 +285,7 @@
                                                                 </a>
                                                             </h5>
                                                         </div>
-                                                        <div *ngIf="index == 0" [id]="'veCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + index">
+                                                        <div *ngIf="index == 0" [id]="'veCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + index">
                                                             <div class="card-block">
                                                                 <form>
                                                                     <div class="form-group">
@@ -304,8 +309,10 @@
                                                                         <label class="col-md-12 col-sm-12 col-xs-12" required for="'veExtractor' + index">
                                                                           Values
                                                                           </label>
-                                                                          <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'veExtractor' + index" placeholder="Values"
-                                                                          [(ngModel)]="extractor.params['values']" name="extractor" />
+                                                                          <tag-input [(ngModel)]="extractor.params['values']" dragZone="tags" name="values"
+                                                                            [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Values (Enter separated)"
+                                                                            secondaryPlaceholder="Enter a new Value (Enter separated)" theme="minimal" class="custom-input-tag-border">
+                                                                        </tag-input>
                                                                       </div>
                                                                     <div class="form-group">
                                                                         <button type="button" class="btn btn-danger" (click)="removeFieldExtractor(extractor,field)">
@@ -315,7 +322,7 @@
                                                                 </form>
                                                             </div>
                                                         </div>
-                                                        <div *ngIf="index != 0" [id]="'veCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + index">
+                                                        <div *ngIf="index != 0" [id]="'veCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + index">
                                                             <div class="card-block">
                                                                 <form>
                                                                     <div class="form-group">
@@ -339,8 +346,10 @@
                                                                         <label class="col-md-12 col-sm-12 col-xs-12" required for="'veExtractor' + index">
                                                                           Values
                                                                           </label>
-                                                                          <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'veExtractor' + index" placeholder="Values"
-                                                                          [(ngModel)]="extractor.params['values']" name="extractor" />
+                                                                          <tag-input [(ngModel)]="extractor.params['values']" dragZone="tags" name="values"
+                                                                            [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Values (Enter separated)"
+                                                                            secondaryPlaceholder="Enter a new Value (Enter separated)" theme="minimal" class="custom-input-tag-border">
+                                                                        </tag-input>
                                                                       </div>
                                                                     <div class="form-group">
                                                                         <button type="button" class="btn btn-danger" (click)="removeFieldExtractor(extractor,field)">
@@ -364,35 +373,35 @@
                                     </form>
                                 </div>
                             </div>
-                            <div *ngIf="index != 0" [id]="'gsCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'gsTabHeading' + index">
+                            <div *ngIf="index != 0" [id]="'gsCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'gsTabHeading' + index">
                                 <div class="card-block">
                                     <form>
                                         <div class="form-group">
                                             <label class="col-md-12 col-sm-12 col-xs-12" required for="'gsOrder' + index">
                                             Order
                                             </label>
-                                            <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'gsSequence' + index" placeholder="Order"
+                                            <input type="number" [disabled] = "field.locked" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="'gsSequence' + index" placeholder="Order"
                                             min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
-                                            [(ngModel)]="field.order" name="order" />
+                                            [(ngModel)]="field.sortOrder" name="order" />
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsLabel' + index">
                                             Label
                                             </label>
-                                            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsLabel' + index" placeholder="Label"
+                                            <input type="text" [disabled] = "field.locked" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsLabel' + index" placeholder="Label"
                                             [(ngModel)]="field.label" name="goalExpression" />
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsName' + index">
                                             Code
                                             </label>
-                                            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsName' + index" placeholder="Code" [(ngModel)]="field.name"
+                                            <input type="text" [disabled] = "field.locked" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsName' + index" placeholder="Code" [(ngModel)]="field.name"
                                             name="api" />
                                         </div>
                                         <div class="form-group">
                                           <label>Select Attribute Type</label>
                                           <select (change)="onTypeSelect($event, field)"
-                                              class="form-control" required id="typeSelection" title="Choose Type"
+                                              class="form-control" required id="typeSelection" title="Choose Type" [disabled] = "field.locked"
                                               [(ngModel)]="field.type" name="AttributeType">
                                               <option *ngFor="let fieldType of fieldTypes"
                                                   [ngValue]="fieldType">{{ fieldType }}
@@ -403,8 +412,13 @@
                                             <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsModelName' + index">
                                             Model Name
                                             </label>
-                                            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'gsModelName' + index" placeholder="Model Name" [(ngModel)]="field.modelName"
-                                            name="code" />
+                                            <select (change)="onModelSelect($event, field)"
+                                                class="form-control" required id="typeSelection" title="Choose Type" [disabled] = "field.locked"
+                                                [(ngModel)]="field.modelName" name="modelName">
+                                                <option *ngFor="let dataModel of dataModelList"
+                                                    [ngValue]="dataModel.name">{{ dataModel.name }}
+                                                </option>
+                                            </select>
                                         </div>
                                         <!-- Field Validator Accordian -->
                                         <div class="form-group">
@@ -413,7 +427,7 @@
                                                     <div class="card">
                                                         <div *ngIf="index == 0" [id]="'vfTabHeading' + index" class="card-header" heightStyle="content" role="tab">
                                                             <h5 class="mb-0">
-                                                                <a data-toggle="collapse" data-parent="#fieldValidatorAccordian" [href]="'#vfCollapse' + index" aria-expanded="true" [attr.aria-controls]="'vfCollapse' + index">
+                                                                <a data-toggle="collapse" data-parent="#fieldValidatorAccordian" [href]="'#vfCollapse' + index" aria-expanded="false" [attr.aria-controls]="'vfCollapse' + index">
                                                                 {{'Click to expand Validator ' + validator.name}}
                                                                 </a>
                                                             </h5>
@@ -426,7 +440,7 @@
                                                                 </a>
                                                             </h5>
                                                         </div>
-                                                        <div *ngIf="index == 0" [id]="'vfCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + index">
+                                                        <div *ngIf="index == 0" [id]="'vfCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + index">
                                                             <div class="card-block">
                                                                 <form>
                                                                     <div class="form-group">
@@ -454,7 +468,7 @@
                                                                 </form>
                                                             </div>
                                                         </div>
-                                                        <div *ngIf="index != 0" [id]="'vfCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + index">
+                                                        <div *ngIf="index != 0" [id]="'vfCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + index">
                                                             <div class="card-block">
                                                               <form>
                                                                 <div class="form-group">
@@ -494,7 +508,7 @@
                                                     <div class="card">
                                                         <div *ngIf="index == 0" [id]="'veTabHeading' + index" class="card-header" heightStyle="content" role="tab">
                                                             <h5 class="mb-0">
-                                                                <a data-toggle="collapse" data-parent="#fieldExtractorAccordian" [href]="'#veCollapse' + index" aria-expanded="true" [attr.aria-controls]="'veCollapse' + index">
+                                                                <a data-toggle="collapse" data-parent="#fieldExtractorAccordian" [href]="'#veCollapse' + index" aria-expanded="false" [attr.aria-controls]="'veCollapse' + index">
                                                                 {{'Click to expand Extractor ' + extractor.name}}
                                                                 </a>
                                                             </h5>
@@ -507,7 +521,7 @@
                                                                 </a>
                                                             </h5>
                                                         </div>
-                                                        <div *ngIf="index == 0" [id]="'veCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + index">
+                                                        <div *ngIf="index == 0" [id]="'veCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + index">
                                                             <div class="card-block">
                                                                 <form>
                                                                     <div class="form-group">
@@ -531,8 +545,10 @@
                                                                         <label class="col-md-12 col-sm-12 col-xs-12" required for="'veExtractor' + index">
                                                                           Values
                                                                           </label>
-                                                                          <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'veExtractor' + index" placeholder="Values"
-                                                                          [(ngModel)]="extractor.params['values']" name="extractor" />
+                                                                          <tag-input [(ngModel)]="extractor.params['values']" dragZone="tags" name="values"
+                                                                            [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Values (Enter separated)"
+                                                                            secondaryPlaceholder="Enter a new Value (Enter separated)" theme="minimal" class="custom-input-tag-border">
+                                                                        </tag-input>
                                                                       </div>
                                                                     <div class="form-group">
                                                                         <button type="button" class="btn btn-danger" (click)="removeFieldExtractor(extractor,field)">
@@ -542,7 +558,7 @@
                                                                 </form>
                                                             </div>
                                                         </div>
-                                                        <div *ngIf="index != 0" [id]="'veCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + index">
+                                                        <div *ngIf="index != 0" [id]="'veCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + index">
                                                             <div class="card-block">
                                                                 <form>
                                                                     <div class="form-group">
@@ -566,8 +582,10 @@
                                                                         <label class="col-md-12 col-sm-12 col-xs-12" required for="'veExtractor' + index">
                                                                           Values
                                                                           </label>
-                                                                          <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'veExtractor' + index" placeholder="Regex"
-                                                                          [(ngModel)]="extractor.params['values']" name="extractor" />
+                                                                          <tag-input [(ngModel)]="extractor.params['values']" dragZone="tags" name="values"
+                                                                            [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]" placeholder="+Values (Enter separated)"
+                                                                            secondaryPlaceholder="Enter a new Value (Enter separated)" theme="minimal" class="custom-input-tag-border">
+                                                                        </tag-input>
                                                                       </div>
                                                                     <div class="form-group">
                                                                         <button type="button" class="btn btn-danger" (click)="removeFieldExtractor(extractor,field)">
@@ -595,7 +613,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" *ngIf="!readOnlyMode">
               <button type="button" class="btn btn-primary" (click)="addNewField()">Add Attribute</button>
             </div>
           </form>
@@ -604,9 +622,9 @@
     </div>
   </div>
   <form>
-    <div class="form-group">
-      <button type="button" class="btn btn-success" (click)="saveDataModel()">Save Data Model</button>
-      <button *ngIf="!createMode" type="button" class="btn btn-danger" (click)="deleteDataModel()">Delete</button>
+    <div class="form-group" *ngIf="!readOnlyMode">
+      <button type="button" class="btn btn-success" (click)="saveDataModel()">{{createMode ? 'Create Data Model' : 'Update Data Model'}}</button>
+      <button *ngIf="!createMode" type="button" class="btn btn-danger" (click)="deleteDataModel()">Delete Data Model</button>
     </div>
   </form>
   

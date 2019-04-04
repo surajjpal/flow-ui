@@ -1,3 +1,6 @@
+declare var closeModal: any;
+declare var showModal: any;
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
@@ -54,7 +57,7 @@ export class DataModelComponent implements OnInit, OnDestroy {
     
   }
 
-  onSelect(dataModel?: DataModel,task?:number) {
+  onDataModelSelect(dataModel?: DataModel,task?:number) {
     this.subscription = this.dataModelService.getDataModel(dataModel._id)
     .subscribe(
       dataModel => {
@@ -63,6 +66,7 @@ export class DataModelComponent implements OnInit, OnDestroy {
           this.selectedDataModel = dataModel;
           if (task) {
             if (task === this.OPEN_IN_READONLY_MODE) {
+              this.selectedDataModel.statusCd = "READ_ONLY";
               this.sharingObject.setDataModel(this.selectedDataModel);
             } else if (task === this.OPEN_IN_EDIT_MODE) {
               this.sharingObject.setDataModel(this.selectedDataModel);
@@ -72,6 +76,7 @@ export class DataModelComponent implements OnInit, OnDestroy {
       
               this.sharingObject.setDataModel(this.selectedDataModel);
             }
+            this.router.navigate(['/pg/stp/stdms'], { relativeTo: this.route });
           }
         }
       });
@@ -94,5 +99,16 @@ export class DataModelComponent implements OnInit, OnDestroy {
     this.subscription = this.dataModelService.getDataModelList(commonsearchModel)
       .subscribe(dataModelList => this.closedDataModels = dataModelList);
   
+  }
+
+
+  activateDataModel(dataModel?:DataModel,modalName?:string){
+      this.subscription = this.dataModelService.activate(dataModel._id)
+      .subscribe(response => {
+        if (modalName && modalName.length > 0) {
+          new closeModal(modalName);
+        }
+        this.getDataModelList();
+      });
   }
 }

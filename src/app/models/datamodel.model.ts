@@ -6,6 +6,7 @@ export class DataModel extends BaseModel{
     fields: Field[];
     version:number;
     process:string;
+    locked:boolean;
     validators: ValidatorInstance[];
 
   constructor() {
@@ -17,6 +18,7 @@ export class DataModel extends BaseModel{
     this.version = 0;
     this.process = '';
     this.validators = [];
+    this.locked = false;
   }
 }
 
@@ -26,6 +28,7 @@ export class Field{
     validators:ValidatorInstance[];
     extractors:ExtractorInstance[];
     modelName:string;
+    locked:boolean;
     type:FieldTypes;
     list:boolean;
     sortOrder:number;
@@ -38,6 +41,7 @@ export class Field{
         this.modelName = '';
         this.list = false;
         this.sortOrder = 0;
+        this.locked = false;
     }
 }
 

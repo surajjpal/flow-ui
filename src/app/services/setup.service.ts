@@ -1006,6 +1006,34 @@ export class DataModelService {
     return subject.asObservable();
   }
 
+  activate(_id: string): Observable<DataModel> {
+    const subject = new Subject<DataModel>();
+
+    const url = `${environment.server + environment.datamodelurl + _id}/activate`;
+
+    this.httpClient.get<DataModel>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<DataModel>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+    return subject.asObservable();
+  }
+
 
   updateDataModel(datamodel?: DataModel): Observable<DataModel> {
     const subject = new Subject<DataModel>();
