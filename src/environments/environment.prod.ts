@@ -76,6 +76,7 @@ export const environment = {
 
   //DataModelUrls
   datamodelurl:'dataModel/',
+  datamodelsaveurl:'dataModel/savedatamodel',
 
   connectorinfo:'connectors/',
   getallconconfig:'connectors/getAll/',

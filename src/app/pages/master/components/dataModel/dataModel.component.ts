@@ -6,6 +6,8 @@ import { DataModelService } from '../../../../services/setup.service';
 import { DataModelObject } from '../../../../services/shared.service';
 
 import { DataModel } from '../../../../models/datamodel.model';
+import { CommonSearchModel } from '../../../../models/flow.model';
+
 
 @Component({
   selector: 'datamodel-dataModel',
@@ -15,6 +17,7 @@ import { DataModel } from '../../../../models/datamodel.model';
 
 export class DataModelComponent implements OnInit, OnDestroy {
   dataModelList: DataModel[];
+  closedDataModels:DataModel[];
   filterQuery: string;
   selectedDataModel: DataModel;
 
@@ -38,6 +41,7 @@ export class DataModelComponent implements OnInit, OnDestroy {
     
   ) {
     this.dataModelList = [];
+    this.closedDataModels = [];
     this.filterQuery = '';
     this.selectedDataModel = new DataModel();
   }
@@ -78,11 +82,17 @@ export class DataModelComponent implements OnInit, OnDestroy {
   }
 
   getDataModelList(){
-  this.subscription = this.dataModelService.getDataModelList()
-      .subscribe(dataModelList => {
-        if (dataModelList) {
-          this.dataModelList = dataModelList;
-        }
-      });
+    let commonsearchModel = new CommonSearchModel();
+    commonsearchModel.searchParams = [{"statusCd":"ACTIVE"},{"statusCd":"DRAFT"}];
+    commonsearchModel.returnFields = ["label","version","statusCd"];
+    this.subscription = this.dataModelService.getDataModelList(commonsearchModel)
+      .subscribe(dataModelList => this.dataModelList = dataModelList);
+
+    commonsearchModel = new CommonSearchModel();
+    commonsearchModel.searchParams = [{"statusCd":"CLOSED"}];
+    commonsearchModel.returnFields = ["label","version","statusCd"];
+    this.subscription = this.dataModelService.getDataModelList(commonsearchModel)
+      .subscribe(dataModelList => this.closedDataModels = dataModelList);
+  
   }
 }

@@ -81,8 +81,11 @@ export const environment = {
     getallconinfo:'connectors/getConInfo/',
     getconinfobytype:'connectors/getConInfoByType/',
 
+
     //DataModelUrls
     datamodelurl:'dataModel/',
+    datamodelsaveurl:'dataModel/savedatamodel',
+
     
     // auto
     autoServer: 'https://flow.automatapi.com/flow/auto/',

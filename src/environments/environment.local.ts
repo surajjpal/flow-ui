@@ -89,6 +89,8 @@ export const environment = {
 
   //DataModelUrls
   datamodelurl:'dataModel/',
+  datamodelsaveurl:'dataModel/savedatamodel',
+
 
   supportedmethodsurl: 'apiConfig/supportedMethods',
   

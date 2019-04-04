@@ -3,7 +3,7 @@ import { Router, NavigationStart, CanActivate, ActivatedRouteSnapshot, RouterSta
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 import { User } from '../models/user.model';
-import { DataModel } from '../models/setup.model';
+import { DataModel } from '../models/datamodel.model';
 import { commonKeys } from '../models/constants';
 import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
 
