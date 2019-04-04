@@ -127,6 +127,24 @@ export class CostModel {
   }
 }
 
+export class BillingModel {
+  expression: string;
+  billType: string;
+  amount: number;
+  apiCd: string;
+  currency: string;
+  overRideFl: boolean;
+
+  constructor() {
+    this.expression = '';
+    this.amount = 0;
+    this.billType = "FIXED";
+    this.apiCd = '';
+    this.currency = '';
+    this.overRideFl = false;
+  }
+}
+
 export class SubprocessData {
   parentProcessUpdateEvent: string;
   toTriggerMachineType: string;
@@ -169,6 +187,7 @@ export class StateModel {
   ruleList: ApiKeyExpressionMap[];
   allocationModel: AllocationModel;
   costModel: CostModel;
+  billingModel: BillingModel;
   subprocessData: SubprocessData;
   manualActions: ManualAction[];
   mandatoryDataPoints: DataPoint[];
@@ -197,6 +216,7 @@ export class StateModel {
     this.ruleList = [];
     this.allocationModel = new AllocationModel();
     this.costModel = new CostModel();
+    this.billingModel = new BillingModel();
     this.subprocessData = new SubprocessData();
     this.manualActions = [];
     this.mandatoryDataPoints = [];
