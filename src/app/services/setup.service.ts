@@ -5,12 +5,8 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
 import { environment } from '../../environments/environment';
-<<<<<<< Updated upstream
-import { RoleRouteMap, ApiConfig,ConnectorInfo,ConnectorConfig } from '../models/setup.model';
-=======
 import { RoleRouteMap, ApiConfig,ConnectorInfo,ConnectorConfig} from '../models/setup.model';
 import { DataModel } from '../models/datamodel.model';
->>>>>>> Stashed changes
 import { Account } from '../models/account.model';
 import { UniversalUser } from './shared.service';
 import { CommonSearchModel } from '../models/flow.model';
@@ -939,8 +935,6 @@ export class AccountService {
     return subject.asObservable();
   }
 }
-<<<<<<< Updated upstream
-=======
 
 ///////////////// DATA MODEL SERVICE ////////////////////////
 
@@ -1044,4 +1038,3 @@ export class DataModelService {
     return subject.asObservable();
   }
 }
->>>>>>> Stashed changes
