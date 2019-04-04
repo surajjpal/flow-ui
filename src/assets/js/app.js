@@ -227,16 +227,50 @@ function getState() {
   return state;
 };
 
+openedModalList = [];
+
+keepOpenedModalListInCheck = function() {
+  setTimeout(() => {
+    if (openedModalList) {
+      let idToRemove = [];
+      for (let modalId of openedModalList) {
+        if (!$('#' + modalId).is(':visible')) {
+          idToRemove.push(modalId);
+        }
+      }
+
+      for (let modalId of idToRemove) {
+        openedModalList.splice(openedModalList.indexOf(modalId), 1);
+      }
+    }
+
+    keepOpenedModalListInCheck();
+  }, 100);
+}
+
+keepOpenedModalListInCheck();
+
 closeModal = function (modalId) {
-  if ($('#' + modalId).is(':visible')) {
-    $('#' + modalId).modal('hide');
+  if (modalId) {
+    if (openedModalList.includes(modalId)) {
+      openedModalList.splice(openedModalList.indexOf(modalId), 1);
+    }
+    
+    if ($('#' + modalId).is(':visible')) {
+      $('#' + modalId).modal('hide');
+    }
   }
 }
 
 showModal = function (modalId) {
-  console.log('opening modal: ' + modalId);
-  if (!$('#' + modalId).is(':visible')) {
-    $('#' + modalId).modal();
+  if (modalId) {
+    if (!openedModalList.includes(modalId)) {
+      openedModalList.push(modalId);
+      
+      if (!$('#' + modalId).is(':visible')) {
+        $('#' + modalId).modal();
+      }
+    }
   }
 }
 
@@ -269,7 +303,6 @@ var cellLabelChanged;
 var isReadOnly = false;
 var newEdge;
 var existingEdgesBeforeUpdate;
-var duplicateEvent = false;
 
 designFlowEditor = function (serverXml, readOnly) {
   isReadOnly = readOnly;
@@ -703,12 +736,8 @@ designFlowEditor = function (serverXml, readOnly) {
         }
 
         if (sourceEvents && sourceEvents.length > 0) {
-          if (duplicateEvent) {
-            console.log('got duplicate event');
-            return;
-          }
-
           newEdge = mxConnectionHandlerInsertEdge.apply(this, arguments);
+
           window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.addEdge(sourceEvents); });
           showModal("newEdgeModal");
           return newEdge;
@@ -1521,8 +1550,6 @@ styleInfo = function (orModels, type) {
 
 
 updateNewEdge = function (event) {
-  duplicateEvent = false;
-  
   if (newEdge) {
     graph.getModel().beginUpdate();
     try {
@@ -1536,8 +1563,6 @@ updateNewEdge = function (event) {
 }
 
 deleteNewEdge = function () {
-  duplicateEvent = false;
-
   if (newEdge) {
     graph.getModel().beginUpdate();
     try {
