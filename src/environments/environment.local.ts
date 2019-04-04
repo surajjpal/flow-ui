@@ -95,6 +95,7 @@ export const environment = {
   connectorinfo:'connectors/',
   getallconconfig:'connectors/getAll/',
   deleteconconfig:'connectors/delete/',
+  deletetaskconfig:'connectors/deleteTaskConfig/',
   saveconconfig:'connectors/save/',
   getallconinfo:'connectors/getConInfo/',
   getconinfobytype:'connectors/getConInfoByType/',

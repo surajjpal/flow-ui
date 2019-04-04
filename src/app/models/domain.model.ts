@@ -225,15 +225,15 @@ export class ModelResponseData {
 }
 
 export class ResponseData {
-  url: string;
   type: string;
+  url: string;
   data: ResponseOption[];
   cardData: string[];
   modelName: string;
 
-  constructor(url?: string, type?: string, data?: ResponseOption[], cardData?: string[], modelName?: string) {
-    this.url = url ? url : '';
+  constructor(type?: string, url?: string, data?: ResponseOption[], cardData?: string[], modelName?: string) {
     this.type = type ? type : '';
+    this.url = url ? url : '';
     this.data = data ? data : [];
     this.cardData = cardData ? cardData : [];
     this.modelName = modelName ? modelName : null;

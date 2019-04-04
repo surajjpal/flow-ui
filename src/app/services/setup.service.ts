@@ -630,6 +630,39 @@ export class ConnectorConfigService {
     return subject.asObservable();
   }
 
+  deleteTaskConfig(configName: string): Observable<any> {
+    const subject = new Subject<any>();
+
+    if (configName.length > 0) {
+      const url = `${environment.server + environment.deletetaskconfig + configName}`;
+
+      this.httpClient.delete<any>(
+        url,
+        {
+          observe: 'response',
+          reportProgress: true,
+          
+          withCredentials: true
+        }
+      )
+        .subscribe(
+        (response: HttpResponse<any>) => {
+          subject.next(response);
+        },
+        (err: HttpErrorResponse) => {
+          // All errors are handled in ErrorInterceptor, no further handling required
+          // Unless any specific action is to be taken on some error
+
+          subject.error(err);
+        }
+        );
+    } else {
+      subject.error('Object is null or invalid');
+    }
+
+    return subject.asObservable();
+  }
+
   getConnectorInfos(type:string): Observable<ConnectorInfo[]> {
     const subject = new Subject<ConnectorInfo[]>();
     
