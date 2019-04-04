@@ -73,6 +73,14 @@ export const environment = {
   apiconfigurl: 'apiConfig/',
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
+<<<<<<< Updated upstream
+=======
+
+  //DataModelUrls
+  datamodelurl:'dataModel/',
+  datamodelsaveurl:'dataModel/savedatamodel',
+
+>>>>>>> Stashed changes
   connectorinfo:'connectors/',
   getallconconfig:'connectors/getAll/',
   deleteconconfig:'connectors/delete/',

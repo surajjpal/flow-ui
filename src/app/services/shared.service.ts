@@ -3,6 +3,10 @@ import { Router, NavigationStart, CanActivate, ActivatedRouteSnapshot, RouterSta
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 import { User } from '../models/user.model';
+<<<<<<< Updated upstream
+=======
+import { DataModel } from '../models/datamodel.model';
+>>>>>>> Stashed changes
 import { commonKeys } from '../models/constants';
 import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
 

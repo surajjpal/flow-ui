@@ -5,9 +5,16 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
 import { environment } from '../../environments/environment';
+<<<<<<< Updated upstream
 import { RoleRouteMap, ApiConfig,ConnectorInfo,ConnectorConfig } from '../models/setup.model';
+=======
+import { RoleRouteMap, ApiConfig,ConnectorInfo,ConnectorConfig} from '../models/setup.model';
+import { DataModel } from '../models/datamodel.model';
+>>>>>>> Stashed changes
 import { Account } from '../models/account.model';
 import { UniversalUser } from './shared.service';
+import { CommonSearchModel } from '../models/flow.model';
+
 
 @Injectable()
 export class RoutesService {
@@ -932,3 +939,109 @@ export class AccountService {
     return subject.asObservable();
   }
 }
+<<<<<<< Updated upstream
+=======
+
+///////////////// DATA MODEL SERVICE ////////////////////////
+
+@Injectable()
+export class DataModelService {
+  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+  
+  constructor(private router: Router, private httpClient: HttpClient) { }
+
+  getDataModelList(commonSearchModel?: CommonSearchModel): Observable<DataModel[]> {
+    const subject = new Subject<DataModel[]>();
+
+    const url = `${environment.server + environment.datamodelurl}`;
+
+    this.httpClient.post<DataModel[]>(
+      url,
+      commonSearchModel,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+      (response: HttpResponse<DataModel[]>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+  saveDataModel(datamodel?: DataModel): Observable<DataModel> {
+    const subject = new Subject<DataModel>();
+
+    const url = `${environment.server + environment.datamodelsaveurl}`;
+
+    this.httpClient.post<DataModel>(
+      url,
+      datamodel,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+      (response: HttpResponse<DataModel>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+
+
+  getDataModel(id?:string): Observable<DataModel> {
+    const subject = new Subject<DataModel>();
+
+    const url = `${environment.server + environment.datamodelurl + id}`;
+
+    this.httpClient.get<DataModel>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+      (response: HttpResponse<DataModel>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+}
+>>>>>>> Stashed changes
