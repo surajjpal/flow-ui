@@ -51,7 +51,7 @@ export class DataPoint {
     this.graphType = null;
     this.businessKeyFlag = false;
     this.percentageChange = false;
-    this.reportDataKey=false;
+    this.reportDataKey = false;
     this.childdataPoints = [];
   }
 }
@@ -95,9 +95,9 @@ export class AllocationModel {
   groups: string[];
   api: string;
   allocatedUserCd: string;
-  capabilities:string[];
-	stickyStates:string[];
-	emailerAPI:string;
+  capabilities: string[];
+  stickyStates: string[];
+  emailerAPI: string;
 
   constructor() {
     this.allocationGroup = '';
@@ -124,6 +124,16 @@ export class CostModel {
     this.costType = "FIXED";
     this.apiCd = '';
     this.currency = '';
+  }
+}
+
+export class SubprocessData {
+  parentProcessUpdateEvent: string;
+  toTriggerMachineType: string;
+
+  constructor() {
+    this.parentProcessUpdateEvent = 'Closure';
+    this.toTriggerMachineType = '';
   }
 }
 
@@ -159,15 +169,16 @@ export class StateModel {
   ruleList: ApiKeyExpressionMap[];
   allocationModel: AllocationModel;
   costModel: CostModel;
+  subprocessData: SubprocessData;
   manualActions: ManualAction[];
   mandatoryDataPoints: DataPoint[];
   timerUnitType: string;
   timerUnit: number;
   runAtDateExpression: string;
   runAtTimeExpression: string;
-  taskConfig:ConnectorConfig[];
+  taskConfig: ConnectorConfig[];
   taskConfigList: string[];
-  connectorConfig:ConnectorConfig[];
+  connectorConfig: ConnectorConfig[];
   connectorConfigList: string[];
   reportFlag: boolean;
   businessMonitorFlag: boolean;
@@ -186,6 +197,7 @@ export class StateModel {
     this.ruleList = [];
     this.allocationModel = new AllocationModel();
     this.costModel = new CostModel();
+    this.subprocessData = new SubprocessData();
     this.manualActions = [];
     this.mandatoryDataPoints = [];
     this.timerUnit = 0;
@@ -201,29 +213,29 @@ export class StateModel {
 }
 
 
-export class StateInfoModel{
+export class StateInfoModel {
 
-	name:string; 
-	duration:any;
-	is_critical:boolean;
-	earlyfinish:any;
-	slack:any;
-	latefinish:any;
-	predecessors:string[];
-	predecessor_ids:string[];
-	earlystart:any;
-	latestart:any;
-	flowId:string;
-	machineType:string;
-  type:string;
-  constructor(){
+  name: string;
+  duration: any;
+  is_critical: boolean;
+  earlyfinish: any;
+  slack: any;
+  latefinish: any;
+  predecessors: string[];
+  predecessor_ids: string[];
+  earlystart: any;
+  latestart: any;
+  flowId: string;
+  machineType: string;
+  type: string;
+  constructor() {
     this.name = "";
     this.duration = 0.0;
     this.is_critical = false;
     this.earlyfinish = 0.0;
     this.slack = 0.0;
     this.latefinish = 0.0;
-    this.predecessors = [];  
+    this.predecessors = [];
     this.predecessor_ids = [];
     this.earlystart = 0.0;
     this.latestart = 0.0;
@@ -247,26 +259,26 @@ export class Transition {
 }
 
 
-export class ProcessModel extends BaseModel{
-  status:string;
-	endTime :any;
-	startTimeLong:any;
-	operationType:any;
-	processOwner:string;
-	endState:any;
-	businessValue:any;
+export class ProcessModel extends BaseModel {
+  status: string;
+  endTime: any;
+  startTimeLong: any;
+  operationType: any;
+  processOwner: string;
+  endState: any;
+  businessValue: any;
   subStatus: string;
-	resourceCost :any;
-	flowId:string;
-	businessCost:any;
-	startTime :any;
-	flowVersion: string;
-	entityId:string;
-	processType:string;
-	endTimeLong:any;
-  statusCd:string;
-  parameters:any;
-  states:any;
+  resourceCost: any;
+  flowId: string;
+  businessCost: any;
+  startTime: any;
+  flowVersion: string;
+  entityId: string;
+  processType: string;
+  endTimeLong: any;
+  statusCd: string;
+  parameters: any;
+  states: any;
   highlights: any[] = [];
 }
 
@@ -300,15 +312,15 @@ export class GraphObject extends BaseModel {
   }
 }
 
-  
+
 export class CommonSearchModel {
-  searchParams:any;
-  returnFields:any;
+  searchParams: any;
+  returnFields: any;
 
   constructor() {
     this.searchParams = [];
     this.returnFields = [];
-  
+
   }
 
 }
