@@ -11,21 +11,22 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
 import {User, UserHierarchy, UserGroup,UserGraphObject} from '../../../../models/user.model';
-import { State,CommonInsightWrapper } from '../../../../models/tasks.model';
+import { State,CommonInsightWrapper, EmailPersister } from '../../../../models/tasks.model';
 import { GraphObject, DataPoint, StateModel, ManualAction,StateInfoModel } from '../../../../models/flow.model';
 import { Episode, ChatMessage } from '../../../../models/conversation.model';
 
-import { StateService, DataCachingService } from '../../../../services/inbox.service';
+import { StateService, DataCachingService, EmailService } from '../../../../services/inbox.service';
 import { ConversationService } from '../../../../services/agent.service';
 import { FetchUserService, UserGraphService ,AllocateTaskToUser} from '../../../../services/userhierarchy.service';
 import { UniversalUser } from '../../../../services/shared.service';
 import { Map } from 'd3';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'api-task-details',
   templateUrl: './taskDetails.component.html',
   styleUrls: ['./taskDetails.scss'],
-  providers: [FetchUserService,AllocateTaskToUser]
+  providers: [FetchUserService,AllocateTaskToUser,EmailService]
 })
 
 export class TaskDetailsComponent implements OnInit, OnDestroy {
@@ -58,6 +59,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   tempUser:User;
   FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
   arrayTableHeaders = {};
+  sourceEmailTrailList:EmailPersister[] = [];
   
   private subscription: Subscription;
   private subscriptionEpisode: Subscription;
@@ -65,19 +67,23 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   private subscriptionUsers: Subscription;
   private subscriptionInsight: Subscription;
   private subscriptionXML: Subscription;
+  private subscriptionEmail:Subscription;
 
   constructor(
     private zone: NgZone,
     private router: Router, 
     private route: ActivatedRoute,
     private stateService: StateService,
+    private emailService:EmailService,
     private conversationService: ConversationService,
     private dataCachingService: DataCachingService,
     private location: Location,
     private fetchUserService:FetchUserService,
     private allocateTaskToUser:AllocateTaskToUser,
-    private universalUser: UniversalUser
+    private universalUser: UniversalUser,
+    private sanitizer: DomSanitizer
   ) { 
+    this.sourceEmailTrailList = [];
     window['taskDetailsRef'] = { component: this, zone: zone };
   }
 
@@ -100,6 +106,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.getEpisode();
     this.extractParams();
     this.initUI();
+    this.fetchEmailTrail();
    
 
     this.userId = this.universalUser.getUser()._id
@@ -123,6 +130,15 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     if (this.subscriptionInsight && !this.subscriptionInsight.closed) {
       this.subscriptionInsight.unsubscribe();
     }
+  }
+
+  fetchEmailTrail(){
+    this.subscriptionEmail = this.emailService.getEmailTrail(this.selectedState.entityId)
+      .subscribe(emailTrail => {
+        if (emailTrail) {
+          this.sourceEmailTrailList = emailTrail;
+        }
+      });
   }
 
   fetchInsight(){
@@ -276,6 +292,14 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
         this.dataPoints = [];
       }
 
+      if (this.selectedState.parameters && this.selectedState.parameters["mailTrail"]) {
+        const emailTrail = JSON.parse(JSON.stringify(this.selectedState.parameters["mailTrail"]));
+
+        if (emailTrail != null && emailTrail.length > 0) {
+          this.sourceEmailTrailList = emailTrail;
+        }
+      }
+
       if (this.selectedState.parameters && this.graphObject.dataPointConfigurationList) {
         console.log("dataconfigList");
         console.log(this.graphObject.dataPointConfigurationList);
@@ -381,9 +405,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
     this.isButtonEnabled = false;
     
-    if (!this.actionMap) {
-      this.actionMap = {};
-    }
+    this.actionMap = JSON.parse(JSON.stringify(this.selectedState.parameters));
 
     for (let index = 0; index < this.dataPoints.length; index++) {
       if (index % 2 === 1) {
@@ -484,5 +506,13 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       values.push(headerValue);
     }
     return values;
+  }
+
+  sanitizeHTML(htmlContent) {
+    if (htmlContent) {
+      return this.sanitizer.bypassSecurityTrustHtml(htmlContent);
+    }
+
+    return "";
   }
 }

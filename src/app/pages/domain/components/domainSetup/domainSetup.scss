@@ -1,0 +1,120 @@
+// #myModal1 {
+//     top:70%;
+//     left:27%;
+//     outline: none;
+//   }
+
+//   .modal-dialog1 {
+//     //position:fixed;
+//     width: 50%;
+//     //height: 40%;
+//     // bottom:0px;
+//     // right:0px;
+//     // margin:0px;
+// }
+
+.chat-item{
+  width: 100%;
+  display: inline-block;
+}
+.chat-item>div{
+  max-width: 80%;
+  position: relative;
+  min-width: 40%;
+  box-shadow: 0 2px 3px -1px hsla(0,0%,43%,.15);
+}
+.incomingChat{
+  float: right;
+    border-radius: 10px 0 0 10px;
+    border-right-width: 3px;
+    border-right-style: solid;
+    border-right-color: gray;
+    background-color: #fff;
+    padding: 15px;
+}
+.outgoingChat{
+  float: left;
+    border-radius: 0 10px 10px 0;
+    border-left-width: 3px;
+    border-left-style: solid;
+    background-color: #fff;
+    padding: 15px;
+}
+
+
+
+.talk-bubble {
+	margin: 40px;
+  display: inline-block;
+  position: relative;
+	width: 200px;
+	height: auto;
+	background-color: #fff;
+}
+
+
+.tri-right.border.btm-right-in:before {
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+  left: auto;
+	right: 30px;
+	bottom: -40px;
+	border: 20px solid;
+	border-color: #2e406f #2e406f transparent transparent;
+}
+
+.border{
+  border: 8px solid #2e406f;
+}
+
+.round{
+  border-radius: 30px;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+
+}
+
+
+talktext{
+  padding: 1em;
+	text-align: left;
+  line-height: 1.5em;
+}
+.talktext p{
+  /* remove webkit p margins */
+  font-weight: bold;
+   padding-left: 5px;
+  -webkit-margin-before: 0em;
+  -webkit-margin-after: 0em;
+}
+
+
+.input1,
+  html .ng-select .ng-select-container {
+    border: none;
+    border-bottom: 2px solid #333;
+    outline: none;
+    text-align: left;
+    width: 70%;
+    font-size: 20px;
+  }
+
+  #outer
+{
+    width:100%;
+    text-align: center;
+}
+.inner
+{
+    display: inline-block;
+}
+  
+#largemodal {
+  max-width: 80% !important;
+}
+
+.modal-lg {
+  max-width: 80% !important;
+}

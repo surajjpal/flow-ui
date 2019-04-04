@@ -1,25 +1,58 @@
 declare var closeModal: any;
+declare var showModal: any;
 declare var showAlertModal: any;
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
 import { Subscription } from 'rxjs/Subscription';
-
-import { Domain, Intent, Entity, Goal, GoalStep, Response, Stage, ResponseData, ResponseOption, Settings, CardData } from '../../../../models/domain.model';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Domain, Intent, Entity, Goal, GoalStep, Response, Stage, ResponseData, ResponseOption, Settings, CardData, Model, ModelResponseOption, ModelResponseData } from '../../../../models/domain.model';
 
 import { DomainService } from '../../../../services/domain.service';
-import { AlertService, DataSharingService } from '../../../../services/shared.service';
+import { AlertService, DataSharingService, UniversalUser } from '../../../../services/shared.service';
+import { AgentService } from '../../../../services/agent.service';
+import { Agent } from '../../../../models/agent.model';
 
 import { environment } from '../../../../../environments/environment';
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 
 @Component({
   selector: 'api-agent-domain',
-  templateUrl: './domainSetup.component.html'
+  templateUrl: './domainSetup.component.html',
+  styleUrls: ['./domainSetup.scss']
 })
 export class DomainSetupComponent implements OnInit, OnDestroy {
+
+  private readonly ACTIVE = 'ACTIVE';
+  private readonly CLOSED = 'CLOSED';
+  private readonly DRAFT = 'DRAFT';
+  private readonly READ = "READ";
+  private readonly CLONED = 'CLONED';
+
+  optionsTypeSource = [
+    { 'value': 'BUTTON', 'label': 'Button' },
+    { 'value': 'CHECKBOX', 'label': 'Checkbox' },
+    { 'value': 'RADIO', 'label': 'Radio' },
+    { 'value': 'FILE_UPLOAD', 'label': 'File Upload' },
+    { 'value': 'OFFERED_DOCUMENT', 'label': 'Offering' },
+    { 'value': 'CARD', 'label': 'Card' },
+    { 'value': 'FORM', 'label': 'Form' },
+    { 'value': 'DROPDOWN', 'label': 'Dropdown' }
+  ];
+  OPTION_INPUT = "INPUT"
+  OPTION_SINGLE_SELECT_DROP_DOWN = "SINGLE_SELECT_DROP_DOWN"
+  OPTION_CHECKBOX = "CHECKBOX";
+  OPTION_RADIO = "RADIO"
+  OPTION_MULTI_SELECT_DROP_DOWN = "MULTI_SELECT_DROP_DOWN";
+  OPTION_FILE_UPLOAD = "FILE_UPLOAD"
+  OPTION_TEXT_AREA = "TEXT_AREA"
+  OPTION_DATE = "DATE";
+  modelOptions: string[] = [this.OPTION_INPUT, this.OPTION_SINGLE_SELECT_DROP_DOWN, this.OPTION_CHECKBOX, this.OPTION_RADIO, this.OPTION_MULTI_SELECT_DROP_DOWN, this.OPTION_FILE_UPLOAD, this.OPTION_TEXT_AREA, this.OPTION_DATE];
+  FILTER_VALUE_LABEL_OPTION_TYPES = ["CARD", "OFFERED_DOCUMENT", "FORM"]
+
   entityUploaderOptions: NgUploaderOptions;
+  faqUploaderOptions: NgUploaderOptions;
 
   domainCreateMode: boolean;
   isAddFileUploadResponse: boolean;
@@ -30,14 +63,15 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   validationKeysSource: string[];
   stagesSource: Stage[];
   templateNames: string[];
-  suggestedTags:string[];
-  globalIntents:string[];
+  suggestedTags: string[];
+  globalIntents: string[];
 
   intentFilterQuery: string;
   entityFilterQuery: string;
   goalFilterQuery: string;
   responseFilterQuery: string;
   cardsFilterQuery: string;
+  modelsFilterQuery: string;
 
   selectedDomain: Domain;
   tempIntent: Intent;
@@ -49,18 +83,52 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   tempResponse: Response;
   selectedResponse: Response;
   selectedCard: CardData;
+  selectedModel: Model;
   tempCard: CardData;
+  tempModel: Model;
   domainUpdate: string;
   domainBody: string;
   domainSucess: boolean;
   operandSource: string[];
   bulkExpressions: string;
+  featureList: any[];
+  faqDomain: boolean;
+  response: string;
+  request: string;
 
-  showTags:boolean;
+  //chat constants
+  agentLogoShadowColor: string;
+  marginBottom: string;
+  marginRight: string;
+  agentLogoUrl: string;
+  showTags: boolean;
+  botHtml: any;
+  companyAgentId: string;
+  showTestButton: boolean;
+  showAutoCon: boolean;
+  updateForTest: boolean;
+  showTooltip: boolean;
+  currentDomainName: string;
+  testingAgent: Agent;
+  deleteTestingDomain: boolean;
+  increaseVersion: boolean;
+  domainCloneMode: boolean;
+  domainActivateMode: boolean;
+  activeDomain: Domain;
+  companyAgent: Agent;
+  hideButtons: boolean;
+  domainEditMode: boolean;
+  firstUpdate: boolean;
+  selectedDomainVersion: number;
+  associatedAgents: Agent[];
+
+  selectedOption: ResponseData;
+  bulkEditOptionsData: string;
 
   private subscription: Subscription;
   private subscriptionModelKeys: Subscription;
   private subscriptionValidationKeys: Subscription;
+  private agentSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -68,24 +136,52 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     private domainService: DomainService,
     private sharingService: DataSharingService,
-    private slimLoadingBarService: SlimLoadingBarService
+    private slimLoadingBarService: SlimLoadingBarService,
+    private sanitizer: DomSanitizer,
+    private user: UniversalUser,
+    private agentService: AgentService,
   ) {
+    this.agentLogoShadowColor = "#666";
+    this.marginBottom = "30px";
+    this.marginRight = "30px"
+    this.agentLogoUrl = "https://automatapi.com/images/autobot.jpg";
+    this.botHtml = "";
+    this.companyAgentId = "";
+    this.showTestButton = false;
+    this.showAutoCon = false;
+    this.updateForTest = false;
+    this.showTooltip = false;
+    this.testingAgent = new Agent();
+    this.increaseVersion = true;
+    this.deleteTestingDomain = false;
+    this.currentDomainName = "";
+    this.selectedDomainVersion = 0;
+    this.domainCloneMode = false;
+    this.hideButtons = false;
+    this.domainActivateMode = false;
+    this.domainEditMode = false;
     this.isAddFileUploadResponse = false;
     this.domainCreateMode = true;
+    this.firstUpdate = false;
     this.modalHeader = '';
     this.createMode = false;
     this.showTags = false;
+    this.associatedAgents = [];
     this.languageSource = ['ENG', 'HIN', 'MAR', 'ID', 'ML', 'ARA'];
     this.operandSource = ['AND', 'OR'];
     this.modelKeysSource = [];
     this.domainUpdate = 'Domain';
     this.domainBody = 'Please wait updating domain........';
+    this.response = 'Please feel free to ask anything';
+    this.request = '';
     this.domainSucess = false;
     this.templateNames = ["default"]
     this.stagesSource = [];
+    this.featureList = [];
+    this.faqDomain = false;
     this.suggestedTags = [];
-    this.globalIntents = ["closure","apiIdle","negation","skip","cancel","apiRetry","affirmation","default","apiInit","initiation"]
-    
+    this.globalIntents = ["closure", "apiIdle", "negation", "skip", "cancel", "apiRetry", "affirmation", "default", "apiInit", "initiation"]
+
     this.stagesSource.push(new Stage('Initialization', 'INIT'));
     this.stagesSource.push(new Stage('Context Setting', 'CONTEXT'));
     this.stagesSource.push(new Stage('Information Input', 'INFO'));
@@ -99,6 +195,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.cardsFilterQuery = '';
 
     this.selectedDomain = new Domain();
+    this.activeDomain = new Domain();
     this.tempIntent = new Intent();
     this.selectedIntent = new Intent();
     this.tempEntity = new Entity();
@@ -109,10 +206,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.selectedResponse = new Response();
     this.selectedCard = new CardData();
     this.tempCard = new CardData();
+    this.selectedModel = new Model();
+    this.tempModel = new Model();
 
     const uploadIntentUrl = `${environment.autoServer}${environment.uploadintentexcelurl}`;
     this.intentUploaderOptions = {
       url: uploadIntentUrl
+
     };
 
     const uploadEntityUrl = `${environment.autoServer}${environment.uploadentityexcelurl}`;
@@ -125,12 +225,35 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     this.fetchValidationKeys();
+    this.increaseVersion = true;
 
     const domain: Domain = this.sharingService.getSharedObject();
     if (domain) {
       this.selectedDomain = domain;
       this.domainCreateMode = false;
+      this.currentDomainName = this.selectedDomain.name
+      if (domain["statusCd"]) {
+        this.selectedDomainVersion = domain.version;
+        this.showTestButton = true;
+      }
+      else {
+        this.showTestButton = false;
+      }
+
+      if (domain.statusCd == this.READ) {
+        this.hideButtons = true;
+      }
+
+      if (domain.statusCd == this.CLOSED) {
+        this.domainActivateMode = true;
+      }
+
+      if ((domain.statusCd == this.DRAFT || domain.statusCd == this.CLONED) && domain._id) {
+        this.domainEditMode = true;
+      }
+
     } else {
       this.selectedDomain = new Domain();
       this.domainCreateMode = true;
@@ -138,6 +261,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
     this.removeGoalStepResponseFromDomainResponse();
   }
+
 
   ngOnDestroy(): void {
     if (this.subscription && !this.subscription.closed) {
@@ -149,6 +273,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     if (this.subscriptionValidationKeys && !this.subscriptionValidationKeys.closed) {
       this.subscriptionValidationKeys.unsubscribe();
     }
+    this.deleteDomainCreatedForTesting();
+
   }
 
   intentUploaderOptions: NgUploaderOptions;
@@ -178,8 +304,28 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   addIntent() {
-      if(this.tempIntent.tags.length >= 8)
-      {
+    if (this.tempIntent.tags.length >= 8) {
+      if (this.selectedIntent) {
+        const index: number = this.selectedDomain.domainIntents.indexOf(this.selectedIntent);
+        if (index !== -1) {
+          this.selectedDomain.domainIntents[index] = this.tempIntent;
+        }
+      } else {
+        this.selectedDomain.domainIntents.push(this.tempIntent);
+      }
+
+      // This is to forcefully call the digest cycle of angular so that,
+      // the filtered list would get updated with these chanegs made in master list
+      this.intentFilterQuery = (` ${this.intentFilterQuery}`);
+      setTimeout(() => {
+        this.intentFilterQuery = this.intentFilterQuery.slice(1);
+      }, 10);
+    }
+    else {
+      if (!this.globalIntents.includes(this.tempIntent.intentCd)) {
+        new showAlertModal('Error! Unable to save', "Number of tags should be atleast 8");
+      }
+      else {
         if (this.selectedIntent) {
           const index: number = this.selectedDomain.domainIntents.indexOf(this.selectedIntent);
           if (index !== -1) {
@@ -188,37 +334,15 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         } else {
           this.selectedDomain.domainIntents.push(this.tempIntent);
         }
-    
-        // This is to forcefully call the digest cycle of angular so that,
-        // the filtered list would get updated with these chanegs made in master list
         this.intentFilterQuery = (` ${this.intentFilterQuery}`);
         setTimeout(() => {
           this.intentFilterQuery = this.intentFilterQuery.slice(1);
         }, 10);
       }
-      else{
-          if(!this.globalIntents.includes(this.tempIntent.intentCd))
-          {
-            new showAlertModal('Error! Unable to save', "Number of tags should be atleast 8");
-          }
-          else{
-            if (this.selectedIntent) {
-              const index: number = this.selectedDomain.domainIntents.indexOf(this.selectedIntent);
-              if (index !== -1) {
-                this.selectedDomain.domainIntents[index] = this.tempIntent;
-              }
-            } else {
-              this.selectedDomain.domainIntents.push(this.tempIntent);
-            }
-            this.intentFilterQuery = (` ${this.intentFilterQuery}`);
-            setTimeout(() => {
-              this.intentFilterQuery = this.intentFilterQuery.slice(1);
-            }, 10);
-          }
-      }
     }
-   
-  
+  }
+
+
 
   removeIntent() {
     if (this.selectedIntent) {
@@ -253,7 +377,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   addEntity() {
-    if(this.tempEntity.tags.length >= 8){
+    if (this.tempEntity.tags.length >= 8) {
       if (this.selectedEntity) {
         const index: number = this.selectedDomain.domainEntities.indexOf(this.selectedEntity);
         if (index !== -1) {
@@ -262,7 +386,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       } else {
         this.selectedDomain.domainEntities.push(this.tempEntity);
       }
-  
+
       // This is to forcefully call the digest cycle of angular so that,
       // the filtered list would get updated with these chanegs made in master list
       this.entityFilterQuery = (` ${this.entityFilterQuery}`);
@@ -270,10 +394,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         this.entityFilterQuery = this.entityFilterQuery.slice(1);
       }, 10);
     }
-    else{
+    else {
       new showAlertModal('Error! Unable to save', "Number of tags should be atleast 8");
     }
-    
+
   }
 
   removeEntity() {
@@ -518,6 +642,15 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
                   if (!d.agentId || d.agentId === null) {
                     d.agentId = '';
                   }
+                  if (!d.fileSize || d.fileSize === null) {
+                    d.fileSize = '';
+                  }
+                  if (!d.fileType || d.fileType === null) {
+                    d.fileType = '';
+                  }
+                  if (!d.fileReference || d.fileReference === null) {
+                    d.fileReference = '';
+                  }
                 }
               }
 
@@ -582,11 +715,46 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.createMode = false;
       this.selectedResponse = response;
       this.tempResponse = JSON.parse(JSON.stringify(this.selectedResponse));
+      if (this.tempResponse.faqResponse) {
+        this.tempResponse.features
+      }
       if (this.tempResponse.uploadDocument) {
         this.isAddFileUploadResponse = true;
       }
       this.populateBulkExpressions(this.tempResponse.expression);
     } else {
+      this.modalHeader = 'Create Response';
+      this.createMode = true;
+      this.selectedResponse = null;
+      this.tempResponse = new Response();
+      this.populateBulkExpressions(this.tempResponse.expression);
+    }
+  }
+
+  onFaqResponseSelect(response?: Response) {
+    if (response) {
+      this.featureList = [];
+      this.modalHeader = 'Update Response';
+      this.createMode = false;
+      this.selectedResponse = response;
+      this.tempResponse = JSON.parse(JSON.stringify(this.selectedResponse));
+
+      for (let feature of this.tempResponse.features) {
+        for (const property in feature) {
+          if (property) {
+            const map = new Map();
+            map.set('key', property);
+            map.set('value', feature[property]);
+            this.featureList.push(map);
+          }
+        }
+      }
+      if (this.tempResponse.uploadDocument) {
+        this.isAddFileUploadResponse = true;
+      }
+      this.populateBulkExpressions(this.tempResponse.expression);
+    } else {
+      this.featureList = [];
       this.modalHeader = 'Create Response';
       this.createMode = true;
       this.selectedResponse = null;
@@ -612,6 +780,127 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       this.selectedCard = null;
       this.tempCard = new CardData();
     }
+  }
+
+  onModelSelect(model?: Model) {
+    if (model) {
+      this.modalHeader = 'Update Form';
+      this.createMode = false;
+      this.selectedModel = model;
+      this.tempModel = model;
+    }
+    else {
+      this.modalHeader = 'Create Form';
+      this.createMode = true;
+      this.selectedModel = null;
+      this.tempModel = new Model();
+    }
+  }
+
+  addFaqResponse(response?: Response) {
+    let domainId = null;
+    let version = null;
+    // if(this.selectedDomain!=null && this.selectedDomain._id){
+    //   domainId = this.selectedDomain._id;
+    //   version = this.selectedDomain.version;
+    // }
+    // else{
+    //   domainId = this.saveDomain(this.selectedDomain);
+    //   version = 1;
+    // }
+    if (response) {
+      response.faqResponse = true;
+      this.selectedDomain.domainResponse.push(response);
+    } else if (this.selectedResponse) {
+      let features = [];
+      for (const feature of this.featureList) {
+        let map = new Map();
+        map[feature.get('key')] = feature.get('value');
+        features.push(map);
+
+      }
+      this.tempResponse.features = features;
+      this.tempResponse.faqResponse = true;
+      if (!this.tempResponse.uniqueId || this.tempResponse.uniqueId.trim().length === 0) {
+        this.tempResponse.uniqueId = this.newGuid();
+      }
+      const index: number = this.selectedDomain.domainResponse.indexOf(this.selectedResponse);
+      if (index !== -1) {
+        this.selectedDomain.domainResponse[index] = this.tempResponse;
+      }
+      if (domainId != null) {
+        //this.trainDomain(domainId,version);
+      }
+      new closeModal('faqResponseModal');
+
+      // This is to forcefully call the digest cycle of angular so that,
+      // the filtered list would get updated with these chanegs made in master list
+      this.responseFilterQuery = (` ${this.responseFilterQuery}`);
+      setTimeout(() => {
+        this.responseFilterQuery = this.responseFilterQuery.slice(1);
+      }, 10);
+    } else {
+      let features = [];
+      for (const feature of this.featureList) {
+        let map = new Map();
+        map[feature.get('key')] = feature.get('value');
+        features.push(map);
+
+      }
+      this.tempResponse.features = features;
+      this.tempResponse.faqResponse = true;
+      this.tempResponse.uniqueId = this.newGuid();
+      this.selectedDomain.domainResponse.push(this.tempResponse);
+
+
+      new closeModal('faqResponseModal');
+
+      // This is to forcefully call the digest cycle of angular so that,
+      // the filtered list would get updated with these chanegs made in master list
+      this.responseFilterQuery = (` ${this.responseFilterQuery}`);
+      setTimeout(() => {
+        this.responseFilterQuery = this.responseFilterQuery.slice(1);
+      }, 10);
+    }
+  }
+
+  newGuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
+  addFeature() {
+    const body = new Map();
+    body.set('key', '');
+    body.set('value', '');
+    this.featureList.push(body);
+  }
+
+  removeFeature(body: any) {
+    if (body && this.featureList && this.featureList.includes(body)) {
+      const index = this.featureList.indexOf(body);
+      this.featureList.splice(index, 1);
+    }
+  }
+
+
+  saveDomain(domain?: Domain, modalName?: string) {
+    let domainId = null;
+    domain.statusCd = "DRAFT"
+    domain.version = 1
+    this.subscription = this.domainService.saveDomain(domain)
+      .subscribe(
+        response => {
+          domainId = response._id;
+          this.selectedDomain = response;
+        },
+        error => {
+
+        }
+      );
+    return domainId;
   }
 
   addResponse(response?: Response) {
@@ -698,6 +987,89 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     }, 10);
   }
 
+  removeModelOption(responseOption: ModelResponseOption) {
+
+    if (this.tempModel && this.tempModel.responseOptions) {
+      const index: number = this.tempModel.responseOptions.indexOf(responseOption);
+      if (index != -1) {
+        this.tempModel.responseOptions.splice(index, 1);
+      }
+    }
+  }
+
+  removeModelOptionData(responseOptionData: ModelResponseData[], data: ModelResponseData) {
+    if (responseOptionData && data) {
+      const index: number = responseOptionData.indexOf(data);
+      if (index != -1) {
+        responseOptionData.splice(index, 1);
+      }
+    }
+  }
+
+  removeModel(model?: Model) {
+    if (model) {
+      const index: number = this.selectedDomain.formModels.indexOf(model);
+      if (index != -1) {
+        this.selectedDomain.formModels.splice(index, 1);
+      }
+    }
+
+  }
+
+  addModel() {
+    if (!this.tempModel.modelName) {
+      new showAlertModal('Error', 'form name can not be empty');
+      return;
+    }
+    if (!this.tempModel.responseOptions || this.tempModel.responseOptions.length == 0) {
+      new showAlertModal('Error', 'options can not be empty');
+      return;
+    }
+    for (let option of this.tempModel.responseOptions) {
+      if (!option.option) {
+        new showAlertModal('Error', 'option can not be empty');
+        return
+      }
+      if (!option.sequence) {
+        new showAlertModal('Error', 'sequence can not be empty');
+        return;
+      }
+      if (!option.responseData || option.responseData.length == 0) {
+        new showAlertModal('Error', 'option data can not be empty for option ' + option.option);
+        return;
+      }
+      if (!option.key) {
+        new showAlertModal('Error', 'key can not be empty for option ' + option.option);
+        return;
+      }
+      // if (option.option != this.OPTION_INPUT && option.option != this.OPTION_TEXT_AREA && option.option != this.OPTION_DATE) {
+      //   for(let optionsData of option.responseData) {
+      //     if (!optionsData.label || !optionsData.value) {
+      //       new showAlertModal('Error', 'value and label can not be empty for option ' + option.option);
+      //       return;
+      //     }
+      //   }
+      // }
+    }
+    if (!this.selectedDomain.formModels) {
+      this.selectedDomain.formModels = [];
+    }
+    if (this.selectedModel) {
+      const index: number = this.selectedDomain.formModels.indexOf(this.selectedModel);
+      if (index !== -1) {
+        this.selectedDomain.formModels[index] = this.tempModel;
+      }
+      else {
+        new showAlertModal('Error', 'form not found in forms');
+      }
+    }
+    else {
+      this.selectedDomain.formModels.push(this.tempModel);
+    }
+    new closeModal('modelModal');
+
+  }
+
   addCard(card?: CardData) {
     if (card) {
       this.selectedDomain.cards.push(card);
@@ -743,6 +1115,23 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
   }
 
+
+  cloneDomain() {
+    if (this.selectedDomain.name == this.currentDomainName) {
+      new showAlertModal('While cloning domain please make sure that the domain name is different!!!');
+    }
+    else {
+      if (this.selectedDomain.statusCd == this.CLOSED) {
+        this.selectedDomain._id = null;
+      }
+      this.domainCloneMode = true;
+      this.selectedDomain.statusCd = this.CLONED;
+      this.selectedDomain.version = 1;
+
+      this.createDomain();
+    }
+  }
+
   createDomain() {
     if (this.selectedDomain) {
       if (this.selectedDomain.domainGoals) {
@@ -761,14 +1150,32 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
           }
         }
       }
+
+      if (!this.selectedDomain["statusCd"]) {
+        this.firstUpdate = true;
+        this.selectedDomain.statusCd = this.ACTIVE;
+        this.selectedDomain.version = 1
+      }
+
+      if (!this.updateForTest && this.deleteTestingDomain) {
+        this.deleteTestingDomain = false;
+      }
+
+      if (this.increaseVersion) {
+        if (this.selectedDomain.statusCd == this.DRAFT && this.selectedDomain._id == null) {
+          this.selectedDomain.version = this.selectedDomain.version + 1
+        }
+      }
       this.subscription = this.domainService.saveDomain(this.selectedDomain)
         .subscribe(
           response => {
-            this.updateClassifierTraining();
-
-            //this.updateIntenTrainingData();
-
-            // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
+            if (this.domainCloneMode) {
+              this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route })
+            }
+            else {
+              this.increaseVersion = false;
+              this.updateClassifierTraining(response);
+            }
           },
           error => {
             this.domainBody = `Something went wrong please try again!!`;
@@ -778,20 +1185,35 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateClassifierTraining() {
-    this.subscription = this.domainService.updateDomainClassifierTraining(this.selectedDomain)
+
+  updateClassifierTraining(updatedDomain: Domain) {
+    this.subscription = this.domainService.updateDomainClassifierTraining(updatedDomain)
       .subscribe(
         response => {
           if (response) {
-            this.domainBody = `Domain updated successfully!!`;
-            this.domainSucess = true;
-            this.selectedDomain = response;
+            this.selectedDomain = updatedDomain;
+            if (this.updateForTest) {
+              this.getAndUpdateAgent();
+            }
+            else {
+              this.domainBody = `Domain updated successfully!!`;
+              this.domainSucess = true;
+              if (this.firstUpdate) {
+                new closeModal("domainUpdateModal");
+                this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route })
+              }
+            }
+
           } else {
-            this.domainBody = `Something went wrong please try again!!`;
-            this.domainSucess = true;
+            if (this.updateForTest) {
+              this.updateForTest = false;
+            }
+            else {
+              this.domainBody = `Something went wrong please try again!!`;
+              this.domainSucess = true;
+            }
+
           }
-          //this.updateEntityTrainingData();
-          //this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
         }
       )
   }
@@ -801,7 +1223,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       .subscribe(
         response => {
           this.updateEntityTrainingData();
-          // this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route });
         }
       );
   }
@@ -902,11 +1323,55 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  onFaqExcelUpload(event: any) {
+    if (event) {
+      if (event.hasOwnProperty('progress') && event['progress'].hasOwnProperty('percent')) {
+        const percent = (event['progress'])['percent'];
+        if (percent) {
+          if (percent < 100) {
+            this.slimLoadingBarService.progress = percent;
+          } else {
+            this.slimLoadingBarService.complete();
+          }
+        }
+      }
+    }
+  }
+
+  onFaqExcelUploadComplete(event: UploadedFile) {
+    this.slimLoadingBarService.complete();
+    if (event.response && event.response.length > 0) {
+      const responseObject = JSON.parse(event.response);
+    }
+
+    //   if (responseObject) {
+    //     if (responseObject.hasOwnProperty('domainIntents')) {
+    //       const excelIntents: Intent[] = responseObject['domainIntents'];
+
+    //       if (excelIntents && excelIntents.length > 0) {
+    //         for (const intent of excelIntents) {
+    //           this.selectedDomain.domainIntents.push(intent);
+    //         }
+    //       }
+    //     } else if (responseObject.hasOwnProperty('domainEntities')) {
+    //       const excelEntities: Entity[] = responseObject['domainEntities'];
+
+    //       if (excelEntities && excelEntities.length > 0) {
+    //         for (const entity of excelEntities) {
+    //           this.selectedDomain.domainEntities.push(entity);
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+  }
+
   onAddResponseOption(response) {
     if (!response.options) {
       response.options = [];
     }
-    response.options.push(new ResponseData());
+    response.options.push(new ResponseData('BUTTON'));
   }
 
   onAddData(option) {
@@ -915,6 +1380,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
   onAddCardActinableData(option) {
     option.data.push(new ResponseOption());
+  }
+
+  onAddModelActinableData(option) {
+    option.responseData.push(new ModelResponseData());
   }
 
   onAddCardData(option) {
@@ -926,6 +1395,13 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       cardData.actionable = [];
     }
     cardData.actionable.push(new ResponseData())
+  }
+
+  onAddModelResponseOption(model: Model) {
+    if (!model.responseOptions) {
+      model.responseOptions = [];
+    }
+    model.responseOptions.push(new ModelResponseOption());
   }
 
 
@@ -956,6 +1432,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     return index;
   }
 
+
+
   populateBulkExpressions(expressions) {
     this.bulkExpressions = '';
     if (expressions) {
@@ -980,35 +1458,283 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     return expressions;
   }
 
-  getIntentSynonyms(){
-    if(this.tempIntent.tags.length > 0){
-      if (!this.suggestedTags.includes(this.tempIntent.tags[this.tempIntent.tags.length-1])){
-        this.subscription = this.domainService.getSynonyms(this.tempIntent.tags[this.tempIntent.tags.length-1])
-        .subscribe(
-          response => {
-            this.showTags = true;
-            this.suggestedTags = response["synonyms"];
-          }
-        );
-      }
-      }
-      
-    }
-
-    getEntitySynonyms(){
-      if(this.tempEntity.tags.length > 0){
-        if (!this.suggestedTags.includes(this.tempEntity.tags[this.tempEntity.tags.length-1])){
-          this.subscription = this.domainService.getSynonyms(this.tempEntity.tags[this.tempEntity.tags.length-1])
+  getIntentSynonyms() {
+    if (this.tempIntent.tags.length > 0) {
+      if (!this.suggestedTags.includes(this.tempIntent.tags[this.tempIntent.tags.length - 1])) {
+        this.subscription = this.domainService.getSynonyms(this.tempIntent.tags[this.tempIntent.tags.length - 1])
           .subscribe(
             response => {
               this.showTags = true;
               this.suggestedTags = response["synonyms"];
             }
           );
-        }
-        }
-        
       }
-    
+    }
 
+  }
+
+  getEntitySynonyms() {
+    if (this.tempEntity.tags.length > 0) {
+      if (!this.suggestedTags.includes(this.tempEntity.tags[this.tempEntity.tags.length - 1])) {
+        this.subscription = this.domainService.getSynonyms(this.tempEntity.tags[this.tempEntity.tags.length - 1])
+          .subscribe(
+            response => {
+              this.showTags = true;
+              this.suggestedTags = response["synonyms"];
+            }
+          );
+      }
+    }
+
+  }
+
+  createBotHtml() {
+    const autoUrl = `${environment.autourl}${this.companyAgentId}`
+    const html = '<div id="autoButton" style="text-align: center; background-color: transparent; position: fixed; right: ' + this.marginRight + '; bottom: ' + this.marginBottom + '; width: auto; height: auto; z-index:9999"><div style="margin-bottom: 8px;"><a href="javascript:toggleChat()"><img src="' + this.testingAgent.uiComponent.logoUrl + '" style="width: 60px; height: 60px; border-radius: 50%; box-shadow: 0px 0px 10px ' + this.agentLogoShadowColor + ';"></img></a></div>' +
+      '</div>' +
+      '<div id="automataPi" class="containerStyle" role="dialog" z-index="9999"><iframe id="' + "autoBot" + '" src="' + autoUrl + '" class="iframeStyle" frameborder="0"></iframe></div>'
+    this.botHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+    this.showAutoCon = true;
+    this.showTooltip = true;
+    this.updateForTest = false;
+  }
+
+
+
+  testDomain() {
+    if (this.companyAgentId) {
+      if (!this.selectedDomain._id) {
+        this.updateForTest = true;
+        this.deleteTestingDomain = true;
+        this.createDomain();
+      }
+      else {
+        this.updateForTest = true;
+        this.createDomain();
+      }
+    }
+    else {
+      this.createCompanyAgent();
+    }
+  }
+
+  getAndUpdateAgent() {
+    if (this.testingAgent._id) {
+      this.testingAgent.domainId = this.selectedDomain._id;
+      this.updateDomainOnAgent(this.testingAgent);
+    }
+
+    else {
+      this.agentSubscription = this.agentService.getAgentById(this.companyAgentId).subscribe(receivedAgent => {
+        if (receivedAgent) {
+          receivedAgent.domainId = this.selectedDomain._id;
+          this.updateDomainOnAgent(receivedAgent);
+        }
+      });
+    }
+  }
+
+  updateDomainOnAgent(agent?: Agent) {
+    this.agentSubscription = this.agentService.saveAgent(agent).subscribe(receivedAgent => {
+      if (receivedAgent) {
+        this.testingAgent = receivedAgent;
+        this.createBotHtml();
+      }
+    });
+  }
+
+  deleteDomainCreatedForTesting() {
+    if (this.deleteTestingDomain) {
+      this.subscription = this.domainService.deleteDomain(this.selectedDomain._id)
+        .subscribe(
+          response => {
+            this.showAutoCon = false;
+            this.showTooltip = false;
+            this.updateForTest = false;
+          },
+          error => {
+            this.showAutoCon = false;
+            this.showTooltip = false;
+            this.updateForTest = false;
+          }
+        );
+    }
+    else {
+      this.showAutoCon = false;
+      this.showTooltip = false;
+      this.updateForTest = false;
+    }
+
+  }
+
+  exitTesting() {
+    this.showAutoCon = false;
+    this.showTooltip = false;
+    this.updateForTest = false;
+    this.deleteDomainCreatedForTesting();
+  }
+
+
+  activateDomaiWarning() {
+    let payload = { "_id": this.selectedDomain._id };
+    this.subscription = this.domainService.getDomain(payload)
+      .subscribe(
+        response => {
+          this.selectedDomain = response;
+          new showModal("activateModal");
+        });
+  }
+
+
+  activateDomain(domain?: Domain, modalName?: string) {
+    let payload = { "name": domain.name, "statusCd": "ACTIVE" };
+    this.subscription = this.domainService.getDomain(payload)
+      .subscribe(
+        response => {
+          if (response["statusCd"] == this.ACTIVE) {
+            this.activeDomain = response;
+            this.activeDomain.statusCd = "CLOSED";
+            this.getAgentWithDomain(response["_id"]);
+            this.subscription = this.domainService.saveDomain(this.activeDomain)
+              .subscribe(
+                response => {
+                  if (response) {
+
+                    domain.statusCd = "ACTIVE";
+                    this.saveAndActivateDomain(domain, modalName);
+                  }
+                });
+          }
+          else {
+            domain.statusCd = "ACTIVE";
+            this.saveAndActivateDomain(domain, modalName);
+          }
+        });
+  }
+
+  getAgentWithDomain(domainId?: string) {
+    let payload = { "$and": [{ "domainId": domainId }, { "companyTestingAgent": { "$exists": false } }] };
+    this.agentSubscription = this.agentService.getDomainAgents(payload).subscribe(receivedAgents => {
+      if (receivedAgents.length > 0) {
+        for (let a of receivedAgents) {
+          this.associatedAgents.push(a);
+        }
+      }
+    });
+  }
+
+
+  saveAgentWithActiveDomain(agent?: Agent) {
+    this.agentSubscription = this.agentService.saveAgent(agent).subscribe(receivedAgent => {
+      if (receivedAgent) {
+        console.log(receivedAgent);
+      }
+    });
+  }
+
+
+  saveAndActivateDomain(domain?: Domain, modalName?: string) {
+    this.subscription = this.domainService.saveDomain(domain)
+      .subscribe(
+        response => {
+          this.selectedDomain = response;
+          if (domain.statusCd == this.ACTIVE && this.associatedAgents.length > 0) {
+            for (let agent of this.associatedAgents) {
+              agent.domainId = this.selectedDomain._id;
+              this.saveAgentWithActiveDomain(agent);
+            }
+
+          }
+          new closeModal(modalName);
+          this.router.navigate(['/pg/dmn/dmsr'], { relativeTo: this.route })
+        },
+        error => {
+
+        }
+      );
+  }
+
+
+
+  createCompanyAgent() {
+    let payload = { "name": "AutoCon", "companyTestingAgent": true };
+    this.agentSubscription = this.agentService.getCompanyAgent(payload).subscribe(receivedAgent => {
+      if (receivedAgent["companyTestingAgent"]) {
+        this.companyAgentId = receivedAgent._id;
+        this.testingAgent = receivedAgent;
+        this.testDomain();
+      }
+      else {
+        this.saveAgent();
+      }
+    });
+
+  }
+
+
+  saveAgent() {
+    let agent: Agent = new Agent()
+    agent.companyId = this.user.getUser().companyId;
+    agent.uiComponent.colorCss = "#2e406f";
+    agent.uiComponent.avatarUrl = "https://s3-us-west-2.amazonaws.com/custom-ui/default/auto_idea.jpg";
+    agent.uiComponent.typingGif = "https://s3-us-west-2.amazonaws.com/custom-ui/default/typing-indicatorauto.gif";
+    agent.uiComponent.logoUrl = "https://automatapi.com/images/autobot.jpg";
+    agent.uiComponent.cronEnabled = false;
+    agent.uiComponent.isBargeable = false;
+    agent.uiComponent.placeHolderText = "Type your query...";
+    agent.domainId = null;
+    agent.agentFlow = [];
+    agent.name = "AutoCon";
+    agent.langSupported = ["ENG", "HIN"];
+    agent.domainNameList = [];
+    agent.companyTestingAgent = true;
+    this.agentSubscription = this.agentService.saveAgent(agent).subscribe(receivedAgent => {
+      if (receivedAgent) {
+        this.companyAgentId = receivedAgent._id;
+        this.testingAgent = receivedAgent;
+        this.testDomain();
+      }
+    });
+  }
+
+
+  updateDomainStatusCd(domain?: Domain) {
+    domain.statusCd = "ACTIVE";
+    domain.version = 1;
+    this.subscription = this.domainService.saveDomain(domain)
+      .subscribe(
+        response => {
+          this.selectedDomain = response;
+          this.increaseVersion = false;
+        },
+        error => {
+
+        }
+      );
+  }
+
+  allowOtherThanValueLabelForForm(option: string) {
+    if (!option) {
+      return false;
+    }
+    return option == this.OPTION_INPUT || option == this.OPTION_TEXT_AREA || option == this.OPTION_DATE || option == this.OPTION_FILE_UPLOAD;
+  }
+
+  bulkEditOptionData(option: ResponseData) {
+    if (!option) {
+      option = new ResponseData();
+    }
+
+    this.selectedOption = option;
+    this.bulkEditOptionsData = JSON.stringify(this.selectedOption.data, null, 4);
+    new showModal("optionDataBulkEditModal");
+  }
+
+  applyBulkEditOptionData() {
+    const temp = JSON.parse(this.bulkEditOptionsData);
+    if (temp && temp instanceof Array) {
+      this.selectedOption.data = temp;
+    }
+    new closeModal("optionDataBulkEditModal");
+  }
 }

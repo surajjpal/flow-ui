@@ -3,9 +3,9 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angul
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
-import { State,CommonInsightWrapper,StateReportModel } from '../models/tasks.model';
+import { State,CommonInsightWrapper,StateReportModel, EmailPersister } from '../models/tasks.model';
 import { GraphObject,StateInfoModel, DataPoint } from '../models/flow.model';
-
+import { CRUDOperationInput } from '../models/crudOperationInput.model';
 import { environment } from '../../environments/environment';
 
 
@@ -518,3 +518,47 @@ export class StateService {
   }
 
 }
+
+@Injectable()
+export class EmailService                                                     {
+  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+  
+  constructor(private httpClient: HttpClient) { }
+
+  getEmailTrail(entityId?:string): Observable<EmailPersister[]> {
+    const subject = new Subject<EmailPersister[]>();
+    const crudInput = new CRUDOperationInput();
+    crudInput.collection = 'email';
+    crudInput.payload = {"entityId":entityId}
+    crudInput.operation = "READ_ALL";
+  
+    const url = `${environment.interfaceService + environment.smCrudFunction}`;
+    this.httpClient.post<EmailPersister[]>(
+      url,
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<EmailPersister[]>) => {
+        if (response.body) {
+          subject.next(response.body["data"]);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+}
+
+  
+

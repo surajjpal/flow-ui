@@ -1,5 +1,6 @@
 declare var showModal: any;
-
+declare let moment: any;
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
@@ -13,18 +14,20 @@ import { DomainService } from '../../../../services/domain.service';
 import { GraphService } from '../../../../services/flow.service';
 import { DataSharingService } from '../../../../services/shared.service';
 import { AnalyticsService } from '../../../../services/analytics.service';
-
+import {IMyDpOptions} from 'mydatepicker';
 import { environment } from 'environments/environment';
 
 
 @Component({
   selector: 'api-agent-agent',
   templateUrl: './agentCreation.component.html',
-  styleUrls: ['./agent.scss']
+  styleUrls: ['./agent.scss'],
+  providers:[DatePipe]
 })
 export class AgentCreationComponent implements OnInit, OnDestroy {
-
+  
   agentCreateMode: boolean;
+  showCronDate:boolean;
   isCreated: boolean;
   modalHeader: string;
   createMode: boolean;
@@ -42,6 +45,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
   apiClassifier: Classifier;
 
   facebookPlugin: Plugin;
+  myDate:any;
 
   @ViewChild('successModal') successModal: ElementRef;
   facebookIntegrated: boolean;
@@ -53,7 +57,14 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
   private subscriptionGraph: Subscription;
   private subscription: Subscription;
 
+  public myDatePickerOptions: IMyDpOptions = {
+        dateFormat: 'dd/mm/yyyy',
+    };
+
+  
+
   constructor(
+    private datePipe: DatePipe,
     private router: Router,
     private route: ActivatedRoute,
     private agentService: AgentService,
@@ -64,11 +75,12 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
   ) {
     this.modalHeader = '';
     this.createMode = true;
+    this.showCronDate = false;
     this.selectedAgent = new Agent();
     this.domainSource = [];
     this.selectedDomainList = [];
     this.flowSource = [];
-
+    this.myDate = this.setCronStartDate(new Date());
     this.isWatsonEnabled = false;
     this.watsonClassifier = new Classifier();
     this.watsonClassifier.classifierServiceName = 'WATSON';
@@ -100,6 +112,22 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       this.selectedAgent = agent;
       this.agentCreateMode = false;
 
+      if(this.selectedAgent.uiComponent.cronEnabled){
+        this.showCronDate = true;
+        if(!this.selectedAgent.uiComponent.startTime || this.selectedAgent.uiComponent.startTime === null)
+        {
+          this.setCronStartDate(new Date());
+          this.selectedAgent.uiComponent.startTime = new Date();
+        }
+        else{
+          let date = new Date(this.selectedAgent.uiComponent.startTime);
+          this.setCronStartDate(date);
+        }
+      }
+      else{
+        this.showCronDate = false;
+      }
+
       if (!this.selectedAgent.uiComponent) {
         this.selectedAgent.uiComponent = new UIComponent();
       }
@@ -126,6 +154,9 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       }
       if (!this.selectedAgent.uiComponent.isBargeable || this.selectedAgent.uiComponent.isBargeable === null) {
         this.selectedAgent.uiComponent.isBargeable = false;
+      }
+      if (!this.selectedAgent.uiComponent.initMessage || this.selectedAgent.uiComponent.initMessage === null) {
+        this.selectedAgent.uiComponent.initMessage = '';
       }
 
       if (this.selectedAgent.agentPlugins && this.selectedAgent.agentPlugins.length > 0) {
@@ -170,6 +201,8 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       }
     } else {
       this.selectedAgent = new Agent();
+      this.setCronStartDate(new Date());
+      this.selectedAgent.uiComponent.startTime = new Date();
       this.agentCreateMode = true;
     }
   }
@@ -187,7 +220,8 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
   }
 
   fetchLookups() {
-    this.subscriptionDomain = this.domainService.domainLookup()
+    let payload = { "$or": [ {"statusCd":"ACTIVE"}, { "statusCd": { "$exists": false } } ] }
+    this.subscriptionDomain = this.domainService.domainLookup(payload)
       .subscribe(
         domainList => {
           if (domainList) {
@@ -248,7 +282,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
       if (this.facebookPluginValidator()) {
         this.selectedAgent.agentPlugins.push(this.facebookPlugin);
       }
-
+      
       this.subscription = this.agentService.saveAgent(this.selectedAgent)
         .subscribe(
           createdAgent => {
@@ -459,6 +493,31 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
 
   goBack() {
     this.router.navigate(['/pg/agnt/agsr'], { relativeTo: this.route });
+  }
+
+  onCronChange(event){
+    if (event){
+      this.setCronStartDate(new Date());
+      this.selectedAgent.uiComponent.startTime = new Date();
+      this.showCronDate = event;
+    }
+    else{
+      this.selectedAgent.uiComponent.startTime = null;
+      this.showCronDate = event;
+    }
+  }
+
+  onDateChanged(event){
+    if(event){
+      this.selectedAgent.uiComponent.startTime = event["jsdate"];
+    }
+  }
+  
+  setCronStartDate(date){
+    let year = date.getFullYear();
+    let month = date.getMonth()+1;
+    let dt = date.getDate();
+    this.myDate = {"date":{"year":year,"day":dt,"month":month}}
   }
 
 }

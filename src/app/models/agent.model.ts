@@ -13,6 +13,8 @@ export class UIComponent {
   cronEnabled: boolean;
   isBargeable: boolean;
   conversationWindowTitlePrefix: string;
+  startTime:any;
+  initMessage: string;
 
   constructor() {
     this.colorCss = '';
@@ -27,6 +29,8 @@ export class UIComponent {
     this.cronEnabled = false;
     this.isBargeable = false;
     this.conversationWindowTitlePrefix = 'Chatting with';
+    this.startTime = null;
+    this.initMessage = '';
   }
 }
 
@@ -88,6 +92,7 @@ export class Agent {
   defaultLanguage: string;
   disabled: boolean;
   debugMode: boolean;
+  companyTestingAgent:boolean;
 
   constructor() {
     this._id = null;
@@ -109,5 +114,6 @@ export class Agent {
     this.defaultLanguage = '';
     this.disabled = false;
     this.debugMode = false;
+    this.companyTestingAgent = false;
   }
 }
