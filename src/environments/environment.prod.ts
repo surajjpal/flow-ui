@@ -3,28 +3,28 @@ export const environment = {
   name: 'production',
 
   // Root
-  root: 'http://flow.lntrealty.com/flow/',
+  root: 'https://flow.lntrealty.com/flow/',
     
   // API
-  authurl: 'http://flow.lntrealty.com/flow/auth/',
+  authurl: 'https://flow.lntrealty.com/flow/auth/',
 
   // Services
 
-  saveaccounturl: 'http://flow.lntrealty.com/flow/account/create',
-  fetchaccountbyidurl: 'http://flow.lntrealty.com/flow/account/',
-  publishaccounturl:'http://flow.lntrealty.com/flow/account/publish/',
-  unpublishaccounturl:'http://flow.lntrealty.com/flow/account/unpublish/',
+  saveaccounturl: 'https://flow.lntrealty.com/flow/account/create',
+  fetchaccountbyidurl: 'https://flow.lntrealty.com/flow/account/',
+  publishaccounturl:'https://flow.lntrealty.com/flow/account/publish/',
+  unpublishaccounturl:'https://flow.lntrealty.com/flow/account/unpublish/',
   processauditurl:"http://api.compusoft.com/api/universalsearch/search/flow",
 
   // Interfaces
-  interfaceService: 'http://flow.lntrealty.com/flow/interfaces',
-  updateClassifierTraining : 'http://flow.lntrealty.com/flow/interfaces/auto_decorate_training',
-  updateIntentTraining: 'http://flow.lntrealty.com/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'http://flow.lntrealty.com/flow/interfaces/entity_classification_training',
+  interfaceService: 'https://flow.lntrealty.com/flow/interfaces',
+  updateClassifierTraining : 'https://flow.lntrealty.com/flow/interfaces/auto_decorate_training',
+  updateIntentTraining: 'https://flow.lntrealty.com/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'https://flow.lntrealty.com/flow/interfaces/entity_classification_training',
 
   // Flow
-  server: 'http://flow.lntrealty.com/flow/console/',
-  autourl:'http://chat.lntrealty.com/?',
+  server: 'https://flow.lntrealty.com/flow/console/',
+  autourl:'https://chat.lntrealty.com/?',
 
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
@@ -82,7 +82,7 @@ export const environment = {
 
 
   // auto
-  autoServer: 'http://flow.lntrealty.com/flow/auto/',
+  autoServer: 'https://flow.lntrealty.com/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',
@@ -111,7 +111,7 @@ export const environment = {
   flowsearch:'/api/search/flow',
 
   // Analytics
-  reportservice: 'http://flow.lntrealty.com/flow/report',
+  reportservice: 'https://flow.lntrealty.com/flow/report',
   sendReportUrl: '/reports/analyticsreport/sendreport',
   scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
   getAnalyticsReports: "/reports/analyticsreport",
@@ -134,7 +134,7 @@ export const environment = {
   businessObjectPredictUrl: '/automatons/businessobject/predict',
   
   //Dashboard
-  dashboardServer: 'http://flow.lntrealty.com/flow/dashboard/',
+  dashboardServer: 'https://flow.lntrealty.com/flow/dashboard/',
   dashboardsummary:'auto/dashboard_summary',
   episodetimeline:'auto/episode_timeline',
   intentcount:'auto/intent_count',
@@ -150,7 +150,7 @@ export const environment = {
   statetransactionvalue:'flow/state_transaction_value',
 
   //Dashboard from interfaces
-  dashboardinterface: 'http://flow.lntrealty.com/flow/interfaces/dashboard',
+  dashboardinterface: 'https://flow.lntrealty.com/flow/interfaces/dashboard',
 
   //Following APIs path - To be used in conjunction with interfaceService property
   crudFunction: '/crud',
@@ -164,8 +164,8 @@ export const environment = {
   businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
 
   //python project in api-utils ondemandreport project
-  sendReportCSV: 'http://flow.lntrealty.com/flow/report/reports/generatereport',
+  sendReportCSV: 'https://flow.lntrealty.com/flow/report/reports/generatereport',
 
   //Vocabulary
-  vocabulary : 'http://flow.lntrealty.com/flow/interfaces/vocabulary',
+  vocabulary : 'https://flow.lntrealty.com/flow/interfaces/vocabulary',
 };
