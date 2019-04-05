@@ -82,6 +82,11 @@ export const environment = {
   datamodelurl:'dataModel/',
   datamodelsaveurl:'dataModel/savedatamodel',
 
+  //EntityUrls
+  entityurl:'entity/',
+  entitysaveurl:'entity/save',
+
+
   connectorinfo:'connectors/',
   getallconconfig:'connectors/getAll/',
   deleteconconfig:'connectors/delete/',

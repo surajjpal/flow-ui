@@ -34,6 +34,7 @@ import { ActivityMonitorService } from  './services/activitymonitor.service'
 import { USPService } from './services/usp.service'
 import { FileUploaderService } from './shared/services/file-uploader.service'
 import { DataModelService } from './services/setup.service'
+import { EntityService } from './services/entity.service'
 import { SharedModule } from './shared/shared.module';
 
 import { ErrorInterceptor } from './services/interceptors';
@@ -53,8 +54,8 @@ const APP_PROVIDERS = [
   DomainService,
   FlowDashboardService, GraphService, CommunicationService,
   DataCachingService, StateService,
-  AccountService, ApiConfigService, RoutesService,FetchUserService,UserGraphService,
-  ApiDesignService,DataModelService,
+  AccountService, ApiConfigService, RoutesService, FetchUserService, UserGraphService,
+  ApiDesignService, DataModelService, EntityService,
   AnalyticsService,
   ScheduleTaskService,
   ActivityMonitorService,

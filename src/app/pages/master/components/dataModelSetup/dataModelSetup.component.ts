@@ -57,7 +57,7 @@ export class DataModelSetupComponent implements OnInit, OnDestroy {
     this.selectedDataModel = new DataModel();
     this.dataModelList = [];
     this.fieldTypes = ['TEXT', 'FLOAT', 'INT', 'DATE', 'BOOLEAN', 'MODEL'];
-    this.validatorTypes = ['ApiInvoker','Rquired'];
+    this.validatorTypes = ['ApiInvoker','Required'];
     this.extractorTypes = ["Regex","Picklist"];
   }
 

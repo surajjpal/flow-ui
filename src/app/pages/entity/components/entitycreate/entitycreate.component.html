@@ -43,7 +43,7 @@
         <form [formGroup]="form">
             <div *ngFor="let field of selectedDataModel.fields" class="form-row">
                 <div [formGroup] = "form" class="form-group">
-                    <label [attr.for]="field.name">{{field.label}}</label>
+                    <label [attr.for]="field.name"><b>{{field.label}}:</b></label>
                     <div [ngSwitch]="field.type">
                    
                       <input *ngSwitchCase="'TEXT'"  class="col-md-12 col-sm-12 col-xs-12 form-control" [formControlName]="field.name"
@@ -53,22 +53,23 @@
                               min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
                               [(ngModel)]="field.value" [formControlName]="field.name" />
                       <select *ngSwitchCase="'BOOLEAN'"  class="col-md-12 col-sm-12 col-xs-12 form-control" (change)="onBooleanChange($event, field)" 
-                              class="form-control" required id="field.name" title="Choose Value"
+                               required id="field.name" title="Choose Value"
                               [(ngModel)]="field.value" [formControlName]="field.name">
                               <option *ngFor="let bool of boolean"
                                   [ngValue]="bool">{{ bool }}
                               </option>
                       </select>
-                      <my-date-picker *ngSwitchCase="'DATE'" [formControlName]="field.name" [options]="myDatePickerOptions" [(ngModel)]="field.value" (dateChanged)="onDateChanged($event)" required></my-date-picker>
+                      <my-date-picker *ngSwitchCase="'DATE'" placeholder="dd/mm/yyyy" [formControlName]="field.name" [options]="myDatePickerOptions" [(ngModel)]="field.value" (dateChanged)="onDateChanged($event)" required></my-date-picker>
 
-                      <input *ngSwitchCase="'FLOAT'"  class="col-md-12 col-sm-12 col-xs-12 form-control" type="number" [formControlName]="field.name" placeholder="0.00" [(ngModel)]="field.value" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" />
+                      <input *ngSwitchCase="'FLOAT'" class="col-md-12 col-sm-12 col-xs-12 form-control" type="number" [formControlName]="field.name" placeholder="0.00" [(ngModel)]="field.value" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" />
                    
                     </div> 
-                    <div class="errorMessage" *ngIf="!isValid">{{field.label}} is required</div>
+                    <label class="errorMessage required" *ngIf="!isValid(field)" > *{{field.label}} is required </label>
+                    <!-- <div class="errorMessage" *ngIf="!isValid(field)">* {{field.label}} is required</div> -->
                   </div>
             </div>
             <div class="form-row">
-              <button  class="btn btn-primary" [disabled]="!form.valid">Save</button>
+              <button  class="btn btn-primary" [disabled]="!form.valid" (click)="saveEntity()">Save</button>
             </div>
         </form>
       </div>

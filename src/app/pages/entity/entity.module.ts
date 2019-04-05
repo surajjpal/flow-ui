@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NgaModule } from '../../theme/nga.module';
 
@@ -15,7 +15,6 @@ import { DataTableModule } from 'angular2-datatable';
 import { EntityComponent } from './entity.component';
 import { EntityCreateComponent } from './components/entitycreate/entitycreate.component';
 
-import { APISpinnerComponent } from '../../shared/components/api-spinner/api-spinner.component';
 import { MyDatePickerModule } from 'mydatepicker';
 import 'd3';
 import 'nvd3';
@@ -40,8 +39,7 @@ import { SharedModule } from '../../shared/shared.module';
   ],
   declarations: [
     EntityComponent,
-    EntityCreateComponent,
-    APISpinnerComponent
+    EntityCreateComponent
   ]
 })
 export class EntityModule { }

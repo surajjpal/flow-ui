@@ -86,6 +86,10 @@ export const environment = {
     datamodelurl:'dataModel/',
     datamodelsaveurl:'dataModel/savedatamodel',
 
+    //EntityUrls
+    entityurl:'entity/',
+    entitysaveurl:'entity/save',
+
     
     // auto
     autoServer: 'https://flow.automatapi.com/flow/auto/',

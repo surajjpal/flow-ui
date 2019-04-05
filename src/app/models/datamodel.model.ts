@@ -63,3 +63,23 @@ export class ExtractorInstance{
         this.params = {};
     }
 }
+
+export class Entity extends BaseModel {
+    label: string;
+    name: string;
+    fields: Field[];
+    version: number;
+    process: string;
+    locked: boolean;
+
+  constructor() {
+    super();
+
+    this.label = '';
+    this.name = '';
+    this.fields = [];
+    this.version = 0;
+    this.process = '';
+    this.locked = false;
+  }
+}

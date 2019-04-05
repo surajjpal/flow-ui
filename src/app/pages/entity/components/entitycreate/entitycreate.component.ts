@@ -11,14 +11,15 @@ import { Subscription } from 'rxjs/Subscription';
 import { AlertService, DataSharingService, UniversalUser } from '../../../../services/shared.service';
 import { DataModelObject } from '../../../../services/shared.service';
 import { DataModelService } from '../../../../services/setup.service';
-import { DataModel, Field, ValidatorInstance, ExtractorInstance } from '../../../../models/datamodel.model';
+import { EntityService } from '../../../../services/entity.service';
+import { DataModel, Field, ValidatorInstance, ExtractorInstance, Entity } from '../../../../models/datamodel.model';
 import { CommonSearchModel } from '../../../../models/flow.model';
 
 import { FieldTypes } from '../../../../models/constants';
 import { environment } from '../../../../../environments/environment';
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 import { Body } from '@angular/http/src/body';
-import {IMyDpOptions} from 'mydatepicker';
+import { IMyDpOptions } from 'mydatepicker';
 
 @Component({
     selector: 'api-entity-entitycreate',
@@ -28,10 +29,10 @@ import {IMyDpOptions} from 'mydatepicker';
       trigger('slideInOut', [
         transition(':enter', [
           style({ transform: 'translateY(-100%)' }),
-          animate('200ms ease-in', style({ transform: 'translateY(0%)' }))
+          animate('600ms ease-in', style({ transform: 'translateY(0%)' }))
         ]),
         transition(':leave', [
-          animate('200ms ease-in', style({ transform: 'translateY(-100%)' }))
+          animate('600ms ease-in', style({ transform: 'translateY(-100%)' }))
         ])
       ])
     ]
@@ -55,7 +56,9 @@ export class EntityCreateComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private sharingObject: DataModelObject,
-        private dataModelService: DataModelService
+        private dataModelService: DataModelService,
+        private entityService: EntityService,
+        private alertService: AlertService
         
       ) {
         this.dataModelList = [];
@@ -94,7 +97,9 @@ export class EntityCreateComponent implements OnInit, OnDestroy {
           .subscribe(list => this.dataModelList = list);
     }
 
-    isValid() { return this.form.controls[this.selectedDataModel.name].valid; }
+    isValid(field) { 
+      return this.form.controls[field.name].valid; 
+    }
 
     toFormGroup(fields: Field[] ) {
       const group: any = {};
@@ -122,5 +127,24 @@ export class EntityCreateComponent implements OnInit, OnDestroy {
         // this.selectedAgent.uiComponent.startTime = event["jsdate"];
       }
     } 
+
+    saveEntity() {
+      const entity = new Entity();
+      entity.fields = this.selectedDataModel.fields;
+      entity.name = this.selectedDataModel.label;
+      entity.process = this.selectedDataModel.process;
+      this.subscription = this.entityService.saveEntity(entity)
+      .subscribe(
+        entity => {
+        if ( entity ) {
+          new closeModal('entityCreateModal');
+          this.alertService.success(entity.name.toString() + 'created successfully', false, 2000);
+        }
+      },
+      error => {
+        this.alertService.error(error["error"]["message"], false, 2000);
+      }
+    );
+    }
 
 }
