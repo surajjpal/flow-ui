@@ -2082,7 +2082,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   deleteConfig(state?:any){
-    if(state.taskConfigList.length > 0){
+    if(state && state.taskConfigList && state.taskConfigList.length > 0){
       for(let config of state.taskConfigList){
         this.toDeleteConfigList.push(config)
       }

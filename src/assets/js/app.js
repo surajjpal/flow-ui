@@ -227,15 +227,50 @@ function getState() {
   return state;
 };
 
+openedModalList = [];
+
+keepOpenedModalListInCheck = function() {
+  setTimeout(() => {
+    if (openedModalList) {
+      let idToRemove = [];
+      for (let modalId of openedModalList) {
+        if (!$('#' + modalId).is(':visible')) {
+          idToRemove.push(modalId);
+        }
+      }
+
+      for (let modalId of idToRemove) {
+        openedModalList.splice(openedModalList.indexOf(modalId), 1);
+      }
+    }
+
+    keepOpenedModalListInCheck();
+  }, 100);
+}
+
+keepOpenedModalListInCheck();
+
 closeModal = function (modalId) {
-  if ($('#' + modalId).is(':visible')) {
-    $('#' + modalId).modal('hide');
+  if (modalId) {
+    if (openedModalList.includes(modalId)) {
+      openedModalList.splice(openedModalList.indexOf(modalId), 1);
+    }
+    
+    if ($('#' + modalId).is(':visible')) {
+      $('#' + modalId).modal('hide');
+    }
   }
 }
 
 showModal = function (modalId) {
-  if (!$('#' + modalId).is(':visible')) {
-    $('#' + modalId).modal();
+  if (modalId) {
+    if (!openedModalList.includes(modalId)) {
+      openedModalList.push(modalId);
+      
+      if (!$('#' + modalId).is(':visible')) {
+        $('#' + modalId).modal();
+      }
+    }
   }
 }
 
@@ -265,7 +300,7 @@ var settingsPopupBody;
 var horizontal = true;
 var sourceCell;   // Used as a parent cell while adding new cell in graph.
 var cellLabelChanged;
-var isReadOnly = false;;
+var isReadOnly = false;
 var newEdge;
 var existingEdgesBeforeUpdate;
 
@@ -659,7 +694,7 @@ designFlowEditor = function (serverXml, readOnly) {
       graph.scrollCellToVisible(v1, true);
     }
 
-    mxConnectionHandlerInsertEdge = mxConnectionHandler.prototype.insertEdge;
+    var mxConnectionHandlerInsertEdge = mxConnectionHandler.prototype.insertEdge;
     mxConnectionHandler.prototype.insertEdge = function (parent, id, value, source, target, style) {
       if (target && target.id == 'treeRoot') {
         window['appComponentRef'].zone.run(() => {
@@ -702,6 +737,7 @@ designFlowEditor = function (serverXml, readOnly) {
 
         if (sourceEvents && sourceEvents.length > 0) {
           newEdge = mxConnectionHandlerInsertEdge.apply(this, arguments);
+
           window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.addEdge(sourceEvents); });
           showModal("newEdgeModal");
           return newEdge;
