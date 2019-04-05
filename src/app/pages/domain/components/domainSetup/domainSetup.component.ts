@@ -1735,6 +1735,5 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     if (temp && temp instanceof Array) {
       this.selectedOption.data = temp;
     }
-    new closeModal("optionDataBulkEditModal");
   }
 }
