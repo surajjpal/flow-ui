@@ -1,34 +1,126 @@
-
+declare var closeModal: any;
+declare var showModal: any;
 
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { trigger, transition, animate, style } from '@angular/animations';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+// import { REACTIVE_FORM_DIRECTIVES } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { AlertService, DataSharingService,UniversalUser } from '../../../../services/shared.service';
+import { AlertService, DataSharingService, UniversalUser } from '../../../../services/shared.service';
 import { DataModelObject } from '../../../../services/shared.service';
 import { DataModelService } from '../../../../services/setup.service';
-import { DataModel,Field,ValidatorInstance, ExtractorInstance } from '../../../../models/datamodel.model';
+import { DataModel, Field, ValidatorInstance, ExtractorInstance } from '../../../../models/datamodel.model';
 import { CommonSearchModel } from '../../../../models/flow.model';
 
-import {FieldTypes} from '../../../../models/constants';
+import { FieldTypes } from '../../../../models/constants';
 import { environment } from '../../../../../environments/environment';
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 import { Body } from '@angular/http/src/body';
+import {IMyDpOptions} from 'mydatepicker';
 
 @Component({
     selector: 'api-entity-entitycreate',
     templateUrl: './entitycreate.component.html',
-    styleUrls: ['./entitycreate.scss']
+    styleUrls: ['./entitycreate.scss'],
+    animations: [
+      trigger('slideInOut', [
+        transition(':enter', [
+          style({ transform: 'translateY(-100%)' }),
+          animate('200ms ease-in', style({ transform: 'translateY(0%)' }))
+        ]),
+        transition(':leave', [
+          animate('200ms ease-in', style({ transform: 'translateY(-100%)' }))
+        ])
+      ])
+    ]
   })
 
 export class EntityCreateComponent implements OnInit, OnDestroy {
 
-    ngOnInit(){
+    dataModelList: DataModel[];
+    boolean: any[];
+    filterQuery: string;
+    selectedDataModel: DataModel;
+    form: FormGroup;
+    private subscription: Subscription;
+
+
+    public myDatePickerOptions: IMyDpOptions = {
+      dateFormat: 'dd/mm/yyyy'
+  };
+
+    constructor(
+        private router: Router,
+        private route: ActivatedRoute,
+        private sharingObject: DataModelObject,
+        private dataModelService: DataModelService
+        
+      ) {
+        this.dataModelList = [];
+        this.boolean = [true, false];
+        this.filterQuery = '';
+        this.selectedDataModel = new DataModel();
+      }
+    
+    ngOnInit() {
+        this.getDataModelList();
+        this.form = new FormGroup({});
 
     }
 
-    ngOnDestroy(){
+    ngOnDestroy() {
 
     }
+
+    createEntityModal(dataModel?: DataModel) {
+      this.subscription = this.dataModelService.getDataModel(dataModel._id)
+    .subscribe(
+      datamodel => {
+        if (datamodel) {
+          this.selectedDataModel = datamodel;
+          this.form = this.toFormGroup(this.selectedDataModel.fields);
+          new showModal('entityCreateModal');
+        }
+      });
+    }
+
+    getDataModelList() {
+        const commonsearchModel = new CommonSearchModel();
+        commonsearchModel.searchParams = [{ 'statusCd': 'ACTIVE' }, { 'statusCd': 'DRAFT' }];
+        commonsearchModel.returnFields = ['label', 'version', 'statusCd'];
+        this.subscription = this.dataModelService.getDataModelList(commonsearchModel)
+          .subscribe(list => this.dataModelList = list);
+    }
+
+    isValid() { return this.form.controls[this.selectedDataModel.name].valid; }
+
+    toFormGroup(fields: Field[] ) {
+      const group: any = {};
+
+      fields.forEach(field => {
+        let required = false;
+        for ( const validator of field.validators) {
+          if ( validator.name === 'Required') {
+            required = true;
+          }
+        }
+        group[field.name] = required ? new FormControl(field.value || '', Validators.required)
+        : new FormControl(field.value || '');
+      });   
+      return new FormGroup(group);
+    }
+
+
+    onBooleanChange(event, field?: Field) {
+
+    }
+
+    onDateChanged(event) {
+      if (event) {
+        // this.selectedAgent.uiComponent.startTime = event["jsdate"];
+      }
+    } 
 
 }

@@ -185,24 +185,24 @@
                                         <!-- Field Validator Accordian -->
                                         <div class="form-group">
                                             <div id="fieldValidatorAccordian" role="tablist" aria-multiselectable="true" *ngIf="field.validators.length > 0">
-                                                <div *ngFor="let validator of field.validators; let index=index" class="panel">
+                                                <div *ngFor="let validator of field.validators; let vindex=index" class="panel">
                                                     <div class="card">
-                                                        <div *ngIf="index == 0" [id]="'vfTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                                                        <div *ngIf="vindex == 0" [id]="'vfTabHeading' + vindex + index" class="card-header" heightStyle="content" role="tab">
                                                             <h5 class="mb-0">
-                                                                <a data-toggle="collapse" data-parent="#fieldValidatorAccordian" [href]="'#vfCollapse' + index" aria-expanded="false" [attr.aria-controls]="'vfCollapse' + index">
+                                                                <a data-toggle="collapse" data-parent="#fieldValidatorAccordian" [href]="'#vfCollapse' + vindex + index" aria-expanded="false" [attr.aria-controls]="'vfCollapse' + vindex + index">
                                                                 {{'Click to expand Validator ' + validator.name}}
                                                                 </a>
                                                             </h5>
                                                         </div>
-                                                        <div *ngIf="index != 0" [id]="'vfTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                                                        <div *ngIf="vindex != 0" [id]="'vfTabHeading' + vindex  + index" class="card-header" heightStyle="content" role="tab">
                                                             <h5 class="mb-0">
-                                                                <a class="collapsed" data-toggle="collapse" data-parent="#fieldValidatorAccordian" [href]="'#vfCollapse' + index" aria-expanded="false"
-                                                                [attr.aria-controls]="'vfCollapse' + index">
+                                                                <a  class="collapsed" data-toggle="collapse" data-parent="#fieldValidatorAccordian" [href]="'#vfCollapse' + vindex  + index" aria-expanded="false"
+                                                                [attr.aria-controls]="'vfCollapse' + vindex  + index">
                                                                 {{'Click to expand Validator ' + validator.name}}
                                                                 </a>
                                                             </h5>
                                                         </div>
-                                                        <div *ngIf="index == 0" [id]="'vfCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + index">
+                                                        <div *ngIf="vindex == 0" [id]="'vfCollapse' + vindex + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + vindex  + index">
                                                             <div class="card-block">
                                                                 <form>
                                                                     <div class="form-group">
@@ -230,7 +230,7 @@
                                                                 </form>
                                                             </div>
                                                         </div>
-                                                        <div *ngIf="index != 0" [id]="'vfCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + index">
+                                                        <div *ngIf="vindex != 0" [id]="'vfCollapse' + vindex + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + vindex  + index">
                                                             <div class="card-block">
                                                               <form>
                                                                 <div class="form-group">
@@ -268,24 +268,24 @@
                                         <!-- Field Extractor Accordian -->
                                         <div class="form-group">
                                             <div id="fieldExtractorAccordian" role="tablist" aria-multiselectable="true" *ngIf="field.extractors.length > 0">
-                                                <div *ngFor="let extractor of field.extractors; let index=index" class="panel">
+                                                <div *ngFor="let extractor of field.extractors; let eindex=index" class="panel">
                                                     <div class="card">
-                                                        <div *ngIf="index == 0" [id]="'veTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                                                        <div *ngIf="eindex == 0" [id]="'veTabHeading' + eindex + index" class="card-header" heightStyle="content" role="tab">
                                                             <h5 class="mb-0">
-                                                                <a data-toggle="collapse" data-parent="#fieldExtractorAccordian" [href]="'#veCollapse' + index" aria-expanded="false" [attr.aria-controls]="'veCollapse' + index">
+                                                                <a data-toggle="collapse" data-parent="#fieldExtractorAccordian" [href]="'#veCollapse' + eindex  + index" aria-expanded="false" [attr.aria-controls]="'veCollapse' + eindex + index">
                                                                 {{'Click to expand Extractor ' + extractor.name}}
                                                                 </a>
                                                             </h5>
                                                         </div>
-                                                        <div *ngIf="index != 0" [id]="'veTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                                                        <div *ngIf="eindex != 0" [id]="'veTabHeading' + eindex + index" class="card-header" heightStyle="content" role="tab">
                                                             <h5 class="mb-0">
-                                                                <a class="collapsed" data-toggle="collapse" data-parent="#fieldExtractorAccordian" [href]="'#veCollapse' + index" aria-expanded="false"
+                                                                <a class="collapsed" data-toggle="collapse" data-parent="#fieldExtractorAccordian" [href]="'#veCollapse' + eindex + index" aria-expanded="false"
                                                                 [attr.aria-controls]="'veCollapse' + index">
                                                                 {{'Click to expand Extractor ' + extractor.name}}
                                                                 </a>
                                                             </h5>
                                                         </div>
-                                                        <div *ngIf="index == 0" [id]="'veCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + index">
+                                                        <div *ngIf="eindex == 0" [id]="'veCollapse' + eindex  + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + eindex  + index">
                                                             <div class="card-block">
                                                                 <form>
                                                                     <div class="form-group">
@@ -322,7 +322,7 @@
                                                                 </form>
                                                             </div>
                                                         </div>
-                                                        <div *ngIf="index != 0" [id]="'veCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + index">
+                                                        <div *ngIf="eindex != 0" [id]="'veCollapse' + eindex  + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + eindex  + index">
                                                             <div class="card-block">
                                                                 <form>
                                                                     <div class="form-group">
@@ -423,24 +423,24 @@
                                         <!-- Field Validator Accordian -->
                                         <div class="form-group">
                                             <div id="fieldValidatorAccordian" role="tablist" aria-multiselectable="true" *ngIf="field.validators.length > 0">
-                                                <div *ngFor="let validator of field.validators; let index=index" class="panel">
+                                                <div *ngFor="let validator of field.validators; let vindex=index" class="panel">
                                                     <div class="card">
-                                                        <div *ngIf="index == 0" [id]="'vfTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                                                        <div *ngIf="vindex == 0" [id]="'vfTabHeading' + vindex  + index" class="card-header" heightStyle="content" role="tab">
                                                             <h5 class="mb-0">
-                                                                <a data-toggle="collapse" data-parent="#fieldValidatorAccordian" [href]="'#vfCollapse' + index" aria-expanded="false" [attr.aria-controls]="'vfCollapse' + index">
+                                                                <a data-toggle="collapse" data-parent="#fieldValidatorAccordian" [href]="'#vfCollapse' + vindex + index" aria-expanded="false" [attr.aria-controls]="'vfCollapse' + vindex + index">
                                                                 {{'Click to expand Validator ' + validator.name}}
                                                                 </a>
                                                             </h5>
                                                         </div>
-                                                        <div *ngIf="index != 0" [id]="'vfTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                                                        <div *ngIf="vindex != 0" [id]="'vfTabHeading' + index" class="card-header" heightStyle="content" role="tab">
                                                             <h5 class="mb-0">
-                                                                <a class="collapsed" data-toggle="collapse" data-parent="#fieldValidatorAccordian" [href]="'#vfCollapse' + index" aria-expanded="false"
-                                                                [attr.aria-controls]="'vfCollapse' + index">
+                                                                <a class="collapsed" data-toggle="collapse" data-parent="#fieldValidatorAccordian" [href]="'#vfCollapse' + vindex  + index" aria-expanded="false"
+                                                                [attr.aria-controls]="'vfCollapse' + vindex + index">
                                                                 {{'Click to expand Validator ' + validator.name}}
                                                                 </a>
                                                             </h5>
                                                         </div>
-                                                        <div *ngIf="index == 0" [id]="'vfCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + index">
+                                                        <div *ngIf="vindex == 0" [id]="'vfCollapse' + vindex + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + vindex + index">
                                                             <div class="card-block">
                                                                 <form>
                                                                     <div class="form-group">
@@ -468,7 +468,7 @@
                                                                 </form>
                                                             </div>
                                                         </div>
-                                                        <div *ngIf="index != 0" [id]="'vfCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + index">
+                                                        <div *ngIf="vindex != 0" [id]="'vfCollapse' + vindex  + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'vfTabHeading' + vindex + index">
                                                             <div class="card-block">
                                                               <form>
                                                                 <div class="form-group">
@@ -504,24 +504,24 @@
                                         <!-- Field Extractor Accordian -->
                                         <div class="form-group">
                                             <div id="fieldExtractorAccordian" role="tablist" aria-multiselectable="true" *ngIf="field.extractors.length > 0">
-                                                <div *ngFor="let extractor of field.extractors; let index=index" class="panel">
+                                                <div *ngFor="let extractor of field.extractors; let eindex=index" class="panel">
                                                     <div class="card">
-                                                        <div *ngIf="index == 0" [id]="'veTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                                                        <div *ngIf="eindex == 0" [id]="'veTabHeading' + eindex  + index" class="card-header" heightStyle="content" role="tab">
                                                             <h5 class="mb-0">
-                                                                <a data-toggle="collapse" data-parent="#fieldExtractorAccordian" [href]="'#veCollapse' + index" aria-expanded="false" [attr.aria-controls]="'veCollapse' + index">
+                                                                <a data-toggle="collapse" data-parent="#fieldExtractorAccordian" [href]="'#veCollapse' + eindex + index" aria-expanded="false" [attr.aria-controls]="'veCollapse' + eindex + index">
                                                                 {{'Click to expand Extractor ' + extractor.name}}
                                                                 </a>
                                                             </h5>
                                                         </div>
-                                                        <div *ngIf="index != 0" [id]="'veTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                                                        <div *ngIf="eindex != 0" [id]="'veTabHeading' + eindex + index" class="card-header" heightStyle="content" role="tab">
                                                             <h5 class="mb-0">
-                                                                <a class="collapsed" data-toggle="collapse" data-parent="#fieldExtractorAccordian" [href]="'#veCollapse' + index" aria-expanded="false"
-                                                                [attr.aria-controls]="'veCollapse' + index">
+                                                                <a class="collapsed" data-toggle="collapse" data-parent="#fieldExtractorAccordian" [href]="'#veCollapse' + eindex + index" aria-expanded="false"
+                                                                [attr.aria-controls]="'veCollapse' + eindex + index">
                                                                 {{'Click to expand Extractor ' + extractor.name}}
                                                                 </a>
                                                             </h5>
                                                         </div>
-                                                        <div *ngIf="index == 0" [id]="'veCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + index">
+                                                        <div *ngIf="eindex == 0" [id]="'veCollapse' + eindex + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + eindex + index">
                                                             <div class="card-block">
                                                                 <form>
                                                                     <div class="form-group">
@@ -558,7 +558,7 @@
                                                                 </form>
                                                             </div>
                                                         </div>
-                                                        <div *ngIf="index != 0" [id]="'veCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + index">
+                                                        <div *ngIf="eindex != 0" [id]="'veCollapse' + eindex + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'veTabHeading' + eindex  + index">
                                                             <div class="card-block">
                                                                 <form>
                                                                     <div class="form-group">

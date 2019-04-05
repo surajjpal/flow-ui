@@ -32,6 +32,7 @@ export class Field{
     type:FieldTypes;
     list:boolean;
     sortOrder:number;
+    value:any;
 
     constructor(){
         this.label = '';
