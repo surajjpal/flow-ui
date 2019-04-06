@@ -792,9 +792,9 @@
                                               </tr>
                                             </thead>
                                             <tbody>
-                                              <tr *ngFor="let option of gsResponse.options">
+                                              <tr *ngFor="let option of gsResponse.options; let index=index;">
                                                 <td>
-                                                  <select class="selectpicker form-control" name="type" id="type" [(ngModel)]="option.type">
+                                                  <select class="selectpicker form-control" name="type" [id]="'type' + option.type + index" [(ngModel)]="option.type">
                                                     <option value="">Choose One</option>
                                                     <option value="BUTTON">Button</option>
                                                     <option value="CHECKBOX">Checkbox</option>
@@ -806,6 +806,11 @@
                                                     <option value="DROPDOWN">Dropdown</option>
                                                     
                                                   </select>
+
+                                                  <!-- <select class="selectpicker form-control" title="Select Option" [(ngModel)]="option.type" name="type">
+                                                    <option *ngFor="let op of modelOptions" [ngValue]="op">{{ op }}</option>
+                                                  </select> -->
+
                                                 </td>
                                                 <td>
                                                   <input type="text" class="form-control" placeholder="URL" [(ngModel)]="option.url" name="url">
@@ -1987,7 +1992,7 @@
                                             <tbody>
                                               <tr *ngFor="let option of gsResponse.options">
                                                 <td>
-                                                  <select class="selectpicker form-control" name="type" id="type" [(ngModel)]="option.type">
+                                                  <select class="selectpicker form-control" name="type" [id]="'type' + option.type + index" [(ngModel)]="option.type">
                                                     <option value="">Choose One</option>
                                                     <option value="BUTTON">Button</option>
                                                     <option value="CHECKBOX">Checkbox</option>
@@ -3512,7 +3517,7 @@
                   <div *ngIf="index == 0" [id]="'modeloptionsTabHeading' + index" class="card-header" heightStyle="content" role="tab">
                     <h5 class="mb-0">
                       <a data-toggle="collapse" data-parent="#modelOptionsAccordion" [href]="'#modeloptionsCollapse' + index" aria-expanded="true" [attr.aria-controls]="'modeloptionsCollapse' + index">
-                        {{'Click to expand option ' + (responseOption.option ? responseOption.option : '') }}
+                        {{'Click to expand option for ' + (responseOption.key ? responseOption.key : '') }}
                       </a>
                     </h5>
                   </div>
@@ -3520,7 +3525,7 @@
                     <h5 class="mb-0">
                       <a class="collapsed" data-toggle="collapse" data-parent="#modelOptionsAccordion" [href]="'#modeloptionsCollapse' + index" aria-expanded="false"
                         [attr.aria-controls]="'modeloptionsCollapse' + index">
-                        {{'Click to expand option ' + (responseOption.option ? responseOption.option : '') }}
+                        {{'Click to expand option for ' + (responseOption.key ? responseOption.key : '') }}
                       </a>
                     </h5>
                   </div>
@@ -3591,9 +3596,18 @@
                               <label></label>
                               <api-checkbox [checked]="responseOption.isMandatory" [label]="'Is Mandatory'" (event)="responseOption.isMandatory = $event.target.checked"></api-checkbox>
                           </div>
-                          
-                          
                        </div>
+                       <div class="form-group row">
+                          <div class="col-md-6">
+                              <label>Dependency expression to display</label>
+                              <input type="text" class="form-control" placeholder="this.resultForm['key'] == 'value'" [(ngModel)]="responseOption.dependencyExpression" name="dependencyExpression"/>
+                          </div>
+                          <div class="col-md-6">
+                              <label></label>
+                              <api-checkbox [checked]="responseOption.disable" [label]="'Is Disable'" (event)="responseOption.disable = $event.target.checked"></api-checkbox>
+                          </div>
+                      </div>
+                      
 
                        <div class="form-group">
                           <div [id]="'modelOptionsDataAccordion' + index" role="tablist" aria-multiselectable="true" *ngIf="tempModel.responseOptions.length > 0">
