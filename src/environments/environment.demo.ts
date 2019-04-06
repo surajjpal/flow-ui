@@ -89,6 +89,7 @@ export const environment = {
     //EntityUrls
     entityurl:'entity/',
     entitysaveurl:'entity/save',
+    entitysubmiturl:'entity/submit',
 
     
     // auto

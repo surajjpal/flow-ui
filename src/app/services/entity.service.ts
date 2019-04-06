@@ -79,6 +79,38 @@ export class EntityService {
   }
 
 
+  submitEntity(entity?: Entity): Observable<Entity> {
+    const subject = new Subject<Entity>();
+
+    const url = `${environment.server + environment.entitysubmiturl}`;
+
+    this.httpClient.post<Entity>(
+      url,
+      entity,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    )
+      .subscribe(
+      (response: HttpResponse<Entity>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+      );
+
+    return subject.asObservable();
+  }
+
+
   updateEntity(entity?: Entity): Observable<Entity> {
     const subject = new Subject<Entity>();
 

@@ -44,6 +44,7 @@ export class EntityCreateComponent implements OnInit, OnDestroy {
     boolean: any[];
     filterQuery: string;
     selectedDataModel: DataModel;
+    showSubmit: boolean;
     form: FormGroup;
     private subscription: Subscription;
 
@@ -64,6 +65,7 @@ export class EntityCreateComponent implements OnInit, OnDestroy {
         this.dataModelList = [];
         this.boolean = [true, false];
         this.filterQuery = '';
+        this.showSubmit = false;
         this.selectedDataModel = new DataModel();
       }
     
@@ -83,6 +85,12 @@ export class EntityCreateComponent implements OnInit, OnDestroy {
       datamodel => {
         if (datamodel) {
           this.selectedDataModel = datamodel;
+          if ( datamodel.process.toString().length > 0) {
+            this.showSubmit = true;
+          }
+          else {
+            this.showSubmit = false;
+          }
           this.form = this.toFormGroup(this.selectedDataModel.fields);
           new showModal('entityCreateModal');
         }
@@ -132,14 +140,29 @@ export class EntityCreateComponent implements OnInit, OnDestroy {
       }
     } 
 
-    saveEntity() {
+    saveEntity(type?: string) {
       const entity = new Entity();
       entity.fields = this.selectedDataModel.fields;
       entity.label = this.selectedDataModel.label;
       entity.name = this.selectedDataModel.name;
       entity.version = this.selectedDataModel.version;
       entity.process = this.selectedDataModel.process;
-      this.subscription = this.entityService.saveEntity(entity)
+      if(type === "save"){
+        this.subscription = this.entityService.saveEntity(entity)
+      .subscribe(
+        entity => {
+        if ( entity ) {
+          new closeModal('entityCreateModal');
+          this.alertService.success(entity.label.toString() + ' has been created successfully', false, 2000);
+        }
+      },
+      error => {
+        this.alertService.error(error["error"]["message"], false, 2000);
+      }
+    );
+      }
+    else if(type === "submit"){
+      this.subscription = this.entityService.submitEntity(entity)
       .subscribe(
         entity => {
         if ( entity ) {
@@ -152,5 +175,12 @@ export class EntityCreateComponent implements OnInit, OnDestroy {
       }
     );
     }
+      
+    }
+
+    
+
+
+
 
 }

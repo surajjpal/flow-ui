@@ -70,21 +70,16 @@
             </div>
             <div class="form-row">
                 <button 
-                type="button" [disabled]="!form.valid" class="btn btn-success btn-with-icon" (click)="submitEntity()">
-                <i class="ion-checkmark"></i>Submit</button>
-                <button 
                 type="button" [disabled]="!form.valid" class="btn btn-primary btn-with-icon" (click)="saveEntity()">
                 <i class="ion-arrow-down-c"></i>Save</button>
+                <button 
+                type="button" *ngIf="showSubmit" [disabled]="!form.valid" class="btn btn-success btn-with-icon" (click)="submitEntity()">
+                <i class="ion-checkmark"></i>Submit</button>
             </div>
         </form>
       </div>
       <!-- Modal Footer -->
       <div class="modal-footer">
-        <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button *ngIf="!createMode" type="submit" class="btn btn-danger" data-dismiss="modal"
-          (click)="removeIntent()">Remove</button>
-        <button type="submit" class="btn btn-primary" data-dismiss="modal"
-          (click)="addIntent()">{{createMode ? 'Create' : 'Update'}}</button> -->
       </div>
     </div>
   </div>
