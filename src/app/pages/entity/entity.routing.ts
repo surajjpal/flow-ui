@@ -2,6 +2,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { EntityComponent } from './entity.component';
 import { EntityCreateComponent } from './components/entitycreate/entitycreate.component';
+import { EntitySearchComponent } from './components/entitysearch/entitysearch.component';
 
 
 const routes: Routes = [
@@ -10,7 +11,8 @@ const routes: Routes = [
     component: EntityComponent,
     children: [
       { path: '', redirectTo: 'ensr', pathMatch: 'full' },
-      { path: 'encr', component: EntityCreateComponent }
+      { path: 'encr', component: EntityCreateComponent },
+      { path: 'ensr', component: EntitySearchComponent }
     ]
   }
 ];

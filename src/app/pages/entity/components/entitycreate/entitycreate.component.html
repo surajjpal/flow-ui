@@ -4,7 +4,7 @@
             <div class="columnentity">
               <div class="cardentity" [@slideInOut]>
                   
-                <h3>{{item.label}}</h3>
+                <h3> <b>{{item.label}}</b></h3>
                 <p>Version : {{item.version}}</p>
                 <p>Please click to create {{item.label}}</p>
                 <a>
@@ -31,7 +31,7 @@
       <!-- Modal Header -->
       <div class="modal-header">
         <h4 class="modal-title" id="entityModalLabel">
-          Create {{selectedDataModel.label}}
+         <b> Create {{selectedDataModel.label}} </b>
         </h4>
         <button type="button" class="close" data-dismiss="modal">
           <span aria-hidden="true">&times;</span>
@@ -69,7 +69,12 @@
                   </div>
             </div>
             <div class="form-row">
-              <button  class="btn btn-primary" [disabled]="!form.valid" (click)="saveEntity()">Save</button>
+                <button 
+                type="button" [disabled]="!form.valid" class="btn btn-success btn-with-icon" (click)="submitEntity()">
+                <i class="ion-checkmark"></i>Submit</button>
+                <button 
+                type="button" [disabled]="!form.valid" class="btn btn-primary btn-with-icon" (click)="saveEntity()">
+                <i class="ion-arrow-down-c"></i>Save</button>
             </div>
         </form>
       </div>

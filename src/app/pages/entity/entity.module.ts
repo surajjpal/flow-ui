@@ -11,10 +11,10 @@ import { NvD3Module } from 'ng2-nvd3';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { MomentModule } from 'angular2-moment';
 import { DataTableModule } from 'angular2-datatable';
-
+import { DateRangePickerComponent } from '../../shared/components/daterangepicker/daterangepicker.component';
 import { EntityComponent } from './entity.component';
 import { EntityCreateComponent } from './components/entitycreate/entitycreate.component';
-
+import { EntitySearchComponent } from './components/entitysearch/entitysearch.component';
 import { MyDatePickerModule } from 'mydatepicker';
 import 'd3';
 import 'nvd3';
@@ -39,7 +39,9 @@ import { SharedModule } from '../../shared/shared.module';
   ],
   declarations: [
     EntityComponent,
-    EntityCreateComponent
+    EntityCreateComponent,
+    EntitySearchComponent,
+    DateRangePickerComponent
   ]
 })
 export class EntityModule { }

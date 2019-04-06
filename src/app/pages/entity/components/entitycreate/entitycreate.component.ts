@@ -122,6 +122,10 @@ export class EntityCreateComponent implements OnInit, OnDestroy {
 
     }
 
+    designEntity() {
+      this.router.navigate(['/pg/stp/stdms'], { relativeTo: this.route });
+    }
+
     onDateChanged(event) {
       if (event) {
         // this.selectedAgent.uiComponent.startTime = event["jsdate"];
@@ -131,14 +135,16 @@ export class EntityCreateComponent implements OnInit, OnDestroy {
     saveEntity() {
       const entity = new Entity();
       entity.fields = this.selectedDataModel.fields;
-      entity.name = this.selectedDataModel.label;
+      entity.label = this.selectedDataModel.label;
+      entity.name = this.selectedDataModel.name;
+      entity.version = this.selectedDataModel.version;
       entity.process = this.selectedDataModel.process;
       this.subscription = this.entityService.saveEntity(entity)
       .subscribe(
         entity => {
         if ( entity ) {
           new closeModal('entityCreateModal');
-          this.alertService.success(entity.name.toString() + 'created successfully', false, 2000);
+          this.alertService.success(entity.label.toString() + ' has been created successfully', false, 2000);
         }
       },
       error => {
