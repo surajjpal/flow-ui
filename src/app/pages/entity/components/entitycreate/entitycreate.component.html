@@ -70,10 +70,10 @@
             </div>
             <div class="form-row">
                 <button 
-                type="button" [disabled]="!form.valid" class="btn btn-primary btn-with-icon" (click)="saveEntity()">
+                type="button" [disabled]="!form.valid" class="btn btn-primary btn-with-icon" (click)="saveEntity('save')">
                 <i class="ion-arrow-down-c"></i>Save</button>
                 <button 
-                type="button" *ngIf="showSubmit" [disabled]="!form.valid" class="btn btn-success btn-with-icon" (click)="submitEntity()">
+                type="button" *ngIf="showSubmit" [disabled]="!form.valid" class="btn btn-success btn-with-icon" (click)="saveEntity('submit')">
                 <i class="ion-checkmark"></i>Submit</button>
             </div>
         </form>
