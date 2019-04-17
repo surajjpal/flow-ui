@@ -756,8 +756,8 @@ export class PersonalComponent implements OnInit, OnDestroy {
     if (this.graphObjects.get(selectedTask.stateMachineInstanceModelId) != null) {
       const dataPointsConfig = this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList;
       for (let data of dataPointsConfig) {
-        if (!data.businessKeyFlag) {
-          if (data.dataType == "ARRAY" && selectedTask['parameters'] != null && selectedTask['parameters'][data.dataPointName].length > 0 && typeof selectedTask['parameters'][data.dataPointName] != "string") {
+        if (data != null && !data.businessKeyFlag) {
+          if (data.dataType == "ARRAY" && selectedTask['parameters'] != null && selectedTask['parameters'][data.dataPointName] != null && selectedTask['parameters'][data.dataPointName].length > 0 && typeof selectedTask['parameters'][data.dataPointName] != "string") {
             arrayDataPoints.push(data)
           }
           else {

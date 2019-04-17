@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
-import { State,CommonInsightWrapper } from '../models/tasks.model';
-import { GraphObject,ProcessModel,CommonSearchModel } from '../models/flow.model';
+import { State, CommonInsightWrapper } from '../models/tasks.model';
+import { GraphObject, ProcessModel, CommonSearchModel } from '../models/flow.model';
 import { Dashboard } from '../models/dashboard.model';
-import { ApiConfig } from '../models/setup.model';
+import { ApiConfig, MVELObject } from '../models/setup.model';
 
 import { environment } from '../../environments/environment';
 import { AsyncAction } from 'rxjs/scheduler/AsyncAction';
@@ -47,7 +47,7 @@ export class FlowDashboardService {
 
         subject.error(err);
       }
-      );
+    );
 
     return subject.asObservable();
   }
@@ -56,7 +56,7 @@ export class FlowDashboardService {
     const subject = new Subject<Dashboard>();
     body['operation'] = "get_flow_dashboard_summary"
     body['dashboard'] = "flow"
-   
+
     const url = `${environment.dashboardinterface}`;
 
     this.httpClient.post<Dashboard>(
@@ -80,7 +80,7 @@ export class FlowDashboardService {
 
         subject.error(err);
       }
-      );
+    );
 
     return subject.asObservable();
   }
@@ -112,7 +112,7 @@ export class FlowDashboardService {
 
         subject.error(err);
       }
-      );
+    );
 
     return subject.asObservable();
   }
@@ -122,7 +122,7 @@ export class FlowDashboardService {
     body['operation'] = "range_of_transaction";
     body['dashboard'] = "flow";
     const url = `${environment.dashboardinterface}`;
-    
+
     this.httpClient.post<Dashboard>(
       url,
       body,
@@ -144,7 +144,7 @@ export class FlowDashboardService {
 
         subject.error(err);
       }
-      );
+    );
 
     return subject.asObservable();
   }
@@ -177,7 +177,7 @@ export class FlowDashboardService {
 
         subject.error(err);
       }
-      );
+    );
 
     return subject.asObservable();
   }
@@ -211,7 +211,7 @@ export class FlowDashboardService {
 
         subject.error(err);
       }
-      );
+    );
 
     return subject.asObservable();
   }
@@ -244,7 +244,7 @@ export class FlowDashboardService {
 
         subject.error(err);
       }
-      );
+    );
 
     return subject.asObservable();
   }
@@ -254,24 +254,24 @@ export class FlowDashboardService {
 
 @Injectable()
 
-export class ProcessService{
+export class ProcessService {
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-  
+
   constructor(private httpClient: HttpClient) { }
 
-  getAll(body:any): Observable<ProcessModel[]> {
+  getAll(body: any): Observable<ProcessModel[]> {
     const subject = new Subject<ProcessModel[]>();
 
     let url;
-    
-      url = `${environment.interfaceService + environment.flowsearch}`;
-    
-    
+
+    url = `${environment.interfaceService + environment.flowsearch}`;
+
+
     this.httpClient.post<ProcessModel[]>(
       url,
       body,
       {
-        headers:this.httpHeaders,
+        headers: this.httpHeaders,
         observe: 'response',
         reportProgress: true,
         withCredentials: true
@@ -292,14 +292,14 @@ export class ProcessService{
 
     return subject.asObservable();
   }
-  getSelectedState(body:any): Observable<State> {
+  getSelectedState(body: any): Observable<State> {
     const subject = new Subject<State>();
 
     let url;
-    
-      url = `${environment.server + environment.getstateinstance}`;
-    
-    
+
+    url = `${environment.server + environment.getstateinstance}`;
+
+
     this.httpClient.post<State>(
       url,
       body,
@@ -331,7 +331,7 @@ export class ProcessService{
 @Injectable()
 export class GraphService {
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-  
+
   constructor(private httpClient: HttpClient) { }
 
   save(graphObject: GraphObject): Observable<GraphObject> {
@@ -359,7 +359,7 @@ export class GraphService {
           (err: HttpErrorResponse) => {
             // All errors are handled in ErrorInterceptor, no further handling required
             // Unless any specific action is to be taken on some error
-    
+
             subject.error(err);
           }
         );
@@ -382,7 +382,7 @@ export class GraphService {
           (err: HttpErrorResponse) => {
             // All errors are handled in ErrorInterceptor, no further handling required
             // Unless any specific action is to be taken on some error
-    
+
             subject.error(err);
           }
         );
@@ -394,7 +394,7 @@ export class GraphService {
     return subject.asObservable();
   }
 
-  getGraphObject(id?:any){
+  getGraphObject(id?: any) {
     const subject = new Subject<GraphObject>();
 
     let url;
@@ -405,10 +405,10 @@ export class GraphService {
     // }
 
     url = `${environment.server + environment.graphurl + id}`;
-    
+
     this.httpClient.get<GraphObject>(
       url,
-      
+
       {
         headers: this.httpHeaders,
         observe: 'response',
@@ -437,7 +437,7 @@ export class GraphService {
 
     let url;
     url = `${environment.server + environment.graphbystatusurl}`;
-    
+
     this.httpClient.post<GraphObject[]>(
       url,
       commonSearchModel,
@@ -521,6 +521,36 @@ export class GraphService {
     return subject.asObservable();
   }
 
+  testMVELExpression(mvelObject: MVELObject): Observable<MVELObject> {
+    const subject = new Subject<MVELObject>();
+    const url = `${environment.server + environment.graphurl + environment.evaluateMVEL}`;
+
+    this.httpClient.post<MVELObject>(
+      url,
+      mvelObject,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<MVELObject>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
   getEntryActions(): Observable<string[]> {
     const subject = new Subject<string[]>();
 
@@ -578,7 +608,7 @@ export class GraphService {
   }
 
 
-  
+
 
   apiConfigLookup(): Observable<ApiConfig[]> {
     const subject = new Subject<ApiConfig[]>();
@@ -614,7 +644,7 @@ export class GraphService {
 export class CommunicationService {
   sharedGraphObject: GraphObject;
   readOnly: boolean;
-  
+
   sendGraphObject(graphObject: GraphObject, readOnly?: boolean) {
     this.sharedGraphObject = graphObject;
 
