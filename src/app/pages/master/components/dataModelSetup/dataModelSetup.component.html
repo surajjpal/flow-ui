@@ -640,61 +640,7 @@
   </form>
   
   
-  
-  <!-- Warning Modal -->
-  <div class="modal fade" id="fileUploadModel" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title" id="warningLabel">
-            {{"File Upload"}}
-          </h4>
-        </div>
-  
-        <!-- Modal Body -->
-        <div class="modal-body" id="modal_body">
-          {{'Uploading file please wait....'}}
-  
-        </div>
-  
-        <!-- Modal Footer -->
-        <div class="modal-footer" id="modal_footer" *ngIf="uploadSucess">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <div class="modal fade" id="validationModal" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title" id="warningLabel">
-            {{"Warning"}}
-          </h4>
-        </div>
-  
-        <!-- Modal Body -->
-        <div class="modal-body" id="modal_body">
-          {{"Sorry cannot save configuration without: "}}
-          <br>
-          <br>
-          {{notSatisfiedDataPoints}}
-  
-        </div>
-  
-        <!-- Modal Footer -->
-        <div class="modal-footer" id="modal_footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Dismiss</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
+ 
   
   <div class="modal fade" id="fileNotUploaded" tabindex="-1" role="dialog" attr.aria-labelledby="warningLabel"
     aria-hidden="true">
