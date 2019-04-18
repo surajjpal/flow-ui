@@ -36,7 +36,9 @@ export class EntitySearchComponent implements OnInit, OnDestroy {
     entityTabclass: any;
     entityList: Entity[];
     selectedEntity: Entity;
+    scrollId: string; 
     subscription: Subscription;
+    filterQuery: string;
     
     constructor(
         private router: Router,
@@ -50,10 +52,12 @@ export class EntitySearchComponent implements OnInit, OnDestroy {
         this.entityList = [];
         this.selectedEntity = null;
         this.entityTabclass = {};
+        this.scrollId = null;
+        this.filterQuery = '';
       }
 
     ngOnInit() {
-        this.progressBarFlag = true;
+        
         this.pageNumber = 0;
         this.fetchRecords = 10;
         this.getEntitylList();
@@ -62,6 +66,38 @@ export class EntitySearchComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
 
     }
+
+    getEntitiesFromUsp() {
+        this.progressBarFlag = true;
+        this.subscription = this.entityService.entityUspSearch(this.scrollId, this.filterQuery)
+          .subscribe(response => {
+              if(response){
+                  this.scrollId = response.scrollId;
+                  const list = [];
+                  if(response.result.length > 0){
+                    this.selectedEntity = response.result[0].payload;
+                    for (const en of response.result) {
+                        this.entityTabclass[en.payload._id] = this.TABLINKS;
+                        list.push(en.payload);
+                    }
+                    this.entityTabclass[this.selectedEntity._id] = this.TABLINKS_ACTIVE;
+                    this.progressBarFlag = false;
+                  }
+              }
+            //   this.progressBarFlag = false;
+            //   if ( list.length > 0) {
+            //     this.selectedEntity = list[0];
+            //     for (const en of list) {
+            //         this.entityTabclass[en._id] = this.TABLINKS;
+            //     }
+            //     this.entityTabclass[this.selectedEntity._id] = this.TABLINKS_ACTIVE;
+            //   }
+            //   this.entityList = list;
+            });
+    }
+
+    
+    
 
     getEntitylList() {
         this.subscription = this.entityService.getEntityList(this.pageNumber, this.fetchRecords)

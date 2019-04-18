@@ -177,10 +177,4 @@ export class EntityCreateComponent implements OnInit, OnDestroy {
     }
       
     }
-
-    
-
-
-
-
 }

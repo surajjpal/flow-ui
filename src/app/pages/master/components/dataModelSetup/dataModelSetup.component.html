@@ -16,6 +16,17 @@
                 <label> Process to Invoke  </label>
                 <input type="text" class="form-control" required placeholder="machinetype" [(ngModel)]="selectedDataModel.process" name="machinetype" />
             </div>
+            <div class="form-group">
+                <label>Select DataModel Type</label>
+                <select  
+                    class="form-control" required id="datamodelselect" title="Choose DataModel Type"
+                    [(ngModel)]="selectedDataModel.type" name="validatorType">
+                    <option *ngFor="let dataModelType of dataModelTypes"
+                        [ngValue]="dataModelType">{{ dataModelType }}
+                    </option>
+                </select>
+                
+              </div>
 
             <!-- Accordian For Validator-->
             <div class="form-group">

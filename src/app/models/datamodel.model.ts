@@ -7,6 +7,7 @@ export class DataModel extends BaseModel{
     version:number;
     process:string;
     locked:boolean;
+    type:string;
     validators: ValidatorInstance[];
 
   constructor() {
@@ -18,6 +19,7 @@ export class DataModel extends BaseModel{
     this.version = 0;
     this.process = '';
     this.validators = [];
+    this.type = '';
     this.locked = false;
   }
 }

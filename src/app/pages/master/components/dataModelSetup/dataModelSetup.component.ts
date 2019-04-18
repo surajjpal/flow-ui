@@ -38,6 +38,7 @@ export class DataModelSetupComponent implements OnInit, OnDestroy {
   validatorTypes:string[];
   extractorTypes:string[];
   dataModelList:DataModel[];
+  dataModelTypes:string[];
   
 
 
@@ -59,6 +60,7 @@ export class DataModelSetupComponent implements OnInit, OnDestroy {
     this.fieldTypes = ['TEXT', 'FLOAT', 'INT', 'DATE', 'BOOLEAN', 'MODEL'];
     this.validatorTypes = ['ApiInvoker','Required'];
     this.extractorTypes = ["Regex","Picklist"];
+    this.dataModelTypes = ["Entity","EmailIn"];
   }
 
     ngOnInit(){

@@ -24,7 +24,7 @@
                 <api-daterangepicker (selectedRange)="onDateRangeSelect($event)"></api-daterangepicker>
             </div>
             <div class="form-group col-sm-2">
-                <button type="button" class="btn btn-primary" (click)="onSubmit()">
+                <button [disabled] = "true" type="button" class="btn btn-primary" (click)="getEntitiesFromUsp()">
                 Submit
                 </button>
             </div>
