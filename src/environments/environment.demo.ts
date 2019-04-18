@@ -55,6 +55,7 @@ export const environment = {
     timeruniturl: 'graph/timerunit',
     autodashboardurl: 'dashboard',
     userurl: 'user/',
+    evaluateMVEL: 'evaluateMVEL/',
   
     registerurl: 'user/createUser',
     forgotpassword:'user/forgotPassword',
