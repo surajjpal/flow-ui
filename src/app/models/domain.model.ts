@@ -68,6 +68,7 @@ export class Goal {
   domainGoalSteps: GoalStep[];
   model: any;
   api: string;
+  preApi: string;
   responseExpression: string;
   validationCheck: boolean;
   flowFlag: boolean;
@@ -84,6 +85,7 @@ export class Goal {
     this.domainGoalSteps = [];
     this.model = {};
     this.api = '';
+    this.preApi = '';
     this.responseExpression = '';
     this.validationCheck = false;
     this.flowFlag = true;
@@ -192,9 +194,14 @@ export class ModelResponseOption {
   prePopulatedValue: any;
   isMandatory: boolean;
   api: string;
+  dependencyExpression: string;
+  disable: boolean;
   responseData: ModelResponseData[];
 
-  constructor(option?: string, responseData?:  ModelResponseData[], label?: string, key?: string, isMandatory?: boolean, api?: string, afterSubmitLabel?: string, alignVertically?: boolean, populateOptionDataKey?: string, prePopulatedValue?: any) {
+  constructor(option?: string, responseData?:  ModelResponseData[], 
+    label?: string, key?: string, isMandatory?: boolean, api?: string, 
+    afterSubmitLabel?: string, alignVertically?: boolean, populateOptionDataKey?: string, 
+    prePopulatedValue?: any, dependencyExpression?: string, disable?: boolean) {
     this.option = option ? option : null;
     this.responseData = responseData ? responseData : [];
     this.label = label ? label : null;
@@ -202,9 +209,11 @@ export class ModelResponseOption {
     this.isMandatory = isMandatory ? isMandatory : false;
     this.api = api ? api : null;
     this.afterSubmitLabel = afterSubmitLabel ? afterSubmitLabel : null;
-    this.alignVertically = alignVertically ? this.alignVertically : false;
-    this.populateOptionDataKey = populateOptionDataKey ? this.populateOptionDataKey : null;
-    this.prePopulatedValue = prePopulatedValue ? this.prePopulatedValue : null;
+    this.alignVertically = alignVertically ? alignVertically : false;
+    this.populateOptionDataKey = populateOptionDataKey ? populateOptionDataKey : null;
+    this.prePopulatedValue = prePopulatedValue ? prePopulatedValue : null;
+    this.dependencyExpression = dependencyExpression ? dependencyExpression : null;
+    this.disable = disable ? disable : false;
   }
 }
 

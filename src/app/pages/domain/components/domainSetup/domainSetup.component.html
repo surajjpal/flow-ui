@@ -590,6 +590,13 @@
               placeholder="Tag Expression" [(ngModel)]="tempGoal.tagExpression" name="tagExpression" />
           </div>
           <div class="form-group">
+            <label class="col-md-12 col-sm-12 col-xs-12" for="preGoalApiLabel">
+              Pre Goal API
+            </label>
+            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="preGoalApiLabel"
+              placeholder="Pre Goal API" [(ngModel)]="tempGoal.preApi" name="preApi" />
+          </div>
+          <div class="form-group">
             <label class="col-md-12 col-sm-12 col-xs-12" for="goalApiLabel">
               Goal API
             </label>
@@ -3984,7 +3991,7 @@
                       <a data-toggle="collapse" data-parent="#modelOptionsAccordion"
                         [href]="'#modeloptionsCollapse' + index" aria-expanded="true"
                         [attr.aria-controls]="'modeloptionsCollapse' + index">
-                        {{'Click to expand option ' + (responseOption.option ? responseOption.option : '') }}
+                        {{'Click to expand option for ' + (responseOption.key ? responseOption.key : '') }}
                       </a>
                     </h5>
                   </div>
@@ -3994,7 +4001,7 @@
                       <a class="collapsed" data-toggle="collapse" data-parent="#modelOptionsAccordion"
                         [href]="'#modeloptionsCollapse' + index" aria-expanded="false"
                         [attr.aria-controls]="'modeloptionsCollapse' + index">
-                        {{'Click to expand option ' + (responseOption.option ? responseOption.option : '') }}
+                        {{'Click to expand option for ' + (responseOption.key ? responseOption.key : '') }}
                       </a>
                     </h5>
                   </div>
@@ -4069,7 +4076,14 @@
                             <label></label>
                             <api-checkbox [checked]="responseOption.isMandatory" [label]="'Is Mandatory'"
                               (event)="responseOption.isMandatory = $event.target.checked"></api-checkbox>
+                            <api-checkbox [checked]="responseOption.disable" [label]="'Is Disable'" 
+                              (event)="responseOption.disable = $event.target.checked">
+                            </api-checkbox>
                           </div>
+                        </div>
+                         <div class="form-group">
+                            <label>Dependency expression to display</label>
+                            <input type="text" class="form-control" placeholder="this.resultForm['key'] == 'value'" [(ngModel)]="responseOption.dependencyExpression" name="dependencyExpression"/>
                         </div>
                         <div class="form-group">
                           <div [id]="'modelOptionsDataAccordion' + index" role="tablist" aria-multiselectable="true"
@@ -4281,7 +4295,7 @@
       <!-- Modal Footer -->
       <div class="modal-footer" id="modal_footer">
         <button type="button" class="btn btn-warning" data-dismiss="modal">Dismiss</button>
-        <button type="button" class="btn btn-success" (click)="applyBulkEditOptionData(ruleKey,ruleValue)">Save</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="applyBulkEditOptionData()">Save</button>
       </div>
     </div>
   </div>

@@ -48,7 +48,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   OPTION_FILE_UPLOAD = "FILE_UPLOAD"
   OPTION_TEXT_AREA = "TEXT_AREA"
   OPTION_DATE = "DATE";
-  modelOptions: string[] = [this.OPTION_INPUT, this.OPTION_SINGLE_SELECT_DROP_DOWN, this.OPTION_CHECKBOX, this.OPTION_RADIO, this.OPTION_MULTI_SELECT_DROP_DOWN, this.OPTION_FILE_UPLOAD, this.OPTION_TEXT_AREA, this.OPTION_DATE];
+  OPTION_ADDRESS = "ADDRESS_SEARCH"
+  modelOptions: string[] = [this.OPTION_INPUT, this.OPTION_SINGLE_SELECT_DROP_DOWN, this.OPTION_CHECKBOX, this.OPTION_RADIO, this.OPTION_MULTI_SELECT_DROP_DOWN, this.OPTION_FILE_UPLOAD, this.OPTION_TEXT_AREA, this.OPTION_DATE, this.OPTION_ADDRESS];
   FILTER_VALUE_LABEL_OPTION_TYPES = ["CARD", "OFFERED_DOCUMENT", "FORM"]
 
   entityUploaderOptions: NgUploaderOptions;
@@ -566,6 +567,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         for (const goal of this.selectedDomain.domainGoals) {
           if (goal.expression && (typeof goal.expression === 'string' || goal.expression instanceof String)) {
             goal.expression = [goal.expression];
+          }
+
+          if (!goal.preApi) {
+            goal.preApi = '';
           }
 
           goal.domainGoalSteps = goal.domainGoalSteps.sort((gs1, gs2) => {
@@ -1735,6 +1740,5 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     if (temp && temp instanceof Array) {
       this.selectedOption.data = temp;
     }
-    new closeModal("optionDataBulkEditModal");
   }
 }

@@ -1913,23 +1913,44 @@
 
 <div class="modal fade" id="mvelEditModal" tabindex="-1" role="dialog" attr.aria-labelledby="mvelEditModal"
    aria-hidden="true">
-   <div class="modal-dialog">
-      <div class="modal-content">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content ">
          <!-- Modal Header -->
          <div class="modal-header">
             <h4 class="modal-title" id="mvelEditModal">
-               {{ruleKey}}
+               Rule key: {{ruleKey}}
             </h4>
          </div>
          <!-- Modal Body -->
          <div class="modal-body" id="modal_body">
-            <div>
-               <textarea class="col-sm-12" [(ngModel)]="selectedRule.expression" rows="12" name="textBody"></textarea>
+            <div class="row">
+               <div class="col-6 col-lg--6 col-md-6 col-sm-6 col-xs-6">
+                  <h3>Expression</h3>
+                  <div>
+                     <textarea class="col-sm-12" [(ngModel)]="selectedRule.expression" rows="40"
+                        name="textBody"></textarea>
+                  </div>
+               </div>
+               <div class="col-6 col-lg--6 col-md-6 col-sm-6 col-xs-6">
+                  <h3>Input to test</h3>
+                  <div>
+                     <textarea class="col-sm-12" [(ngModel)]="mvelObject.input" rows="40" name="textBody"></textarea>
+                  </div>
+
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-12 col-lg--12 col-md-12 col-sm-12 col-xs-12">
+                  <h3>Result:</h3>
+                  {{mvelObject.result}}
+               </div>
+
             </div>
          </div>
          <!-- Modal Footer -->
          <div class="modal-footer" id="modal_footer">
             <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="dismiss()">Dismiss</button>
+            <button type="button" class="btn btn-info" (click)="testExpression()">Test</button>
             <button type="button" class="btn btn-success" (click)="saveExp(ruleKey,ruleValue)">Save</button>
          </div>
       </div>
