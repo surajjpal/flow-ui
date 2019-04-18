@@ -569,6 +569,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
             goal.expression = [goal.expression];
           }
 
+          if (!goal.preApi) {
+            goal.preApi = '';
+          }
+
           goal.domainGoalSteps = goal.domainGoalSteps.sort((gs1, gs2) => {
             if (gs1.sequence > gs2.sequence) {
               return 1;

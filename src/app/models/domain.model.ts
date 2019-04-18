@@ -68,6 +68,7 @@ export class Goal {
   domainGoalSteps: GoalStep[];
   model: any;
   api: string;
+  preApi: string;
   responseExpression: string;
   validationCheck: boolean;
   flowFlag: boolean;
@@ -84,6 +85,7 @@ export class Goal {
     this.domainGoalSteps = [];
     this.model = {};
     this.api = '';
+    this.preApi = '';
     this.responseExpression = '';
     this.validationCheck = false;
     this.flowFlag = true;
