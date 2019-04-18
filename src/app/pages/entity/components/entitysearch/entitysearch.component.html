@@ -1,0 +1,179 @@
+<div *ngIf="progressBarFlag">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;"
+                    aria-valuenow="99" aria-valuemin="0" aria-valuemax="100">Loading...</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <br />
+        </div>
+    </div>
+</div>
+
+<div class="widgets">
+    <ba-card cardTitle="FILTER">
+        <form class="row form-inline">
+            <div class="form-group col-sm-8">
+                <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Query" />
+            </div>
+            <div class="form-group col-sm-2">
+                <api-daterangepicker (selectedRange)="onDateRangeSelect($event)"></api-daterangepicker>
+            </div>
+            <div class="form-group col-sm-2">
+                <button [disabled] = "true" type="button" class="btn btn-primary" (click)="getEntitiesFromUsp()">
+                Submit
+                </button>
+            </div>
+        </form>
+    </ba-card>
+</div> 
+
+<div class="widgets">
+    <!-- <div class="row"> -->
+         <ba-card baCardClass="with-scroll" cardTitle="ENTITIES">
+            <div class="row" *ngIf="selectedEntity != null" style="width: 100%;">
+                <div class="col col-lg-3 col-md-3 col-sm-3">
+                    <div class="card card-default with-scroll">
+                        <div class="card-block">
+                            <table class="table table-striped" [mfData]="entityList" #mf="mfDataTable"
+                                [mfRowsOnPage]="fetchRecords">
+                                <tr *ngFor="let entity of mf.data; let index=index;" (click)="selectEntity(entity)">
+                                    <div [class]="entityTabclass[entity._id]" id="defaultOpen">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>{{entity.label}}</label>
+                                            </div>
+                                            <div class="col">
+                                                {{ entity.createdTimeLong | amDateFormat: 'DD/MM hh:mm A'
+                                                }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Version: {{ entity.version}}</label>
+                                            </div>
+                                            <div class="col">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tr>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="5">
+                                            <mfBootstrapPaginator></mfBootstrapPaginator>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-info" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
+                        *ngIf="entityList.length != 0" (click)="loadMore()">Load
+                        More
+                    </button>
+                </div>
+                <div class="col col-lg-9 col-md-9 col-sm-9">
+                    <div class="card card-default with-scroll">
+                        <div class="card-header bg-gray">
+                            <b> Viewing details for-{{ selectedEntity._id}}</b>
+                        </div>
+                        <div class="card-block">
+                        <div class="card card-default">
+                                <div class="card-block">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <button 
+                                                type="button" class="btn btn-primary btn-with-icon" (click)="saveEntity()">
+                                                <i class="ion-arrow-down-c"></i>Save</button>
+                                            <button 
+                                                type="button" class="btn btn-success btn-with-icon" (click)="submitEntity()">
+                                                <i class="ion-checkmark"></i>Submit</button>
+                                            <button type="button" class="btn btn-primary pull-right"
+                                                title="Show Details" (click)="showDetails()">
+                                                <i class="ion-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card card-default">
+                                <div class="card-header bg-gray">
+                                    <b>Entity Details</b>
+                                </div>
+                                <div class="card-block">
+                                    <div>
+                                        <div class="row">
+                                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                style="margin-top:10px;" *ngFor="let field of selectedEntity.fields">
+                                                <label>
+                                                    <b>{{ field.label }}: </b>
+                                                </label>
+                                                <!-- <input *ngIf="field.type === 'INT'" type="number"
+                                                    class="form-control col-md-12 col-sm-12" [title]="dataPoint.description"
+                                                    [placeholder]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                    name="parameters[dataPoint.dataPointName]" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" /> -->
+                                                <input *ngIf="field.type === 'TEXT'" type="text"
+                                                    class="form-control" required [placeholder]=""
+                                                    [(ngModel)]="field.value"
+                                                    name="field.name" />
+                                                <!-- <textarea *ngIf="dataPoint.dataType === 'TEXT'" rows="5"
+                                                    class="form-control" required [placeholder]="dataPoint.description"
+                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                    name="parameters[dataPoint.dataPointName]" >
+                                                </textarea>
+                                                <select *ngIf="dataPoint.dataType === 'BOOLEAN'" class="selectpicker form-control col-md-12 col-sm-12"
+                                                    [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                    name="parameters[dataPoint.dataPointName]">
+                                                    <option [ngValue]="true">True</option>
+                                                    <option [ngValue]="false">False</option>
+                                                </select>
+                                                <select *ngIf="dataPoint.dataType === 'SINGLE_SELECT'"
+                                                    class="selectpicker form-control col-md-12 col-sm-12"
+                                                    [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                    name="parameters[dataPoint.dataPointName]">
+                                                    <option *ngFor="let choice of dataPoint.inputSource"
+                                                        [ngValue]="choice">{{choice}}</option>
+                                                </select>
+                                                <select *ngIf="dataPoint.dataType === 'MULTI_SELECT'"
+                                                    multiple="true" class="selectpicker form-control col-md-12 col-sm-12"
+                                                    [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                    name="parameters[dataPoint.dataPointName]">
+                                                    <option *ngFor="let choice of dataPoint.inputSource"
+                                                        [ngValue]="choice">{{choice}}</option>
+                                                </select>
+                                                <tag-input *ngIf="dataPoint.dataType === 'ARRAY'" class="custom-input-tag-border form-control col-md-12 col-sm-12"
+                                                    [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                    name="parameters[dataPoint.dataPointName]"
+                                                    [modelAsStrings]="true" [editable]="true"
+                                                    [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
+                                                    [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'"
+                                                    theme="minimal">
+                                                </tag-input> -->
+                                            </div>
+                                        </div>
+                                        <hr />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div *ngIf="selectedEntity === null" style="text-align: center;">
+                <div>
+                    <b>No records found</b>
+                </div>
+            </div>
+              
+        </ba-card>
+  
+</div>

@@ -80,6 +80,17 @@ export const environment = {
     saveconconfig:'connectors/save/',
     getallconinfo:'connectors/getConInfo/',
     getconinfobytype:'connectors/getConInfoByType/',
+
+
+    //DataModelUrls
+    datamodelurl:'dataModel/',
+    datamodelsaveurl:'dataModel/savedatamodel',
+
+    //EntityUrls
+    entityurl:'entity/',
+    entitysaveurl:'entity/save',
+    entitysubmiturl:'entity/submit',
+
     
     // auto
     autoServer: 'https://flow.automatapi.com/flow/auto/',

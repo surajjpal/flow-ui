@@ -79,13 +79,23 @@ export const environment = {
   apiconfigurl: 'apiConfig/',
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
-  connectorinfo: 'connectors/',
-  getallconconfig: 'connectors/getAll/',
-  deleteconconfig: 'connectors/delete/',
-  deletetaskconfig: 'connectors/deleteTaskConfig/',
-  saveconconfig: 'connectors/save/',
-  getallconinfo: 'connectors/getConInfo/',
-  getconinfobytype: 'connectors/getConInfoByType/',
+  //DataModelUrls
+  datamodelurl:'dataModel/',
+  datamodelsaveurl:'dataModel/savedatamodel',
+
+  //EntityUrls
+  entityurl:'entity/',
+  entitysaveurl:'entity/save',
+  entitysubmiturl:'entity/submit',
+
+
+  connectorinfo:'connectors/',
+  getallconconfig:'connectors/getAll/',
+  deleteconconfig:'connectors/delete/',
+  deletetaskconfig:'connectors/deleteTaskConfig/',
+  saveconconfig:'connectors/save/',
+  getallconinfo:'connectors/getConInfo/',
+  getconinfobytype:'connectors/getConInfoByType/',
 
   // auto
   autoServer: 'http://108.168.190.82:8080/flow/auto/',

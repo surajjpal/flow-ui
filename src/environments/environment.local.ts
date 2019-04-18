@@ -88,6 +88,16 @@ export const environment = {
   routesurl: 'master/routes',
   apiconfigurl: 'apiConfig/',
 
+  //DataModelUrls
+  datamodelurl:'dataModel/',
+  datamodelsaveurl:'dataModel/savedatamodel',
+
+  //EntityUrls
+  entityurl:'entity/',
+  entitysaveurl:'entity/save',
+  entitysubmiturl:'entity/submit',
+
+
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
   connectorinfo: 'connectors/',

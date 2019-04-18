@@ -92,6 +92,8 @@ export class ConnectorConfig extends BaseModel {
   }
 }
 
+
+
 export class TempConnectorConfig extends BaseModel {
   configName: string;
   configType: string;

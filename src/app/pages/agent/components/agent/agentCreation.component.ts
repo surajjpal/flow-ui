@@ -58,7 +58,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
 
   public myDatePickerOptions: IMyDpOptions = {
-        dateFormat: 'dd/mm/yyyy',
+        dateFormat: 'dd/mm/yyyy'
     };
 
   
