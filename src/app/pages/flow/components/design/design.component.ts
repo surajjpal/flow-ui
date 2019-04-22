@@ -24,6 +24,7 @@ import {
 } from '../../../../models/flow.model';
 import { ConnectorConfig, ConnectorInfo, TaskObject, TempConnectorConfig } from '../../../../models/setup.model';
 import { ApiConfig, ApiKeyExpressionMap, ApiResponse, MVELObject } from '../../../../models/setup.model';
+import { CommonSearchModel } from '../../../../models/flow.model';
 
 // Service Imports
 import { GraphService, CommunicationService } from '../../../../services/flow.service';
@@ -31,6 +32,8 @@ import { StateService, DataCachingService } from '../../../../services/inbox.ser
 import { ConnectorConfigService, FileService } from '../../../../services/setup.service';
 import { environment } from '../../../../../environments/environment';
 import { AlertService } from 'app/services/shared.service';
+import { DataModelService } from '../../../../services/setup.service';
+import { DataModel, Field, ValidatorInstance, ExtractorInstance, Entity } from '../../../../models/datamodel.model';
 @Component({
   selector: 'api-flow-design',
   templateUrl: './design.component.html',
@@ -140,6 +143,15 @@ export class DesignComponent implements OnInit, OnDestroy {
   selectedRuleInput: string = "";
   mvelObject: MVELObject;
 
+  //Entity
+  dataModelList:DataModel[];
+  selectedEntity:DataModel;
+  selectedDataModel:DataModel;
+  selectedField:Field;
+  entityselected:boolean;
+  entityRedirectWarning:string;
+  entityRedirect:boolean;
+
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
   private subscriptionApiConfig: Subscription;
@@ -157,6 +169,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     private connectorConfigService: ConnectorConfigService,
     private fileService: FileService,
     private alertService: AlertService,
+    private dataModelService: DataModelService
   ) {
     window['flowComponentRef'] = { component: this, zone: zone };
 
@@ -192,6 +205,14 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.temp = {};
     this.responseTypeSource = ['PAYLOAD', 'PARAM'];
     this.paramsToSelectSource = ['SELECTIVE', 'ALL'];
+    //Entity
+    this.selectedEntity = new DataModel();
+    this.selectedDataModel = new DataModel();
+    this.selectedField = new Field();
+    this.dataModelList = [];
+    this.entityselected = false;
+    this.entityRedirectWarning = "You will be redirected to a different page, please make sure you save the process!!";
+    this.entityRedirect = false;
   }
 
   ngOnInit() {
@@ -221,6 +242,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.getTimerUnits();
     this.getApiConfigLookup();
     this.getConList();
+    this.getDataModelList();
     var graphLoad = false;
     if (!this.graphObject || this.graphObject === null) {
       this.loadGraphObject();
@@ -498,6 +520,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   prepareDummyObject() {
+    console.log("ppppppppppppppppppppp")
     if (this.graphObject) {
       this.tempGraphObject = JSON.parse(JSON.stringify(this.graphObject));
     } else {
@@ -898,6 +921,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.graphObject = graphObject;
         this.deleteTaskConfig();
         this.alertService.success('Graph saved successfully!', false, 2000);
+        
         //this.router.navigate(['/pg/flw/flsr'], { relativeTo: this.route });
       });
   }
@@ -2127,6 +2151,43 @@ export class DesignComponent implements OnInit, OnDestroy {
         }
       }
       this.stateConnectorTaskConfig = taskConfigArr;
+    }
+  }
+
+  getEntityFields(dataModel?: DataModel) {
+    this.subscription = this.dataModelService.getDataModel(dataModel._id)
+  .subscribe(
+    datamodel => {
+      if (datamodel) {
+       this.selectedEntity = datamodel;
+       this.entityselected = true;
+      }
+    });
+  }
+
+  getDataModelList() {
+      const commonsearchModel = new CommonSearchModel();
+      commonsearchModel.searchParams = [{ 'statusCd': 'ACTIVE' }, { 'type': 'Entity' }];
+      commonsearchModel.returnFields = ['label', 'version', 'statusCd'];
+      this.subscription = this.dataModelService.getDataModelList(commonsearchModel)
+        .subscribe(list => this.dataModelList = list);
+  }
+
+  onEntitySelect(event){
+    this.getEntityFields(this.selectedDataModel);
+  }
+
+  designEntity(){
+    this.entityRedirect = true;
+  }
+
+  dismissEntityWarn(){
+    this.entityRedirect = false;
+  }
+
+  redirect(){
+    if(this.entityRedirect){
+      this.router.navigate(['/pg/stp/stdms'], { relativeTo: this.route });
     }
   }
 }

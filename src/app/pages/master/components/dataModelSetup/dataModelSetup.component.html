@@ -13,21 +13,20 @@
                 <input type="text" class="form-control" [disabled] = "selectedDataModel.locked" required placeholder="code" [(ngModel)]="selectedDataModel.name" name="name" />
             </div>
             <div class="form-group">
-                <label> Process to Invoke  </label>
-                <input type="text" class="form-control" required placeholder="machinetype" [(ngModel)]="selectedDataModel.process" name="machinetype" />
+                    <label>Select DataModel Type</label>
+                    <select  
+                        class="form-control" required id="datamodelselect" title="Choose DataModel Type"
+                        [(ngModel)]="selectedDataModel.type" name="validatorType">
+                        <option *ngFor="let dataModelType of dataModelTypes"
+                            [ngValue]="dataModelType">{{ dataModelType }}
+                        </option>
+                    </select>
             </div>
-            <div class="form-group">
-                <label>Select DataModel Type</label>
-                <select  
-                    class="form-control" required id="datamodelselect" title="Choose DataModel Type"
-                    [(ngModel)]="selectedDataModel.type" name="validatorType">
-                    <option *ngFor="let dataModelType of dataModelTypes"
-                        [ngValue]="dataModelType">{{ dataModelType }}
-                    </option>
-                </select>
-                
-              </div>
-
+            <div class="form-group" *ngIf="selectedDataModel.type === 'Entity'">
+                <label> Process to Invoke  </label>
+                <input type="text" class="form-control" *ngIf="selectedDataModel.type === 'Entity'" required placeholder="machinetype" [(ngModel)]="selectedDataModel.process" name="machinetype" />
+            </div>
+            
             <!-- Accordian For Validator-->
             <div class="form-group">
               <div id="validatorAccordian" role="tablist" aria-multiselectable="true" *ngIf="selectedDataModel.validators.length > 0">

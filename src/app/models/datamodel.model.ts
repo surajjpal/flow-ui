@@ -8,6 +8,7 @@ export class DataModel extends BaseModel{
     process:string;
     locked:boolean;
     type:string;
+    
     validators: ValidatorInstance[];
 
   constructor() {
@@ -33,7 +34,9 @@ export class Field{
     locked:boolean;
     type:FieldTypes;
     list:boolean;
+    expression: string;
     sortOrder:number;
+    dataPointName:string;
     value:any;
 
     constructor(){
@@ -45,6 +48,8 @@ export class Field{
         this.list = false;
         this.sortOrder = 0;
         this.locked = false;
+        this.expression = '';
+        this.dataPointName = '';
     }
 }
 
