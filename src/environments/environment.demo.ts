@@ -172,10 +172,7 @@ export const environment = {
 
     //Following APIs path - To be used in conjunction with interfaceService property
     crudFunction: '/crud',
-<<<<<<< HEAD
-=======
     smCrudFunction: '/smCrudApi',
->>>>>>> master
     sendAgentMessage: '/sendMessage',
 
     // activity monitor services
@@ -186,9 +183,6 @@ export const environment = {
     businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
 
     //python project in api-utils ondemandreport project
-<<<<<<< HEAD
-    sendReportCSV: 'https://demo-console.automatapi.com/flow/report/reports/generatereport',
-=======
     sendReportCSV: 'https://flow.automatapi.com/flow/report/reports/generatereport',
 
 
@@ -199,5 +193,4 @@ export const environment = {
     uspsearch: '/api/usp/relevancesearch',
     uspselftrain: '/api/usp/selftrain',
 
->>>>>>> master
 };
