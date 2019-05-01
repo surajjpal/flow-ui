@@ -188,9 +188,21 @@
                                                 class="form-control" required id="typeSelection" title="Choose Type" [disabled] = "field.locked" 
                                                 [(ngModel)]="field.modelName" name="modelName">
                                                 <option *ngFor="let dataModel of dataModelList"
-                                                    [ngValue]="dataModel.name">{{ dataModel.name }}
+                                                    [ngValue]="dataModel._id">{{ dataModel.name }}
                                                 </option>
                                             </select>
+                                        </div>
+                                        <div class="form-group" *ngIf="field.type == 'MULTI_SELECT' || field.type == 'SINGLE_SELECT'">
+                                            <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsModelName' + index">
+                                            Input Values
+                                            </label>
+                                            <tag-input class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control"
+                                            [id]="'gsModelName' + index" [(ngModel)]="field.inputSource"
+                                            name="inputSource" [modelAsStrings]="true" [editable]="true"
+                                            [separatorKeys]="[32]" placeholder="+Input (Enter separated)"
+                                            secondaryPlaceholder="Populate source input" theme="minimal"
+                                            class="custom-input-tag-border">
+                                            </tag-input>
                                         </div>
                                         <!-- Field Validator Accordian -->
                                         <div class="form-group">
@@ -429,6 +441,18 @@
                                                     [ngValue]="dataModel.name">{{ dataModel.name }}
                                                 </option>
                                             </select>
+                                        </div>
+                                        <div class="form-group" *ngIf="field.type == 'MULTI_SELECT' || field.type == 'SINGLE_SELECT'">
+                                            <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'gsModelName' + index">
+                                            Input Values
+                                            </label>
+                                            <tag-input class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control"
+                                            [id]="'gsModelName' + index" [(ngModel)]="field.inputSource"
+                                            name="inputSource" [modelAsStrings]="true" [editable]="true"
+                                            [separatorKeys]="[32]" placeholder="+Input (Enter separated)"
+                                            secondaryPlaceholder="Populate source input" theme="minimal"
+                                            class="custom-input-tag-border">
+                                            </tag-input>
                                         </div>
                                         <!-- Field Validator Accordian -->
                                         <div class="form-group">

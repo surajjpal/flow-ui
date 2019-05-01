@@ -57,7 +57,7 @@ export class DataModelSetupComponent implements OnInit, OnDestroy {
     this.readOnlyMode = false;
     this.selectedDataModel = new DataModel();
     this.dataModelList = [];
-    this.fieldTypes = ['TEXT', 'FLOAT', 'INT', 'DATE', 'BOOLEAN', 'MODEL'];
+    this.fieldTypes = ['TEXT', 'FLOAT', 'INT', 'DATE', 'BOOLEAN', 'MODEL', 'SINGLE_SELECT', 'MULTI_SELECT'];
     this.validatorTypes = ['ApiInvoker','Required'];
     this.extractorTypes = ["Regex","Picklist"];
     this.dataModelTypes = ["Entity","EmailIn"];
@@ -86,7 +86,7 @@ export class DataModelSetupComponent implements OnInit, OnDestroy {
 
 
     getActiveModels(){
-      let commonsearchModel = new CommonSearchModel();
+      const commonsearchModel = new CommonSearchModel();
       commonsearchModel.searchParams = [{"statusCd":"ACTIVE"}];
       commonsearchModel.returnFields = ["name"];
       this.dataModelSubscription = this.dataModelService.getDataModelList(commonsearchModel)

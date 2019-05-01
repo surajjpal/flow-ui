@@ -520,9 +520,14 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   prepareDummyObject() {
-    console.log("ppppppppppppppppppppp")
     if (this.graphObject) {
+      if (this.graphObject.entity) {
+        this.entityselected = true;
+        console.log("ppppppppppppppppppppppppppppppp")
+        this.selectedDataModel = JSON.parse(JSON.stringify(this.graphObject.entity));
+      }
       this.tempGraphObject = JSON.parse(JSON.stringify(this.graphObject));
+      
     } else {
       this.tempGraphObject = new GraphObject();
     }
@@ -2159,7 +2164,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   .subscribe(
     datamodel => {
       if (datamodel) {
-       this.selectedEntity = datamodel;
+       this.tempGraphObject.entity = datamodel;
        this.entityselected = true;
       }
     });
@@ -2175,6 +2180,8 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   onEntitySelect(event){
     this.getEntityFields(this.selectedDataModel);
+    // this.tempGraphObject.entity = this.selectedDataModel;
+
   }
 
   designEntity(){

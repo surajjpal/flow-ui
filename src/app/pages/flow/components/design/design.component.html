@@ -1651,8 +1651,8 @@
                               </div>
                         </div>
                         <div class="row" *ngIf="dataModelList.length > 0">
-                              <select class="col-md-12 col-sm-12 col-xs-12  form-control" title="Select Entity"
-                                    [(ngModel)]="selectedDataModel" name="selectedDataModel" (change)="onEntitySelect($event)">
+                              <select class="col-md-12 col-sm-12 col-xs-12  form-control" title="Select Entity" [id] = "selectedDataModel.name"
+                                    [(ngModel)]="selectedDataModel" name="selectedDataModel.name" (change)="onEntitySelect($event)">
                                     <option *ngFor="let dataModel of dataModelList" [ngValue]="dataModel">{{dataModel.label}}</option>
                               </select>
                        </div>
@@ -1665,8 +1665,8 @@
                                 Design</button>
                               </div>
                         </div>
-                        <div id="eAccordion" role="tablist" aria-multiselectable="true" *ngIf="entityselected && selectedEntity.fields.length > 0">
-                              <div *ngFor="let field of selectedEntity.fields; let index=index" class="panel">
+                        <div id="eAccordion" role="tablist" aria-multiselectable="true" *ngIf="entityselected">
+                              <div *ngFor="let field of tempGraphObject.entity.fields; let index=index" class="panel">
                                     <div class="card">
                                           <div *ngIf="index == 0" [id]="'eTabHeading' + index" class="card-header" heightStyle="content" role="tab">
                                                 <h5 class="mb-0">

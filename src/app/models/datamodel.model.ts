@@ -32,12 +32,13 @@ export class Field{
     extractors:ExtractorInstance[];
     modelName:string;
     locked:boolean;
-    type:FieldTypes;
+    type:String;
     list:boolean;
     expression: string;
     sortOrder:number;
     dataPointName:string;
     value:any;
+    inputSource: string[];
 
     constructor(){
         this.label = '';
@@ -49,7 +50,9 @@ export class Field{
         this.sortOrder = 0;
         this.locked = false;
         this.expression = '';
+        this.type = '';
         this.dataPointName = '';
+        this.inputSource = [];
     }
 }
 
