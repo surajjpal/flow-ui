@@ -26,6 +26,9 @@ export const environment = {
   server: 'https://flow.automatapi.io/flow/console/',
   autourl: 'https://agent.automatapi.xyz/#/pg/ch/cnv/',
 
+  autoworkbench: 'https://workbench.automatapi.com/#/wb/',
+  autoworkbenchdisplaybar: '?displaySideBar=false',
+
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
   orPayloadMachineType: 'state/saveOrPayload/machineType/',

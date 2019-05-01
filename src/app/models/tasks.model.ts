@@ -66,6 +66,8 @@ export class State extends BaseModel {
   iterationLevel: number;
   autoAllocation: boolean;
   assignedDueToFlagged: boolean;
+  stateEntryTypeCd: string;
+  assignedVirtualAgentId: string;
 
 }
 

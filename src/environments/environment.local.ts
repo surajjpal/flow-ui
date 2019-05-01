@@ -39,6 +39,8 @@ export const environment = {
   // Flow
   server: 'http://localhost:8080/flow/console/',
   autourl: 'http://localhost:4300/#/pg/ch/cnv/',
+  autoworkbench: 'https://workbench.automatapi.com/#/wb/',
+  autoworkbenchdisplaybar: '?displaySideBar=false',
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
   orPayloadMachineType: 'state/saveOrPayload/machineType/',
@@ -121,6 +123,8 @@ export const environment = {
   createtrainingdataurl: 'add/trainingdata',
   updatetrainingdataurl: 'update/trainingdata',
   deletetrainingdataurl: 'delete/trainingdata?query=',
+
+
 
   getintenturl: 'load/intentclassifier',
   createintenturl: '',

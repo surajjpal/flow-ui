@@ -25,6 +25,8 @@ export const environment = {
     // Flow
     server: 'https://flow.automatapi.com/flow/console/',
     autourl: 'https://virtualagent.automatapi.xyz/#/pg/ch/cnv/',
+    autoworkbench: 'https://workbench.automatapi.com/#/wb/',
+    autoworkbenchdisplaybar: '?displaySideBar=false',
 
     stateinsight: 'state/insight/',
     orPayload: 'state/orPayload/',

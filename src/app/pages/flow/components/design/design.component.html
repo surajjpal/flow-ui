@@ -67,7 +67,6 @@
                   </api-checkbox>
                   <api-checkbox class="col-md-6 col-sm-6 col-xs-6" [checked]="tempState.reportFlag"
                      [label]="'Report Flag'" (event)="tempState.reportFlag = $event.target.checked"></api-checkbox>
-
                </div>
                <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'">
                   <label for="selectAllocationType">Allocation Type</label>
@@ -153,6 +152,20 @@
                         {{entryAction['value']}}</option>
                   </select>
                </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'VirtualAgentStateEntryAction'">
+                  <label for="allocatedAgent">Allocated Virtual Agent</label>
+                  <input type="text" class="form-control" required id="allocatedAgent"
+                     placeholder="Enter Virtual Agent Id" [(ngModel)]="tempState.virtualAgentId"
+                     name="virtualAgentId" />
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'VirtualAgentStateEntryAction'">
+                  <label for="allocationGroup">Allocate to group</label>
+                  <input type="text" class="form-control" required id="allocationGroup" placeholder="Allocate to group"
+                     [(ngModel)]="tempState.allocationModel.allocationGroup" name="allocationGroup" />
+               </div>
+
                <div class="form-group"
                   *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'TimerStateEntryAction'">
                   <label for="timerUnitType">Timer Unit Type</label>

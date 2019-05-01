@@ -12,6 +12,8 @@ import { UserHierarchy, User } from '../../../../models/user.model';
 import { FetchUserService, AllocateTaskToUser } from '../../../../services/userhierarchy.service';
 import { GraphObject, DataPoint, StateModel, ManualAction, StateInfoModel } from '../../../../models/flow.model';
 import { UniversalUser } from 'app/services/shared.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'api-personal',
@@ -57,6 +59,9 @@ export class PersonalComponent implements OnInit, OnDestroy {
   flaggedTaskDdetails: State;
   flaggedStateTabclass = {};
 
+
+  assistModeFl: boolean = false;
+  virtualAgentURL: SafeResourceUrl = '';
 
   loadingUnassigned: boolean = false;
   loadingAssigned: boolean = false;
@@ -109,6 +114,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private fetchUserService: FetchUserService,
     private universalUser: UniversalUser,
+    private sanitizer: DomSanitizer,
     private allocateTaskToUser: AllocateTaskToUser
   ) {
     this.unassignedStates = [];
@@ -188,6 +194,17 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
         }
       });
+  }
+
+  agentAssist(state: State): void {
+    this.assistModeFl = true;
+    this.virtualAgentURL = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.autoworkbench + state.assignedVirtualAgentId + environment.autoworkbenchdisplaybar}`);
+    console.log(this.virtualAgentURL);
+  }
+
+
+  closeAgentAssist(): void {
+    this.assistModeFl = false;
   }
 
   timelineSelect(timeLineState: TimelineStateAuditData) {
