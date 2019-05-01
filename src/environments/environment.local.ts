@@ -1,7 +1,11 @@
 export const environment = {
   production: false,
   name: 'local',
-
+  //feature Domain 2.0
+  fetaureurl: "http://0.0.0.0:9090/api/getFeatures",
+  traindt: "http://0.0.0.0:9090/api/train",
+  converse: "http://0.0.0.0:9090/api/converse",
+  faqupload: "http://0.0.0.0:9090/api/uploadFaq",
   // Root
   root: 'http://localhost:8080/flow/',
 
@@ -14,8 +18,11 @@ export const environment = {
   publishaccounturl: 'http://localhost:8080/flow/account/publish/',
   unpublishaccounturl: 'http://localhost:8080/flow/account/unpublish/',
 
+
+  fetchaccountbyid: 'http://localhost:8080/flow/account/getAccount/',
+
   // Interfaces
-  interfaceService: 'http://localhost:8080/flow/interfaces',
+  interfaceService: 'http://localhost:8080/flow/interfaces/',
   updateClassifierTraining: 'http://localhost:8080/flow/interfaces/auto_decorate_training',
   updateIntentTraining: 'http://localhost:8080/flow/interfaces/intent_classification_training',
   updateEntityTraining: 'http://localhost:8080/flow/interfaces/entity_classification_training',
@@ -57,6 +64,8 @@ export const environment = {
   timeruniturl: 'graph/timerunit',
   autodashboardurl: 'dashboard',
   userurl: 'user/',
+  evaluateMVEL: 'evaluateMVEL/',
+  timeline: 'statemachine/timeline/',
 
   registerurl: 'user/createUser',
 
@@ -75,6 +84,16 @@ export const environment = {
   routesurl: 'master/routes',
   apiconfigurl: 'apiConfig/',
 
+  //DataModelUrls
+  datamodelurl: 'dataModel/',
+  datamodelsaveurl: 'dataModel/savedatamodel',
+
+  //EntityUrls
+  entityurl: 'entity/',
+  entitysaveurl: 'entity/save',
+  entitysubmiturl: 'entity/submit',
+
+
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
   getallconnectorinfo: 'connectorInfo/',
@@ -84,6 +103,7 @@ export const environment = {
   connectorinfo: 'connectors/',
   getallconconfig: 'connectors/getAll/',
   deleteconconfig: 'connectors/delete/',
+  deletetaskconfig: 'connectors/deleteTaskConfig/',
   saveconconfig: 'connectors/save/',
   getallconinfo: 'connectors/getConInfo/',
   getconinfobytype: 'connectors/getConInfoByType/',
@@ -164,6 +184,7 @@ export const environment = {
 
   //Following APIs path - To be used in conjunction with interfaceService property
   crudFunction: '/crud',
+  smCrudFunction: '/smCrudApi',
   sendAgentMessage: '/sendMessage',
 
   // activity monitor services
@@ -175,4 +196,11 @@ export const environment = {
 
   //python project in api-utils ondemandreport project
   sendReportCSV: 'http://127.0.0.1:5000/generatereport',
+
+  //Vocabulary
+  vocabulary: 'http://localhost:5000/api/vocabulary',
+
+  // USP
+  uspsearch: '/api/usp/relevancesearch',
+  uspselftrain: '/api/usp/selftrain',
 };

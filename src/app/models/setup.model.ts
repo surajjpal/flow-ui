@@ -110,6 +110,8 @@ export class ConnectorConfig extends BaseModel {
   }
 }
 
+
+
 export class TempConnectorConfig extends BaseModel {
   configName: string;
   configType: string;
@@ -163,5 +165,17 @@ export class ApiKeyExpressionMap {
   constructor() {
     this.key = '';
     this.expression = '';
+  }
+}
+
+export class MVELObject {
+  input: string;
+  expression: string;
+  result: string;
+
+  constructor() {
+    this.input = '';
+    this.expression = '';
+    this.result = '';
   }
 }

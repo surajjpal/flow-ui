@@ -1,0 +1,90 @@
+<div class="widgets" *ngIf="dataModelList.length > 0">
+    <div class="rowentity">
+        <div *ngFor="let item of dataModelList">
+            <div class="columnentity">
+              <div class="cardentity" [@slideInOut]>
+                  
+                <h3> <b>{{item.label}}</b></h3>
+                <p>Version : {{item.version}}</p>
+                <p>Please click to create {{item.label}}</p>
+                <a>
+                  <img class = "addbutton" src="../../../../../assets/js/mxGraph/images/add.png" (click)="createEntityModal(item)">
+                </a>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="width: 100rem;" *ngIf="dataModelList.length == 0">
+    <div class="card-body">
+      <h5 class="card-title">MESSAGE</h5>
+      <p class="card-text">We are sorry but you need design an Entity first to be able to create it!!</p>
+      <button (click) = "designEntity()" class="btn btn-default"> Design Entity</button>
+    </div>
+  </div>
+
+<div class="modal fade" id="entityCreateModal" tabindex="-1" role="dialog" attr.aria-labelledby="entityModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="entityModalLabel">
+         <b> Create {{selectedDataModel.label}} </b>
+        </h4>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form [formGroup]="form">
+            <div *ngFor="let field of selectedDataModel.fields" class="form-row">
+                <div [formGroup] = "form" class="form-group">
+                    <label [attr.for]="field.name"><b>{{field.label}}:</b></label>
+                    <div [ngSwitch]="field.type">
+                   
+                      <input *ngSwitchCase="'TEXT'"  class="col-md-12 col-sm-12 col-xs-12 form-control" [formControlName]="field.name"
+                              [id]="field.name" [(ngModel)]="field.value">
+
+                      <input  *ngSwitchCase="'INT'" type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" [id]="field.name" 
+                              min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                              [(ngModel)]="field.value" [formControlName]="field.name" />
+                      <select *ngSwitchCase="'BOOLEAN'"  class="col-md-12 col-sm-12 col-xs-12 form-control" (change)="onBooleanChange($event, field)" 
+                               required id="field.name" title="Choose Value"
+                              [(ngModel)]="field.value" [formControlName]="field.name">
+                              <option *ngFor="let bool of boolean"
+                                  [ngValue]="bool">{{ bool }}
+                              </option>
+                      </select>
+                      <my-date-picker *ngSwitchCase="'DATE'" placeholder="dd/mm/yyyy" [formControlName]="field.name" [options]="myDatePickerOptions" [(ngModel)]="field.value" (dateChanged)="onDateChanged($event)" required></my-date-picker>
+
+                      <input *ngSwitchCase="'FLOAT'" class="col-md-12 col-sm-12 col-xs-12 form-control" type="number" [formControlName]="field.name" placeholder="0.00" [(ngModel)]="field.value" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" />
+                   
+                    </div> 
+                    <label class="errorMessage required" *ngIf="!isValid(field)" > *{{field.label}} is required </label>
+                    <!-- <div class="errorMessage" *ngIf="!isValid(field)">* {{field.label}} is required</div> -->
+                  </div>
+            </div>
+            <div class="form-row">
+                <button 
+                type="button" [disabled]="!form.valid" class="btn btn-primary btn-with-icon" (click)="saveEntity('save')">
+                <i class="ion-arrow-down-c"></i>Save</button>
+                <button 
+                type="button" *ngIf="showSubmit" [disabled]="!form.valid" class="btn btn-success btn-with-icon" (click)="saveEntity('submit')">
+                <i class="ion-checkmark"></i>Submit</button>
+            </div>
+        </form>
+      </div>
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+        
+               

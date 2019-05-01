@@ -60,6 +60,8 @@ export const environment = {
   timeruniturl: 'graph/timerunit',
   autodashboardurl: 'dashboard',
   userurl: 'user/',
+  evaluateMVEL: 'evaluateMVEL/',
+  timeline: 'statemachine/timeline/',
 
 
   registerurl: 'user/createUser',
@@ -81,10 +83,20 @@ export const environment = {
   getallconnectorinfo: 'connectorInfo/',
   saveconnectorinfo: 'connectorInfo/save/',
   deleteconnectorinfo: 'connectorInfo/delete/',
+  //DataModelUrls
+  datamodelurl: 'dataModel/',
+  datamodelsaveurl: 'dataModel/savedatamodel',
+
+  //EntityUrls
+  entityurl: 'entity/',
+  entitysaveurl: 'entity/save',
+  entitysubmiturl: 'entity/submit',
+
 
   connectorinfo: 'connectors/',
   getallconconfig: 'connectors/getAll/',
   deleteconconfig: 'connectors/delete/',
+  deletetaskconfig: 'connectors/deleteTaskConfig/',
   saveconconfig: 'connectors/save/',
   getallconinfo: 'connectors/getConInfo/',
   getconinfobytype: 'connectors/getConInfoByType/',
@@ -162,6 +174,7 @@ export const environment = {
 
   //Following APIs path - To be used in conjunction with interfaceService property
   crudFunction: '/crud',
+  smCrudFunction: '/smCrudApi',
   sendAgentMessage: '/sendMessage',
 
   // activity monitor services
@@ -173,4 +186,14 @@ export const environment = {
 
   sendReportCSV: 'http://localhost:8080/flow/report/reports/generatereport',
   funnelReport: 'state/fetchfunneldata',
+
+
+
+  //Vocabulary
+  vocabulary: 'http://108.168.190.82:8080/flow/interfaces/vocabulary',
+
+  // USP
+  uspsearch: '/api/usp/relevancesearch',
+  uspselftrain: '/api/usp/selftrain'
+
 };

@@ -227,15 +227,50 @@ function getState() {
   return state;
 };
 
+openedModalList = [];
+
+keepOpenedModalListInCheck = function() {
+  setTimeout(() => {
+    if (openedModalList) {
+      let idToRemove = [];
+      for (let modalId of openedModalList) {
+        if (!$('#' + modalId).is(':visible')) {
+          idToRemove.push(modalId);
+        }
+      }
+
+      for (let modalId of idToRemove) {
+        openedModalList.splice(openedModalList.indexOf(modalId), 1);
+      }
+    }
+
+    keepOpenedModalListInCheck();
+  }, 100);
+}
+
+keepOpenedModalListInCheck();
+
 closeModal = function (modalId) {
-  if ($('#' + modalId).is(':visible')) {
-    $('#' + modalId).modal('hide');
+  if (modalId) {
+    if (openedModalList.includes(modalId)) {
+      openedModalList.splice(openedModalList.indexOf(modalId), 1);
+    }
+    
+    if ($('#' + modalId).is(':visible')) {
+      $('#' + modalId).modal('hide');
+    }
   }
 }
 
 showModal = function (modalId) {
-  if (!$('#' + modalId).is(':visible')) {
-    $('#' + modalId).modal();
+  if (modalId) {
+    if (!openedModalList.includes(modalId)) {
+      openedModalList.push(modalId);
+      
+      if (!$('#' + modalId).is(':visible')) {
+        $('#' + modalId).modal();
+      }
+    }
   }
 }
 
@@ -265,7 +300,7 @@ var settingsPopupBody;
 var horizontal = true;
 var sourceCell;   // Used as a parent cell while adding new cell in graph.
 var cellLabelChanged;
-var isReadOnly = false;;
+var isReadOnly = false;
 var newEdge;
 var existingEdgesBeforeUpdate;
 
@@ -659,7 +694,7 @@ designFlowEditor = function (serverXml, readOnly) {
       graph.scrollCellToVisible(v1, true);
     }
 
-    mxConnectionHandlerInsertEdge = mxConnectionHandler.prototype.insertEdge;
+    var mxConnectionHandlerInsertEdge = mxConnectionHandler.prototype.insertEdge;
     mxConnectionHandler.prototype.insertEdge = function (parent, id, value, source, target, style) {
       if (target && target.id == 'treeRoot') {
         window['appComponentRef'].zone.run(() => {
@@ -702,6 +737,7 @@ designFlowEditor = function (serverXml, readOnly) {
 
         if (sourceEvents && sourceEvents.length > 0) {
           newEdge = mxConnectionHandlerInsertEdge.apply(this, arguments);
+
           window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.addEdge(sourceEvents); });
           showModal("newEdgeModal");
           return newEdge;
@@ -1024,6 +1060,8 @@ function deleteSubtree(graph, cell) {
     // Gets the subtree from cell downwards
     var cells = [];
     graph.traverse(cell, true, function (vertex) {
+      var state = vertex.value
+      window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.deleteConfig(state); })
       cells.push(vertex);
 
       return true;
@@ -1359,7 +1397,7 @@ getTransitionForAllVertices = function () {
   var transitions = [];
   var edges = graph.getChildEdges(graph.getDefaultParent());
   for (var edge of edges) {
-    if (edge != null && edge.value != null && edge.source.value != null && edge.target.value != null && !(typeof edge.value == "string" || edge.value instanceof String) && !(typeof edge.source.value == "string" || edge.source.value instanceof String) && !(typeof edge.target.value == "string" || edge.target.value instanceof String)) {
+    if (edge != null && edge.value != null && edge.source != null && edge.source.value != null && edge.target != null && edge.target.value != null && !(typeof edge.value == "string" || edge.value instanceof String) && !(typeof edge.source.value == "string" || edge.source.value instanceof String) && !(typeof edge.target.value == "string" || edge.target.value instanceof String)) {
       var transition = {};
 
       transition.sourceStateCd = edge.source.value.stateCd;
@@ -2288,3 +2326,107 @@ addTaskIconOverlays = function (graph) {
     }
   }
 };
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////CONSOLE CHAT///////////////////////////////////////////////////////////////////
+
+var animating = false;
+var autoBotClosed = true;
+var iframeDivId = "autoBot";
+
+function toggleChat() {
+  if (animating) {
+    return;
+  }
+
+  animating = true;
+
+  raiseChildEvent("Chat Bot Open: " + autoBotClosed);
+
+  var chatContainer = document.getElementById("automataPi");
+  var openChatButton = document.getElementById("autoButton");
+  var pos = 0;
+  var currentBottom = 0;
+  //var opacity = 0;
+  var id = setInterval(frame, 1);
+  var total_height = 640;
+  var increaseBy = 10;
+  
+  chatContainer.style.WebkitAnimationDuration = "1s";
+  chatContainer.style.animationDuration = "1s";
+  
+  if (autoBotClosed) {
+    openChatButton.style.zIndex = 0;
+    chatContainer.style.zIndex = 9999;
+  }
+  
+  function frame() {
+    if (pos >= total_height) {
+      clearInterval(id);
+      
+      if (!autoBotClosed) {
+        openChatButton.style.zIndex = 9999;
+        chatContainer.style.zIndex = 0;
+      }
+      
+      autoBotClosed = !autoBotClosed;
+      animating = false;
+    } else {
+      pos += increaseBy;
+      if (pos > total_height) {
+        pos = total_height;
+      }
+      
+      if (chatContainer.style.bottom) {
+        currentBottom = parseInt((chatContainer.style.bottom).replace("px", ""), 10);
+      } else {
+        currentBottom = -total_height;
+        autoBotClosed = true;
+      }
+      
+      if (autoBotClosed) {
+        currentBottom += increaseBy;
+        //opacity = pos / total_height;
+      } else {
+        currentBottom -= increaseBy;
+        //opacity = 1 - (pos / total_height);
+      }
+      
+      chatContainer.style.bottom = currentBottom + 'px';
+      
+      //chatContainer.style.opacity = opacity;
+      //openChatButton.style.opacity = 1 - opacity;
+    }
+  }
+}
+
+
+raiseChildEvent = function(eventCd) {
+  console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
+  var frame = document.getElementById(iframeDivId);
+  frame.contentWindow.postMessage(
+    {
+      event_id: 'API_CHAT_BOT_PARENT',
+      data: {
+        action: eventCd
+      }
+    }, 
+    "*" //or "www.parentpage.com"
+  );
+}
+
+window.addEventListener('message', function(event) {
+  console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[000000000[")
+
+  if(event.data.event_id === 'API_CHAT_BOT'){
+    var chatEvent = event.data.data;
+    if (chatEvent && chatEvent.action) {
+      if (chatEvent.action == 'TOGGLE_CHAT') {
+        toggleChat();
+      }
+  
+    }
+  }
+});
+

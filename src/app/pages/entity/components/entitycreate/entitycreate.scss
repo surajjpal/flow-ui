@@ -1,0 +1,73 @@
+:host /deep/ .widgets {
+  .data-table-container {
+      width: 100%;
+  }
+}
+  /* Float four columns side by side */
+  .columnentity {
+    float: left;
+    width: 25%;
+    padding: 0 10px;
+  }
+  
+  /* Remove extra left and right margins, due to padding */
+  .rowentity {margin: 0 -5px;
+ }
+  
+  /* Clear floats after the columns */
+  .rowentity:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  /* Responsive columns */
+  @media screen and (max-width: 600px) {
+    .columnentity {
+      width: 100%;
+      display: block;
+      margin-bottom: 20px;
+      margin-top: 10px;
+    }
+  }
+  
+  /* Style the counter cards */
+  .cardentity {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    text-align: center;
+    margin-top: 10px;
+    background-color: white;
+  }
+  .cardentity:hover {
+    background-color: #cccccc;
+}
+
+  .float-button {
+    position: fixed;
+    right: -77px;
+    top: 270px;
+    transition: all 0.2s ease-in 0s;//this is the key attribute
+    z-index: 9999;
+    cursor: pointer;
+    }
+
+    .entitybutton {
+      border: none;
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+    }
+    
+    .addbutton{
+       cursor: pointer; 
+       right: 0;
+       bottom: 0;
+    }
+    
+    .button5 {border-radius: 50%;}
+
+    label.required { color: red; }

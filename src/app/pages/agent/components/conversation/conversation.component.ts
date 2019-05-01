@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { ConversationService } from '../../../../services/agent.service';
 import { Episode, ChatMessage, EpisodeContext } from '../../../../models/conversation.model';
@@ -19,6 +20,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   agentMessage: string;
   episodeList: Episode[];
   selectedEpisode: Episode;
+  exitstingEpisode: Episode;
   chatMessageList: ChatMessage[];
   loading;
   pollBargeInEpisode: boolean = true;
@@ -41,20 +43,31 @@ export class ConversationComponent implements OnInit, OnDestroy {
     private conversationService: ConversationService,
     private universalUser: UniversalUser,
     private sanitizer: DomSanitizer,
-    private scrollService: ScrollService
+    private scrollService: ScrollService,
+    private route: ActivatedRoute,
   ) {
     this.searchQuery = '';
     this.agentMessage = '';
     this.loading = false;
     this.episodeList = [];
     this.selectedEpisode = null;
+    this.exitstingEpisode = null;
     this.chatMessageList = [];
   }
 
   ngOnInit() {
-    this.getEpisodesApplicableForBargeIn();
-    this.populateChartOptions();
-    this.transformEpisodeIntoGraph();
+    const episodeId = this.route.snapshot.paramMap.get('episodeId');
+    if (episodeId) {
+      //this.getEpisode(episodeId);
+      this.showEpisodeDetails(episodeId, true);
+      
+    }
+    else {
+      this.getEpisodesApplicableForBargeIn();
+      this.populateChartOptions();
+      this.transformEpisodeIntoGraph();
+    }
+    
   }
 
   ngOnDestroy(): void {
@@ -78,7 +91,19 @@ export class ConversationComponent implements OnInit, OnDestroy {
     }
   }
 
-  getEpisodesApplicableForBargeIn() {
+  getEpisode(episodeId: string) {
+    this.subscriptionBargeIn = this.conversationService.getEpisode(episodeId)
+      .subscribe(
+        episode => {
+          this.selectedEpisode = episode;
+        },
+        error => {
+          console.log("episode not found");
+        }
+      )
+  }
+
+  getEpisodesApplicableForBargeIn(existingEpisode?: boolean) {
     if (!this.pollBargeInEpisode) {
       return;
     }
@@ -92,6 +117,9 @@ export class ConversationComponent implements OnInit, OnDestroy {
         episodeList => {
           if (episodeList) {
             this.episodeList = episodeList;
+            if (this.exitstingEpisode) {
+              this.episodeList.push(this.exitstingEpisode);
+            }
             this.transformEpisodeIntoGraph();
           }
 
@@ -307,19 +335,28 @@ export class ConversationComponent implements OnInit, OnDestroy {
     */
   }
 
-  showEpisodeDetails(episodeId: string) {
+  showEpisodeDetails(episodeId: string, viewMode?: boolean) {
     this.fetchingEpisodeDetails = true;
     this.subscriptionEpisodeDetails = this.conversationService.getEpisode(episodeId)
       .subscribe(
         episode => {
           if (episode) {
             this.selectedEpisode = episode;
-
-            if (this.bargedIntoSelectedEpisode()) {
-              this.pollEpisodeChat = true;
+            if (viewMode) {
+              this.exitstingEpisode = episode;
               this.getChatMessages();
-            } else {
-              this.pollEpisodeChat = false;
+              this.getEpisodesApplicableForBargeIn(true);
+              this.populateChartOptions();
+              this.transformEpisodeIntoGraph();
+              
+            }
+            else {
+              if (this.bargedIntoSelectedEpisode()) {
+                this.pollEpisodeChat = true;
+                this.getChatMessages();
+              } else {
+                this.pollEpisodeChat = false;
+              }
             }
           }
 

@@ -15,6 +15,8 @@ import { ConnectorInfoComponent } from './components/connectorInfo/connectorInfo
 import { ConnectorInfoDetailComponent } from './components/connectorInfoDetail/connectorInfoDetail.component';
 import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSetup.component';
 import { AccountViewComponent } from './components/accountView/accountView.component';
+import { DataModelComponent } from './components/dataModel/dataModel.component';
+import { DataModelSetupComponent } from './components/dataModelSetup/dataModelSetup.component';
 
 
 const routes: Routes = [
@@ -37,8 +39,10 @@ const routes: Routes = [
       { path: 'stcm', component: ConnectorInfoComponent },
       { path: 'stcms', component: ConnectorInfoDetailComponent },
       { path: 'stcc', component: ConnectorConfigComponent },
-      { path: 'stccs', component: ConConfigSetupComponent }
-
+      { path: 'stccs', component: ConConfigSetupComponent },
+      { path : 'anltst', component: AnalyticsReportSetupComponent },
+      { path: ' stdm', component: DataModelComponent },
+      { path: ' stdms ', component: DataModelSetupComponent }
     ]
   }
 ];

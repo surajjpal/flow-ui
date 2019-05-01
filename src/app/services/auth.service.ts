@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Rx';
 import { environment } from '../../environments/environment';
 import { User } from '../models/user.model';
 import { UniversalUser } from './shared.service';
+import { CRUDOperationInput } from '../models/crudOperationInput.model';
 
 @Injectable()
 export class AuthService {

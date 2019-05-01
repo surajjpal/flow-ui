@@ -55,6 +55,8 @@ export const environment = {
   timeruniturl: 'graph/timerunit',
   autodashboardurl: 'dashboard',
   userurl: 'user/',
+  evaluateMVEL: 'evaluateMVEL/',
+  timeline: 'statemachine/timeline/',
 
   registerurl: 'user/createUser',
   forgotpassword: 'user/forgotPassword',
@@ -77,9 +79,19 @@ export const environment = {
   saveconnectorinfo: 'connectorInfo/save/',
   deleteconnectorinfo: 'connectorInfo/delete/',
 
+  //DataModelUrls
+  datamodelurl: 'dataModel/',
+  datamodelsaveurl: 'dataModel/savedatamodel',
+
+  //EntityUrls
+  entityurl: 'entity/',
+  entitysaveurl: 'entity/save',
+  entitysubmiturl: 'entity/submit',
+
   connectorinfo: 'connectors/',
   getallconconfig: 'connectors/getAll/',
   deleteconconfig: 'connectors/delete/',
+  deletetaskconfig: 'connectors/deleteTaskConfig/',
   saveconconfig: 'connectors/save/',
   getallconinfo: 'connectors/getConInfo/',
   getconinfobytype: 'connectors/getConInfoByType/',
@@ -158,6 +170,7 @@ export const environment = {
 
   //Following APIs path - To be used in conjunction with interfaceService property
   crudFunction: '/crud',
+  smCrudFunction: '/smCrudApi',
   sendAgentMessage: '/sendMessage',
 
   // activity monitor services
@@ -169,4 +182,12 @@ export const environment = {
 
   //python project in api-utils ondemandreport project
   sendReportCSV: 'https://flow.automatapi.io/flow/report/reports/generatereport',
+
+  //Vocabulary
+  vocabulary: 'https://flow.automatapi.io/flow/interfaces/vocabulary',
+
+  // USP
+  uspsearch: '/api/usp/relevancesearch',
+  uspselftrain: '/api/usp/selftrain',
+
 };

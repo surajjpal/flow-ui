@@ -55,6 +55,8 @@ export const environment = {
     timeruniturl: 'graph/timerunit',
     autodashboardurl: 'dashboard',
     userurl: 'user/',
+    evaluateMVEL: 'evaluateMVEL/',
+    timeline: 'statemachine/timeline/',
 
     registerurl: 'user/createUser',
     forgotpassword: 'user/forgotPassword',
@@ -80,9 +82,21 @@ export const environment = {
     connectorinfo: 'connectors/',
     getallconconfig: 'connectors/getAll/',
     deleteconconfig: 'connectors/delete/',
+    deletetaskconfig: 'connectors/deleteTaskConfig/',
     saveconconfig: 'connectors/save/',
     getallconinfo: 'connectors/getConInfo/',
     getconinfobytype: 'connectors/getConInfoByType/',
+
+
+    //DataModelUrls
+    datamodelurl: 'dataModel/',
+    datamodelsaveurl: 'dataModel/savedatamodel',
+
+    //EntityUrls
+    entityurl: 'entity/',
+    entitysaveurl: 'entity/save',
+    entitysubmiturl: 'entity/submit',
+
 
     // auto
     autoServer: 'https://flow.automatapi.com/flow/auto/',
@@ -115,7 +129,7 @@ export const environment = {
 
 
     // Analytics
-    reportservice: 'https://demo-console.automatapi.com/flow/report',
+    reportservice: 'https://flow.automatapi.com/flow/report',
     sendReportUrl: '/reports/analyticsreport/sendreport',
     scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
     getAnalyticsReports: "/reports/analyticsreport",
@@ -158,6 +172,10 @@ export const environment = {
 
     //Following APIs path - To be used in conjunction with interfaceService property
     crudFunction: '/crud',
+<<<<<<< HEAD
+=======
+    smCrudFunction: '/smCrudApi',
+>>>>>>> master
     sendAgentMessage: '/sendMessage',
 
     // activity monitor services
@@ -168,5 +186,18 @@ export const environment = {
     businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
 
     //python project in api-utils ondemandreport project
+<<<<<<< HEAD
     sendReportCSV: 'https://demo-console.automatapi.com/flow/report/reports/generatereport',
+=======
+    sendReportCSV: 'https://flow.automatapi.com/flow/report/reports/generatereport',
+
+
+    //Vocabulary
+    vocabulary: 'https://flow.automatapi.com/flow/interfaces/vocabulary',
+
+    // USP
+    uspsearch: '/api/usp/relevancesearch',
+    uspselftrain: '/api/usp/selftrain',
+
+>>>>>>> master
 };
