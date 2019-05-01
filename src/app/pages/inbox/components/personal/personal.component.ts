@@ -410,6 +410,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     }
   }
   onSelect(selectedData: any): void {
+    this.progressBarFlag = true;
     this.selectedData.emit(selectedData);
     this.selectedState = selectedData;
     this.selectedStateCd = selectedData.stateCd;
@@ -417,6 +418,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.subscriptionXML = this.stateService.getXMLforActiveState(selectedData.stateMachineInstanceModelId)
       .subscribe(graphObject => {
         this.dataCachingService.setSharedObject(graphObject, this.selectedState);
+        this.progressBarFlag = false;
         this.router.navigate(['/pg/tsk/tdts'], { relativeTo: this.route });
       });
   }

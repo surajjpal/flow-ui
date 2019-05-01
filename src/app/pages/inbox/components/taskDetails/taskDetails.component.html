@@ -1,3 +1,18 @@
+<div *ngIf="progressBarFlag">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;"
+          aria-valuenow="99" aria-valuemin="0" aria-valuemax="100">Loading...</div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <br />
+    </div>
+  </div>
+</div>
 <div class="widgets">
   <ba-card baCardClass="with-scroll" class="data-table-container">
     <div class="panel panel-default">
@@ -15,13 +30,20 @@
       <br>
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
-          <a class="nav-link active" id="details-tab" data-toggle="tab" href="#tabDetails" role="tab" aria-controls="details">
+          <a class="nav-link active" id="details-tab" data-toggle="tab" href="#tabDetails" role="tab"
+            aria-controls="details">
             <b>Task details</b>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="conversation-tab" data-toggle="tab" href="#tabConversation" role="tab" aria-controls="conversation"
-            aria-expanded="true">
+          <a class="nav-link" id="timeline-tab" (click)="timeline(selectedState)" data-toggle="tab" href="#tabTimeline"
+            role="tab" aria-controls="timeline">
+            <b>Timeline</b>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="conversation-tab" data-toggle="tab" href="#tabConversation" role="tab"
+            aria-controls="conversation" aria-expanded="true">
             <b>Conversation</b>
           </a>
         </li>
@@ -41,24 +63,29 @@
           <div class="row">
             <form>
               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd === 'Personal'"
+                <button [disabled]="!isButtonEnabled"
+                  *ngIf="selectedState && selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd === 'Personal'"
                   type="button" class="btn btn-success btn-with-icon" (click)="updateFlow()">
                   <i class="ion-checkmark"></i>Update Process</button>
-                <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && Users.length > 0"
+                <button [disabled]="!isButtonEnabled"
+                  *ngIf="selectedState && selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && Users.length > 0"
                   type="button" data-toggle="modal" data-target="#userModal" class="btn btn-info btn-with-icon">
                   <i class="ion-person-add"></i>Allocate Team</button>
-                <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd !== 'Personal' "
+                <button [disabled]="!isButtonEnabled"
+                  *ngIf="selectedState && selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd !== 'Personal' "
                   type="button" (click)="reserve()" class="btn btn-primary btn-with-icon">
                   <i class="ion-archive"></i>Reserve Task</button>
-                <button [disabled]="!isButtonEnabled" *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd === 'Personal' && userHierarchy.parentUserId.length > 0"
+                <button [disabled]="!isButtonEnabled"
+                  *ngIf="selectedState && selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd === 'Personal' && userHierarchy.parentUserId.length > 0"
                   type="button" (click)="escalate()" class="btn btn-warning btn-with-icon">
                   <i class="ion-alert-circled"></i>Escalate Task</button>
                 <button [disabled]="!isButtonEnabled" type="button" class="btn btn-warning btn-with-icon" title="Flag"
-                  *ngIf="selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd == 'Personal' && selectedState.subStatus !== 'FLAGGED'"
-                  data-toggle="modal" data-target="#flagTaskModal" data-backdrop="static" data-keyboard="false" (click)="setFlagReason()">
+                  *ngIf="selectedState && selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd == 'Personal' && selectedState.subStatus !== 'FLAGGED'"
+                  data-toggle="modal" data-target="#flagTaskModal" data-backdrop="static" data-keyboard="false"
+                  (click)="setFlagReason()">
                   <i class="ion-flag"></i>Flag Task</button>
                 <button [disabled]="!isButtonEnabled" type="button" class="btn btn-danger btn-with-icon" title="Archive"
-                  *ngIf="selectedState.statusCd ==='ACTIVE' && selectedState.assignedUserGroupCd == 'Personal' "
+                  *ngIf="selectedState && selectedState.statusCd ==='ACTIVE' && selectedState.assignedUserGroupCd == 'Personal' "
                   data-toggle="modal" data-target="#archiveTaskWarningModal">
                   <i class="ion-ios-trash"></i>Archive Task</button>
               </div>
@@ -73,54 +100,66 @@
                 </div>
                 <div class="card-block">
                   <form class="row form-inline">
-                    <div class="form-group col-md-12 alert-danger" style="margin-bottom: 10px;" *ngIf="responseError && responseError.length > 0"
-                      [innerHTML]="responseError"></div>
+                    <div class="form-group col-md-12 alert-danger" style="margin-bottom: 10px;"
+                      *ngIf="responseError && responseError.length > 0" [innerHTML]="responseError"></div>
 
-                    <div class="form-group col-md-3 col-sm-6" style="margin-bottom: 10px;" *ngFor="let dataPoint of dataPoints; let index = index">
-                      <label *ngIf="index % 2 === 0 && dataPoint.dataType !== 'ARRAY' && dataPoint.dataType !== 'ANY' ">{{dataPoint.dataPointLabel}}
+                    <div class="form-group col-md-3 col-sm-6" style="margin-bottom: 10px;"
+                      *ngFor="let dataPoint of dataPoints; let index = index">
+                      <label
+                        *ngIf="index % 2 === 0 && dataPoint.dataType !== 'ARRAY' && dataPoint.dataType !== 'ANY' ">{{dataPoint.dataPointLabel}}
                         :
                       </label>
 
                       <input *ngIf="index % 2 === 1 && (dataPoint.dataType === '' || dataPoint.dataType === 'STRING')"
                         type="text" class="form-control col-md-12 col-sm-12" [title]="dataPoint.description"
-                        [placeholder]="dataPoint.description" [value]="dataPoint.value" (input)="dataPoint.value = $event.target.value" />
+                        [placeholder]="dataPoint.description" [value]="dataPoint.value"
+                        (input)="dataPoint.value = $event.target.value" />
 
-                      <input *ngIf="index % 2 === 1 && dataPoint.dataType === 'NUMBER'" type="number" class="form-control col-md-12 col-sm-12"
-                        [title]="dataPoint.description" [placeholder]="dataPoint.description" [value]="dataPoint.value"
-                        (input)="dataPoint.value = $event.target.value" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                      <input *ngIf="index % 2 === 1 && dataPoint.dataType === 'NUMBER'" type="number"
+                        class="form-control col-md-12 col-sm-12" [title]="dataPoint.description"
+                        [placeholder]="dataPoint.description" [value]="dataPoint.value"
+                        (input)="dataPoint.value = $event.target.value"
+                        onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
 
-                      <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'BOOLEAN'" class="selectpicker form-control col-md-12 col-sm-12"
-                        [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
+                      <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'BOOLEAN'"
+                        class="selectpicker form-control col-md-12 col-sm-12" [title]="dataPoint.description"
+                        [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
                         (ngModelChange)="dataPoint.value = $event">
                         <option [ngValue]="true">True</option>
                         <option [ngValue]="false">False</option>
                       </select>
 
-                      <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'SINGLE_SELECT'" class="selectpicker form-control col-md-12 col-sm-12"
-                        [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
+                      <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'SINGLE_SELECT'"
+                        class="selectpicker form-control col-md-12 col-sm-12" [title]="dataPoint.description"
+                        [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
                         (ngModelChange)="dataPoint.value = $event">
                         <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
                       </select>
 
-                      <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'MULTI_SELECT'" multiple="true" class="selectpicker form-control col-md-12 col-sm-12"
-                        [title]="dataPoint.description" [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
+                      <select *ngIf="index % 2 === 1 && dataPoint.dataType === 'MULTI_SELECT'" multiple="true"
+                        class="selectpicker form-control col-md-12 col-sm-12" [title]="dataPoint.description"
+                        [ngModel]="dataPoint.value" [ngModelOptions]="{standalone: true}"
                         (ngModelChange)="dataPoint.value = $event">
                         <option *ngFor="let choice of dataPoint.inputSource" [ngValue]="choice">{{choice}}</option>
                       </select>
 
-                      <tag-input *ngIf="index % 2 === 1 && dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && isString(dataPoint.value[0])"
+                      <tag-input
+                        *ngIf="index % 2 === 1 && dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && isString(dataPoint.value[0])"
                         class="custom-input-tag-border form-control col-md-12 col-sm-12" [title]="dataPoint.description"
                         [(ngModel)]="dataPoint.value" name="value" [modelAsStrings]="true" [editable]="true"
                         [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
-                        [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'" theme="minimal">
+                        [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'"
+                        theme="minimal">
                       </tag-input>
                     </div>
 
                   </form>
                   <div *ngFor="let dataPoint of getUniqueDataPoints()">
-                    <ng-container class="form-group col-md-12" *ngIf="dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && !isString(dataPoint.value[0])">
+                    <ng-container class="form-group col-md-12"
+                      *ngIf="dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && !isString(dataPoint.value[0])">
                       <label *ngIf="dataPoint.dataType === 'ARRAY'">{{ dataPoint.dataPointLabel }}</label>
-                      <table class="table" *ngIf="dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && !isString(dataPoint.value[0])">
+                      <table class="table"
+                        *ngIf="dataPoint.dataType === 'ARRAY' && dataPoint.value.length>0 && !isString(dataPoint.value[0])">
                         <thead>
                           <tr>
                             <th *ngFor="let key of getKeysForArrayDataType(dataPoint.value, dataPoint.dataPointName)">{{
@@ -164,15 +203,18 @@
               <form style="max-height: 400px; overflow:scroll">
                 <div *ngIf="selectedEpisode && selectedEpisode.statusCd" class="form-group">
                   <label>Status</label>
-                  <input class="form-control" placeholder="Status" disabled="disabled" value="{{selectedEpisode.statusCd}}" />
+                  <input class="form-control" placeholder="Status" disabled="disabled"
+                    value="{{selectedEpisode.statusCd}}" />
                 </div>
-                <div *ngIf="selectedEpisode && selectedEpisode.intents && selectedEpisode.intents.length > 0" class="form-group">
+                <div *ngIf="selectedEpisode && selectedEpisode.intents && selectedEpisode.intents.length > 0"
+                  class="form-group">
                   <label>Intents</label>
                   <select multiple class="form-control" disabled="disabled">
                     <option *ngFor="let intent of selectedEpisode.intents">{{intent}}</option>
                   </select>
                 </div>
-                <div *ngIf="selectedEpisode && selectedEpisode.entities && selectedEpisode.entities.length > 0" class="form-group">
+                <div *ngIf="selectedEpisode && selectedEpisode.entities && selectedEpisode.entities.length > 0"
+                  class="form-group">
                   <label>Entities</label>
                   <select multiple class="form-control" disabled="disabled">
                     <option *ngFor="let entity of selectedEpisode.entities">{{entity}}</option>
@@ -184,13 +226,16 @@
                 </div>
                 <div *ngIf="selectedEpisode && selectedEpisode.startTime" class="form-group">
                   <label>Start Time</label>
-                  <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode.startTime | date: 'dd/MM/y, h:mm:ss a'}}" />
+                  <input class="form-control" placeholder="Start Time" disabled="disabled"
+                    value="{{selectedEpisode.startTime | date: 'dd/MM/y, h:mm:ss a'}}" />
                 </div>
                 <div *ngIf="selectedEpisode && selectedEpisode.endTime" class="form-group">
                   <label>End Time</label>
-                  <input class="form-control" placeholder="End Time" disabled="disabled" value="{{selectedEpisode.endTime | date: 'dd/MM/y, h:mm:ss a'}}" />
+                  <input class="form-control" placeholder="End Time" disabled="disabled"
+                    value="{{selectedEpisode.endTime | date: 'dd/MM/y, h:mm:ss a'}}" />
                 </div>
-                <div *ngIf="selectedEpisode && selectedEpisode.goals && selectedEpisode.goals.length > 0" class="form-group">
+                <div *ngIf="selectedEpisode && selectedEpisode.goals && selectedEpisode.goals.length > 0"
+                  class="form-group">
                   <label>Goals</label>
                   <select multiple class="form-control" disabled="disabled">
                     <option *ngFor="let goal of selectedEpisode.goals">{{goal.goalName}}</option>
@@ -220,8 +265,10 @@
                     <td align="right" style="width: 50%">
                       <div class="talk-bubble tri-right round top-right" style="background-color: #B9F1FB">
                         <div class="talktext">
-                          <p *ngIf="message.displayText && message.displayText.trim().length > 0">{{message.displayText}}</p>
-                          <p *ngIf="!message.displayText || message.displayText.trim().length === 0">{{message.messageText}}</p>
+                          <p *ngIf="message.displayText && message.displayText.trim().length > 0">
+                            {{message.displayText}}</p>
+                          <p *ngIf="!message.displayText || message.displayText.trim().length === 0">
+                            {{message.messageText}}</p>
                         </div>
                       </div>
                     </td>
@@ -237,15 +284,18 @@
               <form style="max-height: 400px; overflow:scroll">
                 <div *ngIf="selectedEpisode && selectedEpisode.statusCd" class="form-group">
                   <label>Status</label>
-                  <input class="form-control" placeholder="Status" disabled="disabled" value="{{selectedEpisode.statusCd}}" />
+                  <input class="form-control" placeholder="Status" disabled="disabled"
+                    value="{{selectedEpisode.statusCd}}" />
                 </div>
-                <div *ngIf="selectedEpisode && selectedEpisode.intents && selectedEpisode.intents.length > 0" class="form-group">
+                <div *ngIf="selectedEpisode && selectedEpisode.intents && selectedEpisode.intents.length > 0"
+                  class="form-group">
                   <label>Intents</label>
                   <select multiple class="form-control" disabled="disabled">
                     <option *ngFor="let intent of selectedEpisode.intents">{{intent}}</option>
                   </select>
                 </div>
-                <div *ngIf="selectedEpisode && selectedEpisode.entities && selectedEpisode.entities.length > 0" class="form-group">
+                <div *ngIf="selectedEpisode && selectedEpisode.entities && selectedEpisode.entities.length > 0"
+                  class="form-group">
                   <label>Entities</label>
                   <select multiple class="form-control" disabled="disabled">
                     <option *ngFor="let entity of selectedEpisode.entities">{{entity}}</option>
@@ -257,13 +307,16 @@
                 </div>
                 <div *ngIf="selectedEpisode && selectedEpisode.startTime" class="form-group">
                   <label>Start Time</label>
-                  <input class="form-control" placeholder="Start Time" disabled="disabled" value="{{selectedEpisode.startTime | date: 'dd/MM/y, h:mm:ss a'}}" />
+                  <input class="form-control" placeholder="Start Time" disabled="disabled"
+                    value="{{selectedEpisode.startTime | date: 'dd/MM/y, h:mm:ss a'}}" />
                 </div>
                 <div *ngIf="selectedEpisode && selectedEpisode.endTime" class="form-group">
                   <label>End Time</label>
-                  <input class="form-control" placeholder="End Time" disabled="disabled" value="{{selectedEpisode.endTime | date: 'dd/MM/y, h:mm:ss a'}}" />
+                  <input class="form-control" placeholder="End Time" disabled="disabled"
+                    value="{{selectedEpisode.endTime | date: 'dd/MM/y, h:mm:ss a'}}" />
                 </div>
-                <div *ngIf="selectedEpisode && selectedEpisode.goals && selectedEpisode.goals.length > 0" class="form-group">
+                <div *ngIf="selectedEpisode && selectedEpisode.goals && selectedEpisode.goals.length > 0"
+                  class="form-group">
                   <label>Goals</label>
                   <select multiple class="form-control" disabled="disabled">
                     <option *ngFor="let goal of selectedEpisode.goals">{{goal.goalName}}</option>
@@ -293,8 +346,10 @@
                     <td align="right" style="width: 50%">
                       <div class="talk-bubble tri-right round top-right" style="background-color: #B9F1FB">
                         <div class="talktext">
-                          <p *ngIf="message.displayText && message.displayText.trim().length > 0">{{message.displayText}}</p>
-                          <p *ngIf="!message.displayText || message.displayText.trim().length === 0">{{message.messageText}}</p>
+                          <p *ngIf="message.displayText && message.displayText.trim().length > 0">
+                            {{message.displayText}}</p>
+                          <p *ngIf="!message.displayText || message.displayText.trim().length === 0">
+                            {{message.messageText}}</p>
                         </div>
                       </div>
                     </td>
@@ -306,21 +361,27 @@
         </div>
         <div role="tabpanel" class="tab-pane fade" id="tabFlow" aria-labelledby="flow-tab">
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
+              (click)="toolsChoice(ZOOM_IN)">
               <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>&nbsp;&nbsp;&nbsp;
-            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_OUT)">
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
+              (click)="toolsChoice(ZOOM_OUT)">
               <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>&nbsp;&nbsp;&nbsp;
-            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_ACTUAL)">
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
+              (click)="toolsChoice(ZOOM_ACTUAL)">
               <i class="ion-arrow-expand"></i>Zoom Actual</button>&nbsp;&nbsp;&nbsp;
-            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(PRINT_PREVIEW)">
+            <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
+              (click)="toolsChoice(PRINT_PREVIEW)">
               <i class="ion-printer"></i>Print Preview</button>
           </div>
           <br>
           <div class="col-md-12 col-sm-12 col-xs-12">
-            <div id="editorGrid" class="col-md-12 col-sm-12 col-xs-12" style="height:75vh;overflow:hidden;margin-bottom:1px;border-style:solid;border-color:silver;"></div>
+            <div id="editorGrid" class="col-md-12 col-sm-12 col-xs-12"
+              style="height:75vh;overflow:hidden;margin-bottom:1px;border-style:solid;border-color:silver;"></div>
           </div>
         </div>
-        <div role="tabpanel" class="tab-pane fade" id="tabEmail" aria-labelledby="email-tab" *ngIf="sourceEmailTrailList && sourceEmailTrailList.length > 0">
+        <div role="tabpanel" class="tab-pane fade" id="tabEmail" aria-labelledby="email-tab"
+          *ngIf="sourceEmailTrailList && sourceEmailTrailList.length > 0">
           <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
               <div class="card card-default">
@@ -329,11 +390,12 @@
                 </div>
                 <div class="card-block">
                   <div class="row">
-                    <div id="emailAccordion" role="tablist" aria-multiselectable="true" *ngIf="sourceEmailTrailList && sourceEmailTrailList.length > 0">
+                    <div id="emailAccordion" role="tablist" aria-multiselectable="true"
+                      *ngIf="sourceEmailTrailList && sourceEmailTrailList.length > 0">
                       <div *ngFor="let email of sourceEmailTrailList; let index=index" class="panel">
                         <div class="card">
-                          <div *ngIf="index == 0" [id]="'emailTabHeading' + index" class="card-header" heightStyle="content"
-                            role="tab">
+                          <div *ngIf="index == 0" [id]="'emailTabHeading' + index" class="card-header"
+                            heightStyle="content" role="tab">
                             <h5 class="mb-0">
                               <a data-toggle="collapse" data-parent="#emailAccordion" [href]="'#emailCollapse' + index"
                                 aria-expanded="true" [attr.aria-controls]="'emailCollapse' + index">
@@ -341,11 +403,12 @@
                               </a>
                             </h5>
                           </div>
-                          <div *ngIf="index != 0" [id]="'emailTabHeading' + index" class="card-header" heightStyle="content"
-                            role="tab">
+                          <div *ngIf="index != 0" [id]="'emailTabHeading' + index" class="card-header"
+                            heightStyle="content" role="tab">
                             <h5 class="mb-0">
-                              <a class="collapsed" data-toggle="collapse" data-parent="#emailAccordion" [href]="'#emailCollapse' + index"
-                                aria-expanded="false" [attr.aria-controls]="'emailCollapse' + index">
+                              <a class="collapsed" data-toggle="collapse" data-parent="#emailAccordion"
+                                [href]="'#emailCollapse' + index" aria-expanded="false"
+                                [attr.aria-controls]="'emailCollapse' + index">
                                 From - {{email.from}} - {{email.subject}}
                               </a>
                             </h5>
@@ -399,11 +462,96 @@
             </div>
           </div>
         </div>
+        <div role="tabpanel" class="tab-pane fade" id="tabTimeline" aria-labelledby="timeline-tab">
+          <div *ngIf="timelineStates && timelineStates.length > 0" class="row">
+            <div class="col-6">
+              <div class="card card-default">
+                <div class="card-header">
+                  <b>States</b>
+                </div>
+                <div class="card-block">
+                  <table class="table table-striped" [mfData]="timelineStates" #mf="mfDataTable" [mfRowsOnPage]="20">
+                    <thead>
+                      <tr>
+                        <th>
+                          <mfDefaultSorter by="">
+                            <h6>
+                              <b>State</b>
+                            </h6>
+                          </mfDefaultSorter>
+                        </th>
+                        <th>
+                          <mfDefaultSorter by="">
+                            <h6>
+                              <b>Start Time</b>
+                            </h6>
+                          </mfDefaultSorter>
+                        </th>
+                        <th>
+                          <mfDefaultSorter by="">
+                            <h6>
+                              <b>Assigned User</b>
+                            </h6>
+                          </mfDefaultSorter>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let timelineState of mf.data; let index=index;"
+                        (click)="timelineSelect(timelineState)">
+                        <td>{{timelineState.stateCd}}</td>
+                        <td> {{ timelineState.startTime}}</td>
+                        <td> {{ timelineState.assignedUserName }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="selectedTimeLineState.parameters" class="col-6">
+              <div class="card card-default">
+                <div class="card-header">
+                  <b>State Parameters</b>
+                </div>
+                <div class="card-block">
+                  <table class="table table-striped" [mfData]="selectedTimeLineState.parameters" #mf="mfDataTable"
+                    [mfRowsOnPage]="20">
+                    <thead>
+                      <tr>
+                        <th>
+                          <mfDefaultSorter by="">
+                            <h6>
+                              <b>Parameter Key</b>
+                            </h6>
+                          </mfDefaultSorter>
+                        </th>
+                        <th>
+                          <mfDefaultSorter by="">
+                            <h6>
+                              <b>Parameter Value</b>
+                            </h6>
+                          </mfDefaultSorter>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let tlparam of mf.data; let index=index;">
+                        <td>{{tlparam.key}}</td>
+                        <td> {{ tlparam.value}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </ba-card>
 </div>
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" attr.aria-labelledby="successModal" aria-hidden="true">
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" attr.aria-labelledby="successModal"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -424,7 +572,8 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="userModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel" aria-hidden="true">
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" attr.aria-labelledby="stateModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -471,8 +620,9 @@
         <form>
           <div class="form-group" *ngIf="selectedState">
             <label for="selectReason">Select Reason</label>
-            <select class="selectpicker form-control" required id="selectReason" title="Choose Flag Reason" [ngModel]="selectedState.flagReason"
-              [ngModelOptions]="{standalone: true}" (ngModelChange)="onReasonSelect($event)">
+            <select class="selectpicker form-control" required id="selectReason" title="Choose Flag Reason"
+              [ngModel]="selectedState.flagReason" [ngModelOptions]="{standalone: true}"
+              (ngModelChange)="onReasonSelect($event)">
               <option *ngFor="let flagReason of FlagReasons" [value]="flagReason">{{flagReason}}</option>
             </select>
           </div>
@@ -507,8 +657,8 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="archiveTaskWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="archiveWarningLabel"
-  aria-hidden="true">
+<div class="modal fade" id="archiveTaskWarningModal" tabindex="-1" role="dialog"
+  attr.aria-labelledby="archiveWarningLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
