@@ -5,7 +5,7 @@ declare var showAlertModal: any;
 import { Component, OnInit, OnDestroy, Input, Output, NgZone, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute } from '@angular/router';
-import { State } from '../../../../models/tasks.model';
+import { State, TimelineStateAuditData } from '../../../../models/tasks.model';
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
 import { BaThemeSpinner } from '../../../../theme/services';
 import { UserHierarchy, User } from '../../../../models/user.model';
@@ -78,6 +78,8 @@ export class PersonalComponent implements OnInit, OnDestroy {
   graphObjects = new Map();
   assignedStategraphObject: GraphObject;
   arrayTableHeaders = {};
+  timelineStates: TimelineStateAuditData[];
+  selectedTimeLineState: TimelineStateAuditData;
 
   // users
   userId: string
@@ -121,6 +123,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.assignedStategraphObject = new GraphObject();
     this.allocatedAssignedTaskToUserId = null;
     this.allocatedUnAssignedTaskToUserId = null;
+    this.selectedTimeLineState = new TimelineStateAuditData();
     //this.selectedStateForFlag = State;
   }
 
@@ -170,6 +173,25 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
       });
 
+  }
+
+  timeline(state: State) {
+
+    this.timelineStates = [];
+    this.subscription = this.stateService.getTimelineForFlow(state.stateMachineInstanceModelId)
+      .subscribe(timelineStates => {
+        if (timelineStates) {
+          this.timelineStates = timelineStates;
+          if (this.timelineStates.length > 0) {
+            this.selectedTimeLineState = this.timelineStates[0];
+          }
+
+        }
+      });
+  }
+
+  timelineSelect(timeLineState: TimelineStateAuditData) {
+    this.selectedTimeLineState = timeLineState;
   }
 
   ngOnDestroy(): void {

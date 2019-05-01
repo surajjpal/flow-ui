@@ -70,6 +70,7 @@ export const environment = {
   autodashboardurl: 'dashboard',
   userurl: 'user/',
   evaluateMVEL: 'evaluateMVEL/',
+  timeline: 'statemachine/timeline/',
 
   registerurl: 'user/createUser',
 
@@ -89,13 +90,13 @@ export const environment = {
   apiconfigurl: 'apiConfig/',
 
   //DataModelUrls
-  datamodelurl:'dataModel/',
-  datamodelsaveurl:'dataModel/savedatamodel',
+  datamodelurl: 'dataModel/',
+  datamodelsaveurl: 'dataModel/savedatamodel',
 
   //EntityUrls
-  entityurl:'entity/',
-  entitysaveurl:'entity/save',
-  entitysubmiturl:'entity/submit',
+  entityurl: 'entity/',
+  entitysaveurl: 'entity/save',
+  entitysubmiturl: 'entity/submit',
 
 
   supportedmethodsurl: 'apiConfig/supportedMethods',

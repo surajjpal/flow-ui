@@ -56,6 +56,7 @@ export const environment = {
   autodashboardurl: 'dashboard',
   userurl: 'user/',
   evaluateMVEL: 'evaluateMVEL/',
+  timeline: 'statemachine/timeline/',
 
   registerurl: 'user/createUser',
   forgotpassword: 'user/forgotPassword',
@@ -76,21 +77,21 @@ export const environment = {
 
 
   //DataModelUrls
-  datamodelurl:'dataModel/',
-  datamodelsaveurl:'dataModel/savedatamodel',
+  datamodelurl: 'dataModel/',
+  datamodelsaveurl: 'dataModel/savedatamodel',
 
   //EntityUrls
-  entityurl:'entity/',
-  entitysaveurl:'entity/save',
-  entitysubmiturl:'entity/submit',
+  entityurl: 'entity/',
+  entitysaveurl: 'entity/save',
+  entitysubmiturl: 'entity/submit',
 
-  connectorinfo:'connectors/',
-  getallconconfig:'connectors/getAll/',
-  deleteconconfig:'connectors/delete/',
-  deletetaskconfig:'connectors/deleteTaskConfig/',
-  saveconconfig:'connectors/save/',
-  getallconinfo:'connectors/getConInfo/',
-  getconinfobytype:'connectors/getConInfoByType/',
+  connectorinfo: 'connectors/',
+  getallconconfig: 'connectors/getAll/',
+  deleteconconfig: 'connectors/delete/',
+  deletetaskconfig: 'connectors/deleteTaskConfig/',
+  saveconconfig: 'connectors/save/',
+  getallconinfo: 'connectors/getConInfo/',
+  getconinfobytype: 'connectors/getConInfoByType/',
 
 
   // auto
