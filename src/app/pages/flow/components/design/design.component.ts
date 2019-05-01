@@ -523,8 +523,6 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (this.graphObject) {
       if (this.graphObject.entity) {
         this.entityselected = true;
-        console.log("ppppppppppppppppppppppppppppppp")
-        this.selectedDataModel = JSON.parse(JSON.stringify(this.graphObject.entity));
       }
       this.tempGraphObject = JSON.parse(JSON.stringify(this.graphObject));
       
