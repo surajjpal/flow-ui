@@ -30,7 +30,7 @@ export class ConnectorInfoDetailComponent implements OnInit, OnDestroy {
     this.connectorInfo = new ConnectorInfo();
     this.configList = [];
     this.payloadList = [];
-    this.types = ['list', 'string', 'encrypted', 'file'];
+    this.types = ['list', 'string', 'encrypted', 'boolean', 'file'];
     this.taskTypes = ['BEAN', 'API', 'PARENT'];
   }
 
@@ -138,22 +138,6 @@ export class ConnectorInfoDetailComponent implements OnInit, OnDestroy {
     if ( this.configList.length > 0){
       for ( const configParam of this.configList){
           let taskAttr = new TaskConfigAttribute();
-          // if( configParam.get('key') === 'key'){
-          //   taskAttr.key = configParam.get('value');
-          // }
-          // else if( configParam.get('key') === 'mandatory'){
-          //   taskAttr.mandatory = configParam.get('value');
-          // }
-          // else if( configParam.get('key') === 'type'){
-          //   taskAttr.type = configParam.get('value');
-          // }
-          // else if( configParam.get('key') === 'validationExpr'){
-          //   taskAttr.validationExpr = configParam.get('value');
-          // }
-          // else if( configParam.get('key') === 'valueList'){
-          //   taskAttr.valueList = configParam.get('value');
-          // }
-          // taskAttrArr.push(taskAttr);
           metaData[configParam.get('key')] = configParam.get('value');
         }
       }
