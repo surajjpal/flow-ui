@@ -35,7 +35,7 @@ const routes: Routes = [
       { path: 'stas', component: ApiConfigSetupComponent },
       { path: 'stuh', component: UserHierarchyComponent },
       { path: 'stdm', component: DataModelComponent },
-      { path: 'stdms ', component: DataModelSetupComponent },
+      { path: 'stdms', component: DataModelSetupComponent },
       { path: 'anlt', component: AnalyticsReportsComponent },
       { path: 'anltst', component: AnalyticsReportSetupComponent },
       { path: 'stcm', component: ConnectorInfoComponent },
