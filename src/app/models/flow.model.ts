@@ -1,6 +1,6 @@
 import { BaseModel } from './base.model';
 import { ApiConfig, ApiKeyExpressionMap, ConnectorConfig } from './setup.model';
-import { values } from 'd3';
+import { values, lab } from 'd3';
 
 export class DataPointValidation {
   sequence: number;
@@ -182,6 +182,8 @@ export class StateModel {
   connectorConfigList: string[];
   reportFlag: boolean;
   businessMonitorFlag: boolean;
+  statusList: LabelValue[];
+  remarks: string;
 
   constructor() {
     this.stateId = '';
@@ -209,6 +211,8 @@ export class StateModel {
     this.connectorConfigList = [];
     this.reportFlag = false;
     this.businessMonitorFlag = false;
+    this.statusList = [];
+    this.remarks = null;
   }
 }
 
@@ -322,5 +326,17 @@ export class CommonSearchModel {
     this.returnFields = [];
 
   }
-
 }
+
+export class LabelValue {
+  label: string;
+	value: string;
+	disabled: boolean;
+  
+  constructor(label?: string, value?: string, disabled?: boolean) {
+    this.label = label ? label : null;
+    this.value = value ? value : null;
+    this.disabled = disabled ? disabled : false;
+  }
+}
+

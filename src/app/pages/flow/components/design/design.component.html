@@ -138,6 +138,48 @@
                   <input type="text" class="form-control" required id="api" placeholder="API"
                      [(ngModel)]="tempState.allocationModel.api" name="api" />
                </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'">
+                  <button type="button" class="btn btn-primary btn-sm pull-right" title="Add Status"
+                     (click)="onAddManualTaskStatus(option)">
+                     <i class="ion-plus-round">Add status</i>
+                  </button>
+               </div>
+               <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.statusList.length > 0">
+                  <table class="table">
+                     <thead>
+                        <tr>
+                           <th>Label</th>
+                           <th>Value</th>
+                           <th>Disable</th>
+                           <th>Remove</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr *ngFor="let status of tempState.statusList">
+                           <td>
+                              <input type="text" class="form-control" required placeholder="Label"
+                              [(ngModel)]="status.label" name="label" />
+                           </td>
+                           <td>
+                              <input type="text" class="form-control" required placeholder="Value"
+                              [(ngModel)]="status.value" name="value" />
+                           </td>
+                           <td>
+                              <api-checkbox [checked]="status.disabled"
+                              [label]="'Disableed'"
+                              (event)="status.disabled = $event.target.checked"></api-checkbox>
+                           </td>
+                           <td>
+                              <button type="button" class="btn btn-danger"
+                              (click)="onRemoveManualTaskStatus(status)">
+                              <i class="ion-ios-trash"></i>
+                              </button>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
                <div class="form-group" *ngIf="stateCreateMode && sourceEvents && sourceEvents.length > 0">
                   <label for="selectStateTrigger">State Trigger</label>
                   <select class="selectpicker form-control" required id="selectStateTrigger"

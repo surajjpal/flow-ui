@@ -20,7 +20,7 @@ import { v4 as uuid } from 'uuid';
 // Model Imports
 import {
   GraphObject, DataPoint, Classifier, StateModel,
-  EventModel, Expression, Transition, ManualAction, DataPointValidation, StateInfoModel
+  EventModel, Expression, Transition, ManualAction, DataPointValidation, StateInfoModel, LabelValue
 } from '../../../../models/flow.model';
 import { ConnectorConfig, ConnectorInfo, TaskObject, TempConnectorConfig } from '../../../../models/setup.model';
 import { ApiConfig, ApiKeyExpressionMap, ApiResponse, MVELObject } from '../../../../models/setup.model';
@@ -2127,6 +2127,24 @@ export class DesignComponent implements OnInit, OnDestroy {
         }
       }
       this.stateConnectorTaskConfig = taskConfigArr;
+    }
+  }
+
+  onAddManualTaskStatus() {
+    if (this.tempState != null) {
+      if (this.tempState.statusList == null) {
+        this.tempState.statusList = [];
+      }
+      this.tempState.statusList.push(new LabelValue);
+    }
+  }
+
+  onRemoveManualTaskStatus(labelValue: LabelValue) {
+    if (this.tempState != null &&  this.tempState.statusList.length > 0) {
+      let index = this.tempState.statusList.indexOf(labelValue);
+      if (index != -1 ) {
+        this.tempState.statusList.splice(index, 1);
+      }
     }
   }
 }
