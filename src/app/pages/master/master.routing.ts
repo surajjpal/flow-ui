@@ -34,15 +34,15 @@ const routes: Routes = [
       { path: 'sta', component: ApiConfigComponent },
       { path: 'stas', component: ApiConfigSetupComponent },
       { path: 'stuh', component: UserHierarchyComponent },
+      { path: 'stdm', component: DataModelComponent },
+      { path: 'stdms ', component: DataModelSetupComponent },
       { path: 'anlt', component: AnalyticsReportsComponent },
       { path: 'anltst', component: AnalyticsReportSetupComponent },
       { path: 'stcm', component: ConnectorInfoComponent },
       { path: 'stcms', component: ConnectorInfoDetailComponent },
       { path: 'stcc', component: ConnectorConfigComponent },
       { path: 'stccs', component: ConConfigSetupComponent },
-      { path : 'anltst', component: AnalyticsReportSetupComponent },
-      { path: ' stdm', component: DataModelComponent },
-      { path: ' stdms ', component: DataModelSetupComponent }
+      { path : 'anltst', component: AnalyticsReportSetupComponent }
     ]
   }
 ];

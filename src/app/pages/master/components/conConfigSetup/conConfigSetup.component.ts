@@ -95,7 +95,7 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
       this.selected = true;
       this.conConfig = conConfig;
       this.conInfo.displayName = conConfig.displayName;
-      this.populateConnector(conConfig);
+      this.getConnecterInfo();
 
     } else {
       this.fileName = "Please upload a file"
@@ -115,8 +115,11 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
         if (connectorInfos && connectorInfos.length > 0) {
           this.connectorsInfo = connectorInfos;
           for (let entry of connectorInfos) {
-            if (!entry.taskType) {
+            if (!entry.taskType || entry.taskType === 'PARENT') {
               this.Connectors.push(entry);
+              if (!this.createMode) {
+                this.populateConnector(this.conConfig);
+              }
             }
           }
         }
@@ -125,9 +128,13 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
 
 
   populateConnector(conConfig: ConnectorConfig) {
-
     this.selectedConnector = conConfig;
     this.selected = true;
+    for(const connectorInfo of this.Connectors){
+      if(this.selectedConnector.displayName === connectorInfo.displayName){
+        this.conInfo = connectorInfo;
+      }
+    }
     this.conInfo.displayName = conConfig.displayName;
 
     this.subscriptionConConfig = this.connectorConfigService.getConInfoByType(conConfig.configType)
@@ -155,19 +162,23 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
       });
   }
 
-  onConfigSelect(config) {
+  onConfigSelect(config?:ConnectorInfo) {
+    console.log(config.taskConfigAttributeList);
     this.conConfig.displayName = config.displayName;
     this.taskConfigAttributeList = config.taskConfigAttributeList;
     this.conConfig.configType = config.type;
-    this.conConfig.connectorInfoRef = config.type
+    this.conConfig.connectorInfoRef = config.referenceType;
     this.selected = true;
+    console.log(this.taskConfigAttributeList);
   }
 
   saveConnectorConfiguration() {
     this.conConfig.configMap = {};
     for (const taskConfigAttribute of this.taskConfigAttributeList) {
-      if (taskConfigAttribute.key && taskConfigAttribute.value.trim().length > 0) {
-        this.conConfig.configMap[taskConfigAttribute.key] = taskConfigAttribute.value;
+      if(taskConfigAttribute.value!==null){
+        if (taskConfigAttribute.key && taskConfigAttribute.value.trim().length > 0) {
+          this.conConfig.configMap[taskConfigAttribute.key] = taskConfigAttribute.value;
+        }
       }
     }
 
@@ -192,10 +203,12 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
     if (this.conConfig.configName.length == 0) {
       this.notSatisfiedDataPoints.push("name");
     }
-
+    
     for (let mandatory of this.taskConfigAttributeList) {
-      if (mandatory.mandatory && configMap[mandatory.key].length == 0) {
-        this.notSatisfiedDataPoints.push(mandatory.key);
+      if(configMap[mandatory.key]){
+        if (mandatory.mandatory && configMap[mandatory.key].length == 0) {
+          this.notSatisfiedDataPoints.push(mandatory.key);
+        }
       }
     }
     if (this.notSatisfiedDataPoints.length > 0) {

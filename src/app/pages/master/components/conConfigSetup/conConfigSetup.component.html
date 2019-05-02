@@ -11,7 +11,7 @@
           <div class="form-group">
             <label>Type</label>
             <select class="selectpicker form-control" required id="selectRootUser" ng-disabled="!createMode" title="Choose Connector"
-              [(ngModel)]="selectedConnector" name="connector" [ngModelOptions]="{standalone: true}" (ngModelChange)="onConfigSelect($event)">
+              [(ngModel)]="conInfo" name="connector" [ngModelOptions]="{standalone: true}" (ngModelChange)="onConfigSelect($event)">
               <option *ngFor="let connector of Connectors" [ngValue]="connector">{{connector.displayName}}</option>
             </select>
           </div>
@@ -49,11 +49,11 @@
                           <input type="text" class="form-control" placeholder="Value" [value]="taskConfigAttribute.value"
                             [(ngModel)]="taskConfigAttribute.value" [ngModelOptions]="{standalone: true}" />
                         </td>
-                        <td *ngIf="typeConfigList[i].get('value') == 'encrypted'">
-                          <input type="password" class="form-control" placeholder="Value" [value]="config.get('value')"
-                            (input)="config.set('value', $event.target.value)" />
+                        <td *ngIf="taskConfigAttribute.type == 'encrypted'">
+                          <input type="password" class="form-control" placeholder="Value" [value]="taskConfigAttribute.value"
+                          [(ngModel)]="taskConfigAttribute.value" [ngModelOptions]="{standalone: true}"/>
                         </td>
-                        <td *ngIf="typeConfigList[i].get('value') == 'file'">
+                        <td *ngIf="taskConfigAttribute.type == 'file'">
                           <label for="file-upload" class="custom-file-upload">
                             <i class="fa fa-cloud-upload"></i> {{createMode ? 'Upload File ' : 'Upload New File'}}
                           </label>
