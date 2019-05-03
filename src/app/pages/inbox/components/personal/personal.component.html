@@ -135,12 +135,11 @@
                                                             <i class="ion-ios-alarm"></i>Timeline</button> -->
                                                         <button
                                                             *ngIf="assignedTaskDdetails.stateEntryTypeCd && assignedTaskDdetails.stateEntryTypeCd === 'VirtualAgentStateEntryAction'"
-                                                            type="button" class="btn btn-info pull-right"
+                                                            type="button" class="btn btn-info btn-with-icon"
                                                             title="Agent Assist" data-toggle="modal"
                                                             (click)="agentAssist(assignedTaskDdetails)">
-                                                            <i class="ion-person-add"></i></button>
+                                                            <i class="ion-chatbubbles"></i>Assist</button>
                                                         <button type="button" class="btn btn-primary pull-right"
-                                                            *ngIf="(!assignedTaskDdetails.stateEntryTypeCd) || (assignedTaskDdetails.stateEntryTypeCd && assignedTaskDdetails.stateEntryTypeCd != 'VirtualAgentStateEntryAction')"
                                                             title="Show Details"
                                                             (click)="onSelect(assignedTaskDdetails)">
                                                             <i class="ion-eye"></i>
