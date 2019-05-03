@@ -483,14 +483,28 @@
                         <th>
                           <mfDefaultSorter by="">
                             <h6>
-                              <b>Start Time</b>
+                              <b>Start</b>
                             </h6>
                           </mfDefaultSorter>
                         </th>
                         <th>
                           <mfDefaultSorter by="">
                             <h6>
-                              <b>Assigned User</b>
+                              <b>End</b>
+                            </h6>
+                          </mfDefaultSorter>
+                        </th>
+                        <th>
+                          <mfDefaultSorter by="">
+                            <h6>
+                              <b>Status</b>
+                            </h6>
+                          </mfDefaultSorter>
+                        </th>
+                        <th>
+                          <mfDefaultSorter by="">
+                            <h6>
+                              <b>User</b>
                             </h6>
                           </mfDefaultSorter>
                         </th>
@@ -500,8 +514,10 @@
                       <tr *ngFor="let timelineState of mf.data; let index=index;"
                         (click)="timelineSelect(timelineState)">
                         <td>{{timelineState.stateCd}}</td>
-                        <td> {{ timelineState.startTime}}</td>
-                        <td> {{ timelineState.assignedUserName }}</td>
+                        <td>{{timelineState.startTime}}</td>
+                        <td>{{timelineState.endTime}}</td>
+                        <td>{{timelineState.statusCd}}</td>
+                        <td>{{timelineState.assignedUserName}}</td>
                       </tr>
                     </tbody>
                   </table>
