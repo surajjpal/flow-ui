@@ -2,8 +2,8 @@
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="progress">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;"
-                    aria-valuenow="99" aria-valuemin="0" aria-valuemax="100">Loading...</div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                    style="width: 100%;" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100">Loading...</div>
             </div>
         </div>
     </div>
@@ -20,14 +20,16 @@
             <div class="panel panel-default">
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#tab_assigned" role="tab" aria-expanded="true"
-                            (click)="fetchRecordsFor(TAB_ASSIGNED, assignedStates)">Assigned</a>
+                        <a class="nav-link active" data-toggle="tab" href="#tab_assigned" role="tab"
+                            aria-expanded="true" (click)="fetchRecordsFor(TAB_ASSIGNED, assignedStates)">Assigned</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#tab_unassigned" role="tab" (click)="fetchRecordsFor(TAB_UNASSIGNED, unassignedStates)">Unassigned</a>
+                        <a class="nav-link" data-toggle="tab" href="#tab_unassigned" role="tab"
+                            (click)="fetchRecordsFor(TAB_UNASSIGNED, unassignedStates)">Unassigned</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#tab_flagged" role="tab" (click)="fetchRecordsFor(TAB_FLAGGED, flaggedStates)">Flagged</a>
+                        <a class="nav-link" data-toggle="tab" href="#tab_flagged" role="tab"
+                            (click)="fetchRecordsFor(TAB_FLAGGED, flaggedStates)">Flagged</a>
                     </li>
                 </ul>
                 <div class="tab-content">
@@ -41,7 +43,8 @@
                                     <div class="card-block">
                                         <table class="table table-striped" [mfData]="assignedStates" #mf="mfDataTable"
                                             [mfRowsOnPage]="fetchRecords">
-                                            <tr *ngFor="let asgnState of mf.data; let index=index;" (click)="onPersonalAssignedSubjectSelect(asgnState)">
+                                            <tr *ngFor="let asgnState of mf.data; let index=index;"
+                                                (click)="onPersonalAssignedSubjectSelect(asgnState)">
                                                 <div [class]="assignedStateTabclass[asgnState._id]" id="defaultOpen">
                                                     <div class="row">
                                                         <div class="col">
@@ -73,7 +76,8 @@
 
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-info" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
+                                <button type="button" class="btn btn-info" id="saveChangesButton"
+                                    style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
                                     *ngIf="assignedStates.length != 0" (click)="loadMore('ACTIVE','Personal')">Load
                                     More
                                 </button>
@@ -88,37 +92,54 @@
                                             <div class="card-block">
                                                 <div class="row">
                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
+                                                        <button
+                                                            [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
                                                             *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd === 'Personal'"
                                                             type="button" class="btn btn-success btn-with-icon"
                                                             (click)="updateProcessFlow(assignedTaskDdetails, 'ASSIGNED')">
                                                             <i class="ion-checkmark"></i>Update Process</button>
-                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
+                                                        <button
+                                                            [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
                                                             *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && users.length > 0"
-                                                            type="button" data-toggle="modal" data-target="#assginedUserModal"
+                                                            type="button" data-toggle="modal"
+                                                            data-target="#assginedUserModal"
                                                             class="btn btn-info btn-with-icon">
                                                             <i class="ion-person-add"></i>Allocate Team</button>
-                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
+                                                        <button
+                                                            [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
                                                             *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd !== 'Personal' "
-                                                            type="button" (click)="reserve()" class="btn btn-primary btn-with-icon">
+                                                            type="button" (click)="reserve()"
+                                                            class="btn btn-primary btn-with-icon">
                                                             <i class="ion-archive"></i>Reserve Task</button>
-                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
+                                                        <button
+                                                            [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
                                                             *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd === 'Personal' && userHierarchy.parentUserId.length > 0"
-                                                            type="button" (click)="escalate()" class="btn btn-warning btn-with-icon">
+                                                            type="button" (click)="escalate()"
+                                                            class="btn btn-warning btn-with-icon">
                                                             <i class="ion-alert-circled"></i>Escalate Task</button>
-                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
+                                                        <button
+                                                            [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
                                                             type="button" class="btn btn-warning btn-with-icon"
-                                                            title="Flag" *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd == 'Personal' && assignedTaskDdetails.subStatus !== 'FLAGGED'"
+                                                            title="Flag"
+                                                            *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd == 'Personal' && assignedTaskDdetails.subStatus !== 'FLAGGED'"
                                                             data-toggle="modal" data-target="#assignedTaskflagModal"
                                                             data-backdrop="static" data-keyboard="false">
                                                             <i class="ion-flag"></i>Flag Task</button>
-                                                        <button [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
+                                                        <button
+                                                            [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
                                                             type="button" class="btn btn-danger btn-with-icon"
-                                                            title="Archive" *ngIf="assignedTaskDdetails.statusCd ==='ACTIVE' && assignedTaskDdetails.assignedUserGroupCd == 'Personal' "
+                                                            title="Archive"
+                                                            *ngIf="assignedTaskDdetails.statusCd ==='ACTIVE' && assignedTaskDdetails.assignedUserGroupCd == 'Personal' "
                                                             data-toggle="modal" data-target="#archiveTaskWarningModal">
                                                             <i class="ion-ios-trash"></i>Archive Task</button>
+                                                        <button type="button" class="btn btn-info btn-with-icon"
+                                                            title="Timeline" data-toggle="modal"
+                                                            (click)="timeline(assignedTaskDdetails)"
+                                                            data-target="#timelineModal">
+                                                            <i class="ion-ios-alarm"></i>Timeline</button>
                                                         <button type="button" class="btn btn-primary pull-right"
-                                                            title="Show Details" (click)="onSelect(assignedTaskDdetails)">
+                                                            title="Show Details"
+                                                            (click)="onSelect(assignedTaskDdetails)">
                                                             <i class="ion-eye"></i>
                                                         </button>
                                                     </div>
@@ -136,7 +157,8 @@
                                                         <label>
                                                             <b>Process: </b>
                                                         </label>
-                                                        <span>{{ assignedTaskDdetails.machineLabel }} v{{
+                                                        <span>{{ assignedTaskDdetails.machineLabel }}
+                                                            v{{
                                                             getGraphObject(assignedTaskDdetails.stateMachineInstanceModelId).version}}</span>
                                                     </div>
                                                     <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4"
@@ -215,43 +237,62 @@
                                                 <div>
                                                     <div class="row">
                                                         <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
-                                                            style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(assignedTaskDdetails)">
+                                                            style="margin-top:10px;"
+                                                            *ngFor="let dataPoint of getBusinessKeysWithoutTable(assignedTaskDdetails)">
                                                             <label>
                                                                 <b>{{ dataPoint.dataPointLabel }}: </b>
                                                             </label>
                                                             <input *ngIf="dataPoint.dataType === 'NUMBER'" type="number"
-                                                                class="form-control col-md-12 col-sm-12" [title]="dataPoint.description"
-                                                                [placeholder]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                                                class="form-control col-md-12 col-sm-12"
+                                                                [title]="dataPoint.description"
+                                                                [placeholder]="dataPoint.description"
+                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                name="parameters[dataPoint.dataPointName]"
+                                                                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
                                                             <input *ngIf="dataPoint.dataType === 'STRING'" type="text"
-                                                                class="form-control" required [placeholder]="dataPoint.description"
+                                                                class="form-control" required
+                                                                [placeholder]="dataPoint.description"
                                                                 [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
                                                                 name="parameters[dataPoint.dataPointName]" />
-                                                            <select *ngIf="dataPoint.dataType === 'BOOLEAN'" class="selectpicker form-control col-md-12 col-sm-12"
-                                                                [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                            <textarea *ngIf="dataPoint.dataType === 'TEXT'" rows="5"
+                                                                class="form-control" required
+                                                                [placeholder]="dataPoint.description"
+                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                name="parameters[dataPoint.dataPointName]">
+                                                            </textarea>
+                                                            <select *ngIf="dataPoint.dataType === 'BOOLEAN'"
+                                                                class="selectpicker form-control col-md-12 col-sm-12"
+                                                                [title]="dataPoint.description"
+                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
                                                                 name="parameters[dataPoint.dataPointName]">
                                                                 <option [ngValue]="true">True</option>
                                                                 <option [ngValue]="false">False</option>
                                                             </select>
                                                             <select *ngIf="dataPoint.dataType === 'SINGLE_SELECT'"
                                                                 class="selectpicker form-control col-md-12 col-sm-12"
-                                                                [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                [title]="dataPoint.description"
+                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
                                                                 name="parameters[dataPoint.dataPointName]">
                                                                 <option *ngFor="let choice of dataPoint.inputSource"
                                                                     [ngValue]="choice">{{choice}}</option>
                                                             </select>
                                                             <select *ngIf="dataPoint.dataType === 'MULTI_SELECT'"
-                                                                multiple="true" class="selectpicker form-control col-md-12 col-sm-12"
-                                                                [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                multiple="true"
+                                                                class="selectpicker form-control col-md-12 col-sm-12"
+                                                                [title]="dataPoint.description"
+                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
                                                                 name="parameters[dataPoint.dataPointName]">
                                                                 <option *ngFor="let choice of dataPoint.inputSource"
                                                                     [ngValue]="choice">{{choice}}</option>
                                                             </select>
-                                                            <tag-input *ngIf="dataPoint.dataType === 'ARRAY'" class="custom-input-tag-border form-control col-md-12 col-sm-12"
-                                                                [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                            <tag-input *ngIf="dataPoint.dataType === 'ARRAY'"
+                                                                class="custom-input-tag-border form-control col-md-12 col-sm-12"
+                                                                [title]="dataPoint.description"
+                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
                                                                 name="parameters[dataPoint.dataPointName]"
                                                                 [modelAsStrings]="true" [editable]="true"
-                                                                [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
+                                                                [separatorKeys]="[32]"
+                                                                [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
                                                                 [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'"
                                                                 theme="minimal">
                                                             </tag-input>
@@ -260,7 +301,8 @@
                                                     <hr />
                                                     <div class="row">
                                                         <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-                                                            style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(assignedTaskDdetails)">
+                                                            style="margin-top:10px;"
+                                                            *ngFor="let dataPoint of getBusinessKeysWithTable(assignedTaskDdetails)">
                                                             <label>
                                                                 <b>{{ dataPoint.dataPointLabel }}: </b>
                                                             </label>
@@ -268,12 +310,14 @@
                                                                 <table class="table table-striped">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, assignedTaskDdetails)">{{
+                                                                            <th
+                                                                                *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, assignedTaskDdetails)">{{
                                                                                 dp.dataPointLabel }}</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        <tr *ngFor="let value of getValueForArraydatatype(dataPoint, assignedTaskDdetails)">
+                                                                        <tr
+                                                                            *ngFor="let value of getValueForArraydatatype(dataPoint, assignedTaskDdetails)">
                                                                             <td *ngFor="let v of value">{{ v }}</td>
                                                                         </tr>
                                                                     </tbody>
@@ -309,9 +353,12 @@
                                         <b>Tasks</b>
                                     </div>
                                     <div class="card-block">
-                                        <table [mfData]="unassignedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords">
-                                            <tr *ngFor="let unasgnState of mf.data; let index=index;" (click)="onPersonalUnAssignedSubjectSelect(unasgnState)">
-                                                <div [class]="unassignedStateTabclass[unasgnState._id]" id="defaultOpen">
+                                        <table [mfData]="unassignedStates" #mf="mfDataTable"
+                                            [mfRowsOnPage]="fetchRecords">
+                                            <tr *ngFor="let unasgnState of mf.data; let index=index;"
+                                                (click)="onPersonalUnAssignedSubjectSelect(unasgnState)">
+                                                <div [class]="unassignedStateTabclass[unasgnState._id]"
+                                                    id="defaultOpen">
 
                                                     <div class="row">
                                                         <div class="col">
@@ -342,7 +389,8 @@
                                         </table>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
+                                <button type="button" class="btn btn-success" id="saveChangesButton"
+                                    style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
                                     *ngIf="unassignedStates.length != 0" (click)="loadMore('ACTIVE','Group')">Load More
                                 </button>
                             </div>
@@ -356,18 +404,23 @@
                                             <div class="card-block">
                                                 <div class="row">
                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                        <button [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]"
+                                                        <button
+                                                            [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]"
                                                             *ngIf="unassignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && users.length > 0"
-                                                            type="button" data-toggle="modal" data-target="#unassginedUserModal"
+                                                            type="button" data-toggle="modal"
+                                                            data-target="#unassginedUserModal"
                                                             class="btn btn-info btn-with-icon">
                                                             <i class="ion-person-add"></i>Allocate Team</button>
-                                                        <button [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]"
+                                                        <button
+                                                            [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]"
                                                             *ngIf="unassignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && unassignedTaskDdetails.assignedUserGroupCd !== 'Personal' "
-                                                            type="button" (click)="reserveUnassignedTask(unassignedTaskDdetails)"
+                                                            type="button"
+                                                            (click)="reserveUnassignedTask(unassignedTaskDdetails)"
                                                             class="btn btn-info btn-with-icon">
                                                             <i class="ion-archive"></i>Reserve Task</button>
                                                         <button type="button" class="btn btn-primary pull-right"
-                                                            title="Show Details" (click)="onSelect(unassignedTaskDdetails)">
+                                                            title="Show Details"
+                                                            (click)="onSelect(unassignedTaskDdetails)">
                                                             <i class="ion-eye"></i>
                                                         </button>
                                                     </div>
@@ -477,7 +530,8 @@
                                             <div class="card-block">
                                                 <div class="row">
                                                     <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
-                                                        style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(unassignedTaskDdetails)">
+                                                        style="margin-top:10px;"
+                                                        *ngFor="let dataPoint of getBusinessKeysWithoutTable(unassignedTaskDdetails)">
                                                         <label>
                                                             <b>{{ dataPoint.dataPointLabel }}: </b>
                                                         </label>
@@ -490,7 +544,8 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-                                                        style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(unassignedTaskDdetails)">
+                                                        style="margin-top:10px;"
+                                                        *ngFor="let dataPoint of getBusinessKeysWithTable(unassignedTaskDdetails)">
                                                         <label>
                                                             <b>{{ dataPoint.dataPointLabel }}: </b>
                                                         </label>
@@ -498,12 +553,14 @@
                                                             <table class="table table-striped">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, unassignedTaskDdetails)">{{
+                                                                        <th
+                                                                            *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, unassignedTaskDdetails)">{{
                                                                             dp.dataPointLabel }}</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <tr *ngFor="let value of getValueForArraydatatype(dataPoint, unassignedTaskDdetails)">
+                                                                    <tr
+                                                                        *ngFor="let value of getValueForArraydatatype(dataPoint, unassignedTaskDdetails)">
                                                                         <td *ngFor="let v of value">{{ v }}</td>
                                                                     </tr>
                                                                 </tbody>
@@ -536,7 +593,8 @@
                                     </div>
                                     <div class="card-block">
                                         <table [mfData]="flaggedStates" #mf="mfDataTable" [mfRowsOnPage]="fetchRecords">
-                                            <tr *ngFor="let flgState of mf.data; let index=index;" (click)="onFlaggedSubjectSelect(flgState)">
+                                            <tr *ngFor="let flgState of mf.data; let index=index;"
+                                                (click)="onFlaggedSubjectSelect(flgState)">
                                                 <div [class]="flaggedStateTabclass[flgState._id]">
                                                     <div class="row">
                                                         <div class="col">
@@ -567,7 +625,8 @@
                                         </table>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-success" id="saveChangesButton" style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
+                                <button type="button" class="btn btn-success" id="saveChangesButton"
+                                    style="display: block; text-align: center; margin: auto;margin-bottom: 20px; margin-top: 20px; width: 200px"
                                     *ngIf="flaggedStates.length != 0" (click)="loadMore('FLAGGED','Personal')">Load
                                     More
                                 </button>
@@ -583,7 +642,8 @@
                                                 <div class="row">
                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                         <button type="button" class="btn btn-primary pull-right"
-                                                            title="Show Details" (click)="onSelect(flaggedTaskDdetails)">
+                                                            title="Show Details"
+                                                            (click)="onSelect(flaggedTaskDdetails)">
                                                             <i class="ion-eye"></i>
                                                         </button>
                                                     </div>
@@ -692,7 +752,8 @@
                                             <div class="card-block">
                                                 <div class="row">
                                                     <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
-                                                        style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithoutTable(flaggedTaskDdetails)">
+                                                        style="margin-top:10px;"
+                                                        *ngFor="let dataPoint of getBusinessKeysWithoutTable(flaggedTaskDdetails)">
                                                         <label>
                                                             <b>{{ dataPoint.dataPointLabel }}: </b>
                                                         </label>
@@ -705,7 +766,8 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-                                                        style="margin-top:10px;" *ngFor="let dataPoint of getBusinessKeysWithTable(flaggedTaskDdetails)">
+                                                        style="margin-top:10px;"
+                                                        *ngFor="let dataPoint of getBusinessKeysWithTable(flaggedTaskDdetails)">
                                                         <label>
                                                             <b>{{ dataPoint.dataPointLabel }}: </b>
                                                         </label>
@@ -713,12 +775,14 @@
                                                             <table class="table table-striped">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, flaggedTaskDdetails)">{{
+                                                                        <th
+                                                                            *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, flaggedTaskDdetails)">{{
                                                                             dp.dataPointLabel }}</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <tr *ngFor="let value of getValueForArraydatatype(dataPoint, flaggedTaskDdetails)">
+                                                                    <tr
+                                                                        *ngFor="let value of getValueForArraydatatype(dataPoint, flaggedTaskDdetails)">
                                                                         <td *ngFor="let v of value">{{ v }}</td>
                                                                     </tr>
                                                                 </tbody>
@@ -744,7 +808,8 @@
     </div>
 </div>
 
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" attr.aria-labelledby="successModal" aria-hidden="true">
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" attr.aria-labelledby="successModal"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -784,7 +849,8 @@
                     <div class="form-group">
                         <label for="selectUser">Select team member</label>
                         <select class="selectpicker form-control" required id="selectUser" title="Choose User"
-                            [ngModel]="tempUser" [ngModelOptions]="{standalone: true}" (ngModelChange)="onUserSelectAssignedTask($event)">
+                            [ngModel]="tempUser" [ngModelOptions]="{standalone: true}"
+                            (ngModelChange)="onUserSelectAssignedTask($event)">
                             <option *ngFor="let user of users" [ngValue]="user">{{user.userName}}</option>
                         </select>
                     </div>
@@ -792,7 +858,8 @@
             </div>
             <div class="modal-footer" id="modal_footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="allocateAssignedTask()">Allocate</button>
+                <button type="submit" class="btn btn-success" data-dismiss="modal"
+                    (click)="allocateAssignedTask()">Allocate</button>
             </div>
         </div>
     </div>
@@ -816,7 +883,8 @@
                     <div class="form-group">
                         <label for="selectUser">Select team member</label>
                         <select class="selectpicker form-control" required id="selectUser" title="Choose User"
-                            [ngModel]="tempUser" [ngModelOptions]="{standalone: true}" (ngModelChange)="onUserSelectUnAssignedTask($event)">
+                            [ngModel]="tempUser" [ngModelOptions]="{standalone: true}"
+                            (ngModelChange)="onUserSelectUnAssignedTask($event)">
                             <option *ngFor="let user of users" [ngValue]="user">{{user.userName}}</option>
                         </select>
                     </div>
@@ -824,7 +892,8 @@
             </div>
             <div class="modal-footer" id="modal_footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="allocateUnAssignedTask()">Allocate</button>
+                <button type="submit" class="btn btn-success" data-dismiss="modal"
+                    (click)="allocateUnAssignedTask()">Allocate</button>
             </div>
         </div>
     </div>
@@ -857,15 +926,17 @@
                 </form>
             </div>
             <div class="modal-footer" id="modal_footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" (click)="assignedTaskFlagClose()">Close</button>
-                <button type="submit" class="btn btn-success" data-dismiss="modal" (click)="assignedTaskConfirmFlag()">Confirm</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"
+                    (click)="assignedTaskFlagClose()">Close</button>
+                <button type="submit" class="btn btn-success" data-dismiss="modal"
+                    (click)="assignedTaskConfirmFlag()">Confirm</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="assignedTaskflagSuccessModal" tabindex="-1" role="dialog" attr.aria-labelledby="flagSuccessModal"
-    aria-hidden="true">
+<div class="modal fade" id="assignedTaskflagSuccessModal" tabindex="-1" role="dialog"
+    attr.aria-labelledby="flagSuccessModal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -887,8 +958,8 @@
     </div>
 </div>
 
-<div class="modal fade" id="archiveTaskWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="archiveWarningLabel"
-    aria-hidden="true">
+<div class="modal fade" id="archiveTaskWarningModal" tabindex="-1" role="dialog"
+    attr.aria-labelledby="archiveWarningLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -905,14 +976,15 @@
             </div>
             <div class="modal-footer" id="modal_footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-danger" data-dismiss="modal" (click)="archiveAssignedTask()">Archive</button>
+                <button type="submit" class="btn btn-danger" data-dismiss="modal"
+                    (click)="archiveAssignedTask()">Archive</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="assignedTaskArchiveSuccessModal" tabindex="-1" role="dialog" attr.aria-labelledby="assignedTaskArchiveSuccessLabel"
-    aria-hidden="true">
+<div class="modal fade" id="assignedTaskArchiveSuccessModal" tabindex="-1" role="dialog"
+    attr.aria-labelledby="assignedTaskArchiveSuccessLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -929,6 +1001,98 @@
             </div>
             <div class="modal-footer" id="modal_footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" (click)="onBack()">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="timelineModal" tabindex="-1" role="dialog" attr.aria-labelledby="timelineLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="timelineModal">
+                    Timeline
+                </h4>
+            </div>
+            <div class="modal-body" id="modal_body">
+
+                <div class="row">
+                    <div class="col-6">
+                        <table class="table table-striped" [mfData]="timelineStates" #mf="mfDataTable"
+                            [mfRowsOnPage]="20">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <mfDefaultSorter by="">
+                                            <h6>
+                                                <b>State</b>
+                                            </h6>
+                                        </mfDefaultSorter>
+                                    </th>
+                                    <th>
+                                        <mfDefaultSorter by="">
+                                            <h6>
+                                                <b>Start Time</b>
+                                            </h6>
+                                        </mfDefaultSorter>
+                                    </th>
+                                    <th>
+                                        <mfDefaultSorter by="">
+                                            <h6>
+                                                <b>Assigned User</b>
+                                            </h6>
+                                        </mfDefaultSorter>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let timelineState of mf.data; let index=index;"
+                                    (click)="timelineSelect(timelineState)">
+                                    <td>{{timelineState.stateCd}}</td>
+                                    <td> {{ timelineState.startTime}}</td>
+                                    <td> {{ timelineState.assignedUserName }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-6">
+                        <div *ngIf="selectedTimeLineState.parameters" class="row">
+                            <table class="table table-striped" [mfData]="selectedTimeLineState.parameters"
+                                #mf="mfDataTable" [mfRowsOnPage]="20">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <mfDefaultSorter by="">
+                                                <h6>
+                                                    <b>Key</b>
+                                                </h6>
+                                            </mfDefaultSorter>
+                                        </th>
+                                        <th>
+                                            <mfDefaultSorter by="">
+                                                <h6>
+                                                    <b>Value</b>
+                                                </h6>
+                                            </mfDefaultSorter>
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let tlparam of mf.data; let index=index;">
+                                        <td>{{tlparam.key}}</td>
+                                        <td> {{ tlparam.value}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" id="modal_footer">
+
             </div>
         </div>
     </div>

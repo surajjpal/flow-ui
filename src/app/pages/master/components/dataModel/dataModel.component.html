@@ -1,0 +1,123 @@
+<div class="widgets">
+  <div class="row">
+    <ba-card cardTitle="DataModel Configurations" baCardClass="with-scroll" class="data-table-container">
+      <div class="panel panel-default">
+        <form class="row form-inline">
+          <div class="form-group col-sm-10">
+            <input class="form-control" [(ngModel)]="filterQuery" name="filterQuery" placeholder="Filter Query" />
+          </div>
+          <div class="form-group col-sm-2">
+            <button type="button" class="btn btn-primary" (click)="createDataModel()">
+              Create Data Model
+            </button>
+          </div>
+        </form>
+        <br>
+
+        <table class="table table-striped" [mfData]="dataModelList | universalDataFilter : filterQuery" #mf="mfDataTable"
+          [mfRowsOnPage]="10" mfSortBy="name">
+          <thead>
+            <tr>
+              <th>
+                <mfDefaultSorter by="name">Name</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="type">status</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="action">Version</mfDefaultSorter>
+              </th>
+              <th>
+                <mfDefaultSorter by="action">Action</mfDefaultSorter>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dataModel of mf.data">
+              <td>{{dataModel.label}}</td>
+              <td>{{dataModel.statusCd}}</td>
+              <td>{{dataModel.version}}</td>
+              <td *ngIf="dataModel.statusCd === ACTIVE">
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-info" title="View" (click)="onDataModelSelect(dataModel, OPEN_IN_READONLY_MODE)">
+                    <i class="ion-eye"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger" title="Deactivate" (click)="deactivateDataModel(dataModel)">
+                    <i class="ion-close-round"></i>
+                  </button>
+                  <button type="button" class="btn btn-primary" title="Clone" (click)="onDataModelSelect(dataModel, CLONE_AND_EDIT_MODE)">
+                    <i class="fa fa-clone"></i>
+                  </button>
+                </div>
+              </td>
+              <td *ngIf="dataModel.statusCd === CLOSED">
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-info" title="View" (click)="onDataModelSelect(dataModel, OPEN_IN_READONLY_MODE)">
+                    <i class="ion-eye"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger" title="Activate" (click)="activateDataModel(dataModel)">
+                    <i class="ion-close-round"></i>
+                  </button>
+                  <button type="button" class="btn btn-primary" title="Clone" (click)="onDataModelSelect(dataModel, CLONE_AND_EDIT_MODE)">
+                    <i class="fa fa-clone"></i>
+                  </button>
+                </div>
+              </td>
+              <td *ngIf="dataModel.statusCd === DRAFT">
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-info" title="Edit" (click)="onDataModelSelect(dataModel, OPEN_IN_EDIT_MODE)">
+                    <i class="ion-edit"></i>
+                  </button>
+                  <button type="button" class="btn btn-success" title="Publish" (click)="onDataModelSelect(dataModel)"
+                        data-toggle="modal" data-target="#finalWarningModal">
+                        <i class="fa fa-check-square-o"></i>
+                      </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="100%">
+                <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </ba-card>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="finalWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="finalWarningLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" id="finalWarningLabel">
+          Warning
+        </h4>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body" id="modal_body">
+        Once it is finalised it can no longer be edited and you have to clone it and create a new copy of it to make
+        any further
+        changes. This will create a new version of the Data Model. Are you sure you want to finalise the Data Model?
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer" id="modal_footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" (click)="activateDataModel(selectedDataModel, 'finalWarningModal')">Finalise</button>
+      </div>
+    </div>
+  </div>
+</div>

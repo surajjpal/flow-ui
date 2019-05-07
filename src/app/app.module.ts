@@ -27,12 +27,14 @@ import { FlowDashboardService, GraphService, CommunicationService } from './serv
 import { DataCachingService, StateService } from './services/inbox.service';
 import { AccountService, ApiConfigService, RoutesService } from './services/setup.service';
 import { ApiDesignService } from './services/apidesign.service';
-import { AuthGuard, AntiAuthGuard, AlertService, DataSharingService, UniversalUser, ScrollService } from './services/shared.service';
+import { AuthGuard, AntiAuthGuard, AlertService, DataSharingService, UniversalUser, ScrollService, DataModelObject } from './services/shared.service';
 import { AnalyticsService } from './services/analytics.service';
 import { ScheduleTaskService } from './services/scheduletasks.service';
 import { ActivityMonitorService } from  './services/activitymonitor.service'
+import { USPService } from './services/usp.service'
 import { FileUploaderService } from './shared/services/file-uploader.service'
-
+import { DataModelService } from './services/setup.service'
+import { EntityService } from './services/entity.service'
 import { SharedModule } from './shared/shared.module';
 
 import { ErrorInterceptor } from './services/interceptors';
@@ -52,12 +54,13 @@ const APP_PROVIDERS = [
   DomainService,
   FlowDashboardService, GraphService, CommunicationService,
   DataCachingService, StateService,
-  AccountService, ApiConfigService, RoutesService,FetchUserService,UserGraphService,
-  ApiDesignService,
+  AccountService, ApiConfigService, RoutesService, FetchUserService, UserGraphService,
+  ApiDesignService, DataModelService, EntityService,
   AnalyticsService,
   ScheduleTaskService,
   ActivityMonitorService,
-  AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService, UniversalUser, FileUploaderService, ScrollService
+  USPService,
+  AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService,DataModelObject, UniversalUser, FileUploaderService, ScrollService
 ];
 
 export type StoreType = {

@@ -68,6 +68,7 @@ export class Goal {
   domainGoalSteps: GoalStep[];
   model: any;
   api: string;
+  preApi: string;
   responseExpression: string;
   validationCheck: boolean;
   flowFlag: boolean;
@@ -84,6 +85,7 @@ export class Goal {
     this.domainGoalSteps = [];
     this.model = {};
     this.api = '';
+    this.preApi = '';
     this.responseExpression = '';
     this.validationCheck = false;
     this.flowFlag = true;
@@ -112,13 +114,19 @@ export class ResponseOption {
   url: string;
   agentId: string;
   language: string;
+  fileSize: string;
+  fileType: string;
+  fileReference: string;
 
-  constructor(value?: string, label?: string, url?: string, agentId?: string, language?: string) {
+  constructor(value?: string, label?: string, url?: string, agentId?: string, language?: string, fileSize?: string, fileType?:string, fileReference?:string) {
     this.value = value ? value : '';
     this.label = label ? label : '';
     this.url = url ? url : '';
     this.agentId = agentId ? agentId : '';
     this.language = language ? language : '';
+    this.fileSize = fileSize ? fileSize : '';
+    this.fileType = fileType ? fileType : '';
+    this.fileReference = fileReference ? fileReference: '';
   }
 }
 
@@ -162,21 +170,87 @@ export class CardData {
   }
 }
 
+export class Model {
+  modelName: string;
+  header: string;
+  responseOptions: ModelResponseOption[]
+
+  constructor(modelName?: string, header?: string, responseOptions?: ModelResponseOption[]) {
+    this.modelName = modelName != null && modelName.trim().length >0 ? modelName : null;
+    this.responseOptions = responseOptions != null && responseOptions.length >0 ? responseOptions : [];
+    this.header = header ? header : null;
+  }
+
+}
+
+export class ModelResponseOption {
+  option: string;
+  sequence: number;
+  label: string = null;
+  afterSubmitLabel: string = null;
+  alignVertically: boolean;
+  key: string = null;
+  populateOptionDataKey: string = null;
+  prePopulatedValue: any;
+  isMandatory: boolean;
+  api: string;
+  dependencyExpression: string;
+  disable: boolean;
+  responseData: ModelResponseData[];
+
+  constructor(option?: string, responseData?:  ModelResponseData[], 
+    label?: string, key?: string, isMandatory?: boolean, api?: string, 
+    afterSubmitLabel?: string, alignVertically?: boolean, populateOptionDataKey?: string, 
+    prePopulatedValue?: any, dependencyExpression?: string, disable?: boolean) {
+    this.option = option ? option : null;
+    this.responseData = responseData ? responseData : [];
+    this.label = label ? label : null;
+    this.key = key ? key : null;
+    this.isMandatory = isMandatory ? isMandatory : false;
+    this.api = api ? api : null;
+    this.afterSubmitLabel = afterSubmitLabel ? afterSubmitLabel : null;
+    this.alignVertically = alignVertically ? alignVertically : false;
+    this.populateOptionDataKey = populateOptionDataKey ? populateOptionDataKey : null;
+    this.prePopulatedValue = prePopulatedValue ? prePopulatedValue : null;
+    this.dependencyExpression = dependencyExpression ? dependencyExpression : null;
+    this.disable = disable ? disable : false;
+  }
+}
+
+export class ModelResponseData {
+  value: any;
+  label: string;
+  dataType: string;
+  settings: Settings;
+
+  constructor(label?: string, value?: string, dataType?: string, settings?: Settings) {
+    this.label = label ? label : null;
+    this.value = value ? value : null;
+    this.dataType = dataType ? dataType : null;
+    this.settings = settings ? settings : new Settings();
+    
+  }
+
+}
+
 export class ResponseData {
-  url: string;
   type: string;
+  url: string;
   data: ResponseOption[];
   cardData: string[];
+  modelName: string;
 
-  constructor(url?: string, type?: string, data?: ResponseOption[], cardData?: string[]) {
-    this.url = url ? url : '';
+  constructor(type?: string, url?: string, data?: ResponseOption[], cardData?: string[], modelName?: string) {
     this.type = type ? type : '';
+    this.url = url ? url : '';
     this.data = data ? data : [];
     this.cardData = cardData ? cardData : [];
+    this.modelName = modelName ? modelName : null;
   }
 }
 
 export class Settings {
+  isMandatory: boolean;
   mask: string;
   secured: boolean;
   validationRegex: string;
@@ -191,16 +265,19 @@ export class Settings {
     this.placeholder = '';
     this.errorMessage = '';
     this.enableDatePicker = false;
+    this.isMandatory = false;
   }
 }
 
 export class Response {
+  uniqueId:string;
   sequence: number;
   level: number;
   actionHTML: string;
   expression: any;
   lang: string;
   response: string;
+  request:string;
   stage: string;
   disableUserInput: boolean;
   options: ResponseData[];
@@ -208,14 +285,18 @@ export class Response {
   selectionExpression: string;
   uploadDocument: {};
   contextExpression: string;
+  faqResponse:boolean;
+  features:any;
+  raiseEventIdOnResponse: string;
 
-  constructor(expression?: string[], lang?: string, response?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
-      options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string) {
+  constructor(expression?: string[], lang?: string, response?: string,request?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
+      options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string,faqResponse?:boolean,features?:any,uniqueId?:string, raiseEventIdOnResponse?: string) {
     this.level = 1;
 
     this.expression = expression ? expression : [];
     this.lang = lang ? lang : '';
     this.response = response ? response : '';
+    this.request = request ? request : '';
     this.actionHTML = actionHTML ? actionHTML : '';
     this.sequence = sequence ? sequence : 0;
     this.stage = stage ? stage : '';
@@ -225,11 +306,18 @@ export class Response {
     this.selectionExpression = selectionExpression ? selectionExpression : '';
     this.uploadDocument = {};
     this.contextExpression = contextExpression ? contextExpression : '';
+    this.faqResponse = faqResponse ? faqResponse : false;
+    this.features = features ? features : [];
+    this.uniqueId = uniqueId ? uniqueId : '';
+    this.raiseEventIdOnResponse = raiseEventIdOnResponse ? raiseEventIdOnResponse : null;
   }
 }
 
 export class Domain {
   _id: string;
+  previousDomainId:string;
+  statusCd:string;
+  version:number;
   name: string;
   createdDt: Date;
   desc: string;
@@ -241,9 +329,13 @@ export class Domain {
   domainGoals: Goal[];
   domainResponse: Response[];
   cards: CardData[];
+  formModels: Model[];
 
   constructor() {
     this._id = null;
+    this.previousDomainId = '';
+    this.statusCd = '';
+    this.version = 0;
     this.name = '';
     this.createdDt = new Date();
     this.desc = '';
@@ -255,5 +347,6 @@ export class Domain {
     this.domainGoals = [];
     this.domainResponse = [];
     this.cards = [];
+    this.formModels = [];
   }
 }

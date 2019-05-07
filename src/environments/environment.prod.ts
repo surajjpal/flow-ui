@@ -4,12 +4,10 @@ export const environment = {
 
   // Root
   root: 'https://flow.lntrealty.com/flow/',
-    
   // API
   authurl: 'https://flow.lntrealty.com/flow/auth/',
 
   // Services
-
   saveaccounturl: 'https://flow.lntrealty.com/flow/account/create',
   fetchaccountbyidurl: 'https://flow.lntrealty.com/flow/account/',
   publishaccounturl:'https://flow.lntrealty.com/flow/account/publish/',
@@ -28,15 +26,15 @@ export const environment = {
 
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
-  orPayloadMachineType:'state/saveOrPayload/machineType/',
+  orPayloadMachineType: 'state/saveOrPayload/machineType/',
   statebystatusandfolderurl: 'state/pagebystatusandfolder/', // status: CLOSED, ACTIVE; folder: Group, Personal
-  statebysubstatusandfolderurl:'state/pagebysubstatusandfolder/',
-  saveflaggedstate:'state/saveFlaggedState',
-  savearchivestate:'state/archive',
-  gettatrecords:'state/fetchtat',
-  getallstats:'state/fetchstatestatus',
-  getpersonalstats:'state/getstatestatusbyuser',
-  getstateinstance:'state/fetchstateinstance',
+  statebysubstatusandfolderurl: 'state/pagebysubstatusandfolder/',
+  saveflaggedstate: 'state/saveFlaggedState',
+  savearchivestate: 'state/archive',
+  gettatrecords: 'state/fetchtat',
+  getallstats: 'state/fetchstatestatus',
+  getpersonalstats: 'state/getstatestatusbyuser',
+  getstateinstance: 'state/fetchstateinstance',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
@@ -44,41 +42,54 @@ export const environment = {
   messageurl: 'data/message/byuser/Admin',
   stateflowimageurl: 'statemachine/stateflow/',
   updatestatemachineurl: 'statemachine/updateflow/withState',
-  alocateuserurl:'statemachine/allocateto',
+  alocateuserurl: 'statemachine/allocateto',
   graphobjectbyflowinstanceid: 'statemachine/graphobject',
   autosummary: 'dashboard/CONVERSATION_SUMMARY',
   graphurl: 'graph/',
   usergraphurl: 'usergraph/saveUserGraph/',
-  getusergraphurl:'usergraph/',
+  getusergraphurl: 'usergraph/',
   graphbystatusurl: 'graph/findbystatus/',
   entryactionurl: 'graph/actions',
   timeruniturl: 'graph/timerunit',
   autodashboardurl: 'dashboard',
   userurl: 'user/',
+  evaluateMVEL: 'evaluateMVEL/',
+  timeline: 'statemachine/timeline/',
 
   registerurl: 'user/createUser',
-  forgotpassword:'user/forgotPassword',
-  savehierarchy:'user/hierarchy',
-  getuserhierarchy:'user/getUserHierarchy/',
-  userchildren:'user/userChildren',
+  forgotpassword: 'user/forgotPassword',
+  savehierarchy: 'user/hierarchy',
+  getuserhierarchy: 'user/getUserHierarchy/',
+  userchildren: 'user/userChildren',
 
 
   createcompanyadminurl: 'user/createcompanyadmin',
   updateuserurl: 'user/update',
   authoritiesurl: 'user/roles',
-  userlisturl:'user/getUserList/',
+  userlisturl: 'user/getUserList/',
   roleroutemapurl: 'master/roleroutemap',
   rolesurl: 'master/roles',
   routesurl: 'master/routes',
   apiconfigurl: 'apiConfig/',
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
-  connectorinfo:'connectors/',
-  getallconconfig:'connectors/getAll/',
-  deleteconconfig:'connectors/delete/',
-  saveconconfig:'connectors/save/',
-  getallconinfo:'connectors/getConInfo/',
-  getconinfobytype:'connectors/getConInfoByType/',
+
+  //DataModelUrls
+  datamodelurl: 'dataModel/',
+  datamodelsaveurl: 'dataModel/savedatamodel',
+
+  //EntityUrls
+  entityurl: 'entity/',
+  entitysaveurl: 'entity/save',
+  entitysubmiturl: 'entity/submit',
+
+  connectorinfo: 'connectors/',
+  getallconconfig: 'connectors/getAll/',
+  deleteconconfig: 'connectors/delete/',
+  deletetaskconfig: 'connectors/deleteTaskConfig/',
+  saveconconfig: 'connectors/save/',
+  getallconinfo: 'connectors/getConInfo/',
+  getconinfobytype: 'connectors/getConInfoByType/',
 
 
   // auto
@@ -108,7 +119,7 @@ export const environment = {
   modelkeyslookupurl: 'load/modelkeys',
   validationtypekeyslookupurl: 'load/validations',
 
-  flowsearch:'/api/search/flow',
+  flowsearch: '/api/search/flow',
 
   // Analytics
   reportservice: 'https://flow.lntrealty.com/flow/report',
@@ -120,7 +131,7 @@ export const environment = {
 
   // Schedule
   scheduleTaskConfiguration: "api/schedule/",
-  
+
   // file upload download service
   fileUploadUrl: '/api/uploadData',
   fileDownloadUrl: '/api/downloadData',
@@ -132,7 +143,7 @@ export const environment = {
   businessObjectActivateTrainerUrl: '/automatons/businessobject/activate',
   businessObjectDectivateTrainerUrl: '/automatons/businessobject/deactivate',
   businessObjectPredictUrl: '/automatons/businessobject/predict',
-  
+
   //Dashboard
   dashboardServer: 'https://flow.lntrealty.com/flow/dashboard/',
   dashboardsummary:'auto/dashboard_summary',
@@ -154,6 +165,7 @@ export const environment = {
 
   //Following APIs path - To be used in conjunction with interfaceService property
   crudFunction: '/crud',
+  smCrudFunction: '/smCrudApi',
   sendAgentMessage: '/sendMessage',
 
   // activity monitor services
@@ -168,4 +180,9 @@ export const environment = {
 
   //Vocabulary
   vocabulary : 'https://flow.lntrealty.com/flow/interfaces/vocabulary',
+
+  // USP
+  uspsearch: '/api/usp/relevancesearch',
+  uspselftrain: '/api/usp/selftrain',
+
 };

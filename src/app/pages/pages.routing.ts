@@ -25,12 +25,14 @@ export const routes: Routes = [
       { path: '', redirectTo: 'tsk/pervi', pathMatch: 'full' },
       { path: 'tsk', loadChildren: './inbox/inbox.module#InboxModule' },
       { path: 'flw', loadChildren: './flow/flow.module#FlowModule' },
+      { path: 'ent', loadChildren: './entity/entity.module#EntityModule' },
       { path: 'agnt', loadChildren: './agent/agent.module#AgentModule' },
       { path: 'dmn', loadChildren: './domain/domain.module#DomainModule' },
       { path: 'stp', loadChildren: './master/master.module#MasterModule' },
       { path: 'stn', loadChildren: './settings/settings.module#SettingsModule' },
       { path: 'apidgn', loadChildren: './apidesign/apidesign.module#ApiDesignModule'},
-      { path: 'bam', loadChildren: './activitymonitor/activitymonitor.module#ActivityMonitorModule' }
+      { path: 'bam', loadChildren: './activitymonitor/activitymonitor.module#ActivityMonitorModule' },
+      { path: 'usp', loadChildren: './usp/usp.module#USPModule' }
     ]
   }
 ];

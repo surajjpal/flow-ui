@@ -3,6 +3,7 @@ import { Router, NavigationStart, CanActivate, ActivatedRouteSnapshot, RouterSta
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 import { User } from '../models/user.model';
+import { DataModel } from '../models/datamodel.model';
 import { commonKeys } from '../models/constants';
 import { ScrollToService, ScrollToConfigOptions } from '@nicky-lenaers/ngx-scroll-to';
 
@@ -37,6 +38,10 @@ export class UniversalUser {
     }
   }
 
+  setAgentId(agentId?:string){
+    window.localStorage.setItem(commonKeys.companyAgentId, agentId);
+  }
+
   getUser() {
     if (!this.user) {
       this.user = JSON.parse(window.localStorage.getItem(commonKeys.uninversalUser));
@@ -45,10 +50,45 @@ export class UniversalUser {
     return this.user;
   }
 
+  getAgentId(){
+    return window.localStorage.getItem(commonKeys.companyAgentId);
+  }
+
   removeUser() {
     this.user = null;
     window.localStorage.removeItem(commonKeys.uninversalUser);
     window.localStorage.setItem(commonKeys.sessionExpired, new Date().getTime().toString());
+  }
+}
+
+
+@Injectable()
+export class DataModelObject {
+  private dataModel: DataModel;
+
+  setDataModel(dataModel: DataModel, shouldRedirect?: boolean) {
+    window.localStorage.setItem(commonKeys.dataModel, JSON.stringify(dataModel));
+    this.dataModel = dataModel;
+
+  //   if (shouldRedirect) {
+  //     window.localStorage.setItem(commonKeys.sessionAvailable, new Date().getTime().toString());  
+  //   }
+   }
+
+
+  getDataModel() {
+    if (!this.dataModel) {
+      this.dataModel = JSON.parse(window.localStorage.getItem(commonKeys.dataModel));
+    }
+
+    return this.dataModel;
+  }
+
+  
+  removeDataModel() {
+    this.dataModel = null;
+    window.localStorage.removeItem(commonKeys.dataModel);
+    //window.localStorage.setItem(commonKeys.dataModel, this.dataModel);
   }
 }
 
