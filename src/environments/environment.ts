@@ -61,7 +61,8 @@ export const environment = {
   autodashboardurl: 'dashboard',
   userurl: 'user/',
   evaluateMVEL: 'evaluateMVEL/',
-
+  
+  route: 'route/',
 
   registerurl: 'user/createUser',
   forgotpassword: 'user/forgotPassword',

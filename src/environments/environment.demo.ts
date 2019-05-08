@@ -57,6 +57,8 @@ export const environment = {
     userurl: 'user/',
     evaluateMVEL: 'evaluateMVEL/',
   
+    route: 'route/',
+  
     registerurl: 'user/createUser',
     forgotpassword:'user/forgotPassword',
     savehierarchy:'user/hierarchy',

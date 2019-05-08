@@ -195,3 +195,11 @@ export class ScrollService {
     this._scrollToService.scrollTo(config);
   }
 }
+
+@Injectable()
+export class ObjectIdService {
+  constructor() { }
+  // TODO from last time - use this method to create ObjectId and use it to while creating new route in middleware route. Assign it to mxGraph vertex to uniquly identify every vertex while perfrorming operations.
+  ObjectId = (m = Math, d = Date, h = 16, s = s => m.floor(s).toString(h)) =>
+    s(d.now() / 1000) + ' '.repeat(h).replace(/./g, () => s(m.random() * h))
+}

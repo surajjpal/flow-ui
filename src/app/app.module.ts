@@ -24,6 +24,7 @@ import { AuthService } from './services/auth.service';
 import { AgentService, ConversationService, AgentDashboardService } from './services/agent.service';
 import { DomainService } from './services/domain.service';
 import { FlowDashboardService, GraphService, CommunicationService } from './services/flow.service';
+import { MWRouteService } from './services/mwroute.service';
 import { DataCachingService, StateService } from './services/inbox.service';
 import { AccountService, ApiConfigService, RoutesService } from './services/setup.service';
 import { ApiDesignService } from './services/apidesign.service';
@@ -53,6 +54,7 @@ const APP_PROVIDERS = [
   AgentService, ConversationService, AgentDashboardService,
   DomainService,
   FlowDashboardService, GraphService, CommunicationService,
+  MWRouteService,
   DataCachingService, StateService,
   AccountService, ApiConfigService, RoutesService, FetchUserService, UserGraphService,
   ApiDesignService, DataModelService, EntityService,

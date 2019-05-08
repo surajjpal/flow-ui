@@ -8,6 +8,7 @@ import { AlertComponent, ApiCheckboxComponent, NgbdDatepickerPopup } from './sha
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 import { UniversalFilterPipe } from './universal-data-filter.pipe';
 import { KeysPipe } from './key-filter.pipe';
+import { APISpinnerComponent } from './components/api-spinner';
 
 @NgModule({
   imports: [
@@ -23,7 +24,7 @@ import { KeysPipe } from './key-filter.pipe';
     KeysPipe,
     NgbdDatepickerPopup,
     FileUploaderComponent,
-    // APISpinnerComponent,
+    APISpinnerComponent,
   ],
   exports: [
     AlertComponent,
@@ -32,7 +33,7 @@ import { KeysPipe } from './key-filter.pipe';
     KeysPipe,
     NgbdDatepickerPopup,
     FileUploaderComponent,
-    // APISpinnerComponent
+    APISpinnerComponent
 
   ]
 })
