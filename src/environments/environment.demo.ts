@@ -59,6 +59,8 @@ export const environment = {
     userurl: 'user/',
     evaluateMVEL: 'evaluateMVEL/',
     timeline: 'statemachine/timeline/',
+    updatevirtualassist: 'statemachine/updatevirtualassist',
+    
 
     registerurl: 'user/createUser',
     forgotpassword: 'user/forgotPassword',

@@ -197,8 +197,20 @@ export class PersonalComponent implements OnInit, OnDestroy {
   }
 
   agentAssist(state: State): void {
-    this.assistModeFl = true;
-    this.virtualAgentURL = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.autoworkbench + state.assignedVirtualAgentId + `/` + state.entityId + environment.autoworkbenchdisplaybar}`);
+    this.stateService.updateVirtualAssist(this.assignedTaskDdetails)
+      .subscribe(
+        contextData => {
+          if (contextData) {
+            
+          }
+          this.assistModeFl = true;
+          this.virtualAgentURL = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.autoworkbench + state.assignedVirtualAgentId + `/` + state.entityId + environment.autoworkbenchdisplaybar}`);
+        },
+        error => {
+          
+        }
+      )
+    
   }
 
 

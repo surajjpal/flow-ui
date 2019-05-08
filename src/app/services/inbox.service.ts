@@ -149,6 +149,30 @@ export class StateService {
     return subject.asObservable();
   }
 
+  updateVirtualAssist(stateInstance: State): Observable<any> {
+    const subject = new Subject<any>();
+    const url = `${environment.server + environment.updatevirtualassist }`;
+    this.httpClient.post<State>(
+      url,
+      stateInstance,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<any>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        subject.error(err);
+      }
+    )
+    return subject.asObservable();
+  }
+
   getInsightForState(stateId: string): Observable<any> {
     const subject = new Subject<any>();
 
