@@ -80,6 +80,9 @@ export const environment = {
   apiconfigurl: 'apiConfig/',
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
+  getallconnectorinfo: 'connectorInfo/',
+  saveconnectorinfo: 'connectorInfo/save/',
+  deleteconnectorinfo: 'connectorInfo/delete/',
   //DataModelUrls
   datamodelurl: 'dataModel/',
   datamodelsaveurl: 'dataModel/savedatamodel',
