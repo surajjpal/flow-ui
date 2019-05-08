@@ -8,7 +8,7 @@
          *ngIf="!readOnly">
          <i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
       <button type="button" class="btn btn-primary btn-with-icon" style="margin-right: 5px"
-         (click)="prepareDummyObject()" *ngIf="!readOnly" data-toggle="modal" data-target="#settignsModal">
+         (click)="prepareDummyObject()" *ngIf="!readOnly" data-toggle="modal" data-target="#settingsModal">
          <i class="fa fa-cogs" aria-hidden="true"></i>Settings</button>
       <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
          <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>
@@ -1116,7 +1116,7 @@
    </div>
 </div>
 <!-- Modal - Settings -->
-<div class="modal fade" data-backdrop="static" data-keyboard="false" id="settignsModal" tabindex="-1" role="dialog"
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="settingsModal" tabindex="-1" role="dialog"
    attr.aria-labelledby="settingsModalLabel" aria-hidden="true">
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -1138,6 +1138,9 @@
                </li>
                <li class="nav-item">
                   <a class="nav-link" data-toggle="tab" href="#datapoints" role="tab">Data Points</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link" data-toggle="tab" href="#entities" role="tab">Entity</a>
                </li>
             </ul>
             <div class="tab-content">
@@ -1641,6 +1644,127 @@
                      </div>
                   </div>
                </div>
+               <div role="tabpanel" class="tab-pane fade" id="entities">
+                        <div class="row">
+                              <div class="col-lg--6 col-md-6 col-sm-6 col-xs-6">
+                                    <h3>Entity</h3>
+                              </div>
+                        </div>
+                        <div class="row" *ngIf="dataModelList.length > 0">
+                              <select class="col-md-12 col-sm-12 col-xs-12  form-control" title="Select Entity" [id] = "selectedDataModel.name"
+                                    [(ngModel)]="selectedDataModel" name="selectedDataModel.name" (change)="onEntitySelect($event)">
+                                    <option *ngFor="let dataModel of dataModelList" [ngValue]="dataModel">{{dataModel.label}}</option>
+                              </select>
+                       </div>
+                       <div class="card"  *ngIf="dataModelList.length == 0">
+                              <div class="card-body">
+                                <h5 class="card-title">MESSAGE</h5>
+                                <p class="card-text">We are sorry but you need design an Entity first to be able to create it!!</p>
+                                <button type="button" class="btn btn-primary" style="margin-right: 5px"
+                                (click)="designEntity()"  data-toggle="modal" data-target="#entityWarning">
+                                Design</button>
+                              </div>
+                        </div>
+                        <div id="eAccordion" role="tablist" aria-multiselectable="true" *ngIf="entityselected">
+                              <div *ngFor="let field of tempGraphObject.entity.fields; let index=index" class="panel">
+                                    <div class="card">
+                                          <div *ngIf="index == 0" [id]="'eTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                                                <h5 class="mb-0">
+                                                      <a data-toggle="collapse" data-parent="#eAccordion" [href]="'#eCollapse' + index" aria-expanded="true" [attr.aria-controls]="'eCollapse' + index"
+                                                            (click)="selectedField=field">
+                                                            {{field.sortOrder}} - {{field.label}}
+                                                      </a>
+                                                </h5>
+                                          </div>
+                                          <div *ngIf="index != 0" [id]="'eTabHeading' + index" class="card-header" heightStyle="content" role="tab">
+                                                <h5 class="mb-0">
+                                                      <a class="collapsed" data-toggle="collapse" data-parent="#eAccordion" [href]="'#eCollapse' + index" aria-expanded="false"
+                                                            [attr.aria-controls]="'eCollapse' + index" (click)="selectedField=field">
+                                                            {{field.sortOrder}} - {{field.label}}
+                                                      </a>
+                                                </h5>
+                                          </div>
+                                          <div *ngIf="index == 0" [id]="'eCollapse' + index" class="collapse show" role="tabpanel" [attr.aria-labelledby]="'eTabHeading' + index">
+                                                <div class="card-block">
+                                                      <form>
+                                                            <div class="form-group">
+                                                                  <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'eInputName' + index">
+                                                                        Code
+                                                                  </label>
+                                                                  <input type="text" [disabled] ="field.locked" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'eInputName' + index"
+                                                                        placeholder="Name" [(ngModel)]="field.name"
+                                                                        name="fieldName" />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                  <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'eLabel' + index">
+                                                                        Label
+                                                                  </label>
+                                                                  <input type="text" [disabled]="field.locked" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'eLabel' + index"
+                                                                        placeholder="Label" [(ngModel)]="field.label"
+                                                                        name="fieldlabel" />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                        <label class="col-md-12 col-sm-12 col-xs-12" [for]="'edataPoint' + index">
+                                                                              Map Data Point
+                                                                        </label>
+                                                                        <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'edataPoint' + index" placeholder="Data Point Name"
+                                                                              [(ngModel)]="field.dataPointName" name="dataPointName"
+                                                                        />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                  <label class="col-md-12 col-sm-12 col-xs-12" [for]="'eInputExpression' + index">
+                                                                        Expression
+                                                                  </label>
+                                                                  <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'eInputExpression' + index" placeholder="Expression"
+                                                                        [(ngModel)]="field.expression" name="expression"
+                                                                  />
+                                                            </div>
+                                                      </form>
+                                                </div>
+                                          </div>
+                                          <div *ngIf="index != 0" [id]="'eCollapse' + index" class="collapse" role="tabpanel" [attr.aria-labelledby]="'eTabHeading' + index">
+                                                <div class="card-block">
+                                                      <form>
+                                                            <div class="form-group">
+                                                                  <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'eInputName' + index">
+                                                                        Code
+                                                                  </label>
+                                                                  <input type="text" [disabled]="field.locked" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'eInputName' + index"
+                                                                        placeholder="Name" [(ngModel)]="field.name"
+                                                                        name="fieldName" />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                  <label class="col-md-12 col-sm-12 col-xs-12" required [for]="'eLabel' + index">
+                                                                        Label
+                                                                  </label>
+                                                                  <input type="text" [disabled]="field.locked" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'eLabel' + index"
+                                                                        placeholder="Label" [(ngModel)]="field.label"
+                                                                        name="fieldlabel" />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                        <label class="col-md-12 col-sm-12 col-xs-12" [for]="'edataPoint' + index">
+                                                                              Map Data Point
+                                                                        </label>
+                                                                        <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'edataPoint' + index" placeholder="Data Point Name"
+                                                                              [(ngModel)]="field.dataPointName" name="dataPointName"
+                                                                        />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                  <label class="col-md-12 col-sm-12 col-xs-12" [for]="'eInputExpression' + index">
+                                                                        Expression
+                                                                  </label>
+                                                                  <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'eInputExpression' + index" placeholder="Expression"
+                                                                        [(ngModel)]="field.expression" name="expression"
+                                                                  />
+                                                            </div>
+                                                      </form>
+
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div> 
             </div>
          </div>
          <!-- Modal Footer -->
@@ -1952,6 +2076,31 @@
             <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="dismiss()">Dismiss</button>
             <button type="button" class="btn btn-info" (click)="testExpression()">Test</button>
             <button type="button" class="btn btn-success" (click)="saveExp(ruleKey,ruleValue)">Save</button>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="entityWarning" tabindex="-1" role="dialog" attr.aria-labelledby="entityWarning"
+   aria-hidden="true">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content ">
+         <!-- Modal Header -->
+         <div class="modal-header">
+            <h4 class="modal-title" id="entityWarning">
+               Redirect Warning
+            </h4>
+         </div>
+         <!-- Modal Body -->
+         <div class="modal-body" id="modal_body">
+                  <div>
+                     {{ entityRedirectWarning }}
+                  </div>
+            </div>
+         <!-- Modal Footer -->
+         <div class="modal-footer" id="modal_footer">
+            <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="dismissEntityWarn()">Dismiss</button>
+            <button type="button" class="btn btn-info" (click)="redirect()">Continue</button>
          </div>
       </div>
    </div>
