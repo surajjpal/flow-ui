@@ -5,7 +5,7 @@ declare var showAlertModal: any;
 import { Component, OnInit, OnDestroy, Input, Output, NgZone, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute } from '@angular/router';
-import { State, TimelineStateAuditData } from '../../../../models/tasks.model';
+import { State, TimelineStateAuditData, TaskDecision } from '../../../../models/tasks.model';
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
 import { BaThemeSpinner } from '../../../../theme/services';
 import { UserHierarchy, User } from '../../../../models/user.model';
@@ -100,12 +100,15 @@ export class PersonalComponent implements OnInit, OnDestroy {
   personalFetched = false;
   groupFetched = false;
   flaggedFetched = false;
+  taskDecision: TaskDecision;
 
   private subscription: Subscription;
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
   private subscriptionXML: Subscription;
-
+  
+  
+  
   constructor(
     private stateService: StateService,
     private baThemeSpinner: BaThemeSpinner,
@@ -130,6 +133,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.allocatedAssignedTaskToUserId = null;
     this.allocatedUnAssignedTaskToUserId = null;
     this.selectedTimeLineState = new TimelineStateAuditData();
+    this.taskDecision = new TaskDecision();
     //this.selectedStateForFlag = State;
   }
 
@@ -1190,55 +1194,4 @@ export class PersonalComponent implements OnInit, OnDestroy {
     }
   }
 
-  isUpdateAllow(stateDetails: State, taskType: string) {
-
-    if (taskType == this.TAB_ASSIGNED) {
-      if (stateDetails.stateEntryTypeCd && stateDetails.stateEntryTypeCd == "VirtualAgentStateEntryAction") {
-        return false;
-      }
-      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && stateDetails.assignedUserGroupCd === 'Personal'
-    }
-  }
-
-  isAllocateAllow(stateDetails: State, tasktype: string) {
-    if (tasktype == this.TAB_UNASSIGNED) {
-      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && this.users.length > 0
-    }
-    if (tasktype == this.TAB_UNASSIGNED) {
-      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && this.users.length > 0
-    }
-  }
-
-  isReserveAllow(stateDetails: State, taskType: String) {
-    if (taskType == this.TAB_ASSIGNED) {
-      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && stateDetails.assignedUserGroupCd !== 'Personal' 
-    }
-    if (taskType == this.TAB_UNASSIGNED) {
-      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && stateDetails.assignedUserGroupCd !== 'Personal' 
-    }
-  }
-
-  isEscalteAllow(stateDetails: State, taskType: string) {
-    if (taskType == this.TAB_ASSIGNED) {
-      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && stateDetails.assignedUserGroupCd === 'Personal' && this.userHierarchy.parentUserId.length > 0
-    }
-  }
-
-  isFlagAllow(stateDetails: State, taskType: string) {
-    if (taskType == this.TAB_ASSIGNED) {
-      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && stateDetails.assignedUserGroupCd == 'Personal' && stateDetails.subStatus !== 'FLAGGED'
-    }
-  }
-
-  isArchiveAllow(stateDetails: State, taskType: string) {
-    if (taskType == this.TAB_ASSIGNED) {
-      return stateDetails.statusCd ==='ACTIVE' && stateDetails.assignedUserGroupCd == 'Personal' 
-    }
-  }
-
-  isAssistAllow(stateDetails: State, taskType: string) {
-    if (taskType == this.TAB_ASSIGNED) {
-      return stateDetails.stateEntryTypeCd && stateDetails.stateEntryTypeCd === 'VirtualAgentStateEntryAction'
-    }
-  }
 }

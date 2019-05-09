@@ -11,7 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
 import { User, UserHierarchy, UserGroup, UserGraphObject } from '../../../../models/user.model';
-import { State, CommonInsightWrapper, EmailPersister, TimelineStateAuditData } from '../../../../models/tasks.model';
+import { State, CommonInsightWrapper, EmailPersister, TimelineStateAuditData, TaskDecision } from '../../../../models/tasks.model';
 import { GraphObject, DataPoint, StateModel, ManualAction, StateInfoModel } from '../../../../models/flow.model';
 import { Episode, ChatMessage } from '../../../../models/conversation.model';
 
@@ -36,6 +36,10 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   ZOOM_ACTUAL = 'ZOOM_ACTUAL';
   PRINT_PREVIEW = 'PRINT_PREVIEW';
   POSTER_PRINT = 'POSTER_PRINT';
+
+  TAB_ASSIGNED = 'ASSIGNED';
+  TAB_UNASSIGNED = 'UNASSIGNED';
+  TAB_FLAGGED = 'FLAGGED';
 
   isButtonEnabled: boolean = true;
   progressBarFlag: boolean = false;
@@ -63,6 +67,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   sourceEmailTrailList: EmailPersister[] = [];
   timelineStates: TimelineStateAuditData[] = [];
   selectedTimeLineState: TimelineStateAuditData;
+  taskDecision: TaskDecision;
 
   private subscription: Subscription;
   private subscriptionEpisode: Subscription;
@@ -87,6 +92,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer
   ) {
     this.sourceEmailTrailList = [];
+    this.taskDecision = new TaskDecision();
     window['taskDetailsRef'] = { component: this, zone: zone };
   }
 

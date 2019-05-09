@@ -90,26 +90,26 @@
                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                         <button
                                                             [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
-                                                            *ngIf="isUpdateAllow(assignedTaskDdetails, TAB_ASSIGNED)"
+                                                            *ngIf="taskDecision.isUpdateAllow(assignedTaskDdetails, TAB_ASSIGNED)"
                                                             type="button" class="btn btn-success btn-with-icon"
                                                             (click)="updateProcessFlow(assignedTaskDdetails, 'ASSIGNED')">
                                                             <i class="ion-checkmark"></i>Update</button>
                                                         <button
                                                             [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
-                                                            *ngIf="isAllocateAllow(assignedTaskDdetails,TAB_ASSIGNED)"
+                                                            *ngIf="taskDecision.isAllocateAllow(assignedTaskDdetails,TAB_ASSIGNED, users)"
                                                             type="button" data-toggle="modal"
                                                             data-target="#assginedUserModal"
                                                             class="btn btn-info btn-with-icon">
                                                             <i class="ion-person-add"></i>Allocate</button>
                                                         <button
                                                             [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
-                                                            *ngIf="isReserveAllow(assignedTaskDdetails,TAB_ASSIGNED)"
+                                                            *ngIf="taskDecision.isReserveAllow(assignedTaskDdetails,TAB_ASSIGNED)"
                                                             type="button" (click)="reserve()"
                                                             class="btn btn-primary btn-with-icon">
                                                             <i class="ion-archive"></i>Reserve</button>
                                                         <button
                                                             [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
-                                                            *ngIf="isEscalteAllow(assignedTaskDdetails, TAB_ASSIGNED)"
+                                                            *ngIf="taskDecision.isEscalteAllow(assignedTaskDdetails, TAB_ASSIGNED, userHierarchy)"
                                                             type="button" (click)="escalate()"
                                                             class="btn btn-warning btn-with-icon">
                                                             <i class="ion-alert-circled"></i>Escalate</button>
@@ -117,7 +117,7 @@
                                                             [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
                                                             type="button" class="btn btn-warning btn-with-icon"
                                                             title="Flag"
-                                                            *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd == 'Personal' && assignedTaskDdetails.subStatus !== 'FLAGGED'"
+                                                            *ngIf="taskDecision.isFlagAllow(assignedTaskDdetails,TAB_ASSIGNED)"
                                                             data-toggle="modal" data-target="#assignedTaskflagModal"
                                                             data-backdrop="static" data-keyboard="false">
                                                             <i class="ion-flag"></i>Flag</button>
@@ -125,7 +125,7 @@
                                                             [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
                                                             type="button" class="btn btn-danger btn-with-icon"
                                                             title="Archive"
-                                                            *ngIf="isFlagAllow(assignedTaskDdetails, TAB_ASSIGNED)"
+                                                            *ngIf="taskDecision.isFlagAllow(assignedTaskDdetails, TAB_ASSIGNED)"
                                                             data-toggle="modal" data-target="#archiveTaskWarningModal">
                                                             <i class="ion-ios-trash"></i>Archive</button>
                                                         <!-- <button type="button" class="btn btn-info btn-with-icon"
@@ -134,7 +134,7 @@
                                                             data-target="#timelineModal">
                                                             <i class="ion-ios-alarm"></i>Timeline</button> -->
                                                         <button
-                                                            *ngIf="isArchiveAllow(assignedTaskDdetails, TAB_ASSIGNED)"
+                                                            *ngIf="taskDecision.isArchiveAllow(assignedTaskDdetails, TAB_ASSIGNED)"
                                                             type="button" class="btn btn-info btn-with-icon"
                                                             title="Agent Assist" data-toggle="modal"
                                                             (click)="agentAssist(assignedTaskDdetails)">
@@ -411,14 +411,14 @@
                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                         <button
                                                             [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]"
-                                                            *ngIf="isAllocateAllow(unassignedTaskDdetails, TAB_UNASSIGNED)"
+                                                            *ngIf="taskDecision.isAllocateAllow(unassignedTaskDdetails, TAB_UNASSIGNED, users)"
                                                             type="button" data-toggle="modal"
                                                             data-target="#unassginedUserModal"
                                                             class="btn btn-info btn-with-icon">
                                                             <i class="ion-person-add"></i>Allocate Team</button>
                                                         <button
                                                             [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]"
-                                                            *ngIf="isReserveAllow(unassignedTaskDdetails, TAB_UNASSIGNED)"
+                                                            *ngIf="taskDecision.isReserveAllow(unassignedTaskDdetails, TAB_UNASSIGNED)"
                                                             type="button"
                                                             (click)="reserveUnassignedTask(unassignedTaskDdetails)"
                                                             class="btn btn-info btn-with-icon">

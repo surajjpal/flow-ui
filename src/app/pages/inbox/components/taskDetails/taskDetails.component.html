@@ -64,28 +64,28 @@
             <form>
               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <button [disabled]="!isButtonEnabled"
-                  *ngIf="selectedState && selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd === 'Personal'"
+                  *ngIf="taskDecision.isUpdateAllow(selectedState, TAB_ASSIGNED)"
                   type="button" class="btn btn-success btn-with-icon" (click)="updateFlow()">
                   <i class="ion-checkmark"></i>Update Process</button>
                 <button [disabled]="!isButtonEnabled"
-                  *ngIf="selectedState && selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && Users.length > 0"
+                  *ngIf="taskDecision.isAllocateAllow(selectedState, TAB_ASSIGNED, Users)"
                   type="button" data-toggle="modal" data-target="#userModal" class="btn btn-info btn-with-icon">
                   <i class="ion-person-add"></i>Allocate Team</button>
                 <button [disabled]="!isButtonEnabled"
-                  *ngIf="selectedState && selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd !== 'Personal' "
+                  *ngIf="taskDecision.isReserveAllow(selectedState,TAB_ASSIGNED)"
                   type="button" (click)="reserve()" class="btn btn-primary btn-with-icon">
                   <i class="ion-archive"></i>Reserve Task</button>
                 <button [disabled]="!isButtonEnabled"
-                  *ngIf="selectedState && selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd === 'Personal' && userHierarchy.parentUserId.length > 0"
+                  *ngIf="taskDecision.isEscalteAllow(selectedState, TAB_ASSIGNED, userHierarchy)"
                   type="button" (click)="escalate()" class="btn btn-warning btn-with-icon">
                   <i class="ion-alert-circled"></i>Escalate Task</button>
                 <button [disabled]="!isButtonEnabled" type="button" class="btn btn-warning btn-with-icon" title="Flag"
-                  *ngIf="selectedState && selectedState.statusCd !== ('CLOSED' || 'ARCHIVE') && selectedState.assignedUserGroupCd == 'Personal' && selectedState.subStatus !== 'FLAGGED'"
+                  *ngIf="taskDecision.isFlagAllow(selectedState,TAB_ASSIGNED)"
                   data-toggle="modal" data-target="#flagTaskModal" data-backdrop="static" data-keyboard="false"
                   (click)="setFlagReason()">
                   <i class="ion-flag"></i>Flag Task</button>
                 <button [disabled]="!isButtonEnabled" type="button" class="btn btn-danger btn-with-icon" title="Archive"
-                  *ngIf="selectedState && selectedState.statusCd ==='ACTIVE' && selectedState.assignedUserGroupCd == 'Personal' "
+                  *ngIf="taskDecision.isFlagAllow(selectedState, TAB_ASSIGNED)"
                   data-toggle="modal" data-target="#archiveTaskWarningModal">
                   <i class="ion-ios-trash"></i>Archive Task</button>
               </div>
