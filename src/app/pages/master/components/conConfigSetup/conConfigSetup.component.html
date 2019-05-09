@@ -11,7 +11,7 @@
           <div class="form-group">
             <label>Type</label>
             <select class="selectpicker form-control" required id="selectRootUser" ng-disabled="!createMode" title="Choose Connector"
-              [(ngModel)]="selectedConnector" name="connector" [ngModelOptions]="{standalone: true}" (ngModelChange)="onConfigSelect($event)">
+              [(ngModel)]="conInfo" name="connector" [ngModelOptions]="{standalone: true}" (ngModelChange)="onConfigSelect($event)">
               <option *ngFor="let connector of Connectors" [ngValue]="connector">{{connector.displayName}}</option>
             </select>
           </div>
@@ -27,7 +27,7 @@
               </ul>
               <div class="tab-content">
                 <div role="tabpanel" class="tab-pane fade show active" id="tab_config">
-                  <table class="table" [mfData]="configList" #mfConfigs="mfDataTable" [mfRowsOnPage]="20">
+                  <table class="table" [mfData]="taskConfigAttributeList" #mfConfigs="mfDataTable" [mfRowsOnPage]="20">
                     <thead>
                       <tr>
                         <th>Action</th>
@@ -36,39 +36,38 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let config of mfConfigs.data; let i = index" [attr.data-index]="i">
+                      <tr *ngFor="let taskConfigAttribute of mfConfigs.data; let i = index" [attr.data-index]="i">
                         <td>
-                          <button type="button" class="btn btn-danger" title="Delete" (click)="removeBody(config)"><i
+                          <button type="button" class="btn btn-danger" title="Delete" (click)="removeBody(taskConfigAttribute)"><i
                               class="ion-close-round"></i></button>
                         </td>
                         <td>
-                          <input type="text" class="form-control" placeholder="Key" [value]="config.get('key')" (input)="config.set('key', $event.target.value)" />
+                          <input type="text" class="form-control" placeholder="Key" [value]="taskConfigAttribute.key"
+                            [(ngModel)]="taskConfigAttribute.key" [ngModelOptions]="{standalone: true}" />
                         </td>
-                        <!-- <td *ngIf="typeConfigList[i].get('value') == 'file'">
-                                
-                                </td> -->
-                        <td *ngIf="typeConfigList[i].get('value') == 'string'">
-                          <input type="text" class="form-control" placeholder="Value" [value]="config.get('value')"
-                            (input)="config.set('value', $event.target.value)" />
+                        <td *ngIf="taskConfigAttribute.type == 'string'">
+                          <input type="text" class="form-control" placeholder="Value" [value]="taskConfigAttribute.value"
+                            [(ngModel)]="taskConfigAttribute.value" [ngModelOptions]="{standalone: true}" />
                         </td>
-                        <td *ngIf="typeConfigList[i].get('value') == 'encrypted'">
-                          <input type="password" class="form-control" placeholder="Value" [value]="config.get('value')"
-                            (input)="config.set('value', $event.target.value)" />
+                        <td *ngIf="taskConfigAttribute.type == 'encrypted'">
+                          <input type="password" class="form-control" placeholder="Value" [value]="taskConfigAttribute.value"
+                          [(ngModel)]="taskConfigAttribute.value" [ngModelOptions]="{standalone: true}"/>
                         </td>
-                        <td *ngIf="typeConfigList[i].get('value') == 'file'">
+                        <td *ngIf="taskConfigAttribute.type == 'file'">
                           <label for="file-upload" class="custom-file-upload">
                             <i class="fa fa-cloud-upload"></i> {{createMode ? 'Upload File ' : 'Upload New File'}}
                           </label>
                           <label>{{fileName}}</label>
-                          <input id="file-upload" type="file" (change)=fileEvent($event,config) />
+                          <input id="file-upload" type="file" (change)=fileEvent($event,taskConfigAttribute) />
                         </td>
-                        <td *ngIf="typeConfigList[i].get('value') == 'list'">
-                          <select class="selectpicker form-control" required id="selectUser" title="Choose Value" name="value"
-                            [(ngModel)]="temp[config.get('key')]" [ngModelOptions]="{standalone: true}" (ngModelChange)="onValueSelect($event,config)">
-                            <option *ngFor="let value of config.get('values')" [ngValue]="value">{{value}}</option>
+                        <td *ngIf="taskConfigAttribute.type == 'list'">
+                          <select class="selectpicker form-control" required id="selectValues" title="Choose Value"
+                            [id]="taskConfigAttribute.key+i" [(ngModel)]="taskConfigAttribute.value" [ngModelOptions]="{standalone: true}">
+                            <option *ngFor="let value of taskConfigAttribute.valueList" [ngValue]="value">{{value}}</option>
                           </select>
-                        <td *ngIf="typeConfigList[i].get('value') == 'boolean'">
-                          <api-checkbox [checked]="config.get('value')" [label]="config.get('value')" (event)="config.set('value', $event.target.checked)"></api-checkbox>
+                        <td *ngIf="taskConfigAttribute.type == 'boolean'">
+                          <api-checkbox [checked]="taskConfigAttribute.value" [label]="taskConfigAttribute.value"
+                            (event)="taskConfigAttribute.value = $event.target.checked"></api-checkbox>
                         </td>
                       </tr>
                     </tbody>

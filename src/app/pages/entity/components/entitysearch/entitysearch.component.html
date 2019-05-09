@@ -114,47 +114,37 @@
                                                 <label>
                                                     <b>{{ field.label }}: </b>
                                                 </label>
-                                                <!-- <input *ngIf="field.type === 'INT'" type="number"
+                                                <input *ngIf="field.type === 'INT'" type="number"
                                                     class="form-control col-md-12 col-sm-12" [title]="dataPoint.description"
-                                                    [placeholder]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                    name="parameters[dataPoint.dataPointName]" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" /> -->
+                                                    [placeholder]="dataPoint.description" [(ngModel)]="field.value"
+                                                    name="field.name" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
                                                 <input *ngIf="field.type === 'TEXT'" type="text"
                                                     class="form-control" required [placeholder]=""
                                                     [(ngModel)]="field.value"
                                                     name="field.name" />
-                                                <!-- <textarea *ngIf="dataPoint.dataType === 'TEXT'" rows="5"
-                                                    class="form-control" required [placeholder]="dataPoint.description"
-                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                    name="parameters[dataPoint.dataPointName]" >
-                                                </textarea>
-                                                <select *ngIf="dataPoint.dataType === 'BOOLEAN'" class="selectpicker form-control col-md-12 col-sm-12"
-                                                    [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                    name="parameters[dataPoint.dataPointName]">
+                                                
+                                                <select *ngIf="field.type === 'BOOLEAN'" class="selectpicker form-control col-md-12 col-sm-12"
+                                                    [title]="feild.label" [(ngModel)]="field.value"
+                                                    name="field.name">
                                                     <option [ngValue]="true">True</option>
                                                     <option [ngValue]="false">False</option>
                                                 </select>
-                                                <select *ngIf="dataPoint.dataType === 'SINGLE_SELECT'"
+                                                <select *ngIf="field.type === 'SINGLE_SELECT'"
                                                     class="selectpicker form-control col-md-12 col-sm-12"
-                                                    [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                    name="parameters[dataPoint.dataPointName]">
-                                                    <option *ngFor="let choice of dataPoint.inputSource"
+                                                    [title]="feild.label" [(ngModel)]="field.value"
+                                                    name="field.name">
+                                                    <option *ngFor="let choice of field.inputSource"
                                                         [ngValue]="choice">{{choice}}</option>
                                                 </select>
-                                                <select *ngIf="dataPoint.dataType === 'MULTI_SELECT'"
+                                                <select *ngIf="field.type === 'MULTI_SELECT'"
                                                     multiple="true" class="selectpicker form-control col-md-12 col-sm-12"
-                                                    [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                    name="parameters[dataPoint.dataPointName]">
-                                                    <option *ngFor="let choice of dataPoint.inputSource"
+                                                    [title]="field.label" [(ngModel)]="field.value"
+                                                    name="field.name">
+                                                    <option *ngFor="let choice of field.inputSource"
                                                         [ngValue]="choice">{{choice}}</option>
                                                 </select>
-                                                <tag-input *ngIf="dataPoint.dataType === 'ARRAY'" class="custom-input-tag-border form-control col-md-12 col-sm-12"
-                                                    [title]="dataPoint.description" [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                    name="parameters[dataPoint.dataPointName]"
-                                                    [modelAsStrings]="true" [editable]="true"
-                                                    [separatorKeys]="[32]" [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
-                                                    [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'"
-                                                    theme="minimal">
-                                                </tag-input> -->
+                                                <input class="form-control"  *ngIf="field.type === 'FLOAT'" type="number" [formControlName]="field.name" placeholder="0.00" 
+                                                [(ngModel)]="field.value" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" />
                                             </div>
                                         </div>
                                         <hr />

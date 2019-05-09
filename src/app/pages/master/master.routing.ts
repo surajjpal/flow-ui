@@ -11,6 +11,8 @@ import { UserHierarchyComponent } from './components/userHierarchy/userHierarchy
 import { AnalyticsReportsComponent } from 'app/pages/analytics/components/analyticsReports/analyticsReports.component';
 import { AnalyticsReportSetupComponent } from 'app/pages/analytics/components/analyticsReportSetup/analyticsReportSetup.component';
 import { ConnectorConfigComponent } from './components/connectorConfig/connectorConfig.component';
+import { ConnectorInfoComponent } from './components/connectorInfo/connectorInfo.component';
+import { ConnectorInfoDetailComponent } from './components/connectorInfoDetail/connectorInfoDetail.component';
 import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSetup.component';
 import { AccountViewComponent } from './components/accountView/accountView.component';
 import { DataModelComponent } from './components/dataModel/dataModel.component';
@@ -31,14 +33,16 @@ const routes: Routes = [
       { path: 'stm', component: RoutelinkComponent },
       { path: 'sta', component: ApiConfigComponent },
       { path: 'stas', component: ApiConfigSetupComponent },
-      { path:'stuh', component: UserHierarchyComponent },
+      { path: 'stuh', component: UserHierarchyComponent },
+      { path: 'stdm', component: DataModelComponent },
+      { path: 'stdms', component: DataModelSetupComponent },
       { path: 'anlt', component: AnalyticsReportsComponent },
-      { path : 'anltst', component: AnalyticsReportSetupComponent },
-      { path:'stdm', component: DataModelComponent },
-      { path:'stdms', component: DataModelSetupComponent},
-      { path:'stcc', component: ConnectorConfigComponent },
-      { path:'stccs', component: ConConfigSetupComponent }
-
+      { path: 'anltst', component: AnalyticsReportSetupComponent },
+      { path: 'stcm', component: ConnectorInfoComponent },
+      { path: 'stcms', component: ConnectorInfoDetailComponent },
+      { path: 'stcc', component: ConnectorConfigComponent },
+      { path: 'stccs', component: ConConfigSetupComponent },
+      { path : 'anltst', component: AnalyticsReportSetupComponent }
     ]
   }
 ];
