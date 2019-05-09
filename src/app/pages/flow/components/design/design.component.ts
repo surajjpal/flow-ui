@@ -1574,8 +1574,6 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.payloadList = [];
     this.typeConfigList = [];
     this.populateSelectedResponse()
-    console.log("000000000000000000000000000000000000000000000")
-    console.log(conInfo)
     if (this.isEmpty(conInfo.metaData) == false) {
       for (const property in conInfo.metaData) {
         const map = new Map();
