@@ -22,7 +22,7 @@ export const environment = {
 
   // Flow
   server: 'https://flow.lntrealty.com/flow/console/',
-  autourl:'https://chat.lntrealty.com/?',
+  autourl:'https://chat.lntrealty.com/#/pg/ch/cnv/',
 
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
