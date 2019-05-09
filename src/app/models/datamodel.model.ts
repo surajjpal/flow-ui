@@ -8,6 +8,7 @@ export class DataModel extends BaseModel{
     process:string;
     locked:boolean;
     type:string;
+    
     validators: ValidatorInstance[];
 
   constructor() {
@@ -31,10 +32,13 @@ export class Field{
     extractors:ExtractorInstance[];
     modelName:string;
     locked:boolean;
-    type:FieldTypes;
+    type:String;
     list:boolean;
+    expression: string;
     sortOrder:number;
+    dataPointName:string;
     value:any;
+    inputSource: string[];
 
     constructor(){
         this.label = '';
@@ -45,6 +49,10 @@ export class Field{
         this.list = false;
         this.sortOrder = 0;
         this.locked = false;
+        this.expression = '';
+        this.type = '';
+        this.dataPointName = '';
+        this.inputSource = [];
     }
 }
 

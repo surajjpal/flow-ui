@@ -39,6 +39,7 @@ export class ApiConfig extends BaseModel {
 export class ConnectorInfo extends BaseModel {
   type: string;
   metaData: any;
+  taskConfigAttributeList: TaskConfigAttribute[];
   displayName: string;
   taskType: String;
   referenceType: string;
@@ -47,12 +48,32 @@ export class ConnectorInfo extends BaseModel {
 
   constructor() {
     super();
-    this.type = '';
-    this.metaData = {};
+    this.type = null;
+    this.metaData = null;
+    this.taskConfigAttributeList = [];
     this.displayName = "";
     this.taskType = "";
     this.referenceType = "";
     this.payload = {};
+  }
+}
+
+
+export class TaskConfigAttribute {
+  key: string;
+  mandatory: boolean;
+  type: string;
+  validationExpr: string;
+  value: string;
+  valueList:string[];
+
+  constructor() {
+    this.key = "";
+    this.type = "";
+    this.mandatory = false;
+    this.validationExpr = "";
+    this.value = "";
+    this.valueList = [];
   }
 }
 

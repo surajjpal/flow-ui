@@ -99,7 +99,7 @@ export class EntityCreateComponent implements OnInit, OnDestroy {
 
     getDataModelList() {
         const commonsearchModel = new CommonSearchModel();
-        commonsearchModel.searchParams = [{ 'statusCd': 'ACTIVE' }, { 'statusCd': 'DRAFT' }];
+        commonsearchModel.searchParams = [{ 'statusCd': 'ACTIVE' }, { 'type': 'Entity' }];
         commonsearchModel.returnFields = ['label', 'version', 'statusCd'];
         this.subscription = this.dataModelService.getDataModelList(commonsearchModel)
           .subscribe(list => this.dataModelList = list);

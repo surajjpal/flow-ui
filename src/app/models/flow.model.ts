@@ -1,6 +1,7 @@
 import { BaseModel } from './base.model';
 import { ApiConfig, ApiKeyExpressionMap, ConnectorConfig } from './setup.model';
 import { values } from 'd3';
+import { DataModel } from './datamodel.model';
 
 export class DataPointValidation {
   sequence: number;
@@ -296,6 +297,7 @@ export class GraphObject extends BaseModel {
   transitions: Transition[];
   activeStateIdList: string[];
   closedStateIdList: string[];
+  entity: DataModel;
 
   constructor() {
     super();
@@ -311,6 +313,7 @@ export class GraphObject extends BaseModel {
     this.transitions = [];
     this.activeStateIdList = [];
     this.closedStateIdList = [];
+    this.entity = new DataModel();
   }
 }
 
