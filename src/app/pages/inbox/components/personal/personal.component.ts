@@ -5,13 +5,15 @@ declare var showAlertModal: any;
 import { Component, OnInit, OnDestroy, Input, Output, NgZone, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute } from '@angular/router';
-import { State, TimelineStateAuditData } from '../../../../models/tasks.model';
+import { State, TimelineStateAuditData, TaskDecision } from '../../../../models/tasks.model';
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
 import { BaThemeSpinner } from '../../../../theme/services';
 import { UserHierarchy, User } from '../../../../models/user.model';
 import { FetchUserService, AllocateTaskToUser } from '../../../../services/userhierarchy.service';
 import { GraphObject, DataPoint, StateModel, ManualAction, StateInfoModel } from '../../../../models/flow.model';
 import { UniversalUser } from 'app/services/shared.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'api-personal',
@@ -58,6 +60,9 @@ export class PersonalComponent implements OnInit, OnDestroy {
   flaggedStateTabclass = {};
 
 
+  assistModeFl: boolean = false;
+  virtualAgentURL: SafeResourceUrl = '';
+
   loadingUnassigned: boolean = false;
   loadingAssigned: boolean = false;
   loadingFlagged: boolean = false;
@@ -95,12 +100,15 @@ export class PersonalComponent implements OnInit, OnDestroy {
   personalFetched = false;
   groupFetched = false;
   flaggedFetched = false;
+  taskDecision: TaskDecision;
 
   private subscription: Subscription;
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
   private subscriptionXML: Subscription;
-
+  
+  
+  
   constructor(
     private stateService: StateService,
     private baThemeSpinner: BaThemeSpinner,
@@ -109,6 +117,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private fetchUserService: FetchUserService,
     private universalUser: UniversalUser,
+    private sanitizer: DomSanitizer,
     private allocateTaskToUser: AllocateTaskToUser
   ) {
     this.unassignedStates = [];
@@ -124,6 +133,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.allocatedAssignedTaskToUserId = null;
     this.allocatedUnAssignedTaskToUserId = null;
     this.selectedTimeLineState = new TimelineStateAuditData();
+    this.taskDecision = new TaskDecision();
     //this.selectedStateForFlag = State;
   }
 
@@ -188,6 +198,28 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
         }
       });
+  }
+
+  agentAssist(state: State): void {
+    this.stateService.updateVirtualAssist(this.assignedTaskDdetails)
+      .subscribe(
+        contextData => {
+          if (contextData) {
+            
+          }
+          this.assistModeFl = true;
+          this.virtualAgentURL = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.autoworkbench + state.assignedVirtualAgentId + `/` + state.entityId + environment.autoworkbenchdisplaybar}`);
+        },
+        error => {
+          
+        }
+      )
+    
+  }
+
+
+  closeAgentAssist(): void {
+    this.assistModeFl = false;
   }
 
   timelineSelect(timeLineState: TimelineStateAuditData) {
@@ -394,6 +426,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     }
   }
   onSelect(selectedData: any): void {
+    this.progressBarFlag = true;
     this.selectedData.emit(selectedData);
     this.selectedState = selectedData;
     this.selectedStateCd = selectedData.stateCd;
@@ -401,6 +434,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.subscriptionXML = this.stateService.getXMLforActiveState(selectedData.stateMachineInstanceModelId)
       .subscribe(graphObject => {
         this.dataCachingService.setSharedObject(graphObject, this.selectedState);
+        this.progressBarFlag = false;
         this.router.navigate(['/pg/tsk/tdts'], { relativeTo: this.route });
       });
   }
@@ -1159,4 +1193,5 @@ export class PersonalComponent implements OnInit, OnDestroy {
         });
     }
   }
+
 }

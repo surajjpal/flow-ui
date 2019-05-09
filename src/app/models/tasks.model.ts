@@ -1,4 +1,5 @@
 import { BaseModel } from './base.model';
+import { UserHierarchy } from './user.model';
 
 export class Chronology {
   id: string;
@@ -66,6 +67,8 @@ export class State extends BaseModel {
   iterationLevel: number;
   autoAllocation: boolean;
   assignedDueToFlagged: boolean;
+  stateEntryTypeCd: string;
+  assignedVirtualAgentId: string;
 
 }
 
@@ -116,4 +119,64 @@ export class TimelineStateAuditData extends BaseModel {
 export class TimelineStateParameterData extends BaseModel {
   key: string;
   value: string;
+}
+
+export class TaskDecision {
+
+  TAB_ASSIGNED = 'ASSIGNED';
+  TAB_UNASSIGNED = 'UNASSIGNED';
+  TAB_FLAGGED = 'FLAGGED';
+  
+
+  isUpdateAllow(stateDetails: State, taskType: string) {
+
+    if (taskType == this.TAB_ASSIGNED) {
+      if (stateDetails.stateEntryTypeCd && stateDetails.stateEntryTypeCd == "VirtualAgentStateEntryAction") {
+        return false;
+      }
+      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && stateDetails.assignedUserGroupCd === 'Personal'
+    }
+  }
+
+  isAllocateAllow(stateDetails: State, tasktype: string, users: UserHierarchy[]) {
+    if (tasktype == this.TAB_UNASSIGNED) {
+      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && users.length > 0
+    }
+    if (tasktype == this.TAB_UNASSIGNED) {
+      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && users.length > 0
+    }
+  }
+
+  isReserveAllow(stateDetails: State, taskType: String) {
+    if (taskType == this.TAB_ASSIGNED) {
+      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && stateDetails.assignedUserGroupCd !== 'Personal' 
+    }
+    if (taskType == this.TAB_UNASSIGNED) {
+      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && stateDetails.assignedUserGroupCd !== 'Personal' 
+    }
+  }
+
+  isEscalteAllow(stateDetails: State, taskType: string, userHierarchy: UserHierarchy) {
+    if (taskType == this.TAB_ASSIGNED) {
+      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && stateDetails.assignedUserGroupCd === 'Personal' && userHierarchy.parentUserId.length > 0
+    }
+  }
+
+  isFlagAllow(stateDetails: State, taskType: string) {
+    if (taskType == this.TAB_ASSIGNED) {
+      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && stateDetails.assignedUserGroupCd == 'Personal' && stateDetails.subStatus !== 'FLAGGED'
+    }
+  }
+
+  isArchiveAllow(stateDetails: State, taskType: string) {
+    if (taskType == this.TAB_ASSIGNED) {
+      return stateDetails.statusCd ==='ACTIVE' && stateDetails.assignedUserGroupCd == 'Personal' 
+    }
+  }
+
+  isAssistAllow(stateDetails: State, taskType: string) {
+    if (taskType == this.TAB_ASSIGNED) {
+      return stateDetails.stateEntryTypeCd && stateDetails.stateEntryTypeCd === 'VirtualAgentStateEntryAction'
+    }
+  }
 }

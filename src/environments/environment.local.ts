@@ -33,6 +33,8 @@ export const environment = {
 
   // Flow
   server: 'http://localhost:8080/flow/console/',
+  autoworkbench: 'https://workbench.automatapi.com/#/wb/',
+  autoworkbenchdisplaybar: '?displaySideBar=false',
   autourl: 'http://localhost:4200/#/pg/ch/cnv/',
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
@@ -66,6 +68,7 @@ export const environment = {
   userurl: 'user/',
   evaluateMVEL: 'evaluateMVEL/',
   timeline: 'statemachine/timeline/',
+  updatevirtualassist: 'statemachine/updatevirtualassist',
 
   registerurl: 'user/createUser',
 
@@ -120,6 +123,8 @@ export const environment = {
   createtrainingdataurl: 'add/trainingdata',
   updatetrainingdataurl: 'update/trainingdata',
   deletetrainingdataurl: 'delete/trainingdata?query=',
+
+
 
   getintenturl: 'load/intentclassifier',
   createintenturl: '',

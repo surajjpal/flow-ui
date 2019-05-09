@@ -30,6 +30,8 @@ export const environment = {
   // Flow
   server: 'http://108.168.190.82:8080/flow/console/',
   autourl: 'https://virtualagent.automatapi.xyz/#/pg/ch/cnv/',
+  autoworkbench: 'https://workbench.automatapi.com/#/wb/',
+  autoworkbenchdisplaybar: '?displaySideBar=false',
 
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
@@ -62,6 +64,7 @@ export const environment = {
   userurl: 'user/',
   evaluateMVEL: 'evaluateMVEL/',
   timeline: 'statemachine/timeline/',
+  updatevirtualassist: 'statemachine/updatevirtualassist',
 
 
   registerurl: 'user/createUser',

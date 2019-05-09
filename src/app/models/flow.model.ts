@@ -183,6 +183,7 @@ export class StateModel {
   connectorConfigList: string[];
   reportFlag: boolean;
   businessMonitorFlag: boolean;
+  virtualAgentId: string;
 
   constructor() {
     this.stateId = '';
@@ -210,6 +211,7 @@ export class StateModel {
     this.connectorConfigList = [];
     this.reportFlag = false;
     this.businessMonitorFlag = false;
+    this.virtualAgentId = '';
   }
 }
 

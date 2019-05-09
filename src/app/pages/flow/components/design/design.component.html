@@ -39,6 +39,225 @@
                               <span class="sr-only">Close</span>
                         </button>
                   </div>
+         <!-- Modal Body -->
+         <div class="modal-body" id="modal_body">
+            <form>
+               <div class="form-group">
+                  <label for="inputStateCode">State Code</label>
+                  <input type="text" class="form-control" required id="inputStateCode" placeholder="State Code"
+                     [(ngModel)]="tempState.stateCd" name="stateCd" />
+               </div>
+               <div class="form-group">
+                  <label for="selectStateType">State Type</label>
+                  <select class="selectpicker form-control" required id="selectStateType" title="Choose State Type"
+                     [(ngModel)]="tempState.type" name="type">
+                     <option *ngFor="let stateType of sourceStateTypes" [value]="stateType">{{stateType}}</option>
+                  </select>
+               </div>
+               <div class="row">
+                  <api-checkbox class="col-md-6 col-sm-6 col-xs-6" [checked]="tempState.businessMonitorFlag"
+                     [label]="'Business Monitor Flag'" (event)="tempState.businessMonitorFlag = $event.target.checked">
+                  </api-checkbox>
+                  <api-checkbox class="col-md-6 col-sm-6 col-xs-6" [checked]="tempState.reportFlag"
+                     [label]="'Report Flag'" (event)="tempState.reportFlag = $event.target.checked"></api-checkbox>
+               </div>
+               <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'">
+                  <label for="selectAllocationType">Allocation Type</label>
+                  <select class="selectpicker form-control" required id="selectAllocationType"
+                     title="Choose Allocation Type" [(ngModel)]="tempState.allocationModel.allocationType"
+                     name="allocationType">
+                     <option *ngFor="let allocationType of allocationTypes" [value]="allocationType">{{allocationType}}
+                     </option>
+                  </select>
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType !== 'Personal'">
+                  <label for="allocationGroup">Allocate to group</label>
+                  <input type="text" class="form-control" required id="allocationGroup" placeholder="Allocate to group"
+                     [(ngModel)]="tempState.allocationModel.allocationGroup" name="allocationGroup" />
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType !== 'Group'">
+                  <label for="allocationGroup">Allocate to default group</label>
+                  <input type="text" class="form-control" required id="allocationGroup"
+                     placeholder="Allocate to default group" [(ngModel)]="tempState.allocationModel.allocationGroup"
+                     name="allocationGroup" />
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType !== 'Group'">
+                  <label for="groups">Allocate to groups</label>
+                  <tag-input [(ngModel)]="tempState.allocationModel.groups" name="groups" [modelAsStrings]="true"
+                     [editable]="true" [separatorKeys]="[32]" placeholder="+Groups (Enter separated)"
+                     secondaryPlaceholder="Add groups" theme="minimal" class="custom-input-tag-border"></tag-input>
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'Capability'">
+                  <label for="groups">Allocate to Capabilities</label>
+                  <tag-input [(ngModel)]="tempState.allocationModel.capabilities" name="capabilities"
+                     [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]"
+                     placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal"
+                     class="custom-input-tag-border"></tag-input>
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'Retain_Familiar'">
+                  <label for="groups">Allocate to States</label>
+                  <tag-input [(ngModel)]="tempState.allocationModel.stickyStates" name="stickyStates"
+                     [modelAsStrings]="true" [editable]="true" [separatorKeys]="[32]"
+                     placeholder="+Groups (Enter separated)" secondaryPlaceholder="Add groups" theme="minimal"
+                     class="custom-input-tag-border"></tag-input>
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual' && tempState.allocationModel.allocationType === 'User'">
+                  <label for="allocationUser">Allocate to User</label>
+                  <input type="text" class="form-control" required id="allocationUser" placeholder="Allocate to User"
+                     [(ngModel)]="tempState.allocationModel.allocatedUserCd" name="allocatedUserCd" />
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'  && tempState.allocationModel.allocationType === 'User'">
+                  <label for="api">API</label>
+                  <input type="text" class="form-control" required id="api" placeholder="API"
+                     [(ngModel)]="tempState.allocationModel.api" name="api" />
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'  && tempState.allocationModel.allocationType !== 'Group'">
+                  <label for="api">Email API</label>
+                  <input type="text" class="form-control" required id="api" placeholder="Email API"
+                     [(ngModel)]="tempState.allocationModel.emailerAPI" name="api" />
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'  && tempState.allocationModel.allocationType === 'API'">
+                  <label for="api">API</label>
+                  <input type="text" class="form-control" required id="api" placeholder="API"
+                     [(ngModel)]="tempState.allocationModel.api" name="api" />
+               </div>
+               <div class="form-group" *ngIf="stateCreateMode && sourceEvents && sourceEvents.length > 0">
+                  <label for="selectStateTrigger">State Trigger</label>
+                  <select class="selectpicker form-control" required id="selectStateTrigger"
+                     title="Choose trigger for this state" [(ngModel)]="tempState.trigger" name="trigger">
+                     <option *ngFor="let event of sourceEvents" [ngValue]="event">{{event.eventCd}}</option>
+                  </select>
+               </div>
+               <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto'">
+                  <label for="selectEntryActions">Entry Actions</label>
+                  <select multiple="true" class="selectpicker form-control" required id="selectEntryActions"
+                     title="Choose Entry Actions" [(ngModel)]="tempState.entryActionList" name="entryActionList">
+                     <option *ngFor="let entryAction of sourceEntryActionList" [ngValue]="entryAction['key']">
+                        {{entryAction['value']}}</option>
+                  </select>
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'VirtualAgentStateEntryAction'">
+                  <label for="allocatedAgent">Allocated Virtual Agent</label>
+                  <input type="text" class="form-control" required id="allocatedAgent"
+                     placeholder="Enter Virtual Agent Id" [(ngModel)]="tempState.virtualAgentId"
+                     name="virtualAgentId" />
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'VirtualAgentStateEntryAction'">
+                  <label for="allocationGroup">Allocate to group</label>
+                  <input type="text" class="form-control" required id="allocationGroup" placeholder="Allocate to group"
+                     [(ngModel)]="tempState.allocationModel.allocationGroup" name="allocationGroup" />
+               </div>
+
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'TimerStateEntryAction'">
+                  <label for="timerUnitType">Timer Unit Type</label>
+                  <!-- <input type="text" class="form-control" required id="timerUnitType" placeholder="Timer Unit Type" [(ngModel)]="tempState.timerUnitType" name="timerUnitType" /> -->
+                  <select class="selectpicker form-control" required id="selectTimerUnitType" title="Choose Timer Unit"
+                     [(ngModel)]="tempState.timerUnitType" name="timerUnitType">
+                     <option *ngFor="let timerUnitType of sourceTimerUnitList" [ngValue]="timerUnitType['key']">
+                        {{timerUnitType['value']}}</option>
+                  </select>
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'TimerStateEntryAction'">
+                  <label for="timerUnit">Timer Units</label>
+                  <input type="number" class="form-control" required id="timerUnit" placeholder="Timer Unit"
+                     [(ngModel)]="tempState.timerUnit" name="timerUnit" min="0"
+                     onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)" />
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'TimerStateEntryAction'">
+                  <label for="timerUnit">Timer Date Paramter</label>
+                  <input type="text" class="form-control" required id="runAtDateExpression"
+                     placeholder="Enter parameter to pick Run Date" [(ngModel)]="tempState.runAtDateExpression"
+                     name="runAtDateExpression" min="0" />
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'TimerStateEntryAction'">
+                  <label for="timerUnit">Timer Time Parameter</label>
+                  <input type="text" class="form-control" required id="runAtTimeExpression"
+                     placeholder="Enter parameter to pick Run Time" [(ngModel)]="tempState.runAtTimeExpression"
+                     name="runAtTimeExpression" min="0" />
+               </div>
+               <div class="form-group"
+                  *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'SubprocessStateEntryAction'">
+                  <label for="timerUnit">Subprocess</label>
+                  <input type="text" class="form-control" required id="toTriggerMachineType"
+                     placeholder="Enter parameter to pick Run Time"
+                     [(ngModel)]="tempState.subprocessData.toTriggerMachineType" name="toTriggerMachineType" min="0" />
+               </div>
+               <div class="form-group" *ngIf="isStateApiCompatible()">
+                  <label for="selectApiConfig">Select API</label>
+                  <select multiple="true" class="selectpicker form-control" required id="selectApiConfig"
+                     title="Choose API" [(ngModel)]="tempState.apiConfigurationList" name="apiConfigurationList">
+                     <option *ngFor="let apiConfig of sourceApiConfigList" [ngValue]="apiConfig._id">{{apiConfig.name}}
+                     </option>
+                  </select>
+               </div>
+               <div class="form-group" *ngIf="isStateConnectorCompatible()">
+                  <!-- <label for="selectConConfig">Select Connector</label>
+                      <select multiple="false" class="selectpicker form-control" required id="selectConConfig" title="Choose Connector" [(ngModel)]="tempState.connectorConfig"
+                        name="conConfigurationList"  [ngModelOptions]="{standalone: true}" (ngModelChange)="onConfigSelect($event)">
+                        <option *ngFor="let conConfig of sourceConConfigList" [ngValue]="conConfig">{{conConfig.configName}}</option>
+                      </select> -->
+                  <label for="selectConConfig">Select Connector</label>
+                  <select multiple="false" class="selectpicker form-control" required id="selectConConfig"
+                     title="Choose Connector" [(ngModel)]="tempState.connectorConfigList" name="connectorConfigList"
+                     [ngModelOptions]="{standalone: true}" (ngModelChange)="setConnectorTaskConfig()">
+                     <option *ngFor="let conConfig of sourceConConfigList" [ngValue]="conConfig.configName">
+                        {{conConfig.configName}}</option>
+                  </select>
+               </div>
+               <div class="form-group" *ngIf="selectedConfig && stateCreateMode">
+                  <form class="row form-inline">
+                     <div *ngFor="let conInfo of conInfoList">
+                        <div class="form-group col-sm-1">
+                           <button type="button" class="btn btn-primary" (click)="connectorSelected(conInfo)">Configure
+                              {{conInfo.displayName}}</button>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+               <div class="form-group" *ngIf="selectedConfig && !stateCreateMode && tempState.taskConfig.length > 0">
+                  <form class="row form-inline">
+                     <div *ngFor="let conInfo of conInfoList">
+                        <div class="form-group col-sm-1">
+                           <button *ngIf="tempState.taskConfig[0].connectorInfoRef == conInfo.type " type="button"
+                              class="btn btn-success" (click)="connectorSelected(conInfo)">Configured
+                              {{conInfo.displayName}}</button>
+                           <button *ngIf="tempState.taskConfig[0].connectorInfoRef !== conInfo.type " type="button"
+                              class="btn btn-primary" (click)="connectorSelected(conInfo)">Configure
+                              {{conInfo.displayName}}</button>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+               <div *ngIf="loadingConfigMap">
+                  <div class="row">
+                     <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="progress">
+                           <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                              style="width: 100%;" aria-valuenow="99" aria-valuemin="0" aria-valuemax="100">Loading.....
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-lg-12 col-md-12 col-sm-12">
+                        <br />
+                     </div>
+                  </div>
                   <!-- Modal Body -->
                   <div class="modal-body" id="modal_body">
                         <form>
