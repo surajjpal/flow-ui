@@ -1200,27 +1200,28 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   convertStateTaskConfigToTempTaskconfig(taskConfig: ConnectorConfig, conInfo: ConnectorInfo, connectorName: string) {
+   
     var tempConTaskconfig = new TempConnectorConfig();
     tempConTaskconfig._id = taskConfig._id;
     tempConTaskconfig.statusCd = taskConfig.statusCd;
     tempConTaskconfig.subStatus = taskConfig.subStatus;
     tempConTaskconfig.configName = taskConfig.configName;
-    tempConTaskconfig.configType = taskConfig.configType
-    tempConTaskconfig.connectorInfoRef = taskConfig.connectorInfoRef
+    tempConTaskconfig.configType = taskConfig.configType;
+    tempConTaskconfig.connectorInfoRef = taskConfig.connectorInfoRef;
     tempConTaskconfig.connectorConfigRef = taskConfig.connectorConfigRef;
     tempConTaskconfig.connectorConfRefName = connectorName;
     tempConTaskconfig.functionInstanceName = taskConfig.functionInstanceName;
     tempConTaskconfig.taskConfig = true;
-    if (taskConfig.configMap) {
+    if (taskConfig.configMap && Object.keys(taskConfig.configMap).length > 0) {
       for (let configKey in taskConfig.configMap) {
         var configMap = this.getConfigMap();
-        if (conInfo && conInfo.metaData) {
-          for (let metaDataKey in conInfo.metaData) {
-            if (configKey == metaDataKey) {
-              configMap.type = conInfo.metaData[metaDataKey].type;
-              configMap.mandatory = conInfo.metaData[metaDataKey].mandatory;
-              configMap.validationExpr = conInfo.metaData[metaDataKey].validationExpr;
-              configMap.valueList = conInfo.metaData[metaDataKey].valueList;
+        if (conInfo && conInfo.taskConfigAttributeList) {
+          for (let task of conInfo.taskConfigAttributeList) {
+            if (configKey == task.key) {
+              configMap.type = task.type;
+              configMap.mandatory = task.mandatory;
+              configMap.validationExpr = task.validationExpr;
+              configMap.valueList = task.valueList;
 
             }
           }
@@ -1232,6 +1233,22 @@ export class DesignComponent implements OnInit, OnDestroy {
         }
         tempConTaskconfig.configMap.push(configMap);
 
+      }
+    }
+    else{
+      if (conInfo && conInfo.taskConfigAttributeList) {
+        for (let task of conInfo.taskConfigAttributeList) {
+          var configMap = this.getConfigMap();
+            configMap.type = task.type;
+            configMap.mandatory = task.mandatory;
+            configMap.validationExpr = task.validationExpr;
+            configMap.valueList = task.valueList;
+            configMap.key = task.key;
+            if (configMap.type == "file" && configMap.value) {
+              configMap.fileName = configMap.value.split("/")[configMap.value.split("/").length - 1]
+            }
+            tempConTaskconfig.configMap.push(configMap);
+        }
       }
     }
     if (!taskConfig.taskObject) {
@@ -1539,74 +1556,6 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   }
 
-  onConfigSelect(event) {
-    this.specificConfigSelected = false;
-    this.selectedConfig = false;
-    this.gotConInfo = false;
-    //this.conInfoOfNoMetadata = new ConnectorInfo();
-    this.configList = [];
-    this.payloadList = [];
-    this.typeConfigList = [];
-    this.fileName = "please upload a file..."
-    this.tempConConfig = event[0]
-    this.loadingConfigMap = true;
-
-    //if(this.tempConConfig._id.length > 0){
-    this.subscriptionConConfig = this.connectorConfigService.getConnectorInfos(event[0])
-      .subscribe(conInfoList => {
-        this.loadingConfigMap = false;
-        if (conInfoList) {
-
-          this.conInfoList = conInfoList;
-          if (conInfoList.length == 1) {
-            this.selectedConfig = false;
-            this.specificConfigSelected = true;
-            //
-            if (!this.stateCreateMode) {
-              if (this.tempState.connectorConfig[0].configType != this.tempConConfig.configType) {
-                this.conConfig = new ConnectorConfig()
-                this.connectorSelected(conInfoList[0])
-              }
-              else {
-                for (let conInfo of conInfoList) {
-                  if (conInfo.type == this.tempState.taskConfig[0].connectorInfoRef) {
-                    this.conConfig = this.tempState.taskConfig[0]
-                    this.connectorSelected(conInfo)
-                  }
-                  else {
-                    this.conConfig = new ConnectorConfig()
-                    this.connectorSelected(conInfoList[0])
-                  }
-                }
-              }
-            }
-            else {
-              this.conConfig = new ConnectorConfig()
-              this.connectorSelected(conInfoList[0])
-            }
-          }
-          else {
-            this.selectedConfig = true;
-            if (!this.stateCreateMode) {
-              if (this.tempState.connectorConfig[0].configType != this.tempConConfig.configType) {
-                this.conConfig = new ConnectorConfig()
-              }
-              else {
-                for (let conInfo of conInfoList) {
-                  if (conInfo.type == this.tempState.taskConfig[0].connectorInfoRef) {
-                    this.specificConfigSelected = true;
-                    this.conConfig = this.tempState.taskConfig[0]
-                    this.connectorSelected(conInfo)
-                  }
-                }
-              }
-            }
-          }
-        }
-      });
-    //}
-
-  }
 
   getConInfoByType(type) {
     this.subscriptionConConfig = this.connectorConfigService.getConInfoByType(type)
@@ -1625,7 +1574,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.payloadList = [];
     this.typeConfigList = [];
     this.populateSelectedResponse()
-
+    console.log("000000000000000000000000000000000000000000000")
+    console.log(conInfo)
     if (this.isEmpty(conInfo.metaData) == false) {
       for (const property in conInfo.metaData) {
         const map = new Map();
