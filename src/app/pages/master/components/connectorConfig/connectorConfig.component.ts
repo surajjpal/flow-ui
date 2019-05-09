@@ -2,16 +2,16 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { ApiConfigService, ConnectorConfigService } from '../../../../services/setup.service';
-import { DataSharingService, AlertService } from '../../../../services/shared.service';
+import { ApiConfigService,ConnectorConfigService } from '../../../../services/setup.service';
+import { DataSharingService,AlertService } from '../../../../services/shared.service';
 
-import { ApiConfig, ConnectorConfig } from '../../../../models/setup.model';
+import { ApiConfig,ConnectorConfig } from '../../../../models/setup.model';
 
 @Component({
   selector: 'connector-connectorConfig',
   templateUrl: './connectorConfig.component.html',
   styleUrls: ['./connectorConfig.scss'],
-  providers: [ConnectorConfigService, AlertService]
+  providers:[ConnectorConfigService,AlertService]
 })
 
 export class ConnectorConfigComponent implements OnInit, OnDestroy {
@@ -26,9 +26,9 @@ export class ConnectorConfigComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apiConfigService: ApiConfigService,
     private sharingService: DataSharingService,
-    private connectorConfigService: ConnectorConfigService,
-    private alertService: AlertService,
-
+    private connectorConfigService:ConnectorConfigService,
+    private alertService:AlertService,
+    
   ) {
     this.conConfigList = [];
     this.filterQuery = '';
@@ -40,7 +40,7 @@ export class ConnectorConfigComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-
+    
   }
 
   onSelect(conConfig: ConnectorConfig) {
@@ -51,25 +51,25 @@ export class ConnectorConfigComponent implements OnInit, OnDestroy {
     }
   }
 
-  deleteConfig(conConfig) {
+  deleteConfig(conConfig){
     this.subscription = this.connectorConfigService.deleteConConfig(conConfig)
-      .subscribe(
-        data => {
-          this.getConList();
-          this.alertService.success('Connector Config deleted successfully', true);
-        });
+    .subscribe(
+      data => {
+        this.alertService.success('Connector Config deleted successfully', true);
+        this.getConList();
+      });
   }
 
-  createConnecterConfig() {
+  createConnecterConfig(){
     this.router.navigate(['/pg/stp/stccs'], { relativeTo: this.route });
   }
 
-  getConList() {
-    this.subscription = this.connectorConfigService.getAllCons()
+  getConList(){
+  this.subscription = this.connectorConfigService.getAllCons()
       .subscribe(conConfigList => {
         if (conConfigList) {
-          for (let con of conConfigList) {
-            if (!con.taskConfig && con.configType != null) {
+          for(let con of conConfigList){
+            if(!con.taskConfig && con.configType!=null){
               this.conConfigList.push(con)
             }
           }

@@ -28,12 +28,17 @@ export const environment = {
   updateEntityTraining: 'http://localhost:8080/flow/interfaces/entity_classification_training',
 
 
+  // interfaceService: '',
+  // updateClassifierTraining : 'http://localhost:5101/auto_decorate_training',
+  // updateIntentTraining: 'http://localhost:5100/intent_classification_training',
+  // updateEntityTraining: 'http://localhost:5100/entity_classification_training',
+
   //
   processauditurl: "http://localhost:5000/api/universalsearch/search/flow",
 
   // Flow
   server: 'http://localhost:8080/flow/console/',
-  autourl: 'http://localhost:4200/#/pg/ch/cnv/',
+  autourl: 'http://localhost:4300/#/pg/ch/cnv/',
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
   orPayloadMachineType: 'state/saveOrPayload/machineType/',
@@ -95,10 +100,6 @@ export const environment = {
 
 
   supportedmethodsurl: 'apiConfig/supportedMethods',
-
-  getallconnectorinfo: 'connectorInfo/',
-  saveconnectorinfo: 'connectorInfo/save/',
-  deleteconnectorinfo: 'connectorInfo/delete/',
 
   connectorinfo: 'connectors/',
   getallconconfig: 'connectors/getAll/',

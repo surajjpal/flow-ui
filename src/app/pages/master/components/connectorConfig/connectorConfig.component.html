@@ -22,9 +22,6 @@
                 <mfDefaultSorter by="name">Name</mfDefaultSorter>
               </th>
               <th>
-                <mfDefaultSorter by="displayName">Display Name</mfDefaultSorter>
-              </th>
-              <th>
                 <mfDefaultSorter by="type">Type</mfDefaultSorter>
               </th>
               <th>
@@ -35,15 +32,14 @@
           <tbody>
             <tr *ngFor="let s of mf.data">
               <td>{{s.configName}}</td>
-              <td>{{s.displayName}}</td>
               <td>{{s.configType}}</td>
               <td>
                 <div class="btn-group" role="group">
                   <button type="button" class="btn btn-primary" title="Edit" (click)="onSelect(s)">
                     <i class="ion-android-create"></i>
                   </button>
-                  <button type="button" class="btn btn-danger" title="Delete" (click)="deleteConfig(s)" data-backdrop="static"
-                    data-keyboard="false">
+                  <button type="button" class="btn btn-danger" title="Delete" (click)="deleteConfig(s)"
+                    data-backdrop="static" data-keyboard="false">
                     <i class="ion-trash-a"></i>
                   </button>
                 </div>

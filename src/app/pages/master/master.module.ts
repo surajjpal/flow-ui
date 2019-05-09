@@ -24,8 +24,6 @@ import { AnalyticsReportsComponent } from 'app/pages/analytics/components/analyt
 import { AnalyticsReportSetupComponent } from 'app/pages/analytics/components/analyticsReportSetup/analyticsReportSetup.component';
 import { DateRangePickerComponent } from 'app/pages/analytics/components/analyticsReportSetup/daterangepicker/daterangepicker.component';
 import { ConnectorConfigComponent } from './components/connectorConfig/connectorConfig.component';
-import { ConnectorInfoComponent } from './components/connectorInfo/connectorInfo.component';
-import { ConnectorInfoDetailComponent } from './components/connectorInfoDetail/connectorInfoDetail.component';
 import { ConConfigSetupComponent } from './components/conConfigSetup/conConfigSetup.component';
 import { AccountViewComponent } from './components/accountView/accountView.component';
 import { DataModelComponent } from './components/dataModel/dataModel.component';
@@ -45,7 +43,7 @@ import { DataModelSetupComponent } from './components/dataModelSetup/dataModelSe
     Daterangepicker,
     NgbModule,
     SharedModule
-
+    
   ],
   declarations: [
     MasterComponent,
@@ -59,8 +57,6 @@ import { DataModelSetupComponent } from './components/dataModelSetup/dataModelSe
     AnalyticsReportsComponent,
     AnalyticsReportSetupComponent,
     DateRangePickerComponent,
-    ConnectorInfoComponent,
-    ConnectorInfoDetailComponent,
     ConnectorConfigComponent,
     ConConfigSetupComponent,
     AccountViewComponent,
