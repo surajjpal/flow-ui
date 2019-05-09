@@ -1189,4 +1189,56 @@ export class PersonalComponent implements OnInit, OnDestroy {
         });
     }
   }
+
+  isUpdateAllow(stateDetails: State, taskType: string) {
+
+    if (taskType == this.TAB_ASSIGNED) {
+      if (stateDetails.stateEntryTypeCd && stateDetails.stateEntryTypeCd == "VirtualAgentStateEntryAction") {
+        return false;
+      }
+      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && stateDetails.assignedUserGroupCd === 'Personal'
+    }
+  }
+
+  isAllocateAllow(stateDetails: State, tasktype: string) {
+    if (tasktype == this.TAB_UNASSIGNED) {
+      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && this.users.length > 0
+    }
+    if (tasktype == this.TAB_UNASSIGNED) {
+      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && this.users.length > 0
+    }
+  }
+
+  isReserveAllow(stateDetails: State, taskType: String) {
+    if (taskType == this.TAB_ASSIGNED) {
+      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && stateDetails.assignedUserGroupCd !== 'Personal' 
+    }
+    if (taskType == this.TAB_UNASSIGNED) {
+      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && stateDetails.assignedUserGroupCd !== 'Personal' 
+    }
+  }
+
+  isEscalteAllow(stateDetails: State, taskType: string) {
+    if (taskType == this.TAB_ASSIGNED) {
+      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && stateDetails.assignedUserGroupCd === 'Personal' && this.userHierarchy.parentUserId.length > 0
+    }
+  }
+
+  isFlagAllow(stateDetails: State, taskType: string) {
+    if (taskType == this.TAB_ASSIGNED) {
+      return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && stateDetails.assignedUserGroupCd == 'Personal' && stateDetails.subStatus !== 'FLAGGED'
+    }
+  }
+
+  isArchiveAllow(stateDetails: State, taskType: string) {
+    if (taskType == this.TAB_ASSIGNED) {
+      return stateDetails.statusCd ==='ACTIVE' && stateDetails.assignedUserGroupCd == 'Personal' 
+    }
+  }
+
+  isAssistAllow(stateDetails: State, taskType: string) {
+    if (taskType == this.TAB_ASSIGNED) {
+      return stateDetails.stateEntryTypeCd && stateDetails.stateEntryTypeCd === 'VirtualAgentStateEntryAction'
+    }
+  }
 }
