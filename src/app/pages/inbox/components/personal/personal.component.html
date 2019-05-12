@@ -134,7 +134,7 @@
                                                             data-target="#timelineModal">
                                                             <i class="ion-ios-alarm"></i>Timeline</button> -->
                                                         <button
-                                                            *ngIf="taskDecision.isArchiveAllow(assignedTaskDdetails, TAB_ASSIGNED)"
+                                                            *ngIf="taskDecision.isAssistAllow(assignedTaskDdetails, TAB_ASSIGNED)"
                                                             type="button" class="btn btn-info btn-with-icon"
                                                             title="Agent Assist" data-toggle="modal"
                                                             (click)="agentAssist(assignedTaskDdetails)">
@@ -328,6 +328,36 @@
 
                                                         </div>
                                                     </div>
+                                                    <div class="row" *ngIf="getStatusList(assignedTaskDdetails) != null">
+                                                        <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                            <label>
+                                                                <b>Select Status: </b>
+                                                            </label>
+                                                            <select
+                                                                class="selectpicker form-control col-md-12 col-sm-12"
+                                                                [(ngModel)]="assignedTaskDdetails.taskStatus"
+                                                                name="taskStatus">
+                                                                <option *ngFor="let choice of getStatusList(assignedTaskDdetails)"
+                                                                    [ngValue]="choice.value">{{ choice.label }}</option>
+                                                            </select>        
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+                                                            style="margin-top:10px;">
+                                                            <label>
+                                                                <b>Remarks: </b>
+                                                            </label>
+                                                            <textarea rows="5"
+                                                                class="form-control" required
+                                                                [placeholder]="'Remarks'"
+                                                                [(ngModel)]="assignedTaskDdetails.taskRemarks"
+                                                                name="taskRemarks">
+                                                            </textarea>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    
                                                 </div>
                                             </div>
                                         </div>

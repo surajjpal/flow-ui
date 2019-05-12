@@ -805,6 +805,17 @@ export class PersonalComponent implements OnInit, OnDestroy {
     return dataPoints;
   }
 
+  getStatusList(selectedTask: State) {
+    if (this.graphObjects.get(selectedTask.stateMachineInstanceModelId) != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId).states) {
+      for (let state of this.graphObjects.get(selectedTask.stateMachineInstanceModelId).states) {
+        if (state.stateCd && selectedTask.stateCd && state.stateCd == selectedTask.stateCd && state.statusList) {
+          return state.statusList;
+        }
+      }
+    }
+    return null;
+  }
+
   getBusinessKeysWithTable(selectedTask: State) {
     //console.log(this.assignedTaskDdetails);
     let arrayDataPoints: DataPoint[];
@@ -875,7 +886,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     if (type == "ASSIGNED") {
       this.assignedTaskActionButtonEnabled[state._id] = false;
     }
-    this.subscription = this.stateService.update(state.machineType, state.entityId, state['parameters'])
+    this.subscription = this.stateService.update(state.machineType, state.entityId, state['parameters'], state.taskStatus, state.taskRemarks)
       .subscribe(
         response => {
           if (type == "ASSIGNED") {
@@ -884,17 +895,28 @@ export class PersonalComponent implements OnInit, OnDestroy {
           if (response) {
             const errorState: State = response;
             let erresponseError = "";
-            for (const key in errorState.errorMessageMap) {
-              if (key) {
-                const errorList: string[] = errorState.errorMessageMap[key];
-
-                erresponseError += `${this.fieldKeyMap[key]}<br>`;
-                for (const error of errorList) {
-                  erresponseError += `  - ${error}<br>`;
+            if (errorState.errorMessageMap && Object.keys(errorState.errorMessageMap).length > 0) {
+              for (const key in errorState.errorMessageMap) {
+                if (key) {
+                  const errorList: string[] = errorState.errorMessageMap[key];
+  
+                  erresponseError += `${this.fieldKeyMap[key]}<br>`;
+                  for (const error of errorList) {
+                    erresponseError += `  - ${error}<br>`;
+                  }
+                  new showModal(erresponseError);
                 }
-                new showModal(erresponseError);
               }
             }
+            else {
+              if (type == "ASSIGNED") {
+                this.progressBarFlag = false;
+                new showModal('successModal');
+                this.assignedTaskActionButtonEnabled[state._id] = true;
+                this.removedAssignedTask(state);
+              }
+            }
+            
           }
           else {
             if (type == "ASSIGNED") {

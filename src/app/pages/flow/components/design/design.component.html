@@ -74,6 +74,18 @@
 
                               </div>
                               <div class="form-group"
+                                    *ngIf="tempState.allocationModel !== null && tempState.type === STATE_TYPE_MANUAL">
+                                    <label for="selectEntryActions">Entry Actions</label>
+                                    <select multiple="true" class="selectpicker form-control" required
+                                          id="selectEntryActions" title="Choose Entry Actions"
+                                          [(ngModel)]="tempState.entryActionList" name="entryActionList">
+                                          <option *ngFor="let entryAction of manualSourceEntryActionList"
+                                                [ngValue]="entryAction['key']">
+                                                {{entryAction['value']}}</option>
+                                    </select>
+                              </div>
+                              
+                              <div class="form-group"
                                     *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'">
                                     <label for="selectAllocationType">Allocation Type</label>
                                     <select class="selectpicker form-control" required id="selectAllocationType"
@@ -166,26 +178,61 @@
                                     <select multiple="true" class="selectpicker form-control" required
                                           id="selectEntryActions" title="Choose Entry Actions"
                                           [(ngModel)]="tempState.entryActionList" name="entryActionList">
-                                          <option *ngFor="let entryAction of sourceEntryActionList"
+                                          <option *ngFor="let entryAction of autoSourceEntryActionList"
                                                 [ngValue]="entryAction['key']">
                                                 {{entryAction['value']}}</option>
                                     </select>
                               </div>
                               <div class="form-group"
-                                    *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'VirtualAgentStateEntryAction'">
+                                    *ngIf="tempState.allocationModel !== null && tempState.type === STATE_TYPE_MANUAL && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'VirtualAgentStateEntryAction'">
                                     <label for="allocatedAgent">Allocated Virtual Agent</label>
                                     <input type="text" class="form-control" required id="allocatedAgent"
                                           placeholder="Enter Virtual Agent Id" [(ngModel)]="tempState.virtualAgentId"
                                           name="virtualAgentId" />
                               </div>
                               <div class="form-group"
-                                    *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'VirtualAgentStateEntryAction'">
-                                    <label for="allocationGroup">Allocate to group</label>
-                                    <input type="text" class="form-control" required id="allocationGroup"
-                                          placeholder="Allocate to group"
-                                          [(ngModel)]="tempState.allocationModel.allocationGroup"
-                                          name="allocationGroup" />
+                                    *ngIf="tempState.allocationModel !== null && tempState.type === STATE_TYPE_MANUAL">
+                                    <button type="button" class="btn btn-primary btn-sm pull-right" title="Add Status"
+                                    (click)="onAddManualTaskStatus()">
+                                    <i class="ion-plus-round">Add status</i>
+                                    </button>
                               </div>
+                              <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === STATE_TYPE_MANUAL && tempState.statusList && tempState.statusList.length > 0">
+                                    <table class="table">
+                                    <thead>
+                                          <tr>
+                                          <th>Label</th>
+                                          <th>Value</th>
+                                          <th>Disable</th>
+                                          <th>Remove</th>
+                                          </tr>
+                                    </thead>
+                                    <tbody>
+                                          <tr *ngFor="let status of tempState.statusList">
+                                          <td>
+                                                <input type="text" class="form-control" required placeholder="Label" [ngModelOptions]="{standalone: true}"
+                                                [(ngModel)]="status.label" name="label" />
+                                          </td>
+                                          <td>
+                                                <input type="text" class="form-control" required placeholder="Value" [ngModelOptions]="{standalone: true}"
+                                                [(ngModel)]="status.value" name="value" />
+                                          </td>
+                                          <td>
+                                                <api-checkbox [checked]="status.disabled"
+                                                [label]="'Disableed'"
+                                                (event)="status.disabled = $event.target.checked"></api-checkbox>
+                                          </td>
+                                          <td>
+                                                <button type="button" class="btn btn-danger"
+                                                (click)="onRemoveManualTaskStatus(status)">
+                                                <i class="ion-ios-trash"></i>
+                                                </button>
+                                          </td>
+                                          </tr>
+                                    </tbody>
+                                    </table>
+                              </div>
+                                    
                               <div class="form-group"
                                     *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'TimerStateEntryAction'">
                                     <label for="timerUnitType">Timer Unit Type</label>
