@@ -69,6 +69,8 @@ export class State extends BaseModel {
   assignedDueToFlagged: boolean;
   stateEntryTypeCd: string;
   assignedVirtualAgentId: string;
+  taskStatus: string = null;
+  taskRemarks: string = null;
 
 }
 

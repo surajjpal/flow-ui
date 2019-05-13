@@ -298,12 +298,18 @@ export class StateService {
     return subject.asObservable();
   }
 
-  update(machineType: string, entityId: string, param: any): Observable<State> {
+  update(machineType: string, entityId: string, param: any, taskStatus?: string, taskRemarks?: string): Observable<State> {
     const subject = new Subject<State>();
 
     const map = {};
     map['param'] = JSON.stringify(param);
     map['payload'] = '{}';
+    if (taskStatus != null && taskStatus.trim().length > 0) {
+      map['TASK_STATUS'] = taskStatus;
+    }
+    if (taskRemarks != null && taskRemarks.trim().length > 0) {
+      map['TASK_REMARKS'] = taskRemarks;
+    }
 
     const url = `${environment.server + environment.updatestatemachineurl}/${machineType}/${entityId}`;
 
@@ -334,6 +340,7 @@ export class StateService {
 
     return subject.asObservable();
   }
+  
 
   updateState(state: State): Observable<State> {
     const subject = new Subject<State>();

@@ -184,6 +184,8 @@ export class StateModel {
   reportFlag: boolean;
   businessMonitorFlag: boolean;
   virtualAgentId: string;
+  statusList: LabelValue[];
+  statusDisable: boolean;
 
   constructor() {
     this.stateId = '';
@@ -212,6 +214,8 @@ export class StateModel {
     this.reportFlag = false;
     this.businessMonitorFlag = false;
     this.virtualAgentId = '';
+    this.statusList = [];
+    this.statusDisable = false;
   }
 }
 
@@ -328,4 +332,16 @@ export class CommonSearchModel {
 
   }
 
+}
+
+export class LabelValue {
+  label: string;
+  value: string;
+  disabled: boolean;
+ 
+  constructor(label?: string, value?: string, disabled?: boolean) {
+    this.label = label ? label : null;
+    this.value = value ? value : null;
+    this.disabled = disabled ? disabled : false;  
+  }
 }

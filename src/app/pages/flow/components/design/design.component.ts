@@ -20,7 +20,7 @@ import { v4 as uuid } from 'uuid';
 // Model Imports
 import {
   GraphObject, DataPoint, Classifier, StateModel,
-  EventModel, Expression, Transition, ManualAction, DataPointValidation, StateInfoModel
+  EventModel, Expression, Transition, ManualAction, DataPointValidation, StateInfoModel, LabelValue
 } from '../../../../models/flow.model';
 import { ConnectorConfig, ConnectorInfo, TaskObject, TempConnectorConfig } from '../../../../models/setup.model';
 import { ApiConfig, ApiKeyExpressionMap, ApiResponse, MVELObject } from '../../../../models/setup.model';
@@ -58,6 +58,11 @@ export class DesignComponent implements OnInit, OnDestroy {
   stateCreateMode: boolean = true;
   updateStateFlag: boolean = true;
 
+  // state types
+  STATE_TYPE_AUTO  ="Auto";
+  STATE_TYPE_MANUAL = "Manual";
+  STATE_TYPE_COGNITIVE = "Cognitive";
+  
   // Dropdown source list
   sourceStatusCodes: string[] = ['DRAFT', 'ACTIVE', 'ARCHIVE'];
   sourceStateTypes: string[] = ['Manual', 'Auto', 'Cognitive'];
@@ -66,7 +71,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   timerUnitType: string[] = ['MINUTE', 'HOUR', 'DAY', 'WEEK', 'MONTH', 'YEAR'];
   sourceOperands: string[] = ['AND', 'OR'];
   sourceClassifiers: Classifier[] = [];
-  sourceEntryActionList: string[] = [];
+  autoSourceEntryActionList: string[] = [];
+  manualSourceEntryActionList: string[] = [];
   sourceApiConfigList: ApiConfig[] = [];
   sourceConConfigList: ConnectorConfig[] = [];
   sourceManualActionType: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT'];
@@ -238,7 +244,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   load(): void {
-    this.getSourceEntryActions();
+    this.getAutoSourceEntryActions();
+    this.getManualSourceEntryActions();
     this.getTimerUnits();
     this.getApiConfigLookup();
     this.getConList();
@@ -286,13 +293,33 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.selectedModel = model;
   }
 
-  getSourceEntryActions() {
-    this.subscriptionEntryAction = this.graphService.getEntryActions()
-      .subscribe(entryActionList => {
-        if (entryActionList) {
-          this.sourceEntryActionList = entryActionList;
+  
+  getAutoSourceEntryActions() {
+    this.subscriptionEntryAction = this.graphService.getEntryActions(this.STATE_TYPE_AUTO)
+      .subscribe(
+        entryActionList => {
+          if (entryActionList) {
+            this.autoSourceEntryActionList = entryActionList;
+          }
+        },
+        error => {
+
         }
-      });
+      )
+  }
+
+  getManualSourceEntryActions() {
+    this.subscriptionEntryAction = this.graphService.getEntryActions(this.STATE_TYPE_MANUAL)
+      .subscribe(
+        entryActioList => {
+          if(entryActioList) {
+            this.manualSourceEntryActionList = entryActioList;
+          }
+        },
+        error => {
+
+        }
+      )
   }
 
   getTimerUnits() {
@@ -2143,4 +2170,23 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.router.navigate(['/pg/stp/stdms'], { relativeTo: this.route });
     }
   }
+
+  onAddManualTaskStatus() {
+    if (this.tempState != null) {
+      if (this.tempState.statusList == null) {
+        this.tempState.statusList = [];
+      }
+      this.tempState.statusList.push(new LabelValue);
+    }    
+  }
+    
+  onRemoveManualTaskStatus(labelValue: LabelValue) {
+    if (this.tempState != null &&  this.tempState.statusList.length > 0) {
+      let index = this.tempState.statusList.indexOf(labelValue);
+      if (index != -1 ) {
+        this.tempState.statusList.splice(index, 1);
+      }
+    }
+  }
+  
 }
