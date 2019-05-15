@@ -1,18 +1,18 @@
-// #myModal1 {
-//     top:70%;
-//     left:27%;
-//     outline: none;
-//   }
 
-//   .modal-dialog1 {
-//     //position:fixed;
-//     width: 50%;
-//     //height: 40%;
-//     // bottom:0px;
-//     // right:0px;
-//     // margin:0px;
-// }
+//Loader
+.loadWrapper {  
+  background: rgba(0,0,0,0.3);  
+  width: 100%;  
+  height: 100%;  
+  position: fixed;
+  top:0px;  
+  left:0px;  
+  z-index: 99999;  
+}  
 
+
+
+//Chat
 .chat-item{
   width: 100%;
   display: inline-block;
@@ -89,6 +89,7 @@ talktext{
   -webkit-margin-before: 0em;
   -webkit-margin-after: 0em;
 }
+
 
 
 .input1,
