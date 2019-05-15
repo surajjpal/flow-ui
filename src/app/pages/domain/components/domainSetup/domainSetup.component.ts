@@ -1503,7 +1503,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
   createBotHtml() {
     const autoUrl = `${environment.autourl}${this.companyAgentId}`
-    const html = '<div id="autoButton" style="text-align: center; background-color: transparent; position: fixed; right: ' + this.marginRight + '; bottom: ' + this.marginBottom + '; width: auto; height: auto; z-index:9999"><div style="margin-bottom: 8px;"><a href="javascript:toggleChat()"><img src="' + this.testingAgent.uiComponent.logoUrl + '" style="width: 60px; height: 60px; border-radius: 50%; box-shadow: 0px 0px 10px ' + this.agentLogoShadowColor + ';"></img></a></div>' +
+    const html = '<div id="autoButton" style="text-align: center; background-color: transparent; position: fixed; right: ' + this.marginRight + '; bottom: ' + this.marginBottom + '; width: auto; height: auto; z-index:9999"><div style="margin-bottom: 8px;"><a href="javascript:toggleChat()"><img src="' + "https://s3-us-west-2.amazonaws.com/custom-ui/default/autobot.jpg" + '" style="width: 60px; height: 60px; border-radius: 50%; box-shadow: 0px 0px 10px ' + this.agentLogoShadowColor + ';"></img></a></div>' +
       '</div>' +
       '<div id="automataPi" class="containerStyle" role="dialog" z-index="9999"><iframe id="' + "autoBot" + '" src="' + autoUrl + '" class="iframeStyle" frameborder="0"></iframe></div>'
     this.botHtml = this.sanitizer.bypassSecurityTrustHtml(html);
@@ -1693,7 +1693,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     agent.uiComponent.colorCss = "#2e406f";
     agent.uiComponent.avatarUrl = "https://s3-us-west-2.amazonaws.com/custom-ui/default/auto_idea.jpg";
     agent.uiComponent.typingGif = "https://s3-us-west-2.amazonaws.com/custom-ui/default/typing-indicatorauto.gif";
-    agent.uiComponent.logoUrl = "https://automatapi.com/images/autobot.jpg";
+    agent.uiComponent.logoUrl = "https://s3-us-west-2.amazonaws.com/custom-ui/default/autobot.jpg";
     agent.uiComponent.cronEnabled = false;
     agent.uiComponent.isBargeable = false;
     agent.uiComponent.placeHolderText = "Type your query...";
