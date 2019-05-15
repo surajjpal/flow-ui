@@ -909,6 +909,12 @@
                                                 {{dataPoint.dataPointLabel}}</option>
                                     </select>
                               </div>
+                              <div class="form-group" *ngIf="tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'DocumentStateEntryAction'">
+                                    <label for="expressionDoc">Document Eval expression</label>
+                                    <input type="text" class="form-control" required id="expressionDoc"
+                                          placeholder="PARAM.?fileName" [(ngModel)]="tempState.documentEvalExp"
+                                          name="documentEvalExp" />
+                              </div>
                         </form>
                         <!--<div id="manualActionAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'">
                      <div class="panel card">

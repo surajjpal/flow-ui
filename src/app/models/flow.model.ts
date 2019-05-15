@@ -186,6 +186,8 @@ export class StateModel {
   virtualAgentId: string;
   statusList: LabelValue[];
   statusDisable: boolean;
+  documentEvalExp: string;
+
 
   constructor() {
     this.stateId = '';
@@ -216,6 +218,7 @@ export class StateModel {
     this.virtualAgentId = '';
     this.statusList = [];
     this.statusDisable = false;
+    this.documentEvalExp = null;
   }
 }
 
