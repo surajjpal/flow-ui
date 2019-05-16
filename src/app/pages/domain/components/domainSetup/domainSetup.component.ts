@@ -7,7 +7,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
 import { Subscription } from 'rxjs/Subscription';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Domain, Intent, Entity, Goal, GoalStep, Response, Stage, ResponseData, ResponseOption, Settings, CardData, Model, ModelResponseOption, ModelResponseData } from '../../../../models/domain.model';
+import { Domain, Intent, Entity, Goal, GoalStep, Response, Stage, 
+  ResponseData, ResponseOption, Settings, CardData, Model, ModelResponseOption, ModelResponseData } from '../../../../models/domain.model';
 
 import { DomainService } from '../../../../services/domain.service';
 import { AlertService, DataSharingService, UniversalUser } from '../../../../services/shared.service';
@@ -16,19 +17,21 @@ import { Agent } from '../../../../models/agent.model';
 
 import { environment } from '../../../../../environments/environment';
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
+import { animate } from '@angular/animations';
 
 @Component({
   selector: 'api-agent-domain',
   templateUrl: './domainSetup.component.html',
   styleUrls: ['./domainSetup.scss']
-})
+  })
 export class DomainSetupComponent implements OnInit, OnDestroy {
 
   private readonly ACTIVE = 'ACTIVE';
   private readonly CLOSED = 'CLOSED';
   private readonly DRAFT = 'DRAFT';
-  private readonly READ = "READ";
+  private readonly READ = 'READ';
   private readonly CLONED = 'CLONED';
+  private readonly TESTING = 'TESTING';
 
   optionsTypeSource = [
     { 'value': 'BUTTON', 'label': 'Button' },
@@ -122,6 +125,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   firstUpdate: boolean;
   selectedDomainVersion: number;
   associatedAgents: Agent[];
+  getAgentReady: boolean;
 
   selectedOption: ResponseData;
   bulkEditOptionsData: string;
@@ -182,6 +186,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.faqDomain = false;
     this.suggestedTags = [];
     this.globalIntents = ["closure", "apiIdle", "negation", "skip", "cancel", "apiRetry", "affirmation", "default", "apiInit", "initiation"]
+    this.getAgentReady = false;
 
     this.stagesSource.push(new Stage('Initialization', 'INIT'));
     this.stagesSource.push(new Stage('Context Setting', 'CONTEXT'));
@@ -226,7 +231,6 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     this.fetchValidationKeys();
     this.increaseVersion = true;
 
@@ -1165,6 +1169,10 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       if (!this.updateForTest && this.deleteTestingDomain) {
         this.deleteTestingDomain = false;
       }
+      if(this.updateForTest) {
+        this.selectedDomain.statusCd = this.TESTING;
+      }
+
 
       if (this.increaseVersion) {
         if (this.selectedDomain.statusCd == this.DRAFT && this.selectedDomain._id == null) {
@@ -1495,18 +1503,20 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
   createBotHtml() {
     const autoUrl = `${environment.autourl}${this.companyAgentId}`
-    const html = '<div id="autoButton" style="text-align: center; background-color: transparent; position: fixed; right: ' + this.marginRight + '; bottom: ' + this.marginBottom + '; width: auto; height: auto; z-index:9999"><div style="margin-bottom: 8px;"><a href="javascript:toggleChat()"><img src="' + this.testingAgent.uiComponent.logoUrl + '" style="width: 60px; height: 60px; border-radius: 50%; box-shadow: 0px 0px 10px ' + this.agentLogoShadowColor + ';"></img></a></div>' +
+    const html = '<div id="autoButton" style="text-align: center; background-color: transparent; position: fixed; right: ' + this.marginRight + '; bottom: ' + this.marginBottom + '; width: auto; height: auto; z-index:9999"><div style="margin-bottom: 8px;"><a href="javascript:toggleChat()"><img src="' + "https://s3-us-west-2.amazonaws.com/custom-ui/default/autobot.jpg" + '" style="width: 60px; height: 60px; border-radius: 50%; box-shadow: 0px 0px 10px ' + this.agentLogoShadowColor + ';"></img></a></div>' +
       '</div>' +
       '<div id="automataPi" class="containerStyle" role="dialog" z-index="9999"><iframe id="' + "autoBot" + '" src="' + autoUrl + '" class="iframeStyle" frameborder="0"></iframe></div>'
     this.botHtml = this.sanitizer.bypassSecurityTrustHtml(html);
     this.showAutoCon = true;
     this.showTooltip = true;
     this.updateForTest = false;
+    this.getAgentReady = false;
   }
 
 
 
   testDomain() {
+    this.getAgentReady = true;
     if (this.companyAgentId) {
       if (!this.selectedDomain._id) {
         this.updateForTest = true;
@@ -1683,7 +1693,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     agent.uiComponent.colorCss = "#2e406f";
     agent.uiComponent.avatarUrl = "https://s3-us-west-2.amazonaws.com/custom-ui/default/auto_idea.jpg";
     agent.uiComponent.typingGif = "https://s3-us-west-2.amazonaws.com/custom-ui/default/typing-indicatorauto.gif";
-    agent.uiComponent.logoUrl = "https://automatapi.com/images/autobot.jpg";
+    agent.uiComponent.logoUrl = "https://s3-us-west-2.amazonaws.com/custom-ui/default/autobot.jpg";
     agent.uiComponent.cronEnabled = false;
     agent.uiComponent.isBargeable = false;
     agent.uiComponent.placeHolderText = "Type your query...";
@@ -1739,6 +1749,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     const temp = JSON.parse(this.bulkEditOptionsData);
     if (temp && temp instanceof Array) {
       this.selectedOption.data = temp;
+       
     }
   }
 }

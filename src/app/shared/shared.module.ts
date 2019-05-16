@@ -6,6 +6,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AlertComponent, ApiCheckboxComponent, NgbdDatepickerPopup } from './shared.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
+import { APISpinnerComponent } from './components/api-spinner/api-spinner.component';
 import { UniversalFilterPipe } from './universal-data-filter.pipe';
 import { KeysPipe } from './key-filter.pipe';
 
@@ -23,7 +24,7 @@ import { KeysPipe } from './key-filter.pipe';
     KeysPipe,
     NgbdDatepickerPopup,
     FileUploaderComponent,
-    // APISpinnerComponent,
+    APISpinnerComponent
   ],
   exports: [
     AlertComponent,
@@ -32,7 +33,7 @@ import { KeysPipe } from './key-filter.pipe';
     KeysPipe,
     NgbdDatepickerPopup,
     FileUploaderComponent,
-    // APISpinnerComponent
+    APISpinnerComponent
 
   ]
 })
