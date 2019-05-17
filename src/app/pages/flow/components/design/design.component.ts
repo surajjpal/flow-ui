@@ -34,6 +34,8 @@ import { environment } from '../../../../../environments/environment';
 import { AlertService } from 'app/services/shared.service';
 import { DataModelService } from '../../../../services/setup.service';
 import { DataModel, Field, ValidatorInstance, ExtractorInstance, Entity } from '../../../../models/datamodel.model';
+import { AgentService } from '../../../../services/agent.service';
+import { Agent } from '../../../../models/agent.model';
 @Component({
   selector: 'api-flow-design',
   templateUrl: './design.component.html',
@@ -158,12 +160,16 @@ export class DesignComponent implements OnInit, OnDestroy {
   entityRedirectWarning:string;
   entityRedirect:boolean;
 
+
+  virtualAgentList:Agent[];
+
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
   private subscriptionApiConfig: Subscription;
   private subscriptionOrPayload: Subscription;
   private subscriptionTimerUnit: Subscription;
   private subscriptionConConfig: Subscription;
+  private agentSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -175,6 +181,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     private connectorConfigService: ConnectorConfigService,
     private fileService: FileService,
     private alertService: AlertService,
+    private agentService: AgentService,
     private dataModelService: DataModelService
   ) {
     window['flowComponentRef'] = { component: this, zone: zone };
@@ -219,6 +226,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.entityselected = false;
     this.entityRedirectWarning = "You will be redirected to a different page, please make sure you save the process!!";
     this.entityRedirect = false;
+
+    this.virtualAgentList = [];
   }
 
   ngOnInit() {
@@ -250,6 +259,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.getApiConfigLookup();
     this.getConList();
     this.getDataModelList();
+    //this.fetchAgents();
     var graphLoad = false;
     if (!this.graphObject || this.graphObject === null) {
       this.loadGraphObject();
@@ -844,6 +854,12 @@ export class DesignComponent implements OnInit, OnDestroy {
     return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
       && this.tempState.entryActionList.includes('ConnectorStateEntryAction');
   }
+
+  // isStateConverseCompatible() {
+  //   // TODO: improve the mechanism to differentiate Rule State with other states
+  //   return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
+  //     && this.tempState.entryActionList.includes('ConverseStateEntryAction');
+  // }
 
   addRule() {
     if (!this.tempState) {
@@ -2187,6 +2203,20 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.tempState.statusList.splice(index, 1);
       }
     }
+  }
+
+  fetchAgents() {
+    const fields = [];
+    fields.push("_id");
+    fields.push("name");
+    this.subscription = this.agentService.getAllAgents(fields)
+      .subscribe(
+        agents => {
+          if (agents) {
+            this.virtualAgentList = agents;
+          }
+        }
+      );
   }
   
 }
