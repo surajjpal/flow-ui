@@ -187,6 +187,7 @@ export class StateModel {
   statusList: LabelValue[];
   statusDisable: boolean;
   documentEvalExp: string;
+  converseRequestExp: string;
 
 
   constructor() {
@@ -219,6 +220,7 @@ export class StateModel {
     this.statusList = [];
     this.statusDisable = false;
     this.documentEvalExp = null;
+    this.converseRequestExp = null;
   }
 }
 

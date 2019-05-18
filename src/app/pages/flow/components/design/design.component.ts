@@ -162,6 +162,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
 
   virtualAgentList:Agent[];
+  selectedVirtualAgents:string[];
 
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
@@ -228,6 +229,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.entityRedirect = false;
 
     this.virtualAgentList = [];
+    this.selectedVirtualAgents = [];
   }
 
   ngOnInit() {
@@ -259,7 +261,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.getApiConfigLookup();
     this.getConList();
     this.getDataModelList();
-    //this.fetchAgents();
+    this.fetchAgents();
     var graphLoad = false;
     if (!this.graphObject || this.graphObject === null) {
       this.loadGraphObject();
@@ -777,6 +779,14 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.tempState.taskConfig = [];
     }
 
+    if (this.isStateConverseCompatible()) {
+      if (this.selectedVirtualAgents.length > 0) {
+        console.log(this.selectedVirtualAgents);
+        this.tempState.virtualAgentId = this.selectedVirtualAgents[0];
+      }
+      
+    }
+    
     if (this.isStateConnectorCompatible() && this.tempState.connectorConfigList && this.tempState.taskConfigList && this.tempState.connectorConfigList.length > 0) {
       this.saveConnectorTaskConfig();
     }
@@ -855,11 +865,11 @@ export class DesignComponent implements OnInit, OnDestroy {
       && this.tempState.entryActionList.includes('ConnectorStateEntryAction');
   }
 
-  // isStateConverseCompatible() {
-  //   // TODO: improve the mechanism to differentiate Rule State with other states
-  //   return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
-  //     && this.tempState.entryActionList.includes('ConverseStateEntryAction');
-  // }
+  isStateConverseCompatible() {
+    // TODO: improve the mechanism to differentiate Rule State with other states
+    return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
+      && this.tempState.entryActionList.includes('ConverseStateEntryAction');
+  }
 
   addRule() {
     if (!this.tempState) {

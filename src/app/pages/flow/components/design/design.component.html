@@ -233,14 +233,14 @@
                                                 {{conConfig.configName}}</option>
                                     </select>
                               </div>
-                              <!-- <div class="form-group" *ngIf="isStateConverseCompatible()">
-                                    <label for="selectConConfig">Select Connector</label>
-                                    <select multiple="true" class="selectpicker form-control" required id="selectAgent" title="Choose Agent" [(ngModel)]="tempState.virtualAgentId"
+                              <div class="form-group" *ngIf="isStateConverseCompatible()">
+                                    <label for="selectConConfig">Select Virtual Agent</label>
+                                    <select multiple="true" class="selectpicker form-control" required id="selectAgent" title="Choose Agent" [(ngModel)]="selectedVirtualAgents"
                                           name="virtualAgentId">
                                           <option *ngFor="let agent of virtualAgentList" [ngValue]="agent._id">{{agent.name}}
                                           </option>
                                     </select>
-                              </div> -->
+                              </div>
 
                               <div *ngIf="isStateConnectorCompatible() && tempState.connectorConfigList && tempState.connectorConfigList.length > 0">
                                     <div class="tab-content">
@@ -640,6 +640,11 @@
                                     <label for="expressionDoc">Document Eval expression</label>
                                     <input type="text" class="form-control" required id="expressionDoc" placeholder="PARAM.?fileName" [(ngModel)]="tempState.documentEvalExp"
                                           name="documentEvalExp" />
+                              </div>
+                              <div class="form-group" *ngIf="tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'ConverseStateEntryAction'">
+                                    <label for="expressionReq">Conversation Request expression</label>
+                                    <input type="text" class="form-control" required id="expressionReq" placeholder="Message" [(ngModel)]="tempState.converseRequestExp"
+                                          name="converseRequestExp" />
                               </div>
                         </form>
                         <!--<div id="manualActionAccordion" role="tablist" aria-multiselectable="true" *ngIf="tempState.allocationModel !== null && tempState.type === 'Manual'">
