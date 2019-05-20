@@ -346,7 +346,7 @@
                                                     
                                                     </div>
                                                     <div role="tabpanel" class="tab-pane fade" id="tabDocuments" aria-labelledby="details-tab">
-                                                        <div class="row" *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id].length > 0">
+                                                        <div class="row" *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id] && documentsForState[assignedTaskDdetails._id].length > 0">
                                                             <div class="col-md-12 form-group">
                                                                 <button type="button" class="btn btn-primary btn-sm pull-right" title="Add Document"
                                                                 (click)="onNewDocumentAdd(assignedTaskDdetails)">
