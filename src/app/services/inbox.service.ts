@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angul
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
-import { State, CommonInsightWrapper, StateReportModel, EmailPersister } from '../models/tasks.model';
+import { State, CommonInsightWrapper, StateReportModel, EmailPersister, Document } from '../models/tasks.model';
 import { GraphObject, StateInfoModel, DataPoint } from '../models/flow.model';
 import { CRUDOperationInput } from '../models/crudOperationInput.model';
 import { environment } from '../../environments/environment';
@@ -87,6 +87,29 @@ export class StateService {
     );
 
     return subject.asObservable();
+  }
+
+  getDocumentsForState(state: State) {
+    const subjecr = new Subject<Document[]>();
+    const url = `${environment.server + environment.getDocuments + "/" + state._id }`;
+    this.httpClient.get<Document[]>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Document[]>) => {
+        if (response.body) {
+          subjecr.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        subjecr.error(err);
+      }
+    );
+    return subjecr.asObservable();
   }
 
 
@@ -298,7 +321,7 @@ export class StateService {
     return subject.asObservable();
   }
 
-  update(machineType: string, entityId: string, param: any, taskStatus?: string, taskRemarks?: string): Observable<State> {
+  update(machineType: string, entityId: string, param: any, taskStatus?: string, taskRemarks?: string, documents?: Document[], activeStateInsatnceId?: string): Observable<State> {
     const subject = new Subject<State>();
 
     const map = {};
@@ -309,6 +332,13 @@ export class StateService {
     }
     if (taskRemarks != null && taskRemarks.trim().length > 0) {
       map['TASK_REMARKS'] = taskRemarks;
+    }
+
+    if (documents && documents.length > 0) {
+      map["DOCUMENTS"] = documents;
+    }
+    if (activeStateInsatnceId) {
+      map["ACTIVE_STATE_INSTANCE_ID"] = activeStateInsatnceId;
     }
 
     const url = `${environment.server + environment.updatestatemachineurl}/${machineType}/${entityId}`;

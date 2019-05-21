@@ -71,6 +71,7 @@ export class State extends BaseModel {
   assignedVirtualAgentId: string;
   taskStatus: string = null;
   taskRemarks: string = null;
+  documents: DocumentSubSet[] = [];
 
 }
 
@@ -122,6 +123,66 @@ export class TimelineStateParameterData extends BaseModel {
   key: string;
   value: string;
 }
+
+export class DocumentSubSet {
+  documentName: string;
+	fileName: string;
+	mandatory: boolean;
+	documentType: string;
+  status: string;
+  
+  constructor(documentName?: string, fileName?: string, mandatory?: boolean, documentType?: string, status?: string) {
+    this.documentName = documentName;
+    this.fileName = fileName;
+    this.mandatory = mandatory;
+    this.documentType = documentType;
+    this.status = status;
+  }
+}
+
+export class Document extends BaseModel {
+  flowInstanceId: string;
+	stateInstanceId: string;
+	documentName: string;
+	fileName: string;
+	userFileName: string;
+	downloadFileUrl: string;
+	fullDataUrl: string;
+	fullFileUrl: string;
+	url: string;
+	mandatory: boolean;
+	allowedFileTypes: string[];
+	documentType: string;
+  status: string;
+  uploadTime: Date;
+  createdTime: Date;
+  updatedTime: Date;
+  description: string;
+
+  constructor(flowInstanceId?: string, stateInstanceId?: string, documentName?: string, fileName?: string, userFileName?: string,
+    downloadFileUrl?: string, fullDataUrl?: string, fullFileUrl?: string, url?: string, mandatory?: boolean, allowedFileTypes?: string[], documentType?: string, status?: string,
+    uploadTime?: null, createdTime?: null, updatedTime?: null, description?: null
+    )
+    {
+      super();
+      this.flowInstanceId = flowInstanceId ? flowInstanceId : null;
+      this.stateInstanceId = stateInstanceId ? stateInstanceId : null;
+      this.documentName = documentName ? documentName : null;
+      this.fileName = fileName ? fileName : null;
+      this.userFileName = userFileName ? userFileName : null;
+      this.downloadFileUrl = downloadFileUrl ? downloadFileUrl : null;
+      this.fullDataUrl = fullDataUrl ? fullDataUrl : null;
+      this.url = url ? url : null;
+      this.mandatory = mandatory ? mandatory : false;
+      this.allowedFileTypes = allowedFileTypes ? allowedFileTypes : [];
+      this.documentType = documentType ? documentType : null;
+      this.status = status ? status : null;
+      this.uploadTime = this.uploadTime ? uploadTime : null;
+      this.createdTime = this.createdTime ? createdTime : null;
+      this.description = this.description ? description : null;
+    }
+}
+
 
 export class TaskDecision {
 

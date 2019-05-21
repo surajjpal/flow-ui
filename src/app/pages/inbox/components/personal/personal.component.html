@@ -232,74 +232,89 @@
                                             </div>
                                         </div>
                                         <div class="card card-default">
-                                            <div class="card-header bg-gray">
-                                                <b>Task Details</b>
-                                            </div>
                                             <div class="card-block">
-                                                <div>
-                                                    <div class="row">
-                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
-                                                            style="margin-top:10px;"
-                                                            *ngFor="let dataPoint of getBusinessKeysWithoutTable(assignedTaskDdetails)">
-                                                            <label>
-                                                                <b>{{ dataPoint.dataPointLabel }}: </b>
-                                                            </label>
-                                                            <input *ngIf="dataPoint.dataType === 'NUMBER'" type="number"
-                                                                class="form-control col-md-12 col-sm-12"
-                                                                [title]="dataPoint.description"
-                                                                [placeholder]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]"
-                                                                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
-                                                            <input *ngIf="dataPoint.dataType === 'STRING'" type="text"
-                                                                class="form-control" required
-                                                                [placeholder]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]" />
-                                                            <textarea *ngIf="dataPoint.dataType === 'TEXT'" rows="5"
-                                                                class="form-control" required
-                                                                [placeholder]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]">
-                                                                    </textarea>
-                                                            <select *ngIf="dataPoint.dataType === 'BOOLEAN'"
-                                                                class="selectpicker form-control col-md-12 col-sm-12"
-                                                                [title]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]">
-                                                                <option [ngValue]="true">True</option>
-                                                                <option [ngValue]="false">False</option>
-                                                            </select>
-                                                            <select *ngIf="dataPoint.dataType === 'SINGLE_SELECT'"
-                                                                class="selectpicker form-control col-md-12 col-sm-12"
-                                                                [title]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]">
-                                                                <option *ngFor="let choice of dataPoint.inputSource"
-                                                                    [ngValue]="choice">{{choice}}</option>
-                                                            </select>
-                                                            <select *ngIf="dataPoint.dataType === 'MULTI_SELECT'"
-                                                                multiple="true"
-                                                                class="selectpicker form-control col-md-12 col-sm-12"
-                                                                [title]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]">
-                                                                <option *ngFor="let choice of dataPoint.inputSource"
-                                                                    [ngValue]="choice">{{choice}}</option>
-                                                            </select>
-                                                            <tag-input *ngIf="dataPoint.dataType === 'ARRAY'"
-                                                                class="custom-input-tag-border form-control col-md-12 col-sm-12"
-                                                                [title]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]"
-                                                                [modelAsStrings]="true" [editable]="true"
-                                                                [separatorKeys]="[32]"
-                                                                [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
-                                                                [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'"
-                                                                theme="minimal">
-                                                            </tag-input>
+                                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link active" id="details-tab" data-toggle="tab" href="#tabDetails" role="tab"
+                                                        aria-controls="details">
+                                                        <b>Task details</b>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" id="flow-tab" data-toggle="tab" href="#tabDocuments" role="tab" aria-controls="flow">
+                                                        <b>Documents</b>
+                                                        </a>
+                                                    </li>
+                                                    
+                                                </ul>
+                                                <div class="tab-content" id="taskDetailsTabContent">
+                                                    <div role="tabpanel" class="tab-pane fade show active" id="tabDetails" aria-labelledby="details-tab">
+                                                        <div class="row">
+                                                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                                style="margin-top:10px;"
+                                                                *ngFor="let dataPoint of getBusinessKeysWithoutTable(assignedTaskDdetails)">
+                                                                <label>
+                                                                    <b>{{ dataPoint.dataPointLabel }}: </b>
+                                                                </label>
+                                                                <input *ngIf="dataPoint.dataType === 'NUMBER'" type="number"
+                                                                    class="form-control col-md-12 col-sm-12"
+                                                                    [title]="dataPoint.description"
+                                                                    [placeholder]="dataPoint.description"
+                                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                    name="parameters[dataPoint.dataPointName]"
+                                                                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                                                <input *ngIf="dataPoint.dataType === 'STRING'" type="text"
+                                                                    class="form-control" required
+                                                                    [placeholder]="dataPoint.description"
+                                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                    name="parameters[dataPoint.dataPointName]" />
+                                                                <textarea *ngIf="dataPoint.dataType === 'TEXT'" rows="5"
+                                                                    class="form-control" required
+                                                                    [placeholder]="dataPoint.description"
+                                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                    name="parameters[dataPoint.dataPointName]">
+                                                                        </textarea>
+                                                                <select *ngIf="dataPoint.dataType === 'BOOLEAN'"
+                                                                    class="selectpicker form-control col-md-12 col-sm-12"
+                                                                    [title]="dataPoint.description"
+                                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                    name="parameters[dataPoint.dataPointName]">
+                                                                    <option [ngValue]="true">True</option>
+                                                                    <option [ngValue]="false">False</option>
+                                                                </select>
+                                                                <select *ngIf="dataPoint.dataType === 'SINGLE_SELECT'"
+                                                                    class="selectpicker form-control col-md-12 col-sm-12"
+                                                                    [title]="dataPoint.description"
+                                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                    name="parameters[dataPoint.dataPointName]">
+                                                                    <option *ngFor="let choice of dataPoint.inputSource"
+                                                                        [ngValue]="choice">{{choice}}</option>
+                                                                </select>
+                                                                <select *ngIf="dataPoint.dataType === 'MULTI_SELECT'"
+                                                                    multiple="true"
+                                                                    class="selectpicker form-control col-md-12 col-sm-12"
+                                                                    [title]="dataPoint.description"
+                                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                    name="parameters[dataPoint.dataPointName]">
+                                                                    <option *ngFor="let choice of dataPoint.inputSource"
+                                                                        [ngValue]="choice">{{choice}}</option>
+                                                                </select>
+                                                                <tag-input *ngIf="dataPoint.dataType === 'ARRAY'"
+                                                                    class="custom-input-tag-border form-control col-md-12 col-sm-12"
+                                                                    [title]="dataPoint.description"
+                                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                    name="parameters[dataPoint.dataPointName]"
+                                                                    [modelAsStrings]="true" [editable]="true"
+                                                                    [separatorKeys]="[32]"
+                                                                    [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
+                                                                    [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'"
+                                                                    theme="minimal">
+                                                                </tag-input>
+                                                            </div>
+                                                       
                                                         </div>
-                                                    </div>
+
+                                                   
                                                     <hr />
                                                     <div class="row">
                                                         <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
@@ -328,7 +343,90 @@
 
                                                         </div>
                                                     </div>
-                                                    <div class="row" *ngIf="getStatusList(assignedTaskDdetails) != null">
+                                                    
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane fade" id="tabDocuments" aria-labelledby="details-tab">
+                                                        <div class="row" *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id] && documentsForState[assignedTaskDdetails._id].length > 0">
+                                                            <div class="col-md-12 form-group">
+                                                                <button type="button" class="btn btn-primary btn-sm pull-right" title="Add Document"
+                                                                (click)="onNewDocumentAdd(assignedTaskDdetails)">
+                                                                <i class="ion-plus-round">Add Document</i>
+                                                                </button>
+                                                            </div>
+                                                            <div style="overflow-x:auto;">
+                                                                <table class="table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Document Type</th>
+                                                                            <th>Upload</th>
+                                                                            <th>Status</th>
+                                                                            <th>Uploaded Time</th>
+                                                                            <th>Description</th>
+                                                                            <th></th>
+                                                                            <th>Remove</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let document of documentsForState[assignedTaskDdetails._id]; let index=index;">
+                                                                            <td><label [class]="document.mandatory ?'control-label required' : 'control-label'" >{{ document.documentType }}</label></td>
+                                                                            <td>
+                                                                                <label [attr.for]="'taskfileupload' + assignedTaskDdetails._id + index"
+                                                                                    >
+                                                                                    <i style="cursor: pointer;" class="fa fa-cloud-upload"></i>
+                                                                                </label>
+                                                                                <label>{{document.userFileName}}</label>
+                                                                                <input [id]="'taskfileupload' + assignedTaskDdetails._id + index"
+                                                                                    type="file"
+                                                                                    (change)="onDocumentUploadForTask($event,document, assignedTaskDdetails)" />
+                                                                            </td>
+                                                                            <td>
+                                                                                <select
+                                                                                    class="selectpicker form-control col-md-12 col-sm-12"
+                                                                                    [title]="'Status'"
+                                                                                    [(ngModel)]="document.status"
+                                                                                    name="status">
+                                                                                    <option *ngFor="let st of DOCUMENT_STATUS"
+                                                                                        [ngValue]="st">{{st}}</option>
+                                                                                </select>
+                                                                            </td>
+                                                                            <td>
+                                                                                {{ document.uploadTimeLong | amDateFormat:
+                                                                                    'DD/MM/YYYY
+                                                                                    hh:mm A' }}
+                                                                            </td>
+                                                                            <td *ngIf="document.description && document.description.length > 10">
+                                                                                {{ document.description.substring(0, 10) }} <span data-toggle="modal"
+                                                                                data-target="#documentDescription" style="cursor: pointer; text-decoration: underline;" (click)="onDocumentDescriptionSelect(document, TAB_ASSIGNED)">more...</span>
+                                                                            </td>
+                                                                            <td *ngIf="document.description && document.description.length <= 10">
+                                                                                {{ document.description }} <i style="cursor: pointer;" data-toggle="modal"
+                                                                                data-target="#documentDescription" class="fa fa-pencil-square-o" aria-hidden="true" (click)="onDocumentDescriptionSelect(document, TAB_ASSIGNED)"></i>
+                                                                            </td>
+                                                                            <td style="text-align: center" *ngIf="!document.description || document.description.length == 0">
+                                                                                <i style="cursor: pointer;" data-toggle="modal"
+                                                                                data-target="#documentDescription" class="fa fa-pencil-square-o" aria-hidden="true" (click)="onDocumentDescriptionSelect(document, TAB_ASSIGNED)"></i>
+                                                                            </td>
+                                                                            <td style="text-align: center" *ngIf="document.downloadFileUrl != null && document.downloadFileUrl.trim().length > 0">
+                                                                                <i style="cursor: pointer;" class="fa fa-cloud-download" (click)="onDownloadDocument(document)"></i>
+                                                                            </td>
+                                                                            <td *ngIf="document.downloadFileUrl == null || document.downloadFileUrl.trim().length == 0">
+
+                                                                            </td>
+                                                                            <td>
+                                                                                <button type="button" class="btn btn-danger pull-right"
+                                                                                (click)="onRemoveDocument(assignedTaskDdetails, document)">
+                                                                                <i class="ion-ios-trash"></i>
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                                
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" *ngIf="getStatusList(assignedTaskDdetails).length > 0">
                                                         <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                                             <label>
                                                                 <b>Select Status: </b>
@@ -357,8 +455,8 @@
                                                         </div>
                                                     </div>
                                                     
-                                                    
                                                 </div>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -1125,6 +1223,40 @@
             </div>
             <div class="modal-footer" id="modal_footer">
 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="documentDescription" tabindex="-1" role="dialog" attr.aria-labelledby="docDescModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    Document description
+                </h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal_body">
+                <form>
+                    <div class="form-group" *ngIf="selectedDocument">
+                        <textarea
+                            class="form-control" required
+                            [placeholder]="'Description'"
+                            [(ngModel)]="selectedDocument.description"
+                            name="description">
+                        </textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="modal_footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                <button type="submit" class="btn btn-success" data-dismiss="modal"
+                    (click)="onSubmitDocumentDescription()">Submit</button>
             </div>
         </div>
     </div>

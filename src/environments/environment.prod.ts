@@ -40,6 +40,7 @@ export const environment = {
   getallstats: 'state/fetchstatestatus',
   getpersonalstats: 'state/getstatestatusbyuser',
   getstateinstance: 'state/fetchstateinstance',
+  getDocuments: 'state/documents',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
