@@ -112,10 +112,10 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
     this.fetchInsight();
     //this.fetchStatesOrPayload();
-    this.getEpisode();
+    //this.getEpisode();
     this.extractParams();
     this.initUI();
-    this.fetchEmailTrail();
+    //this.fetchEmailTrail();
 
 
     this.userId = this.universalUser.getUser()._id

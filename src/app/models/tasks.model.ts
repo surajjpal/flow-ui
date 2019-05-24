@@ -114,9 +114,35 @@ export class TimelineStateAuditData extends BaseModel {
   assignedUserName: string;
   assignedUserDisplayName: string;
   assignedUserId: string;
-  startTime: Time;
-  endTime: Time;
+  startTimeLong: number;
+  endTimeLong: number;
   parameters: TimelineStateParameterData[];
+  escalatedFlag: boolean;
+	flagged: boolean;
+	flagReason: string;
+	assignedDueToFlagged: boolean;
+	taskStatus: string;
+	taskRemarks: string;
+  documents: Document[];
+  
+  constructor() {
+    super()
+    this.stateCd = null;
+    this.assignedUserGroupCd = null;
+    this.assignedUserName = null;
+    this.assignedUserDisplayName = null;
+    this.assignedUserId = null;
+    this.startTimeLong = null;
+    this.endTimeLong = null;
+    this.parameters = [];
+    this.escalatedFlag = false;
+    this.flagged = false;
+    this.flagReason = null;
+    this.assignedDueToFlagged = false;
+    this.taskStatus = null;
+    this.taskRemarks = null;
+    this.documents = [];
+  }
 }
 
 export class TimelineStateParameterData extends BaseModel {

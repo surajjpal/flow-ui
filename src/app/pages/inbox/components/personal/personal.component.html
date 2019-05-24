@@ -245,6 +245,11 @@
                                                         <b>Documents</b>
                                                         </a>
                                                     </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" id="timeline-tab" data-toggle="tab" href="#tabTimeline" role="tab" aria-controls="timeline">
+                                                            <b>Timeline</b>
+                                                        </a>
+                                                    </li>
                                                     
                                                 </ul>
                                                 <div class="tab-content" id="taskDetailsTabContent">
@@ -346,14 +351,14 @@
                                                     
                                                     </div>
                                                     <div role="tabpanel" class="tab-pane fade" id="tabDocuments" aria-labelledby="details-tab">
-                                                        <div class="row" *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id] && documentsForState[assignedTaskDdetails._id].length > 0">
+                                                        <div class="row" >
                                                             <div class="col-md-12 form-group">
                                                                 <button type="button" class="btn btn-primary btn-sm pull-right" title="Add Document"
                                                                 (click)="onNewDocumentAdd(assignedTaskDdetails)">
                                                                 <i class="ion-plus-round">Add Document</i>
                                                                 </button>
                                                             </div>
-                                                            <div style="overflow-x:auto;">
+                                                            <div style="overflow-x:auto;" *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id] && documentsForState[assignedTaskDdetails._id].length > 0">
                                                                 <table class="table">
                                                                     <thead>
                                                                         <tr>
@@ -367,7 +372,7 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        <tr *ngFor="let document of documentsForState[assignedTaskDdetails._id]; let index=index;">
+                                                                        <tr *ngFor="let document of getOtherThanRemarksDocuments(assignedTaskDdetails); let index=index;">
                                                                             <td><label [class]="document.mandatory ?'control-label required' : 'control-label'" >{{ document.documentType }}</label></td>
                                                                             <td>
                                                                                 <label [attr.for]="'taskfileupload' + assignedTaskDdetails._id + index"
@@ -389,8 +394,13 @@
                                                                                         [ngValue]="st">{{st}}</option>
                                                                                 </select>
                                                                             </td>
-                                                                            <td>
+                                                                            <td *ngIf="document.uploadTimeLong != null">
                                                                                 {{ document.uploadTimeLong | amDateFormat:
+                                                                                    'DD/MM/YYYY
+                                                                                    hh:mm A' }}
+                                                                            </td>
+                                                                            <td *ngIf="document.uploadTimeLong == null">
+                                                                                {{ document.uploadTime | amDateFormat:
                                                                                     'DD/MM/YYYY
                                                                                     hh:mm A' }}
                                                                             </td>
@@ -426,6 +436,10 @@
                                                             
                                                         </div>
                                                     </div>
+                                                    <div role="tabpanel" class="tab-pane fade" id="tabTimeline" aria-labelledby="timeline-tab">
+                                                        
+                                                        <api-vertical-timeline [timeLineStateAuditData]="timelineStates"></api-vertical-timeline>
+                                                    </div>
                                                     <div class="row" *ngIf="getStatusList(assignedTaskDdetails).length > 0">
                                                         <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                                             <label>
@@ -446,6 +460,7 @@
                                                             <label>
                                                                 <b>Remarks: </b>
                                                             </label>
+
                                                             <textarea rows="5"
                                                                 class="form-control" required
                                                                 [placeholder]="'Remarks'"
@@ -453,6 +468,56 @@
                                                                 name="taskRemarks">
                                                             </textarea>
                                                         </div>
+                                                        <div class="col-md-12 form-group">
+                                                            <button type="button" class="btn btn-primary btn-sm pull-right" title="Add Attachment"
+                                                            (click)="onNewRemarksDocuments(assignedTaskDdetails)">
+                                                                <i class="fa fa-paperclip">Attachment</i>
+                                                            </button>
+                                                        </div>
+                                                        <div style="overflow-x:auto;" *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id] && documentsForState[assignedTaskDdetails._id].length > 0">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Upload</th>
+                                                                        <th>Uploaded Time</th>
+                                                                        <th>Remove</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let document of getRemarksDocuments(assignedTaskDdetails); let index=index;">
+                                                                        <td>
+                                                                            <label [attr.for]="'taskfileuploadremarks' + assignedTaskDdetails._id + index"
+                                                                                >
+                                                                                <i style="cursor: pointer;" class="fa fa-cloud-upload"></i>
+                                                                            </label>
+                                                                            <label>{{document.userFileName}}</label>
+                                                                            <input [id]="'taskfileuploadremarks' + assignedTaskDdetails._id + index"
+                                                                                type="file"
+                                                                                (change)="onDocumentUploadForTask($event,document, assignedTaskDdetails)" />
+                                                                        </td>
+                                                                        <td *ngIf="document.uploadTimeLong != null">
+                                                                            {{ document.uploadTimeLong | amDateFormat:
+                                                                                'DD/MM/YYYY
+                                                                                hh:mm A' }}
+                                                                        </td>
+                                                                        <td *ngIf="document.uploadTimeLong == null">
+                                                                            {{ document.uploadTime | amDateFormat:
+                                                                                'DD/MM/YYYY
+                                                                                hh:mm A' }}
+                                                                        </td>
+                                                                        <td>
+                                                                            <button type="button" class="btn btn-danger pull-right"
+                                                                            (click)="onRemoveDocument(assignedTaskDdetails, document)">
+                                                                            <i class="ion-ios-trash"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            
+                                                        </div>
+                                                        
+                                            
                                                     </div>
                                                     
                                                 </div>

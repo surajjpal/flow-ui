@@ -194,21 +194,6 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
   }
 
-  timeline(state: State) {
-
-    this.timelineStates = [];
-    this.subscription = this.stateService.getTimelineForFlow(state.stateMachineInstanceModelId)
-      .subscribe(timelineStates => {
-        if (timelineStates) {
-          this.timelineStates = timelineStates;
-          if (this.timelineStates.length > 0) {
-            this.selectedTimeLineState = this.timelineStates[0];
-          }
-
-        }
-      });
-  }
-
   agentAssist(state: State): void {
     this.stateService.updateVirtualAssist(this.assignedTaskDdetails)
       .subscribe(
@@ -1255,6 +1240,23 @@ export class PersonalComponent implements OnInit, OnDestroy {
           // console.log(error);
         }
       )
+    this.getTimeline(stateInstane);
+  }
+
+  getTimeline(state: State) {
+    this.timelineStates = [];
+    this.subscription = this.stateService.getTimelineForFlow(state.stateMachineInstanceModelId)
+      .subscribe(timelineStates => {
+        if (timelineStates) {
+          console.log("******")
+          this.timelineStates = timelineStates;
+          console.log(this.timelineStates);
+          // if (this.timelineStates.length > 0) {
+          //   this.selectedTimeLineState = this.timelineStates[0];
+          // }
+
+        }
+      });
   }
 
   isUploadedDocumentValid(document: Document, fileType: string) {
@@ -1294,12 +1296,15 @@ export class PersonalComponent implements OnInit, OnDestroy {
     document.userFileName = file.name;
     document.fileName = uploadFileName;
     document.uploadTime = new Date();
+    console.log(document.documentType);
     this.documentsToBeUploaded.push(fileInputForm);
     
   }
 
+  
   uploadDocumentForTask(state: State, tabType: string) {
-    let numberOfDocs = this.documentsForState[state._id].length;
+    let numberOfDocs = this.documentsToBeUploaded.length;
+    console.log("number of documents :: " + numberOfDocs);
     for (let inputDoc of this.documentsToBeUploaded) {
       this.subscription = this.fileService.upload(inputDoc)
         .subscribe(
@@ -1355,6 +1360,42 @@ export class PersonalComponent implements OnInit, OnDestroy {
       this.documentsForState[stateInstanace._id] = [];
     }
     this.documentsForState[stateInstanace._id].push(newDoc);
+  }
+
+  onNewRemarksDocuments(stateInstanace: State) {
+    const newDoc = new Document();
+    newDoc.stateInstanceId = stateInstanace._id;
+    newDoc.flowInstanceId = stateInstanace.stateMachineInstanceModelId;
+    newDoc.documentType = "USER_REMARKS";
+    newDoc.documentName = uuid();
+    if (!this.documentsForState[stateInstanace._id]) {
+      this.documentsForState[stateInstanace._id] = [];
+    }
+    this.documentsForState[stateInstanace._id].push(newDoc);
+  }
+
+  getRemarksDocuments(stateInstanace: State) {
+    const remarksDocs: Document[] = [];
+    if (this.documentsForState && this.documentsForState[stateInstanace._id]) {
+      for (let doc of this.documentsForState[stateInstanace._id]) {
+        if (doc.documentType &&  doc.documentType == "USER_REMARKS") {
+          remarksDocs.push(doc);
+        }
+      }
+    }
+    return remarksDocs;
+  }
+
+  getOtherThanRemarksDocuments(stateInstanace: State) {
+    const docs: Document[] = [];
+    if (this.documentsForState && this.documentsForState[stateInstanace._id]) {
+      for (let doc of this.documentsForState[stateInstanace._id]) {
+        if (doc.documentType &&  doc.documentType != "USER_REMARKS") {
+          docs.push(doc);
+        }
+      }
+    }
+    return docs;
   }
 
   onRemoveDocument(stateInstanace: State, document: Document) {
