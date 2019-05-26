@@ -25,6 +25,8 @@ export const environment = {
     // Flow
     server: 'https://flow.automatapi.com/flow/console/',
     autourl: 'https://virtualagent.automatapi.xyz/#/pg/ch/cnv/',
+    autoworkbench: 'https://workbench.automatapi.com/#/wb/',
+    autoworkbenchdisplaybar: '?displaySideBar=false',
 
     stateinsight: 'state/insight/',
     orPayload: 'state/orPayload/',
@@ -37,6 +39,7 @@ export const environment = {
     getallstats: 'state/fetchstatestatus',
     getpersonalstats: 'state/getstatestatusbyuser',
     getstateinstance: 'state/fetchstateinstance',
+    getDocuments: 'state/documents',
     menutreeurl: 'menu/tree',
     menuurl: 'menu/',
     menurouteurl: 'menu/route',
@@ -57,6 +60,8 @@ export const environment = {
     userurl: 'user/',
     evaluateMVEL: 'evaluateMVEL/',
     timeline: 'statemachine/timeline/',
+    updatevirtualassist: 'statemachine/updatevirtualassist',
+    
 
     registerurl: 'user/createUser',
     forgotpassword: 'user/forgotPassword',

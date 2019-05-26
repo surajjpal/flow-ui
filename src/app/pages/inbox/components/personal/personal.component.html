@@ -13,7 +13,6 @@
         </div>
     </div>
 </div>
-
 <div class="widgets">
     <div class="row">
         <ba-card baCardClass="with-scroll" class="data-table-container" style="width: 100%">
@@ -35,7 +34,7 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade show active" id="tab_assigned">
                         <div class="row" *ngIf="assignedTaskDdetails != null" style="width: 100%;">
-                            <div class="col col-lg-3 col-md-3 col-sm-3">
+                            <div *ngIf="!assistModeFl" class="col col-lg-3 col-md-3 col-sm-3">
                                 <div class="card card-default with-scroll">
                                     <div class="card-header">
                                         <b>Tasks</b>
@@ -83,10 +82,7 @@
                                 </button>
                             </div>
                             <div class="col col-lg-9 col-md-9 col-sm-9">
-                                <div class="card card-default with-scroll">
-                                    <div class="card-header bg-gray">
-                                        <b> Viewing details for-{{ assignedTaskDdetails.businessKey}}</b>
-                                    </div>
+                                <div class="card card-default">
                                     <div class="card-block">
                                         <div class="card card-default">
                                             <div class="card-block">
@@ -94,49 +90,55 @@
                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                         <button
                                                             [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
-                                                            *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd === 'Personal'"
+                                                            *ngIf="taskDecision.isUpdateAllow(assignedTaskDdetails, TAB_ASSIGNED)"
                                                             type="button" class="btn btn-success btn-with-icon"
                                                             (click)="updateProcessFlow(assignedTaskDdetails, 'ASSIGNED')">
-                                                            <i class="ion-checkmark"></i>Update Process</button>
+                                                            <i class="ion-checkmark"></i>Update</button>
                                                         <button
                                                             [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
-                                                            *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && users.length > 0"
+                                                            *ngIf="taskDecision.isAllocateAllow(assignedTaskDdetails,TAB_ASSIGNED, users)"
                                                             type="button" data-toggle="modal"
                                                             data-target="#assginedUserModal"
                                                             class="btn btn-info btn-with-icon">
-                                                            <i class="ion-person-add"></i>Allocate Team</button>
+                                                            <i class="ion-person-add"></i>Allocate</button>
                                                         <button
                                                             [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
-                                                            *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd !== 'Personal' "
+                                                            *ngIf="taskDecision.isReserveAllow(assignedTaskDdetails,TAB_ASSIGNED)"
                                                             type="button" (click)="reserve()"
                                                             class="btn btn-primary btn-with-icon">
-                                                            <i class="ion-archive"></i>Reserve Task</button>
+                                                            <i class="ion-archive"></i>Reserve</button>
                                                         <button
                                                             [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
-                                                            *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd === 'Personal' && userHierarchy.parentUserId.length > 0"
+                                                            *ngIf="taskDecision.isEscalteAllow(assignedTaskDdetails, TAB_ASSIGNED, userHierarchy)"
                                                             type="button" (click)="escalate()"
                                                             class="btn btn-warning btn-with-icon">
-                                                            <i class="ion-alert-circled"></i>Escalate Task</button>
+                                                            <i class="ion-alert-circled"></i>Escalate</button>
                                                         <button
                                                             [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
                                                             type="button" class="btn btn-warning btn-with-icon"
                                                             title="Flag"
-                                                            *ngIf="assignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && assignedTaskDdetails.assignedUserGroupCd == 'Personal' && assignedTaskDdetails.subStatus !== 'FLAGGED'"
+                                                            *ngIf="taskDecision.isFlagAllow(assignedTaskDdetails,TAB_ASSIGNED)"
                                                             data-toggle="modal" data-target="#assignedTaskflagModal"
                                                             data-backdrop="static" data-keyboard="false">
-                                                            <i class="ion-flag"></i>Flag Task</button>
+                                                            <i class="ion-flag"></i>Flag</button>
                                                         <button
                                                             [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
                                                             type="button" class="btn btn-danger btn-with-icon"
                                                             title="Archive"
-                                                            *ngIf="assignedTaskDdetails.statusCd ==='ACTIVE' && assignedTaskDdetails.assignedUserGroupCd == 'Personal' "
+                                                            *ngIf="taskDecision.isFlagAllow(assignedTaskDdetails, TAB_ASSIGNED)"
                                                             data-toggle="modal" data-target="#archiveTaskWarningModal">
-                                                            <i class="ion-ios-trash"></i>Archive Task</button>
-                                                        <button type="button" class="btn btn-info btn-with-icon"
+                                                            <i class="ion-ios-trash"></i>Archive</button>
+                                                        <!-- <button type="button" class="btn btn-info btn-with-icon"
                                                             title="Timeline" data-toggle="modal"
                                                             (click)="timeline(assignedTaskDdetails)"
                                                             data-target="#timelineModal">
-                                                            <i class="ion-ios-alarm"></i>Timeline</button>
+                                                            <i class="ion-ios-alarm"></i>Timeline</button> -->
+                                                        <button
+                                                            *ngIf="taskDecision.isAssistAllow(assignedTaskDdetails, TAB_ASSIGNED)"
+                                                            type="button" class="btn btn-info btn-with-icon"
+                                                            title="Agent Assist" data-toggle="modal"
+                                                            (click)="agentAssist(assignedTaskDdetails)">
+                                                            <i class="ion-chatbubbles"></i>Assist</button>
                                                         <button type="button" class="btn btn-primary pull-right"
                                                             title="Show Details"
                                                             (click)="onSelect(assignedTaskDdetails)">
@@ -148,7 +150,7 @@
                                         </div>
                                         <div class="card card-default">
                                             <div class="card-header bg-gray">
-                                                <b>Task Header</b>
+                                                <b> Viewing details for-{{ assignedTaskDdetails.businessKey}}</b>
                                             </div>
                                             <div class="card-block">
                                                 <div class="row">
@@ -159,7 +161,7 @@
                                                         </label>
                                                         <span>{{ assignedTaskDdetails.machineLabel }}
                                                             v{{
-                                                            getGraphObject(assignedTaskDdetails.stateMachineInstanceModelId).version}}</span>
+                                                                    getGraphObject(assignedTaskDdetails.stateMachineInstanceModelId).version}}</span>
                                                     </div>
                                                     <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4"
                                                         style="margin-top:10px;">
@@ -183,8 +185,8 @@
                                                             <b>Start Time: </b>
                                                         </label>
                                                         <span>{{ assignedTaskDdetails.startTimeLong | amDateFormat:
-                                                            'DD/MM/YYYY
-                                                            hh:mm A' }}</span>
+                                                                    'DD/MM/YYYY
+                                                                    hh:mm A' }}</span>
                                                     </div>
                                                     <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4"
                                                         style="margin-top:10px;">
@@ -192,8 +194,8 @@
                                                             <b>End Time: </b>
                                                         </label>
                                                         <span>{{ assignedTaskDdetails.endTimeLong | amDateFormat:
-                                                            'DD/MM/YYYY hh:mm
-                                                            A' }}
+                                                                    'DD/MM/YYYY hh:mm
+                                                                    A' }}
                                                         </span>
                                                     </div>
                                                     <div class="col-xlg-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4"
@@ -230,74 +232,94 @@
                                             </div>
                                         </div>
                                         <div class="card card-default">
-                                            <div class="card-header bg-gray">
-                                                <b>Task Details</b>
-                                            </div>
                                             <div class="card-block">
-                                                <div>
-                                                    <div class="row">
-                                                        <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
-                                                            style="margin-top:10px;"
-                                                            *ngFor="let dataPoint of getBusinessKeysWithoutTable(assignedTaskDdetails)">
-                                                            <label>
-                                                                <b>{{ dataPoint.dataPointLabel }}: </b>
-                                                            </label>
-                                                            <input *ngIf="dataPoint.dataType === 'NUMBER'" type="number"
-                                                                class="form-control col-md-12 col-sm-12"
-                                                                [title]="dataPoint.description"
-                                                                [placeholder]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]"
-                                                                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
-                                                            <input *ngIf="dataPoint.dataType === 'STRING'" type="text"
-                                                                class="form-control" required
-                                                                [placeholder]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]" />
-                                                            <textarea *ngIf="dataPoint.dataType === 'TEXT'" rows="5"
-                                                                class="form-control" required
-                                                                [placeholder]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]">
-                                                            </textarea>
-                                                            <select *ngIf="dataPoint.dataType === 'BOOLEAN'"
-                                                                class="selectpicker form-control col-md-12 col-sm-12"
-                                                                [title]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]">
-                                                                <option [ngValue]="true">True</option>
-                                                                <option [ngValue]="false">False</option>
-                                                            </select>
-                                                            <select *ngIf="dataPoint.dataType === 'SINGLE_SELECT'"
-                                                                class="selectpicker form-control col-md-12 col-sm-12"
-                                                                [title]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]">
-                                                                <option *ngFor="let choice of dataPoint.inputSource"
-                                                                    [ngValue]="choice">{{choice}}</option>
-                                                            </select>
-                                                            <select *ngIf="dataPoint.dataType === 'MULTI_SELECT'"
-                                                                multiple="true"
-                                                                class="selectpicker form-control col-md-12 col-sm-12"
-                                                                [title]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]">
-                                                                <option *ngFor="let choice of dataPoint.inputSource"
-                                                                    [ngValue]="choice">{{choice}}</option>
-                                                            </select>
-                                                            <tag-input *ngIf="dataPoint.dataType === 'ARRAY'"
-                                                                class="custom-input-tag-border form-control col-md-12 col-sm-12"
-                                                                [title]="dataPoint.description"
-                                                                [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-                                                                name="parameters[dataPoint.dataPointName]"
-                                                                [modelAsStrings]="true" [editable]="true"
-                                                                [separatorKeys]="[32]"
-                                                                [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
-                                                                [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'"
-                                                                theme="minimal">
-                                                            </tag-input>
+                                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link active" id="details-tab" data-toggle="tab" href="#tabDetails" role="tab"
+                                                        aria-controls="details">
+                                                        <b>Task details</b>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" id="flow-tab" data-toggle="tab" href="#tabDocuments" role="tab" aria-controls="flow">
+                                                        <b>Documents</b>
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" id="timeline-tab" data-toggle="tab" href="#tabTimeline" role="tab" aria-controls="timeline">
+                                                            <b>Timeline</b>
+                                                        </a>
+                                                    </li>
+                                                    
+                                                </ul>
+                                                <div class="tab-content" id="taskDetailsTabContent">
+                                                    <div role="tabpanel" class="tab-pane fade show active" id="tabDetails" aria-labelledby="details-tab">
+                                                        <div class="row">
+                                                            <div class="col-xlg-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"
+                                                                style="margin-top:10px;"
+                                                                *ngFor="let dataPoint of getBusinessKeysWithoutTable(assignedTaskDdetails)">
+                                                                <label>
+                                                                    <b>{{ dataPoint.dataPointLabel }}: </b>
+                                                                </label>
+                                                                <input *ngIf="dataPoint.dataType === 'NUMBER'" type="number"
+                                                                    class="form-control col-md-12 col-sm-12"
+                                                                    [title]="dataPoint.description"
+                                                                    [placeholder]="dataPoint.description"
+                                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                    name="parameters[dataPoint.dataPointName]"
+                                                                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                                                                <input *ngIf="dataPoint.dataType === 'STRING'" type="text"
+                                                                    class="form-control" required
+                                                                    [placeholder]="dataPoint.description"
+                                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                    name="parameters[dataPoint.dataPointName]" />
+                                                                <textarea *ngIf="dataPoint.dataType === 'TEXT'" rows="5"
+                                                                    class="form-control" required
+                                                                    [placeholder]="dataPoint.description"
+                                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                    name="parameters[dataPoint.dataPointName]">
+                                                                        </textarea>
+                                                                <select *ngIf="dataPoint.dataType === 'BOOLEAN'"
+                                                                    class="selectpicker form-control col-md-12 col-sm-12"
+                                                                    [title]="dataPoint.description"
+                                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                    name="parameters[dataPoint.dataPointName]">
+                                                                    <option [ngValue]="true">True</option>
+                                                                    <option [ngValue]="false">False</option>
+                                                                </select>
+                                                                <select *ngIf="dataPoint.dataType === 'SINGLE_SELECT'"
+                                                                    class="selectpicker form-control col-md-12 col-sm-12"
+                                                                    [title]="dataPoint.description"
+                                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                    name="parameters[dataPoint.dataPointName]">
+                                                                    <option *ngFor="let choice of dataPoint.inputSource"
+                                                                        [ngValue]="choice">{{choice}}</option>
+                                                                </select>
+                                                                <select *ngIf="dataPoint.dataType === 'MULTI_SELECT'"
+                                                                    multiple="true"
+                                                                    class="selectpicker form-control col-md-12 col-sm-12"
+                                                                    [title]="dataPoint.description"
+                                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                    name="parameters[dataPoint.dataPointName]">
+                                                                    <option *ngFor="let choice of dataPoint.inputSource"
+                                                                        [ngValue]="choice">{{choice}}</option>
+                                                                </select>
+                                                                <tag-input *ngIf="dataPoint.dataType === 'ARRAY'"
+                                                                    class="custom-input-tag-border form-control col-md-12 col-sm-12"
+                                                                    [title]="dataPoint.description"
+                                                                    [(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
+                                                                    name="parameters[dataPoint.dataPointName]"
+                                                                    [modelAsStrings]="true" [editable]="true"
+                                                                    [separatorKeys]="[32]"
+                                                                    [placeholder]="'+' + dataPoint.dataPointLabel + ' (Enter separated)'"
+                                                                    [secondaryPlaceholder]="'Enter ' + dataPoint.dataPointName + ' (Enter separated)'"
+                                                                    theme="minimal">
+                                                                </tag-input>
+                                                            </div>
+                                                       
                                                         </div>
-                                                    </div>
+
+                                                   
                                                     <hr />
                                                     <div class="row">
                                                         <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
@@ -312,7 +334,7 @@
                                                                         <tr>
                                                                             <th
                                                                                 *ngFor="let dp of getHeaderDataPointsForArrayDataType(dataPoint, assignedTaskDdetails)">{{
-                                                                                dp.dataPointLabel }}</th>
+                                                                                        dp.dataPointLabel }}</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -326,15 +348,198 @@
 
                                                         </div>
                                                     </div>
+                                                    
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane fade" id="tabDocuments" aria-labelledby="details-tab">
+                                                        <div class="row" >
+                                                            <div class="col-md-12 form-group">
+                                                                <button type="button" class="btn btn-primary btn-sm pull-right" title="Add Document"
+                                                                (click)="onNewDocumentAdd(assignedTaskDdetails)">
+                                                                <i class="ion-plus-round">Add Document</i>
+                                                                </button>
+                                                            </div>
+                                                            <div style="overflow-x:auto;" *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id] && documentsForState[assignedTaskDdetails._id].length > 0">
+                                                                <table class="table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Document Type</th>
+                                                                            <th>Upload</th>
+                                                                            <th>Status</th>
+                                                                            <th>Uploaded Time</th>
+                                                                            <th>Description</th>
+                                                                            <th></th>
+                                                                            <th>Remove</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let document of getOtherThanRemarksDocuments(assignedTaskDdetails); let index=index;">
+                                                                            <td><label [class]="document.mandatory ?'control-label required' : 'control-label'" >{{ document.documentType }}</label></td>
+                                                                            <td>
+                                                                                <label [attr.for]="'taskfileupload' + assignedTaskDdetails._id + index"
+                                                                                    >
+                                                                                    <i style="cursor: pointer;" class="fa fa-cloud-upload"></i>
+                                                                                </label>
+                                                                                <label>{{document.userFileName}}</label>
+                                                                                <input [id]="'taskfileupload' + assignedTaskDdetails._id + index"
+                                                                                    type="file"
+                                                                                    (change)="onDocumentUploadForTask($event,document, assignedTaskDdetails)" />
+                                                                            </td>
+                                                                            <td>
+                                                                                <select
+                                                                                    class="selectpicker form-control col-md-12 col-sm-12"
+                                                                                    [title]="'Status'"
+                                                                                    [(ngModel)]="document.status"
+                                                                                    name="status">
+                                                                                    <option *ngFor="let st of DOCUMENT_STATUS"
+                                                                                        [ngValue]="st">{{st}}</option>
+                                                                                </select>
+                                                                            </td>
+                                                                            <td *ngIf="document.uploadTimeLong != null">
+                                                                                {{ document.uploadTimeLong | amDateFormat:
+                                                                                    'DD/MM/YYYY
+                                                                                    hh:mm A' }}
+                                                                            </td>
+                                                                            <td *ngIf="document.uploadTimeLong == null">
+                                                                                {{ document.uploadTime | amDateFormat:
+                                                                                    'DD/MM/YYYY
+                                                                                    hh:mm A' }}
+                                                                            </td>
+                                                                            <td *ngIf="document.description && document.description.length > 10">
+                                                                                {{ document.description.substring(0, 10) }} <span data-toggle="modal"
+                                                                                data-target="#documentDescription" style="cursor: pointer; text-decoration: underline;" (click)="onDocumentDescriptionSelect(document, TAB_ASSIGNED)">more...</span>
+                                                                            </td>
+                                                                            <td *ngIf="document.description && document.description.length <= 10">
+                                                                                {{ document.description }} <i style="cursor: pointer;" data-toggle="modal"
+                                                                                data-target="#documentDescription" class="fa fa-pencil-square-o" aria-hidden="true" (click)="onDocumentDescriptionSelect(document, TAB_ASSIGNED)"></i>
+                                                                            </td>
+                                                                            <td style="text-align: center" *ngIf="!document.description || document.description.length == 0">
+                                                                                <i style="cursor: pointer;" data-toggle="modal"
+                                                                                data-target="#documentDescription" class="fa fa-pencil-square-o" aria-hidden="true" (click)="onDocumentDescriptionSelect(document, TAB_ASSIGNED)"></i>
+                                                                            </td>
+                                                                            <td style="text-align: center" *ngIf="document.downloadFileUrl != null && document.downloadFileUrl.trim().length > 0">
+                                                                                <i style="cursor: pointer;" class="fa fa-cloud-download" (click)="onDownloadDocument(document)"></i>
+                                                                            </td>
+                                                                            <td *ngIf="document.downloadFileUrl == null || document.downloadFileUrl.trim().length == 0">
+
+                                                                            </td>
+                                                                            <td>
+                                                                                <button type="button" class="btn btn-danger pull-right"
+                                                                                (click)="onRemoveDocument(assignedTaskDdetails, document)">
+                                                                                <i class="ion-ios-trash"></i>
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                                
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <div role="tabpanel" class="tab-pane fade" id="tabTimeline" aria-labelledby="timeline-tab">
+                                                        
+                                                        <api-vertical-timeline [timeLineStateAuditData]="timelineStates"></api-vertical-timeline>
+                                                    </div>
+                                                    <div class="row" *ngIf="getStatusList(assignedTaskDdetails).length > 0">
+                                                        <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                            <label>
+                                                                <b>Select Status: </b>
+                                                            </label>
+                                                            <select
+                                                                class="selectpicker form-control col-md-12 col-sm-12"
+                                                                [(ngModel)]="assignedTaskDdetails.taskStatus"
+                                                                name="taskStatus">
+                                                                <option *ngFor="let choice of getStatusList(assignedTaskDdetails)"
+                                                                    [ngValue]="choice.value">{{ choice.label }}</option>
+                                                            </select>        
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xlg-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+                                                            style="margin-top:10px;">
+                                                            <label>
+                                                                <b>Remarks: </b>
+                                                            </label>
+
+                                                            <textarea rows="5"
+                                                                class="form-control" required
+                                                                [placeholder]="'Remarks'"
+                                                                [(ngModel)]="assignedTaskDdetails.taskRemarks"
+                                                                name="taskRemarks">
+                                                            </textarea>
+                                                        </div>
+                                                        <div class="col-md-12 form-group">
+                                                            <button type="button" class="btn btn-primary btn-sm pull-right" title="Add Attachment"
+                                                            (click)="onNewRemarksDocuments(assignedTaskDdetails)">
+                                                                <i class="fa fa-paperclip">Attachment</i>
+                                                            </button>
+                                                        </div>
+                                                        <div style="overflow-x:auto;" *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id] && documentsForState[assignedTaskDdetails._id].length > 0">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Upload</th>
+                                                                        <th>Uploaded Time</th>
+                                                                        <th>Remove</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let document of getRemarksDocuments(assignedTaskDdetails); let index=index;">
+                                                                        <td>
+                                                                            <label [attr.for]="'taskfileuploadremarks' + assignedTaskDdetails._id + index"
+                                                                                >
+                                                                                <i style="cursor: pointer;" class="fa fa-cloud-upload"></i>
+                                                                            </label>
+                                                                            <label>{{document.userFileName}}</label>
+                                                                            <input [id]="'taskfileuploadremarks' + assignedTaskDdetails._id + index"
+                                                                                type="file"
+                                                                                (change)="onDocumentUploadForTask($event,document, assignedTaskDdetails)" />
+                                                                        </td>
+                                                                        <td *ngIf="document.uploadTimeLong != null">
+                                                                            {{ document.uploadTimeLong | amDateFormat:
+                                                                                'DD/MM/YYYY
+                                                                                hh:mm A' }}
+                                                                        </td>
+                                                                        <td *ngIf="document.uploadTimeLong == null">
+                                                                            {{ document.uploadTime | amDateFormat:
+                                                                                'DD/MM/YYYY
+                                                                                hh:mm A' }}
+                                                                        </td>
+                                                                        <td>
+                                                                            <button type="button" class="btn btn-danger pull-right"
+                                                                            (click)="onRemoveDocument(assignedTaskDdetails, document)">
+                                                                            <i class="ion-ios-trash"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            
+                                                        </div>
+                                                        
+                                            
+                                                    </div>
+                                                    
                                                 </div>
+                                                
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
-
-
+                            <div *ngIf="assistModeFl" class="col col-lg-3 col-md-3 col-sm-3">
+                                <div class="card card-default with-scroll">
+                                    <div class="card-header">
+                                        <b>Agent Assist</b>
+                                        <span class="pull-right clickable close-icon" (click)="closeAgentAssist()"
+                                            data-effect="fadeOut"><i class="ion-close"></i></span>
+                                    </div>
+                                    <div class="card-block">
+                                        <iframe [style.height]="'600px'" #autoBot (click)="virtualAgentUrl"
+                                            [src]="virtualAgentURL" class="iframeStyle" frameborder="0"></iframe>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div *ngIf="assignedTaskDdetails === null" style="text-align: center;">
                             <div>
@@ -342,9 +547,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
                     <div role="tabpanel" class="tab-pane fade" id="tab_unassigned">
                         <div class="row" *ngIf="unassignedTaskDdetails != null" style="width: 100%;">
                             <div class="col col-lg-3 col-md-3 col-sm-3">
@@ -359,7 +561,6 @@
                                                 (click)="onPersonalUnAssignedSubjectSelect(unasgnState)">
                                                 <div [class]="unassignedStateTabclass[unasgnState._id]"
                                                     id="defaultOpen">
-
                                                     <div class="row">
                                                         <div class="col">
                                                             <label>{{unasgnState.machineLabel}}</label>
@@ -396,9 +597,6 @@
                             </div>
                             <div class="col col-lg-9 col-md-9 col-sm-9">
                                 <div class="card card-default">
-                                    <div class="card-header bg-gray">
-                                        <b> Viewing details for-{{ unassignedTaskDdetails.businessKey}}</b>
-                                    </div>
                                     <div class="card-block">
                                         <div class="card card-default">
                                             <div class="card-block">
@@ -406,14 +604,14 @@
                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                         <button
                                                             [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]"
-                                                            *ngIf="unassignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && users.length > 0"
+                                                            *ngIf="taskDecision.isAllocateAllow(unassignedTaskDdetails, TAB_UNASSIGNED, users)"
                                                             type="button" data-toggle="modal"
                                                             data-target="#unassginedUserModal"
                                                             class="btn btn-info btn-with-icon">
                                                             <i class="ion-person-add"></i>Allocate Team</button>
                                                         <button
                                                             [disabled]="!unassignedTaskActionButtonEnabled[unassignedTaskDdetails._id]"
-                                                            *ngIf="unassignedTaskDdetails.statusCd !== ('CLOSED' || 'ARCHIVE') && unassignedTaskDdetails.assignedUserGroupCd !== 'Personal' "
+                                                            *ngIf="taskDecision.isReserveAllow(unassignedTaskDdetails, TAB_UNASSIGNED)"
                                                             type="button"
                                                             (click)="reserveUnassignedTask(unassignedTaskDdetails)"
                                                             class="btn btn-info btn-with-icon">
@@ -429,7 +627,7 @@
                                         </div>
                                         <div class="card card-default">
                                             <div class="card-header bg-gray">
-                                                <b>Task Header</b>
+                                                <b> Viewing details for-{{ unassignedTaskDdetails.businessKey}}</b>
                                             </div>
                                             <div class="card-block">
                                                 <div class="row">
@@ -581,9 +779,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
                     <div role="tabpanel" class="tab-pane fade" id="tab_flagged">
                         <div class="row" *ngIf="flaggedTaskDdetails != null" style="width: 100%;">
                             <div class="col col-lg-3 col-md-3 col-sm-3">
@@ -1093,6 +1288,40 @@
             </div>
             <div class="modal-footer" id="modal_footer">
 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="documentDescription" tabindex="-1" role="dialog" attr.aria-labelledby="docDescModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    Document description
+                </h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal_body">
+                <form>
+                    <div class="form-group" *ngIf="selectedDocument">
+                        <textarea
+                            class="form-control" required
+                            [placeholder]="'Description'"
+                            [(ngModel)]="selectedDocument.description"
+                            name="description">
+                        </textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="modal_footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                <button type="submit" class="btn btn-success" data-dismiss="modal"
+                    (click)="onSubmitDocumentDescription()">Submit</button>
             </div>
         </div>
     </div>

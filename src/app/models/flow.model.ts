@@ -183,6 +183,11 @@ export class StateModel {
   connectorConfigList: string[];
   reportFlag: boolean;
   businessMonitorFlag: boolean;
+  virtualAgentId: string;
+  statusList: LabelValue[];
+  statusDisable: boolean;
+  documentEvalExp: string;
+
 
   constructor() {
     this.stateId = '';
@@ -210,6 +215,10 @@ export class StateModel {
     this.connectorConfigList = [];
     this.reportFlag = false;
     this.businessMonitorFlag = false;
+    this.virtualAgentId = '';
+    this.statusList = [];
+    this.statusDisable = false;
+    this.documentEvalExp = null;
   }
 }
 
@@ -326,4 +335,16 @@ export class CommonSearchModel {
 
   }
 
+}
+
+export class LabelValue {
+  label: string;
+  value: string;
+  disabled: boolean;
+ 
+  constructor(label?: string, value?: string, disabled?: boolean) {
+    this.label = label ? label : null;
+    this.value = value ? value : null;
+    this.disabled = disabled ? disabled : false;  
+  }
 }

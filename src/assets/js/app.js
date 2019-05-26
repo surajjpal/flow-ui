@@ -2403,7 +2403,6 @@ function toggleChat() {
 
 
 raiseChildEvent = function(eventCd) {
-  console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[")
   var frame = document.getElementById(iframeDivId);
   frame.contentWindow.postMessage(
     {
@@ -2417,8 +2416,6 @@ raiseChildEvent = function(eventCd) {
 }
 
 window.addEventListener('message', function(event) {
-  console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[000000000[")
-
   if(event.data.event_id === 'API_CHAT_BOT'){
     var chatEvent = event.data.data;
     if (chatEvent && chatEvent.action) {
@@ -2429,4 +2426,8 @@ window.addEventListener('message', function(event) {
     }
   }
 });
+
+
+
+
 

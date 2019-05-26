@@ -1,3 +1,5 @@
+<api-spinner *ngIf="getAgentReady"></api-spinner>
+  
 <div class="widgets">
   <div class="row">
     <ba-card [cardTitle]="domainCreateMode ? 'Create Domain' : 'Update Domain'" baCardClass="with-scroll"
@@ -394,11 +396,6 @@
             </button>
             <button type="button" *ngIf="showTestButton" class="btn btn-success" (click)="testDomain()">
               {{'Test Domain'}}
-            </button>
-          </div>
-          <div class="form-group" *ngIf='showAutoCon'>
-            <button type="button" *ngIf="showTestButton" class="btn btn-danger" (click)="exitTesting()">
-              {{'Exit Testing'}}
             </button>
           </div>
         </div>
@@ -4239,14 +4236,21 @@
     </div>
   </div>
 </div>
-<div *ngIf="showTooltip" class="talk-bubble tri-right border round btm-right-in"
-  style="position:fixed; right:5px; bottom:90px;">
-  <div class="talktext">
-    <b>{{'I am here, Test me!!'}}</b>
+<div class="loadWrapper" *ngIf="showTooltip && showAutoCon">
+  <div *ngIf="showTooltip" class="talk-bubble tri-right border round btm-right-in"
+    style="position:fixed; right:5px; bottom:90px;">
+    <div class="talktext">
+      <b>{{'I am here, Test me!!'}}</b>
+    </div>
   </div>
-</div>
-<div *ngIf='showAutoCon'>
-  <div dir="auto" [innerHTML]="botHtml"></div>
+  <div *ngIf='showAutoCon'>
+    <div dir="auto" [innerHTML]="botHtml"></div>
+  </div>
+  <div style="text-align:center">
+  <button type="button" class="btn btn-danger btn-lg round" style="bottom:30px;position:absolute;" (click)="exitTesting()">
+    {{'Exit Testing'}}
+  </button>
+  </div>
 </div>
 <div class="modal fade" id="activateModal" tabindex="-1" role="dialog" attr.aria-labelledby="activateModal"
   aria-hidden="true">

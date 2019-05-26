@@ -1,0 +1,30 @@
+<ul class="timeline">
+  <li [class]="index%2 ==1 ? 'timeline-inverted' : ''" *ngFor="let timelineData of timeLineStateAuditData; let index=index;">
+      <div class="timeline-badge"><i class="fa fa-pencil-square-o"></i></div>
+      <div class="timeline-panel">
+        <div class="timeline-heading">
+          <h4 class="timeline-title">{{ timelineData.stateCd }}</h4>
+          <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ timelineData.endTimeLong | amDateFormat:
+            'DD/MM/YYYY
+            hh:mm A' }}</small></p>
+          <label>Group: <code>{{ timelineData.assignedUserGroupCd }}</code></label><br>
+          <label>Updated by <code>{{ timelineData.assignedUserName }}</code></label><br>
+        </div>
+        <div class="timeline-body">
+          <div class="form-group">
+              <label>Comment: </label>
+              <p>{{ timelineData.taskRemarks }}</p>
+          </div>
+          <div *ngIf="timelineData.documents">
+            <label>Documents</label>
+            <div *ngFor="let doc of timelineData.documents" class="col-md-12">
+                <i class="fa fa-paperclip"></i>
+              <a [href]="getDownloadUrl(doc)">
+                {{ doc.userFileName }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+  </li>
+</ul>
