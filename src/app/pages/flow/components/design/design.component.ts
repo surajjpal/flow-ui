@@ -34,6 +34,8 @@ import { environment } from '../../../../../environments/environment';
 import { AlertService } from 'app/services/shared.service';
 import { DataModelService } from '../../../../services/setup.service';
 import { DataModel, Field, ValidatorInstance, ExtractorInstance, Entity } from '../../../../models/datamodel.model';
+import { AgentService } from '../../../../services/agent.service';
+import { Agent } from '../../../../models/agent.model';
 @Component({
   selector: 'api-flow-design',
   templateUrl: './design.component.html',
@@ -158,12 +160,17 @@ export class DesignComponent implements OnInit, OnDestroy {
   entityRedirectWarning:string;
   entityRedirect:boolean;
 
+
+  virtualAgentList:Agent[];
+  selectedVirtualAgents:string[];
+
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
   private subscriptionApiConfig: Subscription;
   private subscriptionOrPayload: Subscription;
   private subscriptionTimerUnit: Subscription;
   private subscriptionConConfig: Subscription;
+  private agentSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -175,6 +182,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     private connectorConfigService: ConnectorConfigService,
     private fileService: FileService,
     private alertService: AlertService,
+    private agentService: AgentService,
     private dataModelService: DataModelService
   ) {
     window['flowComponentRef'] = { component: this, zone: zone };
@@ -219,6 +227,9 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.entityselected = false;
     this.entityRedirectWarning = "You will be redirected to a different page, please make sure you save the process!!";
     this.entityRedirect = false;
+
+    this.virtualAgentList = [];
+    this.selectedVirtualAgents = [];
   }
 
   ngOnInit() {
@@ -250,6 +261,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.getApiConfigLookup();
     this.getConList();
     this.getDataModelList();
+    this.fetchAgents();
     var graphLoad = false;
     if (!this.graphObject || this.graphObject === null) {
       this.loadGraphObject();
@@ -767,6 +779,14 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.tempState.taskConfig = [];
     }
 
+    if (this.isStateConverseCompatible()) {
+      if (this.selectedVirtualAgents.length > 0) {
+        console.log(this.selectedVirtualAgents);
+        this.tempState.virtualAgentId = this.selectedVirtualAgents[0];
+      }
+      
+    }
+    
     if (this.isStateConnectorCompatible() && this.tempState.connectorConfigList && this.tempState.taskConfigList && this.tempState.connectorConfigList.length > 0) {
       this.saveConnectorTaskConfig();
     }
@@ -843,6 +863,12 @@ export class DesignComponent implements OnInit, OnDestroy {
     // TODO: improve the mechanism to differentiate Rule State with other states
     return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
       && this.tempState.entryActionList.includes('ConnectorStateEntryAction');
+  }
+
+  isStateConverseCompatible() {
+    // TODO: improve the mechanism to differentiate Rule State with other states
+    return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
+      && this.tempState.entryActionList.includes('ConverseStateEntryAction');
   }
 
   addRule() {
@@ -2187,6 +2213,20 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.tempState.statusList.splice(index, 1);
       }
     }
+  }
+
+  fetchAgents() {
+    const fields = [];
+    fields.push("_id");
+    fields.push("name");
+    this.subscription = this.agentService.getAllAgents(fields)
+      .subscribe(
+        agents => {
+          if (agents) {
+            this.virtualAgentList = agents;
+          }
+        }
+      );
   }
   
 }
