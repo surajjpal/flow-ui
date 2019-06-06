@@ -126,6 +126,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   selectedDomainVersion: number;
   associatedAgents: Agent[];
   getAgentReady: boolean;
+  agentSavedWithDoamin:boolean;
+  domainStatus:string;
+  domainId:string;
 
   selectedOption: ResponseData;
   bulkEditOptionsData: string;
@@ -187,6 +190,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.suggestedTags = [];
     this.globalIntents = ["closure", "apiIdle", "negation", "skip", "cancel", "apiRetry", "affirmation", "default", "apiInit", "initiation"]
     this.getAgentReady = false;
+    this.agentSavedWithDoamin = false;
 
     this.stagesSource.push(new Stage('Initialization', 'INIT'));
     this.stagesSource.push(new Stage('Context Setting', 'CONTEXT'));
@@ -1169,10 +1173,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
       if (!this.updateForTest && this.deleteTestingDomain) {
         this.deleteTestingDomain = false;
       }
-      if(this.updateForTest) {
+      if (this.updateForTest) {
         this.selectedDomain.statusCd = this.TESTING;
       }
-
 
       if (this.increaseVersion) {
         if (this.selectedDomain.statusCd == this.DRAFT && this.selectedDomain._id == null) {
@@ -1517,6 +1520,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
   testDomain() {
     this.getAgentReady = true;
+    this.domainStatus = this.selectedDomain.statusCd;
+    this.domainId = this.selectedDomain._id;
     if (this.companyAgentId) {
       if (!this.selectedDomain._id) {
         this.updateForTest = true;
@@ -1586,6 +1591,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.showAutoCon = false;
     this.showTooltip = false;
     this.updateForTest = false;
+    this.selectedDomain.statusCd = this.domainStatus;
+    this.selectedDomain._id = this.domainId;
+    this.increaseVersion = true;
     this.deleteDomainCreatedForTesting();
   }
 
@@ -1642,7 +1650,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   saveAgentWithActiveDomain(agent?: Agent) {
     this.agentSubscription = this.agentService.saveAgent(agent).subscribe(receivedAgent => {
       if (receivedAgent) {
-        console.log(receivedAgent);
+         this.agentSavedWithDoamin = true;
       }
     });
   }
