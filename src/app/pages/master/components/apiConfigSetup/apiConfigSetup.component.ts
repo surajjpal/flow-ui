@@ -171,7 +171,6 @@ export class ApiConfigSetupComponent implements OnInit, OnDestroy {
     this.urlParamList = [];
     this.addUrlParam();
   }
-  console.log(this.urlParamList);
 }
 
   populateSelectedResponse() {
@@ -305,14 +304,13 @@ export class ApiConfigSetupComponent implements OnInit, OnDestroy {
         this.apiConfig.body = null;
       }
 
-      if (this.apiConfig.method === 'GET') {
+      
         this.apiConfig.urlParams = {};
         for (const param of this.urlParamList) {
           if (param.get('key') && param.get('key').trim().length > 0) {
             this.apiConfig.urlParams[param.get('key')] = param.get('value');
           }
         }
-      }
 
       if (this.apiConfig._id && this.apiConfig._id.length > 0) {
         this.updateApiConfig();
