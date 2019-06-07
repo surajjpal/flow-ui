@@ -29,6 +29,7 @@ export class ApiConfigSetupComponent implements OnInit, OnDestroy {
   headersList: any[];
   textBody: string;
   bodyList: any[];
+  urlParamList: any[];
 
   private subscription: Subscription;
   private subscriptionMethods: Subscription;
@@ -71,6 +72,7 @@ export class ApiConfigSetupComponent implements OnInit, OnDestroy {
 
     this.populateHeaderList();
     this.populateBody();
+    this.populateUrlParam();
     this.populateSelectedResponse();
   }
 
@@ -149,6 +151,28 @@ export class ApiConfigSetupComponent implements OnInit, OnDestroy {
     }
   }
 
+  populateUrlParam() {
+    this.urlParamList = [];
+    if (this.apiConfig && this.apiConfig._id && this.apiConfig._id.length > 0 && this.apiConfig.urlParams) {
+     
+      for (const property in this.apiConfig.urlParams) {
+        if (property) {
+          const map = new Map();
+          map.set('key', property);
+          map.set('value', this.apiConfig.urlParams[property]);
+          this.urlParamList.push(map);
+        }
+      }
+      if (this.urlParamList.length <= 0) {
+        this.addUrlParam();
+      }
+
+  } else {
+    this.urlParamList = [];
+    this.addUrlParam();
+  }
+}
+
   populateSelectedResponse() {
     if (this.apiConfig && this.apiConfig._id && this.apiConfig._id.length > 0
       && this.apiConfig.responseList && this.apiConfig.responseList.length > 0) {
@@ -185,6 +209,20 @@ export class ApiConfigSetupComponent implements OnInit, OnDestroy {
     if (body && this.bodyList && this.bodyList.includes(body)) {
       const index = this.bodyList.indexOf(body);
       this.bodyList.splice(index, 1);
+    }
+  }
+
+  addUrlParam() {
+    const body = new Map();
+    body.set('key', '');
+    body.set('value', '');
+    this.urlParamList.push(body);
+  }
+
+  removeUrlParam(body: any) {
+    if (body && this.bodyList && this.bodyList.includes(body)) {
+      const index = this.bodyList.indexOf(body);
+      this.urlParamList.splice(index, 1);
     }
   }
 
@@ -265,6 +303,14 @@ export class ApiConfigSetupComponent implements OnInit, OnDestroy {
       } else {
         this.apiConfig.body = null;
       }
+
+      
+        this.apiConfig.urlParams = {};
+        for (const param of this.urlParamList) {
+          if (param.get('key') && param.get('key').trim().length > 0) {
+            this.apiConfig.urlParams[param.get('key')] = param.get('value');
+          }
+        }
 
       if (this.apiConfig._id && this.apiConfig._id.length > 0) {
         this.updateApiConfig();

@@ -20,6 +20,7 @@ export class ApiConfig extends BaseModel {
   method: string;
   headers: any;
   body: any;
+  urlParams: any;
   responseList: ApiResponse[];
   taskConConfigApi: boolean;
 
@@ -31,6 +32,7 @@ export class ApiConfig extends BaseModel {
     this.method = '';
     this.headers = {};
     this.body = {};
+    this.urlParams = {};
     this.responseList = [];
     this.taskConConfigApi = false;
   }
