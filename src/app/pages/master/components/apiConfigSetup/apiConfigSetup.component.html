@@ -28,6 +28,9 @@
                 <a class="nav-link" data-toggle="tab" href="#tab_body" role="tab">Body</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#tab_urlParam" role="tab">Url Params</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#tab_response" role="tab">Response</a>
               </li>
             </ul>
@@ -117,6 +120,43 @@
                       </td>
                       <td colspan="1" style="text-align: right;">
                         <button type="button" class="btn btn-primary" (click)="addBody()">Add Param</button>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="tab_urlParam">
+                <br>
+                <table class="table" [mfData]="urlParamList" #mfUrLParamData="mfDataTable"
+                  [mfRowsOnPage]="5">
+                  <thead>
+                    <tr>
+                      <th>Action</th>
+                      <th>Key</th>
+                      <th>Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let urlParam of mfUrLParamData.data">
+                      <td>
+                        <button type="button" class="btn btn-danger" title="Delete" (click)="removeUrlParam(urlParam)"><i
+                            class="ion-close-round"></i></button>
+                      </td>
+                      <td>
+                        <input type="text" class="form-control" placeholder="Key" [value]="urlParam.get('key')" (input)="urlParam.set('key', $event.target.value)">
+                      </td>
+                      <td>
+                        <input type="text" class="form-control" placeholder="Value" [value]="urlParam.get('value')" (input)="urlParam.set('value', $event.target.value)" />
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="2">
+                        <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]"></mfBootstrapPaginator>
+                      </td>
+                      <td colspan="1" style="text-align: right;">
+                        <button type="button" class="btn btn-primary" (click)="addUrlParam()">Add Url Param</button>
                       </td>
                     </tr>
                   </tfoot>
