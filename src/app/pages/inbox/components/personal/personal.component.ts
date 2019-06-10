@@ -195,21 +195,57 @@ export class PersonalComponent implements OnInit, OnDestroy {
   }
 
   agentAssist(state: State): void {
+    
     this.stateService.updateVirtualAssist(this.assignedTaskDdetails)
-      .subscribe(
-        contextData => {
-          if (contextData) {
-            
-          }
-          this.assistModeFl = true;
-          this.virtualAgentURL = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.autoworkbench + state.assignedVirtualAgentId + `/` + state.entityId + environment.autoworkbenchdisplaybar}`);
-        },
-        error => {
+    .subscribe(
+      contextData => {
+        if (contextData) {
           
         }
-      )
+        if (state.assignedVirtualAgentId.indexOf("http") != -1) {
+          var url = state.assignedVirtualAgentId;
+          if (url.indexOf("?") != -1) {
+            url = url + "&episodeId=" + state.entityId;
+          }
+          else {
+            url = url + "?episodeId=" + state.entityId;
+          }
+          var params = url.substring(url.indexOf("?") + 1).split("&")
+          for (let paraKeyValue of params) {
+            var keyValue = paraKeyValue.split("=");
+            keyValue = keyValue.filter(function(e) {
+              return e != null && e.trim().length != 0;
+            })
+            if (keyValue.length ==1) {
+              if (contextData[keyValue[0]]) {
+                url = url.replace(keyValue[0] + "=", keyValue[0] + "=" + contextData[keyValue[0]]);
+              }
+            }
+          }
+
+          window.open(
+            url,
+            '_blank' // <- This is what makes it open in a new window.
+            );
+        }
+        else {
+          this.assistModeFl = true;
+          this.virtualAgentURL = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.autoworkbench + state.assignedVirtualAgentId + `/` + state.entityId + environment.autoworkbenchdisplaybar}`);
+        }
+        
+      },
+      error => {
+        
+      }
+    )
+  
     
   }
+
+  getValueFromContextDataForKey(key: string) {
+
+  }
+  
 
 
   closeAgentAssist(): void {
