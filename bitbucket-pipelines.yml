@@ -81,5 +81,33 @@ pipelines:
             - ./compress.sh   #Calling compress.sh to uglify files and compressing build  
             - ./create_artifact.sh
             - aws s3 cp flow-ui.zip s3://automatapi-build-artifacts/compusoft/flow-ui/release/
+    
+    sales:
+      - step:
+          name: FlowUI-Sales Build and Release
+          image: node:8.10.0
+          caches:
+            - node
+          script: #Modify the commands below to build your repository.
+            - npm install
+            - npm run build:sales
+            - echo 'successfully build!'
+          artifacts: #Defining the artifacts to be passed to each future step.
+            - dist/**
+    - step:
+          name: FlowUI-Demo-Compressing files
+          script:
+            - ./compress.sh   #Calling compress.sh to uglify files and compressing build 
+    - step:
+          name: FlowUI Demo Deployment
+          deployment: sales
+          image: atlassian/pipelines-awscli
+          script:
+            - echo 'Deleting old build from s3'
+            - aws s3 rm s3://console-ui-sales --recursive
+            - echo 'Deleted old build from s3'
+            - echo 'Uploading new build on s3'
+            - aws s3 cp ./dist/ s3://console-ui-sales/ --recursive
+            - echo 'build upload successful!'
       
 
