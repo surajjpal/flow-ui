@@ -99,7 +99,7 @@ pipelines:
             - ./compress.sh   #Calling compress.sh to uglify files and compressing build 
       - step:
           name: FlowUI Sales Deployment
-          deployment: sales
+          deployment: test
           image: atlassian/pipelines-awscli
           script:
             - echo 'Deleting old build from s3'
