@@ -51,6 +51,7 @@
         "dev": "environments/environment.ts",
         "demo" : "environments/environment.demo.ts",
         "prod": "environments/environment.prod.ts",
+        "sales": "environments/environment.sales.ts",
         "local": "environments/environment.local.ts"
       }
     }
