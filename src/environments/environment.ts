@@ -8,27 +8,27 @@ export const environment = {
   name: 'development',
 
   // Root
-  root: 'http://108.168.190.82:8080/flow/',
+  root: 'http://localhost:8080/flow/',
 
   // API
-  authurl: 'http://108.168.190.82:8080/flow/auth/',
+  authurl: 'http://localhost:8080/flow/auth/',
 
   // Services
-  saveaccounturl: 'http://108.168.190.82:8080/flow/services/saveaccount',
-  fetchaccountbyidurl: 'http://108.168.190.82:8080/flow/services/fetchaccountbyid?query=',
-  publishaccounturl: 'http://108.168.190.82:8080/flow/services/publish/',
-  unpublishaccounturl: 'http://108.168.190.82:8080/flow/services/unpublish/',
+  saveaccounturl: 'http://localhost:8080/flow/services/saveaccount',
+  fetchaccountbyidurl: 'http://localhost:8080/flow/services/fetchaccountbyid?query=',
+  publishaccounturl: 'http://localhost:8080/flow/services/publish/',
+  unpublishaccounturl: 'http://localhost:8080/flow/services/unpublish/',
 
   processauditurl: "http://localhost:5000/api/universalsearch/search/flow",
 
   // Interfaces
-  interfaceService: 'http://108.168.190.82:8080/flow/interfaces',
-  updateClassifierTraining: 'http://108.168.190.82:8080/flow/interfaces/auto_decorate_training',
-  updateIntentTraining: 'http://108.168.190.82:8080/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'http://108.168.190.82:8080/flow/interfaces/entity_classification_training',
+  interfaceService: 'http://localhost:8080/flow/interfaces',
+  updateClassifierTraining: 'http://localhost:8080/flow/interfaces/auto_decorate_training',
+  updateIntentTraining: 'http://localhost:8080/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'http://localhost:8080/flow/interfaces/entity_classification_training',
 
   // Flow
-  server: 'http://108.168.190.82:8080/flow/console/',
+  server: 'http://localhost:8080/flow/console/',
   autourl: 'https://virtualagent.automatapi.xyz/#/pg/ch/cnv/',
   autoworkbench: 'https://workbench.automatapi.com/#/wb/',
   autoworkbenchdisplaybar: '?displaySideBar=false',
@@ -36,7 +36,7 @@ export const environment = {
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
   orPayloadMachineType: 'state/saveOrPayload/machineType/',
-  statebystatusandfolderurl: 'state/pagebystatusandfolder/,', // status: CLOSED, ACTIVE; folder: Group, Personal
+  statebystatusandfolderurl: 'state/pagebystatusandfolder/', // status: CLOSED, ACTIVE; folder: Group, Personal
   statebysubstatusandfolderurl: 'state/pagebysubstatusandfolder/',
   saveflaggedstate: 'state/saveFlaggedState',
   savearchivestate: 'state/archive',
@@ -106,7 +106,7 @@ export const environment = {
   getconinfobytype: 'connectors/getConInfoByType/',
 
   // auto
-  autoServer: 'http://108.168.190.82:8080/flow/auto/',
+  autoServer: 'http://localhost:8080/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',
@@ -158,7 +158,7 @@ export const environment = {
   businessObjectPredictUrl: '/automatons/businessobject/predict',
 
   //Dashboard
-  dashboardServer: 'http://108.168.190.82:8080/flow/dashboard/',
+  dashboardServer: 'http://localhost:8080/flow/dashboard/',
   dashboardsummary: 'auto/dashboard_summary',
   episodetimeline: 'auto/episode_timeline',
   intentcount: 'auto/intent_count',
@@ -174,7 +174,7 @@ export const environment = {
   statetransactionvalue: 'flow/state_transaction_value',
 
   //Dashboard from interfaces
-  dashboardinterface: 'http://108.168.190.82:8080/flow/interfaces/dashboard',
+  dashboardinterface: 'http://localhost:8080/flow/interfaces/dashboard',
 
   //Following APIs path - To be used in conjunction with interfaceService property
   crudFunction: '/crud',
@@ -194,7 +194,7 @@ export const environment = {
 
 
   //Vocabulary
-  vocabulary: 'http://108.168.190.82:8080/flow/interfaces/vocabulary',
+  vocabulary: 'http://localhost:8080/flow/interfaces/vocabulary',
 
   // USP
   uspsearch: '/api/usp/relevancesearch',

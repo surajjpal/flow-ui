@@ -3,27 +3,27 @@ export const environment = {
     name: 'sales',
 
     // Root
-    root: 'https://flow.automatapi.com/flow/',
+    root: 'https://demo-sales.automatapi.com/flow/',
 
     // API
-    authurl: 'https://flow.automatapi.com/flow/auth/',
+    authurl: 'https://demo-sales.automatapi.com/flow/auth/',
 
     // Services
-    saveaccounturl: 'https://flow.automatapi.com/flow/account/create',
-    fetchaccountbyidurl: 'https://flow.automatapi.com/flow/account/',
-    publishaccounturl: 'https://flow.automatapi.com/flow/account/publish/',
-    unpublishaccounturl: 'https://flow.automatapi.com/flow/services/unpublish/',
+    saveaccounturl: 'https://demo-sales.automatapi.com/flow/account/create',
+    fetchaccountbyidurl: 'https://demo-sales.automatapi.com/flow/account/',
+    publishaccounturl: 'https://demo-sales.automatapi.com/flow/account/publish/',
+    unpublishaccounturl: 'https://demo-sales.automatapi.com/flow/services/unpublish/',
 
 
 
     // Interfaces
-    interfaceService: 'https://flow.automatapi.com/flow/interfaces',
-    updateClassifierTraining: 'https://flow.automatapi.com/flow/interfaces/auto_decorate_training',
-    updateIntentTraining: 'https://flow.automatapi.com/flow/interfaces/intent_classification_training',
-    updateEntityTraining: 'https://flow.automatapi.com/flow/interfaces/entity_classification_training',
+    interfaceService: 'https://demo-sales.automatapi.com/flow/interfaces',
+    updateClassifierTraining: 'https://demo-sales.automatapi.com/flow/interfaces/auto_decorate_training',
+    updateIntentTraining: 'https://demo-sales.automatapi.com/flow/interfaces/intent_classification_training',
+    updateEntityTraining: 'https://demo-sales.automatapi.com/flow/interfaces/entity_classification_training',
 
     // Flow
-    server: 'https://flow.automatapi.com/flow/console/',
+    server: 'https://demo-sales.automatapi.com/flow/console/',
     autourl: 'https://virtualagent.automatapi.xyz/#/pg/ch/cnv/',
     autoworkbench: 'https://workbench.automatapi.com/#/wb/',
     autoworkbenchdisplaybar: '?displaySideBar=false',
@@ -104,7 +104,7 @@ export const environment = {
 
 
     // auto
-    autoServer: 'https://flow.automatapi.com/flow/auto/',
+    autoServer: 'https://demo-sales.automatapi.com/flow/auto/',
     episodelisturl: 'load/episodes?query=',
     episodebyidurl: 'load/episode?query=',
     messagelisturl: 'load/messages?query=',
@@ -134,7 +134,7 @@ export const environment = {
 
 
     // Analytics
-    reportservice: 'https://flow.automatapi.com/flow/report',
+    reportservice: 'https://demo-sales.automatapi.com/flow/report',
     sendReportUrl: '/reports/analyticsreport/sendreport',
     scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
     getAnalyticsReports: "/reports/analyticsreport",
@@ -157,7 +157,7 @@ export const environment = {
     businessObjectPredictUrl: '/automatons/businessobject/predict',
 
     //Dashboard
-    dashboardServer: 'https://flow.automatapi.com/flow/dashboard/',
+    dashboardServer: 'https://demo-sales.automatapi.com/flow/dashboard/',
     dashboardsummary: 'auto/dashboard_summary',
     episodetimeline: 'auto/episode_timeline',
     intentcount: 'auto/intent_count',
@@ -173,7 +173,7 @@ export const environment = {
     statetransactionvalue: 'flow/state_transaction_value',
 
     //Dashboard from interfaces
-    dashboardinterface: 'https://flow.automatapi.com/flow/interfaces/dashboard',
+    dashboardinterface: 'https://demo-sales.automatapi.com/flow/interfaces/dashboard',
 
     //Following APIs path - To be used in conjunction with interfaceService property
     crudFunction: '/crud',
@@ -188,11 +188,11 @@ export const environment = {
     businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
 
     //python project in api-utils ondemandreport project
-    sendReportCSV: 'https://flow.automatapi.com/flow/report/reports/generatereport',
+    sendReportCSV: 'https://demo-sales.automatapi.com/flow/report/reports/generatereport',
 
 
     //Vocabulary
-    vocabulary: 'https://flow.automatapi.com/flow/interfaces/vocabulary',
+    vocabulary: 'https://demo-sales.automatapi.com/flow/interfaces/vocabulary',
 
     // USP
     uspsearch: '/api/usp/relevancesearch',
