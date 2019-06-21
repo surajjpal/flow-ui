@@ -186,7 +186,7 @@
                                     </table>
                               </div>
 
-                              <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'TimerStateEntryAction'">
+                              <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 && tempState.entryActionList[0] === 'TimerStateEntryAction' || (tempState.type === 'Manual' && tempState.entryActionList[0] === 'ManualStateEntryAction')">
                                     <label for="timerUnitType">Timer Unit Type</label>
                                     <!-- <input type="text" class="form-control" required id="timerUnitType" placeholder="Timer Unit Type" [(ngModel)]="tempState.timerUnitType" name="timerUnitType" /> -->
                                     <select class="selectpicker form-control" required id="selectTimerUnitType" title="Choose Timer Unit" [(ngModel)]="tempState.timerUnitType"
@@ -195,7 +195,7 @@
                                                 {{timerUnitType['value']}}</option>
                                     </select>
                               </div>
-                              <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'TimerStateEntryAction'">
+                              <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === 'Auto' && tempState.entryActionList && tempState.entryActionList.length>0 && tempState.entryActionList[0] === 'TimerStateEntryAction' || (tempState.type === 'Manual' && tempState.entryActionList[0] === 'ManualStateEntryAction')">
                                     <label for="timerUnit">Timer Units</label>
                                     <input type="number" class="form-control" required id="timerUnit" placeholder="Timer Unit" [(ngModel)]="tempState.timerUnit"
                                           name="timerUnit" min="0" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"
