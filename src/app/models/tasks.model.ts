@@ -228,7 +228,7 @@ export class TaskDecision {
   }
 
   isAllocateAllow(stateDetails: State, tasktype: string, users: UserHierarchy[]) {
-    if (tasktype == this.TAB_UNASSIGNED) {
+    if (tasktype == this.TAB_ASSIGNED) {
       return stateDetails.statusCd !== ('CLOSED' || 'ARCHIVE') && users.length > 0
     }
     if (tasktype == this.TAB_UNASSIGNED) {
