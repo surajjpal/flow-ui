@@ -1,1 +1,33 @@
-Route designing goes here
+<!-- page content -->
+<div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+       <button type="button" class="btn btn-danger btn-with-icon" style="margin-right: 5px" data-toggle="modal"
+          data-target="#discardWarningModal">
+          <i class="ion-ios-refresh"></i>Discard</button>
+       <button type="button" class="btn btn-success btn-with-icon" style="margin-right: 5px" (click)="saveOnServer()"
+          *ngIf="!readOnly">
+          <i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
+       <button type="button" class="btn btn-primary btn-with-icon" style="margin-right: 5px"
+          (click)="prepareDummyObject()" *ngIf="!readOnly" data-toggle="modal" data-target="#settignsModal">
+          <i class="fa fa-cogs" aria-hidden="true"></i>Settings</button>
+       <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
+          <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>
+       <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
+          (click)="toolsChoice(ZOOM_OUT)">
+          <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>
+       <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
+          (click)="toolsChoice(ZOOM_ACTUAL)">
+          <i class="ion-arrow-expand"></i>Zoom Actual</button>
+       <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
+          (click)="toolsChoice(PRINT_PREVIEW)">
+          <i class="ion-printer"></i>Print Preview</button>
+    </div>
+    <br>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+       <div id="routeEditorGrid" class="col-md-12 col-sm-12 col-xs-12"
+          style="height:80vh;overflow:hidden;margin-bottom:1px;border-style:solid;border-color:silver;"></div>
+       <div id="routeOutlineContainer"
+          style="z-index:1;position:absolute;overflow:hidden;top:5px;right:20px;width:120px;height:90px;background:transparent;border-style:solid;border-color:lightgray;">
+       </div>
+    </div>
+ </div>
