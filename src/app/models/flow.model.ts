@@ -17,6 +17,18 @@ export class DataPointValidation {
   }
 }
 
+export class TaskValidation {
+  sequence: number;
+  validationExpression: string;
+  errorMessage: string;
+
+  constructor(sequence?: number, validationExpression?: string, errorMessage?: string) {
+    this.sequence = sequence ? sequence : 0;
+    this.validationExpression = validationExpression ? validationExpression : null;
+    this.errorMessage = errorMessage ? errorMessage : null;
+  }
+}
+
 export class DataPoint {
   sequence: number;
   dataPointName: string;
@@ -188,6 +200,7 @@ export class StateModel {
   statusDisable: boolean;
   documentEvalExp: string;
   converseRequestExp: string;
+  taskValidations: TaskValidation[];
 
 
   constructor() {
@@ -221,6 +234,7 @@ export class StateModel {
     this.statusDisable = false;
     this.documentEvalExp = null;
     this.converseRequestExp = null;
+    this.taskValidations = [];
   }
 }
 

@@ -636,6 +636,50 @@
                                                 {{dataPoint.dataPointLabel}}</option>
                                     </select>
                               </div>
+                              <div class="form-group row" *ngIf="tempState.allocationModel !== null">
+                                    <div class="col-md-12">
+                                          <button type="button" class="btn btn-primary btn-sm pull-right" title="Add Task Validation" (click)="onAddTaskValidation()">
+                                                <i class="ion-plus-round">Add Task Validation</i>
+                                          </button>
+                                    </div>
+                                    
+                              </div>
+                              <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.taskValidations && tempState.taskValidations.length > 0">
+                                    <table class="table">
+                                          <thead>
+                                                <tr>
+                                                      <th>Sequence</th>
+                                                      <th>ValidationExpression</th>
+                                                      <th>Error Message</th>
+                                                      <th>Remove</th>
+                                                </tr>
+                                          </thead>
+                                          <tbody>
+                                                <tr *ngFor="let validation of tempState.taskValidations; let index=index;">
+                                                      <td>
+                                                            <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'taskvalidation' + index" placeholder="Sequence"
+                                                                  onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"
+                                                                  [(ngModel)]="validation.sequence" name="sequence"
+                                                            />
+                                                            
+                                                      </td>
+                                                      <td>
+                                                            <input type="text" class="form-control" required placeholder="validationExpression" [ngModelOptions]="{standalone: true}" [(ngModel)]="validation.validationExpression"
+                                                                  name="validationExpression" />
+                                                      </td>
+                                                      <td>
+                                                            <input type="text" class="form-control" required placeholder="errorMessage" [ngModelOptions]="{standalone: true}" [(ngModel)]="validation.errorMessage"
+                                                                  name="errorMessage" />
+                                                      </td>
+                                                      <td>
+                                                            <button type="button" class="btn btn-danger" (click)="onRemoveTaskValidation(validation)">
+                                                                  <i class="ion-ios-trash"></i>
+                                                            </button>
+                                                      </td>
+                                                </tr>
+                                          </tbody>
+                                    </table>
+                              </div>
                               <div class="form-group" *ngIf="tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'DocumentStateEntryAction'">
                                     <label for="expressionDoc">Document Eval expression</label>
                                     <input type="text" class="form-control" required id="expressionDoc" placeholder="PARAM.?fileName" [(ngModel)]="tempState.documentEvalExp"

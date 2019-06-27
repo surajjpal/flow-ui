@@ -924,7 +924,13 @@ export class PersonalComponent implements OnInit, OnDestroy {
       if (this.validateDocuments(state)) {
         this.progressBarFlag = true;
         this.assignedTaskActionButtonEnabled[state._id] = false;
-        this.uploadDocumentForTask(state, this.TAB_ASSIGNED);
+        if (this.documentsToBeUploaded && this.documentsToBeUploaded.length > 0) {
+          this.uploadDocumentForTask(state, this.TAB_ASSIGNED);
+        }
+        else {
+          this.updateAssignedTask(state);
+        }
+        
       }
     }
     else {
@@ -941,19 +947,21 @@ export class PersonalComponent implements OnInit, OnDestroy {
             this.assignedTaskActionButtonEnabled[state._id] = true;
           if (response) {
             const errorState: State = response;
-            let erresponseError = "";
+            this.responseError = "";
             if (errorState.errorMessageMap && Object.keys(errorState.errorMessageMap).length > 0) {
               for (const key in errorState.errorMessageMap) {
-                if (key) {
+                if (key && errorState.errorMessageMap[key]) {
                   const errorList: string[] = errorState.errorMessageMap[key];
-  
-                  erresponseError += `${this.fieldKeyMap[key]}<br>`;
-                  for (const error of errorList) {
-                    erresponseError += `  - ${error}<br>`;
+                  if (this.fieldKeyMap && this.fieldKeyMap[key]) {
+                    this.responseError += `${this.fieldKeyMap[key]}<br>`;
                   }
-                  new showModal(erresponseError);
+                  for (const error of errorList) {
+                    this.responseError += `  - ${error}<br>`;
+                  }
                 }
               }
+              this.progressBarFlag = false;
+              return;
             }
             else {
                 this.progressBarFlag = false;
