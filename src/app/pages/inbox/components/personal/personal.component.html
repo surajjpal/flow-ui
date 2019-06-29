@@ -364,8 +364,8 @@
                                                                 <i class="ion-plus-round">Add Document</i>
                                                                 </button>
                                                             </div>
-                                                            <div *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id] && documentsForState[assignedTaskDdetails._id].length > 0">
-                                                                <table class="table" style="overflow-x:auto;">
+                                                            <div style="overflow-x:auto;" *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id] && documentsForState[assignedTaskDdetails._id].length > 0">
+                                                                <table class="table">
                                                                     <thead>
                                                                         <tr>
                                                                             <th>Document Type</th>
