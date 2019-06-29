@@ -91,7 +91,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
   documentsToBeUploaded = [];
   selectedDocument: Document;
   selectedTab: string;
-  DOCUMENT_STATUS = ["PENDING", "APPROVED", "REJECTED" ];
+  DOCUMENT_STATUS = ["PENDING", "APPROVED", "REJECTED"];
 
   // users
   userId: string
@@ -939,6 +939,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
   }
 
   updateAssignedTask(state: State) {
+    this.responseError = null;
     this.progressBarFlag = true;
     this.assignedTaskActionButtonEnabled[state._id] = false;
     this.subscription = this.stateService.update(state.machineType, state.entityId, state['parameters'], state.taskStatus, state.taskRemarks, this.documentsForState[state._id], state._id)
@@ -956,7 +957,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
                     this.responseError += `${this.fieldKeyMap[key]}<br>`;
                   }
                   for (const error of errorList) {
-                    this.responseError += `  - ${error}<br>`;
+                    this.responseError += ` ${error}, <br>`;
                   }
                 }
               }
@@ -1479,4 +1480,5 @@ export class PersonalComponent implements OnInit, OnDestroy {
         );
     }
   }
+
 }

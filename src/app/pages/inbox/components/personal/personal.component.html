@@ -88,7 +88,7 @@
                                         <div class="card card-default">
                                             <div class="card-block">
                                                 <div class="row">
-                                                    <div class="form-group col-md-12 alert-danger" style="margin-bottom: 10px;"
+                                                    <div class="form-group col-md-12 alert alert-danger" style="margin-bottom: 10px;"
                                                         *ngIf="responseError && responseError.length > 0" [innerHTML]="responseError">
                                                     </div>
                                     
@@ -364,13 +364,14 @@
                                                                 <i class="ion-plus-round">Add Document</i>
                                                                 </button>
                                                             </div>
-                                                            <div style="overflow-x:auto;" *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id] && documentsForState[assignedTaskDdetails._id].length > 0">
-                                                                <table class="table">
+                                                            <div *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id] && documentsForState[assignedTaskDdetails._id].length > 0">
+                                                                <table class="table" style="overflow-x:auto;">
                                                                     <thead>
                                                                         <tr>
                                                                             <th>Document Type</th>
                                                                             <th>Upload</th>
                                                                             <th>Status</th>
+                                                                            <th>Waived</th>
                                                                             <th>Uploaded Time</th>
                                                                             <th>Description</th>
                                                                             <th></th>
@@ -399,6 +400,10 @@
                                                                                     <option *ngFor="let st of DOCUMENT_STATUS"
                                                                                         [ngValue]="st">{{st}}</option>
                                                                                 </select>
+                                                                            </td>
+                                                                            <td style="text-align: center;">
+                                                                                <api-checkbox [checked]="!document.mandatory" (event)="document.mandatory = !$event.target.checked">
+                                                                                </api-checkbox>
                                                                             </td>
                                                                             <td *ngIf="document.uploadTimeLong != null">
                                                                                 {{ document.uploadTimeLong | amDateFormat:
