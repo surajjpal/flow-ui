@@ -20,7 +20,7 @@ import { v4 as uuid } from 'uuid';
 // Model Imports
 import {
   GraphObject, DataPoint, Classifier, StateModel,
-  EventModel, Expression, Transition, ManualAction, DataPointValidation, StateInfoModel, LabelValue
+  EventModel, Expression, Transition, ManualAction, DataPointValidation, StateInfoModel, LabelValue, TaskValidation
 } from '../../../../models/flow.model';
 import { ConnectorConfig, ConnectorInfo, TaskObject, TempConnectorConfig } from '../../../../models/setup.model';
 import { ApiConfig, ApiKeyExpressionMap, ApiResponse, MVELObject } from '../../../../models/setup.model';
@@ -2211,6 +2211,24 @@ export class DesignComponent implements OnInit, OnDestroy {
       let index = this.tempState.statusList.indexOf(labelValue);
       if (index != -1 ) {
         this.tempState.statusList.splice(index, 1);
+      }
+    }
+  }
+
+  onAddTaskValidation() {
+    if (this.tempState != null) {
+      if (this.tempState.taskValidations == null) {
+        this.tempState.taskValidations = [];
+      }
+      this.tempState.taskValidations.push(new TaskValidation());
+    }
+  }
+
+  onRemoveTaskValidation(validation: TaskValidation) {
+    if (this.tempState != null && this.tempState.taskValidations != null && this.tempState.taskValidations.length > 0) {
+      let index = this.tempState.taskValidations.indexOf(validation);
+      if (index != -1) {
+        this.tempState.taskValidations.splice(index, 1);
       }
     }
   }
