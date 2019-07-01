@@ -93,7 +93,7 @@
                                                     </div>
                                     
                                                     
-                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
                                                         <button
                                                             [disabled]="!assignedTaskActionButtonEnabled[assignedTaskDdetails._id]"
                                                             *ngIf="taskDecision.isUpdateAllow(assignedTaskDdetails, TAB_ASSIGNED)"
@@ -364,7 +364,7 @@
                                                                 <i class="ion-plus-round">Add Document</i>
                                                                 </button>
                                                             </div>
-                                                            <div style="overflow-x:auto;" *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id] && documentsForState[assignedTaskDdetails._id].length > 0">
+                                                            <div style="overflow-x:auto; width: 100%" *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id] && documentsForState[assignedTaskDdetails._id].length > 0">
                                                                 <table class="table">
                                                                     <thead>
                                                                         <tr>
@@ -485,7 +485,7 @@
                                                                 <i class="fa fa-paperclip">Attachment</i>
                                                             </button>
                                                         </div>
-                                                        <div style="overflow-x:auto;" *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id] && documentsForState[assignedTaskDdetails._id].length > 0">
+                                                        <div style="overflow-x:auto; width: 100%;" *ngIf="documentsForState && documentsForState[assignedTaskDdetails._id] && documentsForState[assignedTaskDdetails._id].length > 0">
                                                             <table class="table">
                                                                 <thead>
                                                                     <tr>
