@@ -30,7 +30,7 @@ designRouteEditor = function (route, readOnly) {
     // Enables automatic sizing for vertices after editing and
     // panning by using the left mouse button.
     routeGraph.setCellsMovable(false);
-    routeGraph.setConnectable(true);
+    routeGraph.setConnectable(false);
     routeGraph.setAutoSizeCells(true);
     routeGraph.setPanning(true);
     routeGraph.centerZoom = false;
@@ -165,7 +165,7 @@ function routeCreateNewGraph(routeGraph, routeEmpty, readOnly) {
 
   if (routeEmpty) {
     // Keeping out of model update cycle since the same is being handled internally
-    routeAddOverlays(routeGraph, treeRoot, false, true, horizontal, readOnly);
+    routeAddOverlays(routeGraph, treeRoot, false, true, false, horizontal, readOnly);
   } else {
     model.beginUpdate();
     try {
@@ -209,9 +209,9 @@ function routeCreatePopupMenu(routeGraph, menu, cell, evt, readOnly) {
   var model = routeGraph.getModel();
   if (!readOnly && cell != null) {
     if (cell.id != 'treeRoot' && model.isVertex(cell) && cell.value && !(typeof cell.value === "string" || cell.value instanceof String)) {
-      menu.addItem('Delete', './assets/js/mxGraph/images/delete.gif', function () {
+      menu.addItem('Delete All', './assets/js/mxGraph/images/delete.gif', function () {
         // Send event to typescript to delete selected vertex (route)
-        window['routeComponentRef'].zone.run(() => { window['routeComponentRef'].component.deleteRouteStep(cell.value.routeStepId); });
+        window['routeComponentRef'].zone.run(() => { window['routeComponentRef'].component.deleteRouteStep(cell.value.routeStepId, true); });
       });
 
       menu.addItem('Edit', '', function () {
@@ -243,7 +243,7 @@ function routeCreatePopupMenu(routeGraph, menu, cell, evt, readOnly) {
   });
 };
 
-function routeAddOverlays(routeGraph, cell, addDeleteIcon, addAddIcon, horizontal, readOnly) {
+function routeAddOverlays(routeGraph, cell, addDeleteIcon, addAddIcon, addInsertIcon, horizontal, readOnly) {
   routeGraph.getModel().beginUpdate();
 
   try {
@@ -261,15 +261,40 @@ function routeAddOverlays(routeGraph, cell, addDeleteIcon, addAddIcon, horizonta
         overlay.verticalAlign = mxConstants.ALIGN_BOTTOM;
       }
 
-      // TODO: Continue from this point, fire event to typescript to add new route step
       overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
         try {
-          // Send event to typescript to create new vertex (route)
           var clickedCell = evt.getProperty('cell')
           if (clickedCell.id == 'treeRoot') {
             window['routeComponentRef'].zone.run(() => { window['routeComponentRef'].component.addRouteStep(null); });
           } else {
             window['routeComponentRef'].zone.run(() => { window['routeComponentRef'].component.addRouteStep(clickedCell.value.routeStepId); });
+          }
+        } catch (exception) {
+          console.error(exception);
+        }
+      }));
+      routeGraph.addCellOverlay(cell, overlay);
+    }
+
+    if (!readOnly && addInsertIcon) {
+      var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/add.png', 24, 24), 'Insert Route Step');
+
+      overlay.cursor = 'hand';
+      if (horizontal) {
+        overlay.align = mxConstants.ALIGN_LEFT;
+        overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
+      } else {
+        overlay.align = mxConstants.ALIGN_CENTER;
+        overlay.verticalAlign = mxConstants.ALIGN_BOTTOM;
+      }
+
+      overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
+        try {
+          var clickedCell = evt.getProperty('cell')
+          if (clickedCell.id == 'treeRoot') {
+            // Do nothing as a fail safe. Icon shouldn't be visible for this case
+          } else {
+            window['routeComponentRef'].zone.run(() => { window['routeComponentRef'].component.insertRouteStep(clickedCell.value.routeStepId); });
           }
         } catch (exception) {
           console.error(exception);
@@ -288,7 +313,7 @@ function routeAddOverlays(routeGraph, cell, addDeleteIcon, addAddIcon, horizonta
       overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
         try {
           // Send event to typescript to delete selected vertex (route)
-          window['routeComponentRef'].zone.run(() => { window['routeComponentRef'].component.deleteRouteStep(evt.getProperty('cell').value.routeStepId); });
+          window['routeComponentRef'].zone.run(() => { window['routeComponentRef'].component.deleteRouteStep(evt.getProperty('cell').value.routeStepId, false); });
         } catch (exception) {
           console.error(exception);
         }
@@ -349,7 +374,7 @@ function routeAddChild(routeGraph, sourceVertex, cellValue, routeType, condition
   }
 
   // Keeping out of model update cycle since the same is being handled internally
-  routeAddOverlays(routeGraph, vertex, true, isEnd, horizontal, readOnly);
+  routeAddOverlays(routeGraph, vertex, true, isEnd, true, horizontal, readOnly);
 
   return vertex;
 };

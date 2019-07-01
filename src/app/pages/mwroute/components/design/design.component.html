@@ -1,33 +1,720 @@
 <!-- page content -->
 <div>
-    <div class="col-md-12 col-sm-12 col-xs-12">
-       <button type="button" class="btn btn-danger btn-with-icon" style="margin-right: 5px" data-toggle="modal"
-          data-target="#discardWarningModal">
-          <i class="ion-ios-refresh"></i>Discard</button>
-       <button type="button" class="btn btn-success btn-with-icon" style="margin-right: 5px" (click)="saveOnServer()"
-          *ngIf="!readOnly">
-          <i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
-       <button type="button" class="btn btn-primary btn-with-icon" style="margin-right: 5px"
-          (click)="prepareDummyObject()" *ngIf="!readOnly" data-toggle="modal" data-target="#settignsModal">
-          <i class="fa fa-cogs" aria-hidden="true"></i>Settings</button>
-       <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
-          <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>
-       <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
-          (click)="toolsChoice(ZOOM_OUT)">
-          <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>
-       <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
-          (click)="toolsChoice(ZOOM_ACTUAL)">
-          <i class="ion-arrow-expand"></i>Zoom Actual</button>
-       <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
-          (click)="toolsChoice(PRINT_PREVIEW)">
-          <i class="ion-printer"></i>Print Preview</button>
-    </div>
-    <br>
-    <div class="col-md-12 col-sm-12 col-xs-12">
-       <div id="routeEditorGrid" class="col-md-12 col-sm-12 col-xs-12"
-          style="height:80vh;overflow:hidden;margin-bottom:1px;border-style:solid;border-color:silver;"></div>
-       <div id="routeOutlineContainer"
-          style="z-index:1;position:absolute;overflow:hidden;top:5px;right:20px;width:120px;height:90px;background:transparent;border-style:solid;border-color:lightgray;">
-       </div>
-    </div>
- </div>
+   <div class="col-md-12 col-sm-12 col-xs-12">
+      <button type="button" class="btn btn-danger btn-with-icon" style="margin-right: 5px" data-toggle="modal"
+         data-target="#discardWarningModal">
+         <i class="ion-ios-refresh"></i>Discard</button>
+      <button type="button" class="btn btn-success btn-with-icon" style="margin-right: 5px" (click)="saveOnServer()"
+         *ngIf="!readOnly">
+         <i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
+      <button type="button" class="btn btn-primary btn-with-icon" style="margin-right: 5px"
+         (click)="prepareDummyObject()" *ngIf="!readOnly" data-toggle="modal" data-target="#settignsModal">
+         <i class="fa fa-cogs" aria-hidden="true"></i>Settings</button>
+      <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
+         <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>
+      <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
+         (click)="toolsChoice(ZOOM_OUT)">
+         <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>
+      <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
+         (click)="toolsChoice(ZOOM_ACTUAL)">
+         <i class="ion-arrow-expand"></i>Zoom Actual</button>
+      <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
+         (click)="toolsChoice(PRINT_PREVIEW)">
+         <i class="ion-printer"></i>Print Preview</button>
+   </div>
+   <br>
+   <div class="col-md-12 col-sm-12 col-xs-12">
+      <div id="routeEditorGrid" class="col-md-12 col-sm-12 col-xs-12"
+         style="height:80vh;overflow:hidden;margin-bottom:1px;border-style:solid;border-color:silver;"></div>
+      <div id="routeOutlineContainer"
+         style="z-index:1;position:absolute;overflow:hidden;top:5px;right:20px;width:120px;height:90px;background:transparent;border-style:solid;border-color:lightgray;">
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="saveRouteStepModal" tabindex="-1" role="dialog"
+   attr.aria-labelledby="saveRouteStepModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <!-- Modal Header -->
+         <div class="modal-header">
+            <h4 class="modal-title" id="saveRouteStepModalLabel">
+               Route Step Config
+            </h4>
+            <button type="button" class="btn btn-info" data-dismiss="modal" (click)="resetTempFields()">
+               <span aria-hidden="true">&times;</span>
+               <span class="sr-only">Close</span>
+            </button>
+         </div>
+         <!-- Modal Body -->
+         <div class="modal-body">
+            <form *ngIf="routeStep">
+               <div class="form-group">
+                  <label class="col-md-12 col-sm-12 col-xs-12" for="routeStepType">Route Step Type</label>
+                  <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required id="routeStepType"
+                     title="Choose Route Step Type" (change)="onRouteStepTypeChange($event.target.value)"
+                     [value]="routeStep['@type']" name="@type">
+                     <option *ngFor="let sourceRouteStepType of sourceRouteStepTypes" [value]="sourceRouteStepType">
+                        {{sourceRouteStepType}}</option>
+                  </select>
+               </div>
+
+               <div class="form-group">
+                  <label class="col-md-12 col-sm-12 col-xs-12" for="routeStepName">
+                     Route Step Name
+                  </label>
+                  <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="routeStepName"
+                     placeholder="Route Step Name" [(ngModel)]="routeStep.routeStepName" name="routeStepName" />
+               </div>
+
+               <!-- ApiRouteStep fields -->
+               <ng-container *ngIf="routeStep['@type'] == 'ApiRouteStep'">
+                  <div class="form-group">
+                     <label class="col-md-12 col-sm-12 col-xs-12" for="apiRouteStepApi">
+                        API Name
+                     </label>
+                     <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="apiRouteStepApi"
+                        placeholder="API Name" [(ngModel)]="routeStep.apiName" name="apiName" />
+                  </div>
+               </ng-container>
+
+               <!-- CamelRouteStep fields -->
+               <ng-container *ngIf="routeStep['@type'] == 'CamelRouteStep'">
+                  <div class="form-group">
+                     <label class="col-md-12 col-sm-12 col-xs-12" for="camelRouteStepDsl">
+                        DSL
+                     </label>
+                     <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="camelRouteStepDsl"
+                        placeholder="DSL" [(ngModel)]="routeStep.routeDsl" name="routeDsl" />
+                  </div>
+               </ng-container>
+
+               <!-- ConnectorRouteStep fields -->
+               <ng-container *ngIf="routeStep['@type'] == 'ConnectorRouteStep'">
+                  <div class="form-group">
+                     <label class="col-md-12 col-sm-12 col-xs-12" for="connectorRouteStepConfigName">
+                        Config Name
+                     </label>
+                     <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control"
+                        id="connectorRouteStepConfigName" placeholder="Config Name" [(ngModel)]="routeStep.configName"
+                        name="configName" />
+                  </div>
+                  <div class="form-group">
+                     <label class="col-md-12 col-sm-12 col-xs-12" for="connectorRouteStepConfigType">
+                        Config Type
+                     </label>
+                     <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control"
+                        id="connectorRouteStepConfigType" placeholder="Config Type" [(ngModel)]="routeStep.configType"
+                        name="configType" />
+                  </div>
+               </ng-container>
+
+               <!-- JaxbMarshallRouteStep fields -->
+               <ng-container *ngIf="routeStep['@type'] == 'JaxbMarshallRouteStep'">
+                  <div class="form-group">
+                     <label class="col-md-12 col-sm-12 col-xs-12" for="jaxbMarshallRouteStepType">
+                        Type
+                     </label>
+                     <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control"
+                        id="jaxbMarshallRouteStepType" placeholder="Type" [(ngModel)]="routeStep.type" name="type" />
+                  </div>
+               </ng-container>
+
+               <!-- JaxbUnmarshallRouteStep fields -->
+               <ng-container *ngIf="routeStep['@type'] == 'JaxbUnmarshallRouteStep'">
+                  <div class="form-group">
+                     <label class="col-md-12 col-sm-12 col-xs-12" for="jaxbUnmarshallRouteStepType">
+                        Type
+                     </label>
+                     <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control"
+                        id="jaxbUnmarshallRouteStepType" placeholder="Type" [(ngModel)]="routeStep.type" name="type" />
+                  </div>
+               </ng-container>
+
+               <!-- JsonMarshallRouteStep fields -->
+               <ng-container *ngIf="routeStep['@type'] == 'JsonMarshallRouteStep'">
+                  <div class="form-group">
+                     <label class="col-md-12 col-sm-12 col-xs-12" for="jsonMarshallRouteStepType">
+                        Type
+                     </label>
+                     <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control"
+                        id="jsonMarshallRouteStepType" placeholder="Type" [(ngModel)]="routeStep.type" name="type" />
+                  </div>
+               </ng-container>
+
+               <!-- JsonUnmarshallRouteStep fields -->
+               <ng-container *ngIf="routeStep['@type'] == 'JsonUnmarshallRouteStep'">
+                  <div class="form-group">
+                     <label class="col-md-12 col-sm-12 col-xs-12" for="jsonUnmarshallRouteStepType">
+                        Type
+                     </label>
+                     <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control"
+                        id="jsonUnmarshallRouteStepType" placeholder="Type" [(ngModel)]="routeStep.type" name="type" />
+                  </div>
+               </ng-container>
+
+               <!-- RuleRouteStep fields -->
+               <ng-container *ngIf="routeStep['@type'] == 'RuleRouteStep'">
+                  <div id="ruleAccordion" role="tablist" aria-multiselectable="true">
+                     <div class="panel card">
+                        <div id="ruleTabHeader" class="card-header" heightStyle="content" role="tab">
+                           <h5 class="mb-0">
+                              <a data-toggle="collapse" data-parent="#ruleAccordion" href="#ruleCollapse"
+                                 aria-expanded="true" aria-controls="ruleCollapse">
+                                 Rule Expressions
+                              </a>
+                           </h5>
+                        </div>
+                        <div id="ruleCollapse" class="collapse show" role="tabpanel" aria-labelledby="ruleTabHeader">
+                           <div class="card-block">
+                              <table class="table" [mfData]="routeStep.ruleList" #mfRuleTable="mfDataTable"
+                                 [mfRowsOnPage]="5">
+                                 <thead>
+                                    <tr>
+                                       <th>Action</th>
+                                       <th>Key to save Result</th>
+                                       <th>Expression</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody>
+                                    <tr *ngFor="let rule of mfRuleTable.data">
+                                       <td>
+                                          <button type="button" class="btn btn-danger" title="Delete"
+                                             (click)="removeFromList(rule, routeStep.ruleList)">
+                                             <i class="ion-close-round"></i>
+                                          </button>
+                                       </td>
+                                       <td>
+                                          <input type="text" class="form-control" placeholder="Key" [value]="rule.key"
+                                             (input)="rule.key = $event.target.value">
+                                       </td>
+                                       <td>
+                                          <input type="text" class="form-control" placeholder="Expression"
+                                             [value]="rule.expression"
+                                             (input)="rule.expression = $event.target.value" />
+                                       </td>
+                                       <td>
+                                          <button type="button" class="btn btn-primary" data-toggle="modal"
+                                          data-target="#mvelEditModal" data-backdrop="static" data-keyboard="false" (click)="expandRule(rule)">Expand</button>
+                                          <!-- 
+                                             data-toggle="modal"
+                                             data-target="#mvelEditModal" 
+                                           -->
+                                       </td>
+                                    </tr>
+                                 </tbody>
+                                 <tfoot>
+                                    <tr>
+                                       <td colspan="2">
+                                          <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]">
+                                          </mfBootstrapPaginator>
+                                       </td>
+                                       <td colspan="1" style="text-align: right;">
+                                          <button type="button" class="btn btn-primary" (click)="addRule()">Add
+                                             Rule</button>
+                                       </td>
+                                    </tr>
+                                 </tfoot>
+                              </table>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </ng-container>
+
+               <!-- ChoiceRouteStep fields -->
+               <ng-container *ngIf="routeStep['@type'] == 'ChoiceRouteStep'">
+                  <div id="conditionAccordion" role="tablist" aria-multiselectable="true" *ngIf="routeStep.conditions">
+                     <div *ngFor="let condition of routeStep.conditions; let conditionIndex=index" class="panel">
+                        <div class="card">
+                           <div *ngIf="conditionIndex == 0" [id]="'conditionTabHeading' + conditionIndex" class="card-header"
+                              heightStyle="content" role="tab" (click)="disableBulkEdit()">
+                              <h5 class="mb-0">
+                                 <a data-toggle="collapse" data-parent="#conditionAccordion"
+                                    [href]="'#conditionCollapse' + conditionIndex" aria-expanded="true"
+                                    [attr.aria-controls]="'conditionCollapse' + conditionIndex">
+                                    {{condition.conditionName != null && condition.conditionName.length > 0 ? condition.conditionName : "Condition Name"}}
+                                 </a>
+                              </h5>
+                           </div>
+                           <div *ngIf="conditionIndex != 0" [id]="'conditionTabHeading' + conditionIndex" class="card-header"
+                              heightStyle="content" role="tab" (click)="disableBulkEdit()">
+                              <h5 class="mb-0">
+                                 <a class="collapsed" data-toggle="collapse" data-parent="#conditionAccordion"
+                                    [href]="'#conditionCollapse' + conditionIndex" aria-expanded="false"
+                                    [attr.aria-controls]="'conditionCollapse' + conditionIndex">
+                                    {{condition.conditionName != null && condition.conditionName.length > 0 ? condition.conditionName : "Condition Name"}}
+                                 </a>
+                              </h5>
+                           </div>
+                           <div *ngIf="conditionIndex == 0" [id]="'conditionCollapse' + conditionIndex" class="collapse show"
+                              role="tabpanel" [attr.aria-labelledby]="'conditionTabHeading' + conditionIndex">
+                              <div class="card-block">
+                                 <form>
+                                    <div class="form-group">
+                                       <label for="inputConditionName">
+                                          Condition Name
+                                       </label>
+                                       <input type="text" class="form-control" id="inputConditionName" placeholder="Condition Name"
+                                          [(ngModel)]="condition.conditionName" name="conditionName" />
+                                    </div>
+                                    <div class="form-group">
+                                       <label for="inputOperand">
+                                          Operand
+                                       </label>
+                                       <select class="selectpicker form-control" required id="inputOperand"
+                                          title="Select Operand" [(ngModel)]="condition.operand" name="operand">
+                                          <option *ngFor="let operand of sourceOperands" [value]="operand">{{operand}}
+                                          </option>
+                                       </select>
+                                    </div>
+                                    <div [id]="'expAccordion' + conditionIndex" role="tablist" aria-multiselectable="true"
+                                       *ngIf="!bulkEdit && condition.conditions.length > 0">
+                                       <div *ngFor="let expression of condition.conditions; let expIndex=index" class="panel">
+                                          <div class="card">
+                                             <div *ngIf="expIndex == 0"
+                                                [id]="'condition' + conditionIndex + 'expTabHeading' + expIndex" class="card-header"
+                                                heightStyle="content" role="tab">
+                                                <h5 class="mb-0">
+                                                   <a data-toggle="collapse" [attr.data-parent]="'#expAccordion' + conditionIndex"
+                                                      [href]="'#condition' + conditionIndex + 'expCollapse' + expIndex"
+                                                      aria-expanded="true"
+                                                      [attr.aria-controls]="'condition' + conditionIndex + 'expCollapse' + expIndex">
+                                                      {{expression.value != null && expression.value.length > 0 ? expression.value : "Expression"}}
+                                                   </a>
+                                                </h5>
+                                             </div>
+                                             <div *ngIf="expIndex != 0"
+                                                [id]="'condition' + conditionIndex + 'expTabHeading' + expIndex" class="card-header"
+                                                heightStyle="content" role="tab">
+                                                <h5 class="mb-0">
+                                                   <a class="collapsed" data-toggle="collapse"
+                                                      [attr.data-parent]="'#expAccordion' + conditionIndex"
+                                                      [href]="'#condition' + conditionIndex + 'expCollapse' + expIndex"
+                                                      aria-expanded="false"
+                                                      [attr.aria-controls]="'condition' + conditionIndex + 'expCollapse' + expIndex">
+                                                      {{expression.value != null && expression.value.length > 0 ? expression.value : "Expression"}}
+                                                   </a>
+                                                </h5>
+                                             </div>
+                                             <div *ngIf="expIndex == 0" [id]="'condition' + conditionIndex + 'expCollapse' + expIndex"
+                                                class="collapse show" role="tabpanel"
+                                                [attr.aria-labelledby]="'condition' + conditionIndex + 'expTabHeading' + expIndex">
+                                                <div class="card-block">
+                                                   <form>
+                                                      <div class="form-group">
+                                                         <label required [for]="'expValue' + expIndex">
+                                                            Value
+                                                         </label>
+                                                         <input type="text" class="form-control" required
+                                                            [id]="'expValue' + expIndex" placeholder="Expression"
+                                                            [(ngModel)]="expression.value" name="value" />
+                                                      </div>
+                                                      <div class="form-group" *ngIf="condition.conditions.length > 1">
+                                                         <button type="button" class="btn btn-danger"
+                                                            (click)="deleteExpression(expression, condition)">
+                                                            Remove Expression
+                                                         </button>
+                                                      </div>
+                                                   </form>
+                                                </div>
+                                             </div>
+                                             <div *ngIf="expIndex != 0" [id]="'condition' + conditionIndex + 'expCollapse' + expIndex"
+                                                class="collapse" role="tabpanel"
+                                                [attr.aria-labelledby]="'condition' + conditionIndex + 'expTabHeading' + expIndex">
+                                                <div class="card-block">
+                                                   <form>
+                                                      <div class="form-group">
+                                                         <label required [for]="'expValue' + expIndex">
+                                                            Value
+                                                         </label>
+                                                         <input type="text" class="form-control" required
+                                                            [id]="'expValue' + expIndex" placeholder="Value"
+                                                            [(ngModel)]="expression.value" name="value" />
+                                                      </div>
+                                                      <div class="form-group" *ngIf="condition.conditions.length > 1">
+                                                         <button type="button" class="btn btn-danger"
+                                                            (click)="deleteExpression(expression, condition)">
+                                                            Remove Expression
+                                                         </button>
+                                                      </div>
+                                                   </form>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div *ngIf="bulkEdit" class="form-group">
+                                       <label>
+                                          Expressions Bulk Edit
+                                       </label>
+                                       <textarea class="form-control"
+                                          placeholder="Enter expressions (separated by line)"
+                                          [(ngModel)]="bulkExpressions" name="bulkExpressions"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                       <button type="button" class="btn btn-danger"
+                                          (click)="disableBulkEdit(); deleteCondition(condition);">
+                                          Remove Condition
+                                       </button>
+                                       <button *ngIf="!bulkEdit" type="button" class="btn btn-primary"
+                                          (click)="addExpression(condition)">
+                                          Add Expression
+                                       </button>
+                                       <button *ngIf="!bulkEdit" type="button" class="btn btn-primary"
+                                          (click)="enableBulkEdit(condition)">
+                                          Bulk Edit
+                                       </button>
+                                       <button *ngIf="bulkEdit" type="button" class="btn btn-primary"
+                                          (click)="disableBulkEdit()">
+                                          Normal Edit
+                                       </button>
+                                    </div>
+                                 </form>
+                              </div>
+                           </div>
+                           <div *ngIf="conditionIndex != 0" [id]="'conditionCollapse' + conditionIndex" class="collapse" role="tabpanel"
+                              [attr.aria-labelledby]="'conditionTabHeading' + conditionIndex">
+                              <div class="card-block">
+                                 <form>
+                                    <div class="form-group">
+                                       <label for="inputConditionName">
+                                          Condition Name
+                                       </label>
+                                       <input type="text" class="form-control" id="inputConditionName" placeholder="Condition Name"
+                                          [(ngModel)]="condition.conditionName" name="conditionName" />
+                                    </div>
+                                    <div class="form-group">
+                                       <label for="inputOperand">
+                                          Operand
+                                       </label>
+                                       <select class="selectpicker form-control" required id="inputOperand"
+                                          title="Select Operand" [(ngModel)]="condition.operand" name="operand">
+                                          <option *ngFor="let operand of sourceOperands" [value]="operand">{{operand}}
+                                          </option>
+                                       </select>
+                                    </div>
+                                    <div [id]="'expAccordion' + conditionIndex" role="tablist" aria-multiselectable="true"
+                                       *ngIf="!bulkEdit && condition.conditions.length > 0">
+                                       <div *ngFor="let expression of condition.conditions; let expIndex=index" class="panel">
+                                          <div class="card">
+                                             <div *ngIf="expIndex == 0"
+                                                [id]="'condition' + conditionIndex + 'expTabHeading' + expIndex" class="card-header"
+                                                heightStyle="content" role="tab">
+                                                <h5 class="mb-0">
+                                                   <a data-toggle="collapse" [attr.data-parent]="'#expAccordion' + conditionIndex"
+                                                      [href]="'#condition' + conditionIndex + 'expCollapse' + expIndex"
+                                                      aria-expanded="true"
+                                                      [attr.aria-controls]="'condition' + conditionIndex + 'expCollapse' + expIndex">
+                                                      {{expression.value != null && expression.value.length > 0 ? expression.value : "Expression"}}
+                                                   </a>
+                                                </h5>
+                                             </div>
+                                             <div *ngIf="expIndex != 0"
+                                                [id]="'condition' + conditionIndex + 'expTabHeading' + expIndex" class="card-header"
+                                                heightStyle="content" role="tab">
+                                                <h5 class="mb-0">
+                                                   <a class="collapsed" data-toggle="collapse"
+                                                      [attr.data-parent]="'#expAccordion' + conditionIndex"
+                                                      [href]="'#condition' + conditionIndex + 'expCollapse' + expIndex"
+                                                      aria-expanded="false"
+                                                      [attr.aria-controls]="'condition' + conditionIndex + 'expCollapse' + expIndex">
+                                                      {{expression.value != null && expression.value.length > 0 ? expression.value : "Expression"}}
+                                                   </a>
+                                                </h5>
+                                             </div>
+                                             <div *ngIf="expIndex == 0" [id]="'condition' + conditionIndex + 'expCollapse' + expIndex"
+                                                class="collapse show" role="tabpanel"
+                                                [attr.aria-labelledby]="'condition' + conditionIndex + 'expTabHeading' + expIndex">
+                                                <div class="card-block">
+                                                   <form>
+                                                      <div class="form-group">
+                                                         <label required [for]="'expValue' + expIndex">
+                                                            Value
+                                                         </label>
+                                                         <input type="text" class="form-control" required
+                                                            [id]="'expValue' + expIndex" placeholder="Expression"
+                                                            [(ngModel)]="expression.value" name="value" />
+                                                      </div>
+                                                      <div class="form-group" *ngIf="condition.conditions.length > 1">
+                                                         <button type="button" class="btn btn-danger"
+                                                            (click)="deleteExpression(expression, condition)">
+                                                            Remove Expression
+                                                         </button>
+                                                      </div>
+                                                   </form>
+                                                </div>
+                                             </div>
+                                             <div *ngIf="expIndex != 0" [id]="'condition' + conditionIndex + 'expCollapse' + expIndex"
+                                                class="collapse" role="tabpanel"
+                                                [attr.aria-labelledby]="'condition' + conditionIndex + 'expTabHeading' + expIndex">
+                                                <div class="card-block">
+                                                   <form>
+                                                      <div class="form-group">
+                                                         <label required [for]="'expValue' + expIndex">
+                                                            Value
+                                                         </label>
+                                                         <input type="text" class="form-control" required
+                                                            [id]="'expValue' + expIndex" placeholder="Value"
+                                                            [(ngModel)]="expression.value" name="value" />
+                                                      </div>
+                                                      <div class="form-group" *ngIf="condition.conditions.length > 1">
+                                                         <button type="button" class="btn btn-danger"
+                                                            (click)="deleteExpression(expression, condition)">
+                                                            Remove Expression
+                                                         </button>
+                                                      </div>
+                                                   </form>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div *ngIf="bulkEdit" class="form-group">
+                                       <label>
+                                          Expressions Bulk Edit
+                                       </label>
+                                       <textarea class="form-control"
+                                          placeholder="Enter expressions (separated by line)"
+                                          [(ngModel)]="bulkExpressions" name="bulkExpressions"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                       <button type="button" class="btn btn-danger"
+                                          (click)="disableBulkEdit(); deleteCondition(condition);">
+                                          Remove Condition
+                                       </button>
+                                       <button *ngIf="!bulkEdit" type="button" class="btn btn-primary"
+                                          (click)="addExpression(condition)">
+                                          Add Expression
+                                       </button>
+                                       <button *ngIf="!bulkEdit" type="button" class="btn btn-primary"
+                                          (click)="enableBulkEdit(condition)">
+                                          Bulk Edit
+                                       </button>
+                                       <button *ngIf="bulkEdit" type="button" class="btn btn-primary"
+                                          (click)="disableBulkEdit()">
+                                          Normal Edit
+                                       </button>
+                                    </div>
+                                 </form>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </ng-container>
+
+               <ng-container *ngIf="branchCondition && mode && (mode == 'CREATE' || mode == 'INSERT')">
+                  <div id="branchConditionAccordion" role="tablist" aria-multiselectable="true">
+                     <div class="panel card">
+                        <div id="branchConditionTabHeader" class="card-header" heightStyle="content" role="tab">
+                           <h5 class="mb-0">
+                              <a data-toggle="collapse" data-parent="#branchConditionAccordion" href="#branchConditionCollapse"
+                                 aria-expanded="true" aria-controls="branchConditionCollapse">
+                                 Branch Condition
+                              </a>
+                           </h5>
+                        </div>
+                        <div id="branchConditionCollapse" class="collapse show" role="tabpanel" aria-labelledby="branchConditionTabHeader">
+                           <div class="card-block">
+                              <form>
+                                 <div class="form-group">
+                                    <label for="branchConditionName">
+                                       Condition Name
+                                    </label>
+                                    <input type="text" class="form-control" id="branchConditionName" placeholder="Condition Name"
+                                       [(ngModel)]="branchCondition.conditionName" name="conditionName" />
+                                 </div>
+                                 <div class="form-group">
+                                    <label for="branchConditionOperand">
+                                       Operand
+                                    </label>
+                                    <select class="selectpicker form-control" required id="branchConditionOperand"
+                                       title="Select Operand" [(ngModel)]="branchCondition.operand" name="operand">
+                                       <option *ngFor="let operand of sourceOperands" [value]="operand">{{operand}}
+                                       </option>
+                                    </select>
+                                 </div>
+                                 <div id="branchExpAccordion" role="tablist" aria-multiselectable="true"
+                                    *ngIf="!bulkEdit && branchCondition.conditions.length > 0">
+                                    <div *ngFor="let branchExpression of branchCondition.conditions; let branchExpIndex=index" class="panel">
+                                       <div class="card">
+                                          <div *ngIf="branchExpIndex == 0"
+                                             [id]="'branchExpTabHeading' + branchExpIndex" class="card-header"
+                                             heightStyle="content" role="tab">
+                                             <h5 class="mb-0">
+                                                <a data-toggle="collapse" data-parent="#branchExpAccordion"
+                                                   [href]="'#branchExpCollapse' + branchExpIndex"
+                                                   aria-expanded="true"
+                                                   [attr.aria-controls]="'branchExpCollapse' + branchExpIndex">
+                                                   {{branchExpression.value != null && branchExpression.value.length > 0 ? branchExpression.value : "Expression"}}
+                                                </a>
+                                             </h5>
+                                          </div>
+                                          <div *ngIf="branchExpIndex != 0"
+                                             [id]="'expTabHeading' + branchExpIndex" class="card-header"
+                                             heightStyle="content" role="tab">
+                                             <h5 class="mb-0">
+                                                <a class="collapsed" data-toggle="collapse"
+                                                   data-parent="#branchExpAccordion"
+                                                   [href]="'#branchExpCollapse' + branchExpIndex"
+                                                   aria-expanded="false"
+                                                   [attr.aria-controls]="'branchExpCollapse' + branchExpIndex">
+                                                   {{branchExpression.value != null && branchExpression.value.length > 0 ? branchExpression.value : "Expression"}}
+                                                </a>
+                                             </h5>
+                                          </div>
+                                          <div *ngIf="branchExpIndex == 0" [id]="'branchExpCollapse' + branchExpIndex"
+                                             class="collapse show" role="tabpanel"
+                                             [attr.aria-labelledby]="'expTabHeading' + branchExpIndex">
+                                             <div class="card-block">
+                                                <form>
+                                                   <div class="form-group">
+                                                      <label required [for]="'expValue' + branchExpIndex">
+                                                         Value
+                                                      </label>
+                                                      <input type="text" class="form-control" required
+                                                         [id]="'expValue' + branchExpIndex" placeholder="Expression"
+                                                         [(ngModel)]="branchExpression.value" name="value" />
+                                                   </div>
+                                                   <div class="form-group" *ngIf="branchCondition.conditions.length > 1">
+                                                      <button type="button" class="btn btn-danger"
+                                                         (click)="deleteExpression(branchExpression, branchCondition)">
+                                                         Remove Expression
+                                                      </button>
+                                                   </div>
+                                                </form>
+                                             </div>
+                                          </div>
+                                          <div *ngIf="branchExpIndex != 0" [id]="'branchExpCollapse' + branchExpIndex"
+                                             class="collapse" role="tabpanel"
+                                             [attr.aria-labelledby]="'expTabHeading' + branchExpIndex">
+                                             <div class="card-block">
+                                                <form>
+                                                   <div class="form-group">
+                                                      <label required [for]="'expValue' + branchExpIndex">
+                                                         Value
+                                                      </label>
+                                                      <input type="text" class="form-control" required
+                                                         [id]="'expValue' + branchExpIndex" placeholder="Value"
+                                                         [(ngModel)]="branchExpression.value" name="value" />
+                                                   </div>
+                                                   <div class="form-group" *ngIf="branchCondition.conditions.length > 1">
+                                                      <button type="button" class="btn btn-danger"
+                                                         (click)="deleteExpression(branchExpression, branchCondition)">
+                                                         Remove Expression
+                                                      </button>
+                                                   </div>
+                                                </form>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div *ngIf="bulkEdit" class="form-group">
+                                    <label>
+                                       Expressions Bulk Edit
+                                    </label>
+                                    <textarea class="form-control"
+                                       placeholder="Enter expressions (separated by line)"
+                                       [(ngModel)]="bulkExpressions" name="bulkExpressions"></textarea>
+                                 </div>
+                                 <div class="form-group">
+                                    <button *ngIf="!bulkEdit" type="button" class="btn btn-primary"
+                                       (click)="addExpression(branchCondition)">
+                                       Add Expression
+                                    </button>
+                                    <button *ngIf="!bulkEdit" type="button" class="btn btn-primary"
+                                       (click)="enableBulkEdit(branchCondition)">
+                                       Bulk Edit
+                                    </button>
+                                    <button *ngIf="bulkEdit" type="button" class="btn btn-primary"
+                                       (click)="disableBulkEdit()">
+                                       Normal Edit
+                                    </button>
+                                 </div>
+                              </form>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </ng-container>
+            </form>
+         </div>
+         <!-- Modal Footer -->
+         <div class="modal-footer" id="saveRouteStepModalFooter">
+            <button type="button" class="btn btn-success" id="saveChangesButton" (click)="saveRouteStep()" data-dismiss="modal">
+               Save Changes
+            </button>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog">
+   <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Modal Header</h4>
+         </div>
+         <div class="modal-body">
+            <p>Some text in the modal.</p>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+         </div>
+      </div>
+
+   </div>
+</div>
+
+<!-- Expand Rule Modal -->
+<div class="modal fade" id="mvelEditModal" tabindex="-1" role="dialog"
+   attr.aria-labelledby="mvelEditModal" aria-hidden="true">
+   <div class="modal-dialog modal-lg" *ngIf="selectedRule && mvelObject">
+      <div class="modal-content ">
+         <!-- Modal Header -->
+         <div class="modal-header">
+            <h4 class="modal-title" id="mvelEditModal">
+               Rule key: {{selectedRule.key}}
+            </h4>
+         </div>
+         <!-- Modal Body -->
+         <div class="modal-body" id="modal_body">
+            <div class="row">
+               <div class="col-6 col-lg--6 col-md-6 col-sm-6 col-xs-6">
+                  <h3>Expression</h3>
+                  <div>
+                     <textarea class="col-sm-12" [(ngModel)]="selectedRule.expression" rows="40"
+                        name="textBody"></textarea>
+                  </div>
+               </div>
+               <div class="col-6 col-lg--6 col-md-6 col-sm-6 col-xs-6">
+                  <h3>Input to test</h3>
+                  <div>
+                     <textarea class="col-sm-12" [(ngModel)]="mvelObject.input" rows="40" name="textBody"></textarea>
+                  </div>
+
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-12 col-lg--12 col-md-12 col-sm-12 col-xs-12">
+                  <h3>Result:</h3>
+                  {{mvelObject.result}}
+               </div>
+
+            </div>
+         </div>
+         <!-- Modal Footer -->
+         <div class="modal-footer" id="modal_footer">
+            <!-- data-dismiss="modal" -->
+            <button type="button" class="btn btn-warning" (click)="dismissRuleDialog()">Dismiss</button>
+            <button type="button" class="btn btn-info" (click)="testRule()">Test</button>
+            <button type="button" class="btn btn-success" (click)="saveRule()">Save</button>
+         </div>
+      </div>
+   </div>
+</div>

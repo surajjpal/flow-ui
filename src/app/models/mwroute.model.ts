@@ -1,15 +1,24 @@
 import { BaseModel } from './base.model';
 import { ApiKeyExpressionMap } from './setup.model';
+import { Expression } from './flow.model';
+
+export interface CamelExecutable {
+
+}
 
 export abstract class MWRouteStepConfig {
-    "@type": "ApiRouteStep" | "CamelRouteStep" | "ChoiceRouteStep" | "ConnectorRouteStep" | "RuleRouteStep";
+    "@type": "ApiRouteStep" | "CamelRouteStep" | "ChoiceRouteStep" | "ConnectorRouteStep" | "RuleRouteStep" | "JaxbMarshallRouteStep" | "JaxbUnmarshallRouteStep" | "JsonMarshallRouteStep" | "JsonUnmarshallRouteStep";
     routeStepId: string;
     routeStepName: string;
 
-    constructor(routeStepName?: string) {
-        this["@type"] = this["@type"] ? this["@type"] : 'ApiRouteStep';
-        this.routeStepId = this.generateObjectId();
-        this.routeStepName = routeStepName ? routeStepName : '';
+    constructor(existingObject?: MWRouteStepConfig) {
+        if (existingObject) {
+            this.routeStepId = existingObject.routeStepId;
+            this.routeStepName = existingObject.routeStepName;
+        } else {
+            this.routeStepId = this.generateObjectId();
+            this.routeStepName = '';
+        }
     }
 
     private generateObjectId() {
@@ -21,14 +30,16 @@ export abstract class MWRouteStepConfig {
 }
 
 export class MWCondition {
-    conditions: string[];
     conditionName: string;
+    operand: "AND" | "OR" ;
+    conditions: Expression[];
     routeSteps: MWRouteStepConfig[];
 
-    constructor() {
-        this.conditions = [];
-        this.conditionName = '';
-        this.routeSteps = [];
+    constructor(conditionName?: string, operand?: "AND" | "OR", conditions?: Expression[], routeSteps?: MWRouteStepConfig[]) {
+        this.conditionName = conditionName ? conditionName : '';
+        this.operand = operand ? operand : 'AND';
+        this.conditions = conditions && conditions.length > 0 ? conditions : [new Expression()];
+        this.routeSteps = routeSteps ? routeSteps : [];
     }
 }
 
@@ -36,10 +47,11 @@ export class ApiRouteStep extends MWRouteStepConfig {
     "@type": "ApiRouteStep";
     apiName: string;
 
-    constructor(routeStepName?: string, apiName?: string) {
-        super(routeStepName);
+    constructor(baseObject?: MWRouteStepConfig) {
+        super(baseObject);
 
-        this.apiName = apiName ? apiName : '';
+        this["@type"] = "ApiRouteStep";
+        this.apiName = '';
     }
 }
 
@@ -47,9 +59,10 @@ export class CamelRouteStep extends MWRouteStepConfig {
     "@type": "CamelRouteStep";
     routeDsl: string;
 
-    constructor() {
-        super();
+    constructor(baseObject?: MWRouteStepConfig) {
+        super(baseObject);
 
+        this["@type"] = "CamelRouteStep";
         this.routeDsl = '';
     }
 }
@@ -58,9 +71,10 @@ export class ChoiceRouteStep extends MWRouteStepConfig {
     "@type": "ChoiceRouteStep";
     conditions: MWCondition[];
 
-    constructor() {
-        super();
+    constructor(baseObject?: MWRouteStepConfig) {
+        super(baseObject);
 
+        this["@type"] = "ChoiceRouteStep";
         this.conditions = [];
     }
 }
@@ -70,9 +84,10 @@ export class ConnectorRouteStep extends MWRouteStepConfig {
     configName: string;
     configType: string;
 
-    constructor() {
-        super();
-
+    constructor(baseObject?: MWRouteStepConfig) {
+        super(baseObject);
+        
+        this["@type"] = "ConnectorRouteStep";
         this.configName = '';
         this.configType = '';
     }
@@ -82,10 +97,59 @@ export class RuleRouteStep extends MWRouteStepConfig {
     "@type": "RuleRouteStep";
     ruleList: ApiKeyExpressionMap[];
 
-    constructor() {
-        super();
+    constructor(baseObject?: MWRouteStepConfig) {
+        super(baseObject);
 
+        this["@type"] = "RuleRouteStep";
         this.ruleList = [];
+    }
+}
+
+export class JaxbMarshallRouteStep extends MWRouteStepConfig implements CamelExecutable {
+    "@type": "JaxbMarshallRouteStep";
+    type: string;
+
+    constructor(baseObject?: MWRouteStepConfig) {
+        super(baseObject);
+
+        this["@type"] = "JaxbMarshallRouteStep";
+        this.type = '';
+    }
+}
+
+export class JaxbUnmarshallRouteStep extends MWRouteStepConfig implements CamelExecutable {
+    "@type": "JaxbUnmarshallRouteStep";
+    type: string;
+
+    constructor(baseObject?: MWRouteStepConfig) {
+        super(baseObject);
+
+        this["@type"] = "JaxbUnmarshallRouteStep";
+        this.type = '';
+    }
+}
+
+export class JsonMarshallRouteStep extends MWRouteStepConfig implements CamelExecutable {
+    "@type": "JsonMarshallRouteStep";
+    type: string;
+
+    constructor(baseObject?: MWRouteStepConfig) {
+        super(baseObject);
+
+        this["@type"] = "JsonMarshallRouteStep";
+        this.type = '';
+    }
+}
+
+export class JsonUnmarshallRouteStep extends MWRouteStepConfig implements CamelExecutable {
+    "@type": "JsonUnmarshallRouteStep";
+    type: string;
+
+    constructor(baseObject?: MWRouteStepConfig) {
+        super(baseObject);
+
+        this["@type"] = "JsonUnmarshallRouteStep";
+        this.type = '';
     }
 }
 
@@ -95,12 +159,12 @@ export class MWRouteConfig extends BaseModel {
     version: number;
     routeSteps: MWRouteStepConfig[];
 
-    constructor() {
+    constructor(routeCd?: string, routeLabel?: string, version?: number, routeSteps?: MWRouteStepConfig[]) {
         super();
 
-        this.routeCd = '';
-        this.routeLabel = '';
-        this.version = 0;
-        this.routeSteps = [];
+        this.routeCd = routeCd ? routeCd : '';
+        this.routeLabel = routeLabel ? routeLabel : '';
+        this.version = version ? version : 0;
+        this.routeSteps = routeSteps ? routeSteps : [];
     }
 }
