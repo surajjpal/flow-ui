@@ -1,5 +1,6 @@
 declare var designRouteEditor: any;
 declare var renderRouteGraph: any;
+declare var routeGraphTools: any;
 declare var showModal: any;
 declare var closeModal: any;
 
@@ -7,13 +8,15 @@ import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import {
     MWRouteConfig, ApiRouteStep, CamelRouteStep, ChoiceRouteStep, ConnectorRouteStep,
     RuleRouteStep, JaxbMarshallRouteStep, JaxbUnmarshallRouteStep, JsonMarshallRouteStep,
-    JsonUnmarshallRouteStep,
-    MWRouteStepConfig,
-    MWCondition
+    JsonUnmarshallRouteStep, MWRouteStepConfig, MWCondition
 } from 'app/models/mwroute.model';
 import { ApiKeyExpressionMap, MVELObject } from 'app/models/setup.model';
 import { GraphService } from 'app/services/flow.service';
 import { Expression } from 'app/models/flow.model';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { MWRouteService } from 'app/services/mwroute.service';
+import { DataSharingService } from 'app/services/shared.service';
 
 @Component({
     selector: 'api-mwroute-design',
@@ -24,6 +27,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
     readOnly: boolean = false;
     routeConfig: MWRouteConfig;
+    tempRouteConfig: MWRouteConfig;
     routeStep: ApiRouteStep | CamelRouteStep | ChoiceRouteStep |
         ConnectorRouteStep | RuleRouteStep | JaxbMarshallRouteStep |
         JaxbUnmarshallRouteStep | JsonMarshallRouteStep | JsonUnmarshallRouteStep = null;
@@ -44,6 +48,15 @@ export class DesignComponent implements OnInit, OnDestroy {
     selectedCondition: MWCondition = null;
     bulkExpressions: string = '';
 
+    private subscriptionSaveRoute: Subscription;
+
+    // Final strings used in html as method parameter
+    readonly ZOOM_IN = 'ZOOM_IN';
+    readonly ZOOM_OUT = 'ZOOM_OUT';
+    readonly ZOOM_ACTUAL = 'ZOOM_ACTUAL';
+    readonly PRINT_PREVIEW = 'PRINT_PREVIEW';
+    readonly POSTER_PRINT = 'POSTER_PRINT';
+
     readonly sourceRouteStepTypes: string[] = [
         "ApiRouteStep",
         "CamelRouteStep",
@@ -58,26 +71,47 @@ export class DesignComponent implements OnInit, OnDestroy {
     readonly sourceOperands: string[] = ['AND', 'OR'];
 
     constructor(
+        private router: Router,
+        private route: ActivatedRoute,
         private zone: NgZone,
-        private graphService: GraphService
+        private graphService: GraphService,
+        private mwRouteService: MWRouteService,
+        private dataSharingService: DataSharingService
     ) {
         window['routeComponentRef'] = { component: this, zone: zone };
     }
 
     ngOnInit() {
+        this.routeConfig = this.dataSharingService.getSharedObject();
+
         if (!this.routeConfig) {
             this.routeConfig = new MWRouteConfig();
         }
-
-        // this.routeConfig = JSON.parse(
-        //     '{"_id":"5d0d072d3df3107990514fe1","statusCd":"ACTIVE","subStatus":null,"companyId":"e95764c923e74e308d0019516b17cabd","operationType":"INSERTED","routeCd":"preIFPRoute","routeLabel":null,"version":1,"routeSteps":[{"@type":"JaxbUnmarshallRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"type":"com.pmli.middleware.microservice.nb.tma.model.Tma"},{"@type":"JsonMarshallRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"type":"com.pmli.middleware.microservice.nb.tma.model.Tma"},{"@type":"CamelRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"routeDsl":"bean:com.pmli.middleware.microservice.nb.processors.ConvertToTmaDBProcessor"},{"@type":"CamelRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"routeDsl":"mongodb:mongo?database=statemachine&collection=tma&operation=insert"},{"@type":"CamelRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"routeDsl":"bean:com.pmli.middleware.microservice.nb.processors.AuditRequestProcessor"},{"@type":"CamelRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"routeDsl":"bean:com.pmli.middleware.microservice.nb.processors.TransformToRHILPojo"},{"@type":"JsonMarshallRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"type":"com.pmli.middleware.microservice.nb.rhil.model.SourceRequestJson"},{"@type":"CamelRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"routeDsl":"bean:com.pmli.middleware.microservice.nb.processors.ConvertToRHILDbProcessor"},{"@type":"CamelRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"routeDsl":"mongodb:mongo?database=statemachine&collection=rhil&operation=insert"},{"@type":"JsonMarshallRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"type":"com.pmli.middleware.microservice.nb.rhil.model.SourceRequestJson"},{"@type":"CamelRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"routeDsl":"bean:com.pmli.middleware.microservice.nb.processors.AuditRHILRequestProcessor"},{"@type":"CamelRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"routeDsl":"https://apiuat.religarehealthinsurance.com/relinterfacerestful/religare/restful/createCombiPolicy"},{"@type":"CamelRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"routeDsl":"bean:com.pmli.middleware.microservice.nb.processors.CombiPolicyResponseProcessor"},{"@type":"JsonMarshallRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"type":"com.pmli.middleware.microservice.nb.rhil.model.SourceResponseJson"},{"@type":"CamelRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"routeDsl":"bean:com.pmli.middleware.microservice.nb.processors.ConvertToRHILDbProcessor"},{"@type":"CamelRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"routeDsl":"mongodb:mongo?database=statemachine&collection=rhil&operation=insert"},{"@type":"CamelRouteStep","_id":null,"statusCd":null,"subStatus":null,"companyId":null,"operationType":null,"routeDsl":"bean:com.pmli.middleware.microservice.nb.processors.AuditRHILResponseProcessor"}]}'
-        // );
 
         new designRouteEditor(this.routeConfig.routeSteps, false);
     }
 
     ngOnDestroy() {
         window['routeComponentRef'] = null;
+
+        if (this.subscriptionSaveRoute && !this.subscriptionSaveRoute.closed) {
+            this.subscriptionSaveRoute.unsubscribe();
+        }
+    }
+
+    prepareDummyRouteConfig() {
+        this.tempRouteConfig = JSON.parse(JSON.stringify(this.routeConfig));
+    }
+
+    updateRouteConfig() {
+        this.routeConfig = this.tempRouteConfig;
+        this.tempRouteConfig = null;
+
+        new renderRouteGraph(this.routeConfig.routeSteps, false);
+    }
+
+    toolsChoice(choice: string): void {
+        new routeGraphTools(choice);
     }
 
     deleteRouteStep(routeStepId: string, deleteAll?: boolean) {
@@ -96,7 +130,7 @@ export class DesignComponent implements OnInit, OnDestroy {
 
             new renderRouteGraph(this.routeConfig.routeSteps, false);
         }
-        
+
         this.resetTempFields();
     }
 
@@ -144,7 +178,7 @@ export class DesignComponent implements OnInit, OnDestroy {
             if (this.mode == "CREATE") {
                 if (this.branchCondition) {
                     this.branchCondition.routeSteps.push(this.routeStep);
-                    (<ChoiceRouteStep> this.sourceRouteArray[this.routeIndex]).conditions.push(this.branchCondition);
+                    (<ChoiceRouteStep>this.sourceRouteArray[this.routeIndex]).conditions.push(this.branchCondition);
                 } else {
                     this.sourceRouteArray.push(this.routeStep);
                 }
@@ -152,7 +186,7 @@ export class DesignComponent implements OnInit, OnDestroy {
                 if (this.routeIndex != null && this.routeIndex != undefined && this.routeIndex > -1 && this.routeIndex < this.sourceRouteArray.length) {
                     if (this.branchCondition && this.routeStep["@type"] == "ChoiceRouteStep") {
                         this.branchCondition.routeSteps = this.sourceRouteArray.splice(this.routeIndex, this.sourceRouteArray.length - this.routeIndex);
-                        (<ChoiceRouteStep> this.routeStep).conditions.push(this.branchCondition);
+                        (<ChoiceRouteStep>this.routeStep).conditions.push(this.branchCondition);
                         this.sourceRouteArray.push(this.routeStep);
                     } else {
                         this.sourceRouteArray.splice(this.routeIndex, 0, this.routeStep);
@@ -167,6 +201,25 @@ export class DesignComponent implements OnInit, OnDestroy {
 
         new renderRouteGraph(this.routeConfig.routeSteps, false);
         this.resetTempFields();
+    }
+
+    discardChanges() {
+        this.router.navigate(['/pg/mwrt/rtsr'], { relativeTo: this.route });
+    }
+
+    saveRouteConfig() {
+        // TODO: Add validations over RouteConfig and RouteConfigSteps before saving it.
+        if (!this.readOnly) {
+            this.subscriptionSaveRoute = this.mwRouteService.save(this.routeConfig).subscribe(
+                result => {
+                    if (result) {
+                        this.routeConfig = result;
+                    }
+                }, error => {
+
+                }
+            );
+        }
     }
 
     resetTempFields() {
@@ -199,11 +252,11 @@ export class DesignComponent implements OnInit, OnDestroy {
                         return true;
                     } else if (routeStep["@type"] && routeStep["@type"] == "ChoiceRouteStep") {
                         for (let conditionIndex = 0; conditionIndex < (<ChoiceRouteStep>routeStep).conditions.length; conditionIndex++) {
-                            const condition = (<ChoiceRouteStep> routeStep).conditions[conditionIndex];
+                            const condition = (<ChoiceRouteStep>routeStep).conditions[conditionIndex];
 
                             if (condition && condition.routeSteps) {
                                 if (this.locateSource(condition.routeSteps, routeStepId)) {
-                                    this.parentChoiceRouteStep = <ChoiceRouteStep> routeStep;
+                                    this.parentChoiceRouteStep = <ChoiceRouteStep>routeStep;
                                     this.parentChoiceConditionIndex = conditionIndex;
                                     return true;
                                 }
@@ -240,9 +293,9 @@ export class DesignComponent implements OnInit, OnDestroy {
             } else if (newType == "JsonUnmarshallRouteStep") {
                 this.routeStep = new JsonUnmarshallRouteStep(this.routeStep);
             }
-            
+
             if (this.mode && this.mode == "INSERT") {
-                if (newType == "ChoiceRouteStep")  {
+                if (newType == "ChoiceRouteStep") {
                     this.branchCondition = new MWCondition();
                 } else {
                     this.branchCondition = null;
@@ -361,7 +414,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     disableBulkEdit() {
         if (this.bulkEdit) {
             this.selectedCondition.conditions = [];
-            
+
             if (this.bulkExpressions && this.bulkExpressions.trim().length > 0) {
                 for (const expression of this.bulkExpressions.split('\n')) {
                     this.selectedCondition.conditions.push(new Expression(expression));
@@ -370,7 +423,7 @@ export class DesignComponent implements OnInit, OnDestroy {
                 this.addExpression(this.selectedCondition);
             }
         }
-        
+
         this.bulkEdit = false;
         this.selectedCondition = null;
         this.bulkExpressions = '';
@@ -380,22 +433,22 @@ export class DesignComponent implements OnInit, OnDestroy {
         const tempExpression: Expression = new Expression();
         condition.conditions.push(tempExpression);
     }
-    
+
     deleteExpression(expression: Expression, condition: MWCondition) {
         const index = condition.conditions.indexOf(expression);
         condition.conditions.splice(index, 1);
     }
-    
+
     addCondition() {
-        if (this.routeStep && this.routeStep["@type"] && this.routeStep["@type"] == "ChoiceRouteStep" && (<ChoiceRouteStep> this.routeStep).conditions) {
-            (<ChoiceRouteStep> this.routeStep).conditions.push(new MWCondition());
+        if (this.routeStep && this.routeStep["@type"] && this.routeStep["@type"] == "ChoiceRouteStep" && (<ChoiceRouteStep>this.routeStep).conditions) {
+            (<ChoiceRouteStep>this.routeStep).conditions.push(new MWCondition());
         }
     }
 
     deleteCondition(condition: MWCondition) {
-        if (this.routeStep && this.routeStep["@type"] && this.routeStep["@type"] == "ChoiceRouteStep" && (<ChoiceRouteStep> this.routeStep).conditions) {
-            const index = (<ChoiceRouteStep> this.routeStep).conditions.indexOf(condition);
-            (<ChoiceRouteStep> this.routeStep).conditions.splice(index, 1);
+        if (this.routeStep && this.routeStep["@type"] && this.routeStep["@type"] == "ChoiceRouteStep" && (<ChoiceRouteStep>this.routeStep).conditions) {
+            const index = (<ChoiceRouteStep>this.routeStep).conditions.indexOf(condition);
+            (<ChoiceRouteStep>this.routeStep).conditions.splice(index, 1);
         }
     }
 }

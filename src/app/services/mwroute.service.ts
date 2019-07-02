@@ -41,4 +41,64 @@ export class MWRouteService {
 
         return subject.asObservable();
     }
+
+    save(routeConfig: MWRouteConfig): Observable<MWRouteConfig> {
+        const subject = new Subject<MWRouteConfig>();
+
+        if (routeConfig) {
+            const url = `${environment.server + environment.route}`;
+
+            if (routeConfig._id && routeConfig._id.length > 0) {
+                this.httpClient.put(
+                    url,
+                    routeConfig,
+                    {
+                        headers: this.httpHeaders,
+                        observe: 'response',
+                        reportProgress: true,
+                        withCredentials: true
+                    }
+                ).subscribe(
+                    (response: HttpResponse<MWRouteConfig>) => {
+                        if (response.body) {
+                            subject.next(response.body);
+                        }
+                    },
+                    (err: HttpErrorResponse) => {
+                        // All errors are handled in ErrorInterceptor, no further handling required
+                        // Unless any specific action is to be taken on some error
+
+                        subject.error(err);
+                    }
+                );
+            } else {
+                this.httpClient.post(
+                    url,
+                    routeConfig,
+                    {
+                        headers: this.httpHeaders,
+                        observe: 'response',
+                        reportProgress: true,
+                        withCredentials: true
+                    }
+                ).subscribe(
+                    (response: HttpResponse<MWRouteConfig>) => {
+                        if (response.body) {
+                            subject.next(response.body);
+                        }
+                    },
+                    (err: HttpErrorResponse) => {
+                        // All errors are handled in ErrorInterceptor, no further handling required
+                        // Unless any specific action is to be taken on some error
+
+                        subject.error(err);
+                    }
+                );
+            }
+        } else {
+            subject.error('RouteConfig is null or empty');
+        }
+
+        return subject.asObservable();
+    }
 }

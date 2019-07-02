@@ -162,9 +162,10 @@ export class MWRouteConfig extends BaseModel {
     constructor(routeCd?: string, routeLabel?: string, version?: number, routeSteps?: MWRouteStepConfig[]) {
         super();
 
+        this.statusCd = 'DRAFT';
         this.routeCd = routeCd ? routeCd : '';
         this.routeLabel = routeLabel ? routeLabel : '';
-        this.version = version ? version : 0;
+        this.version = version ? version : 1;
         this.routeSteps = routeSteps ? routeSteps : [];
     }
 }

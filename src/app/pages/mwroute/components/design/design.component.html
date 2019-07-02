@@ -4,11 +4,11 @@
       <button type="button" class="btn btn-danger btn-with-icon" style="margin-right: 5px" data-toggle="modal"
          data-target="#discardWarningModal">
          <i class="ion-ios-refresh"></i>Discard</button>
-      <button type="button" class="btn btn-success btn-with-icon" style="margin-right: 5px" (click)="saveOnServer()"
+      <button type="button" class="btn btn-success btn-with-icon" style="margin-right: 5px" (click)="saveRouteConfig()"
          *ngIf="!readOnly">
          <i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
       <button type="button" class="btn btn-primary btn-with-icon" style="margin-right: 5px"
-         (click)="prepareDummyObject()" *ngIf="!readOnly" data-toggle="modal" data-target="#settignsModal">
+         (click)="prepareDummyRouteConfig()" *ngIf="!readOnly" data-toggle="modal" data-target="#settignsModal">
          <i class="fa fa-cogs" aria-hidden="true"></i>Settings</button>
       <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
          <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>
@@ -195,7 +195,8 @@
                                        </td>
                                        <td>
                                           <button type="button" class="btn btn-primary" data-toggle="modal"
-                                          data-target="#mvelEditModal" data-backdrop="static" data-keyboard="false" (click)="expandRule(rule)">Expand</button>
+                                             data-target="#mvelEditModal" data-backdrop="static" data-keyboard="false"
+                                             (click)="expandRule(rule)">Expand</button>
                                           <!-- 
                                              data-toggle="modal"
                                              data-target="#mvelEditModal" 
@@ -223,12 +224,13 @@
                </ng-container>
 
                <!-- ChoiceRouteStep fields -->
+               <!-- Only visible while editing a ChoiceRouteStep -->
                <ng-container *ngIf="routeStep['@type'] == 'ChoiceRouteStep'">
                   <div id="conditionAccordion" role="tablist" aria-multiselectable="true" *ngIf="routeStep.conditions">
                      <div *ngFor="let condition of routeStep.conditions; let conditionIndex=index" class="panel">
                         <div class="card">
-                           <div *ngIf="conditionIndex == 0" [id]="'conditionTabHeading' + conditionIndex" class="card-header"
-                              heightStyle="content" role="tab" (click)="disableBulkEdit()">
+                           <div *ngIf="conditionIndex == 0" [id]="'conditionTabHeading' + conditionIndex"
+                              class="card-header" heightStyle="content" role="tab" (click)="disableBulkEdit()">
                               <h5 class="mb-0">
                                  <a data-toggle="collapse" data-parent="#conditionAccordion"
                                     [href]="'#conditionCollapse' + conditionIndex" aria-expanded="true"
@@ -237,8 +239,8 @@
                                  </a>
                               </h5>
                            </div>
-                           <div *ngIf="conditionIndex != 0" [id]="'conditionTabHeading' + conditionIndex" class="card-header"
-                              heightStyle="content" role="tab" (click)="disableBulkEdit()">
+                           <div *ngIf="conditionIndex != 0" [id]="'conditionTabHeading' + conditionIndex"
+                              class="card-header" heightStyle="content" role="tab" (click)="disableBulkEdit()">
                               <h5 class="mb-0">
                                  <a class="collapsed" data-toggle="collapse" data-parent="#conditionAccordion"
                                     [href]="'#conditionCollapse' + conditionIndex" aria-expanded="false"
@@ -247,16 +249,18 @@
                                  </a>
                               </h5>
                            </div>
-                           <div *ngIf="conditionIndex == 0" [id]="'conditionCollapse' + conditionIndex" class="collapse show"
-                              role="tabpanel" [attr.aria-labelledby]="'conditionTabHeading' + conditionIndex">
+                           <div *ngIf="conditionIndex == 0" [id]="'conditionCollapse' + conditionIndex"
+                              class="collapse show" role="tabpanel"
+                              [attr.aria-labelledby]="'conditionTabHeading' + conditionIndex">
                               <div class="card-block">
                                  <form>
                                     <div class="form-group">
                                        <label for="inputConditionName">
                                           Condition Name
                                        </label>
-                                       <input type="text" class="form-control" id="inputConditionName" placeholder="Condition Name"
-                                          [(ngModel)]="condition.conditionName" name="conditionName" />
+                                       <input type="text" class="form-control" id="inputConditionName"
+                                          placeholder="Condition Name" [(ngModel)]="condition.conditionName"
+                                          name="conditionName" />
                                     </div>
                                     <div class="form-group">
                                        <label for="inputOperand">
@@ -268,15 +272,17 @@
                                           </option>
                                        </select>
                                     </div>
-                                    <div [id]="'expAccordion' + conditionIndex" role="tablist" aria-multiselectable="true"
-                                       *ngIf="!bulkEdit && condition.conditions.length > 0">
-                                       <div *ngFor="let expression of condition.conditions; let expIndex=index" class="panel">
+                                    <div [id]="'expAccordion' + conditionIndex" role="tablist"
+                                       aria-multiselectable="true" *ngIf="!bulkEdit && condition.conditions.length > 0">
+                                       <div *ngFor="let expression of condition.conditions; let expIndex=index"
+                                          class="panel">
                                           <div class="card">
                                              <div *ngIf="expIndex == 0"
-                                                [id]="'condition' + conditionIndex + 'expTabHeading' + expIndex" class="card-header"
-                                                heightStyle="content" role="tab">
+                                                [id]="'condition' + conditionIndex + 'expTabHeading' + expIndex"
+                                                class="card-header" heightStyle="content" role="tab">
                                                 <h5 class="mb-0">
-                                                   <a data-toggle="collapse" [attr.data-parent]="'#expAccordion' + conditionIndex"
+                                                   <a data-toggle="collapse"
+                                                      [attr.data-parent]="'#expAccordion' + conditionIndex"
                                                       [href]="'#condition' + conditionIndex + 'expCollapse' + expIndex"
                                                       aria-expanded="true"
                                                       [attr.aria-controls]="'condition' + conditionIndex + 'expCollapse' + expIndex">
@@ -285,8 +291,8 @@
                                                 </h5>
                                              </div>
                                              <div *ngIf="expIndex != 0"
-                                                [id]="'condition' + conditionIndex + 'expTabHeading' + expIndex" class="card-header"
-                                                heightStyle="content" role="tab">
+                                                [id]="'condition' + conditionIndex + 'expTabHeading' + expIndex"
+                                                class="card-header" heightStyle="content" role="tab">
                                                 <h5 class="mb-0">
                                                    <a class="collapsed" data-toggle="collapse"
                                                       [attr.data-parent]="'#expAccordion' + conditionIndex"
@@ -297,7 +303,8 @@
                                                    </a>
                                                 </h5>
                                              </div>
-                                             <div *ngIf="expIndex == 0" [id]="'condition' + conditionIndex + 'expCollapse' + expIndex"
+                                             <div *ngIf="expIndex == 0"
+                                                [id]="'condition' + conditionIndex + 'expCollapse' + expIndex"
                                                 class="collapse show" role="tabpanel"
                                                 [attr.aria-labelledby]="'condition' + conditionIndex + 'expTabHeading' + expIndex">
                                                 <div class="card-block">
@@ -319,7 +326,8 @@
                                                    </form>
                                                 </div>
                                              </div>
-                                             <div *ngIf="expIndex != 0" [id]="'condition' + conditionIndex + 'expCollapse' + expIndex"
+                                             <div *ngIf="expIndex != 0"
+                                                [id]="'condition' + conditionIndex + 'expCollapse' + expIndex"
                                                 class="collapse" role="tabpanel"
                                                 [attr.aria-labelledby]="'condition' + conditionIndex + 'expTabHeading' + expIndex">
                                                 <div class="card-block">
@@ -373,16 +381,17 @@
                                  </form>
                               </div>
                            </div>
-                           <div *ngIf="conditionIndex != 0" [id]="'conditionCollapse' + conditionIndex" class="collapse" role="tabpanel"
-                              [attr.aria-labelledby]="'conditionTabHeading' + conditionIndex">
+                           <div *ngIf="conditionIndex != 0" [id]="'conditionCollapse' + conditionIndex" class="collapse"
+                              role="tabpanel" [attr.aria-labelledby]="'conditionTabHeading' + conditionIndex">
                               <div class="card-block">
                                  <form>
                                     <div class="form-group">
                                        <label for="inputConditionName">
                                           Condition Name
                                        </label>
-                                       <input type="text" class="form-control" id="inputConditionName" placeholder="Condition Name"
-                                          [(ngModel)]="condition.conditionName" name="conditionName" />
+                                       <input type="text" class="form-control" id="inputConditionName"
+                                          placeholder="Condition Name" [(ngModel)]="condition.conditionName"
+                                          name="conditionName" />
                                     </div>
                                     <div class="form-group">
                                        <label for="inputOperand">
@@ -394,15 +403,17 @@
                                           </option>
                                        </select>
                                     </div>
-                                    <div [id]="'expAccordion' + conditionIndex" role="tablist" aria-multiselectable="true"
-                                       *ngIf="!bulkEdit && condition.conditions.length > 0">
-                                       <div *ngFor="let expression of condition.conditions; let expIndex=index" class="panel">
+                                    <div [id]="'expAccordion' + conditionIndex" role="tablist"
+                                       aria-multiselectable="true" *ngIf="!bulkEdit && condition.conditions.length > 0">
+                                       <div *ngFor="let expression of condition.conditions; let expIndex=index"
+                                          class="panel">
                                           <div class="card">
                                              <div *ngIf="expIndex == 0"
-                                                [id]="'condition' + conditionIndex + 'expTabHeading' + expIndex" class="card-header"
-                                                heightStyle="content" role="tab">
+                                                [id]="'condition' + conditionIndex + 'expTabHeading' + expIndex"
+                                                class="card-header" heightStyle="content" role="tab">
                                                 <h5 class="mb-0">
-                                                   <a data-toggle="collapse" [attr.data-parent]="'#expAccordion' + conditionIndex"
+                                                   <a data-toggle="collapse"
+                                                      [attr.data-parent]="'#expAccordion' + conditionIndex"
                                                       [href]="'#condition' + conditionIndex + 'expCollapse' + expIndex"
                                                       aria-expanded="true"
                                                       [attr.aria-controls]="'condition' + conditionIndex + 'expCollapse' + expIndex">
@@ -411,8 +422,8 @@
                                                 </h5>
                                              </div>
                                              <div *ngIf="expIndex != 0"
-                                                [id]="'condition' + conditionIndex + 'expTabHeading' + expIndex" class="card-header"
-                                                heightStyle="content" role="tab">
+                                                [id]="'condition' + conditionIndex + 'expTabHeading' + expIndex"
+                                                class="card-header" heightStyle="content" role="tab">
                                                 <h5 class="mb-0">
                                                    <a class="collapsed" data-toggle="collapse"
                                                       [attr.data-parent]="'#expAccordion' + conditionIndex"
@@ -423,7 +434,8 @@
                                                    </a>
                                                 </h5>
                                              </div>
-                                             <div *ngIf="expIndex == 0" [id]="'condition' + conditionIndex + 'expCollapse' + expIndex"
+                                             <div *ngIf="expIndex == 0"
+                                                [id]="'condition' + conditionIndex + 'expCollapse' + expIndex"
                                                 class="collapse show" role="tabpanel"
                                                 [attr.aria-labelledby]="'condition' + conditionIndex + 'expTabHeading' + expIndex">
                                                 <div class="card-block">
@@ -445,7 +457,8 @@
                                                    </form>
                                                 </div>
                                              </div>
-                                             <div *ngIf="expIndex != 0" [id]="'condition' + conditionIndex + 'expCollapse' + expIndex"
+                                             <div *ngIf="expIndex != 0"
+                                                [id]="'condition' + conditionIndex + 'expCollapse' + expIndex"
                                                 class="collapse" role="tabpanel"
                                                 [attr.aria-labelledby]="'condition' + conditionIndex + 'expTabHeading' + expIndex">
                                                 <div class="card-block">
@@ -504,26 +517,38 @@
                   </div>
                </ng-container>
 
+               <!--
+                  Only visible while creating a new branch
+
+                  Case 1 - Adding a child branch to a ChoiceRouteStep
+                  Case 2 - Inserting a ChoiceRouteStep before any step of existing branch
+                     This will break the current branch in two halfs.
+                     First half will be appended with ChoiceRouteStep.
+                     Second half will be a branch of the appended ChoiceRouteStep.
+               -->
                <ng-container *ngIf="branchCondition && mode && (mode == 'CREATE' || mode == 'INSERT')">
                   <div id="branchConditionAccordion" role="tablist" aria-multiselectable="true">
                      <div class="panel card">
                         <div id="branchConditionTabHeader" class="card-header" heightStyle="content" role="tab">
                            <h5 class="mb-0">
-                              <a data-toggle="collapse" data-parent="#branchConditionAccordion" href="#branchConditionCollapse"
-                                 aria-expanded="true" aria-controls="branchConditionCollapse">
+                              <a data-toggle="collapse" data-parent="#branchConditionAccordion"
+                                 href="#branchConditionCollapse" aria-expanded="true"
+                                 aria-controls="branchConditionCollapse">
                                  Branch Condition
                               </a>
                            </h5>
                         </div>
-                        <div id="branchConditionCollapse" class="collapse show" role="tabpanel" aria-labelledby="branchConditionTabHeader">
+                        <div id="branchConditionCollapse" class="collapse show" role="tabpanel"
+                           aria-labelledby="branchConditionTabHeader">
                            <div class="card-block">
                               <form>
                                  <div class="form-group">
                                     <label for="branchConditionName">
                                        Condition Name
                                     </label>
-                                    <input type="text" class="form-control" id="branchConditionName" placeholder="Condition Name"
-                                       [(ngModel)]="branchCondition.conditionName" name="conditionName" />
+                                    <input type="text" class="form-control" id="branchConditionName"
+                                       placeholder="Condition Name" [(ngModel)]="branchCondition.conditionName"
+                                       name="conditionName" />
                                  </div>
                                  <div class="form-group">
                                     <label for="branchConditionOperand">
@@ -537,28 +562,26 @@
                                  </div>
                                  <div id="branchExpAccordion" role="tablist" aria-multiselectable="true"
                                     *ngIf="!bulkEdit && branchCondition.conditions.length > 0">
-                                    <div *ngFor="let branchExpression of branchCondition.conditions; let branchExpIndex=index" class="panel">
+                                    <div
+                                       *ngFor="let branchExpression of branchCondition.conditions; let branchExpIndex=index"
+                                       class="panel">
                                        <div class="card">
-                                          <div *ngIf="branchExpIndex == 0"
-                                             [id]="'branchExpTabHeading' + branchExpIndex" class="card-header"
-                                             heightStyle="content" role="tab">
+                                          <div *ngIf="branchExpIndex == 0" [id]="'branchExpTabHeading' + branchExpIndex"
+                                             class="card-header" heightStyle="content" role="tab">
                                              <h5 class="mb-0">
                                                 <a data-toggle="collapse" data-parent="#branchExpAccordion"
-                                                   [href]="'#branchExpCollapse' + branchExpIndex"
-                                                   aria-expanded="true"
+                                                   [href]="'#branchExpCollapse' + branchExpIndex" aria-expanded="true"
                                                    [attr.aria-controls]="'branchExpCollapse' + branchExpIndex">
                                                    {{branchExpression.value != null && branchExpression.value.length > 0 ? branchExpression.value : "Expression"}}
                                                 </a>
                                              </h5>
                                           </div>
-                                          <div *ngIf="branchExpIndex != 0"
-                                             [id]="'expTabHeading' + branchExpIndex" class="card-header"
-                                             heightStyle="content" role="tab">
+                                          <div *ngIf="branchExpIndex != 0" [id]="'expTabHeading' + branchExpIndex"
+                                             class="card-header" heightStyle="content" role="tab">
                                              <h5 class="mb-0">
                                                 <a class="collapsed" data-toggle="collapse"
                                                    data-parent="#branchExpAccordion"
-                                                   [href]="'#branchExpCollapse' + branchExpIndex"
-                                                   aria-expanded="false"
+                                                   [href]="'#branchExpCollapse' + branchExpIndex" aria-expanded="false"
                                                    [attr.aria-controls]="'branchExpCollapse' + branchExpIndex">
                                                    {{branchExpression.value != null && branchExpression.value.length > 0 ? branchExpression.value : "Expression"}}
                                                 </a>
@@ -577,7 +600,8 @@
                                                          [id]="'expValue' + branchExpIndex" placeholder="Expression"
                                                          [(ngModel)]="branchExpression.value" name="value" />
                                                    </div>
-                                                   <div class="form-group" *ngIf="branchCondition.conditions.length > 1">
+                                                   <div class="form-group"
+                                                      *ngIf="branchCondition.conditions.length > 1">
                                                       <button type="button" class="btn btn-danger"
                                                          (click)="deleteExpression(branchExpression, branchCondition)">
                                                          Remove Expression
@@ -599,7 +623,8 @@
                                                          [id]="'expValue' + branchExpIndex" placeholder="Value"
                                                          [(ngModel)]="branchExpression.value" name="value" />
                                                    </div>
-                                                   <div class="form-group" *ngIf="branchCondition.conditions.length > 1">
+                                                   <div class="form-group"
+                                                      *ngIf="branchCondition.conditions.length > 1">
                                                       <button type="button" class="btn btn-danger"
                                                          (click)="deleteExpression(branchExpression, branchCondition)">
                                                          Remove Expression
@@ -615,8 +640,7 @@
                                     <label>
                                        Expressions Bulk Edit
                                     </label>
-                                    <textarea class="form-control"
-                                       placeholder="Enter expressions (separated by line)"
+                                    <textarea class="form-control" placeholder="Enter expressions (separated by line)"
                                        [(ngModel)]="bulkExpressions" name="bulkExpressions"></textarea>
                                  </div>
                                  <div class="form-group">
@@ -641,9 +665,11 @@
                </ng-container>
             </form>
          </div>
+
          <!-- Modal Footer -->
          <div class="modal-footer" id="saveRouteStepModalFooter">
-            <button type="button" class="btn btn-success" id="saveChangesButton" (click)="saveRouteStep()" data-dismiss="modal">
+            <button type="button" class="btn btn-success" id="saveChangesButton" (click)="saveRouteStep()"
+               data-dismiss="modal">
                Save Changes
             </button>
          </div>
@@ -651,29 +677,66 @@
    </div>
 </div>
 
-<div class="modal fade" id="myModal" role="dialog">
-   <div class="modal-dialog">
-
-      <!-- Modal content-->
+<!-- Modal - Settings -->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="settignsModal" tabindex="-1" role="dialog"
+   attr.aria-labelledby="settingsModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg">
       <div class="modal-content">
+         <!-- Modal Header -->
          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Modal Header</h4>
+            <h4 class="modal-title" id="settingsModalLabel">
+               Settings
+            </h4>
+            <button type="button" class="btn btn-info" data-dismiss="modal">
+               <span aria-hidden="true">&times;</span>
+               <span class="sr-only">Close</span>
+            </button>
          </div>
+         <!-- Modal Body -->
          <div class="modal-body">
-            <p>Some text in the modal.</p>
+            <form *ngIf="tempRouteConfig">
+               <div class="form-group">
+                  <label class="col-md-12 col-sm-12 col-xs-12" for="inputRouteLabel">
+                     Route Name
+                  </label>
+                  <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputRouteLabel"
+                     placeholder="Route Name" [(ngModel)]="tempRouteConfig.routeLabel" name="routeLabel" />
+               </div>
+               <div class="form-group">
+                  <label class="col-md-12 col-sm-12 col-xs-12" for="inputRouteCode">
+                     Route Code
+                  </label>
+                  <input *ngIf="tempRouteConfig._id && tempRouteConfig._id.length > 0" type="text" disabled
+                     class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputRouteCode" placeholder="Route Code"
+                     [value]="tempRouteConfig.routeCd" name="routeCd" />
+                  <input *ngIf="!tempRouteConfig._id || tempRouteConfig._id.length == 0" type="text"
+                     class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputRouteCode" placeholder="Route Code"
+                     [(ngModel)]="tempRouteConfig.routeCd" name="routeCd" />
+               </div>
+               <div class="form-group">
+                  <label class="col-md-12 col-sm-12 col-xs-12" for="inputVersionNumber">
+                     Version Number
+                  </label>
+                  <input type="number" disabled class="col-md-12 col-sm-12 col-xs-12 form-control"
+                     id="inputVersionNumber" placeholder="Version Number" min="0"
+                     onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                     [(ngModel)]="tempRouteConfig.version" name="version" />
+               </div>
+            </form>
          </div>
-         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+         <!-- Modal Footer -->
+         <div class="modal-footer" id="settingsModalFooter">
+            <button type="button" class="btn btn-success" id="saveChangesButton" (click)="updateRouteConfig()" data-dismiss="modal">
+               Save Changes
+            </button>
          </div>
       </div>
-
    </div>
 </div>
 
 <!-- Expand Rule Modal -->
-<div class="modal fade" id="mvelEditModal" tabindex="-1" role="dialog"
-   attr.aria-labelledby="mvelEditModal" aria-hidden="true">
+<div class="modal fade" id="mvelEditModal" tabindex="-1" role="dialog" attr.aria-labelledby="mvelEditModal"
+   aria-hidden="true">
    <div class="modal-dialog modal-lg" *ngIf="selectedRule && mvelObject">
       <div class="modal-content ">
          <!-- Modal Header -->
@@ -714,6 +777,35 @@
             <button type="button" class="btn btn-warning" (click)="dismissRuleDialog()">Dismiss</button>
             <button type="button" class="btn btn-info" (click)="testRule()">Test</button>
             <button type="button" class="btn btn-success" (click)="saveRule()">Save</button>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- Discard Warning Modal -->
+<div class="modal fade" id="discardWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="discardWarningLabel"
+   aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <!-- Modal Header -->
+         <div class="modal-header">
+            <h4 class="modal-title" id="discardWarningLabel">
+               Discard Changes
+            </h4>
+            <button type="button" class="btn btn-info" data-dismiss="modal">
+               <span aria-hidden="true">&times;</span>
+               <span class="sr-only">Close</span>
+            </button>
+         </div>
+         <!-- Modal Body -->
+         <div class="modal-body" id="modal_body">
+            Are you sure you want to discard all the changes you have made?
+         </div>
+         <!-- Modal Footer -->
+         <div class="modal-footer" id="modal_footer">
+            <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal"
+               (click)="discardChanges()">Confirm</button>
          </div>
       </div>
    </div>
