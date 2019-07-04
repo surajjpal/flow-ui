@@ -58,12 +58,14 @@ export class ApiRouteStep extends MWRouteStepConfig {
 export class CamelRouteStep extends MWRouteStepConfig {
     "@type": "CamelRouteStep";
     routeDsl: string;
+    dynamicRouteDsl: string;
 
     constructor(baseObject?: MWRouteStepConfig) {
         super(baseObject);
 
         this["@type"] = "CamelRouteStep";
         this.routeDsl = '';
+        this.dynamicRouteDsl = '';
     }
 }
 
