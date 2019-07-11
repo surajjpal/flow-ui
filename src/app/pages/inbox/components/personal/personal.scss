@@ -54,13 +54,8 @@
 /* Style for master detail list card start */
 .block {
     display: block;
-    width: 100%;
-    border: none;
-    padding: 10px 10px;
-    background-color: white;
     font-size: 14px;
     text-align: left;
-    outline: none
 }
 
 .block.active {
@@ -93,3 +88,55 @@ input[type="file"] {
 
 label.required:before {content: " *"; color: red;}
 
+.atnBtn{
+    position: fixed;
+    top: 63px;
+    left: 195px;
+    width: 91%;
+    padding: 13px 5px;
+    z-index: 9;
+    background: #eeeeee;
+}
+.messageholder{
+    min-height: 500px;
+}
+.messageSwitcher{
+    height: 75px;
+    padding: 5px;
+    margin-bottom: 15px;
+    div.explain{
+        color:#67A2E1;
+        margin-top:20px;
+    }
+    a{
+        font-size: 21px;
+        width: 160px;
+        display: inline-block;
+        line-height: 26px;
+        position: relative;
+        height: 28px;
+    }
+    .dropdown-menu{
+        top: 50%;
+        width: 100%;
+        li{
+            // border-bottom: 1px solid #ececec;
+            margin-bottom: 10px;
+            :last-child{
+                border-bottom: 0px;
+            }
+        }
+    }
+}
+.defaultOpen{
+    position: relative;
+    .processbadge{
+        position: absolute;
+        top: 30px;
+        font-size: 10px;
+        letter-spacing: 1px;
+    }
+}
+.detailsPane{
+    background-color: #eeeeee;
+}

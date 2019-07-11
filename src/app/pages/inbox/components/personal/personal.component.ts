@@ -44,6 +44,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
   selectedStateForFlag: State;
   selectedState: State;
   selectedStateCd: string;
+  message_type: string ="Assigned";
   actionMap: any;
   fieldKeyMap: any;
   assignedStates: State[];
@@ -51,6 +52,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
   assignedTaskDdetails: State;
   assignedStateTabclass = {};
   assignedTaskActionButtonEnabled = {};
+  
 
   unassignedStates: State[];
   unassignedTaskDdetails: State;
@@ -1198,6 +1200,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     if (!tabName || tabName == null || tabName.trim().length == 0) {
       return;
     } else if (tabName === this.TAB_ASSIGNED) {
+      this.message_type = "Assigned";
       if (this.personalFetched) {
         return;
       } else {
@@ -1206,6 +1209,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
         folder = 'Personal';
       }
     } else if (tabName === this.TAB_UNASSIGNED) {
+      this.message_type = "Unassigned";
       if (this.groupFetched) {
         return;
       } else {
@@ -1214,6 +1218,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
         folder = 'Group';
       }
     } else if (tabName === this.TAB_FLAGGED) {
+      this.message_type = "Flagged";
       if (this.flaggedFetched) {
         return;
       } else {

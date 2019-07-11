@@ -59,6 +59,7 @@ h5 {
 
     .card.with-scroll .card-body {
       height: calc(100% - 45px);
+      min-height: 600px;
     }
 
     .card-content {
