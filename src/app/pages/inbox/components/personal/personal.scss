@@ -1,3 +1,8 @@
+.progress {
+    position: absolute;
+    width: 100%;
+    top: 60px;
+}
 .modal-lg {
     max-width: 80% !important;
 }
@@ -27,6 +32,20 @@
 
 .businesskey {
     color: rgb(95, 161, 236);
+}
+.atnBtn .btn.text-icon{
+    color:rgb(63, 151, 206);
+    font-size: 16px;
+    margin: 0px 20px 0 0px;
+    line-height: 100%;
+    font-weight: normal;
+    white-space: nowrap;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+    i{
+        margin-right: 10px;
+    }
 }
 
 
@@ -90,7 +109,7 @@ label.required:before {content: " *"; color: red;}
 
 .atnBtn{
     position: fixed;
-    top: 63px;
+    top: 73px;
     left: 195px;
     width: 91%;
     padding: 13px 5px;
@@ -101,12 +120,12 @@ label.required:before {content: " *"; color: red;}
     min-height: 500px;
 }
 .messageSwitcher{
-    height: 75px;
-    padding: 5px;
-    margin-bottom: 15px;
+    height: 60px;
+    padding: 10px;
+    margin-bottom: 0px;
     div.explain{
         color:#67A2E1;
-        margin-top:20px;
+        margin-top:3px;
     }
     a{
         font-size: 21px;
@@ -128,6 +147,9 @@ label.required:before {content: " *"; color: red;}
         }
     }
 }
+.shortMessagediv{
+    text-align: left;height: 62px;overflow: hidden;
+}
 .defaultOpen{
     position: relative;
     .processbadge{
@@ -139,4 +161,33 @@ label.required:before {content: " *"; color: red;}
 }
 .detailsPane{
     background-color: #eeeeee;
+}
+.messageholder{
+    height: calc(100vh - 193px);
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+.borderSeparator{
+    border-left: #cccccc 1px solid;
+}
+.headerBg{
+    background-color: #ececec;
+    width: 100%;
+}
+.srchMessages{
+    position: absolute;
+    width: 156px;
+    top: 16px;
+    right: 15px;
+}
+.slideOut{
+    position: fixed;
+    top: 120px;
+    right: 0px;
+    -webkit-transition-duration: 1s;
+  -moz-transition-duration: 1s;
+  -o-transition-duration: 1s;
+  transition-duration: 1s;
+    z-index: 999;
+    width: 450px;
 }

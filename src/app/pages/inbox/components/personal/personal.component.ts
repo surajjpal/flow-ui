@@ -204,6 +204,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
         if (contextData) {
           
         }
+        // state.assignedVirtualAgentId = "5cd00b89948ddcf750f70a22";
         if (state.assignedVirtualAgentId.indexOf("http") != -1) {
           var url = state.assignedVirtualAgentId;
           if (url.indexOf("?") != -1) {
@@ -746,6 +747,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
   }
 
   onPersonalAssignedSubjectSelect(state: State) {
+    this.assistModeFl = false;
     this.assignedTaskDdetails = state;
     this.getDocuments(this.assignedTaskDdetails);
     for (let asgnState of this.assignedStates) {
@@ -1298,9 +1300,9 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.subscription = this.stateService.getTimelineForFlow(state.stateMachineInstanceModelId)
       .subscribe(timelineStates => {
         if (timelineStates) {
-          console.log("******")
+          // console.log("******")
           this.timelineStates = timelineStates;
-          console.log(this.timelineStates);
+          // console.log(this.timelineStates);
           // if (this.timelineStates.length > 0) {
           //   this.selectedTimeLineState = this.timelineStates[0];
           // }

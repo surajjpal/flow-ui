@@ -1,31 +1,36 @@
-<ul class="timeline">
-  <li [class]="index%2 ==1 ? 'timeline-inverted' : ''" *ngFor="let timelineData of timeLineStateAuditData; let index=index;">
-      <div class="timeline-badge"><i class="fa fa-pencil-square-o"></i></div>
-      <div class="timeline-panel">
-        <div class="timeline-heading">
-          <h4 class="timeline-title">{{ timelineData.stateCd }}</h4>
-          <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ timelineData.endTimeLong | amDateFormat:
-            'DD/MM/YYYY
-            hh:mm A' }}</small></p>
-          <label>Group: <code>{{ timelineData.assignedUserGroupCd }}</code></label><br>
-          <label>Updated by <code>{{ timelineData.assignedUserName }}</code></label><br>
-          <label>Status: <code>{{ timelineData.taskStatus }} </code></label>
+<div class="schedule-box">
+    <div class="hour-box"  *ngFor="let timelineData of timeLineStateAuditData; let index=index;">
+        <input type="checkbox" class="accordioninput" id="chck{{index}}">
+        <label class="tab-label" for="chck{{index}}"><h3>{{ timelineData.stateCd }}</h3></label>
+        <div class="img-circle circle"><span></span></div>
+        <div class="hour"><i class="fa fa-clock-o"></i> {{ timelineData.endTimeLong | amDateFormat: 'DD/MM/YYYY hh:mm A' }}<br>
+          
         </div>
-        <div class="timeline-body">
-          <div class="form-group">
-              <label>Comment: </label>
-              <p>{{ timelineData.taskRemarks }}</p>
-          </div>
-          <div *ngIf="timelineData.documents">
-            <label>Documents</label>
-            <div *ngFor="let doc of timelineData.documents" class="col-md-12">
-                <i class="fa fa-paperclip"></i>
-              <a [href]="getDownloadUrl(doc)">
-                {{ doc.userFileName }}
-              </a>
+        <div class="content-box">
+            <div *ngIf="timelineData.assignedUserGroupCd">
+              <label>Group: <code>{{ timelineData.assignedUserGroupCd }}</code></label>
             </div>
-          </div>
+            <div *ngIf="timelineData.assignedUserName">
+              <label>Updated by <code>{{ timelineData.assignedUserName }}</code></label>
+            </div>
+            <div *ngIf="timelineData.taskStatus">
+              <label>Status: <code>{{ timelineData.taskStatus }} </code></label>
+            </div>
+            <div *ngIf="timelineData.taskRemarks">
+                <label>Comment: </label><p>{{ timelineData.taskRemarks }}</p>
+            </div>
+            <div *ngIf="timelineData.documents.length > 0">
+              <label>Documents</label>
+              <div *ngFor="let doc of timelineData.documents" class="col-md-12">
+                  <i class="fa fa-paperclip"></i>
+                <a [href]="getDownloadUrl(doc)">
+                  {{ doc.userFileName }}
+                </a>
+              </div>
+            </div>
         </div>
-      </div>
-  </li>
-</ul>
+    </div>
+ </div> 
+
+
+
