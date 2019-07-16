@@ -158,7 +158,14 @@ input.search-input {
     cursor: pointer;
   }
 }
-
+.messageholder .table .pagination {
+  margin: -2px 0 0 0;
+  float: right;
+  background-color: white;
+  a {
+    cursor: pointer;
+  }
+}
 .vertical-scroll {
   max-height: 214px;
 }

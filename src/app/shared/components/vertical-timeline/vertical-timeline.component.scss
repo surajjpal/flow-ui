@@ -1,0 +1,117 @@
+input.accordioninput:checked ~ .content-box{
+    max-height: 100vh !important;
+    padding: 1em;
+}
+input.accordioninput:checked + .tab-label::after{
+    transform: rotate(90deg);
+}
+input.accordioninput:checked ~ .circle{
+    border:2px solid #289712 !important;
+}
+.img-circle {
+    border-radius: 50%;
+}
+input.accordioninput {
+position: absolute;
+opacity: 0;
+z-index: -1;
+}
+.schedule-box {
+border-radius: 8px;
+overflow: hidden;
+}
+
+.schedule-box .hour-box{
+    position:relative;
+    padding-left:280px;
+    font-size:16px;
+    color:#7f7f7f;
+    // padding-bottom:20px;
+    overflow:hidden;
+
+    width: 100%;
+    .content-box {
+        padding-top: 20px;
+        max-height: 0;
+        padding: 0 1em;
+        color: #2c3e50;
+        transition: all .35s;
+    }
+
+
+.hour{
+position:absolute;
+left:0px;
+top:0px;
+width:175px;
+line-height:2em;
+color:#7f7f7f;	
+font-size: 15px;
+}
+.circle{
+position:absolute;
+left:240px;
+top:0px;
+width:24px;
+height:24px;
+border:2px solid #d2d2d2;
+}
+.tab-label {
+    position:relative;
+    top:0px;
+    margin-bottom:20px;
+    cursor:pointer;
+    display: flex;
+    //   justify-content: space-between;
+    //   padding: 1em;
+    //   font-weight: bold;
+
+    /* Icon 
+    &:hover {
+    }*/
+    h3{
+        position:relative;
+        display:inline-block;
+        font-size:18px;
+        padding-right:30px;
+        color:#292929;
+    }
+    &::after {
+        content: "\276F";
+        width: 1em;
+        height: 1em;
+        text-align: center;
+        transition: all .35s;
+    }
+}
+&-content {
+max-height: 0;
+padding: 0 1em;
+color: #3d3d3d;
+background: white;
+transition: all .35s;
+}
+&-close {
+display: flex;
+justify-content: flex-end;
+padding: 1em;
+font-size: 0.75em;
+background: #ebebeb;
+cursor: pointer;
+&:hover {
+background: #d4d4d4;
+}
+}
+}
+.schedule-box .hour-box:before{
+content:'';
+position:absolute;
+left:251px;
+top:24px;
+width:2px;
+height:100%;
+background:#d2d2d2;
+}
+.schedule-box .hour-box:last-child:before{
+display:none;
+}

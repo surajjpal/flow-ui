@@ -44,6 +44,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
   selectedStateForFlag: State;
   selectedState: State;
   selectedStateCd: string;
+  message_type: string ="Assigned";
   actionMap: any;
   fieldKeyMap: any;
   assignedStates: State[];
@@ -51,6 +52,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
   assignedTaskDdetails: State;
   assignedStateTabclass = {};
   assignedTaskActionButtonEnabled = {};
+  
 
   unassignedStates: State[];
   unassignedTaskDdetails: State;
@@ -202,6 +204,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
         if (contextData) {
           
         }
+        // state.assignedVirtualAgentId = "5cd00b89948ddcf750f70a22";
         if (state.assignedVirtualAgentId.indexOf("http") != -1) {
           var url = state.assignedVirtualAgentId;
           if (url.indexOf("?") != -1) {
@@ -744,6 +747,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
   }
 
   onPersonalAssignedSubjectSelect(state: State) {
+    this.assistModeFl = false;
     this.assignedTaskDdetails = state;
     this.getDocuments(this.assignedTaskDdetails);
     for (let asgnState of this.assignedStates) {
@@ -1198,6 +1202,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     if (!tabName || tabName == null || tabName.trim().length == 0) {
       return;
     } else if (tabName === this.TAB_ASSIGNED) {
+      this.message_type = "Assigned";
       if (this.personalFetched) {
         return;
       } else {
@@ -1206,6 +1211,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
         folder = 'Personal';
       }
     } else if (tabName === this.TAB_UNASSIGNED) {
+      this.message_type = "Unassigned";
       if (this.groupFetched) {
         return;
       } else {
@@ -1214,6 +1220,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
         folder = 'Group';
       }
     } else if (tabName === this.TAB_FLAGGED) {
+      this.message_type = "Flagged";
       if (this.flaggedFetched) {
         return;
       } else {
@@ -1293,9 +1300,9 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.subscription = this.stateService.getTimelineForFlow(state.stateMachineInstanceModelId)
       .subscribe(timelineStates => {
         if (timelineStates) {
-          console.log("******")
+          // console.log("******")
           this.timelineStates = timelineStates;
-          console.log(this.timelineStates);
+          // console.log(this.timelineStates);
           // if (this.timelineStates.length > 0) {
           //   this.selectedTimeLineState = this.timelineStates[0];
           // }

@@ -6,7 +6,8 @@ declare let moment: any;
 
 @Component({
   selector: 'api-vertical-timeline',
-  templateUrl: './vertical-timeline.component.html'
+  templateUrl: './vertical-timeline.component.html',
+  styleUrls:['./vertical-timeline.component.scss']
 })
 export class VerticalTimelineComponent implements OnInit {
 
