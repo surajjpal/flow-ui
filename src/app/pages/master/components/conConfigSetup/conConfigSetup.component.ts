@@ -176,7 +176,10 @@ export class ConConfigSetupComponent implements OnInit, OnDestroy {
     this.conConfig.configMap = {};
     for (const taskConfigAttribute of this.taskConfigAttributeList) {
       if(taskConfigAttribute.value!==null){
-        if (taskConfigAttribute.key && taskConfigAttribute.value.trim().length > 0) {
+        if (taskConfigAttribute.key && typeof taskConfigAttribute.value == "boolean") {
+          this.conConfig.configMap[taskConfigAttribute.key] = taskConfigAttribute.value;
+        }
+        if (taskConfigAttribute.key && typeof taskConfigAttribute.value != "boolean" && taskConfigAttribute.value.trim().length > 0) {
           this.conConfig.configMap[taskConfigAttribute.key] = taskConfigAttribute.value;
         }
       }
