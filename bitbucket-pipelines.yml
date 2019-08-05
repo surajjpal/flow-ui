@@ -94,11 +94,11 @@ pipelines:
             - echo 'successfully build!'
         artifacts: #Defining the artifacts to be passed to each future step.
             - dist/**
-    - step:
+      - step:
           name: S3 Prod-Compressing files
           script:
             - ./compress.sh   #Calling compress.sh to uglify files and compressing build 
-    - step:
+      - step:
           name: FlowUI Prod Deployment
           deployment: production-auxilo
           trigger: manual
