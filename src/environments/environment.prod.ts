@@ -3,27 +3,27 @@ export const environment = {
   name: 'production',
 
   // Root
-  root: 'https://flow.auxilofinance.io/flow/',
+  root: 'https://flow.auxilofinance.in/flow/',
 
   // API
-  authurl: 'https://flow.auxilofinance.io/flow/auth/',
+  authurl: 'https://flow.auxilofinance.in/flow/auth/',
 
   // Services
-  saveaccounturl: 'https://flow.auxilofinance.io/flow/account/create',
-  fetchaccountbyidurl: 'https://flow.auxilofinance.io/flow/account/',
-  publishaccounturl: 'https://flow.auxilofinance.io/flow/account/publish/',
-  unpublishaccounturl: 'https://flow.auxilofinance.io/flow/account/unpublish/',
+  saveaccounturl: 'https://flow.auxilofinance.in/flow/account/create',
+  fetchaccountbyidurl: 'https://flow.auxilofinance.in/flow/account/',
+  publishaccounturl: 'https://flow.auxilofinance.in/flow/account/publish/',
+  unpublishaccounturl: 'https://flow.auxilofinance.in/flow/account/unpublish/',
 
 
   processauditurl: "http://localhost:5000/api/universalsearch/search/flow",
   // Interfaces
-  interfaceService: 'https://flow.auxilofinance.io/flow/interfaces',
-  updateClassifierTraining: 'https://flow.auxilofinance.io/flow/interfaces/auto_decorate_training',
-  updateIntentTraining: 'https://flow.auxilofinance.io/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'https://flow.auxilofinance.io/flow/interfaces/entity_classification_training',
+  interfaceService: 'https://flow.auxilofinance.in/flow/interfaces',
+  updateClassifierTraining: 'https://flow.auxilofinance.in/flow/interfaces/auto_decorate_training',
+  updateIntentTraining: 'https://flow.auxilofinance.in/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'https://flow.auxilofinance.in/flow/interfaces/entity_classification_training',
 
   // Flow
-  server: 'https://flow.auxilofinance.io/flow/console/',
+  server: 'https://flow.auxilofinance.in/flow/console/',
   autourl: 'https://agent.automatapi.xyz/#/pg/ch/cnv/',
 
   autoworkbench: 'https://workbench.automatapi.com/#/wb/',
@@ -103,7 +103,7 @@ export const environment = {
 
 
   // auto
-  autoServer: 'https://flow.auxilofinance.io/flow/auto/',
+  autoServer: 'https://flow.auxilofinance.in/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',
@@ -132,7 +132,7 @@ export const environment = {
   flowsearch: '/api/search/flow',
 
   // Analytics
-  reportservice: 'https://flow.auxilofinance.io/flow/report',
+  reportservice: 'https://flow.auxilofinance.in/flow/report',
   sendReportUrl: '/reports/analyticsreport/sendreport',
   scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
   getAnalyticsReports: "/reports/analyticsreport",
@@ -155,7 +155,7 @@ export const environment = {
   businessObjectPredictUrl: '/automatons/businessobject/predict',
 
   //Dashboard
-  dashboardServer: 'https://flow.auxilofinance.io/flow/dashboard/',
+  dashboardServer: 'https://flow.auxilofinance.in/flow/dashboard/',
   dashboardsummary: 'auto/dashboard_summary',
   episodetimeline: 'auto/episode_timeline',
   intentcount: 'auto/intent_count',
@@ -171,7 +171,7 @@ export const environment = {
   statetransactionvalue: 'flow/state_transaction_value',
 
   //Dashboard from interfaces
-  dashboardinterface: 'https://flow.auxilofinance.io/flow/interfaces/dashboard',
+  dashboardinterface: 'https://flow.auxilofinance.in/flow/interfaces/dashboard',
 
   //Following APIs path - To be used in conjunction with interfaceService property
   crudFunction: '/crud',
@@ -186,10 +186,10 @@ export const environment = {
   businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
 
   //python project in api-utils ondemandreport project
-  sendReportCSV: 'https://flow.auxilofinance.io/flow/report/reports/generatereport',
+  sendReportCSV: 'https://flow.auxilofinance.in/flow/report/reports/generatereport',
 
   //Vocabulary
-  vocabulary: 'https://flow.auxilofinance.io/flow/interfaces/vocabulary',
+  vocabulary: 'https://flow.auxilofinance.in/flow/interfaces/vocabulary',
 
   // USP
   uspsearch: '/api/usp/relevancesearch',
