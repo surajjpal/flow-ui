@@ -51,7 +51,8 @@
         "dev": "environments/environment.ts",
         "demo" : "environments/environment.demo.ts",
         "prod": "environments/environment.prod.ts",
-        "local": "environments/environment.local.ts"
+        "local": "environments/environment.local.ts",
+        "auxiloUAT":"environments/environment.auxiloUAT.ts"
       }
     }
   ],

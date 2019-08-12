@@ -26,6 +26,7 @@
     "build:prod:aot": "npm run build:prod -- --aot",
     "build:ci": "npm run build:prod && npm run build:prod:aot",
     "build:demo": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --env=demo --aot --build-optimizer --base-href / --deploy-url /",
+    "build:auxiloUAT": "node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build --env=auxiloUAT --aot --build-optimizer --base-href / --deploy-url /",
     "test": "ng test -sr",
     "test:coverage": "npm run clean:coverage && ng test -sr -cc",
     "lint": "ng lint",
