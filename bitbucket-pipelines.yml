@@ -81,5 +81,32 @@ pipelines:
             - ./compress.sh   #Calling compress.sh to uglify files and compressing build  
             - ./create_artifact.sh
             - aws s3 cp flow-ui.zip s3://automatapi-build-artifacts/compusoft/flow-ui/release/
+    auxilo-uat:
+      - step:                   
+          name: Staging-auxilo Tag based Prod Build and release
+          image: 'node:8.10.0'
+          caches:
+            - node
+          script: #Modify the commands below to build your repository.
+            - npm install
+            - npm run build:auxiloUAT
+            - echo 'successfully build!'
+          artifacts: #Defining the artifacts to be passed to each future step.
+            - dist/**
+      - step:
+          name: Staging-auxilo S3-Compressing files
+          script:
+            - ./compress.sh   #Calling compress.sh to uglify files and compressing build 
+      - step:
+         name: Staging-auxilo FlowUI Deployment
+         deployment: Staging-auxilo
+         image: atlassian/pipelines-awscli
+         script:
+            - echo 'Deleting old build from s3'
+            - aws s3 rm s3://demo-auxi-console-ui --recursive
+            - echo 'Deleted old build from s3'
+            - echo 'Uploading new build on s3'
+            - aws s3 cp ./dist/ s3://demo-auxi-console-ui/ --recursive
+            - echo 'build upload successful!'
       
 
