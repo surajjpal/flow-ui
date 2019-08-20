@@ -109,9 +109,9 @@ label.required:before {content: " *"; color: red;}
 
 .atnBtn{
     position: fixed;
-    top: 73px;
+    top: 66px;
     left: 195px;
-    width: 91%;
+    width: 88.5%;
     padding: 13px 5px;
     z-index: 9;
     background: #eeeeee;
@@ -166,6 +166,7 @@ label.required:before {content: " *"; color: red;}
     height: calc(100vh - 193px);
     overflow-y: scroll;
     scrollbar-width: thin;
+    overflow-x: hidden;
 }
 .borderSeparator{
     border-left: #cccccc 1px solid;
@@ -176,9 +177,10 @@ label.required:before {content: " *"; color: red;}
 }
 .srchMessages{
     position: absolute;
-    width: 156px;
-    top: 16px;
+    width: 150px;
+    top: 10px;
     right: 15px;
+    height: 25px;
 }
 .slideOut{
     position: fixed;
