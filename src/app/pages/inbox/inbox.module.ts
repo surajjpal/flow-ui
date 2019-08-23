@@ -48,7 +48,6 @@ import * as moment from 'moment/moment';
     TeamViewComponent,
     DateRangePickerComponent,
     DashboardComponent
-    
   ]
 })
 export class InboxModule { }

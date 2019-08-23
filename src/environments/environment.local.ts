@@ -28,17 +28,14 @@ export const environment = {
   updateEntityTraining: 'http://localhost:8080/flow/interfaces/entity_classification_training',
 
 
-  // interfaceService: '',
-  // updateClassifierTraining : 'http://localhost:5101/auto_decorate_training',
-  // updateIntentTraining: 'http://localhost:5100/intent_classification_training',
-  // updateEntityTraining: 'http://localhost:5100/entity_classification_training',
-
   //
   processauditurl: "http://localhost:5000/api/universalsearch/search/flow",
 
   // Flow
   server: 'http://localhost:8080/flow/console/',
-  autourl: 'http://localhost:4300/#/pg/ch/cnv/',
+  autoworkbench: 'https://workbench.automatapi.com/#/wb/',
+  autoworkbenchdisplaybar: '?displaySideBar=false',
+  autourl: 'http://localhost:4200/#/pg/ch/cnv/',
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
   orPayloadMachineType: 'state/saveOrPayload/machineType/',
@@ -50,6 +47,7 @@ export const environment = {
   getallstats: 'state/fetchstatestatus',
   getpersonalstats: 'state/getstatestatusbyuser',
   getstateinstance: 'state/fetchstateinstance',
+  getDocuments: 'state/documents',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
@@ -72,6 +70,8 @@ export const environment = {
   evaluateMVEL: 'evaluateMVEL/',
   
   route: 'route/',
+  timeline: 'statemachine/timeline/',
+  updatevirtualassist: 'statemachine/updatevirtualassist',
 
   registerurl: 'user/createUser',
 
@@ -91,16 +91,20 @@ export const environment = {
   apiconfigurl: 'apiConfig/',
 
   //DataModelUrls
-  datamodelurl:'dataModel/',
-  datamodelsaveurl:'dataModel/savedatamodel',
+  datamodelurl: 'dataModel/',
+  datamodelsaveurl: 'dataModel/savedatamodel',
 
   //EntityUrls
-  entityurl:'entity/',
-  entitysaveurl:'entity/save',
-  entitysubmiturl:'entity/submit',
+  entityurl: 'entity/',
+  entitysaveurl: 'entity/save',
+  entitysubmiturl: 'entity/submit',
 
 
   supportedmethodsurl: 'apiConfig/supportedMethods',
+
+  getallconnectorinfo: 'connectorInfo/',
+  saveconnectorinfo: 'connectorInfo/save/',
+  deleteconnectorinfo: 'connectorInfo/delete/',
 
   connectorinfo: 'connectors/',
   getallconconfig: 'connectors/getAll/',
@@ -122,6 +126,8 @@ export const environment = {
   createtrainingdataurl: 'add/trainingdata',
   updatetrainingdataurl: 'update/trainingdata',
   deletetrainingdataurl: 'delete/trainingdata?query=',
+
+
 
   getintenturl: 'load/intentclassifier',
   createintenturl: '',

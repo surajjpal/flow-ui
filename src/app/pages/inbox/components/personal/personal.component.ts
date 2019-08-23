@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 declare var closeModal: any;
 declare var showModal: any;
 declare var showAlertModal: any;
@@ -5,13 +6,16 @@ declare var showAlertModal: any;
 import { Component, OnInit, OnDestroy, Input, Output, NgZone, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute } from '@angular/router';
-import { State } from '../../../../models/tasks.model';
+import { State, TimelineStateAuditData, TaskDecision, Document } from '../../../../models/tasks.model';
 import { StateService, DataCachingService } from '../../../../services/inbox.service';
 import { BaThemeSpinner } from '../../../../theme/services';
 import { UserHierarchy, User } from '../../../../models/user.model';
 import { FetchUserService, AllocateTaskToUser } from '../../../../services/userhierarchy.service';
 import { GraphObject, DataPoint, StateModel, ManualAction, StateInfoModel } from '../../../../models/flow.model';
 import { UniversalUser } from 'app/services/shared.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { environment } from '../../../../../environments/environment';
+import { FileService } from 'app/services/setup.service';
 
 @Component({
   selector: 'api-personal',
@@ -40,6 +44,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
   selectedStateForFlag: State;
   selectedState: State;
   selectedStateCd: string;
+  message_type: string ="Assigned";
   actionMap: any;
   fieldKeyMap: any;
   assignedStates: State[];
@@ -47,6 +52,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
   assignedTaskDdetails: State;
   assignedStateTabclass = {};
   assignedTaskActionButtonEnabled = {};
+  
 
   unassignedStates: State[];
   unassignedTaskDdetails: State;
@@ -57,6 +63,9 @@ export class PersonalComponent implements OnInit, OnDestroy {
   flaggedTaskDdetails: State;
   flaggedStateTabclass = {};
 
+
+  assistModeFl: boolean = false;
+  virtualAgentURL: SafeResourceUrl = '';
 
   loadingUnassigned: boolean = false;
   loadingAssigned: boolean = false;
@@ -78,6 +87,13 @@ export class PersonalComponent implements OnInit, OnDestroy {
   graphObjects = new Map();
   assignedStategraphObject: GraphObject;
   arrayTableHeaders = {};
+  timelineStates: TimelineStateAuditData[];
+  selectedTimeLineState: TimelineStateAuditData;
+  documentsForState = {};
+  documentsToBeUploaded = [];
+  selectedDocument: Document;
+  selectedTab: string;
+  DOCUMENT_STATUS = ["PENDING", "APPROVED", "REJECTED"];
 
   // users
   userId: string
@@ -93,12 +109,15 @@ export class PersonalComponent implements OnInit, OnDestroy {
   personalFetched = false;
   groupFetched = false;
   flaggedFetched = false;
+  taskDecision: TaskDecision;
 
   private subscription: Subscription;
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
   private subscriptionXML: Subscription;
-
+  
+  
+  
   constructor(
     private stateService: StateService,
     private baThemeSpinner: BaThemeSpinner,
@@ -106,7 +125,9 @@ export class PersonalComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private fetchUserService: FetchUserService,
+    private fileService: FileService,
     private universalUser: UniversalUser,
+    private sanitizer: DomSanitizer,
     private allocateTaskToUser: AllocateTaskToUser
   ) {
     this.unassignedStates = [];
@@ -121,6 +142,9 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.assignedStategraphObject = new GraphObject();
     this.allocatedAssignedTaskToUserId = null;
     this.allocatedUnAssignedTaskToUserId = null;
+    this.selectedTimeLineState = new TimelineStateAuditData();
+    this.taskDecision = new TaskDecision();
+    this.selectedDocument = new Document();
     //this.selectedStateForFlag = State;
   }
 
@@ -170,6 +194,69 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
       });
 
+  }
+
+  agentAssist(state: State): void {
+    
+    this.stateService.updateVirtualAssist(this.assignedTaskDdetails)
+    .subscribe(
+      contextData => {
+        if (contextData) {
+          
+        }
+        // state.assignedVirtualAgentId = "5cd00b89948ddcf750f70a22";
+        if (state.assignedVirtualAgentId.indexOf("http") != -1) {
+          var url = state.assignedVirtualAgentId;
+          if (url.indexOf("?") != -1) {
+            url = url + "&episodeId=" + state.entityId;
+          }
+          else {
+            url = url + "?episodeId=" + state.entityId;
+          }
+          var params = url.substring(url.indexOf("?") + 1).split("&")
+          for (let paraKeyValue of params) {
+            var keyValue = paraKeyValue.split("=");
+            keyValue = keyValue.filter(function(e) {
+              return e != null && e.trim().length != 0;
+            })
+            if (keyValue.length ==1) {
+              if (contextData[keyValue[0]]) {
+                url = url.replace(keyValue[0] + "=", keyValue[0] + "=" + contextData[keyValue[0]]);
+              }
+            }
+          }
+
+          window.open(
+            url,
+            '_blank' // <- This is what makes it open in a new window.
+            );
+        }
+        else {
+          this.assistModeFl = true;
+          this.virtualAgentURL = this.sanitizer.bypassSecurityTrustResourceUrl(`${environment.autoworkbench + state.assignedVirtualAgentId + `/` + state.entityId + environment.autoworkbenchdisplaybar}`);
+        }
+        
+      },
+      error => {
+        
+      }
+    )
+  
+    
+  }
+
+  getValueFromContextDataForKey(key: string) {
+
+  }
+  
+
+
+  closeAgentAssist(): void {
+    this.assistModeFl = false;
+  }
+
+  timelineSelect(timeLineState: TimelineStateAuditData) {
+    this.selectedTimeLineState = timeLineState;
   }
 
   ngOnDestroy(): void {
@@ -372,6 +459,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     }
   }
   onSelect(selectedData: any): void {
+    this.progressBarFlag = true;
     this.selectedData.emit(selectedData);
     this.selectedState = selectedData;
     this.selectedStateCd = selectedData.stateCd;
@@ -379,6 +467,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.subscriptionXML = this.stateService.getXMLforActiveState(selectedData.stateMachineInstanceModelId)
       .subscribe(graphObject => {
         this.dataCachingService.setSharedObject(graphObject, this.selectedState);
+        this.progressBarFlag = false;
         this.router.navigate(['/pg/tsk/tdts'], { relativeTo: this.route });
       });
   }
@@ -556,6 +645,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
             // console.log("setFirstAssignedTaskValues");
             // console.log(this.graphObjects);
             this.assignedTaskDdetails = states[0];
+            this.getDocuments(this.assignedTaskDdetails);
             this.loadingAssigned = false;
             if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
               this.progressBarFlag = false;
@@ -582,6 +672,8 @@ export class PersonalComponent implements OnInit, OnDestroy {
     }
   }
 
+  
+
   setFirstFlaggedTaskValues(states) {
     if (states != null && states.length > 0) {
       this.flaggedStateTabclass[states[0]._id] = "block active";
@@ -592,6 +684,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
             // console.log("setFirstFlaggedTaskValues");
             // console.log(this.graphObjects);
             this.flaggedTaskDdetails = states[0];
+            this.getDocuments(this.flaggedTaskDdetails);
             this.loadingFlagged = false;
             if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
               this.progressBarFlag = false;
@@ -627,6 +720,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
             // console.log("setFirstUnAssignedTaskValues");
             // console.log(this.graphObjects);
             this.unassignedTaskDdetails = states[0];
+            this.getDocuments(this.unassignedTaskDdetails);
             this.loadingUnassigned = false;
             if (!this.loadingUnassigned && !this.loadingAssigned && !this.loadingFlagged) {
               this.progressBarFlag = false;
@@ -653,7 +747,9 @@ export class PersonalComponent implements OnInit, OnDestroy {
   }
 
   onPersonalAssignedSubjectSelect(state: State) {
+    this.assistModeFl = false;
     this.assignedTaskDdetails = state;
+    this.getDocuments(this.assignedTaskDdetails);
     for (let asgnState of this.assignedStates) {
       this.assignedStateTabclass[asgnState._id] = this.TABLINKS;
     }
@@ -663,6 +759,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
   onPersonalUnAssignedSubjectSelect(state: State) {
     this.unassignedTaskDdetails = state;
+    this.getDocuments(this.unassignedTaskDdetails);
     for (let unasgnState of this.unassignedStates) {
       this.unassignedStateTabclass[unasgnState._id] = this.TABLINKS;
     }
@@ -672,6 +769,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
   onFlaggedSubjectSelect(state: State) {
     this.flaggedTaskDdetails = state;
+    this.getDocuments(this.flaggedTaskDdetails);
     for (let flgState of this.flaggedStates) {
       this.flaggedStateTabclass[flgState._id] = this.TABLINKS;
     }
@@ -749,6 +847,17 @@ export class PersonalComponent implements OnInit, OnDestroy {
     return dataPoints;
   }
 
+  getStatusList(selectedTask: State) {
+    if (this.graphObjects.get(selectedTask.stateMachineInstanceModelId) != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId).states) {
+      for (let state of this.graphObjects.get(selectedTask.stateMachineInstanceModelId).states) {
+        if (state.stateCd && selectedTask.stateCd && state.stateCd == selectedTask.stateCd && state.statusList) {
+          return state.statusList;
+        }
+      }
+    }
+    return [];
+  }
+
   getBusinessKeysWithTable(selectedTask: State) {
     //console.log(this.assignedTaskDdetails);
     let arrayDataPoints: DataPoint[];
@@ -815,38 +924,63 @@ export class PersonalComponent implements OnInit, OnDestroy {
   }
 
   updateProcessFlow(state: State, type: string) {
-    this.progressBarFlag = true;
-    if (type == "ASSIGNED") {
-      this.assignedTaskActionButtonEnabled[state._id] = false;
+    if (this.documentsForState && this.documentsForState[state._id] && this.documentsForState[state._id].length > 0) {
+      if (this.validateDocuments(state)) {
+        this.progressBarFlag = true;
+        this.assignedTaskActionButtonEnabled[state._id] = false;
+        if (this.documentsToBeUploaded && this.documentsToBeUploaded.length > 0) {
+          this.uploadDocumentForTask(state, this.TAB_ASSIGNED);
+        }
+        else {
+          this.updateAssignedTask(state);
+        }
+        
+      }
     }
-    this.subscription = this.stateService.update(state.machineType, state.entityId, state['parameters'])
+    else {
+      this.updateAssignedTask(state);
+    }
+  }
+
+  updateAssignedTask(state: State) {
+    this.responseError = null;
+    this.progressBarFlag = true;
+    this.assignedTaskActionButtonEnabled[state._id] = false;
+    this.subscription = this.stateService.update(state.machineType, state.entityId, state['parameters'], state.taskStatus, state.taskRemarks, this.documentsForState[state._id], state._id)
       .subscribe(
         response => {
-          if (type == "ASSIGNED") {
             this.assignedTaskActionButtonEnabled[state._id] = true;
-          }
           if (response) {
             const errorState: State = response;
-            let erresponseError = "";
-            for (const key in errorState.errorMessageMap) {
-              if (key) {
-                const errorList: string[] = errorState.errorMessageMap[key];
-
-                erresponseError += `${this.fieldKeyMap[key]}<br>`;
-                for (const error of errorList) {
-                  erresponseError += `  - ${error}<br>`;
+            this.responseError = "";
+            if (errorState.errorMessageMap && Object.keys(errorState.errorMessageMap).length > 0) {
+              for (const key in errorState.errorMessageMap) {
+                if (key && errorState.errorMessageMap[key]) {
+                  const errorList: string[] = errorState.errorMessageMap[key];
+                  if (this.fieldKeyMap && this.fieldKeyMap[key]) {
+                    this.responseError += `${this.fieldKeyMap[key]}<br>`;
+                  }
+                  for (const error of errorList) {
+                    this.responseError += ` ${error}, <br>`;
+                  }
                 }
-                new showModal(erresponseError);
               }
+              this.progressBarFlag = false;
+              return;
             }
+            else {
+                this.progressBarFlag = false;
+                new showModal('successModal');
+                this.assignedTaskActionButtonEnabled[state._id] = true;
+                this.removedAssignedTask(state);
+            }
+            
           }
           else {
-            if (type == "ASSIGNED") {
               this.progressBarFlag = false;
               new showModal('successModal');
               this.assignedTaskActionButtonEnabled[state._id] = true;
               this.removedAssignedTask(state);
-            }
           }
         },
         error => {
@@ -1068,6 +1202,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     if (!tabName || tabName == null || tabName.trim().length == 0) {
       return;
     } else if (tabName === this.TAB_ASSIGNED) {
+      this.message_type = "Assigned";
       if (this.personalFetched) {
         return;
       } else {
@@ -1076,6 +1211,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
         folder = 'Personal';
       }
     } else if (tabName === this.TAB_UNASSIGNED) {
+      this.message_type = "Unassigned";
       if (this.groupFetched) {
         return;
       } else {
@@ -1084,6 +1220,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
         folder = 'Group';
       }
     } else if (tabName === this.TAB_FLAGGED) {
+      this.message_type = "Flagged";
       if (this.flaggedFetched) {
         return;
       } else {
@@ -1137,4 +1274,218 @@ export class PersonalComponent implements OnInit, OnDestroy {
         });
     }
   }
+
+  getDocuments(stateInstane: State) {
+    if (Object.keys(this.documentsForState).length >0 && this.documentsForState[stateInstane._id]) {
+      return this.documentsForState[stateInstane._id];
+    }
+    this.documentsForState[stateInstane._id] = [];
+    this.stateService.getDocumentsForState(stateInstane)
+      .subscribe(documents => {
+          if (documents) {
+            this.documentsForState[stateInstane._id] = documents;
+            
+          }
+        },
+        error => {
+          // console.log("error in fetching documents ");
+          // console.log(error);
+        }
+      )
+    this.getTimeline(stateInstane);
+  }
+
+  getTimeline(state: State) {
+    this.timelineStates = [];
+    this.subscription = this.stateService.getTimelineForFlow(state.stateMachineInstanceModelId)
+      .subscribe(timelineStates => {
+        if (timelineStates) {
+          // console.log("******")
+          this.timelineStates = timelineStates;
+          // console.log(this.timelineStates);
+          // if (this.timelineStates.length > 0) {
+          //   this.selectedTimeLineState = this.timelineStates[0];
+          // }
+
+        }
+      });
+  }
+
+  isUploadedDocumentValid(document: Document, fileType: string) {
+    if (document && document.allowedFileTypes && document.allowedFileTypes.length > 0) {
+      for (let allowfileType of document.allowedFileTypes) {
+        if (fileType.match(allowfileType)) {
+          return true;
+        }
+      }
+      return false
+    }
+    return true;
+  }
+
+  onDocumentUploadForTask(event, document: Document, state: State) {
+    var documentName = document.documentName;
+    if (document.documentName == null || document.documentName.trim().length == 0) {
+      documentName = uuid();
+      document.documentName = documentName;
+    }
+    const fileInputForm = new FormData();
+    const file: File = event.target.files[0];
+    if (!this.isUploadedDocumentValid(document, file.type)) {
+      new showAlertModal("Error", document.documentType + " invalid file type");
+    }
+    fileInputForm.append('file', file, file.name);
+    var uploadFileName = uuid();
+    if (file.name.split(".").length >= 2) {
+      uploadFileName = uploadFileName + "." + file.name.split(".")[file.name.split(".").length - 1];
+    }
+    fileInputForm.append("fileName", uploadFileName);
+    fileInputForm.append("functionInstanceName", "FLOW");
+    fileInputForm.append("entityType", state.machineType);
+    fileInputForm.append("entityRef", state._id);
+    fileInputForm.append("documentName", documentName);
+    fileInputForm.append("stateInstanceId", state._id);
+    document.userFileName = file.name;
+    document.fileName = uploadFileName;
+    document.uploadTime = new Date();
+    console.log(document.documentType);
+    this.documentsToBeUploaded.push(fileInputForm);
+    
+  }
+
+  
+  uploadDocumentForTask(state: State, tabType: string) {
+    let numberOfDocs = this.documentsToBeUploaded.length;
+    console.log("number of documents :: " + numberOfDocs);
+    for (let inputDoc of this.documentsToBeUploaded) {
+      this.subscription = this.fileService.upload(inputDoc)
+        .subscribe(
+          response => {
+            if (response && response["url"] && response["fileName"]) {
+              for (let doc of this.documentsForState[state._id]) {
+                if (doc.stateInstanceId == inputDoc.get("stateInstanceId") && doc.documentName == inputDoc.get("documentName")) {
+                  doc.url = response["url"];
+                  doc.fileName = inputDoc.get("fileName");
+                  doc.downloadFileUrl = response["downloadFileUrl"];
+                  doc.fullDataUrl = response["fullDataUrl"];
+                  doc.fullFileUrl = response["fullFileUrl"];
+                  
+                }
+              }
+            }
+            numberOfDocs--;
+            if (numberOfDocs == 0) {
+              if (tabType == this.TAB_ASSIGNED) {
+                this.updateAssignedTask(state);
+              }
+            }
+          })  
+    }
+    
+  }
+
+  validateDocuments(stateInstance: State) {
+    if (stateInstance &&  this.documentsForState && this.documentsForState[stateInstance._id]) {
+      for (let doc of this.documentsForState[stateInstance._id]) {
+        if (doc.mandatory) {
+          if(!doc.userFileName) {
+            new showAlertModal('Error', doc.documentType + " is mandatory");
+            return false;
+          }
+          if (!doc.status) {
+            new showAlertModal('Error', doc.documentType + " status is mandatory");
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  onNewDocumentAdd(stateInstanace: State) {
+    const newDoc = new Document();
+    newDoc.stateInstanceId = stateInstanace._id;
+    newDoc.flowInstanceId = stateInstanace.stateMachineInstanceModelId;
+    newDoc.documentType = "OTHER";
+    newDoc.documentName = uuid();
+    if (!this.documentsForState[stateInstanace._id]) {
+      this.documentsForState[stateInstanace._id] = [];
+    }
+    this.documentsForState[stateInstanace._id].push(newDoc);
+  }
+
+  onNewRemarksDocuments(stateInstanace: State) {
+    const newDoc = new Document();
+    newDoc.stateInstanceId = stateInstanace._id;
+    newDoc.flowInstanceId = stateInstanace.stateMachineInstanceModelId;
+    newDoc.documentType = "USER_REMARKS";
+    newDoc.documentName = uuid();
+    if (!this.documentsForState[stateInstanace._id]) {
+      this.documentsForState[stateInstanace._id] = [];
+    }
+    this.documentsForState[stateInstanace._id].push(newDoc);
+  }
+
+  getRemarksDocuments(stateInstanace: State) {
+    const remarksDocs: Document[] = [];
+    if (this.documentsForState && this.documentsForState[stateInstanace._id]) {
+      for (let doc of this.documentsForState[stateInstanace._id]) {
+        if (doc.documentType &&  doc.documentType == "USER_REMARKS") {
+          remarksDocs.push(doc);
+        }
+      }
+    }
+    return remarksDocs;
+  }
+
+  getOtherThanRemarksDocuments(stateInstanace: State) {
+    const docs: Document[] = [];
+    if (this.documentsForState && this.documentsForState[stateInstanace._id]) {
+      for (let doc of this.documentsForState[stateInstanace._id]) {
+        if (doc.documentType &&  doc.documentType != "USER_REMARKS") {
+          docs.push(doc);
+        }
+      }
+    }
+    return docs;
+  }
+
+  onRemoveDocument(stateInstanace: State, document: Document) {
+    if (stateInstanace && document && this.documentsForState && this.documentsForState[stateInstanace._id]) {
+      let index = this.documentsForState[stateInstanace._id].indexOf(document)
+      if (index != -1) {
+        this.documentsForState[stateInstanace._id].splice(index, 1);
+      }
+    }
+  }
+
+  onDocumentDescriptionSelect(document: Document, selectedTab: string) {
+    this.selectedDocument = JSON.parse(JSON.stringify(document));
+    console.log(this.selectedDocument);
+    this.selectedTab = selectedTab;
+  }
+
+  onSubmitDocumentDescription() {
+    console.log("onsubmit");
+    if (this.selectedTab == this.TAB_ASSIGNED) {
+      for (let doc of this.documentsForState[this.assignedTaskDdetails._id]) {
+        console.log(doc.documentName + " " + this.selectedDocument.documentName);
+        if (doc && doc.documentName == this.selectedDocument.documentName) {
+          doc.description = this.selectedDocument.description;
+          //this.selectedDocument = null;
+        }
+      }
+    }
+  }
+
+  onDownloadDocument(document: Document) {
+    if (document && document.downloadFileUrl) {
+      const redirectLink = environment.interfaceService + document.downloadFileUrl;
+      window.open(
+        redirectLink,
+        '_blank' 
+        );
+    }
+  }
+
 }

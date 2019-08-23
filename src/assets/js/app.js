@@ -882,11 +882,12 @@ function addOverlays(graph, cell, addDeleteIcon, horizontal) {
     overlay.addListener(mxEvent.CLICK, mxUtils.bind(this, function (sender, evt) {
       try {
         sourceCell = cell;
-
+        
         if (sourceCell.id == 'treeRoot') {
           var existingEdges = getEdgesByStateCd(sourceCell);
           if (existingEdges == 0) {
             window['flowComponentRef'].zone.run(() => { window['flowComponentRef'].component.addState(null); });
+            console.log("-----------------------");
             showModal("stateModal");
             return;
           } else {
@@ -2427,4 +2428,8 @@ window.addEventListener('message', function(event) {
     }
   }
 });
+
+
+
+
 

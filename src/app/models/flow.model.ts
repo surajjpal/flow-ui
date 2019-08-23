@@ -1,6 +1,7 @@
 import { BaseModel } from './base.model';
 import { ApiConfig, ApiKeyExpressionMap, ConnectorConfig } from './setup.model';
 import { values } from 'd3';
+import { DataModel } from './datamodel.model';
 
 export class DataPointValidation {
   sequence: number;
@@ -13,6 +14,18 @@ export class DataPointValidation {
     this.dataPointKey = dataPointKey ? dataPointKey : '';
     this.expression = '';
     this.errorMessage = '';
+  }
+}
+
+export class TaskValidation {
+  sequence: number;
+  validationExpression: string;
+  errorMessage: string;
+
+  constructor(sequence?: number, validationExpression?: string, errorMessage?: string) {
+    this.sequence = sequence ? sequence : 0;
+    this.validationExpression = validationExpression ? validationExpression : null;
+    this.errorMessage = errorMessage ? errorMessage : null;
   }
 }
 
@@ -182,6 +195,13 @@ export class StateModel {
   connectorConfigList: string[];
   reportFlag: boolean;
   businessMonitorFlag: boolean;
+  virtualAgentId: string;
+  statusList: LabelValue[];
+  statusDisable: boolean;
+  documentEvalExp: string;
+  converseRequestExp: string;
+  taskValidations: TaskValidation[];
+
 
   constructor() {
     this.stateId = '';
@@ -209,6 +229,12 @@ export class StateModel {
     this.connectorConfigList = [];
     this.reportFlag = false;
     this.businessMonitorFlag = false;
+    this.virtualAgentId = '';
+    this.statusList = [];
+    this.statusDisable = false;
+    this.documentEvalExp = null;
+    this.converseRequestExp = null;
+    this.taskValidations = [];
   }
 }
 
@@ -294,6 +320,7 @@ export class GraphObject extends BaseModel {
   transitions: Transition[];
   activeStateIdList: string[];
   closedStateIdList: string[];
+  entity: DataModel;
 
   constructor() {
     super();
@@ -309,6 +336,7 @@ export class GraphObject extends BaseModel {
     this.transitions = [];
     this.activeStateIdList = [];
     this.closedStateIdList = [];
+    this.entity = new DataModel();
   }
 }
 
@@ -323,4 +351,16 @@ export class CommonSearchModel {
 
   }
 
+}
+
+export class LabelValue {
+  label: string;
+  value: string;
+  disabled: boolean;
+ 
+  constructor(label?: string, value?: string, disabled?: boolean) {
+    this.label = label ? label : null;
+    this.value = value ? value : null;
+    this.disabled = disabled ? disabled : false;  
+  }
 }

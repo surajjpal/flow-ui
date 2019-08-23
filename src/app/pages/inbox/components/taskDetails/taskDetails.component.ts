@@ -2,22 +2,22 @@ declare var designFlowEditor: any;
 declare var styleStates: any;
 declare var showModal: any;
 declare var graphTools: any;
-declare var styleInfo:any;
+declare var styleInfo: any;
 declare var closeModal: any;
 
-import { Component, OnInit, OnDestroy,NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
-import {User, UserHierarchy, UserGroup,UserGraphObject} from '../../../../models/user.model';
-import { State,CommonInsightWrapper, EmailPersister } from '../../../../models/tasks.model';
-import { GraphObject, DataPoint, StateModel, ManualAction,StateInfoModel } from '../../../../models/flow.model';
+import { User, UserHierarchy, UserGroup, UserGraphObject } from '../../../../models/user.model';
+import { State, CommonInsightWrapper, EmailPersister, TimelineStateAuditData, TaskDecision } from '../../../../models/tasks.model';
+import { GraphObject, DataPoint, StateModel, ManualAction, StateInfoModel } from '../../../../models/flow.model';
 import { Episode, ChatMessage } from '../../../../models/conversation.model';
 
 import { StateService, DataCachingService, EmailService } from '../../../../services/inbox.service';
 import { ConversationService } from '../../../../services/agent.service';
-import { FetchUserService, UserGraphService ,AllocateTaskToUser} from '../../../../services/userhierarchy.service';
+import { FetchUserService, UserGraphService, AllocateTaskToUser } from '../../../../services/userhierarchy.service';
 import { UniversalUser } from '../../../../services/shared.service';
 import { Map } from 'd3';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -26,7 +26,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   selector: 'api-task-details',
   templateUrl: './taskDetails.component.html',
   styleUrls: ['./taskDetails.scss'],
-  providers: [FetchUserService,AllocateTaskToUser,EmailService]
+  providers: [FetchUserService, AllocateTaskToUser, EmailService]
 })
 
 export class TaskDetailsComponent implements OnInit, OnDestroy {
@@ -37,7 +37,12 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   PRINT_PREVIEW = 'PRINT_PREVIEW';
   POSTER_PRINT = 'POSTER_PRINT';
 
+  TAB_ASSIGNED = 'ASSIGNED';
+  TAB_UNASSIGNED = 'UNASSIGNED';
+  TAB_FLAGGED = 'FLAGGED';
+
   isButtonEnabled: boolean = true;
+  progressBarFlag: boolean = false;
 
   selectedState: State;
   dataPoints: DataPoint[];
@@ -45,57 +50,61 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   graphObject: GraphObject;
   responseError: string;
   fieldKeyMap: any;
-  userId:string;
+  userId: string;
   selectedEpisode: Episode;
   chatMessageList: ChatMessage[];
   Users: UserHierarchy[] = [];
-  allocatedUserId:string = "";
-  userHierarchy:UserHierarchy = new UserHierarchy();
+  allocatedUserId: string = "";
+  userHierarchy: UserHierarchy = new UserHierarchy();
   commonInsightWrapper: CommonInsightWrapper;
-  stateInfoModels:StateInfoModel[];
-  orPayload:any; 
-  selectedModel:StateInfoModel;
-  iterationLevel:number;
-  tempUser:User;
-  FlagReasons: string[] = ['Customer did not answer','Customer not reachable','Customer rescheduled'];
+  stateInfoModels: StateInfoModel[];
+  orPayload: any;
+  selectedModel: StateInfoModel;
+  iterationLevel: number;
+  tempUser: User;
+  FlagReasons: string[] = ['Customer did not answer', 'Customer not reachable', 'Customer rescheduled'];
   arrayTableHeaders = {};
-  sourceEmailTrailList:EmailPersister[] = [];
-  
+  sourceEmailTrailList: EmailPersister[] = [];
+  timelineStates: TimelineStateAuditData[] = [];
+  selectedTimeLineState: TimelineStateAuditData;
+  taskDecision: TaskDecision;
+
   private subscription: Subscription;
   private subscriptionEpisode: Subscription;
   private subscriptionChatMessages: Subscription;
   private subscriptionUsers: Subscription;
   private subscriptionInsight: Subscription;
   private subscriptionXML: Subscription;
-  private subscriptionEmail:Subscription;
+  private subscriptionEmail: Subscription;
 
   constructor(
     private zone: NgZone,
-    private router: Router, 
+    private router: Router,
     private route: ActivatedRoute,
     private stateService: StateService,
-    private emailService:EmailService,
+    private emailService: EmailService,
     private conversationService: ConversationService,
     private dataCachingService: DataCachingService,
     private location: Location,
-    private fetchUserService:FetchUserService,
-    private allocateTaskToUser:AllocateTaskToUser,
+    private fetchUserService: FetchUserService,
+    private allocateTaskToUser: AllocateTaskToUser,
     private universalUser: UniversalUser,
     private sanitizer: DomSanitizer
-  ) { 
+  ) {
     this.sourceEmailTrailList = [];
+    this.taskDecision = new TaskDecision();
     window['taskDetailsRef'] = { component: this, zone: zone };
   }
 
   ngOnInit(): void {
     //document.getElementById('#alocateButton').style.visibility = 'hidden';
-    
+    this.progressBarFlag = true;
     this.selectedState = this.dataCachingService.getSelectedState();
     if (!this.selectedState) {
       this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
       return;
     }
-    
+
     this.graphObject = this.dataCachingService.getGraphObject();
     if (!this.graphObject) {
       this.graphObject = new GraphObject();
@@ -106,12 +115,13 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     this.getEpisode();
     this.extractParams();
     this.initUI();
-    this.fetchEmailTrail();
-   
+    //this.fetchEmailTrail();
+
 
     this.userId = this.universalUser.getUser()._id
     this.getUserList();
     this.getParentUser();
+    this.progressBarFlag = false;
     // this.initUI();
 
   }
@@ -132,7 +142,25 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  fetchEmailTrail(){
+  timeline(state: State) {
+    this.timelineStates = [];
+    this.subscription = this.stateService.getTimelineForFlow(state.stateMachineInstanceModelId)
+      .subscribe(timelineStates => {
+        if (timelineStates) {
+          this.timelineStates = timelineStates;
+          if (this.timelineStates.length > 0) {
+            this.selectedTimeLineState = this.timelineStates[0];
+          }
+
+        }
+      });
+  }
+
+  timelineSelect(timeLineState: TimelineStateAuditData) {
+    this.selectedTimeLineState = timeLineState;
+  }
+
+  fetchEmailTrail() {
     this.subscriptionEmail = this.emailService.getEmailTrail(this.selectedState.entityId)
       .subscribe(emailTrail => {
         if (emailTrail) {
@@ -141,121 +169,121 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  fetchInsight(){
+  fetchInsight() {
     this.subscriptionInsight = this.stateService.getInsightForState(this.selectedState._id)
       .subscribe(commonInsightWrapper => {
         if (commonInsightWrapper) {
           this.commonInsightWrapper = commonInsightWrapper;
         }
       });
-    }
-
-  fetchStatesOrPayload(){
-    this.subscriptionInsight = this.stateService.getStates(this.selectedState.stateMachineInstanceModelId)
-    .subscribe(stateInfoModels => {
-      if (stateInfoModels) {
-        this.stateInfoModels = stateInfoModels;
-        new styleInfo(this.stateInfoModels,"archive");
-      }
-      else{
-        this.stateInfoModels = null;
-      }
-    });
-    
   }
 
-  storeModel(model){
-    
+  fetchStatesOrPayload() {
+    this.subscriptionInsight = this.stateService.getStates(this.selectedState.stateMachineInstanceModelId)
+      .subscribe(stateInfoModels => {
+        if (stateInfoModels) {
+          this.stateInfoModels = stateInfoModels;
+          new styleInfo(this.stateInfoModels, "archive");
+        }
+        else {
+          this.stateInfoModels = null;
+        }
+      });
+
+  }
+
+  storeModel(model) {
+
     this.selectedModel = model;
   }
-  setFlagReason(){
+  setFlagReason() {
     this.selectedState.flagReason = this.FlagReasons[0];
   }
 
-  flagClose(){
+  flagClose() {
     this.selectedState.flagReason = "";
   }
 
 
 
-  getUserList(){
-    
+  getUserList() {
+
     this.subscriptionUsers = this.fetchUserService.fetchChildUsers(this.userId)
       .subscribe(userList => {
         if (userList && userList.length > 0) {
           //document.getElementById('#alocateButton').style.visibility = 'visible';
           this.Users = userList;
-          
-             
+
+
         }
       });
-    }
+  }
 
-  getParentUser(){
+  getParentUser() {
     this.subscriptionUsers = this.fetchUserService.getUserHierarchy(this.userId)
-    .subscribe(userHierarchyObject => {
-      
-      if (userHierarchyObject) {
-        //document.getElementById('#alocateButton').style.visibility = 'visible';
-        this.userHierarchy = userHierarchyObject;
+      .subscribe(userHierarchyObject => {
 
-           
-      }
-      
-    });
+        if (userHierarchyObject) {
+          //document.getElementById('#alocateButton').style.visibility = 'visible';
+          this.userHierarchy = userHierarchyObject;
+
+
+        }
+
+      });
 
   }
 
 
-    allocate(){
-      
-      this.isButtonEnabled = false;
-      console.log(this.allocatedUserId)
-      if(this.allocatedUserId.length > 0){
-        this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.allocatedUserId,this.selectedState._id,"Allocate")
+  allocate() {
+
+    this.isButtonEnabled = false;
+    console.log(this.allocatedUserId)
+    if (this.allocatedUserId.length > 0) {
+      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.allocatedUserId, this.selectedState._id, "Allocate")
+        .subscribe(any => {
+
+          this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
+        });
+    }
+    else {
+      new closeModal('userModal');
+      new showModal('userNotSelected');
+      this.isButtonEnabled = true;
+    }
+
+  }
+
+  escalate() {
+    this.isButtonEnabled = false;
+    this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userHierarchy.parentUserId, this.selectedState._id, "Escalate")
       .subscribe(any => {
 
-        this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
-    });
-      }
-      else{
-        new closeModal('userModal');
-        new showModal('userNotSelected');
-        this.isButtonEnabled = true;
-      }
-      
-    }
 
-    escalate(){
-      this.isButtonEnabled = false;
-      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userHierarchy.parentUserId,this.selectedState._id,"Escalate")
+        this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
+
+      });
+  }
+
+  reserve() {
+    this.isButtonEnabled = false;
+    this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userId, this.selectedState._id, "Reserve")
       .subscribe(any => {
-        
+
 
         this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
-        
-    });
-    }
 
-    reserve(){
-      this.isButtonEnabled = false;
-      this.subscriptionUsers = this.allocateTaskToUser.allocateTask(this.userId,this.selectedState._id,"Reserve")
-      .subscribe(any => {
-        
+      });
 
-        this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
-        
-    });
-
-    }
+  }
 
 
-    onUserSelect(user){
-      
-      this.allocatedUserId = user.userId;
-      
-    }
-  
+  onUserSelect(user) {
+
+    this.allocatedUserId = user.userId;
+
+  }
+
 
   onBack() {
     this.location.back();
@@ -263,21 +291,21 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
   getEpisode() {
     this.subscriptionEpisode = this.conversationService.getEpisode(this.selectedState.entityId)
-    .subscribe(episode => {
-      if (episode) {
-        this.selectedEpisode = episode;
-        this.getChatMessages();
-      }
-    });
+      .subscribe(episode => {
+        if (episode) {
+          this.selectedEpisode = episode;
+          this.getChatMessages();
+        }
+      });
   }
 
   getChatMessages() {
     this.subscriptionChatMessages = this.conversationService.getChat(this.selectedState.entityId)
-    .subscribe(chatMessages => {
-      if (chatMessages) {
-        this.chatMessageList = chatMessages;
-      }
-    });
+      .subscribe(chatMessages => {
+        if (chatMessages) {
+          this.chatMessageList = chatMessages;
+        }
+      });
   }
 
   extractParams() {
@@ -301,8 +329,6 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       }
 
       if (this.selectedState.parameters && this.graphObject.dataPointConfigurationList) {
-        console.log("dataconfigList");
-        console.log(this.graphObject.dataPointConfigurationList);
         for (const dataPoint of this.graphObject.dataPointConfigurationList) {
           const paramValue: any = this.selectedState.parameters[dataPoint.dataPointName];
 
@@ -316,22 +342,22 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
             if (paramValue && !(paramValue instanceof Array) && !dataPoint.inputSource.includes(paramValue)) {
               dataPoint.inputSource.push(paramValue);
             }
-            
+
             dataPoint.value = paramValue;
           } else if (dataPoint.dataType === 'MULTI_SELECT') {
             const uniqueValues: string[] = [];
-            
+
             if (paramValue && paramValue instanceof Array && paramValue.length > 0) {
               for (const value of paramValue) {
                 if (!dataPoint.inputSource.includes(value)) {
                   uniqueValues.push(value);
                 }
-                
+
               }
-              
+
               dataPoint.inputSource = dataPoint.inputSource.concat(uniqueValues);
             }
-            
+
             dataPoint.value = paramValue;
           } else if (dataPoint.dataType === 'ARRAY') {
             dataPoint.value = (paramValue && paramValue instanceof Array) ? paramValue : [];
@@ -341,7 +367,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
             dataPoint.dataType = 'STRING';
             dataPoint.value = '';
           }
-          
+
           /** ---------------------- IMPORTANT ----------------------
            * This is done on purpose, please don't remove.
            * Required for UI -> Inline form -> Label & Value
@@ -350,7 +376,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
            * while updating info on server only odd indices objects are selected
            **/
           this.dataPoints.push(dataPoint);
-          if(dataPoint.dataType == 'ARRAY' && dataPoint.value.length>0 && !this.isString(dataPoint.value[0])) {
+          if (dataPoint.dataType == 'ARRAY' && dataPoint.value.length > 0 && !this.isString(dataPoint.value[0])) {
             this.dataPoints.push(dataPoint);
           }
           else {
@@ -358,14 +384,14 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
           }
 
           this.fieldKeyMap[dataPoint.dataPointName] = dataPoint.dataPointLabel;
-          
+
         }
       }
     }
   }
 
   getUniqueDataPoints() {
-    return Array.from(new Set(this.dataPoints ));
+    return Array.from(new Set(this.dataPoints));
   }
 
   initUI() {
@@ -379,9 +405,9 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   }
 
 
-  getInputMap(){
+  getInputMap() {
     this.isButtonEnabled = false;
-    
+
     if (!this.actionMap) {
       this.actionMap = {};
     }
@@ -404,7 +430,7 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
   updateFlow() {
 
     this.isButtonEnabled = false;
-    
+
     this.actionMap = JSON.parse(JSON.stringify(this.selectedState.parameters));
 
     for (let index = 0; index < this.dataPoints.length; index++) {
@@ -451,11 +477,11 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  onReasonSelect(reason):void{
+  onReasonSelect(reason): void {
     this.selectedState.flagReason = reason;
   }
 
-  confirm():void{
+  confirm(): void {
     this.isButtonEnabled = false;
     this.selectedState.flagged = true;
     this.iterationLevel = this.selectedState.iterationLevel;
@@ -465,22 +491,22 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
     this.extractParams();
     this.getInputMap();
-    this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedState,this.actionMap)
-    .subscribe(state => {
-     this.selectedState = state;
-     new closeModal('flagTaskModal');
-     new showModal('flagSuccessModal');
-     
-    });
+    this.subscriptionXML = this.stateService.saveFlaggedState(this.selectedState, this.actionMap)
+      .subscribe(state => {
+        this.selectedState = state;
+        new closeModal('flagTaskModal');
+        new showModal('flagSuccessModal');
+
+      });
   }
 
-  archive():void{
+  archive(): void {
     this.isButtonEnabled = false;
     this.subscription = this.stateService.saveArchivedState(this.selectedState)
-    .subscribe(State => {
-      new closeModal('flagTaskModal');
-      this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
-    });
+      .subscribe(State => {
+        new closeModal('flagTaskModal');
+        this.router.navigate(['/pg/tsk/pervi'], { relativeTo: this.route });
+      });
   }
 
   isString(value) {
@@ -489,16 +515,16 @@ export class TaskDetailsComponent implements OnInit, OnDestroy {
 
   getKeysForArrayDataType(data, dataPointName) {
     this.arrayTableHeaders[dataPointName] = [];
-    for(let key in data[0]) {
+    for (let key in data[0]) {
       this.arrayTableHeaders[dataPointName].push(key);
     }
     return this.arrayTableHeaders[dataPointName];
-    
+
   }
 
   getValueForArraydatatype(data, dataPointName) {
     let values = []
-    for(let d of data) {
+    for (let d of data) {
       let headerValue = []
       for (let key of this.arrayTableHeaders[dataPointName]) {
         headerValue.push(d[key]);

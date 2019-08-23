@@ -26,7 +26,7 @@ import { DomainService } from './services/domain.service';
 import { FlowDashboardService, GraphService, CommunicationService } from './services/flow.service';
 import { MWRouteService } from './services/mwroute.service';
 import { DataCachingService, StateService } from './services/inbox.service';
-import { AccountService, ApiConfigService, RoutesService } from './services/setup.service';
+import { AccountService, ApiConfigService, RoutesService, FileService } from './services/setup.service';
 import { ApiDesignService } from './services/apidesign.service';
 import { AuthGuard, AntiAuthGuard, AlertService, DataSharingService, UniversalUser, ScrollService, DataModelObject } from './services/shared.service';
 import { AnalyticsService } from './services/analytics.service';
@@ -62,7 +62,8 @@ const APP_PROVIDERS = [
   ScheduleTaskService,
   ActivityMonitorService,
   USPService,
-  AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService,DataModelObject, UniversalUser, FileUploaderService, ScrollService
+  AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService,DataModelObject, UniversalUser, FileUploaderService, ScrollService,
+  FileService
 ];
 
 export type StoreType = {

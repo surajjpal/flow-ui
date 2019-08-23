@@ -551,10 +551,10 @@ export class GraphService {
     return subject.asObservable();
   }
 
-  getEntryActions(): Observable<string[]> {
+  getEntryActions(stateType: string): Observable<string[]> {
     const subject = new Subject<string[]>();
 
-    const url = `${environment.server + environment.entryactionurl}`;
+    const url = `${environment.server + environment.entryactionurl + "/" + stateType}`;
 
     this.httpClient.get<string[]>(
       url,

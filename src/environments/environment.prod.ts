@@ -26,6 +26,9 @@ export const environment = {
   server: 'https://flow.automatapi.io/flow/console/',
   autourl: 'https://agent.automatapi.xyz/#/pg/ch/cnv/',
 
+  autoworkbench: 'https://workbench.automatapi.com/#/wb/',
+  autoworkbenchdisplaybar: '?displaySideBar=false',
+
   stateinsight: 'state/insight/',
   orPayload: 'state/orPayload/',
   orPayloadMachineType: 'state/saveOrPayload/machineType/',
@@ -37,6 +40,7 @@ export const environment = {
   getallstats: 'state/fetchstatestatus',
   getpersonalstats: 'state/getstatestatusbyuser',
   getstateinstance: 'state/fetchstateinstance',
+  getDocuments: 'state/documents',
   menutreeurl: 'menu/tree',
   menuurl: 'menu/',
   menurouteurl: 'menu/route',
@@ -58,6 +62,8 @@ export const environment = {
   evaluateMVEL: 'evaluateMVEL/',
   
   route: 'route/',
+  timeline: 'statemachine/timeline/',
+  updatevirtualassist: 'statemachine/updatevirtualassist',
 
   registerurl: 'user/createUser',
   forgotpassword: 'user/forgotPassword',
@@ -76,23 +82,26 @@ export const environment = {
   apiconfigurl: 'apiConfig/',
   supportedmethodsurl: 'apiConfig/supportedMethods',
 
+  getallconnectorinfo: 'connectorInfo/',
+  saveconnectorinfo: 'connectorInfo/save/',
+  deleteconnectorinfo: 'connectorInfo/delete/',
 
   //DataModelUrls
-  datamodelurl:'dataModel/',
-  datamodelsaveurl:'dataModel/savedatamodel',
+  datamodelurl: 'dataModel/',
+  datamodelsaveurl: 'dataModel/savedatamodel',
 
   //EntityUrls
-  entityurl:'entity/',
-  entitysaveurl:'entity/save',
-  entitysubmiturl:'entity/submit',
+  entityurl: 'entity/',
+  entitysaveurl: 'entity/save',
+  entitysubmiturl: 'entity/submit',
 
-  connectorinfo:'connectors/',
-  getallconconfig:'connectors/getAll/',
-  deleteconconfig:'connectors/delete/',
-  deletetaskconfig:'connectors/deleteTaskConfig/',
-  saveconconfig:'connectors/save/',
-  getallconinfo:'connectors/getConInfo/',
-  getconinfobytype:'connectors/getConInfoByType/',
+  connectorinfo: 'connectors/',
+  getallconconfig: 'connectors/getAll/',
+  deleteconconfig: 'connectors/delete/',
+  deletetaskconfig: 'connectors/deleteTaskConfig/',
+  saveconconfig: 'connectors/save/',
+  getallconinfo: 'connectors/getConInfo/',
+  getconinfobytype: 'connectors/getConInfoByType/',
 
 
   // auto

@@ -10,6 +10,7 @@ import { DomainService } from '../../../../services/domain.service';
 import { AgentService } from '../../../../services/agent.service';
 import { DataSharingService } from '../../../../services/shared.service';
 
+
 @Component ({
   selector: 'api-domains',
   templateUrl: './domains.component.html',
@@ -34,6 +35,7 @@ export class DomainsComponent implements OnInit, OnDestroy {
   domainPageSize : number;
   moreDomainPages: boolean;
   moreClosedDomainPages:boolean;
+  showSpinner:boolean;
   closedDomainPageNo:number;
 
   fields : String[];
@@ -54,6 +56,7 @@ export class DomainsComponent implements OnInit, OnDestroy {
     this.selectedDomain = new Domain();
     this.activeDomain = new Domain();
     this.associatedAgents = [];
+    this.showSpinner = false;
   }
   
   ngOnInit() {
@@ -131,6 +134,7 @@ export class DomainsComponent implements OnInit, OnDestroy {
   onDomainSelect(domain?: Domain, task?: number): void {
         if(domain)
         {
+          this.showSpinner = true;
          let payload = {"_id":domain._id}
          this.subscription = this.domainService.getDomain(payload)
          .subscribe(
@@ -143,11 +147,13 @@ export class DomainsComponent implements OnInit, OnDestroy {
                   if (task === this.OPEN_IN_READONLY_MODE) {
                     this.selectedDomain.statusCd = this.READ;
                     this.sharingService.setSharedObject(this.selectedDomain);
+                    this.showSpinner = false;
                     this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
       
                   } 
                   else if (task === this.OPEN_IN_EDIT_MODE) {
                     this.sharingService.setSharedObject(this.selectedDomain);
+                    this.showSpinner = false;
                     this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
                   } 
                   else if (task === this.CLONE_AND_EDIT_MODE) {
@@ -158,6 +164,7 @@ export class DomainsComponent implements OnInit, OnDestroy {
                       this.selectedDomain.statusCd = this.DRAFT;
                     }
                     this.sharingService.setSharedObject(this.selectedDomain);
+                    this.showSpinner = false;
                     this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
                   }
                 }
@@ -165,6 +172,7 @@ export class DomainsComponent implements OnInit, OnDestroy {
               }
               else{
                 this.sharingService.setSharedObject(this.selectedDomain);
+                this.showSpinner = false;
                 this.router.navigate(['/pg/dmn/dms'], { relativeTo: this.route });
               }
            
@@ -180,14 +188,17 @@ export class DomainsComponent implements OnInit, OnDestroy {
 
   activateDomaiWarning(domain?:Domain,task?:number){
     let payload = {"_id":domain._id};
+    this.showSpinner = true;
     this.subscription = this.domainService.getDomain(payload)
     .subscribe(
       response => {
         this.selectedDomain = response;
         if(task === this.PUBLISH_DOMAIN){
+          this.showSpinner = false;
           new showModal("finalWarningModal");
         }
         else{
+          this.showSpinner = false;
           new showModal("activateModal");
         }
       });
@@ -199,6 +210,7 @@ export class DomainsComponent implements OnInit, OnDestroy {
 
   activateDomain(domain?: Domain,modalName?:string){
     let payload = {"name":domain.name,"statusCd":"ACTIVE"};
+    this.showSpinner = true;
     this.subscription = this.domainService.getDomain(payload)
     .subscribe(
       response => {
@@ -237,7 +249,10 @@ export class DomainsComponent implements OnInit, OnDestroy {
     saveAgentWithActiveDomain(agent?:Agent){
       this.agentSubscription = this.agentService.saveAgent(agent).subscribe(receivedAgent=> {
         if(receivedAgent) {
-         console.log(receivedAgent);
+          this.showSpinner = false;
+        }
+        else{
+          this.showSpinner = false;
         }
       });
     }

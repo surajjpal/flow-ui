@@ -20,10 +20,11 @@ import { v4 as uuid } from 'uuid';
 // Model Imports
 import {
   GraphObject, DataPoint, Classifier, StateModel,
-  EventModel, Expression, Transition, ManualAction, DataPointValidation, StateInfoModel
+  EventModel, Expression, Transition, ManualAction, DataPointValidation, StateInfoModel, LabelValue, TaskValidation
 } from '../../../../models/flow.model';
 import { ConnectorConfig, ConnectorInfo, TaskObject, TempConnectorConfig } from '../../../../models/setup.model';
 import { ApiConfig, ApiKeyExpressionMap, ApiResponse, MVELObject } from '../../../../models/setup.model';
+import { CommonSearchModel } from '../../../../models/flow.model';
 
 // Service Imports
 import { GraphService, CommunicationService } from '../../../../services/flow.service';
@@ -31,6 +32,10 @@ import { StateService, DataCachingService } from '../../../../services/inbox.ser
 import { ConnectorConfigService, FileService } from '../../../../services/setup.service';
 import { environment } from '../../../../../environments/environment';
 import { AlertService } from 'app/services/shared.service';
+import { DataModelService } from '../../../../services/setup.service';
+import { DataModel, Field, ValidatorInstance, ExtractorInstance, Entity } from '../../../../models/datamodel.model';
+import { AgentService } from '../../../../services/agent.service';
+import { Agent } from '../../../../models/agent.model';
 @Component({
   selector: 'api-flow-design',
   templateUrl: './design.component.html',
@@ -55,6 +60,11 @@ export class DesignComponent implements OnInit, OnDestroy {
   stateCreateMode: boolean = true;
   updateStateFlag: boolean = true;
 
+  // state types
+  STATE_TYPE_AUTO  ="Auto";
+  STATE_TYPE_MANUAL = "Manual";
+  STATE_TYPE_COGNITIVE = "Cognitive";
+  
   // Dropdown source list
   sourceStatusCodes: string[] = ['DRAFT', 'ACTIVE', 'ARCHIVE'];
   sourceStateTypes: string[] = ['Manual', 'Auto', 'Cognitive'];
@@ -63,7 +73,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   timerUnitType: string[] = ['MINUTE', 'HOUR', 'DAY', 'WEEK', 'MONTH', 'YEAR'];
   sourceOperands: string[] = ['AND', 'OR'];
   sourceClassifiers: Classifier[] = [];
-  sourceEntryActionList: string[] = [];
+  autoSourceEntryActionList: string[] = [];
+  manualSourceEntryActionList: string[] = [];
   sourceApiConfigList: ApiConfig[] = [];
   sourceConConfigList: ConnectorConfig[] = [];
   sourceManualActionType: string[] = ['STRING', 'BOOLEAN', 'NUMBER', 'SINGLE_SELECT', 'MULTI_SELECT'];
@@ -140,12 +151,26 @@ export class DesignComponent implements OnInit, OnDestroy {
   selectedRuleInput: string = "";
   mvelObject: MVELObject;
 
+  //Entity
+  dataModelList:DataModel[];
+  selectedEntity:DataModel;
+  selectedDataModel:DataModel;
+  selectedField:Field;
+  entityselected:boolean;
+  entityRedirectWarning:string;
+  entityRedirect:boolean;
+
+
+  virtualAgentList:Agent[];
+  selectedVirtualAgents:string[];
+
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
   private subscriptionApiConfig: Subscription;
   private subscriptionOrPayload: Subscription;
   private subscriptionTimerUnit: Subscription;
   private subscriptionConConfig: Subscription;
+  private agentSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -157,6 +182,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private connectorConfigService: ConnectorConfigService,
     private fileService: FileService,
     private alertService: AlertService,
+    private agentService: AgentService,
+    private dataModelService: DataModelService
   ) {
     window['flowComponentRef'] = { component: this, zone: zone };
 
@@ -192,6 +219,17 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.temp = {};
     this.responseTypeSource = ['PAYLOAD', 'PARAM'];
     this.paramsToSelectSource = ['SELECTIVE', 'ALL'];
+    //Entity
+    this.selectedEntity = new DataModel();
+    this.selectedDataModel = new DataModel();
+    this.selectedField = new Field();
+    this.dataModelList = [];
+    this.entityselected = false;
+    this.entityRedirectWarning = "You will be redirected to a different page, please make sure you save the process!!";
+    this.entityRedirect = false;
+
+    this.virtualAgentList = [];
+    this.selectedVirtualAgents = [];
   }
 
   ngOnInit() {
@@ -217,10 +255,13 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   load(): void {
-    this.getSourceEntryActions();
+    this.getAutoSourceEntryActions();
+    this.getManualSourceEntryActions();
     this.getTimerUnits();
     this.getApiConfigLookup();
     this.getConList();
+    this.getDataModelList();
+    this.fetchAgents();
     var graphLoad = false;
     if (!this.graphObject || this.graphObject === null) {
       this.loadGraphObject();
@@ -264,13 +305,33 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.selectedModel = model;
   }
 
-  getSourceEntryActions() {
-    this.subscriptionEntryAction = this.graphService.getEntryActions()
-      .subscribe(entryActionList => {
-        if (entryActionList) {
-          this.sourceEntryActionList = entryActionList;
+  
+  getAutoSourceEntryActions() {
+    this.subscriptionEntryAction = this.graphService.getEntryActions(this.STATE_TYPE_AUTO)
+      .subscribe(
+        entryActionList => {
+          if (entryActionList) {
+            this.autoSourceEntryActionList = entryActionList;
+          }
+        },
+        error => {
+
         }
-      });
+      )
+  }
+
+  getManualSourceEntryActions() {
+    this.subscriptionEntryAction = this.graphService.getEntryActions(this.STATE_TYPE_MANUAL)
+      .subscribe(
+        entryActioList => {
+          if(entryActioList) {
+            this.manualSourceEntryActionList = entryActioList;
+          }
+        },
+        error => {
+
+        }
+      )
   }
 
   getTimerUnits() {
@@ -499,7 +560,11 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   prepareDummyObject() {
     if (this.graphObject) {
+      if (this.graphObject.entity) {
+        this.entityselected = true;
+      }
       this.tempGraphObject = JSON.parse(JSON.stringify(this.graphObject));
+      
     } else {
       this.tempGraphObject = new GraphObject();
     }
@@ -714,6 +779,14 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.tempState.taskConfig = [];
     }
 
+    if (this.isStateConverseCompatible()) {
+      if (this.selectedVirtualAgents.length > 0) {
+        console.log(this.selectedVirtualAgents);
+        this.tempState.virtualAgentId = this.selectedVirtualAgents[0];
+      }
+      
+    }
+    
     if (this.isStateConnectorCompatible() && this.tempState.connectorConfigList && this.tempState.taskConfigList && this.tempState.connectorConfigList.length > 0) {
       this.saveConnectorTaskConfig();
     }
@@ -790,6 +863,12 @@ export class DesignComponent implements OnInit, OnDestroy {
     // TODO: improve the mechanism to differentiate Rule State with other states
     return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
       && this.tempState.entryActionList.includes('ConnectorStateEntryAction');
+  }
+
+  isStateConverseCompatible() {
+    // TODO: improve the mechanism to differentiate Rule State with other states
+    return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
+      && this.tempState.entryActionList.includes('ConverseStateEntryAction');
   }
 
   addRule() {
@@ -898,6 +977,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         this.graphObject = graphObject;
         this.deleteTaskConfig();
         this.alertService.success('Graph saved successfully!', false, 2000);
+        
         //this.router.navigate(['/pg/flw/flsr'], { relativeTo: this.route });
       });
   }
@@ -1173,27 +1253,28 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   convertStateTaskConfigToTempTaskconfig(taskConfig: ConnectorConfig, conInfo: ConnectorInfo, connectorName: string) {
+   
     var tempConTaskconfig = new TempConnectorConfig();
     tempConTaskconfig._id = taskConfig._id;
     tempConTaskconfig.statusCd = taskConfig.statusCd;
     tempConTaskconfig.subStatus = taskConfig.subStatus;
     tempConTaskconfig.configName = taskConfig.configName;
-    tempConTaskconfig.configType = taskConfig.configType
-    tempConTaskconfig.connectorInfoRef = taskConfig.connectorInfoRef
+    tempConTaskconfig.configType = taskConfig.configType;
+    tempConTaskconfig.connectorInfoRef = taskConfig.connectorInfoRef;
     tempConTaskconfig.connectorConfigRef = taskConfig.connectorConfigRef;
     tempConTaskconfig.connectorConfRefName = connectorName;
     tempConTaskconfig.functionInstanceName = taskConfig.functionInstanceName;
     tempConTaskconfig.taskConfig = true;
-    if (taskConfig.configMap) {
+    if (taskConfig.configMap && Object.keys(taskConfig.configMap).length > 0) {
       for (let configKey in taskConfig.configMap) {
         var configMap = this.getConfigMap();
-        if (conInfo && conInfo.metaData) {
-          for (let metaDataKey in conInfo.metaData) {
-            if (configKey == metaDataKey) {
-              configMap.type = conInfo.metaData[metaDataKey].type;
-              configMap.mandatory = conInfo.metaData[metaDataKey].mandatory;
-              configMap.validationExpr = conInfo.metaData[metaDataKey].validationExpr;
-              configMap.valueList = conInfo.metaData[metaDataKey].valueList;
+        if (conInfo && conInfo.taskConfigAttributeList) {
+          for (let task of conInfo.taskConfigAttributeList) {
+            if (configKey == task.key) {
+              configMap.type = task.type;
+              configMap.mandatory = task.mandatory;
+              configMap.validationExpr = task.validationExpr;
+              configMap.valueList = task.valueList;
 
             }
           }
@@ -1205,6 +1286,22 @@ export class DesignComponent implements OnInit, OnDestroy {
         }
         tempConTaskconfig.configMap.push(configMap);
 
+      }
+    }
+    else{
+      if (conInfo && conInfo.taskConfigAttributeList) {
+        for (let task of conInfo.taskConfigAttributeList) {
+          var configMap = this.getConfigMap();
+            configMap.type = task.type;
+            configMap.mandatory = task.mandatory;
+            configMap.validationExpr = task.validationExpr;
+            configMap.valueList = task.valueList;
+            configMap.key = task.key;
+            if (configMap.type == "file" && configMap.value) {
+              configMap.fileName = configMap.value.split("/")[configMap.value.split("/").length - 1]
+            }
+            tempConTaskconfig.configMap.push(configMap);
+        }
       }
     }
     if (!taskConfig.taskObject) {
@@ -1512,74 +1609,6 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   }
 
-  onConfigSelect(event) {
-    this.specificConfigSelected = false;
-    this.selectedConfig = false;
-    this.gotConInfo = false;
-    //this.conInfoOfNoMetadata = new ConnectorInfo();
-    this.configList = [];
-    this.payloadList = [];
-    this.typeConfigList = [];
-    this.fileName = "please upload a file..."
-    this.tempConConfig = event[0]
-    this.loadingConfigMap = true;
-
-    //if(this.tempConConfig._id.length > 0){
-    this.subscriptionConConfig = this.connectorConfigService.getConnectorInfos(event[0])
-      .subscribe(conInfoList => {
-        this.loadingConfigMap = false;
-        if (conInfoList) {
-
-          this.conInfoList = conInfoList;
-          if (conInfoList.length == 1) {
-            this.selectedConfig = false;
-            this.specificConfigSelected = true;
-            //
-            if (!this.stateCreateMode) {
-              if (this.tempState.connectorConfig[0].configType != this.tempConConfig.configType) {
-                this.conConfig = new ConnectorConfig()
-                this.connectorSelected(conInfoList[0])
-              }
-              else {
-                for (let conInfo of conInfoList) {
-                  if (conInfo.type == this.tempState.taskConfig[0].connectorInfoRef) {
-                    this.conConfig = this.tempState.taskConfig[0]
-                    this.connectorSelected(conInfo)
-                  }
-                  else {
-                    this.conConfig = new ConnectorConfig()
-                    this.connectorSelected(conInfoList[0])
-                  }
-                }
-              }
-            }
-            else {
-              this.conConfig = new ConnectorConfig()
-              this.connectorSelected(conInfoList[0])
-            }
-          }
-          else {
-            this.selectedConfig = true;
-            if (!this.stateCreateMode) {
-              if (this.tempState.connectorConfig[0].configType != this.tempConConfig.configType) {
-                this.conConfig = new ConnectorConfig()
-              }
-              else {
-                for (let conInfo of conInfoList) {
-                  if (conInfo.type == this.tempState.taskConfig[0].connectorInfoRef) {
-                    this.specificConfigSelected = true;
-                    this.conConfig = this.tempState.taskConfig[0]
-                    this.connectorSelected(conInfo)
-                  }
-                }
-              }
-            }
-          }
-        }
-      });
-    //}
-
-  }
 
   getConInfoByType(type) {
     this.subscriptionConConfig = this.connectorConfigService.getConInfoByType(type)
@@ -1598,7 +1627,6 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.payloadList = [];
     this.typeConfigList = [];
     this.populateSelectedResponse()
-
     if (this.isEmpty(conInfo.metaData) == false) {
       for (const property in conInfo.metaData) {
         const map = new Map();
@@ -2129,4 +2157,94 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.stateConnectorTaskConfig = taskConfigArr;
     }
   }
+
+  getEntityFields(dataModel?: DataModel) {
+    this.subscription = this.dataModelService.getDataModel(dataModel._id)
+  .subscribe(
+    datamodel => {
+      if (datamodel) {
+       this.tempGraphObject.entity = datamodel;
+       this.entityselected = true;
+      }
+    });
+  }
+
+  getDataModelList() {
+      const commonsearchModel = new CommonSearchModel();
+      commonsearchModel.searchParams = [{ 'statusCd': 'ACTIVE' }, { 'type': 'Entity' }];
+      commonsearchModel.returnFields = ['label', 'version', 'statusCd'];
+      this.subscription = this.dataModelService.getDataModelList(commonsearchModel)
+        .subscribe(list => this.dataModelList = list);
+  }
+
+  onEntitySelect(event){
+    this.getEntityFields(this.selectedDataModel);
+    // this.tempGraphObject.entity = this.selectedDataModel;
+
+  }
+
+  designEntity(){
+    this.entityRedirect = true;
+  }
+
+  dismissEntityWarn(){
+    this.entityRedirect = false;
+  }
+
+  redirect(){
+    if(this.entityRedirect){
+      this.router.navigate(['/pg/stp/stdms'], { relativeTo: this.route });
+    }
+  }
+
+  onAddManualTaskStatus() {
+    if (this.tempState != null) {
+      if (this.tempState.statusList == null) {
+        this.tempState.statusList = [];
+      }
+      this.tempState.statusList.push(new LabelValue);
+    }    
+  }
+    
+  onRemoveManualTaskStatus(labelValue: LabelValue) {
+    if (this.tempState != null &&  this.tempState.statusList.length > 0) {
+      let index = this.tempState.statusList.indexOf(labelValue);
+      if (index != -1 ) {
+        this.tempState.statusList.splice(index, 1);
+      }
+    }
+  }
+
+  onAddTaskValidation() {
+    if (this.tempState != null) {
+      if (this.tempState.taskValidations == null) {
+        this.tempState.taskValidations = [];
+      }
+      this.tempState.taskValidations.push(new TaskValidation());
+    }
+  }
+
+  onRemoveTaskValidation(validation: TaskValidation) {
+    if (this.tempState != null && this.tempState.taskValidations != null && this.tempState.taskValidations.length > 0) {
+      let index = this.tempState.taskValidations.indexOf(validation);
+      if (index != -1) {
+        this.tempState.taskValidations.splice(index, 1);
+      }
+    }
+  }
+
+  fetchAgents() {
+    const fields = [];
+    fields.push("_id");
+    fields.push("name");
+    this.subscription = this.agentService.getAllAgents(fields)
+      .subscribe(
+        agents => {
+          if (agents) {
+            this.virtualAgentList = agents;
+          }
+        }
+      );
+  }
+  
 }
