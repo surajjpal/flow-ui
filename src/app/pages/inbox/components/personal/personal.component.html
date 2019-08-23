@@ -567,7 +567,8 @@
 																		<select
 																				class="selectpicker form-control col-md-12 col-sm-12"
 																				[(ngModel)]="assignedTaskDdetails.taskStatus"
-																				name="taskStatus">
+																				name="taskStatus" [ngModelOptions]="{standalone: true}">
+																				<option value=null disabled selected>Select your status</option>
 																				<option *ngFor="let choice of getStatusList(assignedTaskDdetails)"
 																						[ngValue]="choice.value">{{ choice.label }}</option>
 																		</select>        
