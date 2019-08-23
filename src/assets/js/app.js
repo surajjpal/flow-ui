@@ -294,7 +294,7 @@ showAlertModal = function (header, message) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var dataPointCount = 0;
-var graph;
+var routeGraph;
 var oldXML;
 var settingsPopupBody;
 var horizontal = true;
@@ -337,29 +337,29 @@ designFlowEditor = function (serverXml, readOnly) {
 
     // document.body.appendChild(container);
     // Creates the graph inside the given container
-    graph = new mxGraph(container);
+    routeGraph = new mxGraph(container);
 
     // Enables automatic sizing for vertices after editing and
     // panning by using the left mouse button.
-    graph.setCellsMovable(false);
-    graph.setConnectable(true);
-    graph.setAutoSizeCells(true);
-    graph.setPanning(true);
-    graph.centerZoom = false;
-    graph.panningHandler.useLeftButtonForPanning = true;
+    routeGraph.setCellsMovable(false);
+    routeGraph.setConnectable(true);
+    routeGraph.setAutoSizeCells(true);
+    routeGraph.setPanning(true);
+    routeGraph.centerZoom = false;
+    routeGraph.panningHandler.useLeftButtonForPanning = true;
     // Displays a popupmenu when the user clicks
     // on a cell (using the left mouse button) but
     // do not select the cell when the popup menu
     // is displayed
-    graph.panningHandler.popupMenuHandler = false;
+    routeGraph.panningHandler.popupMenuHandler = false;
     // Creates the outline (navigator, overview) for moving
     // around the graph in the top, right corner of the window.
-    var outln = new mxOutline(graph, outline);
+    var outln = new mxOutline(routeGraph, outline);
 
     // Disables tooltips on touch devices
-    graph.setTooltips(!mxClient.IS_TOUCH);
+    routeGraph.setTooltips(!mxClient.IS_TOUCH);
     // Set some stylesheet options for the visual appearance of vertices
-    style = graph.getStylesheet().getDefaultEdgeStyle();
+    style = routeGraph.getStylesheet().getDefaultEdgeStyle();
     style[mxConstants.STYLE_EDGE] = mxEdgeStyle.ElbowConnector;
     style[mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#ffffff';
     style[mxConstants.STYLE_FONTCOLOR] = '#000000';
@@ -370,7 +370,7 @@ designFlowEditor = function (serverXml, readOnly) {
     style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_CENTER;
     style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
 
-    var style = graph.getStylesheet().getDefaultVertexStyle();
+    var style = routeGraph.getStylesheet().getDefaultVertexStyle();
     style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RECTANGLE;
     style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
     style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_MIDDLE;
@@ -392,17 +392,17 @@ designFlowEditor = function (serverXml, readOnly) {
     style[mxConstants.STYLE_GLASS] = '0';
 
     style = mxUtils.clone(style);
-    graph.getStylesheet().putCellStyle('PENDING_STATE', style);
+    routeGraph.getStylesheet().putCellStyle('PENDING_STATE', style);
 
     style = mxUtils.clone(style);
     style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
     style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
-    graph.getStylesheet().putCellStyle('ACTIVE_STATE', style);
+    routeGraph.getStylesheet().putCellStyle('ACTIVE_STATE', style);
 
     style = mxUtils.clone(style);
     style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
     style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
-    graph.getStylesheet().putCellStyle('CLOSED_STATE', style);
+    routeGraph.getStylesheet().putCellStyle('CLOSED_STATE', style);
 
     style = [];
     style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_RHOMBUS;
@@ -421,20 +421,20 @@ designFlowEditor = function (serverXml, readOnly) {
     style[mxConstants.STYLE_SHADOW] = '0';
     style[mxConstants.STYLE_GLASS] = '0';
 
-    graph.getStylesheet().putCellStyle('decision', style);
+    routeGraph.getStylesheet().putCellStyle('decision', style);
 
     style = mxUtils.clone(style);
-    graph.getStylesheet().putCellStyle('PENDING_DECISION', style);
-
-    style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#007BFF';
-    style[mxConstants.STYLE_STROKECOLOR] = '#FFFFFF';
-    graph.getStylesheet().putCellStyle('ACTIVE_DECISION', style);
+    routeGraph.getStylesheet().putCellStyle('PENDING_DECISION', style);
 
     style = mxUtils.clone(style);
     style[mxConstants.STYLE_FILLCOLOR] = '#007BFF';
     style[mxConstants.STYLE_STROKECOLOR] = '#FFFFFF';
-    graph.getStylesheet().putCellStyle('CLOSED_DECISION', style);
+    routeGraph.getStylesheet().putCellStyle('ACTIVE_DECISION', style);
+
+    style = mxUtils.clone(style);
+    style[mxConstants.STYLE_FILLCOLOR] = '#007BFF';
+    style[mxConstants.STYLE_STROKECOLOR] = '#FFFFFF';
+    routeGraph.getStylesheet().putCellStyle('CLOSED_DECISION', style);
 
     style = [];
     style[mxConstants.STYLE_SHAPE] = mxConstants.SHAPE_ELLIPSE;
@@ -453,46 +453,46 @@ designFlowEditor = function (serverXml, readOnly) {
     //style[mxConstants.STYLE_SHADOW] = '1';
     //style[mxConstants.STYLE_GLASS] = '0';
 
-    graph.getStylesheet().putCellStyle('start', style);
+    routeGraph.getStylesheet().putCellStyle('start', style);
 
     style = mxUtils.clone(style);
-    graph.getStylesheet().putCellStyle('PENDING_START', style);
-
-    style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
-    style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
-    graph.getStylesheet().putCellStyle('ACTIVE_START', style);
+    routeGraph.getStylesheet().putCellStyle('PENDING_START', style);
 
     style = mxUtils.clone(style);
     style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
     style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
-    graph.getStylesheet().putCellStyle('CLOSED_START', style);
+    routeGraph.getStylesheet().putCellStyle('ACTIVE_START', style);
+
+    style = mxUtils.clone(style);
+    style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+    style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
+    routeGraph.getStylesheet().putCellStyle('CLOSED_START', style);
 
     style = mxUtils.clone(style);
     style[mxConstants.STYLE_STROKEWIDTH] = '2';
     style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
     style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
-    graph.getStylesheet().putCellStyle('end', style);
+    routeGraph.getStylesheet().putCellStyle('end', style);
 
     style = mxUtils.clone(style);
-    graph.getStylesheet().putCellStyle('PENDING_END', style);
-
-    style = mxUtils.clone(style);
-    style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
-    style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
-    graph.getStylesheet().putCellStyle('ACTIVE_END', style);
+    routeGraph.getStylesheet().putCellStyle('PENDING_END', style);
 
     style = mxUtils.clone(style);
     style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
     style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
-    graph.getStylesheet().putCellStyle('CLOSED_END', style);
+    routeGraph.getStylesheet().putCellStyle('ACTIVE_END', style);
+
+    style = mxUtils.clone(style);
+    style[mxConstants.STYLE_FILLCOLOR] = '#FFFFFF';
+    style[mxConstants.STYLE_STROKECOLOR] = '#007BFF';
+    routeGraph.getStylesheet().putCellStyle('CLOSED_END', style);
 
     // style[mxConstants.STYLE_IMAGE] = 'assets/js/mxGraph/images/dude3.png';
     // style[mxConstants.STYLE_IMAGE_WIDTH] = '24';
     // style[mxConstants.STYLE_IMAGE_HEIGHT] = '24';
     // style[mxConstants.STYLE_SPACING] = 8;
     // Sets the default style for edges
-    style = graph.getStylesheet().getDefaultEdgeStyle();
+    style = routeGraph.getStylesheet().getDefaultEdgeStyle();
     style[mxConstants.STYLE_ROUNDED] = true;
     style[mxConstants.STYLE_STROKEWIDTH] = 2;
     // style[mxConstants.STYLE_EXIT_X] = 1.0; // right
@@ -507,18 +507,18 @@ designFlowEditor = function (serverXml, readOnly) {
 
     style = mxUtils.clone(style);
     style[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
-    graph.getStylesheet().putCellStyle('multipleParents', style);
+    routeGraph.getStylesheet().putCellStyle('multipleParents', style);
 
     // Stops editing on enter or escape keypress
-    var keyHandler = new mxKeyHandler(graph);
+    var keyHandler = new mxKeyHandler(routeGraph);
     keyHandler.bindKey(46, function (evt) {
-      if (graph.isEnabled()) {
-        var selectedCells = graph.selectionModel.cells;
+      if (routeGraph.isEnabled()) {
+        var selectedCells = routeGraph.selectionModel.cells;
         for (var index = 0; index < selectedCells.length; index++) {
           var cell = selectedCells[index];
           if (cell.edge) {
             var targetCell = cell.target;
-            var allEdges = graph.getChildEdges(graph.getDefaultParent());
+            var allEdges = routeGraph.getChildEdges(routeGraph.getDefaultParent());
             var keepTargetCell = false;
             for (var edge of allEdges) {
               if (edge != cell && edge.target == targetCell) {
@@ -528,12 +528,12 @@ designFlowEditor = function (serverXml, readOnly) {
             }
 
             if (!keepTargetCell) {
-              deleteSubtree(graph, cell.target);
+              deleteSubtree(routeGraph, cell.target);
             }
           }
 
           if (cell.style != 'start') {
-            deleteSubtree(graph, selectedCells[index]);
+            deleteSubtree(routeGraph, selectedCells[index]);
           }
         }
         //deleteSubtree()
@@ -544,7 +544,7 @@ designFlowEditor = function (serverXml, readOnly) {
     // a tree layout for all groups who's children are
     // being changed, added or removed.
     // var layout = new mxCompactTreeLayout(graph, true);
-    var layout = new mxHierarchicalLayout(graph, mxConstants.DIRECTION_WEST);
+    var layout = new mxHierarchicalLayout(routeGraph, mxConstants.DIRECTION_WEST);
     layout.useBoundingBox = true;
     layout.edgeRouting = false;
     layout.levelDistance = 100;
@@ -561,19 +561,19 @@ designFlowEditor = function (serverXml, readOnly) {
     layout.isVertexMovable = function (cell) {
       return true;
     };
-    var layoutMgr = new mxLayoutManager(graph);
+    var layoutMgr = new mxLayoutManager(routeGraph);
     layoutMgr.getLayout = function (cell) {
       if (cell.getChildCount() > 0) {
         return layout;
       }
     };
     // Installs a popupmenu handler using local function (see below).
-    graph.popupMenuHandler.factoryMethod = function (menu, cell, evt) {
-      return createPopupMenu(graph, menu, cell, evt, horizontal);
+    routeGraph.popupMenuHandler.factoryMethod = function (menu, cell, evt) {
+      return createPopupMenu(routeGraph, menu, cell, evt, horizontal);
     };
     // Fix for wrong preferred size
-    var oldGetPreferredSizeForCell = graph.getPreferredSizeForCell;
-    graph.getPreferredSizeForCell = function (cell) {
+    var oldGetPreferredSizeForCell = routeGraph.getPreferredSizeForCell;
+    routeGraph.getPreferredSizeForCell = function (cell) {
       var result = oldGetPreferredSizeForCell.apply(this, arguments);
       if (result != null) {
         result.width = Math.max(120, result.width);
@@ -610,7 +610,7 @@ designFlowEditor = function (serverXml, readOnly) {
 
     // Cell label from custom object
     // graph.setHtmlLabels(true);
-    graph.convertValueToString = function (cell) {
+    routeGraph.convertValueToString = function (cell) {
       var data = cell.getValue();
 
       if (data) {
@@ -630,8 +630,8 @@ designFlowEditor = function (serverXml, readOnly) {
       return '';
     };
 
-    cellLabelChanged = graph.cellLabelChanged;
-    graph.cellLabelChanged = function (cell, newValue, autoSize) {
+    cellLabelChanged = routeGraph.cellLabelChanged;
+    routeGraph.cellLabelChanged = function (cell, newValue, autoSize) {
       var data = cell.getValue();
 
       if (data) {
@@ -658,40 +658,40 @@ designFlowEditor = function (serverXml, readOnly) {
 
       var doc = mxUtils.parseXml(serverXml);
       var codec = new mxCodec(doc);
-      codec.decode(doc.documentElement, graph.getModel());
+      codec.decode(doc.documentElement, routeGraph.getModel());
 
-      var allVertices = graph.getChildVertices(graph.getDefaultParent());
+      var allVertices = routeGraph.getChildVertices(routeGraph.getDefaultParent());
       for (var index = 0; index < allVertices.length; index++) {
-        graph.traverse(allVertices[index], true, function (vertex) {
+        routeGraph.traverse(allVertices[index], true, function (vertex) {
           if (index == 0) {
             // To scroll graph so that our cell would appear in center
-            graph.scrollCellToVisible(vertex, true);
+            routeGraph.scrollCellToVisible(vertex, true);
           }
 
-          addOverlays(graph, vertex, index != 0, horizontal);
+          addOverlays(routeGraph, vertex, index != 0, horizontal);
         });
       }
     } else {
       // Gets the default parent for inserting new cells. This
       // is normally the first child of the root (ie. layer 0).
-      var parent = graph.getDefaultParent();
+      var parent = routeGraph.getDefaultParent();
       // Adds the root vertex of the tree
-      graph.getModel().beginUpdate();
+      routeGraph.getModel().beginUpdate();
       try {
-        var w = graph.container.offsetWidth;
-        var h = graph.container.offsetHeight;
-        var v1 = graph.insertVertex(parent, 'treeRoot',
+        var w = routeGraph.container.offsetWidth;
+        var h = routeGraph.container.offsetHeight;
+        var v1 = routeGraph.insertVertex(parent, 'treeRoot',
           '', w / 2, h / 2, 50, 50, 'start'/*, 'image=assets/js/mxGraph/images/house.png'*/);
         // graph.updateCellSize(v1);
-        addOverlays(graph, v1, false, horizontal);
+        addOverlays(routeGraph, v1, false, horizontal);
       }
       finally {
         // Updates the display
-        graph.getModel().endUpdate();
+        routeGraph.getModel().endUpdate();
       }
 
       // To scroll graph so that our cell would appear in center
-      graph.scrollCellToVisible(v1, true);
+      routeGraph.scrollCellToVisible(v1, true);
     }
 
     var mxConnectionHandlerInsertEdge = mxConnectionHandler.prototype.insertEdge;
@@ -751,14 +751,14 @@ designFlowEditor = function (serverXml, readOnly) {
       showModal("warningModal");
       return;
     };
-    addTaskIconOverlays(graph)
+    addTaskIconOverlays(routeGraph)
   }
 };
 
 
 function getEdgesByStateCd(source) {
   var sourceEdges = [];
-  var edges = graph.getChildEdges(graph.getDefaultParent());
+  var edges = routeGraph.getChildEdges(routeGraph.getDefaultParent());
 
   for (var edge of edges) {
     if (source.id == "treeRoot") {
@@ -850,16 +850,16 @@ function createPopupMenu(graph, menu, cell, evt, horizontal) {
   });
   menu.addSeparator();
   menu.addItem('Print', './assets/js/mxGraph/images/print.gif', function () {
-    var scale = mxUtils.getScaleForPageCount(1, graph);
-    var preview = new mxPrintPreview(graph, scale);
-    preview.open();
+    var scale = mxUtils.getScaleForPageCount(1, graph, mxConstants.PAGE_FORMAT_A4_LANDSCAPE);
+    var preview = new mxPrintPreview(graph, scale, mxConstants.PAGE_FORMAT_A4_LANDSCAPE);
+    preview.open("@page { size: landscape; }");
   });
   menu.addItem('Poster Print', './assets/js/mxGraph/images/print.gif', function () {
     var pageCount = mxUtils.prompt('Enter maximum page count', '1');
     if (pageCount != null) {
-      var scale = mxUtils.getScaleForPageCount(pageCount, graph);
-      var preview = new mxPrintPreview(graph, scale);
-      preview.open();
+      var scale = mxUtils.getScaleForPageCount(pageCount, graph, mxConstants.PAGE_FORMAT_A4_LANDSCAPE);
+      var preview = new mxPrintPreview(graph, scale, mxConstants.PAGE_FORMAT_A4_LANDSCAPE);
+      preview.open("@page { size: landscape; }");
     }
   });
 };
@@ -1104,14 +1104,14 @@ hierarchyGraphTools = function (choice) {
     case 'PRINT_PREVIEW': // Print Preview
       var scale = mxUtils.getScaleForPageCount(1, hierarchygraph);
       var preview = new mxPrintPreview(hierarchygraph, scale);
-      preview.open();
+      preview.open("@page { size: landscape; }");
       break;
     case 'POSTER_PRINT': // Poster Print
       var pageCount = prompt('Enter maximum page count', '1');
       if (pageCount != null) {
         var scale = mxUtils.getScaleForPageCount(pageCount, hierarchygraph);
         var preview = new mxPrintPreview(hierarchygraph, scale);
-        preview.open();
+        preview.open("@page { size: landscape; }");
       }
       break;
   }
@@ -1120,32 +1120,32 @@ hierarchyGraphTools = function (choice) {
 graphTools = function (choice) {
   switch (choice) {
     case 'ZOOM_IN': // Zoom In
-      graph.zoomIn();
+      routeGraph.zoomIn();
       break;
     case 'ZOOM_OUT': // Zoom Out
-      graph.zoomOut();
+      routeGraph.zoomOut();
       break;
     case 'ZOOM_ACTUAL': // Zoom Actual
-      graph.zoomActual();
+      routeGraph.zoomActual();
       break;
     case 'PRINT_PREVIEW': // Print Preview
-      var scale = mxUtils.getScaleForPageCount(1, graph);
-      var preview = new mxPrintPreview(graph, scale);
-      preview.open();
+      var scale = mxUtils.getScaleForPageCount(1, routeGraph, mxConstants.PAGE_FORMAT_A4_LANDSCAPE);
+      var preview = new mxPrintPreview(routeGraph, scale, mxConstants.PAGE_FORMAT_A4_LANDSCAPE);
+      preview.open("@page { size: landscape; }");
       break;
     case 'POSTER_PRINT': // Poster Print
       var pageCount = prompt('Enter maximum page count', '1');
       if (pageCount != null) {
-        var scale = mxUtils.getScaleForPageCount(pageCount, graph);
-        var preview = new mxPrintPreview(graph, scale);
-        preview.open();
+        var scale = mxUtils.getScaleForPageCount(pageCount, routeGraph, mxConstants.PAGE_FORMAT_A4_LANDSCAPE);
+        var preview = new mxPrintPreview(routeGraph, scale, mxConstants.PAGE_FORMAT_A4_LANDSCAPE);
+        preview.open("@page { size: landscape; }");
       }
       break;
   }
 }
 
 saveStateObject = function (state) {
-  var vertices = graph.getChildVertices(graph.getDefaultParent());
+  var vertices = routeGraph.getChildVertices(routeGraph.getDefaultParent());
   for (var vertex of vertices) {
     if (vertex.value && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
       if (state.stateCd == vertex.value.stateCd) {
@@ -1193,12 +1193,12 @@ saveStateObject = function (state) {
     }
   }
 
-  var vertex = addChild(graph, sourceCell, state, horizontal, '', '', '');
+  var vertex = addChild(routeGraph, sourceCell, state, horizontal, '', '', '');
   closeModal('stateModal');
 }
 
 updateStateObject = function (state) {
-  var vertices = graph.getChildVertices(graph.getDefaultParent());
+  var vertices = routeGraph.getChildVertices(routeGraph.getDefaultParent());
   for (var vertex of vertices) {
     if (vertex.value && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
       if ((state.stateCd == vertex.value.stateCd) && (vertex.value.stateCd != sourceCell.value.stateCd)) {
@@ -1289,33 +1289,33 @@ updateStateObject = function (state) {
   }
 
   if (sourceCell) {
-    graph.getModel().beginUpdate();
+    routeGraph.getModel().beginUpdate();
     try {
       sourceCell.setValue(state);
 
       if (state && state.events && state.events.length > 1) {
-        var size = graph.getPreferredSizeForCell(sourceCell);
-        var geometry = graph.getModel().getGeometry(sourceCell);
+        var size = routeGraph.getPreferredSizeForCell(sourceCell);
+        var geometry = routeGraph.getModel().getGeometry(sourceCell);
         geometry.width = size.width;
         geometry.height = size.height;
       } else if (state && state.events && state.events.length == 0) {
-        var geometry = graph.getModel().getGeometry(sourceCell);
+        var geometry = routeGraph.getModel().getGeometry(sourceCell);
         geometry.width = circleSize;
         geometry.height = circleSize;
       } else {
-        var size = graph.getPreferredSizeForCell(sourceCell);
-        var geometry = graph.getModel().getGeometry(sourceCell);
+        var size = routeGraph.getPreferredSizeForCell(sourceCell);
+        var geometry = routeGraph.getModel().getGeometry(sourceCell);
         geometry.width = size.width;
         geometry.height = size.height;
       }
 
-      addOverlays(graph, sourceCell, true, horizontal);
+      addOverlays(routeGraph, sourceCell, true, horizontal);
 
-      graph.getView().clear(cell, false, false);
-      graph.getView().validate();
-      graph.cellSizeUpdated(sourceCell, false);
+      routeGraph.getView().clear(cell, false, false);
+      routeGraph.getView().validate();
+      routeGraph.cellSizeUpdated(sourceCell, false);
     } finally {
-      graph.getModel().endUpdate();
+      routeGraph.getModel().endUpdate();
     }
   }
 }
@@ -1356,11 +1356,11 @@ updateStateTrigger = function (eventEdgeMap, stateData) {
   }
 
   for (var edge of existingEdgesBeforeUpdate) {
-    graph.getModel().beginUpdate();
+    routeGraph.getModel().beginUpdate();
     try {
       edge.value = eventEdgeMap[edge.target.value.stateCd];
     } finally {
-      graph.getModel().endUpdate();
+      routeGraph.getModel().endUpdate();
     }
   }
 
@@ -1369,7 +1369,7 @@ updateStateTrigger = function (eventEdgeMap, stateData) {
 
 exportGraphXml = function () {
   var encoder = new mxCodec();
-  var node = encoder.encode(graph.getModel());
+  var node = encoder.encode(routeGraph.getModel());
   var xml = mxUtils.getXml(node);
 
   var states = getValueForAllVertices();
@@ -1384,7 +1384,7 @@ exportGraphXml = function () {
 
 getValueForAllVertices = function () {
   var states = [];
-  var vertices = graph.getChildVertices(graph.getDefaultParent());
+  var vertices = routeGraph.getChildVertices(routeGraph.getDefaultParent());
   for (var vertex of vertices) {
     if (vertex != null && vertex.value != null && !(typeof vertex.value === 'string' || vertex.value instanceof String)) {
       states.push(vertex.value);
@@ -1396,7 +1396,7 @@ getValueForAllVertices = function () {
 
 getTransitionForAllVertices = function () {
   var transitions = [];
-  var edges = graph.getChildEdges(graph.getDefaultParent());
+  var edges = routeGraph.getChildEdges(routeGraph.getDefaultParent());
   for (var edge of edges) {
     if (edge != null && edge.value != null && edge.source != null && edge.source.value != null && edge.target != null && edge.target.value != null && !(typeof edge.value == "string" || edge.value instanceof String) && !(typeof edge.source.value == "string" || edge.source.value instanceof String) && !(typeof edge.target.value == "string" || edge.target.value instanceof String)) {
       var transition = {};
@@ -1414,65 +1414,65 @@ getTransitionForAllVertices = function () {
 
 styleStates = function (activeStateIdList, closedStateIdList) {
   if (activeStateIdList != null && closedStateIdList != null) {
-    graph.getModel().beginUpdate();
+    routeGraph.getModel().beginUpdate();
     try {
-      var vertices = graph.getChildVertices(graph.getDefaultParent());
+      var vertices = routeGraph.getChildVertices(routeGraph.getDefaultParent());
       for (var vertex of vertices) {
         if (vertex != null && vertex.id != null) {
           if (activeStateIdList.indexOf(vertex.id) >= 0) {
-            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#FFC107', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#FFC107', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, '#FFFFFF', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#FFC107', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#FFC107', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_FONTCOLOR, '#FFFFFF', [vertex]);
             var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/active.png', 20, 20), 'Active');
             overlay.align = mxConstants.ALIGN_RIGHT;
             overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
-            graph.addCellOverlay(vertex, overlay);
+            routeGraph.addCellOverlay(vertex, overlay);
           } else if (closedStateIdList.indexOf(vertex.id) >= 0) {
-            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#28A745', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#28A745', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, '#FFFFFF', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#28A745', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#28A745', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_FONTCOLOR, '#FFFFFF', [vertex]);
             var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 20, 20), 'Closed');
             overlay.align = mxConstants.ALIGN_RIGHT;
             overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
-            graph.addCellOverlay(vertex, overlay);
+            routeGraph.addCellOverlay(vertex, overlay);
           } else if (vertex != null && vertex.id == 'treeRoot') {
-            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#28A745', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#28A745', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, '#FFFFFF', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#28A745', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#28A745', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_FONTCOLOR, '#FFFFFF', [vertex]);
             var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 20, 20), 'Closed');
             overlay.align = mxConstants.ALIGN_RIGHT;
             overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
-            graph.addCellOverlay(vertex, overlay);
+            routeGraph.addCellOverlay(vertex, overlay);
           }
 
         }
       }
     } finally {
-      graph.getModel().endUpdate();
+      routeGraph.getModel().endUpdate();
     }
   }
-  addTaskIconOverlays(graph);
+  addTaskIconOverlays(routeGraph);
 }
 
 
 styleProcessAuditStates = function (activeStateIdList, closedStateIdList) {
 
   if (activeStateIdList != null && closedStateIdList != null) {
-    graph.getModel().beginUpdate();
+    routeGraph.getModel().beginUpdate();
     try {
-      var vertices = graph.getChildVertices(graph.getDefaultParent());
+      var vertices = routeGraph.getChildVertices(routeGraph.getDefaultParent());
       for (var vertex of vertices) {
         if (vertex != null && vertex.id != null) {
           if (activeStateIdList.indexOf(vertex.id) >= 0) {
-            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
             var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/warning.gif', 18, 18), 'Active');
             overlay.align = mxConstants.ALIGN_RIGHT;
             overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
-            graph.addCellOverlay(vertex, overlay);
+            routeGraph.addCellOverlay(vertex, overlay);
           } if (activeStateIdList.indexOf(vertex.id) >= 0) {
-            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
             var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/info.png', 18, 18), 'Information');
             overlay.align = mxConstants.ALIGN_LEFT;
             overlay.verticalAlign = mxConstants.ALIGN_TOP;
@@ -1490,12 +1490,12 @@ styleProcessAuditStates = function (activeStateIdList, closedStateIdList) {
 
             }));
 
-            graph.addCellOverlay(vertex, overlay);
+            routeGraph.addCellOverlay(vertex, overlay);
 
 
           } if (closedStateIdList.indexOf(vertex.id) >= 0) {
-            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
             var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/info.png', 18, 18), 'Information');
             overlay.align = mxConstants.ALIGN_LEFT;
             overlay.verticalAlign = mxConstants.ALIGN_TOP;
@@ -1513,67 +1513,67 @@ styleProcessAuditStates = function (activeStateIdList, closedStateIdList) {
 
             }));
 
-            graph.addCellOverlay(vertex, overlay);
+            routeGraph.addCellOverlay(vertex, overlay);
 
 
           }
           else if (closedStateIdList.indexOf(vertex.id) >= 0) {
-            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
             var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 18, 18), 'Closed');
             overlay.align = mxConstants.ALIGN_RIGHT;
             overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
-            graph.addCellOverlay(vertex, overlay);
+            routeGraph.addCellOverlay(vertex, overlay);
           }
           else if (vertex != null && vertex.id == 'treeRoot') {
-            graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_STROKECOLOR, '#CDDDF7', [vertex]);
+            routeGraph.setCellStyles(mxConstants.STYLE_FILLCOLOR, '#CDDDF7', [vertex]);
             var overlay = new mxCellOverlay(new mxImage('./assets/js/mxGraph/images/check.png', 18, 18), 'Closed');
             overlay.align = mxConstants.ALIGN_RIGHT;
             overlay.verticalAlign = mxConstants.ALIGN_MIDDLE;
-            graph.addCellOverlay(vertex, overlay);
+            routeGraph.addCellOverlay(vertex, overlay);
           }
 
         }
       }
     } finally {
-      graph.getModel().endUpdate();
+      routeGraph.getModel().endUpdate();
     }
   }
-  addTaskIconOverlays(graph);
+  addTaskIconOverlays(routeGraph);
 }
 
 styleInfo = function (orModels, type) {
 
-  addInfoOverlays(graph, orModels, type);
+  addInfoOverlays(routeGraph, orModels, type);
 }
 
 
 
 updateNewEdge = function (event) {
   if (newEdge) {
-    graph.getModel().beginUpdate();
+    routeGraph.getModel().beginUpdate();
     try {
       newEdge.setValue(event);
-      graph.getView().clear(newEdge, false, false);
-      graph.getView().validate();
+      routeGraph.getView().clear(newEdge, false, false);
+      routeGraph.getView().validate();
     } finally {
-      graph.getModel().endUpdate();
+      routeGraph.getModel().endUpdate();
     }
   }
 }
 
 deleteNewEdge = function () {
   if (newEdge) {
-    graph.getModel().beginUpdate();
+    routeGraph.getModel().beginUpdate();
     try {
       var cells = [];
       cells.push(newEdge);
 
-      graph.removeCells(cells);
-      graph.getView().validate();
+      routeGraph.removeCells(cells);
+      routeGraph.getView().validate();
     } finally {
-      graph.getModel().endUpdate();
+      routeGraph.getModel().endUpdate();
     }
   }
 }
@@ -2003,17 +2003,18 @@ function createPopupMenuUser(hierarchygraph, usermenu, cell, evt) {
   usermenu.addSeparator();
 
   usermenu.addItem('Print', 'editors/images/print.gif', function () {
-    var preview = new mxPrintPreview(hierarchygraph, 1);
-    preview.open();
+    var scale = mxUtils.getScaleForPageCount(1, hierarchygraph, mxConstants.PAGE_FORMAT_A4_LANDSCAPE);
+    var preview = new mxPrintPreview(hierarchygraph, scale, mxConstants.PAGE_FORMAT_A4_LANDSCAPE);
+    preview.open("@page { size: landscape; }");
   });
 
   usermenu.addItem('Poster Print', 'editors/images/print.gif', function () {
     var pageCount = mxUtils.prompt('Enter maximum page count', '1');
 
     if (pageCount != null) {
-      var scale = mxUtils.getScaleForPageCount(pageCount, hierarchygraph);
-      var preview = new mxPrintPreview(hierarchygraph, scale);
-      preview.open();
+      var scale = mxUtils.getScaleForPageCount(pageCount, hierarchygraph, mxConstants.PAGE_FORMAT_A4_LANDSCAPE);
+      var preview = new mxPrintPreview(hierarchygraph, scale, mxConstants.PAGE_FORMAT_A4_LANDSCAPE);
+      preview.open("@page { size: landscape; }");
     }
   });
 };

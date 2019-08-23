@@ -59,6 +59,9 @@ export const environment = {
     autodashboardurl: 'dashboard',
     userurl: 'user/',
     evaluateMVEL: 'evaluateMVEL/',
+  
+    route: 'route/',
+  
     timeline: 'statemachine/timeline/',
     updatevirtualassist: 'statemachine/updatevirtualassist',
     

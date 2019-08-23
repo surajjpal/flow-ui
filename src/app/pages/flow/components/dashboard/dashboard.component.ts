@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs/Subscription';
 import { FlowDashboardService } from '../../../../services/flow.service';
 import { ConversationSummary, Dashboard, WorkflowSummary, StateConsumingMaxResTimeTransaction } from '../../../../models/dashboard.model';
 import { DateRangePickerComponent } from './daterangepicker/daterangepicker.component';
-// import { APISpinnerComponent } from '../../../../shared/components/api-spinner/api-spinner.component'
 
 declare let d3: any;
 declare let moment: any;
