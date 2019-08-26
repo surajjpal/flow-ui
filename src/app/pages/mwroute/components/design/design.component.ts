@@ -8,7 +8,7 @@ import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import {
     MWRouteConfig, ApiRouteStep, CamelRouteStep, ChoiceRouteStep, ConnectorRouteStep,
     RuleRouteStep, JaxbMarshallRouteStep, JaxbUnmarshallRouteStep, JsonMarshallRouteStep,
-    JsonUnmarshallRouteStep, MWRouteStepConfig, MWCondition
+    JsonUnmarshallRouteStep, MWRouteStepConfig, MWCondition, FlowCreateRouteStep, FlowUpdateRouteStep
 } from 'app/models/mwroute.model';
 import { ApiKeyExpressionMap, MVELObject } from 'app/models/setup.model';
 import { GraphService } from 'app/services/flow.service';
@@ -30,7 +30,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     tempRouteConfig: MWRouteConfig;
     routeStep: ApiRouteStep | CamelRouteStep | ChoiceRouteStep |
         ConnectorRouteStep | RuleRouteStep | JaxbMarshallRouteStep |
-        JaxbUnmarshallRouteStep | JsonMarshallRouteStep | JsonUnmarshallRouteStep = null;
+        JaxbUnmarshallRouteStep | JsonMarshallRouteStep | JsonUnmarshallRouteStep | FlowCreateRouteStep | FlowUpdateRouteStep = null;
     branchCondition: MWCondition = null;
     parentChoiceRouteStep: ChoiceRouteStep;
     parentChoiceConditionIndex: number = -1;

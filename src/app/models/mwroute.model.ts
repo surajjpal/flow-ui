@@ -7,7 +7,7 @@ export interface CamelExecutable {
 }
 
 export abstract class MWRouteStepConfig {
-    "@type": "ApiRouteStep" | "CamelRouteStep" | "ChoiceRouteStep" | "ConnectorRouteStep" | "RuleRouteStep" | "JaxbMarshallRouteStep" | "JaxbUnmarshallRouteStep" | "JsonMarshallRouteStep" | "JsonUnmarshallRouteStep";
+    "@type": "ApiRouteStep" | "CamelRouteStep" | "ChoiceRouteStep" | "ConnectorRouteStep" | "RuleRouteStep" | "JaxbMarshallRouteStep" | "JaxbUnmarshallRouteStep" | "JsonMarshallRouteStep" | "JsonUnmarshallRouteStep" | "FlowCreateRouteStep" | "FlowUpdateRouteStep";
     routeStepId: string;
     routeStepName: string;
 
@@ -154,6 +154,38 @@ export class JsonUnmarshallRouteStep extends MWRouteStepConfig implements CamelE
         this.type = '';
     }
 }
+
+export class FlowCreateRouteStep extends MWRouteStepConfig {
+    "@type": "FlowCreateRouteStep";
+    entityId:string;
+    machineType:string;
+    asyncRouteDsl:string;
+
+    constructor(baseObject?: MWRouteStepConfig) {
+        super(baseObject);
+
+        this["@type"] = "FlowCreateRouteStep";
+        this.machineType = '';
+        this.entityId = '';
+        this.asyncRouteDsl = '';
+    }
+} 
+
+export class FlowUpdateRouteStep extends MWRouteStepConfig {
+    "@type": "FlowUpdateRouteStep";
+    entityId:string;
+    machineType:string;
+    asyncRouteDsl:string;
+
+    constructor(baseObject?: MWRouteStepConfig) {
+        super(baseObject);
+
+        this["@type"] = "FlowUpdateRouteStep";
+        this.machineType = '';
+        this.entityId = '';
+        this.asyncRouteDsl = '';
+    }
+} 
 
 export class MWRouteConfig extends BaseModel {
     routeCd: string;
