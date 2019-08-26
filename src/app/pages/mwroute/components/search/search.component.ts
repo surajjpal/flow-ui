@@ -79,4 +79,8 @@ export class SearchComponent implements OnInit, OnDestroy {
             this.router.navigate(['/pg/mwrt/rtd'], { relativeTo: this.route });
         }
     }
+
+    toInt(){
+        //please check this
+    }
 }
