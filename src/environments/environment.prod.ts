@@ -3,26 +3,26 @@ export const environment = {
   name: 'production',
 
   // Root
-  root: 'https://flow.lntrealty.com/flow/',
+  root: 'https://flow.procmate.com/flow/',
   // API
-  authurl: 'https://flow.lntrealty.com/flow/auth/',
+  authurl: 'https://flow.procmate.com/flow/auth/',
 
   // Services
-  saveaccounturl: 'https://flow.lntrealty.com/flow/account/create',
-  fetchaccountbyidurl: 'https://flow.lntrealty.com/flow/account/',
-  publishaccounturl:'https://flow.lntrealty.com/flow/account/publish/',
-  unpublishaccounturl:'https://flow.lntrealty.com/flow/account/unpublish/',
+  saveaccounturl: 'https://flow.procmate.com/flow/account/create',
+  fetchaccountbyidurl: 'https://flow.procmate.com/flow/account/',
+  publishaccounturl:'https://flow.procmate.com/flow/account/publish/',
+  unpublishaccounturl:'https://flow.procmate.com/flow/account/unpublish/',
   processauditurl:"http://api.compusoft.com/api/universalsearch/search/flow",
 
   // Interfaces
-  interfaceService: 'https://flow.lntrealty.com/flow/interfaces',
-  updateClassifierTraining : 'https://flow.lntrealty.com/flow/interfaces/auto_decorate_training',
-  updateIntentTraining: 'https://flow.lntrealty.com/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'https://flow.lntrealty.com/flow/interfaces/entity_classification_training',
+  interfaceService: 'https://flow.procmate.com/flow/interfaces',
+  updateClassifierTraining : 'https://flow.procmate.com/flow/interfaces/auto_decorate_training',
+  updateIntentTraining: 'https://flow.procmate.com/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'https://flow.procmate.com/flow/interfaces/entity_classification_training',
 
   // Flow
-  server: 'https://flow.lntrealty.com/flow/console/',
-  autourl:'https://chat.lntrealty.com/#/pg/ch/cnv/',
+  server: 'https://flow.procmate.com/flow/console/',
+  autourl:'https://chat.procmate.com/#/pg/ch/cnv/',
 
   autoworkbench: 'https://workbench.automatapi.com/#/wb/',
   autoworkbenchdisplaybar: '?displaySideBar=false',
@@ -101,7 +101,7 @@ export const environment = {
 
 
   // auto
-  autoServer: 'https://flow.lntrealty.com/flow/auto/',
+  autoServer: 'https://flow.procmate.com/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',
@@ -130,7 +130,7 @@ export const environment = {
   flowsearch: '/api/search/flow',
 
   // Analytics
-  reportservice: 'https://flow.lntrealty.com/flow/report',
+  reportservice: 'https://flow.procmate.com/flow/report',
   sendReportUrl: '/reports/analyticsreport/sendreport',
   scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
   getAnalyticsReports: "/reports/analyticsreport",
@@ -153,7 +153,7 @@ export const environment = {
   businessObjectPredictUrl: '/automatons/businessobject/predict',
 
   //Dashboard
-  dashboardServer: 'https://flow.lntrealty.com/flow/dashboard/',
+  dashboardServer: 'https://flow.procmate.com/flow/dashboard/',
   dashboardsummary:'auto/dashboard_summary',
   episodetimeline:'auto/episode_timeline',
   intentcount:'auto/intent_count',
@@ -169,7 +169,7 @@ export const environment = {
   statetransactionvalue:'flow/state_transaction_value',
 
   //Dashboard from interfaces
-  dashboardinterface: 'https://flow.lntrealty.com/flow/interfaces/dashboard',
+  dashboardinterface: 'https://flow.procmate.com/flow/interfaces/dashboard',
 
   //Following APIs path - To be used in conjunction with interfaceService property
   crudFunction: '/crud',
@@ -184,10 +184,10 @@ export const environment = {
   businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
 
   //python project in api-utils ondemandreport project
-  sendReportCSV: 'https://flow.lntrealty.com/flow/report/reports/generatereport',
+  sendReportCSV: 'https://flow.procmate.com/flow/report/reports/generatereport',
 
   //Vocabulary
-  vocabulary : 'https://flow.lntrealty.com/flow/interfaces/vocabulary',
+  vocabulary : 'https://flow.procmate.com/flow/interfaces/vocabulary',
 
   // USP
   uspsearch: '/api/usp/relevancesearch',
