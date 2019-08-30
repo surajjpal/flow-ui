@@ -965,6 +965,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
                   }
                 }
               }
+              //state = errorState;
               this.progressBarFlag = false;
               return;
             }
@@ -1408,6 +1409,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     newDoc.flowInstanceId = stateInstanace.stateMachineInstanceModelId;
     newDoc.documentType = "OTHER";
     newDoc.documentName = uuid();
+    newDoc.status = "PENDING";
     if (!this.documentsForState[stateInstanace._id]) {
       this.documentsForState[stateInstanace._id] = [];
     }
