@@ -20,7 +20,7 @@ import { v4 as uuid } from 'uuid';
 // Model Imports
 import {
   GraphObject, DataPoint, Classifier, StateModel,
-  EventModel, Expression, Transition, ManualAction, DataPointValidation, StateInfoModel, LabelValue, TaskValidation
+  EventModel, Expression, Transition, ManualAction, DataPointValidation, StateInfoModel, LabelValue, TaskValidation, DataPointAccess
 } from '../../../../models/flow.model';
 import { ConnectorConfig, ConnectorInfo, TaskObject, TempConnectorConfig } from '../../../../models/setup.model';
 import { ApiConfig, ApiKeyExpressionMap, ApiResponse, MVELObject } from '../../../../models/setup.model';
@@ -163,6 +163,8 @@ export class DesignComponent implements OnInit, OnDestroy {
 
   virtualAgentList:Agent[];
   selectedVirtualAgents:string[];
+
+  dataPointAccessFilterQuery: string;
 
   private subscription: Subscription;
   private subscriptionEntryAction: Subscription;
@@ -598,6 +600,37 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.tempStateConnectorList = [];
     this.tempSelectedConfigTypeTask = {};
     this.tempSelectedConnectorInfoList = {};
+    if (this.tempState.type == "Manual") {
+      this.addDataPointAccess();
+    }
+  }
+
+  onStateTypeSelect(event) {
+    if (this.tempState && this.tempState.type != null && this.tempState.type == "Manual") {
+      if (this.tempState.dataPointAccessList == null || this.tempState.dataPointAccessList.length == 0) {
+        this.addDataPointAccess();
+      }
+    }
+  }
+
+  addDataPointAccess() {
+    if (this.tempState != null && this.graphObject.dataPointConfigurationList != null && this.graphObject.dataPointConfigurationList.length > 0) {
+      if (this.tempState.dataPointAccessList == null) {
+        this.tempState.dataPointAccessList = [];
+      }
+      for(let dataPoint of this.graphObject.dataPointConfigurationList) {
+        this.tempState.dataPointAccessList.push(new DataPointAccess(dataPoint.dataPointName, dataPoint.dataPointLabel));
+      }
+    }
+  }
+
+  updateDataPointAccess() {
+    if (this.tempState != null && (this.tempState.dataPointAccessList == null || this.tempState.dataPointAccessList.length == 0 )) {
+      this.addDataPointAccess();
+    }
+    else {
+
+    }
   }
 
   updateState(state: StateModel): void {
@@ -619,6 +652,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     //     this.onConfigSelect(this.tempState.connectorConfig);
     //   }
     // }
+    this.updateDataPointAccess();
 
   }
 
@@ -2245,6 +2279,44 @@ export class DesignComponent implements OnInit, OnDestroy {
           }
         }
       );
+  }
+
+  onChangeDataPointAccess(event, dataPointAccess: DataPointAccess, access: string) {
+    if (access == "WRITE") {
+      if (event.target.checked) {
+        dataPointAccess.readAcsess = true;
+        dataPointAccess.hide = false;
+        dataPointAccess.writeAccess = true;
+      }
+      else {
+        dataPointAccess.readAcsess = true;
+        dataPointAccess.hide = false;
+        dataPointAccess.writeAccess = false;
+      }
+    } 
+    if (access == "HIDE") {
+      if (event.target.checked) {
+        dataPointAccess.writeAccess = false;
+        dataPointAccess.readAcsess = false;
+        dataPointAccess.hide = true;
+      }
+      else {
+        dataPointAccess.writeAccess = true;
+        dataPointAccess.readAcsess = true;
+        dataPointAccess.hide = false;
+      }
+    }
+    if (access == "READ") {
+      if (event.target.checked) {
+        dataPointAccess.writeAccess = false;
+        dataPointAccess.hide = false;
+        dataPointAccess.readAcsess = true;
+      }
+      else {
+        dataPointAccess.readAcsess = false;
+      }
+      
+    }
   }
   
 }

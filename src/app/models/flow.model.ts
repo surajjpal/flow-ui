@@ -69,6 +69,22 @@ export class DataPoint {
   }
 }
 
+export class DataPointAccess {
+  dataPointName: string;
+  dataPointLabel: string;
+  writeAccess: boolean;
+  readAcsess: boolean;
+  hide: boolean;
+
+  constructor(dataPointName?: string, dataPointLabel?: string, writeAccess?: boolean, readAcsess?: boolean, hide?: boolean) {
+    this.dataPointName = dataPointName ? dataPointName : null;
+    this.dataPointLabel = dataPointLabel ? dataPointLabel : null;
+    this.writeAccess = writeAccess ? writeAccess : true;
+    this.readAcsess = readAcsess ? readAcsess : true;
+    this.hide = hide ? hide : false;
+  }
+}
+
 
 export class Classifier {
   apiName: string;
@@ -201,6 +217,7 @@ export class StateModel {
   documentEvalExp: string;
   converseRequestExp: string;
   taskValidations: TaskValidation[];
+  dataPointAccessList: DataPointAccess[];
 
 
   constructor() {
@@ -235,6 +252,7 @@ export class StateModel {
     this.documentEvalExp = null;
     this.converseRequestExp = null;
     this.taskValidations = [];
+    this.dataPointAccessList = [];
   }
 }
 
