@@ -370,6 +370,34 @@ export class StateService {
 
     return subject.asObservable();
   }
+
+  getStateInstanceById(_id: string): Observable<State> {
+    const subject = new Subject<State>();
+    const url = `${environment.server + environment.statebyid}` + _id;
+
+    this.httpClient.get<State>(
+      url,
+      {
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<State>) => {
+        if (response.body) {
+          subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
   
 
   updateState(state: State): Observable<State> {

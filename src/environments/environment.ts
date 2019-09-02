@@ -64,6 +64,7 @@ export const environment = {
   autodashboardurl: 'dashboard',
   userurl: 'user/',
   evaluateMVEL: 'evaluateMVEL/',
+  statebyid: 'state/',
   
   route: 'route/',
   timeline: 'statemachine/timeline/',

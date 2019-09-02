@@ -1016,6 +1016,31 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
   }
 
+  getLatestStateInstance(state: State) {
+    this.progressBarFlag = true;
+    this.unassignedTaskActionButtonEnabled[state._id] = false;
+    this.subscription = this.stateService.getStateInstanceById(state._id)
+            .subscribe(
+              response => {
+                this.progressBarFlag = false;
+                if (response && response.assignedUserId) {
+                  this.removedUnAssignedTask(state);
+                  new showModal("errorReserveTaskModal");
+                }
+                else {
+                  this.progressBarFlag = false;
+                  this.reserveUnassignedTask(state);
+                }
+              },
+              error => {
+                this.progressBarFlag = false;
+                new showAlertModal("Error", "error to reserve task")
+              }
+            )
+  }
+
+  
+
   onUserSelectAssignedTask(user) {
 
     this.allocatedAssignedTaskToUserId = user.userId;
