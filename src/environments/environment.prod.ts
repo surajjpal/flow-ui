@@ -3,28 +3,28 @@ export const environment = {
   name: 'production',
 
   // Root
-  root: 'http://flow.procmate.com/flow/',
+  root: 'https://flow.procmate.com/flow/',
   // API
-  authurl: 'http://flow.procmate.com/flow/auth/',
+  authurl: 'https://flow.procmate.com/flow/auth/',
 
   // Services
-  saveaccounturl: 'http://flow.procmate.com/flow/account/create',
-  fetchaccountbyidurl: 'http://flow.procmate.com/flow/account/',
-  publishaccounturl:'http://flow.procmate.com/flow/account/publish/',
-  unpublishaccounturl:'http://flow.procmate.com/flow/account/unpublish/',
-  processauditurl:"http://api.compusoft.com/api/universalsearch/search/flow",
+  saveaccounturl: 'https://flow.procmate.com/flow/account/create',
+  fetchaccountbyidurl: 'https://flow.procmate.com/flow/account/',
+  publishaccounturl:'https://flow.procmate.com/flow/account/publish/',
+  unpublishaccounturl:'https://flow.procmate.com/flow/account/unpublish/',
+  processauditurl:"https://api.compusoft.com/api/universalsearch/search/flow",
 
   // Interfaces
-  interfaceService: 'http://flow.procmate.com/flow/interfaces',
-  updateClassifierTraining : 'http://flow.procmate.com/flow/interfaces/auto_decorate_training',
-  updateIntentTraining: 'http://flow.procmate.com/flow/interfaces/intent_classification_training',
-  updateEntityTraining: 'http://flow.procmate.com/flow/interfaces/entity_classification_training',
+  interfaceService: 'https://flow.procmate.com/flow/interfaces',
+  updateClassifierTraining : 'https://flow.procmate.com/flow/interfaces/auto_decorate_training',
+  updateIntentTraining: 'https://flow.procmate.com/flow/interfaces/intent_classification_training',
+  updateEntityTraining: 'https://flow.procmate.com/flow/interfaces/entity_classification_training',
 
   // Flow
-  server: 'http://flow.procmate.com/flow/console/',
-  autourl:'http://chat.procmate.com/#/pg/ch/cnv/',
+  server: 'https://flow.procmate.com/flow/console/',
+  autourl:'https://chat.procmate.com/#/pg/ch/cnv/',
 
-  autoworkbench: 'http://workbench.automatapi.com/#/wb/',
+  autoworkbench: 'https://workbench.automatapi.com/#/wb/',
   autoworkbenchdisplaybar: '?displaySideBar=false',
 
   stateinsight: 'state/insight/',
@@ -101,7 +101,7 @@ export const environment = {
 
 
   // auto
-  autoServer: 'http://flow.procmate.com/flow/auto/',
+  autoServer: 'https://flow.procmate.com/flow/auto/',
   episodelisturl: 'load/episodes?query=',
   episodebyidurl: 'load/episode?query=',
   messagelisturl: 'load/messages?query=',
@@ -130,7 +130,7 @@ export const environment = {
   flowsearch: '/api/search/flow',
 
   // Analytics
-  reportservice: 'http://flow.procmate.com/flow/report',
+  reportservice: 'https://flow.procmate.com/flow/report',
   sendReportUrl: '/reports/analyticsreport/sendreport',
   scheduleAnalyticsReport: '/reports/analyticsreport/schedulereport',
   getAnalyticsReports: "/reports/analyticsreport",
@@ -153,7 +153,7 @@ export const environment = {
   businessObjectPredictUrl: '/automatons/businessobject/predict',
 
   //Dashboard
-  dashboardServer: 'http://flow.procmate.com/flow/dashboard/',
+  dashboardServer: 'https://flow.procmate.com/flow/dashboard/',
   dashboardsummary:'auto/dashboard_summary',
   episodetimeline:'auto/episode_timeline',
   intentcount:'auto/intent_count',
@@ -169,7 +169,7 @@ export const environment = {
   statetransactionvalue:'flow/state_transaction_value',
 
   //Dashboard from interfaces
-  dashboardinterface: 'http://flow.procmate.com/flow/interfaces/dashboard',
+  dashboardinterface: 'https://flow.procmate.com/flow/interfaces/dashboard',
 
   //Following APIs path - To be used in conjunction with interfaceService property
   crudFunction: '/crud',
@@ -184,10 +184,10 @@ export const environment = {
   businessFilterDataPonitsGraphData: 'businessactivitymanagement/datapoint/graphdata',
 
   //python project in api-utils ondemandreport project
-  sendReportCSV: 'http://flow.procmate.com/flow/report/reports/generatereport',
+  sendReportCSV: 'https://flow.procmate.com/flow/report/reports/generatereport',
 
   //Vocabulary
-  vocabulary : 'http://flow.procmate.com/flow/interfaces/vocabulary',
+  vocabulary : 'https://flow.procmate.com/flow/interfaces/vocabulary',
 
   // USP
   uspsearch: '/api/usp/relevancesearch',
