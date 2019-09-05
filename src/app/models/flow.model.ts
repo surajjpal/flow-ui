@@ -201,6 +201,7 @@ export class StateModel {
   documentEvalExp: string;
   converseRequestExp: string;
   taskValidations: TaskValidation[];
+  mwRouteCd:string;
 
 
   constructor() {
@@ -235,6 +236,7 @@ export class StateModel {
     this.documentEvalExp = null;
     this.converseRequestExp = null;
     this.taskValidations = [];
+    this.mwRouteCd = '';
   }
 }
 

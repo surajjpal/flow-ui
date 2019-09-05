@@ -241,6 +241,14 @@
                                           </option>
                                     </select>
                               </div>
+                              <div class="form-group" *ngIf="isStateRouteCompatible()">
+                                    <label for="selectRoute">Select Route</label>
+                                    <select multiple="true" class="selectpicker form-control" required id="selecRoute" title="Choose Route" [(ngModel)]="tempState.mwRouteCd"
+                                          name="routeId">
+                                          <option *ngFor="let route of mwRouteList" [ngValue]="route.routeCd">{{route.routeCd}}
+                                          </option>
+                                    </select>
+                              </div>
 
                               <div *ngIf="isStateConnectorCompatible() && tempState.connectorConfigList && tempState.connectorConfigList.length > 0">
                                     <div class="tab-content">
