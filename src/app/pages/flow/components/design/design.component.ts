@@ -36,6 +36,8 @@ import { DataModelService } from '../../../../services/setup.service';
 import { DataModel, Field, ValidatorInstance, ExtractorInstance, Entity } from '../../../../models/datamodel.model';
 import { AgentService } from '../../../../services/agent.service';
 import { Agent } from '../../../../models/agent.model';
+import { MWRouteConfig } from 'app/models/mwroute.model';
+import { MWRouteService } from 'app/services/mwroute.service';
 @Component({
   selector: 'api-flow-design',
   templateUrl: './design.component.html',
@@ -160,6 +162,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   entityRedirectWarning:string;
   entityRedirect:boolean;
 
+  //Routes
+  mwRouteList: MWRouteConfig[];
 
   virtualAgentList:Agent[];
   selectedVirtualAgents:string[];
@@ -171,6 +175,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   private subscriptionTimerUnit: Subscription;
   private subscriptionConConfig: Subscription;
   private agentSubscription: Subscription;
+  private subscriptionFetchRoute: Subscription;
 
   constructor(
     private router: Router,
@@ -183,7 +188,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     private fileService: FileService,
     private alertService: AlertService,
     private agentService: AgentService,
-    private dataModelService: DataModelService
+    private dataModelService: DataModelService,
+    private mwRouteService: MWRouteService
   ) {
     window['flowComponentRef'] = { component: this, zone: zone };
 
@@ -262,6 +268,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.getConList();
     this.getDataModelList();
     this.fetchAgents();
+    this.geRoutesLookup();
     var graphLoad = false;
     if (!this.graphObject || this.graphObject === null) {
       this.loadGraphObject();
@@ -355,6 +362,18 @@ export class DesignComponent implements OnInit, OnDestroy {
 
         }
       });
+  }
+
+  geRoutesLookup() {
+    this.subscriptionFetchRoute = this.mwRouteService.fetch().subscribe(
+      result => {
+          if (result && result.length > 0) {
+              this.mwRouteList = result;
+          }
+      }, error => {
+
+      }
+  );
   }
 
   getAllConnectorInfos(graphLoad: boolean) {
@@ -781,7 +800,6 @@ export class DesignComponent implements OnInit, OnDestroy {
 
     if (this.isStateConverseCompatible()) {
       if (this.selectedVirtualAgents.length > 0) {
-        console.log(this.selectedVirtualAgents);
         this.tempState.virtualAgentId = this.selectedVirtualAgents[0];
       }
       
@@ -869,6 +887,11 @@ export class DesignComponent implements OnInit, OnDestroy {
     // TODO: improve the mechanism to differentiate Rule State with other states
     return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
       && this.tempState.entryActionList.includes('ConverseStateEntryAction');
+  }
+  isStateRouteCompatible() {
+    // TODO: improve the mechanism to differentiate Rule State with other states
+    return this.tempState && this.tempState.entryActionList && this.tempState.entryActionList.length > 0
+      && this.tempState.entryActionList.includes('RouteStateEntryAction');
   }
 
   addRule() {
