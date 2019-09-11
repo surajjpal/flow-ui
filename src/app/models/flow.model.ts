@@ -218,6 +218,7 @@ export class StateModel {
   converseRequestExp: string;
   taskValidations: TaskValidation[];
   dataPointAccessList: DataPointAccess[];
+  mwRouteCd:string;
 
 
   constructor() {
@@ -253,6 +254,7 @@ export class StateModel {
     this.converseRequestExp = null;
     this.taskValidations = [];
     this.dataPointAccessList = [];
+    this.mwRouteCd = '';
   }
 }
 
