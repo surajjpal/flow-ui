@@ -376,6 +376,12 @@
 																				<label>
 																						<b>{{ dataPoint.dataPointLabel }}: </b>
 																				</label>
+																				<div *ngIf="isDataPointDisabled(dataPoint, assignedTaskDdetails) && dataPoint.dataType != 'MULTI_SELECT' && dataPoint.dataType != 'ARRAY'" >
+																					{{ assignedTaskDdetails.parameters[dataPoint.dataPointName] }}
+																				</div>
+																				<div *ngIf="isDataPointDisabled(dataPoint, assignedTaskDdetails) && (dataPoint.dataType === 'MULTI_SELECT' || dataPoint.dataType === 'ARRAY')" >
+																					{{ getMultiSelectAndArrayValue(assignedTaskDdetails.parameters[dataPoint.dataPointName]) }}
+																				</div>
 																				<input *ngIf="dataPoint.dataType === 'NUMBER'" type="number"
 																						class="form-control col-md-12 col-sm-12"
 																						[title]="dataPoint.description"
@@ -383,18 +389,19 @@
 																						[(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
 																						name="parameters[dataPoint.dataPointName]"
 																						onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
-																				<input *ngIf="dataPoint.dataType === 'STRING'" type="text"
+																				<input *ngIf="!isDataPointDisabled(dataPoint, assignedTaskDdetails) && dataPoint.dataType === 'STRING'" type="text"
 																						class="form-control" required
 																						[placeholder]="dataPoint.description"
 																						[(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
 																						name="parameters[dataPoint.dataPointName]" />
-																				<textarea *ngIf="dataPoint.dataType === 'TEXT'" rows="5"
+																				<textarea *ngIf="!isDataPointDisabled(dataPoint, assignedTaskDdetails) && dataPoint.dataType === 'TEXT'" rows="5"
 																						class="form-control" required
 																						[placeholder]="dataPoint.description"
 																						[(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
-																						name="parameters[dataPoint.dataPointName]">
+																						name="parameters[dataPoint.dataPointName]"
+																						>
 																								</textarea>
-																				<select *ngIf="dataPoint.dataType === 'BOOLEAN'"
+																				<select *ngIf="!isDataPointDisabled(dataPoint, assignedTaskDdetails) && dataPoint.dataType === 'BOOLEAN'"
 																						class="selectpicker form-control col-md-12 col-sm-12"
 																						[title]="dataPoint.description"
 																						[(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
@@ -402,7 +409,7 @@
 																						<option [ngValue]="true">True</option>
 																						<option [ngValue]="false">False</option>
 																				</select>
-																				<select *ngIf="dataPoint.dataType === 'SINGLE_SELECT'"
+																				<select *ngIf="!isDataPointDisabled(dataPoint, assignedTaskDdetails) && dataPoint.dataType === 'SINGLE_SELECT'"
 																						class="selectpicker form-control col-md-12 col-sm-12"
 																						[title]="dataPoint.description"
 																						[(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"
@@ -410,7 +417,7 @@
 																						<option *ngFor="let choice of dataPoint.inputSource"
 																								[ngValue]="choice">{{choice}}</option>
 																				</select>
-																				<select *ngIf="dataPoint.dataType === 'MULTI_SELECT'"
+																				<select *ngIf="!isDataPointDisabled(dataPoint, assignedTaskDdetails) && dataPoint.dataType === 'MULTI_SELECT'"
 																						multiple="true"
 																						class="selectpicker form-control col-md-12 col-sm-12"
 																						[title]="dataPoint.description"
@@ -419,7 +426,7 @@
 																						<option *ngFor="let choice of dataPoint.inputSource"
 																								[ngValue]="choice">{{choice}}</option>
 																				</select>
-																				<tag-input *ngIf="dataPoint.dataType === 'ARRAY'"
+																				<tag-input *ngIf="!isDataPointDisabled(dataPoint, assignedTaskDdetails) && dataPoint.dataType === 'ARRAY'"
 																						class="custom-input-tag-border form-control col-md-12 col-sm-12"
 																						[title]="dataPoint.description"
 																						[(ngModel)]="assignedTaskDdetails.parameters[dataPoint.dataPointName]"

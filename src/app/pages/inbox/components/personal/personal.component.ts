@@ -11,7 +11,7 @@ import { StateService, DataCachingService } from '../../../../services/inbox.ser
 import { BaThemeSpinner } from '../../../../theme/services';
 import { UserHierarchy, User } from '../../../../models/user.model';
 import { FetchUserService, AllocateTaskToUser } from '../../../../services/userhierarchy.service';
-import { GraphObject, DataPoint, StateModel, ManualAction, StateInfoModel } from '../../../../models/flow.model';
+import { GraphObject, DataPoint, StateModel, ManualAction, StateInfoModel, DataPointAccess } from '../../../../models/flow.model';
 import { UniversalUser } from 'app/services/shared.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { environment } from '../../../../../environments/environment';
@@ -838,13 +838,49 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
           }
           else {
-            dataPoints.push(data);
+            if (!this.toBeDisplayOrNot(data, selectedTask)) {
+              dataPoints.push(data);
+            }
           }
 
         }
       }
     }
     return dataPoints;
+  }
+
+  toBeDisplayOrNot(dataPoint: DataPoint, selectedTask: State) {
+    if (this.graphObjects.get(selectedTask.stateMachineInstanceModelId) != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId).dataPointConfigurationList.length > 0) {
+      if (this.graphObjects.get(selectedTask.stateMachineInstanceModelId).states) {
+        for (let state of this.graphObjects.get(selectedTask.stateMachineInstanceModelId).states) {
+          if (state.stateCd == selectedTask.stateCd && state.dataPointAccessList) {
+            for (let dataAccess of state.dataPointAccessList) {
+              //console.log(dataAccess.dataPointName + " " + dataAccess.hide);
+              if (dataAccess.dataPointName != null && dataPoint.dataPointName != null && dataAccess.dataPointName == dataPoint.dataPointName) {
+                return dataAccess.hide;
+              }
+            }    
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  isDataPointDisabled(dataPoint: DataPoint, selectedTask: State) {
+    if (this.graphObjects != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId) != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId).states) {
+      for (let state of this.graphObjects.get(selectedTask.stateMachineInstanceModelId).states) {
+        if (state.stateCd == selectedTask.stateCd) {
+          for (let dataAccess of state.dataPointAccessList) {
+            //console.log(dataAccess.dataPointName + " " + dataAccess.hide);
+            if (dataAccess.dataPointName != null && dataPoint.dataPointName != null && dataAccess.dataPointName == dataPoint.dataPointName) {
+              return !dataAccess.writeAccess;
+            }
+          }    
+        }
+      }
+    }
+    return false;
   }
 
   getStatusList(selectedTask: State) {
@@ -1521,6 +1557,16 @@ export class PersonalComponent implements OnInit, OnDestroy {
           );
       }
     }
+  }
+
+  getMultiSelectAndArrayValue(value) {
+    if (!value) {
+      return null;
+    }
+    if (value instanceof Array) {
+      return value.join(", ")
+    }
+    return value;
   }
 
 }
