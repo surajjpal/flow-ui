@@ -864,13 +864,13 @@ export class PersonalComponent implements OnInit, OnDestroy {
         }
       }
     }
-    return true;
+    return false;
   }
 
   isDataPointDisabled(dataPoint: DataPoint, selectedTask: State) {
     if (this.graphObjects != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId) != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId).states) {
       for (let state of this.graphObjects.get(selectedTask.stateMachineInstanceModelId).states) {
-        if (state.stateCd == selectedTask.stateCd) {
+        if (state.stateCd == selectedTask.stateCd && state.dataPointAccessList) {
           for (let dataAccess of state.dataPointAccessList) {
             //console.log(dataAccess.dataPointName + " " + dataAccess.hide);
             if (dataAccess.dataPointName != null && dataPoint.dataPointName != null && dataAccess.dataPointName == dataPoint.dataPointName) {
