@@ -350,3 +350,13 @@ export class Domain {
     this.formModels = [];
   }
 }
+
+export class DomainLanguage {
+  langCode: string;
+  langName: string;
+
+  constructor(langCode?: string, langName?: string) {
+    this.langCode = langCode ? langCode : '';
+    this.langName = langName ? langName : '';
+  }
+}

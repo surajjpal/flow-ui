@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angul
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
-import { Domain } from '../models/domain.model';
+import { Domain, DomainLanguage } from '../models/domain.model';
 import { environment } from '../../environments/environment';
 import { CRUDOperationInput } from '../models/crudOperationInput.model';
 
@@ -29,6 +29,46 @@ export class DomainService {
       (response: HttpResponse<string[]>) => {
         if (response.body) {
           subject.next(response.body);
+        }
+      },
+      (err: HttpErrorResponse) => {
+        // All errors are handled in ErrorInterceptor, no further handling required
+        // Unless any specific action is to be taken on some error
+
+        subject.error(err);
+      }
+    );
+
+    return subject.asObservable();
+  }
+
+  domainLanguagesLookup(pageNo?: number): Observable<DomainLanguage[]> {
+    const subject = new Subject<DomainLanguage[]>();
+    
+    const url = `${environment.interfaceService + environment.crudFunction}`;
+
+    const crudInput = new CRUDOperationInput();
+    crudInput.payload = new Map<any, any>();
+    crudInput.collection = 'domainLanguage';
+    crudInput.operation = 'READ_ALL';
+    crudInput.page = pageNo ? pageNo : 0;
+    crudInput.pageSize = 50;
+
+    this.httpClient.post<Map<string, DomainLanguage[]>>(
+      url,
+      crudInput,
+      {
+        headers: this.httpHeaders,
+        observe: 'response',
+        reportProgress: true,
+        withCredentials: true
+      }
+    ).subscribe(
+      (response: HttpResponse<Map<string, DomainLanguage[]>>) => {
+        if (response.body && response.body['data']) {
+          subject.next(response.body['data']);
+        } else {
+          subject.next([]);
         }
       },
       (err: HttpErrorResponse) => {

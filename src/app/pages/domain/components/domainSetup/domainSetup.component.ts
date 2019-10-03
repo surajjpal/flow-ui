@@ -8,7 +8,7 @@ import { NgUploaderOptions, UploadedFile } from 'ngx-uploader';
 import { Subscription } from 'rxjs/Subscription';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Domain, Intent, Entity, Goal, GoalStep, Response, Stage, 
-  ResponseData, ResponseOption, Settings, CardData, Model, ModelResponseOption, ModelResponseData } from '../../../../models/domain.model';
+  ResponseData, ResponseOption, Settings, CardData, Model, ModelResponseOption, ModelResponseData, DomainLanguage } from '../../../../models/domain.model';
 
 import { DomainService } from '../../../../services/domain.service';
 import { AlertService, DataSharingService, UniversalUser } from '../../../../services/shared.service';
@@ -62,7 +62,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   isAddFileUploadResponse: boolean;
   modalHeader: string;
   createMode: boolean;
-  languageSource: string[];
+  languageSource: DomainLanguage[];
+  languageCodeMap: any;
   modelKeysSource: string[];
   validationKeysSource: string[];
   stagesSource: Stage[];
@@ -175,7 +176,9 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.createMode = false;
     this.showTags = false;
     this.associatedAgents = [];
-    this.languageSource = ['ENG', 'HIN', 'MAR', 'ID', 'ML', 'ARA'];
+    // this.languageSource = ['ENG', 'HIN', 'MAR', 'ID', 'ML', 'ARA'];
+    this.languageSource = [];
+
     this.operandSource = ['AND', 'OR'];
     this.modelKeysSource = [];
     this.domainUpdate = 'Domain';
@@ -197,6 +200,26 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
     this.stagesSource.push(new Stage('Information Input', 'INFO'));
     this.stagesSource.push(new Stage('Goal Seek', 'GOAL'));
     this.stagesSource.push(new Stage('Summarize', 'CLOSURE'));
+
+    this.languageCodeMap = {
+      "ARA": "Arabic",
+      "BNG": "Bangla",
+      "ENG": "English",
+      "GUJ": "Gujarati",
+      "HIN": "Hindi",
+      "ID": "Bahasa",
+      "KND": "Kannada",
+      "MAR": "Marathi",
+      "ML": "Malayalam",
+      "ODI": "Odia",
+      "PUN": "Punjabi",
+      "TML": "Tamil",
+      "TLG": "Telugu"
+    };
+
+    for (const key in this.languageCodeMap) {
+      this.languageSource.push(new DomainLanguage(key, this.languageCodeMap[key]));
+    }
 
     this.intentFilterQuery = '';
     this.entityFilterQuery = '';
@@ -236,6 +259,7 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.fetchValidationKeys();
+    // this.fetchDomainLanguages();
     this.increaseVersion = true;
 
     const domain: Domain = this.sharingService.getSharedObject();
@@ -290,6 +314,24 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
 
   fetchValidationKeys() {
     this.validationKeysSource = ['dobdate', 'phonenumber', 'email', 'otp', 'incidentdate', 'incidentdescreption', 'pincode', 'imeiemail', 'incidenttime', 'imei', 'emailmobile'];
+  }
+
+  fetchDomainLanguages(pageNo?: number) {
+    if (!pageNo) {
+      pageNo = 0;
+    }
+
+    this.domainService.domainLanguagesLookup(pageNo).subscribe(
+      domainLanguages => {
+        if (domainLanguages && domainLanguages.length > 0) {
+          this.languageSource = this.languageSource.concat(domainLanguages);
+          this.fetchDomainLanguages(pageNo + 1);
+        }
+      },
+      error => {
+
+      }
+    );
   }
 
   resetFields() {
