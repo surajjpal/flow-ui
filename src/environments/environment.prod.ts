@@ -63,6 +63,7 @@ export const environment = {
   statebyid: 'state/',
   
   route: 'route/',
+  functionalTestCases: 'route/tests',
   timeline: 'statemachine/timeline/',
   updatevirtualassist: 'statemachine/updatevirtualassist',
 

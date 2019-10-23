@@ -1,0 +1,125 @@
+<div class="loadWrapper" *ngIf="progressBarFlag">
+        <div class="sk-circle">
+            <div class="sk-circle1 sk-child"></div>
+            <div class="sk-circle2 sk-child"></div>
+            <div class="sk-circle3 sk-child"></div>
+            <div class="sk-circle4 sk-child"></div>
+            <div class="sk-circle5 sk-child"></div>
+            <div class="sk-circle6 sk-child"></div>
+            <div class="sk-circle7 sk-child"></div>
+            <div class="sk-circle8 sk-child"></div>
+            <div class="sk-circle9 sk-child"></div>
+            <div class="sk-circle10 sk-child"></div>
+            <div class="sk-circle11 sk-child"></div>
+            <div class="sk-circle12 sk-child"></div>
+        </div>
+    </div>
+    <div class="widgets">
+        <div class="row">
+            <ba-card baCardClass="with-scroll" class="data-table-container">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2>Tests</h2>
+                    </div>
+                    <br>
+    
+                    <table class="table table-striped" [mfData]="ftList | universalDataFilter : filterQuery"
+                        #mfActive="mfDataTable" [mfRowsOnPage]="rowsOnPage" [(mfSortBy)]="sortBy"
+                        [(mfSortOrder)]="sortOrder">
+                        <thead>
+                            <tr>
+                                <th colspan="5">
+                                    <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <mfDefaultSorter by="testcaseCd">Test Code</mfDefaultSorter>
+                                </th>
+                                <th>
+                                    <mfDefaultSorter [by]="toInt">Version</mfDefaultSorter>
+                                </th>
+                                <th>
+                                    <mfDefaultSorter by="statusCd">Status</mfDefaultSorter>
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                                
+                                <th>
+                                    Invoke 
+                                </th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let test of mfActive.data" data-toggle="modal">
+                                <td>{{test.routeCd}}</td>
+                                <td>{{test.version}}</td>
+                                <td>{{test.statusCd}}</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-primary" title="Edit"
+                                            (click)="onSelect(test)">
+                                            <i class="ion-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger" title="Delete"
+                                            (click)="deleteTest(test)" data-toggle="modal" data-target="#deleteWarningModal">
+                                            <i class="ion-ios-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                                
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-primary" title="Play" (click)="playTest(test)">
+                                            <i class="ion-play"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <mfBootstrapPaginator [rowsOnPageSet]="[10,25,50,100]"></mfBootstrapPaginator>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </ba-card>
+        </div>
+    </div>
+    
+    
+    <div class="modal fade" id="deleteWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="deleteWarningLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title" id="deleteWarningLabel">
+                        Warning
+                    </h4>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                </div>
+    
+                <!-- Modal Body -->
+                <div class="modal-body" id="modal_body">
+                    Are you sure you want to delete <b>{{selectedTest.testcaseCd}}</b> test?
+                </div>
+    
+                <!-- Modal Footer -->
+                <div class="modal-footer" id="modal_footer">
+                    <button type="button" class="btn btn-default" (click)="selectedTest = null"data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger"
+                        (click)="deleteTest('deleteWarningModal')">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
