@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { FtcConfig } from 'app/models/ftc.model';
 import { FtcService } from 'app/services/ftc.service';
 import { DataSharingService } from 'app/services/shared.service';
+import { FtcFlowService } from 'app/services/ftcflow.service';
 
 @Component({
     selector: 'api-ftc-search',
@@ -22,16 +23,20 @@ export class SearchComponent implements OnInit, OnDestroy {
     // Models to bind with html
     ftList: FtcConfig[];
     selectedTest: FtcConfig = new FtcConfig();
+    //response: string;
 
     progressBarFlag: boolean = false;
 
+
     private subscriptionFetchRoute: Subscription;
+    private subscriptionInvokedRoute: Subscription;
 
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private ftcService: FtcService,
+        private ftcflowService: FtcFlowService,
         private dataSharingService: DataSharingService
     ) {
 
@@ -80,12 +85,34 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
     }
 
+    
     playTest(ftConfig: FtcConfig): void {
-        if (ftConfig) {
+        if (ftConfig) 
+        {
             // this.dataSharingService.setSharedObject(ftConfig);
             // this.router.navigate(['/pg/ftc/ftcd'], { relativeTo: this.route });
     
-        alert(ftConfig.routeCd+" is getting invok");
+            this.subscriptionInvokedRoute = this.ftcflowService.invoke(ftConfig).subscribe(
+                result => {
+
+                     if (result && result['testCaseStatus']=="Passed") 
+                     {
+                        //  this.response= JSON.stringify(result);
+                        //  if(this.response && this.response.length>0)
+                         alert(ftConfig.routeCd+" is invoked successfully");
+                         
+                     }
+                     else
+                     {
+                        alert(ftConfig.routeCd+"failed");
+                     }
+                }, error => {
+    
+                }
+            );
+
+            
+        
         }
     }
 

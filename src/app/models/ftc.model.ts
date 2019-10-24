@@ -1,5 +1,4 @@
 import { BaseModel } from './base.model';
-import { ApiKeyExpressionMap } from './setup.model';
 import { Expression } from './flow.model';
 
 
@@ -42,16 +41,47 @@ export class FTCondition {
     }
 }
 
+export class Conversation {
+    request: string;
+    response: string[];
+
+    constructor(request: string, response: string[]) {
+        this.request = request ? request : "";
+        this.response = response ? response : [];
+    }
+}
+
+export class ConversationConfigMap {
+    agent: string;
+    conversation: Conversation[];
+
+    constructor(agent?: string, conversation?: Conversation[]) {
+        this.agent = agent ? agent : "";
+        this.conversation = conversation ? conversation : [];
+    }
+}
+
+export class ResponseRoute
+{
+    testCaseStatus : string;
+
+    constructor(testCaseStatus?:string)
+    {
+        this.testCaseStatus= testCaseStatus? testCaseStatus :"";
+    }
+}
+
 export class ConversationTestRouteStep extends FtcstepConfig {
     "@type": "ConversationTestRouteStep";
     apiName: string;
-    configMap:string;
+    configMap: ConversationConfigMap;
 
     constructor(baseObject?: FtcstepConfig) {
         super(baseObject);
 
         this["@type"] = "ConversationTestRouteStep";
         this.apiName = '';
+        this.configMap = new ConversationConfigMap();
     }
 }
 

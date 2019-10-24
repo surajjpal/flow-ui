@@ -6,7 +6,7 @@ declare var closeModal: any;
 
 import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import {
-    FtcConfig, ConversationTestRouteStep, DelayRouteStep, VerifyRouteStep, FtcstepConfig
+    FtcConfig, ConversationTestRouteStep, DelayRouteStep, VerifyRouteStep, FtcstepConfig, ConversationConfigMap
 } from 'app/models/ftc.model';
 import { ApiKeyExpressionMap, MVELObject } from 'app/models/setup.model';
 import { GraphService } from 'app/services/flow.service';
@@ -26,6 +26,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     readOnly: boolean = false;
     ftcConfig: FtcConfig;
     tempFtcConfig: FtcConfig;
+    tempConfig: string;
     routeStep: ConversationTestRouteStep | DelayRouteStep | VerifyRouteStep = null;
    // branchCondition: MWCondition = null;
    // parentChoiceRouteStep: ChoiceRouteStep;
@@ -131,6 +132,10 @@ export class DesignComponent implements OnInit, OnDestroy {
             this.mode = 'UPDATE';
             this.routeStep = this.typeCastRouteStep(this.sourceFtcRouteArray[this.routeIndex]);
             new showModal('saveRouteStepModal');
+            if(this.routeStep["@type"]=="ConversationTestRouteStep")
+            {
+                this.tempConfig = JSON.stringify((<ConversationTestRouteStep> this.routeStep).configMap);
+            }
         } else {
             this.resetTempFields();
         }
@@ -166,6 +171,21 @@ export class DesignComponent implements OnInit, OnDestroy {
     saveFtcRouteStep() {
         console.log("routeStep", this.routeStep);
         if (this.sourceFtcRouteArray && this.routeStep) {
+            if(this.routeStep["@type"]=="ConversationTestRouteStep")
+            {
+                if(this.tempConfig && this.tempConfig.length>0)
+                {
+                    (<ConversationTestRouteStep> this.routeStep).configMap=JSON.parse(this.tempConfig);
+                   // console.log("configMap in if",(<ConversationTestRouteStep> this.routeStep).configMap);
+                }
+                else
+                {
+                    (<ConversationTestRouteStep> this.routeStep).configMap = new ConversationConfigMap;
+                    //console.log("configMap in else", (<ConversationTestRouteStep> this.routeStep).configMap);
+
+                }
+
+            }
             if (this.mode == "CREATE") {
                 // if (this.branchCondition) {
                  //   this.branchCondition.routeSteps.push(this.routeStep);
@@ -225,6 +245,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         //this.parentChoiceConditionIndex = -1;
         this.sourceFtcRouteArray = null;
         this.sourceFtcRouteStepId = null;
+        this.tempConfig= null;
     }
 
     locateSource(routeSource: FtcstepConfig[], routeStepId: string) {
