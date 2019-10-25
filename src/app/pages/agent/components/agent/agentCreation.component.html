@@ -148,7 +148,7 @@
                 Remove All
               </button>
               <ul class="domain-list">
-                <li *ngFor="let domain of domainSource" [class.selected]="domain === selectedDomain" (click)="onDomainSelect(domain)">
+                <li *ngFor="let domain of domainSource" [class.selected]="selectedDomain && domain._id === selectedDomain._id" (click)="onDomainSelect(domain)">
                   {{domain.name}}
                 </li>
               </ul>
