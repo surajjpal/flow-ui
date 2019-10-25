@@ -221,7 +221,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
 
   fetchLookups() {
     let payload = { "$or": [ {"statusCd":"ACTIVE"}, { "statusCd": { "$exists": false } } ] }
-    this.subscriptionDomain = this.domainService.domainLookup(payload)
+    this.subscriptionDomain = this.domainService.domainLookup(payload, null, null, ["_id", "name"])
       .subscribe(
         domainList => {
           if (domainList) {
@@ -231,6 +231,7 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
               if (this.selectedAgent.domainNameList && this.selectedAgent.domainNameList.length > 0) {
                 for (const domainName of this.selectedAgent.domainNameList) {
                   for (const domain of this.domainSource) {
+                    //console.log(domain.name + " " + domainName);
                     if (domainName === domain.name) {
                       this.addDomain(domain);
                       break;
@@ -330,19 +331,21 @@ export class AgentCreationComponent implements OnInit, OnDestroy {
 
   arrayToString(array: string[]) {
     let arrayString: string = 'none';
-
-    for (let i = 0, len = array.length; i < len; i++) {
-      if (i === 0) {
-        arrayString = '';
+    if (array) {
+      for (let i = 0, len = array.length; i < len; i++) {
+        if (i === 0) {
+          arrayString = '';
+        }
+  
+        arrayString += array[i];
+  
+        if (i < (len - 1)) {
+          arrayString += ', ';
+        }
       }
-
-      arrayString += array[i];
-
-      if (i < (len - 1)) {
-        arrayString += ', ';
-      }
+  
     }
-
+    
     return arrayString;
   }
 
