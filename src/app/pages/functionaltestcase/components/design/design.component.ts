@@ -86,7 +86,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         new designFtcRouteEditor(this.ftcConfig.routeSteps, false);
 
         this.ftConvForm = this.fb.group({
-            'agentId': ['agentId',[Validators.required]],
+            'agentId': [''],
             'conversation': this.fb.array(
                 [
                     this.initX()
@@ -96,7 +96,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
     initX(){
         return this.fb.group({
-            'request':["Request",[Validators.required]],
+            'request':[''],
             'response':this.fb.array([
                 this.initY()
             ])
@@ -104,7 +104,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
     initY(){
         return this.fb.group({
-            'res':['Validators.required']
+            'res':['']
         })
     }
     addX() {

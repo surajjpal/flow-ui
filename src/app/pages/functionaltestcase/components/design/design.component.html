@@ -82,20 +82,23 @@
                         <label class="col-md-12 col-sm-12 col-xs-12" for="conversationTestRouteStepApi">
                            Conversation Config
                         </label>
-                        <input type="text" formControlName="agentId">{{ formErrors.agentId }}
+                        <input type="text" formControlName="agentId" placeholder="agentId">{{ formErrors.agentId }}
                         <div formArrayName="conversation">
                               <div *ngFor="let conv of ftConvForm['controls'].conversation['controls']; let ix=index">
                                     <div formGroupName="{{ix}}" class="conversation">
-                                          <input type="text" formControlName="request">{{ formErrors.conversation[ix].request }}
+                                          <input type="text" formControlName="request" placeholder="request">{{ formErrors.conversation[ix].request }}
+                                          
                                           <div formArrayName="response">
-                                                <div *ngFor="let res of conv['controls'].response['controls']; let iy=index">
-                                                   <input type="text" formControlName="res">{{ formErrors.res }}
-                                                   
+                                                <div *ngFor="let resp of conv['controls'].response['controls']; let iy=index">
+                                                   <div formGroupName="{{iy}}" class="response">
+                                                      <input type="text" formControlName="res">{{ formErrors.conversation[ix].response[iy].res }}
+                                                   </div>
                                                 </div>
                                           </div>
-                                          <span (click)="addY(ix)">Add Response</span>
+                                          <br><br>
+                                          <span class="btn btn-info" (click)="addY(ix)">Add Response</span>
                                     </div>
-                                    <span (click)="addX()">Add Conversation</span>
+                                    <span class="btn btn-info" (click)="addX()">Add Conversation</span>
                               </div>
                         </div>
                         
