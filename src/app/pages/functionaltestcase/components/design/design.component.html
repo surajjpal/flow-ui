@@ -82,26 +82,35 @@
                         <label class="col-md-12 col-sm-12 col-xs-12" for="conversationTestRouteStepApi">
                            Conversation Config
                         </label>
-                        <input type="text" formControlName="agentId" placeholder="agentId">{{ formErrors.agentId }}
-                        <div formArrayName="conversation">
-                              <div *ngFor="let conv of ftConvForm['controls'].conversation['controls']; let ix=index">
-                                    <div formGroupName="{{ix}}" class="conversation">
-                                          <input type="text" formControlName="request" placeholder="request">{{ formErrors.conversation[ix].request }}
-                                          
-                                          <div formArrayName="response">
-                                                <div *ngFor="let resp of conv['controls'].response['controls']; let iy=index">
-                                                   <div formGroupName="{{iy}}" class="response">
-                                                      <input type="text" formControlName="res">{{ formErrors.conversation[ix].response[iy].res }}
+                        <form [formGroup]="ftConvForm">
+                           <input type="text" formControlName="agentId" placeholder="agentId" class="form-control">
+                     
+                           <div formArrayName="conversation" class=" container-fluid">
+                                 <div class="row" *ngFor="let conv of ftConvForm['controls'].conversation['controls']; let ix=index">
+                                    <ng-container formGroupName="{{ix}}">
+                                       <div class="col-md-5"><input type="text" formControlName="request" placeholder="request"></div>
+                                       <div class="col-md-7">
+                                             <ng-container formArrayName="response">
+                                                <div class="col-md-8">
+                                                   <div *ngFor="let resp of conv['controls'].response['controls']; let iy=index">
+                                                         <div formGroupName="{{iy}}">
+                                                            <input type="text" formControlName="res" placeholder="Response">
+                                                         </div>
                                                    </div>
                                                 </div>
-                                          </div>
-                                          <br><br>
-                                          <span class="btn btn-info" (click)="addY(ix)">Add Response</span>
-                                    </div>
-                                    <span class="btn btn-info" (click)="addX()">Add Conversation</span>
-                              </div>
-                        </div>
-                        
+                                                <div class="col-md-4">
+                                                   <span class="btn btn-info" (click)="addY(ix)"><i class="fa fa-plus"></i></span>
+                                                </div>
+                                             </ng-container>
+                                             
+                                       </div>
+                                    </ng-container>
+                     
+                                       <div class="col-md-12"><span class="btn btn-info" (click)="addX()">Add Conversation</span></div>
+                                 </div>
+                           </div>
+                        </form>
+                        {{ this.ftConvForm.value | json }}
                         <textarea class="col-md-12 col-sm-12 col-xs-12 form-control" id="conversationConfigMap"
                            placeholder="Conversation ConfigMap" [(ngModel)]="tempConfig" name="tempConfig">
                         </textarea>
