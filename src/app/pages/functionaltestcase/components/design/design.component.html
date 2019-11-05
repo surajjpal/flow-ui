@@ -48,7 +48,7 @@
             </div>
             <!-- Modal Body -->
             <div class="modal-body">
-               <form *ngIf="routeStep">
+               <div *ngIf="routeStep">
                   <div class="form-group">
                      <label class="col-md-12 col-sm-12 col-xs-12" for="routeStepType">Route Step Type</label>
                      <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required id="routeStepType"
@@ -82,6 +82,23 @@
                         <label class="col-md-12 col-sm-12 col-xs-12" for="conversationTestRouteStepApi">
                            Conversation Config
                         </label>
+                        <input type="text" formControlName="agentId">{{ formErrors.agentId }}
+                        <div formArrayName="conversation">
+                              <div *ngFor="let conv of ftConvForm['controls'].conversation['controls']; let ix=index">
+                                    <div formGroupName="{{ix}}" class="conversation">
+                                          <input type="text" formControlName="request">{{ formErrors.conversation[ix].request }}
+                                          <div formArrayName="response">
+                                                <div *ngFor="let res of conv['controls'].response['controls']; let iy=index">
+                                                   <input type="text" formControlName="res">{{ formErrors.res }}
+                                                   
+                                                </div>
+                                          </div>
+                                          <span (click)="addY(ix)">Add Response</span>
+                                    </div>
+                                    <span (click)="addX()">Add Conversation</span>
+                              </div>
+                        </div>
+                        
                         <textarea class="col-md-12 col-sm-12 col-xs-12 form-control" id="conversationConfigMap"
                            placeholder="Conversation ConfigMap" [(ngModel)]="tempConfig" name="tempConfig">
                         </textarea>
@@ -211,9 +228,9 @@
                         placeholder="Mvel Expression" [(ngModel)]="routeStep.mvelExpression" name="mvelExpression" />
                </div>                  
                
-               </ng-container>
+                  </ng-container>
 
-               </form>
+               </div>
             </div>
    
             <!-- Modal Footer -->

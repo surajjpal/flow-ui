@@ -15,6 +15,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FtcService } from 'app/services/ftc.service';
 import { DataSharingService } from 'app/services/shared.service';
+import { FormBuilder, FormGroup, FormArray, FormControl,Validators } from '@angular/forms';
 
 @Component({
     selector: 'api-ftc-design',
@@ -61,13 +62,16 @@ export class DesignComponent implements OnInit, OnDestroy {
     ];
     readonly sourceOperands: string[] = ['AND', 'OR'];
 
+    ftConvForm: FormGroup;
+
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         private zone: NgZone,
         private graphService: GraphService,
         private ftcService: FtcService,
-        private dataSharingService: DataSharingService
+        private dataSharingService: DataSharingService,
+        private fb: FormBuilder
     ) {
         window['ftcrouteComponentRef'] = { component: this, zone: zone };
     }
@@ -80,8 +84,39 @@ export class DesignComponent implements OnInit, OnDestroy {
         }
 
         new designFtcRouteEditor(this.ftcConfig.routeSteps, false);
+
+        this.ftConvForm = this.fb.group({
+            'agentId': ['agentId',[Validators.required]],
+            'conversation': this.fb.array(
+                [
+                    this.initX()
+                ]
+            )
+          })
+    }
+    initX(){
+        return this.fb.group({
+            'request':["Request",[Validators.required]],
+            'response':this.fb.array([
+                this.initY()
+            ])
+        })
+    }
+    initY(){
+        return this.fb.group({
+            'res':['Validators.required']
+        })
+    }
+    addX() {
+    const control = <FormArray>this.ftConvForm.controls['conversation'];
+    control.push(this.initX());
     }
 
+
+    addY(ix) {
+    const control = (<FormArray>this.ftConvForm.controls['conversation']).at(ix).get('response') as FormArray;
+    control.push(this.initY());
+    }
     ngOnDestroy() {
         window['ftcrouteComponentRef'] = null;
 
