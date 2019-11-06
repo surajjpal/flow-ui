@@ -19,13 +19,16 @@ export class SearchComponent implements OnInit, OnDestroy {
     rowsOnPage = 10;
     sortBy = 'testcaseCd';
     sortOrder = 'asc';
+    
 
     // Models to bind with html
     ftList: FtcConfig[];
     selectedTest: FtcConfig = new FtcConfig();
+    
     //response: string;
 
     progressBarFlag: boolean = false;
+    testResult : boolean = false;
 
 
     private subscriptionFetchRoute: Subscription;
@@ -64,8 +67,25 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
     }
 
+    disableTest(modalId: string): void {
+        if (this.selectedTest) {
+
+        
+            // this.subscriptionFetchRoute = this.mwRouteService.delete().subscribe(
+            //     result => {
+            //         this.fetchRoutes();
+            //     }, error => {
+    
+            //     }
+            // );
+        }
+
+        //new closeModal(modalId);
+    }
     deleteTest(modalId: string): void {
         if (this.selectedTest) {
+
+            this.selectedTest.statusCd
             // this.subscriptionFetchRoute = this.mwRouteService.delete().subscribe(
             //     result => {
             //         this.fetchRoutes();
@@ -100,11 +120,13 @@ export class SearchComponent implements OnInit, OnDestroy {
                         //  this.response= JSON.stringify(result);
                         //  if(this.response && this.response.length>0)
                          alert(ftConfig.routeCd+" is invoked successfully");
+                         this.testResult= true;
                          
                      }
                      else
                      {
                         alert(ftConfig.routeCd+"failed");
+                        this.testResult = false;
                      }
                 }, error => {
     
@@ -115,8 +137,6 @@ export class SearchComponent implements OnInit, OnDestroy {
         
         }
     }
-
-
     toInt(){
         //please check this
     }

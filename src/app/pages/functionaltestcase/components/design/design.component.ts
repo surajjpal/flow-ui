@@ -6,7 +6,7 @@ declare var closeModal: any;
 
 import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import {
-    FtcConfig, ConversationTestRouteStep, DelayRouteStep, VerifyRouteStep, FtcstepConfig, ConversationConfigMap
+    FtcConfig, ConversationTestRouteStep, DelayRouteStep, VerifyRouteStep, FtcstepConfig, ConversationConfigMap,FlowCreateRouteStep,FlowUpdateRouteStep
 } from 'app/models/ftc.model';
 import { ApiKeyExpressionMap, MVELObject } from 'app/models/setup.model';
 import { GraphService } from 'app/services/flow.service';
@@ -28,7 +28,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     ftcConfig: FtcConfig;
     tempFtcConfig: FtcConfig;
     tempConfig: string;
-    routeStep: ConversationTestRouteStep | DelayRouteStep | VerifyRouteStep = null;
+    routeStep: ConversationTestRouteStep | DelayRouteStep | VerifyRouteStep | FlowCreateRouteStep |FlowUpdateRouteStep = null;
    // branchCondition: MWCondition = null;
    // parentChoiceRouteStep: ChoiceRouteStep;
     //parentChoiceConditionIndex: number = -1;
@@ -58,7 +58,9 @@ export class DesignComponent implements OnInit, OnDestroy {
     readonly sourceFtcRouteStepTypes: string[] = [
         "ConversationTestRouteStep",
         "DelayRouteStep",
-        "VerifyRouteStep"
+        "VerifyRouteStep",
+        "FlowCreateRouteStep",
+        "FlowUpdateRouteStep"
     ];
     readonly sourceOperands: string[] = ['AND', 'OR'];
 
@@ -204,7 +206,10 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
 
     saveFtcRouteStep() {
-        console.log("routeStep", this.routeStep);
+        // console.log("routeStep", this.routeStep);
+
+        
+        this.tempConfig = JSON.stringify(this.restruct(this.ftConvForm.value));
         if (this.sourceFtcRouteArray && this.routeStep) {
             if(this.routeStep["@type"]=="ConversationTestRouteStep")
             {
@@ -249,6 +254,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         // console.log("routeStepConfig", this.ftcConfig.routeSteps);
         new renderFtcRouteGraph(this.ftcConfig.routeSteps, false);
         this.resetTempFields();
+        
     }
 
     discardChanges() {
@@ -318,7 +324,33 @@ export class DesignComponent implements OnInit, OnDestroy {
 
         return false;
     }
-
+    // Restructure response from the dynamic form
+    restruct(res){
+        let retArray = {}
+        for (var prop in res) {
+          // console.log(prop,res[prop]);
+          if (prop === 'agentId') {
+            retArray['agent'] = res[prop];
+          }else if(prop === 'conversation'){
+            retArray['conversation'] =[]
+            res[prop].forEach(element => {
+              let tempLev2 = {}
+              for(var convProp in element){
+                if(convProp === 'request'){
+                  tempLev2['request'] = element[convProp]
+                }else{
+                  tempLev2['response'] = []
+                  element[convProp].forEach(el2 => {
+                    tempLev2['response'].push(el2.res);
+                  });
+                }
+              }
+              retArray['conversation'].push(tempLev2);
+            });
+          }
+        }
+        return retArray;
+      }
     onRouteStepTypeChange(newType: string) {
         //this.disableBulkEdit();
 
@@ -329,7 +361,11 @@ export class DesignComponent implements OnInit, OnDestroy {
                 this.routeStep = new DelayRouteStep(this.routeStep);
             } else if (newType == "VerifyRouteStep") {
                 this.routeStep = new VerifyRouteStep(this.routeStep);
-            } 
+            } else if (newType == "FlowCreateRouteStep") {
+                this.routeStep = new FlowCreateRouteStep(this.routeStep);
+            }else if (newType=="FlowUpdateRouteStep"){
+                this.routeStep = new FlowUpdateRouteStep(this.routeStep);
+            }
 
             //if (this.mode && this.mode == "INSERT") {
                 // if (newType == "ChoiceRouteStep") {
@@ -349,7 +385,11 @@ export class DesignComponent implements OnInit, OnDestroy {
                 return <DelayRouteStep>routeStep;
             } else if (routeStep["@type"] == "VerifyRouteStep") {
                 return <VerifyRouteStep>routeStep;
-             }// else if (routeStep["@type"] == "ConnectorRouteStep") {
+            }else if (routeStep["@type"] == "FlowCreateRouteStep") {
+                return <FlowCreateRouteStep>routeStep;
+            }else if (routeStep["@type"] == "FlowUpdateRouteStep") {
+                return <FlowUpdateRouteStep>routeStep;
+            }// else if (routeStep["@type"] == "ConnectorRouteStep") {
             //     return <ConnectorRouteStep>routeStep;
             // } else if (routeStep["@type"] == "RuleRouteStep") {
             //     return <RuleRouteStep>routeStep;

@@ -86,20 +86,20 @@
                            <input type="text" formControlName="agentId" placeholder="agentId" class="form-control">
                      
                            <div formArrayName="conversation" class=" container-fluid">
-                                 <div class="row" *ngFor="let conv of ftConvForm['controls'].conversation['controls']; let ix=index">
+                                 <div class="row-fluid" *ngFor="let conv of ftConvForm['controls'].conversation['controls']; let ix=index">
                                     <ng-container formGroupName="{{ix}}">
-                                       <div class="col-md-5"><input type="text" formControlName="request" placeholder="request"></div>
+                                       <div class="col-md-5"><input type="text" formControlName="request" placeholder="request" class="form-control"></div>
                                        <div class="col-md-7">
                                              <ng-container formArrayName="response">
                                                 <div class="col-md-8">
                                                    <div *ngFor="let resp of conv['controls'].response['controls']; let iy=index">
                                                          <div formGroupName="{{iy}}">
-                                                            <input type="text" formControlName="res" placeholder="Response">
+                                                            <input type="text" formControlName="res" placeholder="Response" class="form-control">
                                                          </div>
                                                    </div>
                                                 </div>
                                                 <div class="col-md-4">
-                                                   <span class="btn btn-info" (click)="addY(ix)"><i class="fa fa-plus"></i></span>
+                                                   <span class="btn btn-primary" (click)="addY(ix)"><i class="fa fa-plus"></i></span>
                                                 </div>
                                              </ng-container>
                                              
@@ -110,7 +110,7 @@
                                  </div>
                            </div>
                         </form>
-                        {{ this.ftConvForm.value | json }}
+                        <!-- {{ this.ftConvForm.value | json }} -->
                         <textarea class="col-md-12 col-sm-12 col-xs-12 form-control" id="conversationConfigMap"
                            placeholder="Conversation ConfigMap" [(ngModel)]="tempConfig" name="tempConfig">
                         </textarea>
@@ -162,76 +162,6 @@
 
                            </select>
                         </div>
-                     <!-- 
-                     <div id="ruleAccordion" role="tablist" aria-multiselectable="true">
-                        <div class="panel card">
-                           <div id="ruleTabHeader" class="card-header" heightStyle="content" role="tab">
-                              <h5 class="mb-0">
-                                 <a data-toggle="collapse" data-parent="#ruleAccordion" href="#ruleCollapse"
-                                    aria-expanded="true" aria-controls="ruleCollapse">
-                                    Rule Expressions
-                                 </a>
-                              </h5>
-                           </div>
-                           <div id="ruleCollapse" class="collapse show" role="tabpanel" aria-labelledby="ruleTabHeader">
-                              <div class="card-block">
-                                 <table class="table" [mfData]="routeStep.mvelExpression" #mfRuleTable="mfDataTable"
-                                    [mfRowsOnPage]="5">
-                                    <thead>
-                                       <tr>
-                                          <th>Action</th>
-                                          <th>Key to save Result</th>
-                                          <th>Expression</th>
-                                       </tr>
-                                    </thead>
-                                    <tbody>
-                                       <tr *ngFor="let rule of mfRuleTable.data">
-                                          <td>
-                                             <button type="button" class="btn btn-danger" title="Delete"
-                                                (click)="removeFromList(rule, routeStep.mvelExpression)">
-                                                <i class="ion-close-round"></i>
-                                             </button>
-                                          </td>
-                                          <td>
-                                             <input type="text" class="form-control" placeholder="Key" [value]="rule.key"
-                                                (input)="rule.key = $event.target.value">
-                                          </td>
-                                          <td>
-                                             <input type="text" class="form-control" placeholder="Expression"
-                                                [value]="rule.expression"
-                                                (input)="rule.expression = $event.target.value" />
-                                          </td>
-                                          
-                                          <td>
-                                             <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                data-target="#mvelEditModal" data-backdrop="static" data-keyboard="false"
-                                                (click)="expandRule(rule)">Expand</button>
-                                              
-                                                data-toggle="modal"
-                                                data-target="#mvelEditModal" 
-                                              
-                                          </td>
-                                          
-                                       </tr>
-                                    </tbody>
-                                    <tfoot>
-                                       <tr>
-                                          <td colspan="2">
-                                             <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25,50,100]">
-                                             </mfBootstrapPaginator>
-                                          </td>
-                                          <td colspan="1" style="text-align: right;">
-                                             <button type="button" class="btn btn-primary" (click)="addRule()">Add
-                                                Rule</button>
-                                          </td>
-                                       </tr>
-                                    </tfoot>
-                                 </table>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  -->
                         <div class="form-group">
                               <label class="col-md-12 col-sm-12 col-xs-12" for="verifyRouteStepExpr">
                         Mvel Expression
@@ -240,6 +170,63 @@
                         placeholder="Mvel Expression" [(ngModel)]="routeStep.mvelExpression" name="mvelExpression" />
                </div>                  
                
+                  </ng-container>
+
+               <!-- FlowCreateRouteStep fields -->
+               <ng-container *ngIf="routeStep['@type'] == 'FlowCreateRouteStep'">
+                     <div class="form-group">
+                        <label class="col-md-12 col-sm-12 col-xs-12" for="flowCreateMachineType">
+                           Matchine Type
+                        </label>
+                        <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="flowCreateMachineType"
+                           placeholder="Matchine Type" [(ngModel)]="routeStep.machineType" name="machineType" />
+                     </div>
+                     <!--
+                     <div class="form-group">
+                           <label class="col-md-12 col-sm-12 col-xs-12" for="flowCreateEntityId">
+                              Entity Id
+                           </label>
+                           <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="flowCreateEntityId"
+                              placeholder="Entity Id" [(ngModel)]="routeStep.entityId" name="entityId" />
+                       </div>
+                     -->
+                       <div class="form-group">
+                           <label class="col-md-12 col-sm-12 col-xs-12" for="flowCreatePayload">
+                              Payload
+                           </label>
+                           <textarea class="col-md-12 col-sm-12 col-xs-12 form-control" id="flowCreatePayload"
+                              placeholder="Payload" [(ngModel)]="routeStep.payload" name="payload">
+                           </textarea>
+                       </div>
+
+                  </ng-container>
+
+                  <!-- FlowUpdateRouteStep fields -->
+               <ng-container *ngIf="routeStep['@type'] == 'FlowUpdateRouteStep'">
+                     <div class="form-group">
+                        <label class="col-md-12 col-sm-12 col-xs-12" for="flowUpdateMachineType">
+                           Matchine Type
+                        </label>
+                        <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="flowUpdateMachineType"
+                           placeholder="Matchine Type" [(ngModel)]="routeStep.machineType" name="machineType" />
+                     </div>
+                     <!--
+                     <div class="form-group">
+                           <label class="col-md-12 col-sm-12 col-xs-12" for="flowUpdateEntityId">
+                              Entity Id
+                           </label>
+                           <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="flowUpdateEntityId"
+                              placeholder="Entity Id" [(ngModel)]="routeStep.entityId" name="entityId" />
+                       </div>
+                     -->
+                       <div class="form-group">
+                           <label class="col-md-12 col-sm-12 col-xs-12" for="flowUpdatePayload">
+                              Payload
+                           </label>
+                           <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="flowUpdatePayload"
+                              placeholder="Payload" [(ngModel)]="routeStep.payload" name="payload" />
+                       </div>
+
                   </ng-container>
 
                </div>

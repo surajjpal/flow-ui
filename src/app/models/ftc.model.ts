@@ -3,7 +3,7 @@ import { Expression } from './flow.model';
 
 
 export abstract class FtcstepConfig {
-    "@type": "ConversationTestRouteStep" | "DelayRouteStep" | "VerifyRouteStep";
+    "@type": "ConversationTestRouteStep" | "DelayRouteStep" | "VerifyRouteStep" | "FlowCreateRouteStep" | "FlowUpdateRouteStep";
    routeStepId: string;
    routeStepType: string;
 
@@ -117,6 +117,41 @@ export class VerifyRouteStep extends FtcstepConfig {
     }
 }
 
+export class FlowCreateRouteStep extends FtcstepConfig {
+    "@type": "FlowCreateRouteStep";
+    machineType: string;
+    entityId: string;
+    asyncRouteDsl: string;
+    payload: string;
+    
+    constructor(baseObject?: FtcstepConfig) {
+        super(baseObject);
+
+        this["@type"] = "FlowCreateRouteStep";
+        this.machineType ='';
+        this.entityId='';
+        this.asyncRouteDsl='';
+        this.payload='';
+    }
+}
+
+export class FlowUpdateRouteStep extends FtcstepConfig {
+    "@type": "FlowUpdateRouteStep";
+    machineType: string;
+    entityId: string;
+    asyncRouteDsl: string;
+    payload: string;
+    
+    constructor(baseObject?: FtcstepConfig) {
+        super(baseObject);
+
+        this["@type"] = "FlowUpdateRouteStep";
+        this.machineType ='';
+        this.entityId='';
+        this.asyncRouteDsl='';
+        this.payload='';
+    }
+}
 
 export class FtcConfig extends BaseModel {
     routeCd: string; 

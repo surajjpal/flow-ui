@@ -49,7 +49,11 @@
                                 <th>
                                     Invoke 
                                 </th>
-                                
+                                <!--
+                                <th>
+                                    Result
+                                </th>
+                                 -->
                             </tr>
                         </thead>
                         <tbody>
@@ -63,6 +67,12 @@
                                             (click)="onSelect(test)">
                                             <i class="ion-edit"></i>
                                         </button>
+                                        <!--
+                                        <button type="button" class="btn btn-danger" title="Disabled"
+                                            (click)="disableTest(test)">
+                                            <i class="ion-ios-trash"></i>
+                                        </button>
+                                        -->
                                         <button type="button" class="btn btn-danger" title="Delete"
                                             (click)="deleteTest(test)" data-toggle="modal" data-target="#deleteWarningModal">
                                             <i class="ion-ios-trash"></i>
@@ -70,14 +80,21 @@
                                     </div>
                                 </td>
                                 
+                                                               
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-primary" title="Play" (click)="playTest(test)">
+                                        <button type="button" class="btn btn-primary" title="" (click)="playTest(test)">
                                             <i class="ion-play"></i>
                                         </button>
                                     </div>
                                 </td>
-                            
+
+                                <!--
+                                <td>
+                                    <label *ngIf="testResult"> <i class="ion-ios-trash"></i> </label>
+                                    <label *ngIf="!testResult"> <i class="ion-play"></i> </label> 
+                                </td>
+                                -->
                             </tr>
                         </tbody>
                         <tfoot>
@@ -92,7 +109,7 @@
             </ba-card>
         </div>
     </div>
-    
+
     
     <div class="modal fade" id="deleteWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="deleteWarningLabel"
         aria-hidden="true">
