@@ -113,11 +113,18 @@ export class DesignComponent implements OnInit, OnDestroy {
     const control = <FormArray>this.ftConvForm.controls['conversation'];
     control.push(this.initX());
     }
-
-
+    
+    removeX(idx) {
+        const control = (this.ftConvForm).get('conversation') as FormArray;
+        control.removeAt(idx);
+    }
     addY(ix) {
     const control = (<FormArray>this.ftConvForm.controls['conversation']).at(ix).get('response') as FormArray;
     control.push(this.initY());
+    }
+    removeY(idx,idy) {
+        const control = (<FormArray>this.ftConvForm.controls['conversation']).at(idx).get('response') as FormArray;
+        control.removeAt(idy);
     }
     ngOnDestroy() {
         window['ftcrouteComponentRef'] = null;
@@ -168,6 +175,8 @@ export class DesignComponent implements OnInit, OnDestroy {
         if (found) {
             this.mode = 'UPDATE';
             this.routeStep = this.typeCastRouteStep(this.sourceFtcRouteArray[this.routeIndex]);
+            // console.log(this.unstruct((this.routeStep['configMap'])));
+            // this.ftConvForm.patchValue(this.unstruct((this.routeStep['configMap'])));
             new showModal('saveRouteStepModal');
             if(this.routeStep["@type"]=="ConversationTestRouteStep")
             {
@@ -208,8 +217,9 @@ export class DesignComponent implements OnInit, OnDestroy {
     saveFtcRouteStep() {
         // console.log("routeStep", this.routeStep);
 
-        
-        this.tempConfig = JSON.stringify(this.restruct(this.ftConvForm.value));
+        if(!this.tempConfig){
+            this.tempConfig = JSON.stringify(this.restruct(this.ftConvForm.value));
+        }
         if (this.sourceFtcRouteArray && this.routeStep) {
             if(this.routeStep["@type"]=="ConversationTestRouteStep")
             {
@@ -351,6 +361,34 @@ export class DesignComponent implements OnInit, OnDestroy {
         }
         return retArray;
       }
+    unstruct(res){
+        let retArray = {}
+        for (var prop in res) {
+            // console.log(prop,res[prop]);
+            if (prop === 'agent') {
+            retArray['agentId'] = res[prop];
+            }else if(prop === 'conversation'){
+            retArray['conversation'] =[]
+            res[prop].forEach(element => {
+                let tempLev2 = {}
+                for(var convProp in element){
+                if(convProp === 'request'){
+                    tempLev2['request'] = element[convProp]
+                }else{
+                    tempLev2['response'] = []
+                    element[convProp].forEach(el2 => {
+                        let temp = {};
+                        temp['res'] = el2;
+                        tempLev2['response'].push(temp);
+                    });
+                }
+                }
+                retArray['conversation'].push(tempLev2);
+            });
+            }
+        }
+        return retArray;
+    }
     onRouteStepTypeChange(newType: string) {
         //this.disableBulkEdit();
 
