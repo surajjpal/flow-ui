@@ -1,0 +1,341 @@
+<!-- page content -->
+<div>
+      <div class="col-md-12 col-sm-12 col-xs-12">
+         <button type="button" class="btn btn-danger btn-with-icon" style="margin-right: 5px" data-toggle="modal"
+            data-target="#discardWarningModal">
+            <i class="ion-ios-refresh"></i>Discard</button>
+         <button type="button" class="btn btn-success btn-with-icon" style="margin-right: 5px" (click)="saveFtcRouteConfig()"
+            *ngIf="!readOnly">
+            <i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
+         <button type="button" class="btn btn-primary btn-with-icon" style="margin-right: 5px"
+            (click)="prepareDummyFtcRouteConfig()" *ngIf="!readOnly" data-toggle="modal" data-target="#settignsModal">
+            <i class="fa fa-cogs" aria-hidden="true"></i>Settings</button>
+         <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px" (click)="toolsChoice(ZOOM_IN)">
+            <i class="fa fa-search-plus" aria-hidden="true"></i>Zoom In</button>
+         <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
+            (click)="toolsChoice(ZOOM_OUT)">
+            <i class="fa fa-search-minus" aria-hidden="true"></i>Zoom Out</button>
+         <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
+            (click)="toolsChoice(ZOOM_ACTUAL)">
+            <i class="ion-arrow-expand"></i>Zoom Actual</button>
+         <button type="button" class="btn btn-info btn-with-icon" style="margin-right: 5px"
+            (click)="toolsChoice(PRINT_PREVIEW)">
+            <i class="ion-printer"></i>Print Preview</button>
+      </div>
+      <br>
+      <div class="col-md-12 col-sm-12 col-xs-12">
+         <div id="ftcEditorGrid" class="col-md-12 col-sm-12 col-xs-12"
+            style="height:80vh;overflow:hidden;margin-bottom:1px;border-style:solid;border-color:silver;"></div>
+         <div id="ftcOutlineContainer"
+            style="z-index:1;position:absolute;overflow:hidden;top:5px;right:20px;width:120px;height:90px;background:transparent;border-style:solid;border-color:lightgray;">
+         </div>
+      </div>
+   </div>
+   
+   <div class="modal fade" data-backdrop="static" data-keyboard="false" id="saveRouteStepModal" tabindex="-1" role="dialog"
+      attr.aria-labelledby="saveRouteStepModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+         <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+               <h4 class="modal-title" id="saveRouteStepModalLabel">
+                  Functional Test Case Route Step Config
+               </h4>
+               <button type="button" class="btn btn-info" data-dismiss="modal" (click)="resetTempFields()">
+                  <span aria-hidden="true">&times;</span>
+                  <span class="sr-only">Close</span>
+               </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+               <div *ngIf="routeStep">
+                  <div class="form-group">
+                     <label class="col-md-12 col-sm-12 col-xs-12" for="routeStepType">Route Step Type</label>
+                     <select class="col-md-12 col-sm-12 col-xs-12 selectpicker form-control" required id="routeStepType"
+                        title="Choose Route Step Type" (change)="onRouteStepTypeChange($event.target.value)"
+                        [value]="routeStep['@type']" name="@type">
+                        <option *ngFor="let sourceRouteStepType of sourceFtcRouteStepTypes" [value]="sourceRouteStepType">
+                           {{sourceRouteStepType}}</option>
+                     </select>
+                  </div>
+   
+                  
+                  <div class="form-group">
+                     <label class="col-md-12 col-sm-12 col-xs-12" for="routeStepName">
+                        Route Step Name
+                     </label>
+                     <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="routeStepName"
+                        placeholder="Route Step Name" [(ngModel)]="routeStep.routeStepName" name="routeStepName" />
+                  </div> 
+   
+                  <!-- ConversationTestRouteStep fields -->
+                  <ng-container *ngIf="routeStep['@type'] == 'ConversationTestRouteStep'">
+                     <div class="form-group">
+                        <label class="col-md-12 col-sm-12 col-xs-12" for="conversationTestRouteStepApi">
+                           API Name
+                        </label>
+                        <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="conversationTestRouteStepApi"
+                           placeholder="API Name" [(ngModel)]="routeStep.apiName" name="apiName" />
+                     </div>
+                     
+                     <div class="form-group">
+                        <label class="col-md-12 col-sm-12 col-xs-12" for="conversationTestRouteStepApi">
+                           Conversation Config
+                        </label>
+                        <form [formGroup]="ftConvForm">
+                           <input type="text" formControlName="agentId" placeholder="agentId" class="form-control">
+                           
+                           <div formArrayName="conversation" class="container-fluid">
+                                 <div class="row ftcConvContainer" *ngFor="let conv of ftConvForm['controls'].conversation['controls']; let ix=index">
+                                    <ng-container formGroupName="{{ix}}">
+                                       <div class="col-md-5"><input type="text" formControlName="request" placeholder="request" class="form-control" (keyup.enter)="addX()"></div>
+                                       <div class="col-md-7">
+                                             <ng-container formArrayName="response">
+                                                <div class="row">
+                                                   <div class="col-md-8">
+                                                      <div *ngFor="let resp of conv['controls'].response['controls']; let iy=index">
+                                                            <div formGroupName="{{iy}}">
+                                                                  <div class="input-group">
+                                                                        <input type="text" formControlName="res" placeholder="Response" tabindex="-1" (keyup.enter)="addY(ix)" class="form-control respField">
+                                                                     <div class="input-group-append">
+                                                                        <button class="btn btn-danger" type="button" (click)="removeY(ix,iy)"><i class="fa fa-times"></i></button>
+                                                                     </div>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                   </div>
+                                                   <div class="col-md-4">
+                                                      <span class="btn btn-primary" (click)="addY(ix)"><i class="fa fa-plus"></i></span>
+                                                   </div>
+                                                </div>
+                                             </ng-container>
+                                             
+                                       </div>
+                                    </ng-container>
+                     
+                                    <div class="col-md-12"><span class="btn btn-info" (click)="addX()">Add Conversation</span></div>
+                                    <div class="btn btn-danger" style="position: absolute; right: 8px;" (click)="removeX(ix)">Remove</div>
+                                 </div>
+                           </div>
+                        </form>
+                        <!-- {{ this.ftConvForm.value | json }} -->
+                        <textarea class="col-md-12 col-sm-12 col-xs-12 form-control" id="conversationConfigMap"
+                           placeholder="Conversation ConfigMap" [(ngModel)]="tempConfig" name="tempConfig">
+                        </textarea>
+                     </div>
+                  
+                  </ng-container>
+   
+                  <!-- DelayRouteStep fields -->
+                  <ng-container *ngIf="routeStep['@type'] == 'DelayRouteStep'">
+                     <div class="form-group">
+                        <label class="col-md-12 col-sm-12 col-xs-12" for="delayRouteStepDelayTime">
+                           Delay Time
+                        </label>
+                        <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="delayRouteStepDelayTime"
+                           placeholder="Delay Time" [(ngModel)]="routeStep.delayTime" name="delayTime" />
+                     </div>
+                  </ng-container>
+     
+                  <!-- VerifyRouteStep fields -->
+                  <ng-container *ngIf="routeStep['@type'] == 'VerifyRouteStep'">
+                        <div class="form-group">
+                              <label class="col-md-12 col-sm-12 col-xs-12" for="verifyRouteStepMT">
+                                 Machine Type
+                              </label>
+                              <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="verifyRouteStepMT"
+                                 placeholder="MT" [(ngModel)]="routeStep.machineType" name="machineType" />
+                        </div>
+
+                        <div class="form-group">
+                              <label class="col-md-12 col-sm-12 col-xs-12" for="verifyRouteStepSC">
+                                 Sate Code
+                              </label>
+                              <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="verifyRouteStepSC"
+                                 placeholder="State code" [(ngModel)]="routeStep.stateCd" name="stateCd" />
+                        </div>
+
+                        <div class="form-group">
+                              <label class="col-md-12 col-sm-12 col-xs-12" for="verifyRouteStepStatus">
+                                 Satus Code
+                              </label>
+                              <!--
+                              <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="verifyRouteStepStatus"
+                                 placeholder="Status" [(ngModel)]="routeStep.statusCd" name="statusCd" />
+                              -->
+                           <select class="col-md-12 col-sm-12 col-xs-12 form-control" id="verifyRouteStepStatus" 
+                           placeholder="Status" [(ngModel)]="routeStep.statusCd" name="statusCd">
+                              <option value="ACTIVE">Active</option>
+                              <option value="CLOSED">Closed</option>
+
+                           </select>
+                        </div>
+                        <div class="form-group">
+                              <label class="col-md-12 col-sm-12 col-xs-12" for="verifyRouteStepExpr">
+                        Mvel Expression
+                     </label>
+                     <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="verifyRouteStepExpr"
+                        placeholder="Mvel Expression" [(ngModel)]="routeStep.mvelExpression" name="mvelExpression" />
+               </div>                  
+               
+                  </ng-container>
+
+               <!-- FlowCreateRouteStep fields -->
+               <ng-container *ngIf="routeStep['@type'] == 'FlowCreateRouteStep'">
+                     <div class="form-group">
+                        <label class="col-md-12 col-sm-12 col-xs-12" for="flowCreateMachineType">
+                           Matchine Type
+                        </label>
+                        <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="flowCreateMachineType"
+                           placeholder="Matchine Type" [(ngModel)]="routeStep.machineType" name="machineType" />
+                     </div>
+                     <!--
+                     <div class="form-group">
+                           <label class="col-md-12 col-sm-12 col-xs-12" for="flowCreateEntityId">
+                              Entity Id
+                           </label>
+                           <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="flowCreateEntityId"
+                              placeholder="Entity Id" [(ngModel)]="routeStep.entityId" name="entityId" />
+                       </div>
+                     -->
+                       <div class="form-group">
+                           <label class="col-md-12 col-sm-12 col-xs-12" for="flowCreatePayload">
+                              Payload
+                           </label>
+                           <textarea class="col-md-12 col-sm-12 col-xs-12 form-control" id="flowCreatePayload"
+                              placeholder="Payload" [(ngModel)]="routeStep.payload" name="payload">
+                           </textarea>
+                       </div>
+
+                  </ng-container>
+
+                  <!-- FlowUpdateRouteStep fields -->
+               <ng-container *ngIf="routeStep['@type'] == 'FlowUpdateRouteStep'">
+                     <div class="form-group">
+                        <label class="col-md-12 col-sm-12 col-xs-12" for="flowUpdateMachineType">
+                           Matchine Type
+                        </label>
+                        <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="flowUpdateMachineType"
+                           placeholder="Matchine Type" [(ngModel)]="routeStep.machineType" name="machineType" />
+                     </div>
+                     <!--
+                     <div class="form-group">
+                           <label class="col-md-12 col-sm-12 col-xs-12" for="flowUpdateEntityId">
+                              Entity Id
+                           </label>
+                           <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="flowUpdateEntityId"
+                              placeholder="Entity Id" [(ngModel)]="routeStep.entityId" name="entityId" />
+                       </div>
+                     -->
+                       <div class="form-group">
+                           <label class="col-md-12 col-sm-12 col-xs-12" for="flowUpdatePayload">
+                              Payload
+                           </label>
+                           <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="flowUpdatePayload"
+                              placeholder="Payload" [(ngModel)]="routeStep.payload" name="payload" />
+                       </div>
+
+                  </ng-container>
+
+               </div>
+            </div>
+   
+            <!-- Modal Footer -->
+            <div class="modal-footer" id="saveRouteStepModalFooter">
+               <button type="button" class="btn btn-success" id="saveChangesButton" (click)="saveFtcRouteStep()"
+                  data-dismiss="modal">
+                  Save Changes
+               </button>
+            </div>
+         </div>
+      </div>
+   </div>
+   
+   <!-- Modal - Settings -->
+   <div class="modal fade" data-backdrop="static" data-keyboard="false" id="settignsModal" tabindex="-1" role="dialog"
+      attr.aria-labelledby="settingsModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+         <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+               <h4 class="modal-title" id="settingsModalLabel">
+                  Settings
+               </h4>
+               <button type="button" class="btn btn-info" data-dismiss="modal">
+                  <span aria-hidden="true">&times;</span>
+                  <span class="sr-only">Close</span>
+               </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+               <form *ngIf="tempFtcConfig">
+                  <!--<div class="form-group">
+                     <label class="col-md-12 col-sm-12 col-xs-12" for="inputRouteLabel">
+                        Test Case Label
+                     </label>
+                     <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputRouteLabel"
+                        placeholder="Test Case Name" [(ngModel)]="tempFtcConfig.routeLabel" name="routeLabel" />
+                  </div>-->
+                  
+                  <div class="form-group">
+                     <label class="col-md-12 col-sm-12 col-xs-12" for="inputRouteCode">
+                        Route Code
+                     </label>
+                     <input *ngIf="tempFtcConfig._id && tempFtcConfig._id.length > 0" type="text" disabled
+                        class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputRouteCode" placeholder="Route Code"
+                        [value]="tempFtcConfig.routeCd" name="routeCd" />
+                     <input *ngIf="!tempFtcConfig._id || tempFtcConfig._id.length == 0" type="text"
+                        class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputRouteCode" placeholder="Route Code"
+                        [(ngModel)]="tempFtcConfig.routeCd" name="routeCd" />
+                  </div>
+                  
+                  <div class="form-group">
+                     <label class="col-md-12 col-sm-12 col-xs-12" for="inputVersionNumber">
+                        Version Number
+                     </label>
+                     <input type="number" disabled class="col-md-12 col-sm-12 col-xs-12 form-control"
+                        id="inputVersionNumber" placeholder="Version Number" min="0"
+                        onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                        [(ngModel)]="tempFtcConfig.version" name="version" />
+                  </div>
+               </form>
+            </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer" id="settingsModalFooter">
+               <button type="button" class="btn btn-success" id="saveChangesButton" (click)="updateFtcRouteConfig()" data-dismiss="modal">
+                  Save Changes
+               </button>
+            </div>
+         </div>
+      </div>
+   </div>
+   
+   <!-- Expand Rule Modal -->
+   <!-- Discard Warning Modal -->
+   <div class="modal fade" id="discardWarningModal" tabindex="-1" role="dialog" attr.aria-labelledby="discardWarningLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+         <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+               <h4 class="modal-title" id="discardWarningLabel">
+                  Discard Changes
+               </h4>
+               <button type="button" class="btn btn-info" data-dismiss="modal">
+                  <span aria-hidden="true">&times;</span>
+                  <span class="sr-only">Close</span>
+               </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body" id="modal_body">
+               Are you sure you want to discard all the changes you have made?
+            </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer" id="modal_footer">
+               <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+               <button type="button" class="btn btn-danger" data-dismiss="modal"
+                  (click)="discardChanges()">Confirm</button>
+            </div>
+         </div>
+      </div>
+   </div>

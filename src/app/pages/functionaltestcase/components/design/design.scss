@@ -1,0 +1,26 @@
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.modal-lg {
+    max-width: 80% !important;
+}
+.ftcConvContainer{
+    background-color: #fafafa;
+    margin-top: 10px;
+    padding: 5px;
+    border: 1px solid #ececec;
+    border-radius: 3px;
+    .respField{
+     margin-bottom: 4px;   
+    }
+    .input-group{
+        margin-bottom:0px;
+    }
+}

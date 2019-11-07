@@ -26,6 +26,7 @@ export const routes: Routes = [
       { path: 'tsk', loadChildren: './inbox/inbox.module#InboxModule' },
       { path: 'flw', loadChildren: './flow/flow.module#FlowModule' },
       { path: 'mwrt', loadChildren: './mwroute/mwroute.module#MWRouteModule' },
+      { path: 'ftc', loadChildren: './functionaltestcase/ftc.module#FTCModule' },
       { path: 'ent', loadChildren: './entity/entity.module#EntityModule' },
       { path: 'agnt', loadChildren: './agent/agent.module#AgentModule' },
       { path: 'dmn', loadChildren: './domain/domain.module#DomainModule' },

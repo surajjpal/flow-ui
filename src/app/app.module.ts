@@ -43,6 +43,8 @@ import { ErrorInterceptor } from './services/interceptors';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { AngularFontAwesomeModule } from 'angular-font-awesome/angular-font-awesome';
 import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
+import { FtcService } from './services/ftc.service';
+import { FtcFlowService } from './services/ftcflow.service';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -63,7 +65,7 @@ const APP_PROVIDERS = [
   ActivityMonitorService,
   USPService,
   AppState, GlobalState, AuthGuard, AntiAuthGuard, AuthService, AlertService, DataSharingService,DataModelObject, UniversalUser, FileUploaderService, ScrollService,
-  FileService
+  FileService, FtcService, FtcFlowService
 ];
 
 export type StoreType = {

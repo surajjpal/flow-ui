@@ -62,6 +62,9 @@ export const environment = {
     statebyid: 'state/',
   
     route: 'route/',
+    functionalTestCases: 'route/tests',
+    ftcRouteTrigger: 'api/route/',
+
   
     timeline: 'statemachine/timeline/',
     updatevirtualassist: 'statemachine/updatevirtualassist',
