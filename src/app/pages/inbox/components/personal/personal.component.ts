@@ -16,6 +16,7 @@ import { UniversalUser } from 'app/services/shared.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { environment } from '../../../../../environments/environment';
 import { FileService } from 'app/services/setup.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'api-personal',
@@ -111,6 +112,20 @@ export class PersonalComponent implements OnInit, OnDestroy {
   flaggedFetched = false;
   taskDecision: TaskDecision;
 
+  assignedCount:number;
+  unassignedCount:number;
+  aURL='https://flow.automatapi.com/flow/console/state/countbystatusandfolder/ACTIVE,Personal';
+  uaURL='https://flow.automatapi.com/flow/console/state/countbystatusandfolder/ACTIVE,Group';
+  username='mhil@automatapi.com';
+  pass='RQYID2CJ';
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type':  'application/json',
+      'Authorization': 'Basic ' + btoa(this.username+':'+this.pass)
+    })
+  };
+
+
   private subscription: Subscription;
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
@@ -128,7 +143,8 @@ export class PersonalComponent implements OnInit, OnDestroy {
     private fileService: FileService,
     private universalUser: UniversalUser,
     private sanitizer: DomSanitizer,
-    private allocateTaskToUser: AllocateTaskToUser
+    private allocateTaskToUser: AllocateTaskToUser,
+    private http: HttpClient
   ) {
     this.unassignedStates = [];
     this.assignedStates = [];
@@ -158,6 +174,14 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.flaggedTaskPageNumber = 0;
     this.fetchRecords = 10
     // this.fetchData(this.pageNumber, this.fetchRecords);
+    this.getCountAssignedUnassigned(this.TAB_ASSIGNED)
+      .subscribe(data=>{
+        this.assignedCount=data['count']; });
+    this.getCountAssignedUnassigned(this.TAB_UNASSIGNED)
+    .subscribe(data=>{
+      this.unassignedCount=data['count'];});
+      
+
     this.fetchRecordsFor(this.TAB_ASSIGNED, this.assignedStates);
     this.graphObject = this.dataCachingService.getGraphObject();
     if (!this.graphObject) {
@@ -167,6 +191,17 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.getUserList();
     this.getParentUser();
   }
+
+
+  getCountAssignedUnassigned(tabname:string) {
+    if(tabname.toUpperCase()==="ASSIGNED"){
+      return this.http.get(this.aURL,this.httpOptions);
+    }
+    if(tabname.toUpperCase()==="UNASSIGNED"){
+      return this.http.get(this.uaURL,this.httpOptions);
+    }
+  }
+
 
   getUserList() {
 

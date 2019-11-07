@@ -11,11 +11,11 @@
 		<div class="col-3 col-md-3  col-sm-12">
 			<div class="dropdown messageSwitcher">
 				<a class="dropdown-toggle" id="msgType" data-toggle="dropdown" aria-expanded="false">
-						{{message_type}}
+						{{message_type}}({{assignedCount}})
 				</a>
 				<ul class="dropdown-menu top-dropdown-menu" aria-labelledby="msgType">
-						<li class="dropdown-item"><a (click)="fetchRecordsFor(TAB_ASSIGNED, assignedStates)">Assigned</a></li>
-						<li class="dropdown-item"><a (click)="fetchRecordsFor(TAB_UNASSIGNED, unassignedStates)">Unassigned</a></li>
+						<li class="dropdown-item"><a (click)="fetchRecordsFor(TAB_ASSIGNED, assignedStates)">Assigned({{assignedCount}})</a></li>
+						<li class="dropdown-item"><a (click)="fetchRecordsFor(TAB_UNASSIGNED, unassignedStates)">Unassigned({{unassignedCount}})</a></li>
 						<li class="dropdown-item"><a (click)="fetchRecordsFor(TAB_FLAGGED, flaggedStates)">Flagged</a></li>
 				</ul>
 				<div class="explain">
