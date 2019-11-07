@@ -52,6 +52,57 @@ export class StateService {
 
   constructor(private httpClient: HttpClient) { }
 
+
+
+  getCountByAssignedUnassigned(tabname:string): Observable<any> {
+    const subject = new Subject<any>();
+    const assignedurl = `${environment.server + environment.assignedunassignedurl+',Personal'}`;
+    const unassignedurl = `${environment.server + environment.assignedunassignedurl+',Group'}`;
+    if(tabname.toUpperCase()==="ASSIGNED"){
+      this.httpClient.get<number>(
+        assignedurl,
+        {
+          observe: 'response',
+          reportProgress: true,
+          withCredentials: true
+        }
+      ).subscribe(
+        (response: HttpResponse<any>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          subject.error(err);
+        }
+      )
+      return subject.asObservable();
+    }
+
+    if(tabname.toUpperCase()==="UNASSIGNED"){
+      this.httpClient.get<number>(
+        unassignedurl,
+        {
+          observe: 'response',
+          reportProgress: true,
+          withCredentials: true
+        }
+      ).subscribe(
+        (response: HttpResponse<any>) => {
+          if (response.body) {
+            subject.next(response.body);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          subject.error(err);
+        }
+      )
+      return subject.asObservable();
+    }
+  }
+
+
+
   getStatesByStatusAndFolder(status: string, folder: string, pageNumber: any, fetchRecords: any): Observable<State[]> {
     const subject = new Subject<State[]>();
 

@@ -21,6 +21,9 @@ export const environment = {
 
   processauditurl: "http://localhost:5000/api/universalsearch/search/flow",
 
+  // count assigned and unassigned url
+  assignedunassignedurl:'state/countbystatusandfolder/ACTIVE',
+
   // Interfaces
   interfaceService: 'http://108.168.190.82:8080/flow/interfaces',
   updateClassifierTraining: 'http://108.168.190.82:8080/flow/interfaces/auto_decorate_training',

@@ -114,16 +114,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
   assignedCount:number;
   unassignedCount:number;
-  aURL='https://flow.automatapi.com/flow/console/state/countbystatusandfolder/ACTIVE,Personal';
-  uaURL='https://flow.automatapi.com/flow/console/state/countbystatusandfolder/ACTIVE,Group';
-  username='mhil@automatapi.com';
-  pass='RQYID2CJ';
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type':  'application/json',
-      'Authorization': 'Basic ' + btoa(this.username+':'+this.pass)
-    })
-  };
+
 
 
   private subscription: Subscription;
@@ -143,8 +134,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     private fileService: FileService,
     private universalUser: UniversalUser,
     private sanitizer: DomSanitizer,
-    private allocateTaskToUser: AllocateTaskToUser,
-    private http: HttpClient
+    private allocateTaskToUser: AllocateTaskToUser
   ) {
     this.unassignedStates = [];
     this.assignedStates = [];
@@ -174,12 +164,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.flaggedTaskPageNumber = 0;
     this.fetchRecords = 10
     // this.fetchData(this.pageNumber, this.fetchRecords);
-    this.getCountAssignedUnassigned(this.TAB_ASSIGNED)
-      .subscribe(data=>{
-        this.assignedCount=data['count']; });
-    this.getCountAssignedUnassigned(this.TAB_UNASSIGNED)
-    .subscribe(data=>{
-      this.unassignedCount=data['count'];});
+    this.getBindAssignedUnassigned();
       
 
     this.fetchRecordsFor(this.TAB_ASSIGNED, this.assignedStates);
@@ -193,13 +178,13 @@ export class PersonalComponent implements OnInit, OnDestroy {
   }
 
 
-  getCountAssignedUnassigned(tabname:string) {
-    if(tabname.toUpperCase()==="ASSIGNED"){
-      return this.http.get(this.aURL,this.httpOptions);
-    }
-    if(tabname.toUpperCase()==="UNASSIGNED"){
-      return this.http.get(this.uaURL,this.httpOptions);
-    }
+  getBindAssignedUnassigned() {
+    this.stateService.getCountByAssignedUnassigned(this.TAB_ASSIGNED)
+    .subscribe(data=>{
+      this.assignedCount=data['count'];});
+    this.stateService.getCountByAssignedUnassigned(this.TAB_UNASSIGNED)
+    .subscribe(data=>{
+      this.unassignedCount=data['count'];});
   }
 
 

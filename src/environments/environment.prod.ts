@@ -14,6 +14,8 @@ export const environment = {
   publishaccounturl: 'https://flow.automatapi.io/flow/account/publish/',
   unpublishaccounturl: 'https://flow.automatapi.io/flow/account/unpublish/',
 
+  // count assigned and unassigned url
+  assignedunassignedurl:'state/countbystatusandfolder/ACTIVE',
 
   processauditurl: "http://localhost:5000/api/universalsearch/search/flow",
   // Interfaces

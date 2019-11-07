@@ -31,6 +31,10 @@ export const environment = {
   //
   processauditurl: "http://localhost:5000/api/universalsearch/search/flow",
 
+  // count assigned and unassigned url
+  assignedunassignedurl:'state/countbystatusandfolder/ACTIVE',
+  
+
   // Flow
   server: 'http://localhost:8080/flow/console/',
   autoworkbench: 'https://workbench.automatapi.com/#/wb/',
@@ -212,4 +216,6 @@ export const environment = {
   // USP
   uspsearch: '/api/usp/relevancesearch',
   uspselftrain: '/api/usp/selftrain',
+
+  
 };
