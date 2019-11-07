@@ -16,7 +16,6 @@ import { UniversalUser } from 'app/services/shared.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { environment } from '../../../../../environments/environment';
 import { FileService } from 'app/services/setup.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'api-personal',
