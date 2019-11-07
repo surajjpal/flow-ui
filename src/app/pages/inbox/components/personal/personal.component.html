@@ -11,7 +11,7 @@
 		<div class="col-3 col-md-3  col-sm-12">
 			<div class="dropdown messageSwitcher">
 				<a class="dropdown-toggle" id="msgType" data-toggle="dropdown" aria-expanded="false">
-						{{message_type}}({{assignedCount}})
+						{{message_type}}({{currentFolderTaskCount}})
 				</a>
 				<ul class="dropdown-menu top-dropdown-menu" aria-labelledby="msgType">
 						<li class="dropdown-item"><a (click)="fetchRecordsFor(TAB_ASSIGNED, assignedStates)">Assigned({{assignedCount}})</a></li>
