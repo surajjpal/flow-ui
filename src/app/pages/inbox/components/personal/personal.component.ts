@@ -113,6 +113,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
 
   assignedCount:number;
   unassignedCount:number;
+  currentFolderTaskCount:number;
 
 
 
@@ -180,7 +181,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
   getBindAssignedUnassigned() {
     this.stateService.getCountByAssignedUnassigned(this.TAB_ASSIGNED)
     .subscribe(data=>{
-      this.assignedCount=data['count'];});
+      this.assignedCount=data['count']; this.currentFolderTaskCount=data['count'];});
     this.stateService.getCountByAssignedUnassigned(this.TAB_UNASSIGNED)
     .subscribe(data=>{
       this.unassignedCount=data['count'];});
@@ -1283,6 +1284,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     if (!tabName || tabName == null || tabName.trim().length == 0) {
       return;
     } else if (tabName === this.TAB_ASSIGNED) {
+      this.currentFolderTaskCount = this.assignedCount;
       this.message_type = "Assigned";
       if (this.personalFetched) {
         return;
@@ -1292,6 +1294,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
         folder = 'Personal';
       }
     } else if (tabName === this.TAB_UNASSIGNED) {
+      this.currentFolderTaskCount = this.unassignedCount;
       this.message_type = "Unassigned";
       if (this.groupFetched) {
         return;
