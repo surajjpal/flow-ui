@@ -69,6 +69,8 @@ export const environment = {
     timeline: 'statemachine/timeline/',
     updatevirtualassist: 'statemachine/updatevirtualassist',
     
+    // count assigned and unassigned url
+    assignedunassignedurl:'state/countbystatusandfolder/ACTIVE',
 
     registerurl: 'user/createUser',
     forgotpassword: 'user/forgotPassword',

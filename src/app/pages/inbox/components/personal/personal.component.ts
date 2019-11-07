@@ -111,6 +111,11 @@ export class PersonalComponent implements OnInit, OnDestroy {
   flaggedFetched = false;
   taskDecision: TaskDecision;
 
+  assignedCount:number;
+  unassignedCount:number;
+
+
+
   private subscription: Subscription;
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
@@ -158,6 +163,9 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.flaggedTaskPageNumber = 0;
     this.fetchRecords = 10
     // this.fetchData(this.pageNumber, this.fetchRecords);
+    this.getBindAssignedUnassigned();
+      
+
     this.fetchRecordsFor(this.TAB_ASSIGNED, this.assignedStates);
     this.graphObject = this.dataCachingService.getGraphObject();
     if (!this.graphObject) {
@@ -167,6 +175,17 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.getUserList();
     this.getParentUser();
   }
+
+
+  getBindAssignedUnassigned() {
+    this.stateService.getCountByAssignedUnassigned(this.TAB_ASSIGNED)
+    .subscribe(data=>{
+      this.assignedCount=data['count'];});
+    this.stateService.getCountByAssignedUnassigned(this.TAB_UNASSIGNED)
+    .subscribe(data=>{
+      this.unassignedCount=data['count'];});
+  }
+
 
   getUserList() {
 
