@@ -52,7 +52,8 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
   OPTION_TEXT_AREA = "TEXT_AREA"
   OPTION_DATE = "DATE";
   OPTION_ADDRESS = "ADDRESS_SEARCH"
-  modelOptions: string[] = [this.OPTION_INPUT, this.OPTION_SINGLE_SELECT_DROP_DOWN, this.OPTION_CHECKBOX, this.OPTION_RADIO, this.OPTION_MULTI_SELECT_DROP_DOWN, this.OPTION_FILE_UPLOAD, this.OPTION_TEXT_AREA, this.OPTION_DATE, this.OPTION_ADDRESS];
+  OPTION_HTML = "FORM_HTML"
+  modelOptions: string[] = [this.OPTION_INPUT, this.OPTION_SINGLE_SELECT_DROP_DOWN, this.OPTION_CHECKBOX, this.OPTION_RADIO, this.OPTION_MULTI_SELECT_DROP_DOWN, this.OPTION_FILE_UPLOAD, this.OPTION_TEXT_AREA, this.OPTION_DATE, this.OPTION_ADDRESS, this.OPTION_HTML];
   FILTER_VALUE_LABEL_OPTION_TYPES = ["CARD", "OFFERED_DOCUMENT", "FORM"]
 
   entityUploaderOptions: NgUploaderOptions;
@@ -1089,11 +1090,11 @@ export class DomainSetupComponent implements OnInit, OnDestroy {
         new showAlertModal('Error', 'sequence can not be empty');
         return;
       }
-      if (!option.responseData || option.responseData.length == 0) {
+      if (option.option != this.OPTION_HTML && (!option.responseData || option.responseData.length == 0)) {
         new showAlertModal('Error', 'option data can not be empty for option ' + option.option);
         return;
       }
-      if (!option.key) {
+      if (option.option != this.OPTION_HTML && !option.key) {
         new showAlertModal('Error', 'key can not be empty for option ' + option.option);
         return;
       }

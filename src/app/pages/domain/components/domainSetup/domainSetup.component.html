@@ -3978,6 +3978,23 @@
             <input class="form-control" placeholder="Form header" [(ngModel)]="tempModel.header" name="header" />
           </div>
           <div class="form-group">
+            <label>Form CSS</label>
+            <textarea class="form-control" placeholder="Form CSS" [(ngModel)]="tempModel.formCSS" name="formCSS" ></textarea>
+          </div>
+          <div class="form-group">
+            <label>Form JS</label>
+            <textarea class="form-control" placeholder="Form JS" [(ngModel)]="tempModel.formJS" name="formJS"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Form Start Html</label>
+            <textarea class="form-control" placeholder="Form Start Html" [(ngModel)]="tempModel.formStartHtml" name="formStartHtml" ></textarea>
+          </div>
+          <div class="form-group">
+            <label>Form End Html</label>
+            <textarea class="form-control" placeholder="Form End Html" [(ngModel)]="tempModel.formEndHtml" name="formEndHtml" ></textarea>
+          </div>
+          
+          <div class="form-group">
             <div id="modelOptionsAccordion" role="tablist" aria-multiselectable="true"
               *ngIf="tempModel.responseOptions.length > 0">
               <div *ngFor="let responseOption of tempModel.responseOptions; let index=index" class="panel">
@@ -4020,157 +4037,170 @@
                           </select>
                         </div>
                         <div class="form-group row">
-                          <div class="col-md-6">
+                          <div class="col-md-4">
                             <label required [for]="'modelOptionsSequence' + index">Sequence</label>
                             <input type="number" class="col-md-12 col-sm-12 col-xs-12 form-control" required
                               [id]="'modelOptionsSequence' + index" placeholder="Sequence"
                               onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : ((event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46)"
                               [(ngModel)]="responseOption.sequence" name="sequence" />
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-4">
+                            <label>CSS Class Name</label>
+                            <input type="text" class="form-control" placeholder="CSS Class Name"
+                              [(ngModel)]="responseOption.cssClass" name="cssClass" />
+                          </div>
+                          <div class="col-md-4">
                             <api-checkbox [checked]="responseOption.alignVertically" [label]="'Align vertically'"
                               (event)="responseOption.alignVertically = $event.target.checked"></api-checkbox>
                           </div>
                         </div>
-                        <div class="form-group row">
-                          <div class="col-md-6">
-                            <label>Label</label>
-                            <input type="text" class="form-control" placeholder="Label"
-                              [(ngModel)]="responseOption.label" name="label" />
+                        <ng-container *ngIf="responseOption.option != OPTION_HTML; else FORM_HTML">
+                          <div class="form-group row">
+                            <div class="col-md-6">
+                              <label>Label</label>
+                              <input type="text" class="form-control" placeholder="Label"
+                                [(ngModel)]="responseOption.label" name="label" />
+                            </div>
+                            <div class="col-md-6">
+                              <label>Label to be display after submit</label>
+                              <input type="text" class="form-control" placeholder="Label"
+                                [(ngModel)]="responseOption.afterSubmitLabel" name="afterSubmitLabel" />
+                            </div>
                           </div>
-                          <div class="col-md-6">
-                            <label>Label to be display after submit</label>
-                            <input type="text" class="form-control" placeholder="Label"
-                              [(ngModel)]="responseOption.afterSubmitLabel" name="afterSubmitLabel" />
+                          <div
+                            *ngIf="responseOption.option != 'INPUT' && responseOption.option != 'TEXT_AREA' && responseOption.option != 'DATE'"
+                            class="form-group row">
+                            <div class="col-md-6">
+                              <label>API to populate data</label>
+                              <input type="text" class="form-control" placeholder="API" [(ngModel)]="responseOption.api"
+                                name="api" />
+                            </div>
+                            <div class="col-md-6">
+                              <label>Key to populate option data</label>
+                              <input type="text" class="form-control" placeholder="populateOptionDataKey"
+                                [(ngModel)]="responseOption.populateOptionDataKey" name="populateDataKey" />
+                            </div>
                           </div>
-                        </div>
-                        <div
-                          *ngIf="responseOption.option != 'INPUT' && responseOption.option != 'TEXT_AREA' && responseOption.option != 'DATE'"
-                          class="form-group row">
-                          <div class="col-md-6">
-                            <label>API to populate data</label>
-                            <input type="text" class="form-control" placeholder="API" [(ngModel)]="responseOption.api"
-                              name="api" />
+                          <div class="form-group">
+                            <label>Prepopulated Value</label>
+                            <input type="text" class="form-control" placeholder="prePopulatedValue"
+                              [(ngModel)]="responseOption.prePopulatedValue" name="prePopulatedValue" />
                           </div>
-                          <div class="col-md-6">
-                            <label>Key to populate option data</label>
-                            <input type="text" class="form-control" placeholder="populateOptionDataKey"
-                              [(ngModel)]="responseOption.populateOptionDataKey" name="populateDataKey" />
+                          <div class="form-group row">
+                            <div class="col-md-6">
+                              <label>Key against which value to be store</label>
+                              <input type="text" class="form-control" placeholder="Key" [(ngModel)]="responseOption.key"
+                                name="key" />
+                            </div>
+                            <div class="col-md-6">
+                              <label></label>
+                              <api-checkbox [checked]="responseOption.isMandatory" [label]="'Is Mandatory'"
+                                (event)="responseOption.isMandatory = $event.target.checked"></api-checkbox>
+                              <api-checkbox [checked]="responseOption.disable" [label]="'Is Disable'" 
+                                (event)="responseOption.disable = $event.target.checked">
+                              </api-checkbox>
+                            </div>
                           </div>
-                        </div>
-                        <div class="form-group">
-                          <label>Prepopulated Value</label>
-                          <input type="text" class="form-control" placeholder="prePopulatedValue"
-                            [(ngModel)]="responseOption.prePopulatedValue" name="prePopulatedValue" />
-                        </div>
-                        <div class="form-group row">
-                          <div class="col-md-6">
-                            <label>Key against which value to be store</label>
-                            <input type="text" class="form-control" placeholder="Key" [(ngModel)]="responseOption.key"
-                              name="key" />
+                          <div class="form-group">
+                              <label>Dependency expression to display</label>
+                              <input type="text" class="form-control" placeholder="this.resultForm['key'] == 'value'" [(ngModel)]="responseOption.dependencyExpression" name="dependencyExpression"/>
                           </div>
-                          <div class="col-md-6">
-                            <label></label>
-                            <api-checkbox [checked]="responseOption.isMandatory" [label]="'Is Mandatory'"
-                              (event)="responseOption.isMandatory = $event.target.checked"></api-checkbox>
-                            <api-checkbox [checked]="responseOption.disable" [label]="'Is Disable'" 
-                              (event)="responseOption.disable = $event.target.checked">
-                            </api-checkbox>
-                          </div>
-                        </div>
-                         <div class="form-group">
-                            <label>Dependency expression to display</label>
-                            <input type="text" class="form-control" placeholder="this.resultForm['key'] == 'value'" [(ngModel)]="responseOption.dependencyExpression" name="dependencyExpression"/>
-                        </div>
-                        <div class="form-group">
-                          <div [id]="'modelOptionsDataAccordion' + index" role="tablist" aria-multiselectable="true"
-                            *ngIf="tempModel.responseOptions.length > 0">
-                            <div *ngFor="let row of responseOption.responseData; let dataindex=index" class="panel">
-                              <div class="card">
-                                <div *ngIf="dataindex == 0" [id]="'optionsdataTabHeading' + index + dataindex"
-                                  class="card-header" heightStyle="content" role="tab">
-                                  <h5 class="mb-0">
-                                    <a data-toggle="collapse" [attr.data-parent]="'#modelOptionsDataAccordion' + index"
-                                      [href]="'#modeloptionsdataCollapse' + index+ dataindex" aria-expanded="true"
-                                      [attr.aria-controls]="'modeloptionsdataCollapse' + index + dataindex">
-                                      {{'Click to expand data for ' + (row.label ? row.label : '') }}
-                                    </a>
-                                  </h5>
-                                </div>
-                                <div *ngIf="dataindex != 0" [id]="'optionsdataTabHeading' + index + dataindex"
-                                  class="card-header" heightStyle="content" role="tab">
-                                  <h5 class="mb-0">
-                                    <a class="collapsed" data-toggle="collapse"
-                                      [attr.data-parent]="'#modelOptionsDataAccordion' + index"
-                                      [href]="'#modeloptionsdataCollapse' + index + dataindex" aria-expanded="false"
-                                      [attr.aria-controls]="'modeloptionsdataCollapse' + index + dataindex">
-                                      {{'Click to expand data for ' + (row.label ? row.label : '') }}
-                                    </a>
-                                  </h5>
-                                </div>
-                                <div [id]="'modeloptionsdataCollapse' + index + dataindex"
-                                  [class]="index ==0 ? 'collapse show' : 'collapse'" role="tabpanel"
-                                  [attr.aria-labelledby]="'optionsdataTabHeading' + index + dataindex">
-                                  <div class="card-block">
-                                    <form>
-                                      <div class="form-group row">
-                                        <div class="col-md-6">
-                                          <label>Label</label>
-                                          <input type="text" class="form-control" placeholder="Label"
-                                            [value]="row.label" (input)="row.label = $event.target.value" />
+                          <div class="form-group">
+                            <div [id]="'modelOptionsDataAccordion' + index" role="tablist" aria-multiselectable="true"
+                              *ngIf="tempModel.responseOptions.length > 0">
+                              <div *ngFor="let row of responseOption.responseData; let dataindex=index" class="panel">
+                                <div class="card">
+                                  <div *ngIf="dataindex == 0" [id]="'optionsdataTabHeading' + index + dataindex"
+                                    class="card-header" heightStyle="content" role="tab">
+                                    <h5 class="mb-0">
+                                      <a data-toggle="collapse" [attr.data-parent]="'#modelOptionsDataAccordion' + index"
+                                        [href]="'#modeloptionsdataCollapse' + index+ dataindex" aria-expanded="true"
+                                        [attr.aria-controls]="'modeloptionsdataCollapse' + index + dataindex">
+                                        {{'Click to expand data for ' + (row.label ? row.label : '') }}
+                                      </a>
+                                    </h5>
+                                  </div>
+                                  <div *ngIf="dataindex != 0" [id]="'optionsdataTabHeading' + index + dataindex"
+                                    class="card-header" heightStyle="content" role="tab">
+                                    <h5 class="mb-0">
+                                      <a class="collapsed" data-toggle="collapse"
+                                        [attr.data-parent]="'#modelOptionsDataAccordion' + index"
+                                        [href]="'#modeloptionsdataCollapse' + index + dataindex" aria-expanded="false"
+                                        [attr.aria-controls]="'modeloptionsdataCollapse' + index + dataindex">
+                                        {{'Click to expand data for ' + (row.label ? row.label : '') }}
+                                      </a>
+                                    </h5>
+                                  </div>
+                                  <div [id]="'modeloptionsdataCollapse' + index + dataindex"
+                                    [class]="index ==0 ? 'collapse show' : 'collapse'" role="tabpanel"
+                                    [attr.aria-labelledby]="'optionsdataTabHeading' + index + dataindex">
+                                    <div class="card-block">
+                                      <form>
+                                        <div class="form-group row">
+                                          <div class="col-md-6">
+                                            <label>Label</label>
+                                            <input type="text" class="form-control" placeholder="Label"
+                                              [value]="row.label" (input)="row.label = $event.target.value" />
+                                          </div>
+                                          <div class="col-md-6">
+                                            <label>Value</label>
+                                            <input type="text" class="form-control" placeholder="value"
+                                              [value]="row.value" (input)="row.value = $event.target.value" />
+                                          </div>
                                         </div>
-                                        <div class="col-md-6">
-                                          <label>Value</label>
-                                          <input type="text" class="form-control" placeholder="value"
-                                            [value]="row.value" (input)="row.value = $event.target.value" />
+                                        <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)"
+                                          class="form-group">
+                                          <label>Placeholder</label>
+                                          <input type="text" class="form-control" placeholder="placeholder"
+                                            [value]="row.settings.placeholder"
+                                            (input)="row.settings.placeholder = $event.target.value" />
                                         </div>
-                                      </div>
-                                      <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)"
-                                        class="form-group">
-                                        <label>Placeholder</label>
-                                        <input type="text" class="form-control" placeholder="placeholder"
-                                          [value]="row.settings.placeholder"
-                                          (input)="row.settings.placeholder = $event.target.value" />
-                                      </div>
-                                      <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)"
-                                        class="form-group">
-                                        <label>Mask</label>
-                                        <input type="text" class="form-control" placeholder="mask"
-                                          [value]="row.settings.mask"
-                                          (input)="row.settings.mask = $event.target.value" />
-                                      </div>
-                                      <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)"
-                                        class="form-group">
-                                        <label>Validation Expression</label>
-                                        <input type="text" class="form-control" placeholder="validationRegex"
-                                          [value]="row.settings.validationRegex"
-                                          (input)="row.settings.validationRegex = $event.target.value" />
-                                      </div>
-                                      <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)"
-                                        class="form-group">
-                                        <label>Errormessage if expression not matched</label>
-                                        <input type="text" class="form-control" placeholder="errorMessage"
-                                          [value]="row.settings.errorMessage"
-                                          (input)="row.settings.errorMessage = $event.target.value" />
-                                      </div>
-                                      <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)"
-                                        class="form-group">
-                                        <api-checkbox [checked]="row.settings.secured" [label]="'Is secured'"
-                                          (event)="row.settings.secured = $event.target.checked"></api-checkbox>
-                                      </div>
-                                      <div class="form-group">
-                                        <button type="button" class="btn btn-danger"
-                                          (click)="removeModelOptionData(responseOption.responseData, row)">
-                                          <i class="ion-ios-trash"> Remove data</i>
-                                        </button>
-                                      </div>
-                                    </form>
+                                        <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)"
+                                          class="form-group">
+                                          <label>Mask</label>
+                                          <input type="text" class="form-control" placeholder="mask"
+                                            [value]="row.settings.mask"
+                                            (input)="row.settings.mask = $event.target.value" />
+                                        </div>
+                                        <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)"
+                                          class="form-group">
+                                          <label>Validation Expression</label>
+                                          <input type="text" class="form-control" placeholder="validationRegex"
+                                            [value]="row.settings.validationRegex"
+                                            (input)="row.settings.validationRegex = $event.target.value" />
+                                        </div>
+                                        <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)"
+                                          class="form-group">
+                                          <label>Errormessage if expression not matched</label>
+                                          <input type="text" class="form-control" placeholder="errorMessage"
+                                            [value]="row.settings.errorMessage"
+                                            (input)="row.settings.errorMessage = $event.target.value" />
+                                        </div>
+                                        <div *ngIf="allowOtherThanValueLabelForForm(responseOption.option)"
+                                          class="form-group">
+                                          <api-checkbox [checked]="row.settings.secured" [label]="'Is secured'"
+                                            (event)="row.settings.secured = $event.target.checked"></api-checkbox>
+                                        </div>
+                                        <div class="form-group">
+                                          <button type="button" class="btn btn-danger"
+                                            (click)="removeModelOptionData(responseOption.responseData, row)">
+                                            <i class="ion-ios-trash"> Remove data</i>
+                                          </button>
+                                        </div>
+                                      </form>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </ng-container>
+                        <ng-template #FORM_HTML>
+                          <div class="form-group">
+                            <label>Raw Form HTML</label>
+                            <textarea type="text" class="form-control" placeholder="Raw Form HTML" [(ngModel)]="responseOption.rawHtml" name="rawHtml" ></textarea>
+                          </div>
+                        </ng-template>
                       </form>
                       <button *ngIf="responseOption.option" class="btn btn-danger"
                         (click)="removeModelOption(responseOption)">Remove Option</button>

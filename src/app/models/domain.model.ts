@@ -118,7 +118,7 @@ export class ResponseOption {
   fileType: string;
   fileReference: string;
 
-  constructor(value?: string, label?: string, url?: string, agentId?: string, language?: string, fileSize?: string, fileType?:string, fileReference?:string) {
+  constructor(value?: string, label?: string, url?: string, agentId?: string, language?: string, fileSize?: string, fileType?: string, fileReference?: string) {
     this.value = value ? value : '';
     this.label = label ? label : '';
     this.url = url ? url : '';
@@ -126,7 +126,7 @@ export class ResponseOption {
     this.language = language ? language : '';
     this.fileSize = fileSize ? fileSize : '';
     this.fileType = fileType ? fileType : '';
-    this.fileReference = fileReference ? fileReference: '';
+    this.fileReference = fileReference ? fileReference : '';
   }
 }
 
@@ -156,7 +156,7 @@ export class CardData {
   content: string;
   actionable: ResponseData[];
   document: {};
-  
+
   constructor(cardName?: string, templateName?: string, title?: string, subTitle?: string, avatarImageUrl?: string, imageUrl?: string, content?: string, actionable?: ResponseData[]) {
     this.cardName = cardName ? cardName : '';
     this.templateName = templateName ? templateName : '';
@@ -173,17 +173,26 @@ export class CardData {
 export class Model {
   modelName: string;
   header: string;
+  formCSS: string;
+  formJS: string;
+  formStartHtml: string;
+  formEndHtml: string;
   responseOptions: ModelResponseOption[]
 
-  constructor(modelName?: string, header?: string, responseOptions?: ModelResponseOption[]) {
-    this.modelName = modelName != null && modelName.trim().length >0 ? modelName : null;
-    this.responseOptions = responseOptions != null && responseOptions.length >0 ? responseOptions : [];
+  constructor(modelName?: string, header?: string, formCSS?: string, formJS?: string, formStartHtml?: string, formEndHtml?: string, responseOptions?: ModelResponseOption[]) {
+    this.modelName = modelName != null && modelName.trim().length > 0 ? modelName : null;
     this.header = header ? header : null;
+    this.formCSS = formCSS ? formCSS : null;
+    this.formJS = formJS ? formJS : null;
+    this.formStartHtml = formStartHtml ? formStartHtml : null;
+    this.formEndHtml = formEndHtml ? formEndHtml : null;
+    this.responseOptions = responseOptions != null && responseOptions.length > 0 ? responseOptions : [];
   }
-
 }
 
 export class ModelResponseOption {
+  rawHtml: string;  // Applicable only to 'HTML' type of ResponseOption.
+  cssClass: string;
   option: string;
   sequence: number;
   label: string = null;
@@ -198,10 +207,12 @@ export class ModelResponseOption {
   disable: boolean;
   responseData: ModelResponseData[];
 
-  constructor(option?: string, responseData?:  ModelResponseData[], 
-    label?: string, key?: string, isMandatory?: boolean, api?: string, 
-    afterSubmitLabel?: string, alignVertically?: boolean, populateOptionDataKey?: string, 
+  constructor(rawHtml?: string, cssClass?: string, option?: string, responseData?: ModelResponseData[],
+    label?: string, key?: string, isMandatory?: boolean, api?: string,
+    afterSubmitLabel?: string, alignVertically?: boolean, populateOptionDataKey?: string,
     prePopulatedValue?: any, dependencyExpression?: string, disable?: boolean) {
+    this.rawHtml = rawHtml ? rawHtml : null;
+    this.cssClass = cssClass ? cssClass : null;
     this.option = option ? option : null;
     this.responseData = responseData ? responseData : [];
     this.label = label ? label : null;
@@ -228,7 +239,7 @@ export class ModelResponseData {
     this.value = value ? value : null;
     this.dataType = dataType ? dataType : null;
     this.settings = settings ? settings : new Settings();
-    
+
   }
 
 }
@@ -270,14 +281,14 @@ export class Settings {
 }
 
 export class Response {
-  uniqueId:string;
+  uniqueId: string;
   sequence: number;
   level: number;
   actionHTML: string;
   expression: any;
   lang: string;
   response: string;
-  request:string;
+  request: string;
   stage: string;
   disableUserInput: boolean;
   options: ResponseData[];
@@ -285,12 +296,12 @@ export class Response {
   selectionExpression: string;
   uploadDocument: {};
   contextExpression: string;
-  faqResponse:boolean;
-  features:any;
+  faqResponse: boolean;
+  features: any;
   raiseEventIdOnResponse: string;
 
-  constructor(expression?: string[], lang?: string, response?: string,request?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
-      options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string,faqResponse?:boolean,features?:any,uniqueId?:string, raiseEventIdOnResponse?: string) {
+  constructor(expression?: string[], lang?: string, response?: string, request?: string, actionHTML?: string, sequence?: number, stage?: string, disableUserInput?: boolean,
+    options?: ResponseData[], settings?: Settings, selectionExpression?: string, contextExpression?: string, faqResponse?: boolean, features?: any, uniqueId?: string, raiseEventIdOnResponse?: string) {
     this.level = 1;
 
     this.expression = expression ? expression : [];
@@ -315,9 +326,9 @@ export class Response {
 
 export class Domain {
   _id: string;
-  previousDomainId:string;
-  statusCd:string;
-  version:number;
+  previousDomainId: string;
+  statusCd: string;
+  version: number;
   name: string;
   createdDt: Date;
   desc: string;
