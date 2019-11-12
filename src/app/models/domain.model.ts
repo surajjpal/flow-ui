@@ -238,13 +238,15 @@ export class ResponseData {
   url: string;
   data: ResponseOption[];
   cardData: string[];
+  cardSourceKey: string;
   modelName: string;
 
-  constructor(type?: string, url?: string, data?: ResponseOption[], cardData?: string[], modelName?: string) {
+  constructor(type?: string, url?: string, data?: ResponseOption[], cardData?: string[], cardSourceKey?: string, modelName?: string) {
     this.type = type ? type : '';
     this.url = url ? url : '';
     this.data = data ? data : [];
     this.cardData = cardData ? cardData : [];
+    this.cardSourceKey = cardSourceKey ? cardSourceKey : '';
     this.modelName = modelName ? modelName : null;
   }
 }
