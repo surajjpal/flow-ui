@@ -47,7 +47,7 @@ export class FtcService {
 
         if (testConfig) {
             const url = `${environment.server + environment.route}`;
-            if(testConfig._id == "null")
+            if(testConfig.routeCd != "")
             {
             if (testConfig._id && testConfig._id.length > 0) {
                 this.httpClient.put(
@@ -110,9 +110,11 @@ export class FtcService {
     delete(testConfig: FtcConfig): Observable<boolean> {
         const subject = new Subject<boolean>();
 
-        if (testConfig) {
+        
             const url = `${environment.server + environment.route}`;
 
+            // if(testConfig._id=="null")
+            // {
             if (testConfig._id && testConfig._id.length > 0) {
 
 
@@ -132,7 +134,10 @@ export class FtcService {
                         subject.error(error);
                     }
                 );
-            } 
+        //     }else
+        // {
+        //     subject.error('Test Config id is null. Can not delete test.')
+        // } 
         } else {
             subject.error('TestConfig is null or empty');
         }
