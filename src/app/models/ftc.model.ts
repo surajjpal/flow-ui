@@ -154,12 +154,14 @@ export class FlowUpdateRouteStep extends FtcstepConfig {
 }
 
 export class FtcConfig extends BaseModel {
+    
     routeCd: string; 
 	//testcaseCd: string;
     routeLabel: string; 
     routeType: string; 
     version: number; 
     routeSteps: FtcstepConfig[];
+    
 
     constructor(routeCd?: string, routeLabel?: string, routeType?: string, version?: number, routeSteps?: FtcstepConfig[]) {
         super();

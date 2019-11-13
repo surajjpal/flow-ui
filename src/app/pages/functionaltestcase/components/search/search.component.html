@@ -28,13 +28,13 @@
                         [(mfSortOrder)]="sortOrder">
                         <thead>
                             <tr>
-                                <th colspan="5">
+                                <th colspan="7">
                                     <input class="form-control" [(ngModel)]="filterQuery" placeholder="Search" />
                                 </th>
                             </tr>
                             <tr>
                                 <th>
-                                    <mfDefaultSorter by="testcaseCd">Test Code</mfDefaultSorter>
+                                    <mfDefaultSorter by="routeCd">Test Code</mfDefaultSorter>
                                 </th>
                                 <th>
                                     <mfDefaultSorter [by]="toInt">Version</mfDefaultSorter>
@@ -49,15 +49,15 @@
                                 <th>
                                     Invoke 
                                 </th>
-                                <!--
+                                
                                 <th>
                                     Result
                                 </th>
-                                 -->
+                                
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let test of mfActive.data" data-toggle="modal">
+                            <tr *ngFor="let test of mfActive.data; let i = index" data-toggle="modal">
                                 <td>{{test.routeCd}}</td>
                                 <td>{{test.version}}</td>
                                 <td>{{test.statusCd}}</td>
@@ -73,8 +73,8 @@
                                             <i class="ion-ios-trash"></i>
                                         </button>
                                         -->
-                                        <button type="button" class="btn btn-danger" title="Delete"
-                                            (click)="deleteTest(test)" data-toggle="modal" data-target="#deleteWarningModal">
+                                        <button type="button" class="btn btn-danger" title="Delete" 
+                                            (click)="selectedTest = test;" data-toggle="modal" data-target="#deleteWarningModal">
                                             <i class="ion-ios-trash"></i>
                                         </button>
                                     </div>
@@ -83,18 +83,25 @@
                                                                
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-primary" title="" (click)="playTest(test)">
+                                        <button type="button" class="btn btn-primary" title="" (click)="playTest(test,i)">
                                             <i class="ion-play"></i>
                                         </button>
                                     </div>
                                 </td>
-
-                                <!--
-                                <td>
-                                    <label *ngIf="testResult"> <i class="ion-ios-trash"></i> </label>
-                                    <label *ngIf="!testResult"> <i class="ion-play"></i> </label> 
+                                
+                                <div class="btn-group" role="group">
+                                <td> <label>{{resultArray[i]}}</label>
+                                    <!--
+                                    <div *ngIf = "testResult">
+                                        <label><i class="ion-ios-checkmark"></i>Passed</label>
+                                    </div>
+                                    <div *ngIf = "!testResult">
+                                     <label><i class="ion-ios-checkmark"></i>Failed</label>
+                                    </div>
+                                    -->
                                 </td>
-                                -->
+                                </div>
+                            
                             </tr>
                         </tbody>
                         <tfoot>
@@ -128,14 +135,14 @@
     
                 <!-- Modal Body -->
                 <div class="modal-body" id="modal_body">
-                    Are you sure you want to delete <b>{{selectedTest.testcaseCd}}</b> test?
+                    Are you sure you want to delete <b>{{selectedTest.routeCd}}</b> test?
                 </div>
     
                 <!-- Modal Footer -->
                 <div class="modal-footer" id="modal_footer">
                     <button type="button" class="btn btn-default" (click)="selectedTest = null"data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-danger"
-                        (click)="deleteTest('deleteWarningModal')">Delete</button>
+                        (click)="deleteTest(selectedTest)">Delete</button>
                 </div>
             </div>
         </div>

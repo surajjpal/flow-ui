@@ -7,6 +7,7 @@ import { FtcConfig } from 'app/models/ftc.model';
 import { FtcService } from 'app/services/ftc.service';
 import { DataSharingService } from 'app/services/shared.service';
 import { FtcFlowService } from 'app/services/ftcflow.service';
+import { AlertService } from 'app/services/shared.service';
 
 @Component({
     selector: 'api-ftc-search',
@@ -19,7 +20,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     rowsOnPage = 10;
     sortBy = 'testcaseCd';
     sortOrder = 'asc';
-    
 
     // Models to bind with html
     ftList: FtcConfig[];
@@ -29,6 +29,9 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     progressBarFlag: boolean = false;
     testResult : boolean = false;
+    result: string = 'Ready To Test';
+    resultArray:any[] =[];
+    
 
 
     private subscriptionFetchRoute: Subscription;
@@ -40,6 +43,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         private router: Router,
         private ftcService: FtcService,
         private ftcflowService: FtcFlowService,
+        private alertService: AlertService,
         private dataSharingService: DataSharingService
     ) {
 
@@ -47,13 +51,23 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.fetchTestCases();
-    }
+    
+    //     for(let i=0;i<=this.resultArray.length;i++)
+    //     {
+    //             this.resultArray[i]='Not Invoked';
+    //     }       
+     }
 
     private fetchTestCases() {
         this.subscriptionFetchRoute = this.ftcService.fetch().subscribe(
             result => {
                 if (result && result.length > 0) {
                     this.ftList = result;
+                    let i =0;
+                    result.forEach(element => {
+                        this.resultArray[i]='Not Invoked';
+                        i++;
+                    });
                 }
             }, error => {
 
@@ -82,10 +96,19 @@ export class SearchComponent implements OnInit, OnDestroy {
 
         //new closeModal(modalId);
     }
-    deleteTest(modalId: string): void {
-        if (this.selectedTest) {
-
-            this.selectedTest.statusCd
+    deleteTest(ftConfig: FtcConfig): void {
+        if (ftConfig) 
+        {
+            
+            //this.alertService.success("Testcase deleted successfully",false,2000);
+            this.subscriptionInvokedRoute = this.ftcService.delete(ftConfig).subscribe(
+                result => {
+                    new closeModal('deleteWarningModal');
+                    this.fetchTestCases();
+                }, error => {
+                    new closeModal('deleteWarningModal');
+                });
+            this.alertService.success("Testcase deleted successfully",false,2000);
             // this.subscriptionFetchRoute = this.mwRouteService.delete().subscribe(
             //     result => {
             //         this.fetchRoutes();
@@ -94,8 +117,6 @@ export class SearchComponent implements OnInit, OnDestroy {
             //     }
             // );
         }
-
-        new closeModal(modalId);
     }
 
     onSelect(ftConfig: FtcConfig): void {
@@ -106,7 +127,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     
-    playTest(ftConfig: FtcConfig): void {
+    playTest(ftConfig: FtcConfig, index: any): void {
+        
         if (ftConfig) 
         {
             // this.dataSharingService.setSharedObject(ftConfig);
@@ -119,22 +141,39 @@ export class SearchComponent implements OnInit, OnDestroy {
                      {
                         //  this.response= JSON.stringify(result);
                         //  if(this.response && this.response.length>0)
-                         alert(ftConfig.routeCd+" is invoked successfully");
-                         this.testResult= true;
-                         
+                         //alert(ftConfig.routeCd+" is invoked successfully");
+                         this.alertService.success('Test Case Passed!', false, 2000);
+                         this.testResult=true;
+                         this.result = "Passed";    
+                         this.resultArray[index] = "Passed";
+                     }
+                     else if (result && result['testCaseStatus']=="Failed")
+                     {
+                        //alert(ftConfig.routeCd+"failed");
+                        this.alertService.error("Test Case Failed!", false, 2000);
+                        this.testResult = false;
+                        this.result = "Failed";
+                        this.resultArray[index] = "Failed";
+                     }
+                     else if (result && result['testCaseStatus']=="no instance")
+                     {
+                        this.alertService.error("Can not find state Instance.", false, 5000);  
+                        this.resultArray[index] = "State Instance Error";
+                     }
+                     else if (result && result['testCaseStatus']=="Payload error")
+                     {
+                        this.alertService.error("Payload can not be empty.", false, 5000);  
+                        this.resultArray[index] = "Payload error";
                      }
                      else
                      {
-                        alert(ftConfig.routeCd+"failed");
-                        this.testResult = false;
+                        this.alertService.error(result['testCaseStatus'], false, 5000);
+                        this.resultArray[index] = result['testCaseStatus'];
                      }
                 }, error => {
-    
+
                 }
             );
-
-            
-        
         }
     }
     toInt(){
