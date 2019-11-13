@@ -96,7 +96,7 @@
                                                       <div *ngFor="let resp of conv['controls'].response['controls']; let iy=index">
                                                             <div formGroupName="{{iy}}">
                                                                   <div class="input-group">
-                                                                        <input type="text" formControlName="res" placeholder="Response" tabindex="-1" (keyup.enter)="addY(ix)" class="form-control respField">
+                                                                        <input type="text" formControlName="res" placeholder="Response" (keyup.enter)="addY(ix)" class="form-control respField">
                                                                      <div class="input-group-append">
                                                                         <button class="btn btn-danger" type="button" (click)="removeY(ix,iy)"><i class="fa fa-times"></i></button>
                                                                      </div>
@@ -113,9 +113,10 @@
                                        </div>
                                     </ng-container>
                      
-                                    <div class="col-md-12"><span class="btn btn-info" (click)="addX()">Add Conversation</span></div>
+                                    
                                     <div class="btn btn-danger" style="position: absolute; right: 8px;" (click)="removeX(ix)">Remove</div>
                                  </div>
+                                 <div class="col-md-12"><span class="btn btn-info" (click)="addX()">Add Conversation</span></div>
                            </div>
                         </form>
                         <!-- {{ this.ftConvForm.value | json }} -->
@@ -133,7 +134,7 @@
                            Delay Time
                         </label>
                         <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="delayRouteStepDelayTime"
-                           placeholder="Delay Time" [(ngModel)]="routeStep.delayTime" name="delayTime" />
+                           placeholder="Delay Time in seconds" [(ngModel)]="routeStep.delayTime" name="delayTime" />
                      </div>
                   </ng-container>
      

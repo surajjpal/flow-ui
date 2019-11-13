@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Rx';
 
@@ -47,7 +47,8 @@ export class FtcService {
 
         if (testConfig) {
             const url = `${environment.server + environment.route}`;
-
+            if(testConfig._id == "null")
+            {
             if (testConfig._id && testConfig._id.length > 0) {
                 this.httpClient.put(
                     url,
@@ -95,6 +96,10 @@ export class FtcService {
                     }
                 );
             }
+        }else
+            {
+                subject.error('Test Configuration can not be null or empty');
+            }
         } else {
             subject.error('TestConfig is null or empty');
         }
@@ -102,5 +107,36 @@ export class FtcService {
         return subject.asObservable();
     }
 
-    
+    delete(testConfig: FtcConfig): Observable<boolean> {
+        const subject = new Subject<boolean>();
+
+        if (testConfig) {
+            const url = `${environment.server + environment.route}`;
+
+            if (testConfig._id && testConfig._id.length > 0) {
+
+
+                this.httpClient.request('DELETE',url,
+                    {
+                        body:testConfig,
+                        headers: this.httpHeaders,
+                        observe: "response",
+                        reportProgress: true,
+                        withCredentials: true
+                    }
+                ).subscribe(
+                    (response: HttpResponse<any>) => {
+                        subject.next(true);
+                    },
+                    (error: HttpErrorResponse) => {
+                        subject.error(error);
+                    }
+                );
+            } 
+        } else {
+            subject.error('TestConfig is null or empty');
+        }
+
+        return subject.asObservable();
+    }
 }
