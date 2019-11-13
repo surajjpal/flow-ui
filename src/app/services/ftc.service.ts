@@ -47,7 +47,8 @@ export class FtcService {
 
         if (testConfig) {
             const url = `${environment.server + environment.route}`;
-
+            if(testConfig._id == "null")
+            {
             if (testConfig._id && testConfig._id.length > 0) {
                 this.httpClient.put(
                     url,
@@ -94,6 +95,10 @@ export class FtcService {
                         subject.error(err);
                     }
                 );
+            }
+        }else
+            {
+                subject.error('Test Configuration can not be null or empty');
             }
         } else {
             subject.error('TestConfig is null or empty');

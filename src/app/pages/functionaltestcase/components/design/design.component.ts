@@ -12,9 +12,9 @@ import { ApiKeyExpressionMap, MVELObject } from 'app/models/setup.model';
 import { GraphService } from 'app/services/flow.service';
 import { Expression } from 'app/models/flow.model';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { FtcService } from 'app/services/ftc.service';
-import { DataSharingService } from 'app/services/shared.service';
+import { DataSharingService, AlertService } from 'app/services/shared.service';
 import { FormBuilder, FormGroup, FormArray, FormControl,Validators } from '@angular/forms';
 
 @Component({
@@ -72,6 +72,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         private zone: NgZone,
         private graphService: GraphService,
         private ftcService: FtcService,
+        private alertService: AlertService,
         private dataSharingService: DataSharingService,
         private fb: FormBuilder
     ) {
@@ -278,9 +279,10 @@ export class DesignComponent implements OnInit, OnDestroy {
                 result => {
                     if (result) {
                         this.ftcConfig = result;
+                        this.alertService.success("Testcase saved successfully",false,2000);
                     }
                 }, error => {
-
+                    this.alertService.error(error,false,2000);   
                 }
             );
         }

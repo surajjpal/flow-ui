@@ -2,7 +2,7 @@ declare var closeModal: any;
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 import { FtcConfig } from 'app/models/ftc.model';
 import { FtcService } from 'app/services/ftc.service';
 import { DataSharingService } from 'app/services/shared.service';
@@ -70,6 +70,7 @@ export class SearchComponent implements OnInit, OnDestroy {
                     });
                 }
             }, error => {
+                            this.alertService.error("Can not fetch test cases::"+ error);
 
             }
         );
@@ -104,11 +105,13 @@ export class SearchComponent implements OnInit, OnDestroy {
             this.subscriptionInvokedRoute = this.ftcService.delete(ftConfig).subscribe(
                 result => {
                     new closeModal('deleteWarningModal');
+                    this.alertService.success("Testcase deleted successfully",false,2000);
                     this.fetchTestCases();
                 }, error => {
                     new closeModal('deleteWarningModal');
+                    this.alertService.error(error,false,2000);
                 });
-            this.alertService.success("Testcase deleted successfully",false,2000);
+            //this.alertService.success("Testcase deleted successfully",false,2000);
             // this.subscriptionFetchRoute = this.mwRouteService.delete().subscribe(
             //     result => {
             //         this.fetchRoutes();
@@ -171,7 +174,7 @@ export class SearchComponent implements OnInit, OnDestroy {
                         this.resultArray[index] = result['testCaseStatus'];
                      }
                 }, error => {
-
+                                this.alertService.error("Something went wrong with the invoke method");
                 }
             );
         }
