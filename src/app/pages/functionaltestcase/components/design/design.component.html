@@ -150,7 +150,7 @@
 
                         <div class="form-group">
                               <label class="col-md-12 col-sm-12 col-xs-12" for="verifyRouteStepSC">
-                                 Sate Code
+                                 State Code
                               </label>
                               <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="verifyRouteStepSC"
                                  placeholder="State code" [(ngModel)]="routeStep.stateCd" name="stateCd" />
@@ -158,7 +158,7 @@
 
                         <div class="form-group">
                               <label class="col-md-12 col-sm-12 col-xs-12" for="verifyRouteStepStatus">
-                                 Satus Code
+                                 Status Code
                               </label>
                               <!--
                               <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" id="verifyRouteStepStatus"
@@ -280,13 +280,13 @@
                   
                   <div class="form-group">
                      <label class="col-md-12 col-sm-12 col-xs-12" for="inputRouteCode">
-                        Route Code
+                        Test Case Code
                      </label>
                      <input *ngIf="tempFtcConfig._id && tempFtcConfig._id.length > 0" type="text" disabled
-                        class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputRouteCode" placeholder="Route Code"
+                        class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputRouteCode" placeholder="Test Case Code"
                         [value]="tempFtcConfig.routeCd" name="routeCd" />
                      <input *ngIf="!tempFtcConfig._id || tempFtcConfig._id.length == 0" type="text"
-                        class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputRouteCode" placeholder="Route Code"
+                        class="col-md-12 col-sm-12 col-xs-12 form-control" id="inputRouteCode" placeholder="Test Case Code"
                         [(ngModel)]="tempFtcConfig.routeCd" name="routeCd" />
                   </div>
                   
