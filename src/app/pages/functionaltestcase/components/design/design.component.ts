@@ -292,9 +292,9 @@ export class DesignComponent implements OnInit, OnDestroy {
     saveFtcRouteStep() {
         // console.log("routeStep", this.routeStep);
 
-        if(!this.tempConfig){
+        // if(!this.tempConfig){
             this.tempConfig = JSON.stringify(this.restruct(this.ftConvForm.value));
-        }
+        // }
         if (this.sourceFtcRouteArray && this.routeStep) {
             if(this.routeStep["@type"]=="ConversationTestRouteStep")
             {
