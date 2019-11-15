@@ -20,7 +20,6 @@ import { DashboardComponent} from './components/dashboard/dashboard.component';
 import { ApiTableModule } from './components/api_table/apitable.module';
 import { DateRangePickerComponent } from './components/dashboard/daterangepicker/daterangepicker.component';
 import { SharedModule } from '../../shared/shared.module';
-
 import { MomentModule } from 'angular2-moment';
 import * as moment from 'moment/moment';
 

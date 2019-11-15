@@ -50,10 +50,10 @@
                   [(ngModel)]="selectedDomain.desc" name="desc" />
               </div>
               <div class="form-group">
-                <label>Lanugage Supported</label>
+                <label>Supported Languages</label>
                 <select class="selectpicker form-control" multiple="true" title="Select supported languages"
                   [(ngModel)]="selectedDomain.langSupported" name="langSupported">
-                  <option *ngFor="let language of languageSource" [ngValue]="language">{{language}}</option>
+                  <option *ngFor="let language of languageSource" [ngValue]="language.langCode">{{language.langName}} - {{language.langCode}}</option>
                 </select>
               </div>
             </form>
@@ -944,16 +944,16 @@
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
-                                                        <th>card</th>
-                                                        <!-- <th>
-                                                     <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
-                                                       <i class="ion-plus-round"></i>
-                                                     </button>
-                                                     </th> -->
+                                                        <th>Card Source Key</th>
+                                                        <th>Card Template</th>
                                                       </tr>
                                                     </thead>
                                                     <tbody>
                                                       <tr>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Card Source Key (JSON Path)"
+                                                            [(ngModel)]="option.cardSourceKey" name="cardSourceKey" />
+                                                        </td>
                                                         <td>
                                                           <select class="selectpicker form-control" id="selectStatus"
                                                             title="Choose card" [(ngModel)]="option.cardData"
@@ -1246,16 +1246,16 @@
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
-                                                          <th>card</th>
-                                                          <!-- <th>
-                                                     <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
-                                                       <i class="ion-plus-round"></i>
-                                                     </button>
-                                                     </th> -->
+                                                          <th>Card Source Key</th>
+                                                          <th>Card Template</th>
                                                         </tr>
                                                       </thead>
                                                       <tbody>
                                                         <tr>
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="Card Source Key (JSON Path)"
+                                                              [(ngModel)]="option.cardSourceKey" name="cardSourceKey" />
+                                                          </td>
                                                           <td>
                                                             <select class="selectpicker form-control" id="selectStatus"
                                                               title="Choose card" [(ngModel)]="option.cardData"
@@ -1587,16 +1587,16 @@
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
-                                                        <th>card</th>
-                                                        <!-- <th>
-                                   <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
-                                     <i class="ion-plus-round"></i>
-                                   </button>
-                                   </th> -->
+                                                        <th>Card Source Key</th>
+                                                        <th>Card Template</th>
                                                       </tr>
                                                     </thead>
                                                     <tbody>
                                                       <tr>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Card Source Key (JSON Path)"
+                                                            [(ngModel)]="option.cardSourceKey" name="cardSourceKey" />
+                                                        </td>
                                                         <td>
                                                           <select class="selectpicker form-control" id="selectStatus"
                                                             title="Choose card" [(ngModel)]="option.cardData"
@@ -1890,16 +1890,16 @@
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
-                                                          <th>card</th>
-                                                          <!-- <th>
-                                   <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
-                                     <i class="ion-plus-round"></i>
-                                   </button>
-                                   </th> -->
+                                                          <th>Card Source Key</th>
+                                                          <th>Card Template</th>
                                                         </tr>
                                                       </thead>
                                                       <tbody>
                                                         <tr>
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="Card Source Key (JSON Path)"
+                                                              [(ngModel)]="option.cardSourceKey" name="cardSourceKey" />
+                                                          </td>
                                                           <td>
                                                             <select class="selectpicker form-control" id="selectStatus"
                                                               title="Choose card" [(ngModel)]="option.cardData"
@@ -2343,16 +2343,16 @@
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
-                                                        <th>card</th>
-                                                        <!-- <th>
-                                      <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
-                                        <i class="ion-plus-round"></i>
-                                      </button>
-                                      </th> -->
+                                                        <th>Card Source Key</th>
+                                                        <th>Card Template</th>
                                                       </tr>
                                                     </thead>
                                                     <tbody>
                                                       <tr>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Card Source Key (JSON Path)"
+                                                            [(ngModel)]="option.cardSourceKey" name="cardSourceKey" />
+                                                        </td>
                                                         <td>
                                                           <select class="selectpicker form-control" id="selectStatus"
                                                             title="Choose card" [(ngModel)]="option.cardData"
@@ -2646,16 +2646,16 @@
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
-                                                          <th>card</th>
-                                                          <!-- <th>
-                                      <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
-                                        <i class="ion-plus-round"></i>
-                                      </button>
-                                      </th> -->
+                                                          <th>Card Source Key</th>
+                                                          <th>Card Template</th>
                                                         </tr>
                                                       </thead>
                                                       <tbody>
                                                         <tr>
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="Card Source Key (JSON Path)"
+                                                              [(ngModel)]="option.cardSourceKey" name="cardSourceKey" />
+                                                          </td>
                                                           <td>
                                                             <select class="selectpicker form-control" id="selectStatus"
                                                               title="Choose card" [(ngModel)]="option.cardData"
@@ -2989,16 +2989,16 @@
                                                   <table class="table table-striped">
                                                     <thead>
                                                       <tr>
-                                                        <th>card</th>
-                                                        <!-- <th>
-                                   <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
-                                     <i class="ion-plus-round"></i>
-                                   </button>
-                                   </th> -->
+                                                        <th>Card Source Key</th>
+                                                        <th>Card Template</th>
                                                       </tr>
                                                     </thead>
                                                     <tbody>
                                                       <tr>
+                                                        <td>
+                                                          <input type="text" class="form-control" placeholder="Card Source Key (JSON Path)"
+                                                            [(ngModel)]="option.cardSourceKey" name="cardSourceKey" />
+                                                        </td>
                                                         <td>
                                                           <select class="selectpicker form-control" id="selectStatus"
                                                             title="Choose card" [(ngModel)]="option.cardData"
@@ -3292,16 +3292,16 @@
                                                     <table class="table table-striped">
                                                       <thead>
                                                         <tr>
-                                                          <th>card</th>
-                                                          <!-- <th>
-                                   <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
-                                     <i class="ion-plus-round"></i>
-                                   </button>
-                                   </th> -->
+                                                          <th>Card Source Key</th>
+                                                          <th>Card Template</th>
                                                         </tr>
                                                       </thead>
                                                       <tbody>
                                                         <tr>
+                                                          <td>
+                                                            <input type="text" class="form-control" placeholder="Card Source Key (JSON Path)"
+                                                              [(ngModel)]="option.cardSourceKey" name="cardSourceKey" />
+                                                          </td>
                                                           <td>
                                                             <select class="selectpicker form-control" id="selectStatus"
                                                               title="Choose card" [(ngModel)]="option.cardData"
@@ -3662,16 +3662,16 @@
                     <table class="table table-striped">
                       <thead>
                         <tr>
-                          <th>card</th>
-                          <!-- <th>
-                                         <button type="button" class="btn btn-primary" (click)="onAddCardData(option)">
-                                           <i class="ion-plus-round"></i>
-                                         </button>
-                                         </th> -->
+                          <th>Card Source Key</th>
+                          <th>Card Template</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
+                          <td>
+                            <input type="text" class="form-control" placeholder="Card Source Key (JSON Path)"
+                              [(ngModel)]="option.cardSourceKey" name="cardSourceKey" />
+                          </td>
                           <td>
                             <select class="selectpicker form-control" id="selectStatus" title="Choose card"
                               [(ngModel)]="option.cardData" name="cardData" multiple="true">

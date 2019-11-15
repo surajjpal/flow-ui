@@ -8,6 +8,7 @@ pipelines:
     master:
     - step:
           name: FlowUI-Demo Build and Release
+          size: 2x
           image: node:8.10.0
           caches:
             - node

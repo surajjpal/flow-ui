@@ -111,6 +111,12 @@ export class PersonalComponent implements OnInit, OnDestroy {
   flaggedFetched = false;
   taskDecision: TaskDecision;
 
+  assignedCount:number;
+  unassignedCount:number;
+  currentFolderTaskCount:number;
+
+
+
   private subscription: Subscription;
   private subscriptionGroup: Subscription;
   private subscriptionPersonal: Subscription;
@@ -158,6 +164,9 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.flaggedTaskPageNumber = 0;
     this.fetchRecords = 10
     // this.fetchData(this.pageNumber, this.fetchRecords);
+    this.getBindAssignedUnassigned();
+      
+
     this.fetchRecordsFor(this.TAB_ASSIGNED, this.assignedStates);
     this.graphObject = this.dataCachingService.getGraphObject();
     if (!this.graphObject) {
@@ -167,6 +176,17 @@ export class PersonalComponent implements OnInit, OnDestroy {
     this.getUserList();
     this.getParentUser();
   }
+
+
+  getBindAssignedUnassigned() {
+    this.stateService.getCountByAssignedUnassigned(this.TAB_ASSIGNED)
+    .subscribe(data=>{
+      this.assignedCount=data['count']; this.currentFolderTaskCount=data['count'];});
+    this.stateService.getCountByAssignedUnassigned(this.TAB_UNASSIGNED)
+    .subscribe(data=>{
+      this.unassignedCount=data['count'];});
+  }
+
 
   getUserList() {
 
@@ -864,13 +884,13 @@ export class PersonalComponent implements OnInit, OnDestroy {
         }
       }
     }
-    return true;
+    return false;
   }
 
   isDataPointDisabled(dataPoint: DataPoint, selectedTask: State) {
     if (this.graphObjects != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId) != null && this.graphObjects.get(selectedTask.stateMachineInstanceModelId).states) {
       for (let state of this.graphObjects.get(selectedTask.stateMachineInstanceModelId).states) {
-        if (state.stateCd == selectedTask.stateCd) {
+        if (state.stateCd == selectedTask.stateCd && state.dataPointAccessList) {
           for (let dataAccess of state.dataPointAccessList) {
             //console.log(dataAccess.dataPointName + " " + dataAccess.hide);
             if (dataAccess.dataPointName != null && dataPoint.dataPointName != null && dataAccess.dataPointName == dataPoint.dataPointName) {
@@ -1264,6 +1284,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
     if (!tabName || tabName == null || tabName.trim().length == 0) {
       return;
     } else if (tabName === this.TAB_ASSIGNED) {
+      this.currentFolderTaskCount = this.assignedCount;
       this.message_type = "Assigned";
       if (this.personalFetched) {
         return;
@@ -1273,6 +1294,7 @@ export class PersonalComponent implements OnInit, OnDestroy {
         folder = 'Personal';
       }
     } else if (tabName === this.TAB_UNASSIGNED) {
+      this.currentFolderTaskCount = this.unassignedCount;
       this.message_type = "Unassigned";
       if (this.groupFetched) {
         return;
