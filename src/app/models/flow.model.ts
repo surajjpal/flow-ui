@@ -341,6 +341,7 @@ export class GraphObject extends BaseModel {
   activeStateIdList: string[];
   closedStateIdList: string[];
   entity: DataModel;
+  disableTaskAssignmentEmails: boolean;
 
   constructor() {
     super();
@@ -357,6 +358,7 @@ export class GraphObject extends BaseModel {
     this.activeStateIdList = [];
     this.closedStateIdList = [];
     this.entity = new DataModel();
+    this.disableTaskAssignmentEmails = false;
   }
 }
 

@@ -1200,6 +1200,10 @@
                                                             {{status}}</option>
                                                 </select>
                                           </div>
+                                          <div>
+                                                <api-checkbox class="col-md-12 col-sm-12 col-xs-12" [checked]="tempGraphObject.disableTaskAssignmentEmails" [label]="'Disable task assignment emails'" (event)="tempGraphObject.disableTaskAssignmentEmails = $event.target.checked">
+                                                </api-checkbox>
+                                          </div>
                                     </form>
                               </div>
                               <div role="tabpanel" class="tab-pane fade" id="datapoints">
