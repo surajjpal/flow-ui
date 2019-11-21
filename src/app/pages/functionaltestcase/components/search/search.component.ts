@@ -139,7 +139,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     
             this.subscriptionInvokedRoute = this.ftcflowService.invoke(ftConfig).subscribe(
                 result => {
-
+                    console.log(result);
                      if (result && result['testCaseStatus']=="Passed") 
                      {
                         //  this.response= JSON.stringify(result);

@@ -15,6 +15,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { v4 as uuid } from 'uuid';
 
+import {AllCommunityModules} from '@ag-grid-community/all-modules';
+
 // import 'rxjs/add/operator/switchMap';
 
 // Model Imports
@@ -179,6 +181,20 @@ export class DesignComponent implements OnInit, OnDestroy {
   private agentSubscription: Subscription;
   private subscriptionFetchRoute: Subscription;
 
+
+  // For Grid 
+  // gridColumns:any[] = [{headerName: 'Result', headerExp: '', type: ['dateColumn', 'nonEditableColumn']}];
+  gridApi:any;
+  gridColumnApi:any;
+  headerName:any ="";
+  headerExp:any ="";
+  private columnDefs:any[]=[{headerName: 'Result', field:"result", headerExp: '', type: ['nonEditableColumn']}];
+  private rowData:any[]=[
+    {result:""}
+  ];
+  
+  public modules = AllCommunityModules;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -240,10 +256,57 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.selectedVirtualAgents = [];
   }
 
+
+  onAddGridRow() {
+    
+    this.columnDefs.unshift({headerName: this.headerName.dataPointLabel, field:this.headerName.dataPointName, headerExp: this.headerExp, sortable: true, filter: true,editable: true});
+    // this.gridApi.destroy();
+    // this.gridApi.setDatasource(this.columnDefs);
+    this.gridApi.setColumnDefs([]);
+    this.gridApi.setColumnDefs(this.columnDefs);
+    console.log(this.rowData)
+  }
+  onUploadGridCsv(event: {type: string, data: any}) {
+    if (event.type === 'success') {
+      event.data.forEach(element => {
+        element['result'] = '';
+      });
+      // console.log(event.data);
+      this.rowData = event.data;
+      this.gridApi.setColumnDefs([]);
+      this.gridApi.setColumnDefs(this.columnDefs);
+      this.gridApi.refreshCells({force: true})
+    } else { 
+      console.log(event.data); // error
+    }
+  }
+  showEvaluated(){
+    
+  }
+  onRemoveGridRow(col) {
+    let pos = this.columnDefs.indexOf(col);
+    if (pos != -1) {
+      if(this.columnDefs.length>1){
+        this.columnDefs.splice(pos, 1);
+      }
+    }
+  }
+  onGridReady(params) {
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
+
+    // data = createData(14);
+    // topRowData = createData(2);
+    // bottomRowData = createData(2);
+    // params.api.setRowData(data);
+    // params.api.setPinnedTopRowData(topRowData);
+    // params.api.setPinnedBottomRowData(bottomRowData);
+  }
+
+
   ngOnInit() {
     this.load();
   }
-
   ngOnDestroy() {
     // prevent memory leak when component destroyed
     window['flowComponentRef'] = null;
@@ -2289,6 +2352,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       }
     }
   }
+
 
   fetchAgents() {
     const fields = [];

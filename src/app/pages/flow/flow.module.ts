@@ -21,6 +21,8 @@ import { SearchProcessComponent } from './components/searchprocess/searchprocess
 import { ProcessAuditComponent } from './components/processaudit/processaudit.component';
 import { DesignComponent } from './components/design/design.component';
 
+import { AgGridModule } from '@ag-grid-community/angular';
+import { CSV2JSONModule } from 'angular2-csv2json';
 
 import 'd3';
 import 'nvd3';
@@ -39,7 +41,9 @@ import { SharedModule } from '../../shared/shared.module';
     MomentModule,
     NvD3Module,
     DataTableModule,
-    SharedModule
+    SharedModule,
+    CSV2JSONModule,
+    AgGridModule.withComponents([])
   ],
   declarations: [
     FlowComponent,
