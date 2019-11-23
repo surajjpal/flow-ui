@@ -141,7 +141,7 @@
                                           name="entryActionList">
                                           <option *ngFor="let entryAction of autoSourceEntryActionList" [ngValue]="entryAction['key']">
                                                 {{entryAction['value']}}</option>
-                                          <option ngValue="grid">GRID</option>      
+                                               
                                     </select>
                               </div>
                               <div class="form-group" *ngIf="tempState.allocationModel !== null && tempState.type === STATE_TYPE_MANUAL && tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'VirtualAgentStateEntryAction'">
@@ -748,13 +748,14 @@
                                     <input type="text" class="form-control" required id="expressionReq" placeholder="Message" [(ngModel)]="tempState.converseRequestExp"
                                           name="converseRequestExp" />
                               </div>
-                              <div class="form-group" *ngIf="tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'grid'">
+                              <div class="form-group" *ngIf="tempState.entryActionList && tempState.entryActionList.length>0 &&  tempState.entryActionList[0] === 'DecisionTableRuleEntryAction'">
                                           
                                           
                                           <table class="table">
                                                 <thead>
                                                       <tr>
                                                             <th>Header Name</th>
+                                                            <th>Request Type</th>
                                                             <th>Remove</th>
                                                       </tr>
                                                 </thead>
@@ -766,7 +767,14 @@
                                                             </select>
                                                       </td>
                                                       <td>
-                                                            <button type="button" class="btn btn-primary btn-sm pull-right" title="Add Task Validation" (click)="onAddGridRow()">
+                                                            <select name="colDefHeaderType"  [id]="'colDefHeaderType'"  [(ngModel)]="decisionRequestType" [ngModelOptions]="{standalone: true}" class="form-control">
+                                                                  <option *ngFor="let requestType of decisionRequestTypes" [ngValue]="decisionRequestType">
+                                                                  {{ requestType }}</option>
+                                                            </select>
+                                                      </td>
+
+                                                      <td>
+                                                            <button type="button" class="btn btn-primary btn-sm pull-left" title="Add Task Validation" (click)="onAddGridRow()">
                                                                   <i class="ion-plus-round">Add Column</i>
                                                             </button>
                                                       </td>
@@ -787,8 +795,8 @@
                                                                                 </tr>
                                                                               </thead>
                                                                               <tbody>
-                                                                                <tr *ngFor="let cols of columnDefs; let index=index;">
-                                                                                  <td> {{cols.headerName}}
+                                                                                <tr *ngFor="let decisionHeader of tempState.decisionTabelHeaders; let index=index;">
+                                                                                  <td> {{decisionHeader.label}}
                                                                                     <!-- <select name="colDefHeaderName"  [id]="'colDefHeaderName' + index"  [(ngModel)]="cols.headerName" [ngModelOptions]="{standalone: true}" class="form-control" [attr.disabled]="cols.headerName === 'Result'? '':null">
                                                                                           <option *ngFor="let dataPoint of graphObject.dataPointConfigurationList" [ngValue]="dataPoint.dataPointLabel">
                                                                                           {{dataPoint.dataPointLabel}}</option>
@@ -796,7 +804,7 @@
                                                                                     </select> -->
                                                                                   </td>
                                                                                   <td>
-                                                                                      <button type="button" class="btn btn-danger" (click)="onRemoveGridRow(cols)">
+                                                                                      <button type="button" class="btn btn-danger" (click)="onRemoveGridRow(decisionHeader)">
                                                                                             <i class="ion-ios-trash"></i>
                                                                                       </button>
                                                                                   </td>

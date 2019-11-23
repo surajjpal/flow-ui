@@ -22,7 +22,7 @@ import {AllCommunityModules} from '@ag-grid-community/all-modules';
 // Model Imports
 import {
   GraphObject, DataPoint, Classifier, StateModel,
-  EventModel, Expression, Transition, ManualAction, DataPointValidation, StateInfoModel, LabelValue, TaskValidation, DataPointAccess
+  EventModel, Expression, Transition, ManualAction, DataPointValidation, StateInfoModel, LabelValue, TaskValidation, DataPointAccess, DecisionTableHeader
 } from '../../../../models/flow.model';
 import { ConnectorConfig, ConnectorInfo, TaskObject, TempConnectorConfig } from '../../../../models/setup.model';
 import { ApiConfig, ApiKeyExpressionMap, ApiResponse, MVELObject } from '../../../../models/setup.model';
@@ -188,11 +188,15 @@ export class DesignComponent implements OnInit, OnDestroy {
   gridColumnApi:any;
   headerName:any ="";
   headerExp:any ="";
-  private columnDefs:any[]=[{headerName: 'Result', field:"result", headerExp: ''}];
+  decisionRequestType: string = "INPUT";
+  decisionRequestTypes = [ "INPUT", "OUTPUT" ];
+  private columnDefs:any[] = [];
   private rowData:any[]=[
     {result:""}
   ];
-  
+    private decisionTabelHeaders : DecisionTableHeader[];
+    private decisionTabelRuleList: ApiKeyExpressionMap[][];
+
   public modules = AllCommunityModules;
 
   constructor(
@@ -258,14 +262,37 @@ export class DesignComponent implements OnInit, OnDestroy {
 
 
   onAddGridRow() {
-    
-    this.columnDefs.unshift({headerName: this.headerName.dataPointLabel, field:this.headerName.dataPointName, headerExp: this.headerExp, sortable: true, filter: true,editable: true});
+
+    if (!this.tempState.decisionTabelHeaders) {
+      this.tempState.decisionTabelHeaders = [];
+      //this.initDecisionTableHeaders();
+    }
+    const decisionTableHeader = new DecisionTableHeader();
+    decisionTableHeader.label = this.headerName.dataPointLabel;
+    decisionTableHeader.value = this.headerName.dataPointName;
+    decisionTableHeader.requestType = this.decisionRequestType;
+    this.tempState.decisionTabelHeaders.push(decisionTableHeader);
+    if (this.decisionRequestType == "INPUT") {
+      this.columnDefs.unshift({headerName: this.headerName.dataPointName, field:this.headerName.dataPointName, headerExp: this.headerExp, sortable: true, filter: true,editable: true});
+    }
+    else {
+      this.columnDefs.push({headerName: this.headerName.dataPointName, field:this.headerName.dataPointName, headerExp: this.headerExp, sortable: true, filter: true,editable: true});
+    }
     // this.gridApi.destroy();
     // this.gridApi.setDatasource(this.columnDefs);
     this.gridApi.setColumnDefs([]);
     this.gridApi.setColumnDefs(this.columnDefs);
     console.log(this.rowData)
   }
+
+  initDecisionTableHeaders() {
+    const decisionTabelHeader = new DecisionTableHeader();
+    decisionTabelHeader.label = "Result";
+    decisionTabelHeader.requestType = "OUTPUT";
+    decisionTabelHeader.value = "result";
+    this.tempState.decisionTabelHeaders.push(decisionTabelHeader);
+  }
+
   onUploadGridCsv(event: {type: string, data: any}) {
     if (event.type === 'success') {
       event.data.forEach(element => {
@@ -283,9 +310,10 @@ export class DesignComponent implements OnInit, OnDestroy {
   showEvaluated(){
     
   }
-  onRemoveGridRow(col) {
-    let pos = this.columnDefs.indexOf(col);
+  onRemoveGridRow(decisionHeader: DecisionTableHeader) {
+    let pos = this.tempState.decisionTabelHeaders.indexOf(decisionHeader);
     if (pos != -1) {
+      this.tempState.decisionTabelHeaders.splice(pos, 1);
       if(this.columnDefs.length>1){
         this.columnDefs.splice(pos, 1);
         this.gridApi.setColumnDefs([]);
@@ -874,6 +902,9 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   saveState(): void {
+
+    console.log("caloumnDef==> ");
+    console.log(this.columnDefs);
     this.tempState.endState = (this.tempState.events.length === 0);
     if (this.tempState.stateCd == null || this.tempState.stateCd.trim().length == 0) {
       this.errorToSaveGraphObject = "state code can not be empty";

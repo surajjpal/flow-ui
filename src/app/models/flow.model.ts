@@ -219,7 +219,7 @@ export class StateModel {
   taskValidations: TaskValidation[];
   dataPointAccessList: DataPointAccess[];
   mwRouteCd:string;
-
+  decisionTabelHeaders: DecisionTableHeader[];
 
   constructor() {
     this.stateId = '';
@@ -255,6 +255,7 @@ export class StateModel {
     this.taskValidations = [];
     this.dataPointAccessList = [];
     this.mwRouteCd = '';
+    this.decisionTabelHeaders = [];
   }
 }
 
@@ -374,6 +375,8 @@ export class CommonSearchModel {
 }
 
 export class LabelValue {
+
+  
   label: string;
   value: string;
   disabled: boolean;
@@ -384,3 +387,18 @@ export class LabelValue {
     this.disabled = disabled ? disabled : false;  
   }
 }
+
+export class DecisionTableHeader{
+  label:String;
+	value:String;
+	requestType: String;
+  disabled: boolean;
+  
+  constructor(label?: string, value?: string, requestType?: string, disabled?: boolean) {
+    this.label = label ? label : null;
+    this.value = value ? value : null;
+    this.requestType = value ? requestType : null;
+    this.disabled = disabled ? disabled : false;  
+  }
+}
+
