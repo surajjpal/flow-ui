@@ -755,7 +755,6 @@
                                                 <thead>
                                                       <tr>
                                                             <th>Header Name</th>
-                                                            <th>Col Expression</th>
                                                             <th>Remove</th>
                                                       </tr>
                                                 </thead>
@@ -767,15 +766,47 @@
                                                             </select>
                                                       </td>
                                                       <td>
-                                                            <input type="text" class="col-md-12 col-sm-12 col-xs-12 form-control" required [id]="'colDefHeaderExp'" [ngModelOptions]="{standalone: true}" placeholder="Expression" [(ngModel)]="headerExp" />
-                                                      </td>
-                                                      <td>
                                                             <button type="button" class="btn btn-primary btn-sm pull-right" title="Add Task Validation" (click)="onAddGridRow()">
                                                                   <i class="ion-plus-round">Add Column</i>
                                                             </button>
                                                       </td>
                                                 </tbody>
                                           </table>
+                                          
+                                          <div class="settings">
+                                                <a class="btn btn-primary pull-right" data-toggle="collapse" href="#gridOptions" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                      <i class="fa fa-gears"></i>
+                                                </a>
+                                                <div class="collapse" id="gridOptions">
+                                                      <div class="card card-body">
+                                                                  <table class="table">
+                                                                              <thead>
+                                                                                <tr>
+                                                                                      <th>Header Name</th>
+                                                                                      <th>Remove</th>
+                                                                                </tr>
+                                                                              </thead>
+                                                                              <tbody>
+                                                                                <tr *ngFor="let cols of columnDefs; let index=index;">
+                                                                                  <td> {{cols.headerName}}
+                                                                                    <!-- <select name="colDefHeaderName"  [id]="'colDefHeaderName' + index"  [(ngModel)]="cols.headerName" [ngModelOptions]="{standalone: true}" class="form-control" [attr.disabled]="cols.headerName === 'Result'? '':null">
+                                                                                          <option *ngFor="let dataPoint of graphObject.dataPointConfigurationList" [ngValue]="dataPoint.dataPointLabel">
+                                                                                          {{dataPoint.dataPointLabel}}</option>
+                                                                                          <option [ngValue] = "Result">Result</option>
+                                                                                    </select> -->
+                                                                                  </td>
+                                                                                  <td>
+                                                                                      <button type="button" class="btn btn-danger" (click)="onRemoveGridRow(cols)">
+                                                                                            <i class="ion-ios-trash"></i>
+                                                                                      </button>
+                                                                                  </td>
+                                                                                </tr>
+                                                                              </tbody>
+                                                                            </table>
+                                                      </div>
+                                                </div>
+                                                      
+                                          </div>
                                           <csv2json 
                                                 [btnText]="'Upload Data'"
                                                 [errorMsg]="'custom error msg'"

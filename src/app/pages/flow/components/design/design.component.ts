@@ -188,7 +188,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   gridColumnApi:any;
   headerName:any ="";
   headerExp:any ="";
-  private columnDefs:any[]=[{headerName: 'Result', field:"result", headerExp: '', type: ['nonEditableColumn']}];
+  private columnDefs:any[]=[{headerName: 'Result', field:"result", headerExp: ''}];
   private rowData:any[]=[
     {result:""}
   ];
@@ -288,6 +288,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     if (pos != -1) {
       if(this.columnDefs.length>1){
         this.columnDefs.splice(pos, 1);
+        this.gridApi.setColumnDefs([]);
+      this.gridApi.setColumnDefs(this.columnDefs);
       }
     }
   }
