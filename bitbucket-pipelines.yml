@@ -13,7 +13,6 @@ pipelines:
           caches:
             - node
           script: #Modify the commands below to build your repository.
-            - export NODE_OPTIONS=--max_old_space_size=8192
             - npm install
             - npm run build:demo
             - echo 'successfully build!'
@@ -38,11 +37,11 @@ pipelines:
     RELEASE*:                 
     - step:                   
         name: Tag based Prod Build and release
+        size: 2x
         image: 'node:8.10.0'
         caches:
           - node
         script: #Modify the commands below to build your repository.
-            - export NODE_OPTIONS=--max_old_space_size=8192
             - npm install
             - npm run build:prod
             - echo 'successfully build!'
