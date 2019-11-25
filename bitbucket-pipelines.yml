@@ -13,8 +13,8 @@ pipelines:
           caches:
             - node
           script: #Modify the commands below to build your repository.
-            - npm install
             - export NODE_OPTIONS=--max_old_space_size=8192
+            - npm install
             - npm run build:demo
             - echo 'successfully build!'
           artifacts: #Defining the artifacts to be passed to each future step.
@@ -42,6 +42,7 @@ pipelines:
         caches:
           - node
         script: #Modify the commands below to build your repository.
+            - export NODE_OPTIONS=--max_old_space_size=8192
             - npm install
             - npm run build:prod
             - echo 'successfully build!'
