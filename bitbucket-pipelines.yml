@@ -9,7 +9,7 @@ pipelines:
     - step:
           name: FlowUI-Demo Build and Release
           size: 2x
-          image: node:8.10.0
+          image: node:10.15.0
           caches:
             - node
           script: #Modify the commands below to build your repository.
