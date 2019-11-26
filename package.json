@@ -41,6 +41,8 @@
   },
   "private": true,
   "dependencies": {
+    "@ag-grid-community/all-modules": "^22.0.0",
+    "@ag-grid-community/angular": "^22.0.0",
     "@angular/animations": "4.3.0",
     "@angular/common": "4.3.0",
     "@angular/compiler": "4.3.0",

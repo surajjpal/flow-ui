@@ -21,6 +21,7 @@ import { SearchProcessComponent } from './components/searchprocess/searchprocess
 import { ProcessAuditComponent } from './components/processaudit/processaudit.component';
 import { DesignComponent } from './components/design/design.component';
 
+import { AgGridModule } from '@ag-grid-community/angular';
 
 import 'd3';
 import 'nvd3';
@@ -39,7 +40,8 @@ import { SharedModule } from '../../shared/shared.module';
     MomentModule,
     NvD3Module,
     DataTableModule,
-    SharedModule
+    SharedModule,
+    AgGridModule.withComponents([])
   ],
   declarations: [
     FlowComponent,

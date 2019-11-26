@@ -15,12 +15,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { v4 as uuid } from 'uuid';
 
+import {AllCommunityModules} from '@ag-grid-community/all-modules';
+
 // import 'rxjs/add/operator/switchMap';
 
 // Model Imports
 import {
   GraphObject, DataPoint, Classifier, StateModel,
-  EventModel, Expression, Transition, ManualAction, DataPointValidation, StateInfoModel, LabelValue, TaskValidation, DataPointAccess
+  EventModel, Expression, Transition, ManualAction, DataPointValidation, StateInfoModel, LabelValue, TaskValidation, DataPointAccess, DecisionTableHeader
 } from '../../../../models/flow.model';
 import { ConnectorConfig, ConnectorInfo, TaskObject, TempConnectorConfig } from '../../../../models/setup.model';
 import { ApiConfig, ApiKeyExpressionMap, ApiResponse, MVELObject } from '../../../../models/setup.model';
@@ -179,6 +181,22 @@ export class DesignComponent implements OnInit, OnDestroy {
   private agentSubscription: Subscription;
   private subscriptionFetchRoute: Subscription;
 
+
+  // For Grid 
+  // gridColumns:any[] = [{headerName: 'Result', headerExp: '', type: ['dateColumn', 'nonEditableColumn']}];
+  gridApi:any;
+  gridColumnApi:any;
+  headerName:any ="";
+  headerExp:any ="";
+  decisionRequestType: string = "INPUT";
+  decisionRequestTypes = [ "INPUT", "OUTPUT" ];
+  private columnDefs:any[] = [];
+  private rowData:any[]=[];
+    private decisionTabelHeaders : DecisionTableHeader[];
+    private decisionTabelRuleList: ApiKeyExpressionMap[][];
+
+  public modules = AllCommunityModules;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -240,10 +258,170 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.selectedVirtualAgents = [];
   }
 
+  // #######################################################GRID
+ 
+  onAddGridColumn() {
+
+    if (!this.tempState.decisionTabelHeaders) {
+      this.tempState.decisionTabelHeaders = [];
+      //this.initDecisionTableHeaders();
+    }
+    let headerName = this.headerName.dataPointLabel;
+    let field = this.headerName.dataPointName;
+    var count = 1;
+    for (let index = 0; index < this.columnDefs.length; index++) {
+      const element = this.columnDefs[index];
+      if(element.value === field){
+        count++;
+      }        
+    }
+    field = field + "-|-"+count;
+    // return;
+
+    if (this.decisionRequestType == "INPUT") {
+      this.columnDefs.unshift({headerName: headerName, field:field, label: this.headerName.dataPointLabel, value:this.headerName.dataPointName,requestType:'INPUT',disabled:true, sortable: true, filter: true,editable: true});
+    }
+    else {
+      this.columnDefs.push({headerName: headerName, field:field, label: this.headerName.dataPointLabel, value:this.headerName.dataPointName,requestType:'OUTPUT',disabled:true, sortable: true, filter: true,editable: true});
+    }
+    // this.gridApi.destroy();
+    // this.gridApi.setDatasource(this.columnDefs);
+    this.gridApi.setColumnDefs([]);
+    this.gridApi.setColumnDefs(this.columnDefs);
+    
+
+    // let pos = this.columnDefs.map(element => element.value).indexOf(field);
+
+    console.log(this.columnDefs)
+  }
+  addGridRow(){
+    let newNode:any = {};
+    for (var i=0; i<this.columnDefs.length;i++){
+      var temp = this.columnDefs[i].field + "";
+      newNode[temp] ="";
+    }
+    this.rowData.push(newNode);
+    this.gridApi.setRowData([]);
+    this.gridApi.setRowData(this.rowData);
+  }
+  saveGridDate(){
+    let struct:any[] =[];
+    let exportCol:any[]=[];
+    this.rowData.forEach(element => {
+      let singleEntry = []
+      for(var prop in element){
+        let proparray  = prop.split("-|-");
+        singleEntry.push({
+          key: proparray[0],
+          expression:element[prop]
+        })
+      }
+      struct.push(singleEntry);
+    });
+    
+    this.columnDefs.forEach(element => {
+      var tempCols:DecisionTableHeader = new DecisionTableHeader();
+      tempCols.label = element.label;  
+      tempCols.value = element.value;  
+      tempCols.requestType = element.requestType;  
+      tempCols.disabled = element.disabled;
+      exportCol.push(tempCols);
+    });
+    this.tempState.decisionTabelHeaders = exportCol;
+    this.tempState.decisionTabelRuleList = struct;
+    
+  }
+  onUploadGridCsv(event: {type: string, data: any}) {
+    if (event.type === 'success') {
+      event.data.forEach(element => {
+        element['result'] = '';
+      });
+      // console.log(event.data);
+      this.rowData = event.data;
+      this.gridApi.setColumnDefs([]);
+      this.gridApi.setColumnDefs(this.columnDefs);
+      this.gridApi.refreshCells({force: true})
+    } else { 
+      console.log(event.data); // error
+    }
+  }
+  onRemoveGridRow(pos) {
+    // let pos = this.tempState.decisionTabelHeaders.indexOf(decisionHeader);
+    // if (pos != -1) {
+      // this.tempState.decisionTabelHeaders.splice(pos, 1);
+      if(this.columnDefs.length>1){
+        this.columnDefs.splice(pos, 1);
+        this.gridApi.setColumnDefs([]);
+        this.gridApi.setColumnDefs(this.columnDefs);
+      }
+    // }
+  }
+  onGridReady(params) {
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
+
+    // data = createData(14);
+    // topRowData = createData(2);
+    // bottomRowData = createData(2);
+    // params.api.setRowData(data);
+    // params.api.setPinnedTopRowData(topRowData);
+    // params.api.setPinnedBottomRowData(bottomRowData);
+  }
+
+  gridPopulate(){
+    this.columnDefs = [];
+    this.rowData=[];
+    let tempInput = JSON.parse(JSON.stringify(this.tempState.decisionTabelRuleList));
+
+    for (let colIndex = 0; colIndex < this.tempState.decisionTabelHeaders.length; colIndex++) {
+      const element = this.tempState.decisionTabelHeaders[colIndex];
+      var temp= {};
+      let field=element.value;
+      var count = 1;
+      for (let index = 0; index < this.columnDefs.length; index++) {
+        const element = this.columnDefs[index];
+        if(element.value === field){
+          count++;
+        }        
+      }
+      field = field + "-|-"+count;
+
+      temp['headerName'] =element.label;
+      temp['field'] =field;
+      temp['label'] =element.label;
+      temp['value'] =element.value;
+      temp['requestType'] =element.requestType;
+      temp['disabled'] =element.disabled;
+      temp['sortable'] =true;
+      temp['filter'] =true;
+      temp['editable'] =true;
+      this.columnDefs.push(temp);
+
+
+      
+      tempInput.forEach(element => {
+        element[colIndex]['key'] = field;
+      });
+      
+    }
+    // console.log(this.columnDefs);
+    
+    for (let rowIndex = 0; rowIndex < tempInput.length; rowIndex++) {
+      const element = tempInput[rowIndex];
+      var innerRowTemp ={}
+      element.forEach(el2 => {
+        innerRowTemp[el2.key] = el2.expression;
+      });
+      this.rowData.push(innerRowTemp);
+    }
+
+  }
+
+  // #######################################################GRID END
+
   ngOnInit() {
     this.load();
   }
-
   ngOnDestroy() {
     // prevent memory leak when component destroyed
     window['flowComponentRef'] = null;
@@ -280,7 +458,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.loadGraphObject();
     }
     this.getAllConnectorInfos(graphLoad);
-
+    
 
     //this.fetchStatesOrPayload();
   }
@@ -666,6 +844,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     //this.setPreviousConnectorTaskList();
     this.setTaskConfigFromOldConfigForState()
     this.setConnectorTaskConfig();
+    this.gridPopulate();
     // if(this.tempState.connectorConfig){
     //   if(this.tempState.connectorConfig.length > 0){
     //     this.onConfigSelect(this.tempState.connectorConfig);
@@ -809,6 +988,10 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   saveState(): void {
+
+    console.log("caloumnDef==> ");
+    let gridObject = this.saveGridDate();
+    console.log(gridObject);
     this.tempState.endState = (this.tempState.events.length === 0);
     if (this.tempState.stateCd == null || this.tempState.stateCd.trim().length == 0) {
       this.errorToSaveGraphObject = "state code can not be empty";
@@ -2289,6 +2472,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       }
     }
   }
+
 
   fetchAgents() {
     const fields = [];
