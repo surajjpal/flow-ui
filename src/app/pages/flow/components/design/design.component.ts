@@ -191,9 +191,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   decisionRequestType: string = "INPUT";
   decisionRequestTypes = [ "INPUT", "OUTPUT" ];
   private columnDefs:any[] = [];
-  private rowData:any[]=[
-    {result:""}
-  ];
+  private rowData:any[]=[];
     private decisionTabelHeaders : DecisionTableHeader[];
     private decisionTabelRuleList: ApiKeyExpressionMap[][];
 
@@ -261,7 +259,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
 
-  onAddGridRow() {
+  onAddGridColumn() {
 
     if (!this.tempState.decisionTabelHeaders) {
       this.tempState.decisionTabelHeaders = [];
@@ -272,19 +270,73 @@ export class DesignComponent implements OnInit, OnDestroy {
     decisionTableHeader.value = this.headerName.dataPointName;
     decisionTableHeader.requestType = this.decisionRequestType;
     this.tempState.decisionTabelHeaders.push(decisionTableHeader);
+    let headerName = this.headerName.dataPointLabel;
+    let field = this.headerName.dataPointName;
+    var count = 1;
+    for (let index = 0; index < this.columnDefs.length; index++) {
+      const element = this.columnDefs[index];
+      if(element.value === field){
+        count++;
+      }        
+    }
+    field = field + "-"+count;
+    // return;
+
     if (this.decisionRequestType == "INPUT") {
-      this.columnDefs.unshift({headerName: this.headerName.dataPointName, field:this.headerName.dataPointName, headerExp: this.headerExp, sortable: true, filter: true,editable: true});
+      this.columnDefs.unshift({headerName: headerName, field:field, label: this.headerName.dataPointLabel, value:this.headerName.dataPointName,requestType:'INPUT',disabled:true, sortable: true, filter: true,editable: true});
     }
     else {
-      this.columnDefs.push({headerName: this.headerName.dataPointName, field:this.headerName.dataPointName, headerExp: this.headerExp, sortable: true, filter: true,editable: true});
+      this.columnDefs.push({headerName: headerName, field:field, label: this.headerName.dataPointLabel, value:this.headerName.dataPointName,requestType:'OUTPUT',disabled:true, sortable: true, filter: true,editable: true});
     }
     // this.gridApi.destroy();
     // this.gridApi.setDatasource(this.columnDefs);
     this.gridApi.setColumnDefs([]);
     this.gridApi.setColumnDefs(this.columnDefs);
-    console.log(this.rowData)
-  }
+    
 
+    // let pos = this.columnDefs.map(element => element.value).indexOf(field);
+
+    console.log(this.columnDefs)
+  }
+  addGridRow(){
+    let newNode:any = {};
+    for (var i=0; i<this.columnDefs.length;i++){
+      var temp = this.columnDefs[i].field + "";
+      newNode[temp] ="";
+    }
+    this.rowData.push(newNode);
+    this.gridApi.setRowData([]);
+    this.gridApi.setRowData(this.rowData);
+  }
+  saveDate(){
+    let struct:any[] =[];
+    let exportCol:any[]=[];
+    this.rowData.forEach(element => {
+      let singleEntry = []
+      for(var prop in element){
+        let proparray  = prop.split("-");
+        singleEntry.push({
+          key: proparray[0],
+          expression:element[prop]
+        })
+      }
+      struct.push(singleEntry);
+    });
+    
+    this.columnDefs.forEach(element => {
+      var tempCols = {}
+      tempCols['label'] = element.label;  
+      tempCols['value'] = element.value;  
+      tempCols['requestType'] = element.requestType;  
+      tempCols['disabled'] = element.disabled;
+      exportCol.push(tempCols);
+    });
+    let exportObj =  {
+      'colDefs' :exportCol,
+      'rowData' : struct
+    }
+    console.log(exportObj);
+  }
   initDecisionTableHeaders() {
     const decisionTabelHeader = new DecisionTableHeader();
     decisionTabelHeader.label = "Result";
@@ -307,19 +359,16 @@ export class DesignComponent implements OnInit, OnDestroy {
       console.log(event.data); // error
     }
   }
-  showEvaluated(){
-    
-  }
-  onRemoveGridRow(decisionHeader: DecisionTableHeader) {
-    let pos = this.tempState.decisionTabelHeaders.indexOf(decisionHeader);
-    if (pos != -1) {
-      this.tempState.decisionTabelHeaders.splice(pos, 1);
+  onRemoveGridRow(pos) {
+    // let pos = this.tempState.decisionTabelHeaders.indexOf(decisionHeader);
+    // if (pos != -1) {
+      // this.tempState.decisionTabelHeaders.splice(pos, 1);
       if(this.columnDefs.length>1){
         this.columnDefs.splice(pos, 1);
         this.gridApi.setColumnDefs([]);
-      this.gridApi.setColumnDefs(this.columnDefs);
+        this.gridApi.setColumnDefs(this.columnDefs);
       }
-    }
+    // }
   }
   onGridReady(params) {
     this.gridApi = params.api;
