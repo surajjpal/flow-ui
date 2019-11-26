@@ -258,7 +258,8 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.selectedVirtualAgents = [];
   }
 
-
+  // #######################################################GRID
+ 
   onAddGridColumn() {
 
     if (!this.tempState.decisionTabelHeaders) {
@@ -274,7 +275,7 @@ export class DesignComponent implements OnInit, OnDestroy {
         count++;
       }        
     }
-    field = field + "-"+count;
+    field = field + "-|-"+count;
     // return;
 
     if (this.decisionRequestType == "INPUT") {
@@ -309,7 +310,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.rowData.forEach(element => {
       let singleEntry = []
       for(var prop in element){
-        let proparray  = prop.split("-");
+        let proparray  = prop.split("-|-");
         singleEntry.push({
           key: proparray[0],
           expression:element[prop]
@@ -330,14 +331,6 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.tempState.decisionTabelRuleList = struct;
     
   }
-  initDecisionTableHeaders() {
-    const decisionTabelHeader = new DecisionTableHeader();
-    decisionTabelHeader.label = "Result";
-    decisionTabelHeader.requestType = "OUTPUT";
-    decisionTabelHeader.value = "result";
-    this.tempState.decisionTabelHeaders.push(decisionTabelHeader);
-  }
-
   onUploadGridCsv(event: {type: string, data: any}) {
     if (event.type === 'success') {
       event.data.forEach(element => {
@@ -375,6 +368,56 @@ export class DesignComponent implements OnInit, OnDestroy {
     // params.api.setPinnedBottomRowData(bottomRowData);
   }
 
+  gridPopulate(){
+    this.columnDefs = [];
+    this.rowData=[];
+    let tempInput = JSON.parse(JSON.stringify(this.tempState.decisionTabelRuleList));
+
+    for (let colIndex = 0; colIndex < this.tempState.decisionTabelHeaders.length; colIndex++) {
+      const element = this.tempState.decisionTabelHeaders[colIndex];
+      var temp= {};
+      let field=element.value;
+      var count = 1;
+      for (let index = 0; index < this.columnDefs.length; index++) {
+        const element = this.columnDefs[index];
+        if(element.value === field){
+          count++;
+        }        
+      }
+      field = field + "-|-"+count;
+
+      temp['headerName'] =element.label;
+      temp['field'] =field;
+      temp['label'] =element.label;
+      temp['value'] =element.value;
+      temp['requestType'] =element.requestType;
+      temp['disabled'] =element.disabled;
+      temp['sortable'] =true;
+      temp['filter'] =true;
+      temp['editable'] =true;
+      this.columnDefs.push(temp);
+
+
+      
+      tempInput.forEach(element => {
+        element[colIndex]['key'] = field;
+      });
+      
+    }
+    // console.log(this.columnDefs);
+    
+    for (let rowIndex = 0; rowIndex < tempInput.length; rowIndex++) {
+      const element = tempInput[rowIndex];
+      var innerRowTemp ={}
+      element.forEach(el2 => {
+        innerRowTemp[el2.key] = el2.expression;
+      });
+      this.rowData.push(innerRowTemp);
+    }
+
+  }
+
+  // #######################################################GRID END
 
   ngOnInit() {
     this.load();
@@ -415,7 +458,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.loadGraphObject();
     }
     this.getAllConnectorInfos(graphLoad);
-
+    
 
     //this.fetchStatesOrPayload();
   }
@@ -801,6 +844,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     //this.setPreviousConnectorTaskList();
     this.setTaskConfigFromOldConfigForState()
     this.setConnectorTaskConfig();
+    this.gridPopulate();
     // if(this.tempState.connectorConfig){
     //   if(this.tempState.connectorConfig.length > 0){
     //     this.onConfigSelect(this.tempState.connectorConfig);
