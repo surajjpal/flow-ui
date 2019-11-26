@@ -83,5 +83,24 @@ pipelines:
             - ./compress.sh   #Calling compress.sh to uglify files and compressing build  
             - ./create_artifact.sh
             - aws s3 cp flow-ui.zip s3://automatapi-build-artifacts/compusoft/flow-ui/release/
-      
+    pmli:
+      - step:                   
+          name: Branch based Prod Build and release
+          image: 'node:8.10.0'
+          caches:
+            - node
+          script: #Modify the commands below to build your repository.
+            - npm install
+            - npm run build:demo
+            - echo 'successfully build!'
+          artifacts: #Defining the artifacts to be passed to each future step.
+            - dist/**
+      - step:
+          name: S3 Prod-Compressing files
+          deployment: staging
+          script:
+            - ./compress.sh   #Calling compress.sh to uglify files and compressing build  
+            - ./create_artifact.sh
+            - aws s3 cp flow-ui.zip s3://automatapi-build-artifacts/pmli/flow-ui/release/   
+
 
