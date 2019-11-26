@@ -369,8 +369,13 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   gridPopulate(){
+    if (!this.tempState.decisionTabelRuleList || !this.tempState.decisionTabelRuleList || this.tempState.decisionTabelHeaders.length == 0 || this.tempState.decisionTabelRuleList.length == 0) {
+      return;
+    }
+
     this.columnDefs = [];
     this.rowData=[];
+    
     let tempInput = JSON.parse(JSON.stringify(this.tempState.decisionTabelRuleList));
 
     for (let colIndex = 0; colIndex < this.tempState.decisionTabelHeaders.length; colIndex++) {
