@@ -265,11 +265,6 @@ export class DesignComponent implements OnInit, OnDestroy {
       this.tempState.decisionTabelHeaders = [];
       //this.initDecisionTableHeaders();
     }
-    const decisionTableHeader = new DecisionTableHeader();
-    decisionTableHeader.label = this.headerName.dataPointLabel;
-    decisionTableHeader.value = this.headerName.dataPointName;
-    decisionTableHeader.requestType = this.decisionRequestType;
-    this.tempState.decisionTabelHeaders.push(decisionTableHeader);
     let headerName = this.headerName.dataPointLabel;
     let field = this.headerName.dataPointName;
     var count = 1;
@@ -308,7 +303,7 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.gridApi.setRowData([]);
     this.gridApi.setRowData(this.rowData);
   }
-  saveDate(){
+  saveGridDate(){
     let struct:any[] =[];
     let exportCol:any[]=[];
     this.rowData.forEach(element => {
@@ -324,18 +319,16 @@ export class DesignComponent implements OnInit, OnDestroy {
     });
     
     this.columnDefs.forEach(element => {
-      var tempCols = {}
-      tempCols['label'] = element.label;  
-      tempCols['value'] = element.value;  
-      tempCols['requestType'] = element.requestType;  
-      tempCols['disabled'] = element.disabled;
+      var tempCols:DecisionTableHeader = new DecisionTableHeader();
+      tempCols.label = element.label;  
+      tempCols.value = element.value;  
+      tempCols.requestType = element.requestType;  
+      tempCols.disabled = element.disabled;
       exportCol.push(tempCols);
     });
-    let exportObj =  {
-      'colDefs' :exportCol,
-      'rowData' : struct
-    }
-    console.log(exportObj);
+    this.tempState.decisionTabelHeaders = exportCol;
+    this.tempState.decisionTabelRuleList = struct;
+    
   }
   initDecisionTableHeaders() {
     const decisionTabelHeader = new DecisionTableHeader();
@@ -953,7 +946,8 @@ export class DesignComponent implements OnInit, OnDestroy {
   saveState(): void {
 
     console.log("caloumnDef==> ");
-    console.log(this.columnDefs);
+    let gridObject = this.saveGridDate();
+    console.log(gridObject);
     this.tempState.endState = (this.tempState.events.length === 0);
     if (this.tempState.stateCd == null || this.tempState.stateCd.trim().length == 0) {
       this.errorToSaveGraphObject = "state code can not be empty";

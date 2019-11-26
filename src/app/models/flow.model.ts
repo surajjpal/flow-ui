@@ -220,6 +220,7 @@ export class StateModel {
   dataPointAccessList: DataPointAccess[];
   mwRouteCd:string;
   decisionTabelHeaders: DecisionTableHeader[];
+  decisionTabelRuleList: ApiKeyExpressionMap[][];
 
   constructor() {
     this.stateId = '';
@@ -256,6 +257,7 @@ export class StateModel {
     this.dataPointAccessList = [];
     this.mwRouteCd = '';
     this.decisionTabelHeaders = [];
+    this.decisionTabelRuleList = [];
   }
 }
 
