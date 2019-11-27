@@ -306,6 +306,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   removeGridSelected(){
     var selectedData =this.gridApi.getSelectedRows();
     var res = this.gridApi.updateRowData({remove: selectedData});
+    this.rowData.splice(res.remove[0].childIndex,1);
   }
   saveGridDate(){
     let struct:any[] =[];
