@@ -785,6 +785,9 @@
                                                       <button type="button" class="btn btn-primary btn-sm pull-left" title="Add Row" (click)="addGridRow()">
                                                             <i class="ion-plus-round">Add Row</i>
                                                       </button>
+                                                      <button type="button" class="btn btn-error btn-sm pull-left" title="Remove Selected Row" (click)="removeGridSelected()">
+                                                            <i class="ion-minus-round">Remove Selected Row</i>
+                                                      </button>
                                                       <!-- 
                                                             Component for uploading CSV
                                                             <csv2json 
@@ -817,7 +820,7 @@
                                                                                     </select> -->
                                                                                     </td>
                                                                                     <td>
-                                                                                          <button type="button" class="btn btn-danger" (click)="onRemoveGridRow(index)">
+                                                                                          <button type="button" class="btn btn-danger" (click)="onRemoveGridColumn(index)">
                                                                                                 <i class="ion-ios-trash"></i>
                                                                                           </button>
                                                                                     </td>
@@ -837,11 +840,11 @@
                                                       [rowData]="rowData" 
                                                       [columnDefs]="columnDefs"
                                                       [modules]="modules"
-                                                      [singleClickEdit]="true"
                                                       [pagination]="true"
                                                       [enableFilter]="true"
                                                       [enableSorting]="true"
                                                       (gridReady) = "onGridReady($event)"
+                                                      rowSelection="multiple"
                                                       >
                                                 </ag-grid-angular>
                                           </div>
@@ -970,7 +973,6 @@
                                                                   <td>
                                                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mvelEditModal" data-backdrop="static" data-keyboard="false"
                                                                               (click)="expandExp(rule)">Expand</button>
-                                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mvelGridModal" data-backdrop="static" data-keyboard="false" (click)="expandExp(rule)">Grid View</button>
 
                                                                   </td>
                                                             </tr>
