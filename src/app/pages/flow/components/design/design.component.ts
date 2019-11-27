@@ -261,7 +261,6 @@ export class DesignComponent implements OnInit, OnDestroy {
   // #######################################################GRID
  
   onAddGridColumn() {
-
     if (!this.tempState.decisionTabelHeaders) {
       this.tempState.decisionTabelHeaders = [];
       //this.initDecisionTableHeaders();
@@ -304,6 +303,10 @@ export class DesignComponent implements OnInit, OnDestroy {
     this.gridApi.setRowData([]);
     this.gridApi.setRowData(this.rowData);
   }
+  removeGridSelected(){
+    var selectedData =this.gridApi.getSelectedRows();
+    var res = this.gridApi.updateRowData({remove: selectedData});
+  }
   saveGridDate(){
     let struct:any[] =[];
     let exportCol:any[]=[];
@@ -329,7 +332,6 @@ export class DesignComponent implements OnInit, OnDestroy {
     });
     this.tempState.decisionTabelHeaders = exportCol;
     this.tempState.decisionTabelRuleList = struct;
-    
   }
   onUploadGridCsv(event: {type: string, data: any}) {
     if (event.type === 'success') {
@@ -345,7 +347,7 @@ export class DesignComponent implements OnInit, OnDestroy {
       console.log(event.data); // error
     }
   }
-  onRemoveGridRow(pos) {
+  onRemoveGridColumn(pos) {
     // let pos = this.tempState.decisionTabelHeaders.indexOf(decisionHeader);
     // if (pos != -1) {
       // this.tempState.decisionTabelHeaders.splice(pos, 1);
@@ -421,7 +423,14 @@ export class DesignComponent implements OnInit, OnDestroy {
     }
 
   }
+  resetGrid(){
+    this.columnDefs = [];
+    this.rowData = [];
+    
+    this.gridApi.setColumnDefs([]);
+    this.gridApi.setRowData([]);
 
+  }
   // #######################################################GRID END
 
   ngOnInit() {
@@ -779,6 +788,7 @@ export class DesignComponent implements OnInit, OnDestroy {
   }
 
   addState(sourceEvents: EventModel[]): void {
+    this.resetGrid();
     this.stateCreateMode = true;
     this.selectedConfig = false;
     this.specificConfigSelected = false;
