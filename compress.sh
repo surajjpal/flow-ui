@@ -1,6 +1,6 @@
 echo "------------------------ Adding Dependency ------------------------"
-echo "npm install uglify-js -g"
-npm install uglify-js -g
+echo "npm install uglify-js@3.6.9 -g"
+npm install uglify-js@3.6.9 -g
 echo "-------------------------------------------------------------------"
 
 echo "------------------------ Compressing Build ------------------------"
